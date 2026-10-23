@@ -167,18 +167,72 @@ def load_image(path):
 
 
 def ken_burns(path, size, t, dur, seed):
+    """Slow push-in. Photos whose shape doesn't match the card sit on a blurred, darkened copy of themselves."""
     im = load_image(path)
-    zoom = 1.08 + 0.10 * (t / dur)
-    sc = max(size[0] / im.width, size[1] / im.height) * zoom
-    rw, rh = size[0] / sc, size[1] / sc
-    dx = (im.width - rw) * (0.5 + 0.35 * math.sin(seed) * (t / dur - 0.5))
-    dy = (im.height - rh) * 0.4
-    return im.crop((int(dx), int(dy), int(dx + rw), int(dy + rh))).resize(size, Image.LANCZOS)
+    cover = max(size[0] / im.width, size[1] / im.height)
+    contain = min(size[0] / im.width, size[1] / im.height)
+    zoom = 1.0 + 0.10 * (t / dur)
+    if cover / contain < 1.35:  # close enough in shape: plain cover crop
+        sc = cover * (zoom + 0.06)
+        rw, rh = size[0] / sc, size[1] / sc
+        dx = (im.width - rw) * (0.5 + 0.35 * math.sin(seed) * (t / dur - 0.5))
+        dy = (im.height - rh) * 0.3
+        return im.crop((int(dx), int(dy), int(dx + rw), int(dy + rh))).resize(size, Image.LANCZOS)
+    bg = blurred_fill(path, size)
+    sc = min(contain * 1.18, cover) * zoom
+    fg = im.resize((int(im.width * sc), int(im.height * sc)), Image.LANCZOS)
+    x = (size[0] - fg.width) // 2
+    y = int((size[1] - fg.height) * 0.3)
+    out = bg.copy()
+    out.paste(fg, (x, y))
+    return out
+
+
+@lru_cache(maxsize=16)
+def blurred_fill(path, size):
+    im = load_image(path)
+    sc = max(size[0] / im.width, size[1] / im.height) * 1.1
+    big = im.resize((int(im.width * sc) + 1, int(im.height * sc) + 1))
+    x, y = (big.width - size[0]) // 2, (big.height - size[1]) // 2
+    big = big.crop((x, y, x + size[0], y + size[1])).filter(ImageFilter.GaussianBlur(28))
+    return Image.blend(big, Image.new("RGB", size, INK), 0.45)
+
+
+@lru_cache(maxsize=4)
+def clip_frames(clip_dir):
+    return sorted(os.path.join(clip_dir, f) for f in os.listdir(clip_dir))
+
+
+def clip_frame(clip_dir, t):
+    frames = clip_frames(clip_dir)
+    return Image.open(frames[min(int(t * CFG["fps"]), len(frames) - 1)]).convert("RGB")
+
+
+def extract_clip(item, idx, cache_root):
+    """Pre-cut the item's clip into card-sized JPEG frames (cover-fit, starting at clip_start)."""
+    src = item["clip"] if os.path.isabs(item["clip"]) else os.path.join(HERE, item["clip"])
+    out = os.path.join(cache_root, f"clip_{idx:02d}")
+    os.makedirs(out, exist_ok=True)
+    for f in os.listdir(out):
+        os.remove(os.path.join(out, f))
+    w, h = CARD_MEDIA[2] - CARD_MEDIA[0], CARD_MEDIA[3] - CARD_MEDIA[1]
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(item.get("clip_start", 0)), "-i", src,
+                    "-t", str(item["duration"]), "-an", "-vf",
+                    f"fps={CFG['fps']},scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h}",
+                    "-q:v", "3", os.path.join(out, "%05d.jpg")], check=True)
+    item["_clip_dir"] = out
 
 
 # ----------------------------------------------------------------------------- scene pieces
 
-CARD = (70, 690, 1010, 1210)
+CARD = (70, 690, 1010, 1130)
+CARD_MEDIA = (70, 690, 1010, 1190)  # taller when it holds a photo / clip
+
+
+def card_box(item):
+    return CARD_MEDIA if (item.get("image") or item.get("clip")) else CARD
+VO_START = {"hook": 0.15, "item": 0.55, "outro": 0.55}
+VO_TAIL = {"hook": 0.35, "item": 0.5, "outro": 1.0}
 
 
 def draw_header(layer, rank, t, accent):
@@ -207,9 +261,14 @@ def draw_card(layer, item, t, accent, idx):
     p = ease_out(prog(t, 0.3, 0.45))
     if p <= 0:
         return
-    w, h = CARD[2] - CARD[0], CARD[3] - CARD[1]
-    if item.get("image"):
-        card = ken_burns(item["image"], (w, h), t, item["duration"], idx).convert("RGBA")
+    box = card_box(item)
+    w, h = box[2] - box[0], box[3] - box[1]
+    has_media = item.get("_clip_dir") or item.get("image")
+    if has_media:
+        if item.get("_clip_dir"):
+            card = clip_frame(item["_clip_dir"], t).convert("RGBA")
+        else:
+            card = ken_burns(item["image"], (w, h), t, item["duration"], idx).convert("RGBA")
         shade = np.zeros((h, w, 4), np.uint8)
         shade[..., 3] = (np.clip((np.linspace(0, 1, h) - 0.45) / 0.55, 0, 1) ** 1.5 * 235)[:, None]
         card.alpha_composite(Image.fromarray(shade, "RGBA"))
@@ -226,7 +285,7 @@ def draw_card(layer, item, t, accent, idx):
     ImageDraw.Draw(border).rounded_rectangle((30, 30, w + 29, h + 29), 44, outline=accent + (200,), width=5)
     border = border.filter(ImageFilter.GaussianBlur(8))
     scale = 0.9 + 0.1 * p
-    cx, cy = (CARD[0] + CARD[2]) / 2, (CARD[1] + CARD[3]) / 2
+    cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
     place(layer, border, cx, cy, scale, p)
     place(layer, card, cx, cy, scale, p)
 
@@ -236,10 +295,17 @@ def draw_card(layer, item, t, accent, idx):
         val = int(round(item["stat"] * cp))
         txt = f"{val:,}{item.get('stat_suffix', '') if cp >= 1 else ''}"
         punch = 1 + 0.18 * max(0, 1 - (t - 1.9) / 0.25) if t >= 1.9 else 1
-        big = 210 if not item.get("image") else 150
-        sy = cy - 20 if not item.get("image") else CARD[3] - 130
-        place(layer, text_img(txt, "black", big, fill=WHITE, stroke=4, stroke_fill=INK), cx, sy, punch * scale, p)
-        place(layer, text_img(item["stat_label"], "bold", 34, fill=WHITE if accent == GOLD else GOLD, tracking=3), cx, sy + big * 0.62, 1,
+        label = text_img(item["stat_label"], "bold", 34 if not has_media else 28,
+                         fill=WHITE if accent == GOLD else GOLD, tracking=3)
+        lp = ease_out(prog(t, 1.4, 0.4))
+        if has_media:
+            # keep the photo's subject clear: stat sits small in the bottom-left corner
+            num = text_img(txt, "black", 110, fill=WHITE, stroke=4, stroke_fill=INK)
+            place(layer, num, box[0] + 34, box[3] - 100, punch, p, anchor="l")
+            place(layer, label, box[0] + 40, box[3] - 36, 1, lp, anchor="l")
+            return
+        place(layer, text_img(txt, "black", 210, fill=WHITE, stroke=4, stroke_fill=INK), cx, cy - 20, punch * scale, p)
+        place(layer, label, cx, cy - 20 + 210 * 0.62, 1,
               ease_out(prog(t, 1.4, 0.4)))
 
 
@@ -278,10 +344,52 @@ def chip_img(text, accent):
     return im
 
 
+def extras_timing(item):
+    """When the chips start and how far apart they land (spread over longer, voiced scenes)."""
+    t_chip = 2.15
+    if item.get("balls"):
+        t_chip = 2.0 + 0.2 * len(item["balls"]) + 0.4
+    if item.get("quote"):
+        t_chip = 1.9 + (len(item["quote"]) + 2) * 0.028 + 0.3
+    n = len(item.get("chips", []))
+    gap = max(0.45, min(1.1, (item["duration"] - 1.2 - t_chip) / max(1, n - 1)))
+    return t_chip, gap
+
+
+def draw_caption(layer, sc, lt, start):
+    """Word-by-word subtitles; word timing is spread over the voice line by word length."""
+    if not sc.get("caption") or not sc.get("_vo_dur"):
+        return
+    words = sc["caption"].split()
+    weights = np.array([len(w_) + 2 for w_ in words], float)
+    ends = np.cumsum(weights) / weights.sum() * sc["_vo_dur"]
+    tt = lt - start
+    if tt < 0 or tt > sc["_vo_dur"] + 0.4:
+        return
+    cur = int(min(np.searchsorted(ends, tt), len(words) - 1))
+    # group into chunks of <= 3 words, breaking after punctuation
+    chunks, c = [], []
+    for k, w_ in enumerate(words):
+        c.append(k)
+        if len(c) == 3 or w_[-1] in ".,?!" or k == len(words) - 1:
+            chunks.append(c)
+            c = []
+    chunk = next(ch for ch in chunks if cur in ch)
+    t_chunk = ends[chunk[0] - 1] if chunk[0] > 0 else 0
+    pop = 0.85 + 0.15 * ease_back(clamp((tt - t_chunk) / 0.15))
+    imgs = [text_img(words[k].upper(), "black", 60, fill=GOLD if k == cur else WHITE, stroke=6) for k in chunk]
+    total = sum(i.width for i in imgs) + 18 * (len(imgs) - 1)
+    fit = min(1, 960 / total) * pop
+    x = W / 2 - total * fit / 2
+    for im in imgs:
+        place(layer, im, x + im.width * fit / 2, 1640, fit)
+        x += (im.width + 18) * fit
+
+
 def draw_extras(layer, item, t, accent):
     """Quote typewriter / ball-by-ball pills, then the check-mark chips. Returns SFX cue times."""
-    y = 1290
-    t_chip = 2.15
+    y = card_box(item)[3] + 85
+    t_chip, gap = extras_timing(item)
     if item.get("balls"):
         balls = item["balls"]
         n = len(balls)
@@ -301,7 +409,6 @@ def draw_extras(layer, item, t, accent):
         place(layer, text_img(item["balls_label"], "bold", 34, fill=WHITE), W / 2, y + 92, 1,
               ease_out(prog(t, 2.0 + 0.2 * n, 0.3)))
         y += 190
-        t_chip = 2.0 + 0.2 * n + 0.4
     if item.get("quote"):
         q = "“" + item["quote"] + "”"
         qp = prog(t, 1.9, len(q) * 0.028)
@@ -320,9 +427,8 @@ def draw_extras(layer, item, t, accent):
             for li, line in enumerate(lines):
                 place(layer, text_img(line, "italic", 46, fill=WHITE), 90, y + li * 62, anchor="l")
         y += 70 + 62 * 1 + (62 if font("italic", 46).getlength(q) > 900 else 0)
-        t_chip = 1.9 + len(q) * 0.028 + 0.3
     for k, c in enumerate(item.get("chips", [])):
-        cp = prog(t, t_chip + 0.45 * k, 0.3)
+        cp = prog(t, t_chip + gap * k, 0.3)
         if cp > 0:
             im = chip_img(c, accent)
             place(layer, im, 90 - 300 * (1 - ease_out(cp)), y + k * 96, 1, min(1, cp * 2), anchor="l")
@@ -360,6 +466,7 @@ def scene_item(t, item, idx):
     draw_extras(layer, item, t, accent)
     if item.get("crowd"):
         draw_confetti(layer, t - 1.9, accent)
+    draw_caption(layer, item, t, VO_START["item"])
     dur = item["duration"]
     # entrance slide, exit whip, impact shake
     dx = int(W * 0.4 * (1 - ease_out(prog(t, 0, 0.28))))
@@ -381,10 +488,10 @@ def flash(img, t, length=0.16):
 def scene_hook(t, hook):
     bg = draw_background(t, GOLD, ghost="18")
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    if hook.get("image"):
-        im = ken_burns(hook["image"], (940, 760), t, hook["duration"], 1).convert("RGBA")
-        im.putalpha(rounded_mask(im.size, 42))
-        place(layer, im, W / 2, 1180, 1, ease_out(prog(t, 0.2, 0.4)) * 0.85)
+    if hook.get("image"):  # full-bleed, darkened photo behind the title
+        im = ken_burns(hook["image"], (W, H), t, hook["duration"], 1)
+        im = Image.blend(im, Image.new("RGB", (W, H), INK), 0.55).convert("RGBA")
+        bg = Image.blend(bg, im, ease_out(prog(t, 0.0, 0.5)))
     sizes = [96, 96, 150]
     ys = [700, 820, 980]
     for k, (line, sz, y) in enumerate(zip(hook["lines"], sizes, ys)):
@@ -409,6 +516,7 @@ def scene_hook(t, hook):
         ImageDraw.Draw(pill).rounded_rectangle((0, 0, pill.width - 1, pill.height - 1), 30, fill=(224, 38, 43, 240))
         pill.alpha_composite(im, (35, 20))
         place(layer, pill, W / 2, 1190, 1, 1)
+    draw_caption(layer, hook, t, VO_START["hook"])
     zoom_dx = int(8 * math.sin(t * 2))
     shake = max(0, 1 - (t - 0.8) / 0.3) if t >= 0.8 else 0
     bg.paste(layer, (zoom_dx + int(14 * shake * math.sin(t * 90)), int(10 * shake * math.cos(t * 70))), layer)
@@ -448,11 +556,26 @@ def scene_outro(t, outro):
         ay = 1290 + 22 * abs(math.sin(t * 6))
         d = ImageDraw.Draw(layer)
         d.polygon([(W / 2 - 44, ay), (W / 2 + 44, ay), (W / 2, ay + 56)], fill=GOLD + (255,))
+    draw_caption(layer, outro, t, VO_START["outro"])
     bg.paste(layer, (0, 0), layer)
     return flash(bg, t)
 
 
 # ----------------------------------------------------------------------------- timeline + audio
+
+def attach_voiceover(cfg, manifest_path):
+    """Stretch each scene to fit its voice line (from voiceover.py) and remember where the audio is."""
+    if not os.path.exists(manifest_path):
+        return
+    with open(manifest_path) as f:
+        man = json.load(f)
+    scenes = [("hook", "hook", cfg["hook"]), ("outro", "outro", cfg["outro"])]
+    scenes += [(str(it["rank"]), "item", it) for it in cfg["items"]]
+    for key, kind, sc in scenes:
+        if key in man:
+            sc["_vo_path"], sc["_vo_dur"] = man[key]["path"], man[key]["dur"]
+            sc["duration"] = max(sc["duration"], round(VO_START[kind] + man[key]["dur"] + VO_TAIL[kind], 2))
+
 
 def build_timeline(cfg):
     segs = [("hook", cfg["hook"], 0.0, cfg["hook"]["duration"])]
@@ -485,16 +608,14 @@ def sfx_events(segs):
             ev += [(t0 + 0.45 + 0.08 * k, "pop", 0.35) for k in range(len(item["title"].split()))]
             ev += [(t0 + 0.9 + k * 0.07, "tick", 0.3) for k in range(13)]
             ev += [(t0 + 1.9, "ding", 0.7)]
-            t_chip = 2.15
+            t_chip, gap = extras_timing(item)
             if item.get("balls"):
                 ev += [(t0 + 2.0 + 0.2 * k, "pop" if b not in ("4", "6") else "impact", 0.45 if b in ("4", "6") else 0.5)
                        for k, b in enumerate(item["balls"])]
-                t_chip = 2.0 + 0.2 * len(item["balls"]) + 0.4
             if item.get("quote"):
                 q = len(item["quote"]) + 2
                 ev += [(t0 + 1.9 + k * 0.028 * 3, "tick", 0.12) for k in range(q // 3)]
-                t_chip = 1.9 + q * 0.028 + 0.3
-            ev += [(t0 + t_chip + 0.45 * k + 0.05, "pop", 0.7) for k in range(len(item.get("chips", [])))]
+            ev += [(t0 + t_chip + gap * k + 0.05, "pop", 0.7) for k in range(len(item.get("chips", [])))]
             if item.get("crowd"):
                 ev += [(t0 + 1.7, "crowd", 0.75), (t0 + 1.9, "camera_shutter", 0.6)]
     return ev
@@ -514,6 +635,22 @@ def build_audio(segs, total, music, path):
         bed = sfx.beat_bed(total)
         fade = np.minimum(1, np.minimum(np.arange(len(bed)) / sfx.SR / 0.5, (total - np.arange(len(bed)) / sfx.SR) / 1.5))
         mix[:len(bed)] += bed * np.clip(fade, 0, 1) * 0.22
+    vo = np.zeros_like(mix)
+    for kind, data, t0, dur in segs:
+        sc = data[0] if kind == "item" else data
+        if kind in VO_START and sc.get("_vo_path"):
+            v = np.fromfile(os.path.join(HERE, sc["_vo_path"]), np.float32)
+            i = int((t0 + VO_START[kind]) * sfx.SR)
+            vo[i:i + len(v)] += v[: len(vo) - i]
+    if vo.any():
+        # duck SFX + music under the voice (fast attack, slow release)
+        hop = 441
+        env = np.abs(vo[: len(vo) // hop * hop]).reshape(-1, hop).max(1)
+        env = np.convolve(env > 0.03, np.ones(25), "same") > 0
+        duck = np.repeat(np.where(env, 0.4, 1.0), hop)
+        duck = np.convolve(duck, np.ones(2205) / 2205, "same")
+        mix[: len(duck)] *= duck
+        mix += vo * 0.95
     mix = mix[: int(sfx.SR * total)]
     mix = np.tanh(mix * 1.1) / np.tanh(1.1)
     mix = mix / max(1e-6, np.abs(mix).max()) * 0.89  # ~ -1 dBFS peak
@@ -559,9 +696,13 @@ def main():
     cfg_path = args[0] if args else os.path.join(HERE, "config.json")
     with open(cfg_path) as f:
         CFG = json.load(f)
-    SEGMENTS, total = build_timeline(CFG)
     out = os.path.join(HERE, CFG["output"])
     os.makedirs(os.path.dirname(out), exist_ok=True)
+    attach_voiceover(CFG, os.path.join(os.path.dirname(out), "vo", "manifest.json"))
+    for idx, item in enumerate(CFG["items"]):
+        if item.get("clip"):
+            extract_clip(item, idx, os.path.join(os.path.dirname(out), "cache"))
+    SEGMENTS, total = build_timeline(CFG)
     base, ext = os.path.splitext(out)
     if PREVIEW:
         base += "_preview"

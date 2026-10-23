@@ -1,12 +1,34 @@
 # Kohli Countdown Reel
 
-A 60-second, 9:16 motion-graphics countdown: *"Ranking the best days as a Kohli fan"*.
+A ~75-second, 9:16 motion-graphics countdown with voiceover, word-by-word captions and event photos: *"Ranking the best days as a Kohli fan"*.
 It reworks the idea of a reference reel with fixed numbering, tighter pacing, animated stats and sound design.
 
 ```
-python3 render.py              # full 1080x1920 render  (~2 min on 4 cores)
-python3 render.py --preview    # half-res quick check
+python3 voiceover.py           # 1. build the voice lines  -> out/vo/
+python3 render.py              # 2. full 1080x1920 render  (~3 min on 4 cores)
+python3 render.py --preview    #    half-res quick check
 ```
+
+Each scene stretches to fit its voice line, and SFX/music duck under the voice.
+
+### Voiceover: your own voice (recommended)
+Record each line from the script below as its own file (phone voice memo is fine), put them in `vo/`,
+and set `vo_file` on that scene in `config.json`, e.g. `"vo_file": "vo/10.m4a"`. Silence at the start/end is
+trimmed automatically. Any scene without a `vo_file` falls back to the AI voice (offline Kokoro, Hindi `hm_omega`).
+Keep `caption` matching what you actually say. The captions are timed proportionally across the line.
+
+AI voice setup (one-time, ~350 MB):
+```
+pip install kokoro-onnx soundfile
+curl -L -o models/kokoro-v1.0.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+curl -L -o models/voices-v1.0.bin  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+```
+
+### Photos and clips
+`items[].image` is a photo. `items[].clip` is a video clip (plays muted inside the card from `clip_start` seconds),
+and it overrides `image`. Portrait or square photos sit on a blurred copy of themselves, so any shape works.
+The current `assets/ref_*.jpg` are 720p frames cropped from the reference reel. Replace them with original,
+higher-res photos when you can.
 
 Outputs, in `out/`:
 - `kohli_countdown.mp4`: SFX plus a light synthesised beat
@@ -20,7 +42,8 @@ Everything lives in `config.json`:
 
 | field | what it does |
 |---|---|
-| `items[].image` | path to a photo for that moment; it gets a Ken Burns zoom inside the card, with the stat laid over it |
+| `items[].image` / `items[].clip` | photo / video clip for that moment |
+| `vo_file` / `vo_text` / `caption` | your recording / AI-voice text (Devanagari) / on-screen captions |
 | `hook.image` | photo behind the opening title |
 | `facecam` | your green-screen face-cam clip; it's chroma-keyed into the bottom-right, and your voice is mixed over the SFX |
 | `facecam_chroma` | key colour (default `0x00FF00`) |
@@ -43,20 +66,20 @@ Use photos you have the rights to (your own screenshots/edits, licensed images).
 | 52–57 | #1 RCB, red accent | big impact, crowd roar, camera shutter, confetti |
 | 57–60.7 | "WHAT'S YOUR #1?" + comment CTA | slam, pulsing #1, bouncing arrow |
 
-## Voiceover script (Hinglish, ~5 s per moment)
+## Voiceover script (what to record; same text as `caption` in config.json)
 
-- **Hook:** "Ranking my best days as a Kohli fan... and #1 made the whole nation cry."
-- **10:** "2014 mein England mein sirf 134 runs. 2018 mein wapas gaya aur 593 thok diye."
-- **9:** "Lord's 2021. 'For 60 overs they should feel hell out there.' And they did."
-- **8:** "1020 days. Har match mein wait kiya. 71st century finally aayi."
-- **7:** "Hobart. 321 chahiye the 40 overs mein. Malinga ke ek over mein 24 maar diye."
-- **6:** "Mohali 2016. Must-win game, 82 not out, and twos run like singles."
-- **5:** "2011. Sachin ko kandhe pe uthaya. 'He carried the nation for 21 years.'"
-- **4:** "50th ODI hundred. Sachin ke saamne. Unka record. Wankhede mein."
-- **3:** "34 for 3 in a World Cup final. 76 runs. World champions."
-- **2:** "MCG. 31 for 4. Rauf ko back-to-back sixes. Mujhe aaj bhi goosebumps aate hain."
-- **1:** "18 saal. Jersey number 18. Ee sala cup... NAMDU. We all cried."
-- **Outro:** "Your #1 kya hai? Comment karo."
+- **Hook** (`vo/hook`): Ranking my best days as a Kohli fan... and number 1 made the whole nation cry.
+- **#10** (`vo/10`): 2014 mein England mein sirf 134 runs. 2018 mein wapas gaya aur 593 thok diye.
+- **#9** (`vo/9`): Lord's 2021. For 60 overs, they should feel hell out there. Aur England 120 pe all out.
+- **#8** (`vo/8`): 1020 din ka intezaar. Phir Dubai mein aayi 71st century.
+- **#7** (`vo/7`): Hobart. 40 overs mein 321 chahiye the. Malinga ke ek over mein 24 maar diye.
+- **#6** (`vo/6`): Mohali 2016. Must-win match, 82 not out, aur twos aise bhaage jaise singles.
+- **#5** (`vo/5`): 2011. 28 saal ka intezaar khatam. Aur Sachin ko apne kandhon pe uthaya.
+- **#4** (`vo/4`): 50th ODI hundred. Sachin ke saamne, unka hi record, Wankhede mein.
+- **#3** (`vo/3`): World Cup final, 34 for 3. Kohli ke 76. Aur hum World Champions.
+- **#2** (`vo/2`): MCG. 31 for 4. Rauf ko back-to-back sixes. Aaj bhi goosebumps aate hain.
+- **#1** (`vo/1`): 18 saal. Jersey number 18. Ee sala cup... NAMDU. Hum sab roye the.
+- **Outro** (`vo/outro`): Aapka number 1 kya hai? Comment karo.
 
 ## Review of the reference reel and what this version changes
 
