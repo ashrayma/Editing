@@ -1,26 +1,8 @@
 {
-  "output": "out/kohli_countdown.mp4",
   "fps": 30,
   "music": true,
   "facecam": null,
   "facecam_chroma": "0x00FF00",
-  "hook": {
-    "duration": 3.2,
-    "lines": [
-      "RANKING THE",
-      "BEST DAYS AS A",
-      "KOHLI FAN"
-    ],
-    "tease": "#1 made the whole nation cry",
-    "image": "assets/ref_hook.jpg",
-    "caption": "Ranking my best days as a Kohli fan... aur number 1? Usne poore desh ko rula diya.",
-    "vo_text": "कोहली फैन होने के मेरे बेस्ट दिन... और नंबर वन ने तो पूरे देश को रुला दिया।",
-    "vo_file": "vo/raw/hook.m4a",
-    "vo_trim": [
-      5.9,
-      999
-    ]
-  },
   "items": [
     {
       "rank": 10,
@@ -123,7 +105,7 @@
       "chips": [
         "Chasing 161 in a must-win game",
         "Ran twos like singles",
-        "Bowed down to Mohali"
+        "Took India into the semis"
       ],
       "image": "assets/ref_6.jpg",
       "duration": 5.0,
@@ -235,20 +217,95 @@
       "clip_start": 0
     }
   ],
-  "outro": {
-    "duration": 3.4,
-    "lines": [
-      "WHAT'S YOUR",
-      "#1?"
-    ],
-    "cta": "Comment it below · Follow for Part 2",
-    "caption": "Ab tum batao, tumhara number 1 kaunsa hai? Comment karo!",
-    "vo_text": "आपका नंबर वन क्या है? कमेंट करो।",
-    "vo_file": "vo/raw/outro.m4a"
-  },
   "voice": {
     "tts_voice": "hm_omega",
     "tts_speed": 1.2,
-    "recording_tempo": 1.06
-  }
+    "recording_tempo": 1.06,
+    "tts_fallback": false
+  },
+  "parts": [
+    {
+      "name": "part1",
+      "output": "out/part1.mp4",
+      "ranks": [
+        10,
+        9,
+        8,
+        7,
+        6
+      ],
+      "hook": {
+        "duration": 3.2,
+        "lines": [
+          "RANKING THE",
+          "BEST DAYS AS A",
+          "KOHLI FAN"
+        ],
+        "tease": "Part 1 · #10 to #6",
+        "image": "assets/ref_10.jpg",
+        "caption": "",
+        "vo_text": "",
+        "vo_file": null,
+        "badge": [
+          "PART",
+          "1"
+        ]
+      },
+      "outro": {
+        "duration": 3.4,
+        "lines": [
+          "TOP 5 IN",
+          "PART 2"
+        ],
+        "cta": "Follow so you don't miss it",
+        "caption": "",
+        "vo_text": "",
+        "vo_file": null,
+        "ghost": "5"
+      }
+    },
+    {
+      "name": "part2",
+      "output": "out/part2.mp4",
+      "ranks": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "hook": {
+        "duration": 3.2,
+        "lines": [
+          "RANKING THE",
+          "BEST DAYS AS A",
+          "KOHLI FAN"
+        ],
+        "tease": "#1 made the whole nation cry",
+        "image": "assets/ref_hook.jpg",
+        "caption": "Ranking my best days as a Kohli fan... aur number 1? Usne poore desh ko rula diya.",
+        "vo_text": "कोहली फैन होने के मेरे बेस्ट दिन... और नंबर वन ने तो पूरे देश को रुला दिया।",
+        "vo_file": "vo/raw/hook.m4a",
+        "vo_trim": [
+          5.9,
+          999
+        ],
+        "badge": [
+          "PART",
+          "2"
+        ]
+      },
+      "outro": {
+        "duration": 3.4,
+        "lines": [
+          "WHAT'S YOUR",
+          "#1?"
+        ],
+        "cta": "Comment it below · Follow for Part 2",
+        "caption": "Ab tum batao, tumhara number 1 kaunsa hai? Comment karo!",
+        "vo_text": "आपका नंबर वन क्या है? कमेंट करो।",
+        "vo_file": "vo/raw/outro.m4a"
+      }
+    }
+  ]
 }

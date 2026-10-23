@@ -237,7 +237,7 @@ VO_TAIL = {"hook": 0.35, "item": 0.5, "outro": 1.0}
 
 def draw_header(layer, rank, t, accent):
     place(layer, text_img("BEST DAYS AS A KOHLI FAN", "bold", 30, fill=(200, 210, 235), tracking=5), W / 2, 185)
-    n = len(CFG["items"])
+    n = CFG.get("_total_ranks", len(CFG["items"]))
     x0, x1, y = 150, 930, 238
     seg = (x1 - x0) / n
     over = Image.new("RGBA", (W, 40), (0, 0, 0, 0))
@@ -511,8 +511,9 @@ def scene_hook(t, hook):
         badge = Image.new("RGBA", (260, 260), (0, 0, 0, 0))
         bd = ImageDraw.Draw(badge)
         bd.ellipse((10, 10, 250, 250), fill=(224, 38, 43, 255), outline=WHITE + (255,), width=6)
-        bd.text((130, 100), "TOP", font=font("black", 50), fill=WHITE, anchor="mm")
-        bd.text((130, 162), "10", font=font("black", 92), fill=WHITE, anchor="mm")
+        top, big = hook.get("badge", ["TOP", "10"])
+        bd.text((130, 100), top, font=font("black", 50), fill=WHITE, anchor="mm")
+        bd.text((130, 162), big, font=font("black", 92), fill=WHITE, anchor="mm")
         badge = badge.rotate(-14 + 360 * (1 - ease_out(bp)), resample=Image.BICUBIC)
         place(layer, badge, 870, 510, ease_back(bp), 1)
     tp = prog(t, 1.4, 0.9)
@@ -541,7 +542,7 @@ def scene_suspense(t, dur):
 
 
 def scene_outro(t, outro):
-    bg = draw_background(t, GOLD, ghost="?")
+    bg = draw_background(t, GOLD, ghost=outro.get("ghost", "?"))
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     p1 = prog(t, 0.05, 0.25)
     if p1 > 0:
@@ -550,8 +551,8 @@ def scene_outro(t, outro):
     p2 = prog(t, 0.35, 0.3)
     if p2 > 0:
         pulse = 1 + 0.05 * math.sin(t * 8) if t > 0.8 else 1
-        place(layer, text_img(outro["lines"][1], "black", 320, fill=GOLD, stroke=8), W / 2, 920,
-              (2.4 - 1.4 * ease_back(p2)) * pulse, min(1, 3 * p2))
+        big = text_img(outro["lines"][1], "black", 320, fill=GOLD, stroke=8)
+        place(layer, big, W / 2, 920, (2.4 - 1.4 * ease_back(p2)) * pulse * min(1, 980 / big.width), min(1, 3 * p2))
     p3 = prog(t, 1.0, 0.35)
     if p3 > 0:
         im = text_img(outro["cta"], "bold", 40, fill=INK)
@@ -570,13 +571,13 @@ def scene_outro(t, outro):
 
 # ----------------------------------------------------------------------------- timeline + audio
 
-def attach_voiceover(cfg, manifest_path):
+def attach_voiceover(cfg, manifest_path, prefix=""):
     """Stretch each scene to fit its voice line (from voiceover.py) and remember where the audio is."""
     if not os.path.exists(manifest_path):
         return
     with open(manifest_path) as f:
         man = json.load(f)
-    scenes = [("hook", "hook", cfg["hook"]), ("outro", "outro", cfg["outro"])]
+    scenes = [(prefix + "hook", "hook", cfg["hook"]), (prefix + "outro", "outro", cfg["outro"])]
     scenes += [(str(it["rank"]), "item", it) for it in cfg["items"]]
     for key, kind, sc in scenes:
         if key in man:
@@ -697,16 +698,35 @@ def render_frame(i):
 PREVIEW = False
 
 
+def part_config(base, part):
+    """The config for one reel: its hook/outro and only its ranks; the progress bar still counts all of them."""
+    cfg = {k: v for k, v in base.items() if k != "parts"}
+    cfg.update(hook=part["hook"], outro=part["outro"], output=part["output"], _total_ranks=len(base["items"]),
+               items=[it for it in base["items"] if it["rank"] in part["ranks"]])
+    return cfg
+
+
 def main():
-    global CFG, SEGMENTS, PREVIEW
+    global PREVIEW
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     PREVIEW = "--preview" in sys.argv
+    only = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--part=")), None)
     cfg_path = args[0] if args else os.path.join(HERE, "config.json")
     with open(cfg_path) as f:
-        CFG = json.load(f)
+        base = json.load(f)
+    if "parts" not in base:
+        return render_part(base, "")
+    for part in base["parts"]:
+        if only in (None, part["name"]):
+            render_part(part_config(base, part), part["name"] + "_")
+
+
+def render_part(cfg, prefix):
+    global CFG, SEGMENTS
+    CFG = cfg
     out = os.path.join(HERE, CFG["output"])
     os.makedirs(os.path.dirname(out), exist_ok=True)
-    attach_voiceover(CFG, os.path.join(os.path.dirname(out), "vo", "manifest.json"))
+    attach_voiceover(CFG, os.path.join(os.path.dirname(out), "vo", "manifest.json"), prefix)
     for idx, item in enumerate(CFG["items"]):
         if item.get("clip"):
             extract_clip(item, idx, os.path.join(os.path.dirname(out), "cache"))

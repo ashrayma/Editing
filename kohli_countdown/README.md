@@ -5,7 +5,8 @@ It reworks the idea of a reference reel with fixed numbering, tighter pacing, an
 
 ```
 python3 voiceover.py           # 1. build the voice lines  -> out/vo/
-python3 render.py              # 2. full 1080x1920 render  (~3 min on 4 cores)
+python3 render.py              # 2. renders out/part1.mp4 (#10-#6) and out/part2.mp4 (#5-#1)
+python3 render.py --part=part2 #    just one part
 python3 render.py --preview    #    half-res quick check
 ```
 
@@ -30,9 +31,12 @@ and it overrides `image`. Portrait or square photos sit on a blurred copy of the
 The current `assets/ref_*.jpg` are 720p frames cropped from the reference reel. Replace them with original,
 higher-res photos when you can.
 
+The reel is split into two posts (`parts` in config.json: each has its own ranks, hook and outro).
+Voice files for a part's hook/outro are keyed `part1_hook`, `part2_outro` etc.; the countdown lines are shared.
+
 Outputs, in `out/`:
-- `kohli_countdown.mp4`: SFX plus a light synthesised beat
-- `kohli_countdown_sfx_only.mp4`: SFX only. **Upload this one and add a trending sound inside Instagram** (trending audio gets more reach).
+- `part1.mp4`, `part2.mp4`: SFX plus a light synthesised beat
+- `part1_sfx_only.mp4`, `part2_sfx_only.mp4`: SFX only. **Upload this one and add a trending sound inside Instagram** (trending audio gets more reach).
 
 Requirements: Python 3, Pillow, NumPy, ffmpeg. Fonts: Inter / Inter Display.
 

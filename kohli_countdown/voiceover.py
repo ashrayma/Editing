@@ -20,10 +20,15 @@ SR = 44100
 
 
 def scenes(cfg):
-    yield "hook", cfg["hook"]
+    """(manifest key, scene) for every voiced scene; hooks/outros are per part when the reel is split."""
+    parts = cfg.get("parts") or [{"name": "", "hook": cfg["hook"], "outro": cfg["outro"]}]
+    pre = (lambda p: p["name"] + "_") if cfg.get("parts") else (lambda p: "")
+    for p in parts:
+        yield pre(p) + "hook", p["hook"]
     for it in cfg["items"]:
         yield str(it["rank"]), it
-    yield "outro", cfg["outro"]
+    for p in parts:
+        yield pre(p) + "outro", p["outro"]
 
 
 def load_any(path):
@@ -86,7 +91,7 @@ def main():
     cfg_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "config.json")
     with open(cfg_path) as f:
         cfg = json.load(f)
-    out_dir = os.path.join(HERE, os.path.dirname(cfg["output"]), "vo")
+    out_dir = os.path.join(HERE, "out", "vo")
     os.makedirs(out_dir, exist_ok=True)
     voice = cfg.get("voice", {})
     tts = None
@@ -96,7 +101,7 @@ def main():
             src = sc["vo_file"] if os.path.isabs(sc["vo_file"]) else os.path.join(HERE, sc["vo_file"])
             audio = clean_recording(src, sc.get("vo_trim"), voice.get("recording_tempo", 1.0))
             origin = "recording"
-        elif sc.get("vo_text"):
+        elif sc.get("vo_text") and voice.get("tts_fallback", True):
             if tts is None:
                 from kokoro_onnx import Kokoro
                 tts = Kokoro(os.path.join(HERE, "models", "kokoro-v1.0.onnx"),
