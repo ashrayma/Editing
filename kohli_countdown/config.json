@@ -13,9 +13,13 @@
     ],
     "tease": "#1 made the whole nation cry",
     "image": "assets/ref_hook.jpg",
-    "caption": "Ranking my best days as a Kohli fan... and number 1 made the whole nation cry.",
+    "caption": "Ranking my best days as a Kohli fan... aur number 1? Usne poore desh ko rula diya.",
     "vo_text": "कोहली फैन होने के मेरे बेस्ट दिन... और नंबर वन ने तो पूरे देश को रुला दिया।",
-    "vo_file": null
+    "vo_file": "vo/raw/hook.m4a",
+    "vo_trim": [
+      5.9,
+      999
+    ]
   },
   "items": [
     {
@@ -32,9 +36,9 @@
       ],
       "image": "assets/ref_10.jpg",
       "duration": 5.0,
-      "caption": "2014 mein England mein sirf 134 runs. 2018 mein wapas gaya aur 593 thok diye.",
+      "caption": "2014 England. Sirf 134 runs. Sab ne bola khatam. 2018 mein wapas gaya... aur 593 thok diye.",
       "vo_text": "2014 में इंग्लैंड में सिर्फ 134 रन। 2018 में वापस गया, और 593 ठोक दिए।",
-      "vo_file": null,
+      "vo_file": "vo/raw/10.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -51,11 +55,15 @@
       ],
       "image": null,
       "duration": 5.2,
-      "caption": "Lord's 2021. For 60 overs, they should feel hell out there. Aur England 120 pe all out.",
+      "caption": "On number 9, Lord's 2021. Huddle mein bola: For 60 overs, they should feel hell out there. Aur England 120 pe all out.",
       "vo_text": "लॉर्ड्स 2021। फॉर सिक्सटी ओवर्स, दे शुड फील हेल आउट देयर। और इंग्लैंड 120 पर ऑल आउट।",
-      "vo_file": null,
+      "vo_file": "vo/raw/9.m4a",
       "clip": null,
-      "clip_start": 0
+      "clip_start": 0,
+      "vo_trim": [
+        12.2,
+        999
+      ]
     },
     {
       "rank": 8,
@@ -71,9 +79,9 @@
       ],
       "image": "assets/ref_8.jpg",
       "duration": 5.0,
-      "caption": "1020 din ka intezaar. Phir Dubai mein aayi 71st century.",
+      "caption": "Number 8... 1020 din, ek century ka intezaar. Phir Dubai mein, 122 not out against Afghanistan. The King was back.",
       "vo_text": "एक हज़ार बीस दिन का इंतज़ार। फिर दुबई में आई इकहत्तरवीं सेंचुरी।",
-      "vo_file": null,
+      "vo_file": "vo/raw/8.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -99,9 +107,9 @@
       ],
       "image": "assets/ref_7.jpg",
       "duration": 5.6,
-      "caption": "Hobart. 40 overs mein 321 chahiye the. Malinga ke ek over mein 24 maar diye.",
+      "caption": "On number 7, Hobart. 40 overs mein 321 chahiye the. Malinga ke ek over mein 24 runs. Bhai, 37th over mein match khatam.",
       "vo_text": "होबार्ट। चालीस ओवर में तीन सौ इक्कीस चाहिए थे। मलिंगा के एक ओवर में चौबीस मार दिए।",
-      "vo_file": null,
+      "vo_file": "vo/raw/7.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -119,9 +127,9 @@
       ],
       "image": "assets/ref_6.jpg",
       "duration": 5.0,
-      "caption": "Mohali 2016. Must-win match, 82 not out, aur twos aise bhaage jaise singles.",
+      "caption": "And number 6, Mohali 2016. Knockout jaisa match, 82 not out against Australia. Twos aise bhaaga jaise singles ho.",
       "vo_text": "मोहाली 2016। मस्ट विन मैच, बयासी नॉट आउट, और टू रन ऐसे भागे जैसे सिंगल्स।",
-      "vo_file": null,
+      "vo_file": "vo/raw/6.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -138,9 +146,9 @@
       ],
       "image": null,
       "duration": 5.2,
-      "caption": "2011. 28 saal ka intezaar khatam. Aur Sachin ko apne kandhon pe uthaya.",
+      "caption": "On number 5, 2011. 28 saal ka intezaar khatam. Aur Kohli ne Sachin ko apne kandhon pe uthaya.",
       "vo_text": "2011। अट्ठाईस साल का इंतज़ार खत्म। और सचिन को अपने कंधों पर उठाया।",
-      "vo_file": null,
+      "vo_file": "vo/raw/5.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -158,9 +166,9 @@
       ],
       "image": "assets/ref_4.jpg",
       "duration": 5.2,
-      "caption": "50th ODI hundred. Sachin ke saamne, unka hi record, Wankhede mein.",
+      "caption": "For me, number 4 is the 50th ODI century. Sachin ke saamne unhi ka record tod ke... aur phir unke aage jhuk gaya.",
       "vo_text": "पचासवीं वनडे सेंचुरी। सचिन के सामने, उन्हीं का रिकॉर्ड, वानखेड़े में।",
-      "vo_file": null,
+      "vo_file": "vo/raw/4.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -178,9 +186,9 @@
       ],
       "image": "assets/ref_3.jpg",
       "duration": 5.2,
-      "caption": "World Cup final, 34 for 3. Kohli ke 76. Aur hum World Champions.",
+      "caption": "Number 3. World Cup final. 34 pe 3. Kohli ke 76... aur hum World Champions!",
       "vo_text": "वर्ल्ड कप फाइनल, चौंतीस पर तीन। कोहली के छिहत्तर। और हम वर्ल्ड चैंपियंस।",
-      "vo_file": null,
+      "vo_file": "vo/raw/3.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -198,9 +206,9 @@
       ],
       "image": "assets/ref_2.jpg",
       "duration": 5.4,
-      "caption": "MCG. 31 for 4. Rauf ko back-to-back sixes. Aaj bhi goosebumps aate hain.",
+      "caption": "For me, number 2 is MCG. 31 pe 4. Rauf ko back-to-back sixes... aaj bhi goosebumps aate hain. Kohli goes down the ground, Kohli goes out of the ground!",
       "vo_text": "एमसीजी। इकतीस पर चार। रउफ को बैक टू बैक सिक्सेस। आज भी गूज़बम्प्स आते हैं।",
-      "vo_file": null,
+      "vo_file": "vo/raw/2.m4a",
       "clip": null,
       "clip_start": 0
     },
@@ -220,9 +228,9 @@
       "duration": 6.0,
       "accent": "#E0262B",
       "crowd": true,
-      "caption": "18 saal. Jersey number 18. Ee sala cup... NAMDU. Hum sab roye the.",
+      "caption": "And number 1. 18 saal. Jersey number 18. Ee sala cup... NAMDU! Hum sab roye the.",
       "vo_text": "अठारह साल। जर्सी नंबर अठारह। ई साला कप... नमदु। हम सब रोए थे।",
-      "vo_file": null,
+      "vo_file": "vo/raw/1.m4a",
       "clip": null,
       "clip_start": 0
     }
@@ -234,12 +242,13 @@
       "#1?"
     ],
     "cta": "Comment it below · Follow for Part 2",
-    "caption": "Aapka number 1 kya hai? Comment karo.",
+    "caption": "Ab tum batao, tumhara number 1 kaunsa hai? Comment karo!",
     "vo_text": "आपका नंबर वन क्या है? कमेंट करो।",
-    "vo_file": null
+    "vo_file": "vo/raw/outro.m4a"
   },
   "voice": {
     "tts_voice": "hm_omega",
-    "tts_speed": 1.2
+    "tts_speed": 1.2,
+    "recording_tempo": 1.06
   }
 }

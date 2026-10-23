@@ -362,7 +362,14 @@ def draw_caption(layer, sc, lt, start):
         return
     words = sc["caption"].split()
     weights = np.array([len(w_) + 2 for w_ in words], float)
-    ends = np.cumsum(weights) / weights.sum() * sc["_vo_dur"]
+    # spread words over the voiced stretches only, so captions wait through the speaker's pauses
+    regions = sc.get("_vo_voiced") or [(0, sc["_vo_dur"])]
+    lens = np.array([b - a for a, b in regions])
+    pos = np.cumsum(weights) / weights.sum() * lens.sum()
+    ends = np.empty_like(pos)
+    for k, p_ in enumerate(pos):
+        r = min(int(np.searchsorted(np.cumsum(lens), p_)), len(regions) - 1)
+        ends[k] = regions[r][0] + (p_ - (np.cumsum(lens)[r] - lens[r]))
     tt = lt - start
     if tt < 0 or tt > sc["_vo_dur"] + 0.4:
         return
@@ -574,6 +581,7 @@ def attach_voiceover(cfg, manifest_path):
     for key, kind, sc in scenes:
         if key in man:
             sc["_vo_path"], sc["_vo_dur"] = man[key]["path"], man[key]["dur"]
+            sc["_vo_voiced"] = man[key].get("voiced") or [(0, man[key]["dur"])]
             sc["duration"] = max(sc["duration"], round(VO_START[kind] + man[key]["dur"] + VO_TAIL[kind], 2))
 
 
