@@ -103,8 +103,11 @@ def main():
             clips = []
             for pc in pieces:
                 src = pc["file"] if os.path.isabs(pc["file"]) else os.path.join(HERE, pc["file"])
-                clips += [clean_recording(src, pc.get("trim"), voice.get("recording_tempo", 1.0)),
-                          np.zeros(int(0.28 * SR), np.float32)]
+                clip = clean_recording(src, pc.get("trim"), voice.get("recording_tempo", 1.0)).copy()
+                fade = min(int(0.015 * SR), len(clip) // 2)  # no clicks at edit points
+                clip[:fade] *= np.linspace(0, 1, fade)
+                clip[len(clip) - fade:] *= np.linspace(1, 0, fade)
+                clips += [clip, np.zeros(int(pc.get("gap_after", 0.22) * SR), np.float32)]
             audio = np.concatenate(clips[:-1])
             origin = "recording"
         elif sc.get("vo_text") and voice.get("tts_fallback", True):

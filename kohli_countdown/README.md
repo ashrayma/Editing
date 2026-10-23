@@ -15,7 +15,8 @@ Each scene stretches to fit its voice line, and SFX/music duck under the voice.
 ### Voiceover: your own voice (recommended)
 Record each line from the script below as its own file (phone voice memo is fine), put them in `vo/`,
 and set `vo_file` on that scene in `config.json`, e.g. `"vo_file": "vo/10.m4a"`. Silence at the start/end is
-trimmed automatically. Any scene without a `vo_file` falls back to the AI voice (offline Kokoro, Hindi `hm_omega`).
+trimmed automatically. `vo_file` can also be a list of `{"file", "trim": [start, end], "gap_after"}` pieces:
+that's how fumbles, retakes and false starts are cut out of a long take (see config.json for the current edit list). Any scene without a `vo_file` falls back to the AI voice (offline Kokoro, Hindi `hm_omega`).
 Keep `caption` matching what you actually say. The captions are timed proportionally across the line.
 
 AI voice setup (one-time, ~350 MB):
