@@ -1,0 +1,83 @@
+{
+  "output": "out/kohli_countdown.mp4",
+  "fps": 30,
+  "music": true,
+  "facecam": null,
+  "facecam_chroma": "0x00FF00",
+  "hook": {
+    "duration": 3.2,
+    "lines": ["RANKING THE", "BEST DAYS AS A", "KOHLI FAN"],
+    "tease": "#1 made the whole nation cry",
+    "image": null
+  },
+  "items": [
+    {
+      "rank": 10, "title": "593 in England", "sub": "Ind vs Eng · Test series · 2018",
+      "stat": 593, "stat_suffix": "", "stat_label": "RUNS · 10 INNINGS · AVG 59.3",
+      "chips": ["2014 tour: just 134 runs", "Top scorer of the series", "Redemption arc complete"],
+      "image": null, "duration": 5.0
+    },
+    {
+      "rank": 9, "title": "Lord's 2021", "sub": "Ind vs Eng · 2nd Test",
+      "stat": 151, "stat_suffix": "", "stat_label": "RUN WIN AT LORD'S",
+      "quote": "For 60 overs, they should feel hell out there.",
+      "chips": ["England bowled out in 51.5 overs"],
+      "image": null, "duration": 5.2
+    },
+    {
+      "rank": 8, "title": "The 71st Century", "sub": "vs Afghanistan · Asia Cup · Dubai 2022",
+      "stat": 1020, "stat_suffix": "", "stat_label": "DAYS OF WAITING",
+      "chips": ["122* off 61 balls", "First T20I hundred", "The King was back"],
+      "image": null, "duration": 5.0
+    },
+    {
+      "rank": 7, "title": "133* in Hobart", "sub": "vs Sri Lanka · CB Series · 2012",
+      "stat": 133, "stat_suffix": "*", "stat_label": "OFF 86 BALLS",
+      "balls": ["2", "6", "4", "4", "4", "4"], "balls_label": "24 off one Malinga over",
+      "chips": ["321 needed in 40 overs", "Done in 36.4"],
+      "image": null, "duration": 5.6
+    },
+    {
+      "rank": 6, "title": "82* in Mohali", "sub": "vs Australia · T20 World Cup · 2016",
+      "stat": 82, "stat_suffix": "*", "stat_label": "OFF 51 BALLS",
+      "chips": ["Chasing 161 in a must-win game", "Ran twos like singles", "Bowed down to Mohali"],
+      "image": null, "duration": 5.0
+    },
+    {
+      "rank": 5, "title": "2011 World Cup", "sub": "Final vs Sri Lanka · Wankhede",
+      "stat": 28, "stat_suffix": " YRS", "stat_label": "OF WAITING ENDED",
+      "quote": "He carried the nation for 21 years. Time we carried him.",
+      "chips": ["Sachin on his shoulders"],
+      "image": null, "duration": 5.2
+    },
+    {
+      "rank": 4, "title": "The 50th ODI Ton", "sub": "vs NZ · WC semi-final · Wankhede 2023",
+      "stat": 50, "stat_suffix": "", "stat_label": "ODI HUNDREDS · WORLD RECORD",
+      "chips": ["Broke Sachin's record of 49", "Sachin in the stands, applauding", "Bowed down to his hero"],
+      "image": null, "duration": 5.2
+    },
+    {
+      "rank": 3, "title": "76 in the Final", "sub": "vs South Africa · T20 WC final · 2024",
+      "stat": 76, "stat_suffix": "", "stat_label": "OFF 59 BALLS · PLAYER OF THE FINAL",
+      "chips": ["India were 34/3", "World Champions after 13 years", "Goodbye to T20Is"],
+      "image": null, "duration": 5.2
+    },
+    {
+      "rank": 2, "title": "82* vs Pakistan", "sub": "T20 World Cup · MCG · 2022",
+      "stat": 82, "stat_suffix": "*", "stat_label": "OFF 53 BALLS",
+      "chips": ["India were 31/4", "Back-to-back sixes off Rauf", "90,000 at the MCG lost it"],
+      "image": null, "duration": 5.4
+    },
+    {
+      "rank": 1, "title": "RCB. Finally.", "sub": "IPL 2025 final vs PBKS · Ahmedabad",
+      "stat": 18, "stat_suffix": " YRS", "stat_label": "OF LOYALTY · JERSEY NO. 18",
+      "chips": ["Ee sala cup NAMDU", "Tears on the field", "We all cried here"],
+      "image": null, "duration": 6.0, "accent": "#E0262B", "crowd": true
+    }
+  ],
+  "outro": {
+    "duration": 3.4,
+    "lines": ["WHAT'S YOUR", "#1?"],
+    "cta": "Comment it below · Follow for Part 2"
+  }
+}

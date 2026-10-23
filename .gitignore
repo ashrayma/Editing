@@ -1,0 +1,4 @@
+__pycache__/
+kohli_countdown/out/*_video.mp4
+kohli_countdown/out/*_facecam.mp4
+kohli_countdown/out/*_preview*.mp4
