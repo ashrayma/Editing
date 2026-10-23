@@ -98,8 +98,14 @@ def main():
     manifest = {}
     for key, sc in scenes(cfg):
         if sc.get("vo_file"):
-            src = sc["vo_file"] if os.path.isabs(sc["vo_file"]) else os.path.join(HERE, sc["vo_file"])
-            audio = clean_recording(src, sc.get("vo_trim"), voice.get("recording_tempo", 1.0))
+            # a path, or a list of {"file", "trim": [start, end]} pieces joined with a short breath
+            pieces = sc["vo_file"] if isinstance(sc["vo_file"], list) else [{"file": sc["vo_file"], "trim": sc.get("vo_trim")}]
+            clips = []
+            for pc in pieces:
+                src = pc["file"] if os.path.isabs(pc["file"]) else os.path.join(HERE, pc["file"])
+                clips += [clean_recording(src, pc.get("trim"), voice.get("recording_tempo", 1.0)),
+                          np.zeros(int(0.28 * SR), np.float32)]
+            audio = np.concatenate(clips[:-1])
             origin = "recording"
         elif sc.get("vo_text") and voice.get("tts_fallback", True):
             if tts is None:

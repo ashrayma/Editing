@@ -226,7 +226,7 @@ def extract_clip(item, idx, cache_root):
 # ----------------------------------------------------------------------------- scene pieces
 
 CARD = (70, 690, 1010, 1130)
-CARD_MEDIA = (70, 690, 1010, 1190)  # taller when it holds a photo / clip
+CARD_MEDIA = (30, 625, 1050, 1325)  # near full-bleed when it holds a photo / clip
 
 
 def card_box(item):
@@ -270,7 +270,12 @@ def draw_card(layer, item, t, accent, idx):
         else:
             card = ken_burns(item["image"], (w, h), t, item["duration"], idx).convert("RGBA")
         shade = np.zeros((h, w, 4), np.uint8)
-        shade[..., 3] = (np.clip((np.linspace(0, 1, h) - 0.45) / 0.55, 0, 1) ** 1.5 * 235)[:, None]
+        # darken top-left (stat) and bottom (captions) so text reads on any photo
+        yy = np.linspace(0, 1, h)[:, None]
+        xx = np.linspace(0, 1, w)[None, :]
+        top = np.clip((0.32 - yy) / 0.32, 0, 1) * np.clip((0.75 - xx) / 0.75, 0, 1) ** 0.6
+        bottom = np.clip((yy - 0.6) / 0.4, 0, 1) ** 1.4
+        shade[..., 3] = (np.clip(top * 0.85 + bottom, 0, 1) * 200).astype(np.uint8)
         card.alpha_composite(Image.fromarray(shade, "RGBA"))
     else:
         yy, xx = np.mgrid[0:h, 0:w]
@@ -296,13 +301,13 @@ def draw_card(layer, item, t, accent, idx):
         txt = f"{val:,}{item.get('stat_suffix', '') if cp >= 1 else ''}"
         punch = 1 + 0.18 * max(0, 1 - (t - 1.9) / 0.25) if t >= 1.9 else 1
         label = text_img(item["stat_label"], "bold", 34 if not has_media else 28,
-                         fill=WHITE if accent == GOLD else GOLD, tracking=3)
+                         fill=WHITE if accent == GOLD else GOLD, tracking=3, stroke=3 if has_media else 0)
         lp = ease_out(prog(t, 1.4, 0.4))
         if has_media:
             # keep the photo's subject clear: stat sits small in the bottom-left corner
             num = text_img(txt, "black", 110, fill=WHITE, stroke=4, stroke_fill=INK)
-            place(layer, num, box[0] + 34, box[3] - 100, punch, p, anchor="l")
-            place(layer, label, box[0] + 40, box[3] - 36, 1, lp, anchor="l")
+            place(layer, num, box[0] + 34, box[1] + 82, punch, p, anchor="l")
+            place(layer, label, box[0] + 40, box[1] + 148, 1, lp, anchor="l")
             return
         place(layer, text_img(txt, "black", 210, fill=WHITE, stroke=4, stroke_fill=INK), cx, cy - 20, punch * scale, p)
         place(layer, label, cx, cy - 20 + 210 * 0.62, 1,
@@ -315,7 +320,7 @@ def draw_rank_block(layer, item, t, accent):
     if sp > 0:
         s = 2.6 - 1.6 * ease_back(sp)
         place(layer, text_img(f"#{rank}", "black", 210, fill=GOLD if rank > 1 else accent, stroke=6),
-              W / 2, 410, s, min(1, sp * 3))
+              W / 2, 385, s, min(1, sp * 3))
     words = item["title"].upper().split()
     imgs = [text_img(w_, "black", 80, fill=WHITE, stroke=3) for w_ in words]
     space = 22
@@ -326,9 +331,9 @@ def draw_rank_block(layer, item, t, accent):
         wp = prog(t, 0.45 + 0.08 * k, 0.22)
         if wp > 0:
             s = scale_fit * (0.5 + 0.5 * ease_back(wp))
-            place(layer, im, x + im.width * scale_fit / 2, 565, s, min(1, wp * 2))
+            place(layer, im, x + im.width * scale_fit / 2, 528, s, min(1, wp * 2))
         x += (im.width + space) * scale_fit
-    place(layer, text_img(item["sub"], "semi", 34, fill=MUTED), W / 2, 640, 1, ease_out(prog(t, 0.75, 0.35)))
+    place(layer, text_img(item["sub"], "semi", 34, fill=MUTED), W / 2, 590, 1, ease_out(prog(t, 0.75, 0.35)))
 
 
 def chip_img(text, accent):
@@ -356,7 +361,7 @@ def extras_timing(item):
     return t_chip, gap
 
 
-def draw_caption(layer, sc, lt, start):
+def draw_caption(layer, sc, lt, start, y=1400):
     """Word-by-word subtitles; word timing is spread over the voice line by word length."""
     if not sc.get("caption") or not sc.get("_vo_dur"):
         return
@@ -389,13 +394,13 @@ def draw_caption(layer, sc, lt, start):
     fit = min(1, 960 / total) * pop
     x = W / 2 - total * fit / 2
     for im in imgs:
-        place(layer, im, x + im.width * fit / 2, 1640, fit)
+        place(layer, im, x + im.width * fit / 2, y, fit)
         x += (im.width + 18) * fit
 
 
 def draw_extras(layer, item, t, accent):
     """Quote typewriter / ball-by-ball pills, then the check-mark chips. Returns SFX cue times."""
-    y = card_box(item)[3] + 85
+    y = card_box(item)[3] + 75
     t_chip, gap = extras_timing(item)
     if item.get("balls"):
         balls = item["balls"]
@@ -473,7 +478,8 @@ def scene_item(t, item, idx):
     draw_extras(layer, item, t, accent)
     if item.get("crowd"):
         draw_confetti(layer, t - 1.9, accent)
-    draw_caption(layer, item, t, VO_START["item"])
+    box = card_box(item)
+    draw_caption(layer, item, t, VO_START["item"], box[3] - 70 if box is CARD_MEDIA else 1640)
     dur = item["duration"]
     # entrance slide, exit whip, impact shake
     dx = int(W * 0.4 * (1 - ease_out(prog(t, 0, 0.28))))
