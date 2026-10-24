@@ -1,34 +1,11 @@
 {
  "beats": [
   {
-   "id": "virat",
-   "type": "lower",
-   "at": "hook1",
-   "side": "left",
-   "w": 760,
-   "h": 150,
-   "name": "Virat Kohli",
-   "sub": "asked one question",
-   "icon": "VK"
-  },
-  {
-   "id": "question",
-   "type": "quote",
-   "at": "hook2",
-   "side": "right",
-   "w": 984,
-   "h": 420,
-   "quote": "Which innings in cricket history do you wish you had played?",
-   "who": "The question",
-   "who_sub": "put to Virat Kohli",
-   "word_step": 0.24
-  },
-  {
    "id": "hook",
    "type": "title",
-   "at": "hook3",
+   "at": "intro",
    "h": 420,
-   "eyebrow": "Sharjah · 1998",
+   "eyebrow": "Virat's answer",
    "lines": [
     "THE DESERT",
     "STORM"
@@ -125,6 +102,17 @@
    "text_top": 52
   },
   {
+   "id": "stopped",
+   "type": "lower",
+   "at": "storm",
+   "side": "left",
+   "w": 760,
+   "h": 150,
+   "name": "Play stopped · 25 minutes",
+   "sub": "Sandstorm · Sharjah, 22 April 1998",
+   "icon": "25"
+  },
+  {
    "id": "revised",
    "type": "equation",
    "at": "revised",
@@ -205,7 +193,7 @@
    "eyebrow": "Every shot in the book",
    "fours": 9,
    "sixes": 5,
-   "tail": 0.6,
+   "tail": 1.0,
    "sfx_extra": [
     {
      "at": 0.5,
@@ -222,7 +210,8 @@
      "file": "pop.mp3",
      "vol": 0.25
     }
-   ]
+   ],
+   "lead": 0.3
   },
   {
    "id": "recording",
@@ -348,17 +337,14 @@
  ],
  "sfx": [
   {
-   "at": "hook3",
-   "edge": "end",
-   "offset": -1.35,
+   "t": 4.15,
    "file": "impact-bass-2.mp3",
    "vol": 0.45
   },
   {
-   "at": "hook3",
-   "offset": -0.2,
-   "file": "whoosh-cinematic.mp3",
-   "vol": 0.3
+   "t": 4.95,
+   "file": "whoosh.mp3",
+   "vol": 0.4
   },
   {
    "at": "real-10.0",
@@ -374,35 +360,48 @@
  ],
  "photos": [
   {
-   "at": "hook1",
-   "src": "assets/photos/01_virat_kohli.jpg",
-   "need": "Virat Kohli: interview or press-conference photo"
-  },
-  {
-   "at": "hook3",
-   "src": "assets/photos/02_sachin_sharjah_1998.jpg",
-   "need": "Sachin raising his bat, Sharjah 1998"
+   "at": "intro",
+   "src": "assets/photos/sachin_vs_waugh.jpg",
+   "pos": "center 30%",
+   "zoom": [
+    1.05,
+    1.18
+   ]
   },
   {
    "at": "date",
-   "src": "assets/photos/03_sharjah_stadium.jpg",
-   "need": "Sharjah Cricket Stadium under lights"
+   "kind": "text",
+   "eyebrow": "Coca-Cola Cup",
+   "lines": [
+    [
+     "22.04.1998",
+     150
+    ]
+   ],
+   "sub": "Sharjah Cricket Stadium, UAE"
   },
   {
    "at": "target",
-   "src": "assets/photos/04_australia_innings.jpg",
-   "need": "Australia batting, 22 Apr 1998 (Bevan 101*)"
+   "src": "assets/photos/sachin_lofted_drive.jpg",
+   "pos": "85% 55%",
+   "zoom": [
+    1.3,
+    1.42
+   ]
   },
   {
    "at": "aussies",
-   "src": "assets/photos/05_australia_team_90s.jpg",
-   "need": "Australia team, late 1990s"
+   "src": "assets/photos/sachin_vs_waugh.jpg",
+   "pos": "88% 45%",
+   "zoom": [
+    1.35,
+    1.5
+   ]
   },
   {
    "at": "turn",
    "src": "assets/img/ai_sandstorm.png",
    "tag": "AI-GENERATED",
-   "need": "sandstorm",
    "zoom": [
     1.0,
     1.22
@@ -410,49 +409,122 @@
    "sfx": "whoosh-cinematic.mp3"
   },
   {
-   "at": "revised",
-   "src": "assets/photos/07_after_the_storm.jpg",
-   "need": "Players back out after the sandstorm"
-  },
-  {
    "at": "real",
-   "src": "assets/photos/08_sachin_six.jpg",
-   "need": "Sachin hitting a six, 22 Apr 1998"
+   "src": "assets/photos/sachin_lofted_drive.jpg",
+   "pos": "30% 40%",
+   "zoom": [
+    1.0,
+    1.14
+   ]
   },
   {
    "at": "shots",
-   "src": "assets/photos/09_sachin_down_the_track.jpg",
-   "need": "Sachin charging down the track"
+   "src": "assets/photos/sachin_vs_waugh.jpg",
+   "pos": "30% 25%",
+   "zoom": [
+    1.2,
+    1.35
+   ]
   },
   {
    "at": "lost",
-   "src": "assets/photos/10_sachin_crowd.jpg",
-   "need": "Sachin raising his bat to the crowd after 143"
+   "kind": "text",
+   "eyebrow": "22 April 1998",
+   "lines": [
+    [
+     "LOST BY 26.",
+     104
+    ],
+    [
+     "<span style='color:#FFB340'>QUALIFIED.</span>",
+     120
+    ]
+   ],
+   "sub": "Sachin carried India into the final"
   },
   {
    "at": "bday",
-   "src": "assets/photos/11_final_century.jpg",
-   "need": "Sachin's century in the final, 24 Apr 1998"
+   "kind": "text",
+   "eyebrow": "Two days later",
+   "lines": [
+    [
+     "THE FINAL",
+     120
+    ],
+    [
+     "<span style='color:#FFB340'>24.04.1998</span>",
+     120
+    ]
+   ]
   },
   {
    "at": "final",
-   "src": "assets/photos/12_cup_trophy.jpg",
-   "need": "India with the Coca-Cola Cup trophy"
+   "src": "assets/photos/trophy_celebration.jpg",
+   "pos": "center 35%",
+   "zoom": [
+    1.0,
+    1.12
+   ]
   },
   {
    "at": "warne",
-   "src": "assets/photos/13_warne_vs_sachin.jpg",
-   "need": "Shane Warne bowling to Sachin"
+   "kind": "text",
+   "eyebrow": "Shane Warne",
+   "lines": [
+    [
+     "NIGHT",
+     150
+    ],
+    [
+     "<span style='color:#FFB340'>MARES.</span>",
+     150
+    ]
+   ]
   },
   {
    "at": "why",
-   "src": "assets/photos/14_virat_kohli.jpg",
-   "need": "Virat Kohli"
+   "src": "assets/photos/team_victory_lap.jpg",
+   "pos": "center 40%",
+   "zoom": [
+    1.0,
+    1.15
+   ]
   },
   {
    "at": "cta",
-   "src": "assets/photos/15_sachin_portrait.jpg",
-   "need": "Sachin, 1998 portrait"
+   "src": "assets/photos/sachin_vs_waugh.jpg",
+   "pos": "center 30%",
+   "zoom": [
+    1.0,
+    1.12
+   ]
   }
- ]
+ ],
+ "hook": {
+  "src": "assets/video/hook.mp4",
+  "duration": 5.2,
+  "overlap": 0.05,
+  "captions": [
+   {
+    "t0": 0.2,
+    "t1": 1.6,
+    "text": "The one knock in"
+   },
+   {
+    "t0": 1.6,
+    "t1": 2.8,
+    "text": "international cricket"
+   },
+   {
+    "t0": 2.8,
+    "t1": 4.15,
+    "text": "you wish you had played?"
+   },
+   {
+    "t0": 4.2,
+    "t1": 5.15,
+    "text": "Sharjah '98. Desert Storm."
+   }
+  ]
+ }
 }

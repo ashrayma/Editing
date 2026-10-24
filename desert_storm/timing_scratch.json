@@ -1,0 +1,92 @@
+{
+ "source": "scratch",
+ "audio": "assets/audio/scratch_vo.wav",
+ "duration": 74.169,
+ "lines": [
+  {
+   "id": "intro",
+   "start": 0.05,
+   "end": 4.951
+  },
+  {
+   "id": "date",
+   "start": 5.091,
+   "end": 9.108
+  },
+  {
+   "id": "target",
+   "start": 9.248,
+   "end": 11.994
+  },
+  {
+   "id": "context",
+   "start": 12.134,
+   "end": 18.996
+  },
+  {
+   "id": "aussies",
+   "start": 19.136,
+   "end": 24.33
+  },
+  {
+   "id": "turn",
+   "start": 24.47,
+   "end": 28.575
+  },
+  {
+   "id": "storm",
+   "start": 28.715,
+   "end": 33.818
+  },
+  {
+   "id": "revised",
+   "start": 33.958,
+   "end": 38.707
+  },
+  {
+   "id": "real",
+   "start": 38.847,
+   "end": 40.695
+  },
+  {
+   "id": "score",
+   "start": 40.835,
+   "end": 45.254
+  },
+  {
+   "id": "shots",
+   "start": 45.394,
+   "end": 47.001
+  },
+  {
+   "id": "lost",
+   "start": 47.141,
+   "end": 51.805
+  },
+  {
+   "id": "bday",
+   "start": 51.945,
+   "end": 56.174
+  },
+  {
+   "id": "final",
+   "start": 56.314,
+   "end": 59.903
+  },
+  {
+   "id": "warne",
+   "start": 60.043,
+   "end": 66.294
+  },
+  {
+   "id": "why",
+   "start": 66.434,
+   "end": 69.921
+  },
+  {
+   "id": "cta",
+   "start": 70.061,
+   "end": 73.229
+  }
+ ]
+}

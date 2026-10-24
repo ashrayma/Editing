@@ -218,7 +218,7 @@ def r_boundaries(b, cid, dur):
       <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:30px">{chips}</div>
       <div class="item" style="font-size:36px;font-weight:700;margin-top:30px"><span class="num" style="font-size:44px">{b['fours']}</span> fours &nbsp;·&nbsp; <span class="num" style="font-size:44px;color:{ACCENT}">{b['sixes']}</span> sixes &nbsp;<span class="muted">= {b['fours']*4 + b['sixes']*6} runs in boundaries</span></div></div>"""
     js = stagger_in(f"#{cid} .item", 0.25)
-    js += f'  tl.fromTo("#{cid} .chip", {{ scale: 0, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.42, ease: "back.out(1.7)", stagger: 0.11 }}, 0.45);\n'
+    js += f'  tl.fromTo("#{cid} .chip", {{ scale: 0, opacity: 0 }}, {{ scale: 1, opacity: 1, duration: 0.42, ease: "back.out(1.7)", stagger: 0.055 }}, 0.35);\n'
     return inner, css, js
 
 
@@ -344,7 +344,7 @@ def caption_groups(lines, timing, keywords, max_words=3):
     groups = []
     for line in lines:
         t = timing[line["id"]]
-        words = line.get("caption", line["text"]).split()
+        words = line.get("caption", line["text"]).split()  # on-screen text is English
         chunks, cur = [], []
         for w in words:
             cur.append(w)
@@ -432,8 +432,13 @@ def stage_file(photos, total):
     divs, js = [], []
     for i, p in enumerate(photos):
         t0, t1 = r3(p["_t0"]), r3(p["_t1"])
-        have = os.path.exists(os.path.join(FILM, p["src"]))
-        if have:
+        have = bool(p.get("src")) and os.path.exists(os.path.join(FILM, p["src"]))
+        if p.get("kind") == "text":
+            lines = "".join(f'<div class="ptx-l" style="font-size:{sz}px">{t}</div>' for t, sz in p["lines"])
+            inner = (f'<div class="ptx"><div class="ptx-e">{esc(p.get("eyebrow", ""))}</div>{lines}'
+                     f'<div class="ptx-s">{esc(p.get("sub", ""))}</div></div>')
+            backdrop = ""
+        elif have:
             bd = blurred_backdrop(p["src"])
             tag = f'<div class="ptag">{esc(p["tag"])}</div>' if p.get("tag") else ""
             credit = f'<div class="pcred">{esc(p["credit"])}</div>' if p.get("credit") else ""
@@ -449,9 +454,12 @@ def stage_file(photos, total):
         d = -1 if i % 2 == 0 else 1
         js.append(f'  tl.fromTo("#pf{i}", {{ x: {d} * 1150, opacity: 0, filter: "blur(16px)" }}, '
                   f'{{ x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }}, {t0});')
+        if i + 1 < len(photos):  # push: leave toward the side the next picture comes from's opposite
+            js.append(f'  tl.to("#pf{i}", {{ x: {d} * 700, opacity: 0, filter: "blur(14px)", duration: 0.42, ease: "power3.in" }}, '
+                      f'{r3(photos[i + 1]["_t0"])});')
         if backdrop:
             js.append(f'  tl.fromTo("#pb{i}", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.6, ease: "power2.out" }}, {t0});')
-        if have:
+        if have and p.get("kind") != "text":
             z0, z1 = p.get("zoom", [1.0, 1.12])
             js.append(f'  tl.fromTo("#pk{i}", {{ scale: {z0}, x: {-14 * d} }}, {{ scale: {z1}, x: {14 * d}, duration: {r3(t1 - t0)}, ease: "none" }}, {t0});')
     return f"""<template>
@@ -464,6 +472,11 @@ def stage_file(photos, total):
   .ptag {{ position:absolute; top:28px; left:28px; padding:10px 20px; border-radius:100px; background:rgba(0,0,0,.55); color:#fff;
            font-size:28px; font-weight:800; letter-spacing:.1em; }}
   .pcred {{ position:absolute; right:26px; bottom:20px; color:rgba(255,255,255,.7); font-size:22px; font-weight:600; text-shadow:0 1px 6px rgba(0,0,0,.7); }}
+  .ptx {{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px;
+          background:radial-gradient(90% 80% at 50% 40%, #3a2a14 0%, #1a140c 45%, #0c0b0a 100%); color:#fff; }}
+  .ptx-e {{ color:{ACCENT}; font-size:30px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }}
+  .ptx-l {{ font-weight:900; letter-spacing:-.04em; line-height:1.04; }}
+  .ptx-s {{ color:rgba(255,255,255,.62); font-size:34px; font-weight:600; margin-top:10px; }}
   .pslot {{ position:absolute; inset:26px; border:4px dashed rgba(255,255,255,.22); border-radius:36px; display:flex; flex-direction:column;
             align-items:center; justify-content:center; gap:14px; text-align:center; padding:0 60px;
             background:radial-gradient(90% 70% at 50% 35%, #2b2b31 0%, #151518 100%); }}
@@ -497,8 +510,10 @@ def build():
     script = json.load(open(os.path.join(ROOT, "script.json")))
     tim = json.load(open(os.path.join(ROOT, "timing.json")))
     edit = json.load(open(os.path.join(ROOT, "edit.json")))
-    timing = {l["id"]: l for l in tim["lines"]}
-    total = r3(tim["duration"])
+    hook = edit.get("hook")
+    offset = r3(hook["duration"] - hook.get("overlap", 0.0)) if hook else 0.0
+    timing = {l["id"]: {"start": l["start"] + offset, "end": l["end"] + offset} for l in tim["lines"]}
+    total = r3(offset + tim["duration"])
     os.makedirs(os.path.join(FILM, "compositions"), exist_ok=True)
     for f in os.listdir(os.path.join(FILM, "compositions")):
         if f.endswith(".html"):
@@ -512,10 +527,19 @@ def build():
         p["_t1"] = photos[i + 1]["_t0"] + 0.85 if i + 1 < len(photos) else total
     with open(os.path.join(FILM, "compositions", "stage.html"), "w") as fh:
         fh.write(stage_file(photos, total))
-    voice = (f'    <audio id="vo" class="clip" src="{tim["audio"]}" data-start="0" data-duration="{total}" '
-             f'data-track-index="1" data-volume="1"></audio>')
-    tight, origin = 1.0, "540px 560px"
     cam_js = []
+    voice = (f'    <audio id="vo" class="clip" src="{tim["audio"]}" data-start="{offset}" data-duration="{r3(total - offset)}" '
+             f'data-track-index="1" data-volume="1"></audio>')
+    # the hook: a full-screen clip with its own sound, whipped off to the left as the story starts
+    hook_html = ""
+    if hook:
+        hd = r3(hook["duration"])
+        hook_html = (f'    <div id="hookwrap" style="position:absolute;inset:0;z-index:4">\n'
+                     f'      <video id="hookclip" class="clip" src="{hook["src"]}" data-start="0" data-duration="{hd}" data-track-index="0" '
+                     f'data-has-audio="true" playsinline style="position:absolute;left:0;top:0;width:{W}px;height:{H}px;object-fit:cover"></video>\n    </div>')
+        cam_js.append(f'  tl.fromTo("#hookwrap", {{ x: 0, opacity: 1, filter: "blur(0px)" }}, '
+                      f'{{ x: -700, opacity: 0, filter: "blur(18px)", duration: 0.32, ease: "power3.in" }}, {r3(hd - 0.3)});')
+    tight, origin = 1.0, "540px 560px"
 
     hosts, sfx = [], []
     for k, b in enumerate(edit["beats"]):
@@ -539,7 +563,8 @@ def build():
         if i:
             sfx.append({"t": p["_t0"] - 0.1, "file": p.get("sfx", ["whoosh-short.mp3", "whoosh.mp3"][i % 2]), "vol": 0.3})
     for s in edit.get("sfx", []):
-        sfx.append({"t": anchor(s["at"], timing, s.get("edge", "start")) + s.get("offset", 0), "file": s["file"], "vol": s.get("vol", 0.4)})
+        t = s["t"] if "t" in s else anchor(s["at"], timing, s.get("edge", "start")) + s.get("offset", 0)
+        sfx.append({"t": t, "file": s["file"], "vol": s.get("vol", 0.4)})
 
     audio, lane_free = [], [0.0] * 6
     for i, s in enumerate(sorted(sfx, key=lambda s: s["t"])):
@@ -572,6 +597,7 @@ def build():
     <div id="stage" data-composition-id="stage" data-composition-src="compositions/stage.html" data-start="0" data-duration="{total}"
          data-track-index="0" data-track-kind="graphics" data-width="{W}" data-height="{H}" style="z-index:1"></div>
     <div id="grade"></div>
+{hook_html}
 {chr(10).join(hosts)}
     <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="{total}"
          data-track-index="2" data-track-kind="captions" data-width="{W}" data-height="{H}" style="z-index:5"></div>
@@ -589,7 +615,13 @@ def build():
 """
     with open(os.path.join(FILM, "index.html"), "w") as fh:
         fh.write(index)
-    groups = caption_groups(script["lines"], timing, script.get("keywords", []))
+    lines = [dict(l) for l in script["lines"]]
+    hook_caps = []
+    if hook:
+        for i, c in enumerate(hook.get("captions", [])):
+            timing[f"_hook{i}"] = {"start": c["t0"], "end": c["t1"]}
+            hook_caps.append({"id": f"_hook{i}", "text": c["text"]})
+    groups = caption_groups(hook_caps + lines, timing, script.get("keywords", []))
     with open(os.path.join(FILM, "compositions", "captions.html"), "w") as fh:
         fh.write(captions_file(groups, total))
     # layout manifest for the face-safety audit

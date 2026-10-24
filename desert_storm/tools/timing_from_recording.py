@@ -6,9 +6,11 @@ delivery.
   python3 tools/timing_from_recording.py my_voice.m4a     # any audio or video file
   python3 tools/build.py && python3 tools/layout_audit.py
 
-Whisper (small, multilingual) runs offline through sherpa-onnx; models come from the
-sherpa-onnx GitHub releases (see README). Say the lines roughly as written: you can
-ad-lib, the alignment only needs most words of each line to match.
+Silero VAD (and Whisper for --mode words) run offline through sherpa-onnx; models come from the
+sherpa-onnx GitHub releases (see README). Read the lines in order with a short breath
+between them; the default --mode pauses finds those breaks, so it works for Hinglish.
+Times are relative to the start of your voice file; build.py places the voice right
+after the hook clip.
 """
 import argparse, difflib, json, os, re, subprocess, sys, tempfile, wave
 import numpy as np
@@ -19,18 +21,18 @@ MODELS = os.environ.get("WHISPER_MODELS", os.path.join(ROOT, "models"))
 
 
 def norm(w):
-    return re.sub(r"[^a-z0-9]", "", w.lower())
+    w = w.lower().replace("\u093c", "")  # drop the nukta so ज़ and ज match
+    return re.sub(r"[^a-z0-9\u0900-\u097f]", "", w)
 
 
-def transcribe(wav, language):
-    import sherpa_onnx
+def load_wav(wav):
     w = wave.open(wav)
-    sr = w.getframerate()
-    a = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768
-    m = os.path.join(MODELS, "sherpa-onnx-whisper-small")
-    rec = sherpa_onnx.OfflineRecognizer.from_whisper(
-        encoder=f"{m}/small-encoder.int8.onnx", decoder=f"{m}/small-decoder.int8.onnx",
-        tokens=f"{m}/small-tokens.txt", language=language, task="transcribe", num_threads=4)
+    return np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768, w.getframerate()
+
+
+def speech_segments(a, sr):
+    """Silero VAD: [(start, end, samples)] for every stretch of speech, split at pauses of 80 ms or more."""
+    import sherpa_onnx
     cfg = sherpa_onnx.VadModelConfig()
     cfg.silero_vad.model = os.path.join(MODELS, "silero_vad.onnx")
     cfg.silero_vad.min_silence_duration = 0.08
@@ -38,17 +40,62 @@ def transcribe(wav, language):
     cfg.sample_rate = sr
     vad = sherpa_onnx.VoiceActivityDetector(cfg, buffer_size_in_seconds=600)
     segs = []
+
+    def drain():
+        while not vad.empty():
+            t0 = vad.front.start / sr
+            segs.append((t0, t0 + len(vad.front.samples) / sr, np.array(vad.front.samples)))
+            vad.pop()
     for i in range(0, len(a), cfg.silero_vad.window_size):
         vad.accept_waveform(a[i:i + cfg.silero_vad.window_size])
-        while not vad.empty():
-            segs.append((vad.front.start / sr, np.array(vad.front.samples)))
-            vad.pop()
+        drain()
     vad.flush()
-    while not vad.empty():
-        segs.append((vad.front.start / sr, np.array(vad.front.samples)))
-        vad.pop()
+    drain()
+    return segs
+
+
+def align_pauses(lines, segs, expected):
+    """Language-independent: pick the line breaks among the pauses so each line's length best
+    fits its expected length (scaled to your pace), preferring longer pauses as breaks."""
+    L, N = len(lines), len(segs)
+    if N < L:
+        raise SystemExit(f"only {N} speech stretches for {L} lines: leave a short pause between lines and try again")
+    span = segs[-1][1] - segs[0][0]
+    k = span / (sum(expected) + 0.15 * (L - 1))
+    gap = [0.0] + [segs[i][0] - segs[i - 1][1] for i in range(1, N)]
+    INF = float("inf")
+    dp = [[INF] * (N + 1) for _ in range(L + 1)]
+    back = [[0] * (N + 1) for _ in range(L + 1)]
+    dp[0][0] = 0.0
+    for l in range(L):
+        want = k * expected[l]
+        for n in range(l + 1, N - (L - l - 1) + 1):
+            best, arg = INF, 0
+            for j in range(l, n):
+                if dp[l][j] == INF:
+                    continue
+                dur = segs[n - 1][1] - segs[j][0]
+                c = dp[l][j] + 10 * ((dur - want) / want) ** 2 - (3 * min(gap[j], 0.8) if j else 0)
+                if c < best:
+                    best, arg = c, j
+            dp[l + 1][n], back[l + 1][n] = best, arg
+    cuts, n = [], N
+    for l in range(L, 0, -1):
+        j = back[l][n]
+        cuts.append((j, n))
+        n = j
+    cuts.reverse()
+    return [{"id": line["id"], "start": round(segs[j][0], 3), "end": round(segs[n - 1][1], 3)} for line, (j, n) in zip(lines, cuts)]
+
+
+def transcribe(a, sr, segs, language):
+    import sherpa_onnx
+    m = os.path.join(MODELS, "sherpa-onnx-whisper-small")
+    rec = sherpa_onnx.OfflineRecognizer.from_whisper(
+        encoder=f"{m}/small-encoder.int8.onnx", decoder=f"{m}/small-decoder.int8.onnx",
+        tokens=f"{m}/small-tokens.txt", language=language, task="transcribe", num_threads=4)
     words = []  # (word, start, end), spread across each VAD segment by character count
-    for t0, s in segs:
+    for t0, _, s in segs:
         st = rec.create_stream()
         st.accept_waveform(sr, s)
         rec.decode_stream(st)
@@ -65,7 +112,8 @@ def transcribe(wav, language):
 
 
 def align(lines, words):
-    sw = [(norm(w), li) for li, l in enumerate(lines) for w in l["text"].split() if norm(w)]
+    key = "tts" if any(re.search(r"[\u0900-\u097f]", w[0]) for w in words) else "text"
+    sw = [(norm(w), li) for li, l in enumerate(lines) for w in l.get(key, l["text"]).split() if norm(w)]
     tw = [norm(w[0]) for w in words]
     sm = difflib.SequenceMatcher(None, [s[0] for s in sw], tw, autojunk=False)
     hits = {}  # line index -> list of (start, end)
@@ -100,7 +148,10 @@ def probe(path, entry):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("take")
-    ap.add_argument("--language", default="en", help="whisper language; for Hinglish takes try 'hi' and keep script.json in the same script")
+    ap.add_argument("--mode", choices=["pauses", "words"], default="pauses",
+                    help="pauses: language-independent, fits line breaks to your pauses (best for Hinglish); "
+                         "words: Whisper transcription matched word by word (good for English takes)")
+    ap.add_argument("--language", default="en", help="whisper language for --mode words")
     args = ap.parse_args()
     script = json.load(open(os.path.join(ROOT, "script.json")))
     os.makedirs(os.path.join(FILM, "assets/audio"), exist_ok=True)
@@ -114,7 +165,19 @@ if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as td:
         wav = os.path.join(td, "a.wav")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", dst, "-ac", "1", "-ar", "16000", wav], check=True)
-        words = transcribe(wav, args.language)
-    timing["lines"] = align(script["lines"], words)
+        a, sr = load_wav(wav)
+    segs = speech_segments(a, sr)
+    if args.mode == "words":
+        timing["lines"] = align(script["lines"], transcribe(a, sr, segs, args.language))
+    else:
+        ref = os.path.join(ROOT, "timing_scratch.json")
+        if os.path.exists(ref):
+            exp = {l["id"]: l["end"] - l["start"] for l in json.load(open(ref))["lines"]}
+            expected = [exp.get(l["id"], len(l["text"]) / 14) for l in script["lines"]]
+        else:
+            expected = [len(l["text"]) / 14 for l in script["lines"]]  # ~14 characters a second
+        timing["lines"] = align_pauses(script["lines"], segs, expected)
+    for l in timing["lines"]:
+        print(f"  {l['id']:<10} {l['start']:6.2f} - {l['end']:6.2f}")
     json.dump(timing, open(os.path.join(ROOT, "timing.json"), "w"), indent=1)
     print(f"timing.json written from your take ({timing['duration']}s, {len(timing['lines'])} lines). Now: python3 tools/build.py")
