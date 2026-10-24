@@ -526,5 +526,9 @@
     "text": "Sharjah '98. Desert Storm."
    }
   ]
+ },
+ "music": {
+  "src": "assets/audio/music.wav",
+  "volume": 0.6
  }
 }

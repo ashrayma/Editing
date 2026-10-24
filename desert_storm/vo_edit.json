@@ -1,0 +1,6 @@
+{
+ "source": "voice_raw/voiceover_take1.m4a",
+ "note": "ranges of the raw take to keep, in seconds; the gaps between them are false starts and dead air",
+ "join_gap": 0.22,
+ "keep": [[4.15, 37.62], [40.15, 60.26], [63.5, 77.12], [79.74, 95.9]]
+}

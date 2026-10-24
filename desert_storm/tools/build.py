@@ -530,6 +530,9 @@ def build():
     cam_js = []
     voice = (f'    <audio id="vo" class="clip" src="{tim["audio"]}" data-start="{offset}" data-duration="{r3(total - offset)}" '
              f'data-track-index="1" data-volume="1"></audio>')
+    if edit.get("music"):  # pre-ducked under the voice by tools/make_music.py
+        voice += (f'\n    <audio id="music" class="clip" src="{edit["music"]["src"]}" data-start="0" data-duration="{total}" '
+                  f'data-track-index="2" data-volume="{edit["music"].get("volume", 0.6)}"></audio>')
     # the hook: a full-screen clip with its own sound, whipped off to the left as the story starts
     hook_html = ""
     if hook:

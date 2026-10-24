@@ -1,92 +1,93 @@
 {
- "source": "scratch",
- "audio": "assets/audio/scratch_vo.wav",
- "duration": 89.757,
+ "source": "voice_raw/voiceover_take1.m4a (cut + cleaned by tools/clean_vo.py)",
+ "audio": "assets/audio/voice_clean.wav",
+ "duration": 84.021,
+ "note": "line boundaries set by hand from a phrase-level transcript of the take",
  "lines": [
   {
    "id": "intro",
-   "start": 0.05,
-   "end": 8.286
+   "start": 0.1,
+   "end": 6.43
   },
   {
    "id": "date",
-   "start": 8.426,
-   "end": 14.217
+   "start": 6.57,
+   "end": 11.6
   },
   {
    "id": "target",
-   "start": 14.357,
-   "end": 18.071
+   "start": 12.1,
+   "end": 15.41
   },
   {
    "id": "context",
-   "start": 18.211,
-   "end": 25.2
+   "start": 15.78,
+   "end": 22.86
   },
   {
    "id": "aussies",
-   "start": 25.34,
-   "end": 30.787
+   "start": 23.3,
+   "end": 29.1
   },
   {
    "id": "turn",
-   "start": 30.927,
-   "end": 35.55
+   "start": 29.35,
+   "end": 33.55
   },
   {
    "id": "storm",
-   "start": 35.69,
-   "end": 41.456
+   "start": 33.77,
+   "end": 40.17
   },
   {
    "id": "revised",
-   "start": 41.596,
-   "end": 47.642
+   "start": 40.21,
+   "end": 45.88
   },
   {
    "id": "real",
-   "start": 47.782,
-   "end": 49.963
+   "start": 45.95,
+   "end": 47.67
   },
   {
    "id": "score",
-   "start": 50.103,
-   "end": 54.851
+   "start": 47.81,
+   "end": 52.11
   },
   {
    "id": "shots",
-   "start": 54.991,
-   "end": 58.385
+   "start": 52.33,
+   "end": 55.92
   },
   {
    "id": "lost",
-   "start": 58.525,
-   "end": 63.769
+   "start": 56.23,
+   "end": 60.56
   },
   {
    "id": "bday",
-   "start": 63.909,
-   "end": 70.184
+   "start": 60.65,
+   "end": 65.2
   },
   {
    "id": "final",
-   "start": 70.324,
-   "end": 75.084
+   "start": 66.05,
+   "end": 70.0
   },
   {
    "id": "warne",
-   "start": 75.224,
-   "end": 80.877
+   "start": 70.02,
+   "end": 75.15
   },
   {
    "id": "why",
-   "start": 81.017,
-   "end": 84.672
+   "start": 75.4,
+   "end": 78.48
   },
   {
    "id": "cta",
-   "start": 84.812,
-   "end": 88.817
+   "start": 78.66,
+   "end": 82.99
   }
  ]
 }

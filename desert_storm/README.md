@@ -1,6 +1,6 @@
 # The Desert Storm: a faceless story reel
 
-A ~79 s, 9:16 story reel built with [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + GSAP rendered to MP4).
+An 89 s, 9:16 story reel built with [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML + GSAP rendered to MP4).
 
 **Structure:** a 5.2 s hook clip (the host asks *"the one knock in international cricket you wish you had played"*, Virat answers
 *"Sharjah 98, Desert Storm"*), then a Hinglish voiceover tells the story over real event photos, with English captions and on-screen text.
@@ -9,22 +9,36 @@ There is no face on screen. A large rounded **photo stage** holds the picture fo
 Ken Burns zoom. Captions sit under it, and stat, screenshot and screen-recording cards slide in below. `tools/layout_audit.py`
 fails the build if anything covers the photo stage.
 
-`out/desert_storm_preview.mp4` uses a **scratch Hindi AI voice** until your recording arrives.
+`out/desert_storm_final.mp4` is the finished reel: your Hinglish voiceover (`voice_raw/voiceover_take1.m4a`), cut and cleaned,
+with original background music.
 
-## Your voiceover
+## Voiceover
 
-The script is in **[SCRIPT.md](SCRIPT.md)**: what you say (Hinglish), what shows on screen (English), and how to record it.
-When the file arrives:
+The script is in **[SCRIPT.md](SCRIPT.md)**. Your take went through:
+1. `tools/clean_vo.py` cuts the ranges listed in `vo_edit.json`: 4 s of lead-in silence and three false starts
+   ("Ek zabar…", "Bowler koi bh…", "Ek sau… na"), each followed by your clean retake. Then rumble filter, gentle
+   noise reduction, presence EQ, compression, −16 LUFS. 96.8 s raw → 84.0 s clean, your natural pace otherwise untouched.
+2. `timing.json` holds where each of the 17 lines sits in the cleaned take. These were set by hand from a phrase-level
+   transcript because several lines run together without a pause. `tools/timing_from_recording.py` can fit them
+   automatically for a future take with clear pauses between lines.
+3. Everything (captions, photos, cards, sound effects, music sections) is anchored to those line ids.
+
+To redo with a new take: edit `vo_edit.json` (or keep everything), then
 ```
-python3 tools/timing_from_recording.py my_voice.m4a   # finds each line in your take, writes timing.json
-python3 tools/build.py && python3 tools/layout_audit.py
+python3 tools/clean_vo.py voice_raw/new_take.m4a
+python3 tools/timing_from_recording.py film/assets/audio/voice_clean.wav   # or set timing.json by hand
+python3 tools/make_music.py && python3 tools/build.py && python3 tools/layout_audit.py
 cd film && npx hyperframes render -o ../out/render.mp4 && cd ..
-ffmpeg -i out/render.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=11 -c:a aac -b:a 192k -movflags +faststart out/desert_storm.mp4
+ffmpeg -i out/render.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=11 -c:a aac -b:a 192k -movflags +faststart out/desert_storm_final.mp4
 ```
-Alignment works by pauses, not words (speech recognition is unreliable on Hinglish): read the lines in order with a short breath
-between them, and the aligner picks the line breaks that best fit the script's rhythm at your pace. On test takes at normal and
-+15% speed it landed within 0.04 s on average. Everything else (captions, photos, cards, sound effects) is anchored to line ids,
-so it all moves with your delivery. The last step brings the mix to −14 LUFS, the level Reels and Shorts play at.
+
+## Music
+
+`tools/make_music.py` composes an original track from scratch in code (no samples, no third-party audio, so it's
+copyright-free): 128 BPM, A minor (Am–F–C–G). The arrangement follows the story. Soft pad under the hook; kick, hats,
+bass and pluck arpeggio through the story; drums drop out for the sandstorm; a riser into a full drop that lands on
+a bar line exactly on "asli toofan"; a half-time breakdown and fade from the Warne line. It ducks 7 dB wherever
+you speak, and in the mix it sits 8–11 dB under your voice (16–20 dB in the quiet sections).
 
 ## Pictures
 
@@ -71,8 +85,8 @@ so this follows his recognisable Shorts style in general, not a frame-by-frame b
 - **Sound**: soft whooshes on every card and photo change, pops on chips, a ping when a big number lands, a low riser into "the real storm" with a bass impact on the drop, and a sparkle on the trophy and CTA.
 - **CTA as a question** in the last line, mirrored by an on-screen card.
 
-Music: no royalty-free music source was available on the build machine, so the render has voice and SFX only.
-Add a trending sound in the Instagram/YouTube editor at about 10–15% under the voice.
+Music: an original synthesised bed (see Music above). If you'd rather ride a trending sound on Instagram, set the
+`music` entry's `volume` in `edit.json` to 0, rebuild, and add the sound in the app.
 
 ## Files
 
@@ -82,6 +96,8 @@ script.json            the lines: text (Hinglish, spoken), caption (English, on 
 timing.json            when each line is spoken (scratch voice, or your take); timing_scratch.json = reference rhythm
 edit.json              hook, photos, cards, sound cues, anchored to line ids
 tools/build.py         generates film/index.html + film/compositions/*
+tools/clean_vo.py      raw take -> cut + cleaned voice (cut list in vo_edit.json)
+tools/make_music.py    the original background music, arranged to the story
 tools/scratch_vo.py    offline Kokoro scratch voice (Hindi hm_omega; models: ../kohli_countdown/README.md)
 tools/timing_from_recording.py   your take -> timing.json (Silero VAD pause alignment, offline)
 tools/prep_hook.py     hook clip -> 1080x1920 with its burned-in captions blurred
