@@ -5,7 +5,7 @@ timing.json (start/end of every script line, in seconds).
 
 Replace it with your own recording via tools/timing_from_recording.py.
 
-usage: python3 tools/scratch_vo.py [--voice hm_omega] [--speed 1.1] [--lang hi]
+usage: python3 tools/scratch_vo.py [--voice hm_omega] [--speed 1.25] [--lang hi]
 
 Times are relative to the start of the voice; build.py places the voice after the hook clip.
 """
@@ -26,7 +26,7 @@ def trim(a, thr=0.01):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice", default="hm_omega")
-    ap.add_argument("--speed", type=float, default=1.1)
+    ap.add_argument("--speed", type=float, default=1.25)
     ap.add_argument("--lang", default="hi")
     args = ap.parse_args()
     script = json.load(open(os.path.join(ROOT, "script.json")))

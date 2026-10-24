@@ -34,8 +34,8 @@
   const dir = 1;
   tl.fromTo("#birthday-card", { x: dir * 1100, opacity: 0, filter: "blur(18px)" },
             { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0.0);
-  tl.to("#birthday-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 4.649 - 0.36);
-  tl.set("#birthday-card", { opacity: 0 }, 4.649 - 0.01);
+  tl.to("#birthday-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 6.695 - 0.36);
+  tl.set("#birthday-card", { opacity: 0 }, 6.695 - 0.01);
   tl.fromTo("#birthday .item", { y: 24, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power4.out", stagger: 0.07 }, 0.28);
   { const o = { v: 0 }; const el = document.querySelector("#birthday-n");
     tl.to(o, { v: 25, duration: 0.9, ease: "power3.out", onUpdate: () => el.textContent = o.v.toFixed(0) }, 0.35); }

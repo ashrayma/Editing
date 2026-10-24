@@ -2,75 +2,132 @@
  "title": "The one innings Virat wishes he had played",
  "language_note": "text = what you say (Hinglish). caption = what appears on screen (English). tts = Devanagari, only for the scratch voice.",
  "lines": [
-  {"id": "intro",
-   "text": "Virat Kohli ka jawaab tha: Sharjah, 1998. Desert Storm.",
-   "caption": "Virat's answer: Sharjah, 1998. The Desert Storm.",
-   "tts": "विराट कोहली का जवाब था: शारजाह, उन्नीस सौ अट्ठानवे। डेज़र्ट स्टॉर्म।"},
-  {"id": "date",
-   "text": "22 April 1998. Coca-Cola Cup, Sharjah.",
-   "caption": "22 April 1998. Coca-Cola Cup, Sharjah.",
-   "tts": "बाईस अप्रैल, उन्नीस सौ अट्ठानवे। कोका कोला कप, शारजाह।"},
-  {"id": "target",
-   "text": "Australia ne 284 bana diye.",
-   "caption": "Australia put up 284.",
-   "tts": "ऑस्ट्रेलिया ने दो सौ चौरासी बना दिए।"},
-  {"id": "context",
-   "text": "Aaj ke time pe normal lagta hai, par tab average ODI score bas 230 ke aas-paas hota tha.",
-   "caption": "Sounds normal today. Back then, an average ODI score was about 230.",
-   "tts": "आज के टाइम पे नॉर्मल लगता है, पर तब एवरेज वनडे स्कोर बस दो सौ तीस के आसपास होता था।"},
-  {"id": "aussies",
-   "text": "Aur ye late 90s wali Australia thi. Koi bhi team, koi bhi ground, haar pakki.",
-   "caption": "And this was late-90s Australia. Any team. Any ground. Beaten.",
-   "tts": "और ये लेट नाइंटीज़ वाली ऑस्ट्रेलिया थी। कोई भी टीम, कोई भी ग्राउंड, हार पक्की।"},
-  {"id": "turn",
-   "text": "Phir chase ke beech mein kuch aisa hua, jo kisi ne socha nahi tha.",
-   "caption": "Then, mid-chase, something nobody planned for.",
-   "tts": "फिर चेज़ के बीच में कुछ ऐसा हुआ, जो किसी ने सोचा नहीं था।"},
-  {"id": "storm",
-   "text": "Ek sandstorm ne poore stadium ko dhak liya. 25 minute tak khel ruka raha.",
-   "caption": "A sandstorm swallowed the stadium. Play stopped for 25 minutes.",
-   "tts": "एक सैंडस्टॉर्म ने पूरे स्टेडियम को ढक लिया। पच्चीस मिनट तक खेल रुका रहा।"},
-  {"id": "revised",
-   "text": "Dhool baithi, toh target ho gaya 46 overs mein 276.",
-   "caption": "When the dust settled: 276 off 46 overs.",
-   "tts": "धूल बैठी, तो टारगेट हो गया छियालीस ओवर्स में दो सौ छिहत्तर।"},
-  {"id": "real",
-   "text": "Aur phir aaya asli toofan.",
-   "caption": "And then the real storm arrived.",
-   "tts": "और फिर आया असली तूफ़ान।"},
-  {"id": "score",
-   "text": "Sachin Tendulkar. 131 balls pe 143 runs.",
-   "caption": "Sachin Tendulkar. 143 off 131 balls.",
-   "tts": "सचिन तेंदुलकर। एक सौ इकतीस बॉल्स पे एक सौ तैंतालीस रन्स।"},
-  {"id": "shots",
-   "text": "Nau chauke. Paanch chhakke.",
-   "caption": "Nine fours. Five sixes.",
-   "tts": "नौ चौके। पांच छक्के।"},
-  {"id": "lost",
-   "text": "India woh match haar gaya, par Sachin akele India ko final mein le gaye.",
-   "caption": "India lost that match, but Sachin dragged them into the final, almost alone.",
-   "tts": "इंडिया वो मैच हार गया, पर सचिन अकेले इंडिया को फाइनल में ले गए।"},
-  {"id": "bday",
-   "text": "Do din baad, apne 25th birthday pe, unhone phir wahi kiya.",
-   "caption": "Two days later, on his 25th birthday, he did it again.",
-   "tts": "दो दिन बाद, अपने पच्चीसवें बर्थडे पे, उन्होंने फिर वही किया।"},
-  {"id": "final",
-   "text": "Final mein 134. Aur India ne cup jeet liya.",
-   "caption": "134 in the final. India won the cup.",
-   "tts": "फाइनल में एक सौ चौंतीस। और इंडिया ने कप जीत लिया।"},
-  {"id": "warne",
-   "text": "Shane Warne ne mazaak mein kaha, ki ab raat ko sapne mein bhi Sachin unhe chhakke maarte dikhenge.",
-   "caption": "Shane Warne joked he'd have nightmares of Sachin hitting him over his head.",
-   "tts": "शेन वॉर्न ने मज़ाक में कहा, कि अब रात को सपने में भी सचिन उन्हें छक्के मारते दिखेंगे।"},
-  {"id": "why",
-   "text": "Ab samajh aaya, Virat ko yahi innings kyun chahiye thi?",
-   "caption": "Now you know why Virat wishes this one was his.",
-   "tts": "अब समझ आया, विराट को यही इनिंग्स क्यों चाहिए थी?"},
-  {"id": "cta",
-   "text": "Aap kaunsi innings choose karte? Comment mein batao.",
-   "caption": "Which knock would you pick? Tell me in the comments.",
-   "tts": "आप कौनसी इनिंग्स चूज़ करते? कमेंट में बताओ।"}
+  {
+   "id": "intro",
+   "text": "Haan, Virat Kohli bhi chahte hain ki kaash ye innings unhone kheli hoti. Toh chalo, aapko le chalta hoon Sharjah, 1998 mein.",
+   "caption": "Even Virat wishes he'd played this one. So let me take you to Sharjah, 1998.",
+   "tts": "हाँ, विराट कोहली भी चाहते हैं कि काश ये इनिंग्स उन्होंने खेली होती। तो चलो, आपको ले चलता हूँ शारजाह, उन्नीस सौ अट्ठानवे में।"
+  },
+  {
+   "id": "date",
+   "text": "Tareekh thi 22 April. Coca-Cola Cup chal raha tha, aur India ko kaise bhi final mein pahunchna tha.",
+   "caption": "22 April. The Coca-Cola Cup. And India needed a place in the final.",
+   "tts": "तारीख थी बाईस अप्रैल। कोका कोला कप चल रहा था, और इंडिया को कैसे भी फाइनल में पहुँचना था।"
+  },
+  {
+   "id": "target",
+   "text": "Pehle batting ki Australia ne, aur bana diye 284 runs.",
+   "caption": "Australia batted first and put up 284.",
+   "tts": "पहले बैटिंग की ऑस्ट्रेलिया ने, और बना दिए दो सौ चौरासी रन्स।"
+  },
+  {
+   "id": "context",
+   "text": "Ab aap bologe, 284 mein kya bada hai? Par yaar, us zamaane mein 230 bhi bada score maana jaata tha.",
+   "caption": "You might think, what's 284? But back then, even 230 was a big score.",
+   "tts": "अब आप बोलोगे, दो सौ चौरासी में क्या बड़ा है? पर यार, उस ज़माने में दो सौ तीस भी बड़ा स्कोर माना जाता था।"
+  },
+  {
+   "id": "aussies",
+   "text": "Aur saamne thi late 90s ki Australia. Woh team jo kisi ko bhi, kahin bhi hara deti thi.",
+   "caption": "And this was late-90s Australia. A team that beat anyone, anywhere.",
+   "tts": "और सामने थी लेट नाइंटीज़ की ऑस्ट्रेलिया। वो टीम जो किसी को भी, कहीं भी हरा देती थी।"
+  },
+  {
+   "id": "turn",
+   "text": "India chase kar raha tha, ki tabhi kuch aisa hua jo kisi ne socha bhi nahi tha.",
+   "caption": "India were chasing, when something nobody expected happened.",
+   "tts": "इंडिया चेज़ कर रहा था, कि तभी कुछ ऐसा हुआ जो किसी ने सोचा भी नहीं था।"
+  },
+  {
+   "id": "storm",
+   "text": "Ek zabardast sandstorm aaya, aur poora stadium dhool mein chhup gaya. Pachchees minute khel ruka raha.",
+   "caption": "A huge sandstorm hit. The stadium vanished in dust. Play stopped for 25 minutes.",
+   "tts": "एक ज़बरदस्त सैंडस्टॉर्म आया, और पूरा स्टेडियम धूल में छुप गया। पच्चीस मिनट खेल रुका रहा।"
+  },
+  {
+   "id": "revised",
+   "text": "Jab dhool baithi, toh target ho gaya 46 overs mein 276. Kaam aur mushkil ho gaya.",
+   "caption": "When the dust settled: 276 off 46 overs. It only got harder.",
+   "tts": "जब धूल बैठी, तो टारगेट हो गया छियालीस ओवर्स में दो सौ छिहत्तर। काम और मुश्किल हो गया।"
+  },
+  {
+   "id": "real",
+   "text": "Aur yahin se shuru hua asli toofan.",
+   "caption": "And that's where the real storm began.",
+   "tts": "और यहीं से शुरू हुआ असली तूफ़ान।"
+  },
+  {
+   "id": "score",
+   "text": "Sachin Tendulkar ne 131 balls pe 143 runs thok diye.",
+   "caption": "Sachin Tendulkar smashed 143 off 131 balls.",
+   "tts": "सचिन तेंदुलकर ने एक सौ इकतीस बॉल्स पे एक सौ तैंतालीस रन्स ठोक दिए।"
+  },
+  {
+   "id": "shots",
+   "text": "Nau chauke, paanch chhakke. Bowler koi bhi ho, sabki dhulaai hui.",
+   "caption": "Nine fours, five sixes. No bowler was spared.",
+   "tts": "नौ चौके, पाँच छक्के। बॉलर कोई भी हो, सबकी धुलाई हुई।"
+  },
+  {
+   "id": "lost",
+   "text": "Match toh India haar gaya, par Sachin ne akele dum pe India ko final mein pahuncha diya.",
+   "caption": "India lost the match, but Sachin single-handedly took them to the final.",
+   "tts": "मैच तो इंडिया हार गया, पर सचिन ने अकेले दम पे इंडिया को फाइनल में पहुँचा दिया।"
+  },
+  {
+   "id": "bday",
+   "text": "Aur kahani yahin khatam nahi hoti. Do din baad final tha, aur us din Sachin ka 25th birthday tha.",
+   "caption": "And it doesn't end there. Two days later came the final, on Sachin's 25th birthday.",
+   "tts": "और कहानी यहीं खत्म नहीं होती। दो दिन बाद फाइनल था, और उस दिन सचिन का पच्चीसवाँ बर्थडे था।"
+  },
+  {
+   "id": "final",
+   "text": "Birthday gift? Ek aur century. 134 runs, aur India ne cup jeet liya.",
+   "caption": "His birthday gift? Another century. 134, and India won the cup.",
+   "tts": "बर्थडे गिफ्ट? एक और सेंचुरी। एक सौ चौंतीस रन्स, और इंडिया ने कप जीत लिया।"
+  },
+  {
+   "id": "warne",
+   "text": "Shane Warne ne baad mein mazaak mein kaha, ki ab toh sapne mein bhi Sachin unhe chhakke maarte dikhenge.",
+   "caption": "Shane Warne later joked he'd have nightmares of Sachin hitting him for six.",
+   "tts": "शेन वॉर्न ने बाद में मज़ाक में कहा, कि अब तो सपने में भी सचिन उन्हें छक्के मारते दिखेंगे।"
+  },
+  {
+   "id": "why",
+   "text": "Toh ab samajh aaya na, Virat ko yahi innings kyun chahiye thi?",
+   "caption": "Now you get why Virat wishes this one was his.",
+   "tts": "तो अब समझ आया ना, विराट को यही इनिंग्स क्यों चाहिए थी?"
+  },
+  {
+   "id": "cta",
+   "text": "Aur aap? Agar ek innings choose karni ho, toh kaunsi? Comment mein batao.",
+   "caption": "And you? If you could pick one innings, which one? Tell me in the comments.",
+   "tts": "और आप? अगर एक इनिंग्स चूज़ करनी हो, तो कौनसी? कमेंट में बताओ।"
+  }
  ],
- "keywords": ["virat", "kohli", "sachin", "tendulkar", "sharjah", "desert", "storm", "australia", "sandstorm", "warne",
-              "beaten", "final", "cup", "nightmares", "sixes", "fours", "birthday", "real"]
+ "keywords": [
+  "australia",
+  "beaten",
+  "birthday",
+  "century",
+  "cup",
+  "desert",
+  "final",
+  "fours",
+  "gift",
+  "harder",
+  "kohli",
+  "nightmares",
+  "real",
+  "sachin",
+  "sandstorm",
+  "sharjah",
+  "sixes",
+  "spared",
+  "storm",
+  "tendulkar",
+  "vanished",
+  "virat",
+  "warne"
+ ]
 }

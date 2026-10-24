@@ -193,7 +193,7 @@
    "eyebrow": "Every shot in the book",
    "fours": 9,
    "sixes": 5,
-   "tail": 1.0,
+   "tail": 0.2,
    "sfx_extra": [
     {
      "at": 0.5,
@@ -211,7 +211,7 @@
      "vol": 0.25
     }
    ],
-   "lead": 0.3
+   "lead": 0.2
   },
   {
    "id": "recording",
