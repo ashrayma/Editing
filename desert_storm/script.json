@@ -1,0 +1,26 @@
+{
+ "title": "The one innings Virat wishes he had played",
+ "lines": [
+  {"id": "hook1", "text": "Virat Kohli was asked one question."},
+  {"id": "hook2", "text": "Which innings in cricket history do you wish you had played?"},
+  {"id": "hook3", "text": "His answer? Sharjah. 1998. The Desert Storm."},
+  {"id": "date", "text": "April 22nd, 1998. Coca-Cola Cup, Sharjah."},
+  {"id": "target", "text": "Australia put up 284."},
+  {"id": "context", "text": "Today that sounds normal. Back then, an average ODI score was around 230."},
+  {"id": "aussies", "text": "And this was the late-90s Australia. Any team. Any ground. Beaten."},
+  {"id": "turn", "text": "Then, mid-chase, something nobody planned for."},
+  {"id": "storm", "text": "A sandstorm swallowed the stadium. Play stopped for twenty-five minutes."},
+  {"id": "revised", "text": "When the dust settled, the target was 276 off 46 overs."},
+  {"id": "real", "text": "And then the real storm arrived."},
+  {"id": "score", "text": "Sachin Tendulkar. 143 off 131 balls."},
+  {"id": "shots", "text": "Nine fours. Five sixes."},
+  {"id": "lost", "text": "India lost that match, but Sachin dragged them into the final, almost alone."},
+  {"id": "bday", "text": "Two days later, on his 25th birthday, he did it again."},
+  {"id": "final", "text": "134 in the final. India won the cup."},
+  {"id": "warne", "text": "Shane Warne later joked he'd have nightmares of Sachin hitting him over his head."},
+  {"id": "why", "text": "So yeah. I get why Virat wishes this one was his."},
+  {"id": "cta", "text": "Which knock would you pick? Tell me in the comments."}
+ ],
+ "keywords": ["virat", "kohli", "sachin", "tendulkar", "sharjah", "desert", "storm", "australia", "sandstorm", "warne",
+              "beaten", "final", "cup", "nightmares", "sixes", "fours", "birthday"]
+}

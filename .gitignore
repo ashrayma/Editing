@@ -5,3 +5,9 @@ kohli_countdown/out/*_preview*.mp4
 kohli_countdown/models/
 kohli_countdown/out/vo/
 kohli_countdown/out/cache/
+desert_storm/node_modules/
+desert_storm/models/
+desert_storm/film/.hyperframes/
+desert_storm/film/assets/photos/_backdrop/
+desert_storm/out/*.log
+desert_storm/out/desert_storm_scratch.mp4

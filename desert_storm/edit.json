@@ -1,0 +1,458 @@
+{
+ "beats": [
+  {
+   "id": "virat",
+   "type": "lower",
+   "at": "hook1",
+   "side": "left",
+   "w": 760,
+   "h": 150,
+   "name": "Virat Kohli",
+   "sub": "asked one question",
+   "icon": "VK"
+  },
+  {
+   "id": "question",
+   "type": "quote",
+   "at": "hook2",
+   "side": "right",
+   "w": 984,
+   "h": 420,
+   "quote": "Which innings in cricket history do you wish you had played?",
+   "who": "The question",
+   "who_sub": "put to Virat Kohli",
+   "word_step": 0.24
+  },
+  {
+   "id": "hook",
+   "type": "title",
+   "at": "hook3",
+   "h": 420,
+   "eyebrow": "Sharjah · 1998",
+   "lines": [
+    "THE DESERT",
+    "STORM"
+   ],
+   "sizes": [
+    112,
+    150
+   ],
+   "accent_lines": [
+    1
+   ],
+   "dust": true
+  },
+  {
+   "id": "venue",
+   "type": "lower",
+   "at": "date",
+   "side": "left",
+   "w": 760,
+   "h": 150,
+   "name": "Sharjah Cricket Stadium",
+   "sub": "Coca-Cola Cup · 22 April 1998",
+   "icon": "98"
+  },
+  {
+   "id": "target",
+   "type": "stat",
+   "at": "target",
+   "side": "right",
+   "w": 760,
+   "h": 470,
+   "eyebrow": "Australia posted",
+   "value": 284,
+   "unit": "/ 7",
+   "sub": "India had to chase it down",
+   "tail": 0.5,
+   "sfx_extra": [
+    {
+     "at": 1.5,
+     "file": "ping.mp3",
+     "vol": 0.3
+    }
+   ]
+  },
+  {
+   "id": "context",
+   "type": "bars",
+   "at": "context",
+   "side": "left",
+   "w": 840,
+   "h": 480,
+   "eyebrow": "ODI cricket · 1998",
+   "title": "284 was a mountain",
+   "max": 300,
+   "rows": [
+    [
+     "Average ODI score",
+     230,
+     "rgba(255,255,255,.55)"
+    ],
+    [
+     "Australia's total",
+     284,
+     "#FFB340"
+    ]
+   ],
+   "labels": {
+    "0": "~230",
+    "1": "284"
+   }
+  },
+  {
+   "id": "aussies",
+   "type": "title",
+   "card": true,
+   "at": "aussies",
+   "side": "right",
+   "w": 820,
+   "h": 440,
+   "eyebrow": "Australia · late '90s",
+   "lines": [
+    "Any team.",
+    "Any ground.",
+    "Beaten."
+   ],
+   "sizes": [
+    86,
+    86,
+    112
+   ],
+   "accent_lines": [
+    2
+   ],
+   "text_top": 52
+  },
+  {
+   "id": "revised",
+   "type": "equation",
+   "at": "revised",
+   "side": "right",
+   "w": 920,
+   "h": 440,
+   "eyebrow": "After the storm · revised target",
+   "cells": [
+    [
+     276,
+     "runs"
+    ],
+    [
+     46,
+     "overs"
+    ],
+    [
+     25,
+     "mins lost"
+    ]
+   ]
+  },
+  {
+   "id": "realstorm",
+   "type": "title",
+   "at": "real",
+   "h": 420,
+   "eyebrow": "And then",
+   "lines": [
+    "THE REAL",
+    "DESERT STORM"
+   ],
+   "sizes": [
+    104,
+    128
+   ],
+   "accent_lines": [
+    1
+   ],
+   "dust": true,
+   "tail": 0.1
+  },
+  {
+   "id": "scorecard",
+   "type": "shot",
+   "at": "score",
+   "side": "left",
+   "w": 660,
+   "h": 560,
+   "light": true,
+   "tag": "SCREENSHOT",
+   "src": "assets/broll/screenshot_scorecard.png",
+   "highlight": [
+    16,
+    288,
+    628,
+    60
+   ],
+   "ring_at": 0.7,
+   "zoom": 1.32,
+   "zoom_at": 1.5,
+   "zoom_origin": "50% 57%",
+   "sfx_extra": [
+    {
+     "at": 0.75,
+     "file": "pop.mp3",
+     "vol": 0.35
+    }
+   ]
+  },
+  {
+   "id": "boundaries",
+   "type": "boundaries",
+   "at": "shots",
+   "side": "right",
+   "w": 900,
+   "h": 470,
+   "eyebrow": "Every shot in the book",
+   "fours": 9,
+   "sixes": 5,
+   "tail": 0.6,
+   "sfx_extra": [
+    {
+     "at": 0.5,
+     "file": "pop.mp3",
+     "vol": 0.22
+    },
+    {
+     "at": 1.05,
+     "file": "pop.mp3",
+     "vol": 0.22
+    },
+    {
+     "at": 1.55,
+     "file": "pop.mp3",
+     "vol": 0.25
+    }
+   ]
+  },
+  {
+   "id": "recording",
+   "type": "video",
+   "at": "lost",
+   "side": "left",
+   "w": 650,
+   "h": 560,
+   "tag": "SCREEN RECORDING",
+   "src": "assets/broll/screen_recording.mp4",
+   "fit": true,
+   "pos": "center top",
+   "tail": 0.4,
+   "sfx_extra": [
+    {
+     "at": 0.55,
+     "file": "click-soft.mp3",
+     "vol": 0.45
+    },
+    {
+     "at": 0.7,
+     "file": "typing.mp3",
+     "vol": 0.22
+    },
+    {
+     "at": 1.7,
+     "file": "click-soft.mp3",
+     "vol": 0.45
+    }
+   ]
+  },
+  {
+   "id": "birthday",
+   "type": "stat",
+   "at": "bday",
+   "side": "right",
+   "w": 760,
+   "h": 470,
+   "eyebrow": "The final · 24 April 1998",
+   "value": 25,
+   "unit": "th birthday",
+   "sub": "…and another hundred vs Australia",
+   "count_dur": 0.9,
+   "sfx_extra": [
+    {
+     "at": 1.2,
+     "file": "ping.mp3",
+     "vol": 0.3
+    }
+   ]
+  },
+  {
+   "id": "final",
+   "type": "stat",
+   "at": "final",
+   "side": "left",
+   "w": 820,
+   "h": 500,
+   "eyebrow": "Coca-Cola Cup final",
+   "value": 134,
+   "unit": "off 131",
+   "tail": 0.5,
+   "sub_html": "India won by 6 wickets · <span style='color:#FFB340'>cup lifted</span>",
+   "sfx_extra": [
+    {
+     "at": 2.4,
+     "file": "sparkle.mp3",
+     "vol": 0.3
+    }
+   ]
+  },
+  {
+   "id": "quote",
+   "type": "quote",
+   "at": "warne",
+   "side": "right",
+   "w": 984,
+   "h": 460,
+   "quote": "I'll be going to bed tonight having nightmares of Sachin smashing me over my head.",
+   "who": "Shane Warne",
+   "who_sub": "Sharjah, 1998",
+   "word_step": 0.2
+  },
+  {
+   "id": "versus",
+   "type": "vs",
+   "at": "why",
+   "side": "center",
+   "w": 984,
+   "h": 300,
+   "size": 78,
+   "a": "SACHIN",
+   "a_sub": "143 & 134",
+   "b": "AUSTRALIA",
+   "b_sub": "284 & 272",
+   "sfx_extra": [
+    {
+     "at": 0.55,
+     "file": "impact-bass-2.mp3",
+     "vol": 0.4
+    }
+   ]
+  },
+  {
+   "id": "cta",
+   "type": "cta",
+   "at": "cta",
+   "side": "right",
+   "w": 920,
+   "h": 440,
+   "tail": 0.8,
+   "title_html": "Which knock would <span style='color:#FFB340'>you</span> pick?",
+   "button": "Tell me in the comments",
+   "sub": "Follow for more cricket stories",
+   "sfx_extra": [
+    {
+     "at": 0.6,
+     "file": "sparkle.mp3",
+     "vol": 0.3
+    }
+   ]
+  }
+ ],
+ "sfx": [
+  {
+   "at": "hook3",
+   "edge": "end",
+   "offset": -1.35,
+   "file": "impact-bass-2.mp3",
+   "vol": 0.45
+  },
+  {
+   "at": "hook3",
+   "offset": -0.2,
+   "file": "whoosh-cinematic.mp3",
+   "vol": 0.3
+  },
+  {
+   "at": "real-10.0",
+   "file": "riser.mp3",
+   "vol": 0.2
+  },
+  {
+   "at": "real",
+   "offset": 0.05,
+   "file": "impact-bass-1.mp3",
+   "vol": 0.5
+  }
+ ],
+ "photos": [
+  {
+   "at": "hook1",
+   "src": "assets/photos/01_virat_kohli.jpg",
+   "need": "Virat Kohli: interview or press-conference photo"
+  },
+  {
+   "at": "hook3",
+   "src": "assets/photos/02_sachin_sharjah_1998.jpg",
+   "need": "Sachin raising his bat, Sharjah 1998"
+  },
+  {
+   "at": "date",
+   "src": "assets/photos/03_sharjah_stadium.jpg",
+   "need": "Sharjah Cricket Stadium under lights"
+  },
+  {
+   "at": "target",
+   "src": "assets/photos/04_australia_innings.jpg",
+   "need": "Australia batting, 22 Apr 1998 (Bevan 101*)"
+  },
+  {
+   "at": "aussies",
+   "src": "assets/photos/05_australia_team_90s.jpg",
+   "need": "Australia team, late 1990s"
+  },
+  {
+   "at": "turn",
+   "src": "assets/img/ai_sandstorm.png",
+   "tag": "AI-GENERATED",
+   "need": "sandstorm",
+   "zoom": [
+    1.0,
+    1.22
+   ],
+   "sfx": "whoosh-cinematic.mp3"
+  },
+  {
+   "at": "revised",
+   "src": "assets/photos/07_after_the_storm.jpg",
+   "need": "Players back out after the sandstorm"
+  },
+  {
+   "at": "real",
+   "src": "assets/photos/08_sachin_six.jpg",
+   "need": "Sachin hitting a six, 22 Apr 1998"
+  },
+  {
+   "at": "shots",
+   "src": "assets/photos/09_sachin_down_the_track.jpg",
+   "need": "Sachin charging down the track"
+  },
+  {
+   "at": "lost",
+   "src": "assets/photos/10_sachin_crowd.jpg",
+   "need": "Sachin raising his bat to the crowd after 143"
+  },
+  {
+   "at": "bday",
+   "src": "assets/photos/11_final_century.jpg",
+   "need": "Sachin's century in the final, 24 Apr 1998"
+  },
+  {
+   "at": "final",
+   "src": "assets/photos/12_cup_trophy.jpg",
+   "need": "India with the Coca-Cola Cup trophy"
+  },
+  {
+   "at": "warne",
+   "src": "assets/photos/13_warne_vs_sachin.jpg",
+   "need": "Shane Warne bowling to Sachin"
+  },
+  {
+   "at": "why",
+   "src": "assets/photos/14_virat_kohli.jpg",
+   "need": "Virat Kohli"
+  },
+  {
+   "at": "cta",
+   "src": "assets/photos/15_sachin_portrait.jpg",
+   "need": "Sachin, 1998 portrait"
+  }
+ ]
+}

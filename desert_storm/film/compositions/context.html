@@ -1,0 +1,50 @@
+<template>
+  <style>
+
+  #root { position:absolute; inset:0; font-family:'Inter', sans-serif; color:#fff; -webkit-font-smoothing:antialiased; }
+  .card { position:absolute; top:1092px; border-radius:44px; overflow:hidden;
+          background:rgba(18,18,22,.80); backdrop-filter:blur(28px) saturate(140%);
+          box-shadow:0 40px 90px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(255,255,255,.10); }
+  .card.light { background:rgba(250,250,252,.96); color:#1d1d1f; }
+  .eyebrow { font-size:28px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#FFB340; }
+  .light .eyebrow { color:#c26a00; }
+  .tag { position:absolute; top:26px; left:26px; z-index:5; padding:10px 20px; border-radius:100px; font-size:28px; font-weight:800;
+          letter-spacing:.1em; background:rgba(0,0,0,.55); backdrop-filter:blur(12px); color:#fff; display:flex; gap:10px; align-items:center; }
+  .tag i { width:12px; height:12px; border-radius:50%; background:#ff453a; display:block; }
+  .num { font-weight:800; letter-spacing:-.045em; font-variant-numeric:tabular-nums; line-height:.9; }
+  .muted { color:rgba(255,255,255,.62); }
+  .light .muted { color:#6e6e73; }
+
+
+  </style>
+  <div id="root" data-composition-id="context" data-width="1080" data-height="1920">
+    <div id="context-card" class="card" style="left:48px;top:1092px;width:840px;height:480px"><div style="padding:46px 52px"><div class="eyebrow item">ODI cricket · 1998</div>
+      <div class="item" style="font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px">284 was a mountain</div>
+      <div class="item" style="margin-top:34px">
+        <div style="display:flex;justify-content:space-between;font-size:32px;font-weight:600"><span>Average ODI score</span><span class="num" style="font-size:44px">~230</span></div>
+        <div style="height:34px;border-radius:17px;background:rgba(255,255,255,.10);margin-top:14px;overflow:hidden">
+          <div id="context-b0" style="height:100%;width:76.7%;border-radius:17px;background:rgba(255,255,255,.55);transform-origin:left center"></div>
+        </div>
+      </div>
+      <div class="item" style="margin-top:30px">
+        <div style="display:flex;justify-content:space-between;font-size:32px;font-weight:600"><span>Australia&#x27;s total</span><span class="num" style="font-size:44px">284</span></div>
+        <div style="height:34px;border-radius:17px;background:rgba(255,255,255,.10);margin-top:14px;overflow:hidden">
+          <div id="context-b1" style="height:100%;width:94.7%;border-radius:17px;background:#FFB340;transform-origin:left center"></div>
+        </div>
+      </div></div></div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+
+  const dir = -1;
+  tl.fromTo("#context-card", { x: dir * 1100, opacity: 0, filter: "blur(18px)" },
+            { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0.0);
+  tl.to("#context-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 6.345 - 0.36);
+  tl.set("#context-card", { opacity: 0 }, 6.345 - 0.01);
+  tl.fromTo("#context .item", { y: 24, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power4.out", stagger: 0.07 }, 0.28);
+  tl.fromTo("#context-b0", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "expo.out" }, 0.55);
+  tl.fromTo("#context-b1", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "expo.out" }, 0.9);
+
+  window.__timelines["context"] = tl;
+  </script>
+</template>

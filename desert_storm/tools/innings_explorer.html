@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Innings Explorer</title>
+<style>
+  :root { --ink:#1d1d1f; --mute:#6e6e73; --line:#e5e5ea; --bg:#f5f5f7; --acc:#ff9f0a; --blue:#0071e3; }
+  * { box-sizing:border-box; margin:0; }
+  html,body { height:100%; }
+  body { font-family:"Inter",system-ui,sans-serif; background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; overflow:hidden; }
+  .chrome { height:56px; display:flex; align-items:center; gap:10px; padding:0 22px; background:#fff; border-bottom:1px solid var(--line); }
+  .dot { width:12px; height:12px; border-radius:50%; }
+  .url { margin-left:18px; flex:1; height:32px; border-radius:9px; background:var(--bg); display:flex; align-items:center; padding:0 14px; font-size:14px; color:var(--mute); }
+  main { height:calc(100% - 56px); overflow:auto; scroll-behavior:auto; }
+  .wrap { max-width:620px; margin:0 auto; padding:22px 18px 400px; }
+  h1 { font-family:"Inter Display","Inter",sans-serif; font-size:28px; font-weight:700; letter-spacing:-.02em; }
+  .sub { color:var(--mute); margin-top:4px; font-size:14px; }
+  .search { margin-top:16px; height:50px; border-radius:16px; background:#fff; border:1px solid var(--line); display:flex; align-items:center; padding:0 16px; font-size:18px; box-shadow:0 6px 24px rgba(0,0,0,.05); }
+  .search .ph { color:#aeaeb2; } .caret { width:2px; height:24px; background:var(--blue); margin-left:2px; animation:b 1s steps(1) infinite; }
+  @keyframes b { 50% { opacity:0; } }
+  .results { margin-top:16px; display:grid; gap:10px; }
+  .res { background:#fff; border-radius:14px; padding:16px 20px; border:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; opacity:0; transform:translateY(8px); transition:all .35s cubic-bezier(.2,.8,.2,1); }
+  .res.show { opacity:1; transform:none; } .res.hot { border-color:var(--blue); box-shadow:0 0 0 4px rgba(0,113,227,.12); }
+  .res b { font-size:17px; } .res span { color:var(--mute); font-size:14px; }
+  .tag { font-size:12px; font-weight:700; padding:5px 10px; border-radius:20px; background:#fff4e5; color:#c26a00; }
+  .card { margin-top:16px; background:#fff; border-radius:18px; border:1px solid var(--line); padding:20px; display:none; }
+  .card.show { display:block; animation:up .5s cubic-bezier(.2,.8,.2,1); }
+  @keyframes up { from { opacity:0; transform:translateY(14px); } }
+  .eyebrow { font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); }
+  h2 { font-family:"Inter Display","Inter",sans-serif; font-size:22px; letter-spacing:-.02em; margin-top:6px; }
+  .teams { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px; }
+  .team { background:var(--bg); border-radius:14px; padding:16px 18px; }
+  .team .n { color:var(--mute); font-size:14px; } .team .s { font-size:26px; font-weight:800; letter-spacing:-.02em; margin-top:4px; }
+  .team .o { color:var(--mute); font-size:14px; }
+  .note { margin-top:14px; font-size:14px; color:var(--mute); display:flex; gap:8px; align-items:center; }
+  table { width:100%; border-collapse:collapse; margin-top:14px; font-size:15px; }
+  th { text-align:right; color:var(--mute); font-weight:600; font-size:12px; padding:6px 6px; border-bottom:1px solid var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  td { text-align:right; padding:10px 6px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  tr.star td { background:#fff8ec; font-weight:800; } tr.star td:first-child { border-left:3px solid var(--acc); }
+  .chase { margin-top:26px; padding-bottom:40px; }
+  .bar { position:relative; height:46px; border-radius:12px; background:var(--bg); overflow:visible; margin-top:12px; }
+  .fill { position:absolute; left:0; top:0; bottom:0; width:0; border-radius:12px; background:linear-gradient(90deg,#ffb340,#ff7a00); transition:width 2.2s cubic-bezier(.25,.8,.25,1); }
+  .mark { position:absolute; top:-8px; bottom:-8px; width:2px; background:var(--ink); }
+  .mark i { position:absolute; top:62px; left:-60px; width:120px; text-align:center; white-space:nowrap; font-style:normal; font-size:12px; font-weight:700; }
+  .legend { display:flex; justify-content:space-between; margin-top:30px; font-size:14px; color:var(--mute); }
+  .big { font-size:36px; font-weight:800; letter-spacing:-.03em; color:var(--ink); }
+  #cursor { position:fixed; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.28); border:2px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.25); pointer-events:none; z-index:99; transform:translate(-50%,-50%); transition:transform .12s; left:-50px; top:-50px; }
+  #cursor.down { transform:translate(-50%,-50%) scale(.7); }
+</style>
+</head>
+<body>
+<div class="chrome"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div class="url">localhost/innings-explorer</div></div>
+<main id="main"><div class="wrap">
+  <h1>Innings Explorer</h1>
+  <div class="sub">Search any ODI knock. Scores from the official record.</div>
+  <div class="search" id="search"><span id="q"></span><span class="caret"></span><span class="ph" id="ph">Search a match…</span></div>
+  <div class="results" id="results">
+    <div class="res" id="r1"><div><b>Australia vs India · Coca-Cola Cup</b><br><span>Sharjah · 22 April 1998 · Match 6</span></div><div class="tag">DESERT STORM</div></div>
+    <div class="res" id="r2"><div><b>Australia vs India · Coca-Cola Cup Final</b><br><span>Sharjah · 24 April 1998</span></div><div class="tag">FINAL</div></div>
+  </div>
+  <div class="card" id="card">
+    <div class="eyebrow">Coca-Cola Cup · Sharjah · 22 Apr 1998</div>
+    <h2>Australia won by 26 runs. India qualified.</h2>
+    <div class="teams">
+      <div class="team"><div class="n">Australia</div><div class="s">284/7</div><div class="o">50 overs · Bevan 101*</div></div>
+      <div class="team"><div class="n">India · target 276 in 46 ov</div><div class="s">250/5</div><div class="o">46 overs</div></div>
+    </div>
+    <div class="note">🌪️ Sandstorm stopped play for ~25 minutes. Target revised to 276 off 46 overs.</div>
+    <table>
+      <tr><th>India batting</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr>
+      <tr class="star"><td>Sachin Tendulkar</td><td>143</td><td>131</td><td>9</td><td>5</td><td>109.2</td></tr>
+    </table>
+    <div class="chase">
+      <div class="legend"><span>India's chase · 46 overs</span><span><span class="big" id="runs">0</span> runs</span></div>
+      <div class="bar"><div class="fill" id="fill"></div>
+        <div class="mark" style="left:85.9%"><i>Qualify 237</i></div>
+        <div class="mark" style="left:calc(100% - 2px)"><i style="left:-104px;text-align:right">Win 276</i></div>
+      </div>
+    </div>
+  </div>
+</div></main>
+<div id="cursor"></div>
+<script>
+  const c = document.getElementById('cursor');
+  addEventListener('mousemove', e => { c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px'; });
+  addEventListener('mousedown', () => c.classList.add('down'));
+  addEventListener('mouseup', () => c.classList.remove('down'));
+  window.typeQuery = ch => { document.getElementById('ph').style.display = 'none'; document.getElementById('q').textContent += ch; };
+  window.showResults = () => { r1.classList.add('show'); setTimeout(() => r2.classList.add('show'), 120); };
+  r1.addEventListener('mouseenter', () => r1.classList.add('hot'));
+  r1.addEventListener('click', () => {
+    card.classList.add('show');
+    setTimeout(() => {
+      fill.style.width = (250 / 276 * 100) + '%';
+      const t0 = performance.now();
+      (function tick(now) { const p = Math.min(1, (now - t0) / 2200); runs.textContent = Math.round(250 * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(tick); })(t0);
+    }, 1400);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<template>
+  <style>
+
+  #root { position:absolute; inset:0; font-family:'Inter', sans-serif; color:#fff; -webkit-font-smoothing:antialiased; }
+  .card { position:absolute; top:1092px; border-radius:44px; overflow:hidden;
+          background:rgba(18,18,22,.80); backdrop-filter:blur(28px) saturate(140%);
+          box-shadow:0 40px 90px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(255,255,255,.10); }
+  .card.light { background:rgba(250,250,252,.96); color:#1d1d1f; }
+  .eyebrow { font-size:28px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#FFB340; }
+  .light .eyebrow { color:#c26a00; }
+  .tag { position:absolute; top:26px; left:26px; z-index:5; padding:10px 20px; border-radius:100px; font-size:28px; font-weight:800;
+          letter-spacing:.1em; background:rgba(0,0,0,.55); backdrop-filter:blur(12px); color:#fff; display:flex; gap:10px; align-items:center; }
+  .tag i { width:12px; height:12px; border-radius:50%; background:#ff453a; display:block; }
+  .num { font-weight:800; letter-spacing:-.045em; font-variant-numeric:tabular-nums; line-height:.9; }
+  .muted { color:rgba(255,255,255,.62); }
+  .light .muted { color:#6e6e73; }
+
+
+  </style>
+  <div id="root" data-composition-id="revised" data-width="1080" data-height="1920">
+    <div id="revised-card" class="card" style="left:112px;top:1092px;width:920px;height:440px"><div style="padding:46px 44px"><div class="eyebrow item">After the storm · revised target</div>
+      <div style="display:flex;gap:6px;margin-top:40px"><div class="item" style="text-align:center;flex:1">
+          <div class="num" id="revised-c0" style="font-size:132px">276</div>
+          <div class="muted" style="font-size:30px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:12px">runs</div></div><div class="item muted" style="font-size:60px;font-weight:300;align-self:center">·</div><div class="item" style="text-align:center;flex:1">
+          <div class="num" id="revised-c1" style="font-size:132px">46</div>
+          <div class="muted" style="font-size:30px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:12px">overs</div></div><div class="item muted" style="font-size:60px;font-weight:300;align-self:center">·</div><div class="item" style="text-align:center;flex:1">
+          <div class="num" id="revised-c2" style="font-size:132px">25</div>
+          <div class="muted" style="font-size:30px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:12px">mins lost</div></div></div>
+      </div></div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+
+  const dir = 1;
+  tl.fromTo("#revised-card", { x: dir * 1100, opacity: 0, filter: "blur(18px)" },
+            { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0.0);
+  tl.to("#revised-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 5.261 - 0.36);
+  tl.set("#revised-card", { opacity: 0 }, 5.261 - 0.01);
+  tl.fromTo("#revised .item", { y: 40, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power4.out", stagger: 0.16 }, 0.3);
+
+  window.__timelines["revised"] = tl;
+  </script>
+</template>

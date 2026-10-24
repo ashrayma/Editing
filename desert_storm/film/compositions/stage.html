@@ -1,0 +1,86 @@
+<template>
+  <style>
+  #root { position:absolute; inset:0; font-family:'Inter', sans-serif; }
+  .pbd { position:absolute; inset:0; background-size:cover; background-position:center; }
+  .pframe { position:absolute; left:40px; top:176px; width:1000px; height:760px; border-radius:52px; overflow:hidden;
+             background:#141417; box-shadow:0 50px 120px rgba(0,0,0,.6), inset 0 0 0 1.5px rgba(255,255,255,.10); }
+  .pkb { position:absolute; inset:-3%; background-size:cover; }
+  .ptag { position:absolute; top:28px; left:28px; padding:10px 20px; border-radius:100px; background:rgba(0,0,0,.55); color:#fff;
+           font-size:28px; font-weight:800; letter-spacing:.1em; }
+  .pcred { position:absolute; right:26px; bottom:20px; color:rgba(255,255,255,.7); font-size:22px; font-weight:600; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+  .pslot { position:absolute; inset:26px; border:4px dashed rgba(255,255,255,.22); border-radius:36px; display:flex; flex-direction:column;
+            align-items:center; justify-content:center; gap:14px; text-align:center; padding:0 60px;
+            background:radial-gradient(90% 70% at 50% 35%, #2b2b31 0%, #151518 100%); }
+  .pslot-k { color:#FFB340; font-size:28px; font-weight:800; letter-spacing:.14em; }
+  .pslot-d { color:rgba(255,255,255,.85); font-size:44px; font-weight:800; letter-spacing:-.02em; line-height:1.12; }
+  .pslot-f { color:rgba(255,255,255,.4); font-size:28px; font-weight:600; font-family:'JetBrains Mono', monospace; }
+  </style>
+  <div id="root" data-composition-id="stage" data-width="1080" data-height="1920">
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 25%, #26262b 0%, #0d0d10 60%, #050506 100%)"></div>
+    <div id="p0" class="clip" data-start="0.2" data-duration="6.546" style="position:absolute;inset:0;z-index:1"><div id="pf0" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Virat Kohli: interview or press-conference photo</div><div class="pslot-f">assets/photos/01_virat_kohli.jpg</div></div></div></div>
+    <div id="p1" class="clip" data-start="5.896" data-duration="4.979" style="position:absolute;inset:0;z-index:2"><div id="pf1" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin raising his bat, Sharjah 1998</div><div class="pslot-f">assets/photos/02_sachin_sharjah_1998.jpg</div></div></div></div>
+    <div id="p2" class="clip" data-start="10.025" data-duration="5.666" style="position:absolute;inset:0;z-index:3"><div id="pf2" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sharjah Cricket Stadium under lights</div><div class="pslot-f">assets/photos/03_sharjah_stadium.jpg</div></div></div></div>
+    <div id="p3" class="clip" data-start="14.841" data-duration="9.224" style="position:absolute;inset:0;z-index:4"><div id="pf3" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Australia batting, 22 Apr 1998 (Bevan 101*)</div><div class="pslot-f">assets/photos/04_australia_innings.jpg</div></div></div></div>
+    <div id="p4" class="clip" data-start="23.215" data-duration="5.52" style="position:absolute;inset:0;z-index:5"><div id="pf4" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Australia team, late 1990s</div><div class="pslot-f">assets/photos/05_australia_team_90s.jpg</div></div></div></div>
+    <div id="p5" class="clip" data-start="27.885" data-duration="8.098" style="position:absolute;inset:0;z-index:6"><div id="pb5" class="pbd" style="background-image:url('assets/photos/_backdrop/ai_sandstorm.jpg')"></div><div id="pf5" class="pframe"><div id="pk5" class="pkb" style="background-image:url('assets/img/ai_sandstorm.png');background-position:center"></div><div class="ptag">AI-GENERATED</div></div></div>
+    <div id="p6" class="clip" data-start="35.133" data-duration="5.831" style="position:absolute;inset:0;z-index:7"><div id="pf6" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Players back out after the sandstorm</div><div class="pslot-f">assets/photos/07_after_the_storm.jpg</div></div></div></div>
+    <div id="p7" class="clip" data-start="40.114" data-duration="7.519" style="position:absolute;inset:0;z-index:8"><div id="pf7" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin hitting a six, 22 Apr 1998</div><div class="pslot-f">assets/photos/08_sachin_six.jpg</div></div></div></div>
+    <div id="p8" class="clip" data-start="46.783" data-duration="2.724" style="position:absolute;inset:0;z-index:9"><div id="pf8" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin charging down the track</div><div class="pslot-f">assets/photos/09_sachin_down_the_track.jpg</div></div></div></div>
+    <div id="p9" class="clip" data-start="48.657" data-duration="5.639" style="position:absolute;inset:0;z-index:10"><div id="pf9" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin raising his bat to the crowd after 143</div><div class="pslot-f">assets/photos/10_sachin_crowd.jpg</div></div></div></div>
+    <div id="p10" class="clip" data-start="53.446" data-duration="4.381" style="position:absolute;inset:0;z-index:11"><div id="pf10" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin&#x27;s century in the final, 24 Apr 1998</div><div class="pslot-f">assets/photos/11_final_century.jpg</div></div></div></div>
+    <div id="p11" class="clip" data-start="56.977" data-duration="4.366" style="position:absolute;inset:0;z-index:12"><div id="pf11" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">India with the Coca-Cola Cup trophy</div><div class="pslot-f">assets/photos/12_cup_trophy.jpg</div></div></div></div>
+    <div id="p12" class="clip" data-start="60.493" data-duration="5.397" style="position:absolute;inset:0;z-index:13"><div id="pf12" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Shane Warne bowling to Sachin</div><div class="pslot-f">assets/photos/13_warne_vs_sachin.jpg</div></div></div></div>
+    <div id="p13" class="clip" data-start="65.04" data-duration="4.32" style="position:absolute;inset:0;z-index:14"><div id="pf13" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Virat Kohli</div><div class="pslot-f">assets/photos/14_virat_kohli.jpg</div></div></div></div>
+    <div id="p14" class="clip" data-start="68.51" data-duration="3.62" style="position:absolute;inset:0;z-index:15"><div id="pf14" class="pframe"><div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
+                <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
+                <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">Sachin, 1998 portrait</div><div class="pslot-f">assets/photos/15_sachin_portrait.jpg</div></div></div></div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo("#pf0", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 0.2);
+  tl.fromTo("#pf1", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 5.896);
+  tl.fromTo("#pf2", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 10.025);
+  tl.fromTo("#pf3", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 14.841);
+  tl.fromTo("#pf4", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 23.215);
+  tl.fromTo("#pf5", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 27.885);
+  tl.fromTo("#pb5", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 27.885);
+  tl.fromTo("#pk5", { scale: 1.0, x: -14 }, { scale: 1.22, x: 14, duration: 8.098, ease: "none" }, 27.885);
+  tl.fromTo("#pf6", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 35.133);
+  tl.fromTo("#pf7", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 40.114);
+  tl.fromTo("#pf8", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 46.783);
+  tl.fromTo("#pf9", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 48.657);
+  tl.fromTo("#pf10", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 53.446);
+  tl.fromTo("#pf11", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 56.977);
+  tl.fromTo("#pf12", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 60.493);
+  tl.fromTo("#pf13", { x: 1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 65.04);
+  tl.fromTo("#pf14", { x: -1 * 1150, opacity: 0, filter: "blur(16px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, 68.51);
+  tl.set({}, {}, 72.13);
+  window.__timelines["stage"] = tl;
+  </script>
+</template>
