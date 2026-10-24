@@ -301,7 +301,27 @@ def r_cta(b, cid, dur):
     return inner, "", js
 
 
-RENDER = dict(stat=r_stat, bars=r_bars, image=r_image, video=r_video, shot=r_shot, equation=r_equation,
+def r_result(b, cid, dur):
+    """Match result: score, the loss, and the payoff (qualified) with a check that pops in."""
+    check = (f'<svg width="54" height="54" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="{ACCENT}"/>'
+             f'<path d="M6.5 12.5l3.6 3.6 7.4-8" fill="none" stroke="#1d1d1f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    inner = f"""<div style="padding:44px 52px">
+      <div class="eyebrow item">{esc(b['eyebrow'])}</div>
+      <div class="item" style="display:flex;align-items:baseline;gap:20px;margin-top:20px">
+        <div style="font-size:44px;font-weight:700" class="muted">{esc(b['team'])}</div>
+        <div class="num" id="{cid}-n" style="font-size:150px">{esc(b['score'])}</div></div>
+      <div class="item" style="display:flex;align-items:center;gap:16px;margin-top:26px;font-size:44px;font-weight:700">
+        <span style="width:16px;height:16px;border-radius:50%;background:#ff6961;display:inline-block"></span>{esc(b['result'])}</div>
+      <div class="item" style="display:flex;align-items:center;gap:18px;margin-top:18px">
+        <div style="font-size:64px;font-weight:900;letter-spacing:-.02em;color:{ACCENT}">{esc(b['payoff'])}</div>
+        <div id="{cid}-ck" style="display:flex">{check}</div></div>
+    </div>"""
+    js = stagger_in(f"#{cid} .item", 0.28, step=0.22, y=30)
+    js += f'  tl.fromTo("#{cid}-ck", {{ scale: 0, rotation: -40 }}, {{ scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2.4)" }}, 1.05);\n'
+    return inner, "", js
+
+
+RENDER = dict(result=r_result, stat=r_stat, bars=r_bars, image=r_image, video=r_video, shot=r_shot, equation=r_equation,
               boundaries=r_boundaries, donut=r_donut, vs=r_vs, quote=r_quote, title=r_title, lower=r_lower, cta=r_cta)
 
 
@@ -440,17 +460,26 @@ def stage_file(photos, total):
             backdrop = ""
         elif have:
             bd = blurred_backdrop(p["src"])
-            tag = f'<div class="ptag">{esc(p["tag"])}</div>' if p.get("tag") else ""
-            credit = f'<div class="pcred">{esc(p["credit"])}</div>' if p.get("credit") else ""
-            inner = (f'<div id="pk{i}" class="pkb" style="background-image:url(\'{p["src"]}\');background-position:{p.get("pos", "center")}"></div>{tag}{credit}')
+            inner = f'<div id="pk{i}" class="pkb" style="background-image:url(\'{p["src"]}\');background-position:{p.get("pos", "center")}"></div>'
             backdrop = f'<div id="pb{i}" class="pbd" style="background-image:url(\'{bd}\')"></div>'
         else:
             inner = f"""<div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
                 <rect x="2.5" y="5" width="19" height="15" rx="3"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.6-2h4.8L16 5"/></svg>
                 <div class="pslot-k">PHOTO SLOT</div><div class="pslot-d">{esc(p["need"])}</div><div class="pslot-f">{esc(p["src"])}</div></div>"""
             backdrop = ""
+        tag = f'<div class="ptag">{esc(p["tag"])}</div>' if p.get("tag") else ""
+        dust_html = dust_js = dust_css = ""
+        if p.get("dust"):
+            dust_html, dust_js, dust_css = seeded_particles(f"pd{i}", 34, 31 + i, sw, sh)
+            dust_js = dust_js.replace("DUR", str(r3(t1 - t0))).replace(", 0);", f", {t0});")
+            js.append(dust_js)
+        # pz = punch-in layer (snaps on the numbers), pk = the slow Ken Burns zoom inside it
         divs.append(f'<div id="p{i}" class="clip" data-start="{t0}" data-duration="{r3(t1 - t0)}" style="position:absolute;inset:0;z-index:{i + 1}">'
-                    f'{backdrop}<div id="pf{i}" class="pframe">{inner}</div></div>')
+                    f'{backdrop}<div id="pf{i}" class="pframe"><div id="pz{i}" class="pz">{inner}</div>'
+                    f'<div class="pdust">{dust_html}</div>{tag}</div></div>')
+        js.append(f'  tl.set("#pz{i}", {{ scale: 1, x: 0, y: 0 }}, {t0});')
+        for (pt, sc, px, py) in p.get("_punch", []):
+            js.append(f'  tl.to("#pz{i}", {{ scale: {sc}, x: {px}, y: {py}, duration: 0.32, ease: "power3.out" }}, {r3(pt)});')
         d = -1 if i % 2 == 0 else 1
         js.append(f'  tl.fromTo("#pf{i}", {{ x: {d} * 1150, opacity: 0, filter: "blur(16px)" }}, '
                   f'{{ x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }}, {t0});')
@@ -460,8 +489,10 @@ def stage_file(photos, total):
         if backdrop:
             js.append(f'  tl.fromTo("#pb{i}", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.6, ease: "power2.out" }}, {t0});')
         if have and p.get("kind") != "text":
-            z0, z1 = p.get("zoom", [1.0, 1.12])
-            js.append(f'  tl.fromTo("#pk{i}", {{ scale: {z0}, x: {-14 * d} }}, {{ scale: {z1}, x: {14 * d}, duration: {r3(t1 - t0)}, ease: "none" }}, {t0});')
+            dur = t1 - t0
+            z0, z1 = p.get("zoom", [1.0, 1.0 + min(0.22, 0.012 * dur)])
+            js.append(f'  tl.fromTo("#pk{i}", {{ scale: {z0}, x: {-24 * d}, y: 12 }}, '
+                      f'{{ scale: {z1}, x: {24 * d}, y: -12, duration: {r3(dur)}, ease: "none" }}, {t0});')
     return f"""<template>
   <style>
   #root {{ position:absolute; inset:0; font-family:{FONT}; }}
@@ -469,6 +500,9 @@ def stage_file(photos, total):
   .pframe {{ position:absolute; left:{x0}px; top:{y0}px; width:{sw}px; height:{sh}px; border-radius:52px; overflow:hidden;
              background:#141417; box-shadow:0 50px 120px rgba(0,0,0,.6), inset 0 0 0 1.5px rgba(255,255,255,.10); }}
   .pkb {{ position:absolute; inset:-3%; background-size:cover; }}
+  .pz {{ position:absolute; inset:0; }}
+  .pdust {{ position:absolute; inset:0; pointer-events:none; }}
+  .p {{ position:absolute; border-radius:50%; }}
   .ptag {{ position:absolute; top:28px; left:28px; padding:10px 20px; border-radius:100px; background:rgba(0,0,0,.55); color:#fff;
            font-size:28px; font-weight:800; letter-spacing:.1em; }}
   .pcred {{ position:absolute; right:26px; bottom:20px; color:rgba(255,255,255,.7); font-size:22px; font-weight:600; text-shadow:0 1px 6px rgba(0,0,0,.7); }}
@@ -498,8 +532,20 @@ def stage_file(photos, total):
 """
 
 
+LINE_TEXT = {}
+
+
 def anchor(ref, timing, edge):
-    """'lineid' -> that line's start/end; 'lineid+0.8' / 'lineid-0.3' offsets it."""
+    """'lineid' -> that line's start/end; 'lineid+0.8' / 'lineid-0.3' offsets it;
+    'lineid@word' -> roughly when that word is said (its character position in the spoken line)."""
+    if "@" in ref:
+        lid, word = ref.split("@", 1)
+        text = LINE_TEXT[lid]
+        k = text.lower().find(word.lower())
+        if k < 0:
+            raise SystemExit(f"anchor {ref}: '{word}' not in line {lid}")
+        t = timing[lid]
+        return t["start"] + (t["end"] - t["start"]) * k / len(text)
     m = re.match(r"^([\w-]+)(?:([+-][\d.]+))?$", ref)
     t = timing[m.group(1)][edge]
     return t + float(m.group(2) or 0)
@@ -520,9 +566,12 @@ def build():
             os.remove(os.path.join(FILM, "compositions", f))
 
     # photo stage: each photo runs from its line until the next photo has landed
+    LINE_TEXT.update({l["id"]: l["text"] for l in script["lines"]})
     photos = edit.get("photos", [])
     for i, p in enumerate(photos):
         p["_t0"] = max(0.0, anchor(p["at"], timing, "start") - p.get("lead", 0.15))
+        p["_punch"] = [(anchor(q["at"], timing, "start") + q.get("offset", 0), q.get("scale", 1.12), q.get("x", 0), q.get("y", 0))
+                       for q in p.get("punch", [])]
     for i, p in enumerate(photos):
         p["_t1"] = photos[i + 1]["_t0"] + 0.85 if i + 1 < len(photos) else total
     with open(os.path.join(FILM, "compositions", "stage.html"), "w") as fh:
@@ -542,6 +591,11 @@ def build():
                      f'data-has-audio="true" playsinline style="position:absolute;left:0;top:0;width:{W}px;height:{H}px;object-fit:cover"></video>\n    </div>')
         cam_js.append(f'  tl.fromTo("#hookwrap", {{ x: 0, opacity: 1, filter: "blur(0px)" }}, '
                       f'{{ x: -700, opacity: 0, filter: "blur(18px)", duration: 0.32, ease: "power3.in" }}, {r3(hd - 0.3)});')
+    logo_html = ""
+    if edit.get("logo"):
+        lg = edit["logo"]
+        logo_html = (f'    <img id="logo" src="{lg["src"]}" alt="" style="position:absolute;left:{lg.get("x", 44)}px;top:{lg.get("y", 64)}px;'
+                     f'height:{lg.get("h", 56)}px;z-index:90;filter:drop-shadow(0 2px 8px rgba(0,0,0,.55))">')
     tight, origin = 1.0, "540px 560px"
 
     hosts, sfx = [], []
@@ -606,6 +660,7 @@ def build():
          data-track-index="2" data-track-kind="captions" data-width="{W}" data-height="{H}" style="z-index:5"></div>
 {voice}
 {chr(10).join(audio)}
+{logo_html}
     </div>
     <script>
       const tl = gsap.timeline({{ paused: true }});

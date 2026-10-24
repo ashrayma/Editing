@@ -156,30 +156,21 @@
    "tail": 0.1
   },
   {
-   "id": "scorecard",
-   "type": "shot",
+   "id": "score143",
+   "type": "stat",
    "at": "score",
    "side": "left",
-   "w": 660,
-   "h": 560,
-   "light": true,
-   "tag": "SCREENSHOT",
-   "src": "assets/broll/screenshot_scorecard.png",
-   "highlight": [
-    16,
-    288,
-    628,
-    60
-   ],
-   "ring_at": 0.7,
-   "zoom": 1.32,
-   "zoom_at": 1.5,
-   "zoom_origin": "50% 57%",
+   "w": 800,
+   "h": 470,
+   "eyebrow": "Sachin Tendulkar · 22 April 1998",
+   "value": 143,
+   "unit": "off 131 balls",
+   "sub": "Top score of the match",
    "sfx_extra": [
     {
-     "at": 0.75,
-     "file": "pop.mp3",
-     "vol": 0.35
+     "at": 1.4,
+     "file": "ping.mp3",
+     "vol": 0.3
     }
    ]
   },
@@ -214,32 +205,23 @@
    "lead": 0.2
   },
   {
-   "id": "recording",
-   "type": "video",
+   "id": "result",
+   "type": "result",
    "at": "lost",
    "side": "left",
-   "w": 650,
-   "h": 560,
-   "tag": "SCREEN RECORDING",
-   "src": "assets/broll/screen_recording.mp4",
-   "fit": true,
-   "pos": "center top",
-   "tail": 0.4,
+   "w": 820,
+   "h": 500,
+   "eyebrow": "22 April 1998 · Result",
+   "team": "India",
+   "score": "250/5",
+   "result": "Lost by 26",
+   "payoff": "QUALIFIED",
+   "tail": 0.35,
    "sfx_extra": [
     {
-     "at": 0.55,
-     "file": "click-soft.mp3",
-     "vol": 0.45
-    },
-    {
-     "at": 0.7,
-     "file": "typing.mp3",
-     "vol": 0.22
-    },
-    {
-     "at": 1.7,
-     "file": "click-soft.mp3",
-     "vol": 0.45
+     "at": 1.05,
+     "file": "pop.mp3",
+     "vol": 0.4
     }
    ]
   },
@@ -366,6 +348,20 @@
    "zoom": [
     1.05,
     1.18
+   ],
+   "punch": [
+    {
+     "at": "intro@Sharjah",
+     "scale": 1.14,
+     "x": 60,
+     "y": 30
+    },
+    {
+     "at": "intro@1998",
+     "scale": 1.26,
+     "x": 110,
+     "y": 50
+    }
    ]
   },
   {
@@ -378,7 +374,17 @@
      150
     ]
    ],
-   "sub": "Sharjah Cricket Stadium, UAE"
+   "sub": "Sharjah Cricket Stadium, UAE",
+   "punch": [
+    {
+     "at": "date@22",
+     "scale": 1.08
+    },
+    {
+     "at": "date@final",
+     "scale": 1.14
+    }
+   ]
   },
   {
    "at": "target",
@@ -387,6 +393,25 @@
    "zoom": [
     1.3,
     1.42
+   ],
+   "punch": [
+    {
+     "at": "target@284",
+     "scale": 1.2,
+     "x": -60
+    },
+    {
+     "at": "context@284",
+     "scale": 1.08,
+     "x": 120,
+     "y": 40
+    },
+    {
+     "at": "context@230",
+     "scale": 1.22,
+     "x": 160,
+     "y": 60
+    }
    ]
   },
   {
@@ -396,6 +421,19 @@
    "zoom": [
     1.35,
     1.5
+   ],
+   "punch": [
+    {
+     "at": "aussies@Woh team",
+     "scale": 1.12,
+     "x": -40
+    },
+    {
+     "at": "aussies@kahin",
+     "scale": 1.24,
+     "x": -90,
+     "y": 30
+    }
    ]
   },
   {
@@ -406,7 +444,42 @@
     1.0,
     1.22
    ],
-   "sfx": "whoosh-cinematic.mp3"
+   "sfx": "whoosh-cinematic.mp3",
+   "dust": true,
+   "punch": [
+    {
+     "at": "turn@kuch aisa",
+     "scale": 1.08
+    },
+    {
+     "at": "storm@sandstorm",
+     "scale": 1.18,
+     "x": -50
+    },
+    {
+     "at": "storm@Pachchees",
+     "scale": 1.3,
+     "x": -120,
+     "y": 40
+    },
+    {
+     "at": "revised@46",
+     "scale": 1.12,
+     "x": 80
+    },
+    {
+     "at": "revised@276",
+     "scale": 1.26,
+     "x": 140,
+     "y": -30
+    },
+    {
+     "at": "revised@mushkil",
+     "scale": 1.34,
+     "x": 160,
+     "y": -40
+    }
+   ]
   },
   {
    "at": "real",
@@ -415,6 +488,14 @@
    "zoom": [
     1.0,
     1.14
+   ],
+   "punch": [
+    {
+     "at": "real@toofan",
+     "scale": 1.15,
+     "x": 90,
+     "y": 40
+    }
    ]
   },
   {
@@ -424,23 +505,36 @@
    "zoom": [
     1.2,
     1.35
+   ],
+   "punch": [
+    {
+     "at": "shots@paanch",
+     "scale": 1.18
+    },
+    {
+     "at": "shots@dhulaai",
+     "scale": 1.28,
+     "x": 50,
+     "y": 40
+    }
    ]
   },
   {
    "at": "lost",
-   "kind": "text",
-   "eyebrow": "22 April 1998",
-   "lines": [
-    [
-     "LOST BY 26.",
-     104
-    ],
-    [
-     "<span style='color:#FFB340'>QUALIFIED.</span>",
-     120
-    ]
+   "src": "assets/photos/sachin_lofted_drive.jpg",
+   "pos": "18% 30%",
+   "zoom": [
+    1.3,
+    1.42
    ],
-   "sub": "Sachin carried India into the final"
+   "punch": [
+    {
+     "at": "lost@akele",
+     "scale": 1.14,
+     "x": 60,
+     "y": 40
+    }
+   ]
   },
   {
    "at": "bday",
@@ -464,6 +558,19 @@
    "zoom": [
     1.0,
     1.12
+   ],
+   "punch": [
+    {
+     "at": "final@134",
+     "scale": 1.14,
+     "y": 30
+    },
+    {
+     "at": "final@cup",
+     "scale": 1.26,
+     "x": 40,
+     "y": 50
+    }
    ]
   },
   {
@@ -530,5 +637,11 @@
  "music": {
   "src": "assets/audio/music.wav",
   "volume": 0.6
+ },
+ "logo": {
+  "src": "assets/img/logo.png",
+  "x": 40,
+  "y": 60,
+  "h": 74
  }
 }

@@ -60,12 +60,13 @@ versions of the same photos would look noticeably crisper. To add or swap a pict
 | kind | what | how it was made |
 |---|---|---|
 | Hook video | host asks the question, Virat answers | your clip, with its burned-in captions blurred and replaced (`tools/prep_hook.py`) |
-| Screen recording | search → open the match → scorecard → chase bar crossing the qualifying line | `tools/record_screen.cjs` drives headless Chromium through `tools/innings_explorer.html` and records it |
-| Screenshot | Tendulkar's scorecard row, ringed and zoomed | same page, 2× screenshot |
+| Result card | India 250/5 · Lost by 26 · QUALIFIED ✓ | HyperFrames card (replaced the earlier screenshot and screen-recording cards, which were too small to read on a phone; `tools/record_screen.cjs` can still regenerate them) |
+| Logo | theCricketLounge, top-left for the whole reel | `film/assets/img/logo.png`, set by `logo` in `edit.json` |
 | AI image | sandstorm over a floodlit stadium | Canva AI image generation (tagged **AI-GENERATED** on screen) |
 | Motion graphics | count-up stats, comparison bars, boundary chips, VS card, quote card, kinetic titles with drifting sand | `tools/build.py` → HyperFrames sub-compositions |
 
-The Innings Explorer page is a small local page built for this reel (cricket sites were unreachable from the build machine), filled with the real match figures.
+Photos never sit still: each has a slow Ken Burns zoom and pan, plus punch-ins that snap in on the spoken numbers
+(`punch` in `edit.json`, anchored as `"line@word"`, e.g. `"target@284"`). The sandstorm also carries drifting dust.
 
 Facts used: Australia 284/7 (Bevan 101*); sandstorm stopped play for ~25 min; India's target revised to 276 in 46 overs;
 India 250/5, lost by 26 runs but qualified on net run rate; Tendulkar 143 (131 balls, 9×4, 5×6). Final, 24 April 1998

@@ -17,20 +17,29 @@
 
 
   </style>
-  <div id="root" data-composition-id="scorecard" data-width="1080" data-height="1920">
-    <div id="scorecard-card" class="card light" style="left:48px;top:1092px;width:660px;height:560px"><div id="scorecard-img" style="position:absolute;inset:0;background:#fff url('assets/broll/screenshot_scorecard.png') center top/cover no-repeat"><div id="scorecard-ring" style="position:absolute;left:16px;top:288px;width:628px;height:60px;border:5px solid #FFB340;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.0)"></div></div><div class="tag" style="background:rgba(0,0,0,.72)"><i style="background:#0a84ff"></i>SCREENSHOT</div></div>
+  <div id="root" data-composition-id="score143" data-width="1080" data-height="1920">
+    <div id="score143-card" class="card" style="left:48px;top:1092px;width:800px;height:470px">
+    <div style="padding:46px 52px">
+      <div class="eyebrow item">Sachin Tendulkar · 22 April 1998</div>
+      <div class="item" style="display:flex;align-items:baseline;gap:18px;margin-top:18px">
+        <div class="num" id="score143-n" style="font-size:190px">0</div>
+        <div style="font-size:46px;font-weight:700" class="muted">off 131 balls</div>
+      </div>
+      <div class="item" style="font-size:38px;font-weight:600;margin-top:22px;line-height:1.22">Top score of the match</div>
+    </div></div>
   </div>
   <script>
   const tl = gsap.timeline({ paused: true });
 
   const dir = -1;
-  tl.fromTo("#scorecard-card", { x: dir * 1100, opacity: 0, filter: "blur(18px)" },
+  tl.fromTo("#score143-card", { x: dir * 1100, opacity: 0, filter: "blur(18px)" },
             { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, 0.0);
-  tl.to("#scorecard-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 4.72 - 0.36);
-  tl.set("#scorecard-card", { opacity: 0 }, 4.72 - 0.01);
-  tl.fromTo("#scorecard-img", { scale: 1.0, transformOrigin: "50% 57%" }, { scale: 1.32, duration: 1.1, ease: "power2.inOut" }, 1.5);
-  tl.fromTo("#scorecard-ring", { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 0.7);
+  tl.to("#score143-card", { x: dir * 260, opacity: 0, filter: "blur(12px)", duration: 0.34, ease: "power3.in" }, 4.72 - 0.36);
+  tl.set("#score143-card", { opacity: 0 }, 4.72 - 0.01);
+  tl.fromTo("#score143 .item", { y: 24, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power4.out", stagger: 0.07 }, 0.28);
+  { const o = { v: 0 }; const el = document.querySelector("#score143-n");
+    tl.to(o, { v: 143, duration: 1.2, ease: "power3.out", onUpdate: () => el.textContent = o.v.toFixed(0) }, 0.35); }
 
-  window.__timelines["scorecard"] = tl;
+  window.__timelines["score143"] = tl;
   </script>
 </template>
