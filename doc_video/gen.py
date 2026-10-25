@@ -112,6 +112,7 @@ def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=
 def headline(lines, start, dur, side="left", size=96, accent_idx=None, y=None, align=None, sub=None, z=30):
     """Big type revealed line by line from behind a mask, with the brand's yellow bar."""
     i = nid("hl")
+    size = round(size * 0.78)  # Apple-clean: generous whitespace, type a size smaller
     align = align or ("left" if side == "left" else ("right" if side == "right" else "center"))
     x = {"left": 150, "right": W - 150, "center": W / 2}[side]
     top = y if y is not None else H / 2 - (len(lines) * size * 1.08) / 2 - (30 if sub else 0)
@@ -139,6 +140,7 @@ def headline(lines, start, dur, side="left", size=96, accent_idx=None, y=None, a
 def odometer(text, start, dur, side="left", size=230, label=None, color=Y, roll=1.4, y=None, z=30):
     """A number that rolls into place digit by digit (Apple-style), with a small label under it."""
     i = nid("od")
+    size = round(size * 0.75)
     EVENTS.append((start + 0.1, "roll"))
     x = {"left": 150, "right": W - 150, "center": W / 2}[side]
     cols = []
@@ -253,6 +255,19 @@ def backdrop(src, start, dur, opacity=0.28, z=2):
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.6}},{round(start + dur - 0.6, 2)})')
 
 
+def fullimg(src, start, dur, dim=0.35, ai=True, z=8, push=1.10):
+    """Full-bleed image with a slow push-in, darkened for type on top; AI images carry a small disclosure tag."""
+    i = nid("fi")
+    EVENTS.append((start, "whoosh"))
+    tag = '<div class="aitag">AI illustration</div>' if ai else ""
+    add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden">'
+        f'<img id="{i}i" src="{media(src)}" style="width:100%;height:100%;object-fit:cover">'
+        f'<div class="full" style="background:rgba(5,5,6,{dim})"></div>{tag}</div>', start, dur, z)
+    anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.6,ease:"power2.out"}},{start})')
+    anim(f'tl.fromTo("#{i}i",{{scale:{push}}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.5}},{round(start + dur - 0.5, 2)})')
+
+
 def stage(start, dur, z=40):
     """A full-frame dark stage for the hero moments (fades in and out)."""
     i = nid("st")
@@ -308,8 +323,7 @@ C = "footage/clips/"
 R3 = "blender/renders/"
 
 # CHAPTER 1 - THE FASTEST BALL (hook)
-card(P + "shoaib_bowling.jpg", 0.3, 3.4, "right", "SHOAIB AKHTAR", "Cricket World Cup 2003")
-backdrop(P + "shoaib_bowling.jpg", 0.0, 3.8)
+fullimg("assets/ai/ai_ball.png", 0.0, 3.9, dim=0.25)
 headline(["161.3", "KM/H"], 0.5, 3.0, "left", size=150, accent_idx=0)
 full_video(R3 + "speed.mp4", b("hook_fastest", 3.0), 3.6)
 headline(["The fastest ball", "ever recorded."], b("hook_fastest", 6.4), 2.3, "center", size=92, accent_idx=1)
@@ -320,7 +334,8 @@ card(C + "six_close.mp4", b("hook_six", 0.0), 3.6, "right", "OFF STUMP, WIDE", "
 odometer("6", b("hook_six", 0.6), 3.0, "left", size=320, label="OVER THIRD MAN")
 card(C + "crowd_flags.mp4", b("hook_six", 3.6), 3.3, "center", video=True, maxw=1300, maxh=760, kb=True)
 headline(["This isn't the story", "of one shot."], b("not_one_shot", 0.1), 4.0, "center", size=96, accent_idx=1)
-odometer("12", b("not_one_shot", 4.4), 3.9, "center", size=260, label="NIGHTS WITHOUT SLEEP")
+fullimg("assets/ai/ai_sleepless.png", b("not_one_shot", 4.2), BEAT["not_one_shot"][1] - b("not_one_shot", 4.2) + 0.3, dim=0.35)
+odometer("12", b("not_one_shot", 4.4), 3.9, "left", size=260, label="NIGHTS WITHOUT SLEEP")
 pills(["Cramps", "A runner", "<b>98</b> runs"], b("cramps_98", 0.3), 5.6, "left", gap=0.9)
 card(P + "sachin_crouch_cramps.jpg", b("cramps_98", 0.3), 5.6, "right", "SACHIN TENDULKAR", "Centurion, 1 March 2003")
 big98(b("cramps_98", 6.0), 3.0)
@@ -339,14 +354,16 @@ headline(["World Cup 2003", "India vs Pakistan"], b("no_cricket", 3.8), BEAT["no
 headline(["Not just", "a cricket match."], b("not_just_match", 0.0), 2.6, "center", size=110, accent_idx=1)
 odometer("12", b("months_talk", 0.6), 6.2, "left", size=240, label="MONTHS OF BUILD-UP")
 card(P + "collage_three_bowlers.jpg", b("months_talk", 0.4), 6.6, "right")
-headline(["“Jeetna hi hai.”"], b("phone_calls", 0.2), 4.6, "center", size=120, sub="Phone calls to the team, every day")
-odometer("13", b("phone_calls", 5.0), 5.4, "center", size=240, label="RESTLESS NIGHTS BEFORE THE MATCH")
+card("assets/ai/ai_phone.png", b("phone_calls", 0.1), 5.0, "right", "AI ILLUSTRATION", "The calls kept coming")
+headline(["“Jeetna", "hi hai.”"], b("phone_calls", 0.3), 4.6, "left", size=120, accent_idx=1, sub="Phone calls to the team, every day")
+fullimg("assets/ai/ai_sleepless.png", b("phone_calls", 5.0), BEAT["phone_calls"][1] - b("phone_calls", 5.0) + 0.3, dim=0.4)
+odometer("13", b("phone_calls", 5.2), 5.2, "left", size=240, label="RESTLESS NIGHTS BEFORE THE MATCH")
 card(P + "toss_handshake.jpg", b("toss_ties", 0.3), 6.0, "left", "SOURAV GANGULY × WAQAR YOUNIS", "Before the toss")
 backdrop(P + "toss_handshake.jpg", b("toss_ties", 0.0), 6.4)
 card(P + "handshake_hires.jpg", b("toss_ties", 6.2), BEAT["toss_ties"][1] - b("toss_ties", 6.2) + 0.2, "right", maxh=760)
 headline(["A handshake.", "For a moment,", "it felt calm."], b("toss_ties", 6.4), BEAT["toss_ties"][1] - b("toss_ties", 6.4), "left",
          size=78, accent_idx=0)
-card(C + "stadium.mp4", b("match_starts", 0.0), 5.2, "center", video=True, maxw=1300, maxh=760)
+fullimg("assets/ai/ai_stadium.png", b("match_starts", 0.0), 5.6, dim=0.3)
 headline(["Match 36", "SuperSport Park"], b("match_starts", 0.6), 4.4, "left", size=90, accent_idx=1)
 
 # Pakistan bat first
@@ -378,7 +395,7 @@ pills(["Ball 1 · <b>SIX</b>", "Ball 2 · <b>FOUR</b> square leg", "Ball 3 · <b
 card(P + "bowling_card_sachin.jpg", b("three_balls", 0.0), 6.2, "right", maxh=760)
 headline(["3 balls.", "3 boundaries."], b("three_balls", 0.2), 6.0, "left", size=110, accent_idx=1)
 odometer("18", b("eighteen", 0.0), 3.6, "center", size=300, label="RUNS OFF THE OVER")
-card(C + "crowd_celebrate.mp4", b("that_feeling", 0.0), 5.4, "center", video=True, maxw=1300, maxh=760)
+fullimg("assets/ai/ai_tv_family.png", b("that_feeling", 0.0), 5.6, dim=0.1)
 odometer("53", b("sehwag_53", 0.8), 8.0, "left", size=260, label="IN 5.4 OVERS · RUN RATE 9+")
 card(C + "crowd_flags.mp4", b("sehwag_53", 0.4), 8.4, "right", video=True, maxh=760)
 card(C + "wicket_over.mp4", b("two_wickets", 0.0), 7.9, "right", "WAQAR YOUNIS", "Two wickets in two balls", video=True, maxh=760)
@@ -431,7 +448,7 @@ headline(["Belief."], b("belief", 0.3), 10.0, "left", size=170, accent_idx=0)
 card(C + "crowd_celebrate.mp4", b("belief", 0.0), 10.3, "right", video=True, maxh=760)
 headline(["Pride."], b("pride", 0.3), 6.6, "left", size=170, accent_idx=0)
 card(P + "india_team_walk.jpg", b("pride", 0.0), 6.9, "right")
-card(P + "ganguly_waqar_after.jpg", b("crores", 0.0), 7.2, "center", maxw=1240, maxh=740)
+fullimg("assets/ai/ai_tv_family.png", b("crores", 0.0), 7.2, dim=0.15, push=1.16)
 headline(["Some matches are won", "on the scoreboard."], b("hearts", 0.0), 3.4, "center", size=86, accent_idx=1)
 headline(["Some, in the heart."], b("hearts", 3.4), 2.4, "center", size=96, accent_idx=0)
 headline(["Centurion was", "won in both."], b("hearts", 5.6), BEAT["hearts"][1] - b("hearts", 5.6) + 0.4, "center", size=110, accent_idx=1)
@@ -455,24 +472,24 @@ html,body{{margin:0;background:#060607}}
 .card .frame{{width:100%;height:100%;border-radius:30px;overflow:hidden;
   box-shadow:0 50px 110px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.08)}}
 .tag{{position:absolute;left:28px;bottom:-74px;display:flex;align-items:center;gap:14px;color:#fff;white-space:nowrap}}
-.tag b{{font-weight:800;font-size:28px;letter-spacing:2px}}
-.tag em{{font-style:normal;font-weight:500;font-size:24px;color:rgba(255,255,255,.62)}}
+.tag b{{font-weight:800;font-size:23px;letter-spacing:2px}}
+.tag em{{font-style:normal;font-weight:500;font-size:20px;color:rgba(255,255,255,.62)}}
 .tagbar{{width:6px;height:34px;background:{Y};border-radius:3px}}
 .hl{{position:absolute;font-weight:800;letter-spacing:-0.03em;line-height:1.04;color:#fff}}
 .hl .mask{{overflow:hidden;padding-bottom:.06em}}
 .hl .ln{{display:block}}
 .hbar{{position:absolute;left:-46px;top:.08em;width:10px;height:calc(100% - .16em);background:{Y};border-radius:5px;transform-origin:top}}
-.hsub{{font-size:34px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.66);margin-top:22px}}
+.hsub{{font-size:28px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.66);margin-top:22px}}
 .odo{{position:absolute;font-weight:800;letter-spacing:-0.04em;line-height:1}}
 .digits{{display:inline-flex}}
 .dcol{{display:inline-block;height:1em;overflow:hidden}}
 .dstrip{{display:flex;flex-direction:column}}
 .dstrip span{{height:1em;line-height:1em}}
 .dchar{{display:inline-block}}
-.olab{{font-size:30px;font-weight:700;letter-spacing:6px;color:rgba(255,255,255,.72);margin-top:22px}}
+.olab{{font-size:24px;font-weight:700;letter-spacing:6px;color:rgba(255,255,255,.72);margin-top:22px}}
 .pills{{position:absolute;display:flex;flex-direction:column;gap:22px}}
-.pill{{display:flex;align-items:center;gap:18px;padding:22px 34px;border-radius:999px;background:rgba(255,255,255,.07);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#fff;font-size:40px;font-weight:600;white-space:nowrap}}
+.pill{{display:flex;align-items:center;gap:18px;padding:18px 28px;border-radius:999px;background:rgba(255,255,255,.07);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#fff;font-size:32px;font-weight:600;white-space:nowrap}}
 .pill b{{color:{Y};font-weight:800}}
 .pill .dot{{width:14px;height:14px;border-radius:50%;background:{Y}}}
 .phone{{position:absolute;border-radius:56px;padding:14px;background:#111;box-shadow:0 0 0 2px #2a2a2c,0 60px 120px rgba(0,0,0,.7);transform-style:preserve-3d}}
@@ -481,28 +498,30 @@ html,body{{margin:0;background:#060607}}
 .tline{{position:absolute;left:230px;right:230px;top:540px;height:4px;background:linear-gradient(90deg,{Y},rgba(254,222,92,.25));transform-origin:left}}
 .tnode{{position:absolute;top:470px;transform:translateX(-50%);text-align:center;width:340px}}
 .tdot{{width:30px;height:30px;border-radius:50%;margin:56px auto 0}}
-.tyear{{position:absolute;top:-70px;left:0;right:0;font-size:84px;font-weight:800;color:#fff;letter-spacing:-2px}}
-.tlab{{margin-top:34px;font-size:30px;font-weight:600;color:rgba(255,255,255,.8)}}
+.tyear{{position:absolute;top:-60px;left:0;right:0;font-size:66px;font-weight:800;color:#fff;letter-spacing:-2px}}
+.tlab{{margin-top:34px;font-size:25px;font-weight:600;color:rgba(255,255,255,.8)}}
 .chapter{{position:absolute;left:150px;top:96px;display:flex;align-items:center;gap:18px;color:#fff;z-index:60}}
-.chnum{{font-size:26px;font-weight:800;color:{Y};letter-spacing:3px}}
+.chnum{{font-size:21px;font-weight:800;color:{Y};letter-spacing:3px}}
 .chbar{{width:40px;height:3px;background:rgba(255,255,255,.5)}}
-.chtitle{{font-size:26px;font-weight:700;letter-spacing:6px;text-transform:uppercase}}
+.chtitle{{font-size:21px;font-weight:700;letter-spacing:6px;text-transform:uppercase}}
 .stage{{position:absolute;inset:0;background:radial-gradient(90% 80% at 50% 45%,#19191c,#050506);overflow:hidden}}
 .persp{{position:absolute;inset:0;perspective:1400px;display:flex;align-items:center;justify-content:center}}
-.n98{{position:absolute;top:150px;left:0;right:0;text-align:center;font-size:560px;font-weight:900;letter-spacing:-0.05em;line-height:1;transform-style:preserve-3d}}
+.n98{{position:absolute;top:150px;left:0;right:0;text-align:center;font-size:440px;font-weight:900;letter-spacing:-0.05em;line-height:1;transform-style:preserve-3d}}
 .n98 span{{display:block}}
 .n98 .back{{color:#7a560e}}
 .n98 .gold{{position:absolute;left:0;right:0;top:0;background:linear-gradient(180deg,#FFF1B0 0%,#FEDE5C 35%,#C8961E 70%,#FFE38A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}}
 .n98.refl .back{{display:none}}
 .n98.refl{{top:auto;bottom:-430px;transform:scaleY(-1);-webkit-mask-image:linear-gradient(0deg,rgba(0,0,0,.6),transparent 45%)}}
-.uline{{position:absolute;left:610px;right:610px;top:760px;height:8px;border-radius:4px;background:{Y};transform-origin:left;box-shadow:0 0 30px rgba(254,222,92,.6)}}
+.uline{{position:absolute;left:680px;right:680px;top:660px;height:8px;border-radius:4px;background:{Y};transform-origin:left;box-shadow:0 0 30px rgba(254,222,92,.6)}}
 .datewrap{{flex-direction:column;align-items:flex-start;left:560px;right:auto;justify-content:center}}
-.dbar{{position:absolute;left:-60px;top:300px;width:16px;height:470px;border-radius:8px;background:{Y};transform-origin:top;box-shadow:0 0 40px rgba(254,222,92,.5)}}
-.dl1{{font-size:190px;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}}
-.dl2{{font-size:250px;font-weight:900;color:{Y};letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}}
+.dbar{{position:absolute;left:-60px;top:345px;width:14px;height:380px;border-radius:8px;background:{Y};transform-origin:top;box-shadow:0 0 40px rgba(254,222,92,.5)}}
+.dl1{{font-size:150px;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}}
+.dl2{{font-size:200px;font-weight:900;color:{Y};letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}}
 .lbig{{position:absolute;left:50%;top:50%;width:1000px;margin-left:-500px;margin-top:-118px}}
 .lsweep{{position:absolute;left:50%;top:0;bottom:0;width:180px;margin-left:-90px;background:linear-gradient(90deg,transparent,rgba(254,222,92,.35),transparent);transform:skewX(-18deg)}}
 .lfoot{{position:absolute;left:0;right:0;top:640px;text-align:center;color:rgba(255,255,255,.75);font-size:40px;font-weight:600;letter-spacing:2px}}
+.aitag{{position:absolute;right:40px;top:34px;padding:8px 16px;border-radius:999px;background:rgba(0,0,0,.45);
+  color:rgba(255,255,255,.7);font-size:18px;font-weight:600;letter-spacing:1px}}
 .mark{{position:absolute;right:70px;bottom:56px;width:210px;opacity:.55;z-index:80}}
 """
 
