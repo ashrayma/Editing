@@ -1,0 +1,624 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#060607}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#0a0a0b;
+  font-family:"Inter Display","Inter",system-ui,sans-serif;perspective:1600px}
+.bg{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,#1b1b1e 0%,#0b0b0c 55%,#050506 100%)}
+.glow{position:absolute;width:1400px;height:1400px;left:-200px;top:-500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(254,222,92,0.10),rgba(254,222,92,0) 60%)}
+.grain{position:absolute;inset:0;opacity:.07;mix-blend-mode:overlay;background-image:url(media/grain.png)}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);z-index:90;pointer-events:none}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card{position:absolute;transform-style:preserve-3d}
+.card .frame{width:100%;height:100%;border-radius:30px;overflow:hidden;
+  box-shadow:0 50px 110px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.08)}
+.tag{position:absolute;left:28px;bottom:-74px;display:flex;align-items:center;gap:14px;color:#fff;white-space:nowrap}
+.tag b{font-weight:800;font-size:28px;letter-spacing:2px}
+.tag em{font-style:normal;font-weight:500;font-size:24px;color:rgba(255,255,255,.62)}
+.tagbar{width:6px;height:34px;background:#FEDE5C;border-radius:3px}
+.hl{position:absolute;font-weight:800;letter-spacing:-0.03em;line-height:1.04;color:#fff}
+.hl .mask{overflow:hidden;padding-bottom:.06em}
+.hl .ln{display:block}
+.hbar{position:absolute;left:-46px;top:.08em;width:10px;height:calc(100% - .16em);background:#FEDE5C;border-radius:5px;transform-origin:top}
+.hsub{font-size:34px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.66);margin-top:22px}
+.odo{position:absolute;font-weight:800;letter-spacing:-0.04em;line-height:1}
+.digits{display:inline-flex}
+.dcol{display:inline-block;height:1em;overflow:hidden}
+.dstrip{display:flex;flex-direction:column}
+.dstrip span{height:1em;line-height:1em}
+.dchar{display:inline-block}
+.olab{font-size:30px;font-weight:700;letter-spacing:6px;color:rgba(255,255,255,.72);margin-top:22px}
+.pills{position:absolute;display:flex;flex-direction:column;gap:22px}
+.pill{display:flex;align-items:center;gap:18px;padding:22px 34px;border-radius:999px;background:rgba(255,255,255,.07);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#fff;font-size:40px;font-weight:600;white-space:nowrap}
+.pill b{color:#FEDE5C;font-weight:800}
+.pill .dot{width:14px;height:14px;border-radius:50%;background:#FEDE5C}
+.phone{position:absolute;border-radius:56px;padding:14px;background:#111;box-shadow:0 0 0 2px #2a2a2c,0 60px 120px rgba(0,0,0,.7);transform-style:preserve-3d}
+.phone video{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:44px}
+.tgraph{position:absolute;inset:0}
+.tline{position:absolute;left:230px;right:230px;top:540px;height:4px;background:linear-gradient(90deg,#FEDE5C,rgba(254,222,92,.25));transform-origin:left}
+.tnode{position:absolute;top:470px;transform:translateX(-50%);text-align:center;width:340px}
+.tdot{width:30px;height:30px;border-radius:50%;margin:56px auto 0}
+.tyear{position:absolute;top:-70px;left:0;right:0;font-size:84px;font-weight:800;color:#fff;letter-spacing:-2px}
+.tlab{margin-top:34px;font-size:30px;font-weight:600;color:rgba(255,255,255,.8)}
+.chapter{position:absolute;left:150px;top:96px;display:flex;align-items:center;gap:18px;color:#fff;z-index:60}
+.chnum{font-size:26px;font-weight:800;color:#FEDE5C;letter-spacing:3px}
+.chbar{width:40px;height:3px;background:rgba(255,255,255,.5)}
+.chtitle{font-size:26px;font-weight:700;letter-spacing:6px;text-transform:uppercase}
+.stage{position:absolute;inset:0;background:radial-gradient(90% 80% at 50% 45%,#19191c,#050506);overflow:hidden}
+.persp{position:absolute;inset:0;perspective:1400px;display:flex;align-items:center;justify-content:center}
+.n98{position:absolute;top:150px;left:0;right:0;text-align:center;font-size:560px;font-weight:900;letter-spacing:-0.05em;line-height:1;transform-style:preserve-3d}
+.n98 span{display:block}
+.n98 .back{color:#7a560e}
+.n98 .gold{position:absolute;left:0;right:0;top:0;background:linear-gradient(180deg,#FFF1B0 0%,#FEDE5C 35%,#C8961E 70%,#FFE38A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.n98.refl .back{display:none}
+.n98.refl{top:auto;bottom:-430px;transform:scaleY(-1);-webkit-mask-image:linear-gradient(0deg,rgba(0,0,0,.6),transparent 45%)}
+.uline{position:absolute;left:610px;right:610px;top:760px;height:8px;border-radius:4px;background:#FEDE5C;transform-origin:left;box-shadow:0 0 30px rgba(254,222,92,.6)}
+.datewrap{flex-direction:column;align-items:flex-start;left:560px;right:auto;justify-content:center}
+.dbar{position:absolute;left:-60px;top:300px;width:16px;height:470px;border-radius:8px;background:#FEDE5C;transform-origin:top;box-shadow:0 0 40px rgba(254,222,92,.5)}
+.dl1{font-size:190px;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}
+.dl2{font-size:250px;font-weight:900;color:#FEDE5C;letter-spacing:-0.03em;line-height:1;transform-origin:50% 100%}
+.lbig{position:absolute;left:50%;top:50%;width:1000px;margin-left:-500px;margin-top:-118px}
+.lsweep{position:absolute;left:50%;top:0;bottom:0;width:180px;margin-left:-90px;background:linear-gradient(90deg,transparent,rgba(254,222,92,.35),transparent);transform:skewX(-18deg)}
+.lfoot{position:absolute;left:0;right:0;top:640px;text-align:center;color:rgba(255,255,255,.75);font-size:40px;font-weight:600;letter-spacing:2px}
+.mark{position:absolute;right:70px;bottom:56px;width:210px;opacity:.55;z-index:80}
+</style></head><body>
+<div id="root" data-composition-id="root" data-width="1920" data-height="1080" data-fps="30" data-duration="409.49">
+<div class="bg"></div><div class="glow" id="glow"></div><div class="grain"></div>
+<img id="bd2" class="full clip" src="media/bd_shoaib_bowling.jpg" data-start="0.0" data-duration="3.8" style="z-index:2">
+<div id="card1" class="card clip" data-start="0.3" data-duration="3.4" style="left:1037px;top:200px;width:499px;height:700px;z-index:20"><div class="frame"><img id="card1i" src="media/shoaib_bowling.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card1t"><span class="tagbar"></span><b>SHOAIB AKHTAR</b><em>Cricket World Cup 2003</em></div></div>
+<div id="hl3" class="hl clip" data-start="0.5" data-duration="3.0" style="left:150px;top:378.0px;font-size:150px;text-align:left;z-index:30"><div class="hbar" id="hl3b"></div><div class="mask"><div class="ln" id="hl3l0" style="color:#FEDE5C">161.3</div></div><div class="mask"><div class="ln" id="hl3l1" style="color:#fff">KM/H</div></div></div>
+<video id="fv4" class="full clip" src="media/speed.mp4" muted playsinline data-start="3.6" data-duration="3.6" data-media-start="0" style="z-index:40"></video>
+<div id="hl5" class="hl clip" data-start="7.0" data-duration="2.3" style="left:0;right:0;top:440.64px;font-size:92px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl5l0" style="color:#fff">The fastest ball</div></div><div class="mask"><div class="ln" id="hl5l1" style="color:#FEDE5C">ever recorded.</div></div></div>
+<div id="st6" class="stage clip" data-start="9.22" data-duration="2.5" style="z-index:40"><div class="persp datewrap" id="st6w"><div class="dbar" id="st6b"></div><div class="dl1" id="st6a">1 MARCH</div><div class="dl2" id="st6c">2003</div></div></div>
+<div id="card7" class="card clip" data-start="11.72" data-duration="3.6" style="left:294px;top:180px;width:679px;height:740px;z-index:20"><div class="frame"><video id="card7v" class="clip" src="media/shoaib_run.mp4" muted playsinline data-start="11.72" data-duration="3.6" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card7t"><span class="tagbar"></span><b>THE FIRST BALL</b><em>Shoaib to Sachin</em></div></div>
+<div id="hl8" class="hl clip" data-start="11.92" data-duration="3.4" style="right:150px;top:361.79999999999995px;font-size:110px;text-align:right;z-index:30"><div class="hbar" id="hl8b"></div><div class="mask"><div class="ln" id="hl8l0" style="color:#fff">Shoaib</div></div><div class="mask"><div class="ln" id="hl8l1" style="color:#FEDE5C">vs</div></div><div class="mask"><div class="ln" id="hl8l2" style="color:#fff">Sachin</div></div></div>
+<div id="card9" class="card clip" data-start="15.68" data-duration="3.6" style="left:947px;top:180px;width:679px;height:740px;z-index:20"><div class="frame"><video id="card9v" class="clip" src="media/six_close.mp4" muted playsinline data-start="15.68" data-duration="3.6" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card9t"><span class="tagbar"></span><b>OFF STUMP, WIDE</b><em>Over third man</em></div></div>
+<div id="od10" class="odo clip" data-start="16.28" data-duration="3.0" style="left:150px;top:341.6px;font-size:320px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od10d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od10lab">OVER THIRD MAN</div></div>
+<div id="card11" class="card clip" data-start="19.28" data-duration="3.3" style="left:611px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card11v" class="clip" src="media/crowd_flags.mp4" muted playsinline data-start="19.28" data-duration="3.3" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="hl12" class="hl clip" data-start="23.0" data-duration="4.0" style="left:0;right:0;top:436.32px;font-size:96px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl12l0" style="color:#fff">This isn&#x27;t the story</div></div><div class="mask"><div class="ln" id="hl12l1" style="color:#FEDE5C">of one shot.</div></div></div>
+<div id="od13" class="odo clip" data-start="27.3" data-duration="3.9" style="left:0;right:0;text-align:center;top:378.8px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od13d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od13d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od13lab">NIGHTS WITHOUT SLEEP</div></div>
+<div id="pl14" class="pills clip" data-start="31.87" data-duration="5.6" style="left:150px;top:384.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl14p0"><span class="dot"></span>Cramps</div><div class="pill" id="pl14p1"><span class="dot"></span>A runner</div><div class="pill" id="pl14p2"><span class="dot"></span><b>98</b> runs</div></div>
+<div id="card15" class="card clip" data-start="31.87" data-duration="5.6" style="left:1010px;top:200px;width:552px;height:700px;z-index:20"><div class="frame"><img id="card15i" src="media/sachin_crouch_cramps.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card15t"><span class="tagbar"></span><b>SACHIN TENDULKAR</b><em>Centurion, 1 March 2003</em></div></div>
+<div id="st16" class="stage clip" data-start="37.57" data-duration="3.0" style="z-index:40"><div class="persp"><div class="n98" id="st16n"><span class="back" style="text-shadow:0 1px 0 #6b4c0c,0 2px 0 #6b4c0c,0 3px 0 #6b4c0c,0 4px 0 #6b4c0c,0 5px 0 #6b4c0c,0 6px 0 #6b4c0c,0 7px 0 #6b4c0c,0 8px 0 #6b4c0c,0 9px 0 #6b4c0c,0 10px 0 #6b4c0c,0 11px 0 #6b4c0c,0 12px 0 #6b4c0c,0 13px 0 #6b4c0c,0 14px 0 #6b4c0c,0 15px 0 #6b4c0c,0 40px 60px rgba(0,0,0,.7)">98</span><span class="gold">98</span></div><div class="n98 refl" id="st16r"><span class="gold">98</span></div></div><div class="uline" id="st16u"></div></div>
+<div id="st17" class="stage clip" data-start="40.35" data-duration="2.5" style="z-index:45"><img class="lbig" id="st17l" src="media/logo.png"><div class="lsweep" id="st17s"></div></div>
+<div id="ch18" class="chapter clip" data-start="42.85" data-duration="4.5"><span class="chnum">01</span><span class="chbar"></span><span class="chtitle">The Pressure</span></div>
+<div id="tg19" class="tgraph clip" data-start="43.05" data-duration="18.869999999999997" style="z-index:30"><div class="tline" id="tg19line"></div><div class="tnode" id="tg19n0" style="left:230.0px"><div class="tdot"></div><div class="tyear">1999</div><div class="tlab">World Cup during Kargil</div></div><div class="tnode" id="tg19n1" style="left:716.6666666666667px"><div class="tdot"></div><div class="tyear">1999</div><div class="tlab">India beat Pakistan</div></div><div class="tnode" id="tg19n2" style="left:1203.3333333333335px"><div class="tdot"></div><div class="tyear">2001</div><div class="tlab">Parliament attack</div></div><div class="tnode" id="tg19n3" style="left:1690.0px"><div class="tdot"></div><div class="tyear">2002</div><div class="tlab">Troops face off at the border</div></div></div>
+<div id="hl20" class="hl clip" data-start="62.24" data-duration="3.6" style="left:150px;top:421.2px;font-size:110px;text-align:left;z-index:30"><div class="hbar" id="hl20b"></div><div class="mask"><div class="ln" id="hl20l0" style="color:#fff">No bilateral</div></div><div class="mask"><div class="ln" id="hl20l1" style="color:#FEDE5C">cricket.</div></div></div>
+<div id="hl21" class="hl clip" data-start="65.94" data-duration="4.3799999999999955" style="right:150px;top:417.12px;font-size:86px;text-align:right;z-index:30"><div class="hbar" id="hl21b"></div><div class="mask"><div class="ln" id="hl21l0" style="color:#fff">World Cup 2003</div></div><div class="mask"><div class="ln" id="hl21l1" style="color:#FEDE5C">India vs Pakistan</div></div><div class="hsub" id="hl21s">Centurion, South Africa</div></div>
+<div id="hl22" class="hl clip" data-start="70.74" data-duration="2.6" style="left:0;right:0;top:421.2px;font-size:110px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl22l0" style="color:#fff">Not just</div></div><div class="mask"><div class="ln" id="hl22l1" style="color:#FEDE5C">a cricket match.</div></div></div>
+<div id="card24" class="card clip" data-start="73.49" data-duration="6.6" style="left:914px;top:200px;width:744px;height:700px;z-index:20"><div class="frame"><img id="card24i" src="media/collage_three_bowlers.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="od23" class="odo clip" data-start="73.69" data-duration="6.2" style="left:150px;top:391.2px;font-size:240px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od23d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od23d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od23lab">MONTHS OF BUILD-UP</div></div>
+<div id="hl25" class="hl clip" data-start="80.69" data-duration="4.6" style="left:0;right:0;top:445.2px;font-size:120px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl25l0" style="color:#fff">“Jeetna hi hai.”</div></div><div class="hsub" id="hl25s">Phone calls to the team, every day</div></div>
+<div id="od26" class="odo clip" data-start="85.49" data-duration="5.4" style="left:0;right:0;text-align:center;top:391.2px;font-size:240px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od26d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od26d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od26lab">RESTLESS NIGHTS BEFORE THE MATCH</div></div>
+<img id="bd28" class="full clip" src="media/bd_toss_handshake.jpg" data-start="91.6" data-duration="6.4" style="z-index:2">
+<div id="card27" class="card clip" data-start="91.9" data-duration="6.0" style="left:104px;top:252px;width:1060px;height:596px;z-index:20"><div class="frame"><img id="card27i" src="media/toss_handshake.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card27t"><span class="tagbar"></span><b>SOURAV GANGULY × WAQAR YOUNIS</b><em>Before the toss</em></div></div>
+<div id="card29" class="card clip" data-start="97.8" data-duration="6.2" style="left:949px;top:170px;width:675px;height:760px;z-index:20"><div class="frame"><img id="card29i" src="media/handshake_hires.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl30" class="hl clip" data-start="98.0" data-duration="5.799999999999997" style="left:150px;top:413.64px;font-size:78px;text-align:left;z-index:30"><div class="hbar" id="hl30b"></div><div class="mask"><div class="ln" id="hl30l0" style="color:#FEDE5C">A handshake.</div></div><div class="mask"><div class="ln" id="hl30l1" style="color:#fff">For a moment,</div></div><div class="mask"><div class="ln" id="hl30l2" style="color:#fff">it felt calm.</div></div></div>
+<div id="card31" class="card clip" data-start="104.22" data-duration="5.2" style="left:611px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card31v" class="clip" src="media/stadium.mp4" muted playsinline data-start="104.22" data-duration="5.2" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="hl32" class="hl clip" data-start="104.82" data-duration="4.4" style="left:150px;top:442.8px;font-size:90px;text-align:left;z-index:30"><div class="hbar" id="hl32b"></div><div class="mask"><div class="ln" id="hl32l0" style="color:#fff">Match 36</div></div><div class="mask"><div class="ln" id="hl32l1" style="color:#FEDE5C">SuperSport Park</div></div></div>
+<div id="ch33" class="chapter clip" data-start="110.35" data-duration="4.5"><span class="chnum">02</span><span class="chbar"></span><span class="chtitle">The Target</span></div>
+<div id="card34" class="card clip" data-start="110.55" data-duration="7.6" style="left:1027px;top:200px;width:518px;height:700px;z-index:20"><div class="frame"><img id="card34i" src="media/saeed_anwar.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card34t"><span class="tagbar"></span><b>SAEED ANWAR</b><em>Opener, Pakistan</em></div></div>
+<div id="hl35" class="hl clip" data-start="112.35" data-duration="5.6" style="left:150px;top:384.48px;font-size:96px;text-align:left;z-index:30"><div class="hbar" id="hl35b"></div><div class="mask"><div class="ln" id="hl35l0" style="color:#fff">Saeed Anwar</div></div><div class="mask"><div class="ln" id="hl35l1" style="color:#FEDE5C">194 vs India</div></div><div class="mask"><div class="ln" id="hl35l2" style="color:#fff">in 1997</div></div></div>
+<div id="card37" class="card clip" data-start="118.78" data-duration="4.6" style="left:1095px;top:200px;width:383px;height:700px;z-index:20"><div class="frame"><img id="card37i" src="media/harbhajan_celebrates.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="od36" class="odo clip" data-start="118.88" data-duration="4.4" style="left:150px;top:378.8px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od36d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od36d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od36d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od36lab">OFF 126 BALLS</div></div>
+<div id="ph38" class="phone clip" data-start="123.77" data-duration="6.9" style="left:1154px;top:129px;width:380px;height:822px;z-index:25"><video class="clip" src="media/scorecard_phone.mp4" muted playsinline data-start="123.77" data-duration="6.9" data-media-start="0"></video></div>
+<div id="od39" class="odo clip" data-start="124.07" data-duration="3.2" style="left:150px;top:416.0px;font-size:200px;color:#fff;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od39d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od39d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od39d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dchar">/</span><span class="dcol"><span class="dstrip" id="od39d4"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od39lab">PAKISTAN, 50 OVERS</div></div>
+<div id="od40" class="odo clip" data-start="127.37" data-duration="3.2" style="left:150px;top:391.2px;font-size:240px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od40d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od40d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od40d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od40lab">TARGET</div></div>
+<div id="card42" class="card clip" data-start="131.36" data-duration="6.0" style="left:1037px;top:200px;width:499px;height:700px;z-index:20"><div class="frame"><img id="card42i" src="media/shoaib_bowling.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="pl41" class="pills clip" data-start="131.76" data-duration="11.2" style="left:150px;top:384.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl41p0"><span class="dot"></span>Wasim Akram</div><div class="pill" id="pl41p1"><span class="dot"></span>Waqar Younis</div><div class="pill" id="pl41p2"><span class="dot"></span>Shoaib Akhtar <b>161.3</b></div></div>
+<div id="card43" class="card clip" data-start="137.36" data-duration="5.8" style="left:914px;top:200px;width:744px;height:700px;z-index:20"><div class="frame"><img id="card43i" src="media/collage_three_bowlers.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="card45" class="card clip" data-start="143.68" data-duration="7.2" style="left:936px;top:200px;width:700px;height:700px;z-index:20"><div class="frame"><img id="card45i" src="media/sachin_drive_keeper.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card45t"><span class="tagbar"></span><b>SACHIN TENDULKAR</b></div></div>
+<div id="hl44" class="hl clip" data-start="143.78" data-duration="7.0" style="left:150px;top:410.4px;font-size:120px;text-align:left;z-index:30"><div class="hbar" id="hl44b"></div><div class="mask"><div class="ln" id="hl44l0" style="color:#fff">The plan?</div></div><div class="mask"><div class="ln" id="hl44l1" style="color:#FEDE5C">Just bat.</div></div></div>
+<div id="ch46" class="chapter clip" data-start="151.73" data-duration="4.5"><span class="chnum">03</span><span class="chbar"></span><span class="chtitle">The Assault</span></div>
+<div id="card47" class="card clip" data-start="151.73" data-duration="6.6" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card47v" class="clip" src="media/wasim.mp4" muted playsinline data-start="151.73" data-duration="6.6" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card47t"><span class="tagbar"></span><b>OVER 1 · WASIM AKRAM</b><em>Front-foot punch, four</em></div></div>
+<div id="hl48" class="hl clip" data-start="154.33" data-duration="4.0" style="left:150px;top:399.6px;font-size:130px;text-align:left;z-index:30"><div class="hbar" id="hl48b"></div><div class="mask"><div class="ln" id="hl48l0" style="color:#fff">Ball 3.</div></div><div class="mask"><div class="ln" id="hl48l1" style="color:#FEDE5C">Four.</div></div></div>
+<div id="card49" class="card clip" data-start="158.84" data-duration="4.0" style="left:285px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card49v" class="clip" src="media/shoaib_run.mp4" muted playsinline data-start="158.84" data-duration="4.0" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card49t"><span class="tagbar"></span><b>OVER 2 · SHOAIB AKHTAR</b></div></div>
+<div id="card50" class="card clip" data-start="162.84" data-duration="4.2" style="left:1037px;top:200px;width:499px;height:700px;z-index:20"><div class="frame"><img id="card50i" src="media/shoaib_bowling.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl51" class="hl clip" data-start="163.04" data-duration="4.0" style="left:150px;top:397.44px;font-size:88px;text-align:left;z-index:30"><div class="hbar" id="hl51b"></div><div class="mask"><div class="ln" id="hl51l0" style="color:#fff">The whole</div></div><div class="mask"><div class="ln" id="hl51l1" style="color:#fff">stadium held</div></div><div class="mask"><div class="ln" id="hl51l2" style="color:#FEDE5C">its breath.</div></div></div>
+<div id="card52" class="card clip" data-start="167.99" data-duration="4.2" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card52v" class="clip" src="media/six_close.mp4" muted playsinline data-start="167.99" data-duration="4.2" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="od53" class="odo clip" data-start="171.99" data-duration="4.1" style="left:0;right:0;text-align:center;top:279.6px;font-size:420px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od53d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od53lab">OVER THIRD MAN</div></div>
+<div id="card54" class="card clip" data-start="176.55" data-duration="7.3" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card54v" class="clip" src="media/four_speed.mp4" muted playsinline data-start="176.55" data-duration="7.3" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card54t"><span class="tagbar"></span><b>154.1 KPH</b><em>And Sachin still found the gap</em></div></div>
+<div id="pl55" class="pills clip" data-start="176.85" data-duration="6.9" style="left:150px;top:384.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl55p0"><span class="dot"></span>Ball 1 · <b>SIX</b></div><div class="pill" id="pl55p1"><span class="dot"></span>Ball 2 · <b>FOUR</b> square leg</div><div class="pill" id="pl55p2"><span class="dot"></span>Ball 3 · <b>FOUR</b> off side</div></div>
+<div id="card56" class="card clip" data-start="184.25" data-duration="6.2" style="left:883px;top:170px;width:806px;height:760px;z-index:20"><div class="frame"><img id="card56i" src="media/bowling_card_sachin.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl57" class="hl clip" data-start="184.45" data-duration="6.0" style="left:150px;top:421.2px;font-size:110px;text-align:left;z-index:30"><div class="hbar" id="hl57b"></div><div class="mask"><div class="ln" id="hl57l0" style="color:#fff">3 balls.</div></div><div class="mask"><div class="ln" id="hl57l1" style="color:#FEDE5C">3 boundaries.</div></div></div>
+<div id="od58" class="odo clip" data-start="190.89" data-duration="3.6" style="left:0;right:0;text-align:center;top:354.0px;font-size:300px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od58d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od58d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od58lab">RUNS OFF THE OVER</div></div>
+<div id="card59" class="card clip" data-start="192.9" data-duration="5.4" style="left:611px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card59v" class="clip" src="media/crowd_celebrate.mp4" muted playsinline data-start="192.9" data-duration="5.4" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="card61" class="card clip" data-start="199.12" data-duration="8.4" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card61v" class="clip" src="media/crowd_flags.mp4" muted playsinline data-start="199.12" data-duration="8.4" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="od60" class="odo clip" data-start="199.52" data-duration="8.0" style="left:150px;top:378.8px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od60d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od60d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od60lab">IN 5.4 OVERS · RUN RATE 9+</div></div>
+<div id="card62" class="card clip" data-start="208.16" data-duration="7.9" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card62v" class="clip" src="media/wicket_over.mp4" muted playsinline data-start="208.16" data-duration="7.9" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card62t"><span class="tagbar"></span><b>WAQAR YOUNIS</b><em>Two wickets in two balls</em></div></div>
+<div id="pl63" class="pills clip" data-start="210.56" data-duration="5.4" style="left:150px;top:436.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl63p0"><span class="dot"></span>Sehwag · c Afridi b Waqar · <b>21</b></div><div class="pill" id="pl63p1"><span class="dot"></span>Ganguly · lbw b Waqar · <b>0</b></div></div>
+<div id="od64" class="odo clip" data-start="216.71" data-duration="4.2" style="left:0;right:0;text-align:center;top:366.4px;font-size:280px;color:#fff;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od64d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od64d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dchar">/</span><span class="dcol"><span class="dstrip" id="od64d3"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od64lab">FROM 53/0 IN TWO BALLS</div></div>
+<div id="card65" class="card clip" data-start="221.35" data-duration="4.1" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card65v" class="clip" src="media/head_down.mp4" muted playsinline data-start="221.35" data-duration="4.1" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="hl66" class="hl clip" data-start="221.55" data-duration="3.9" style="left:150px;top:442.8px;font-size:90px;text-align:left;z-index:30"><div class="hbar" id="hl66b"></div><div class="mask"><div class="ln" id="hl66l0" style="color:#fff">If Sachin goes,</div></div><div class="mask"><div class="ln" id="hl66l1" style="color:#FEDE5C">the match goes.</div></div></div>
+<div id="ch67" class="chapter clip" data-start="225.92" data-duration="4.5"><span class="chnum">04</span><span class="chbar"></span><span class="chtitle">The 98</span></div>
+<div id="card68" class="card clip" data-start="226.12" data-duration="6.6" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card68v" class="clip" src="media/kaif_back.mp4" muted playsinline data-start="226.12" data-duration="6.6" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card68t"><span class="tagbar"></span><b>MOHAMMAD KAIF · 22</b><em>Give Sachin the strike</em></div></div>
+<div id="hl69" class="hl clip" data-start="226.92" data-duration="5.8" style="left:150px;top:403.91999999999996px;font-size:84px;text-align:left;z-index:30"><div class="hbar" id="hl69b"></div><div class="mask"><div class="ln" id="hl69l0" style="color:#FEDE5C">Job:</div></div><div class="mask"><div class="ln" id="hl69l1" style="color:#fff">rotate strike,</div></div><div class="mask"><div class="ln" id="hl69l2" style="color:#fff">don&#x27;t get out.</div></div></div>
+<div id="card70" class="card clip" data-start="233.12" data-duration="5.5" style="left:947px;top:200px;width:679px;height:700px;z-index:20"><div class="frame"><img id="card70i" src="media/sachin_kaif_hug.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card70t"><span class="tagbar"></span><b>TENDULKAR &amp; KAIF</b></div></div>
+<div id="od71" class="odo clip" data-start="233.42" data-duration="5.2" style="left:150px;top:378.8px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od71d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od71d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od71d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od71lab">RUN PARTNERSHIP</div></div>
+<div id="card73" class="card clip" data-start="239.0" data-duration="5.2" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card73v" class="clip" src="media/running.mp4" muted playsinline data-start="239.0" data-duration="5.2" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="pl72" class="pills clip" data-start="239.3" data-duration="4.9" style="left:150px;top:436.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl72p0"><span class="dot"></span>Kaif · <b>35</b> (60)</div><div class="pill" id="pl72p1"><span class="dot"></span>India · <b>155/3</b></div></div>
+<div id="card74" class="card clip" data-start="244.64" data-duration="7.3" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card74v" class="clip" src="media/drinks.mp4" muted playsinline data-start="244.64" data-duration="7.3" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div><div class="tag" id="card74t"><span class="tagbar"></span><b>CRAMPS</b><em>Every run a struggle</em></div></div>
+<div id="hl75" class="hl clip" data-start="245.64" data-duration="6.3" style="left:150px;top:459.0px;font-size:150px;text-align:left;z-index:30"><div class="hbar" id="hl75b"></div><div class="mask"><div class="ln" id="hl75l0" style="color:#FEDE5C">Cramps.</div></div></div>
+<div id="card77" class="card clip" data-start="252.31" data-duration="4.1" style="left:1010px;top:200px;width:552px;height:700px;z-index:20"><div class="frame"><img id="card77i" src="media/sachin_crouch_cramps.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl76" class="hl clip" data-start="252.41" data-duration="4.0" style="left:150px;top:391.2px;font-size:110px;text-align:left;z-index:30"><div class="hbar" id="hl76b"></div><div class="mask"><div class="ln" id="hl76l0" style="color:#fff">A runner</div></div><div class="mask"><div class="ln" id="hl76l1" style="color:#FEDE5C">for Sachin.</div></div><div class="hsub" id="hl76s">Virender Sehwag</div></div>
+<div id="card78" class="card clip" data-start="256.79" data-duration="9.7" style="left:951px;top:170px;width:670px;height:760px;z-index:20"><div class="frame"><img id="card78i" src="media/sachin_running_shoaib_face.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="od79" class="odo clip" data-start="261.39" data-duration="5.1" style="left:150px;top:354.0px;font-size:300px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od79d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od79d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od79lab">TWO SHOTS FROM A HUNDRED</div></div>
+<div id="card80" class="card clip" data-start="267.35" data-duration="6.0" style="left:384px;top:200px;width:499px;height:700px;z-index:20"><div class="frame"><img id="card80i" src="media/shoaib_bowling.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card80t"><span class="tagbar"></span><b>SHOAIB AKHTAR</b><em>Back for more</em></div></div>
+<div id="hl82" class="hl clip" data-start="273.15" data-duration="4.0" style="left:150px;top:448.2px;font-size:170px;text-align:left;z-index:30"><div class="hbar" id="hl82b"></div><div class="mask"><div class="ln" id="hl82l0" style="color:#FEDE5C">Bouncer.</div></div></div>
+<div id="card81" class="card clip" data-start="273.35" data-duration="4.0" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card81v" class="clip" src="media/shoaib_back.mp4" muted playsinline data-start="273.35" data-duration="4.0" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="card84" class="card clip" data-start="277.55" data-duration="6.5400000000000205" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card84v" class="clip" src="media/sachin_late.mp4" muted playsinline data-start="277.55" data-duration="6.5400000000000205" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="pl83" class="pills clip" data-start="277.75" data-duration="6.340000000000032" style="left:150px;top:436.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl83p0"><span class="dot"></span>Gloved to point</div><div class="pill" id="pl83p1"><span class="dot"></span>c Younis Khan b Shoaib Akhtar</div></div>
+<div id="st85" class="stage clip" data-start="284.51" data-duration="3.0" style="z-index:40"><div class="persp"><div class="n98" id="st85n"><span class="back" style="text-shadow:0 1px 0 #6b4c0c,0 2px 0 #6b4c0c,0 3px 0 #6b4c0c,0 4px 0 #6b4c0c,0 5px 0 #6b4c0c,0 6px 0 #6b4c0c,0 7px 0 #6b4c0c,0 8px 0 #6b4c0c,0 9px 0 #6b4c0c,0 10px 0 #6b4c0c,0 11px 0 #6b4c0c,0 12px 0 #6b4c0c,0 13px 0 #6b4c0c,0 14px 0 #6b4c0c,0 15px 0 #6b4c0c,0 40px 60px rgba(0,0,0,.7)">98</span><span class="gold">98</span></div><div class="n98 refl" id="st85r"><span class="gold">98</span></div></div><div class="uline" id="st85u"></div></div>
+<div id="pl86" class="pills clip" data-start="287.51" data-duration="4.3" style="left:150px;top:384.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl86p0"><span class="dot"></span><b>98</b> off 75 balls</div><div class="pill" id="pl86p1"><span class="dot"></span><b>12</b> fours · <b>1</b> six</div><div class="pill" id="pl86p2"><span class="dot"></span>Two runs short.</div></div>
+<div id="card87" class="card clip" data-start="287.51" data-duration="4.3" style="left:914px;top:200px;width:744px;height:700px;z-index:20"><div class="frame"><img id="card87i" src="media/collage_three_bowlers.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="card89" class="card clip" data-start="292.46" data-duration="10.4" style="left:756px;top:252px;width:1060px;height:596px;z-index:20"><div class="frame"><img id="card89i" src="media/ganguly_waqar_after.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="od88" class="odo clip" data-start="292.66" data-duration="10.0" style="left:150px;top:378.8px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="od88d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od88d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="od88lab">NEEDED · 22 OVERS LEFT · 177/4</div></div>
+<div id="ch90" class="chapter clip" data-start="303.53" data-duration="4.5"><span class="chnum">05</span><span class="chbar"></span><span class="chtitle">The Finish</span></div>
+<div id="hl91" class="hl clip" data-start="303.53" data-duration="4.1" style="left:0;right:0;top:432.0px;font-size:100px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl91l0" style="color:#fff">Rahul Dravid</div></div><div class="mask"><div class="ln" id="hl91l1" style="color:#FEDE5C">Yuvraj Singh, 21</div></div></div>
+<div id="card92" class="card clip" data-start="308.02" data-duration="8.9" style="left:1002px;top:200px;width:569px;height:700px;z-index:20"><div class="frame"><img id="card92i" src="media/dravid_yuvraj_win.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card92t"><span class="tagbar"></span><b>DRAVID &amp; YUVRAJ</b><em>Finished it off</em></div></div>
+<div id="pl93" class="pills clip" data-start="309.02" data-duration="7.9" style="left:150px;top:436.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl93p0"><span class="dot"></span>Yuvraj · <b>50*</b> (53)</div><div class="pill" id="pl93p1"><span class="dot"></span>Dravid · <b>44*</b></div></div>
+<div id="card94" class="card clip" data-start="317.71" data-duration="6.4" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card94v" class="clip" src="media/dressing_room.mp4" muted playsinline data-start="317.71" data-duration="6.4" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="hl95" class="hl clip" data-start="317.91" data-duration="6.2" style="left:150px;top:397.68px;font-size:104px;text-align:left;z-index:30"><div class="hbar" id="hl95b"></div><div class="mask"><div class="ln" id="hl95l0" style="color:#fff">India won</div></div><div class="mask"><div class="ln" id="hl95l1" style="color:#FEDE5C">by 6 wickets.</div></div><div class="hsub" id="hl95s">276/4 in 45.4 overs</div></div>
+<div id="ph96" class="phone clip" data-start="324.72" data-duration="8.0" style="left:1154px;top:129px;width:380px;height:822px;z-index:25"><video class="clip" src="media/scorecard_phone.mp4" muted playsinline data-start="324.72" data-duration="8.0" data-media-start="0"></video></div>
+<div id="pl97" class="pills clip" data-start="325.12" data-duration="7.6" style="left:150px;top:384.0px;align-items:flex-start;z-index:30"><div class="pill" id="pl97p0"><span class="dot"></span>Pakistan · out in the group stage</div><div class="pill" id="pl97p1"><span class="dot"></span>India · into the final</div><div class="pill" id="pl97p2"><span class="dot"></span>Sachin · <b>673</b> runs · Player of the Tournament</div></div>
+<div id="card98" class="card clip" data-start="332.72" data-duration="9.0" style="left:104px;top:256px;width:1060px;height:589px;z-index:20"><div class="frame"><img id="card98i" src="media/india_team_walk.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl99" class="hl clip" data-start="333.12" data-duration="8.6" style="right:150px;top:447.12px;font-size:86px;text-align:right;z-index:30"><div class="hbar" id="hl99b"></div><div class="mask"><div class="ln" id="hl99l0" style="color:#fff">The innings fans</div></div><div class="mask"><div class="ln" id="hl99l1" style="color:#FEDE5C">remember most?</div></div></div>
+<div id="st100" class="stage clip" data-start="342.12" data-duration="3.0" style="z-index:40"><div class="persp"><div class="n98" id="st100n"><span class="back" style="text-shadow:0 1px 0 #6b4c0c,0 2px 0 #6b4c0c,0 3px 0 #6b4c0c,0 4px 0 #6b4c0c,0 5px 0 #6b4c0c,0 6px 0 #6b4c0c,0 7px 0 #6b4c0c,0 8px 0 #6b4c0c,0 9px 0 #6b4c0c,0 10px 0 #6b4c0c,0 11px 0 #6b4c0c,0 12px 0 #6b4c0c,0 13px 0 #6b4c0c,0 14px 0 #6b4c0c,0 15px 0 #6b4c0c,0 40px 60px rgba(0,0,0,.7)">98</span><span class="gold">98</span></div><div class="n98 refl" id="st100r"><span class="gold">98</span></div></div><div class="uline" id="st100u"></div></div>
+<div id="hl101" class="hl clip" data-start="345.12" data-duration="6.11099999999999" style="left:0;right:0;top:399.6px;font-size:130px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl101l0" style="color:#FEDE5C">The 98</div></div><div class="mask"><div class="ln" id="hl101l1" style="color:#fff">at Centurion.</div></div></div>
+<div id="card102" class="card clip" data-start="352.23" data-duration="3.0" style="left:622px;top:170px;width:675px;height:760px;z-index:20"><div class="frame"><img id="card102i" src="media/handshake_hires.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="card104" class="card clip" data-start="355.48" data-duration="10.3" style="left:937px;top:170px;width:698px;height:760px;z-index:20"><div class="frame"><video id="card104v" class="clip" src="media/crowd_celebrate.mp4" muted playsinline data-start="355.48" data-duration="10.3" data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+<div id="hl103" class="hl clip" data-start="355.78" data-duration="10.0" style="left:150px;top:448.2px;font-size:170px;text-align:left;z-index:30"><div class="hbar" id="hl103b"></div><div class="mask"><div class="ln" id="hl103l0" style="color:#FEDE5C">Belief.</div></div></div>
+<div id="card106" class="card clip" data-start="366.18" data-duration="6.9" style="left:756px;top:256px;width:1060px;height:589px;z-index:20"><div class="frame"><img id="card106i" src="media/india_team_walk.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl105" class="hl clip" data-start="366.48" data-duration="6.6" style="left:150px;top:448.2px;font-size:170px;text-align:left;z-index:30"><div class="hbar" id="hl105b"></div><div class="mask"><div class="ln" id="hl105l0" style="color:#FEDE5C">Pride.</div></div></div>
+<div id="card107" class="card clip" data-start="373.53" data-duration="7.2" style="left:340px;top:201px;width:1240px;height:698px;z-index:20"><div class="frame"><img id="card107i" src="media/ganguly_waqar_after.jpg" style="width:100%;height:100%;object-fit:cover"></div></div>
+<div id="hl108" class="hl clip" data-start="381.11" data-duration="3.4" style="left:0;right:0;top:447.12px;font-size:86px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl108l0" style="color:#fff">Some matches are won</div></div><div class="mask"><div class="ln" id="hl108l1" style="color:#FEDE5C">on the scoreboard.</div></div></div>
+<div id="hl109" class="hl clip" data-start="384.51" data-duration="2.4" style="left:0;right:0;top:488.15999999999997px;font-size:96px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl109l0" style="color:#FEDE5C">Some, in the heart.</div></div></div>
+<div id="hl110" class="hl clip" data-start="386.71" data-duration="3.1210000000000604" style="left:0;right:0;top:421.2px;font-size:110px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="hl110l0" style="color:#fff">Centurion was</div></div><div class="mask"><div class="ln" id="hl110l1" style="color:#FEDE5C">won in both.</div></div></div>
+<div id="card111" class="card clip" data-start="390.33" data-duration="9.0" style="left:756px;top:253px;width:1060px;height:594px;z-index:20"><div class="frame"><img id="card111i" src="media/shoaib_sachin_rivalry.jpg" style="width:100%;height:100%;object-fit:cover"></div><div class="tag" id="card111t"><span class="tagbar"></span><b>SACHIN vs SHOAIB</b><em>The full rivalry?</em></div></div>
+<div id="hl112" class="hl clip" data-start="390.93" data-duration="8.4" style="left:150px;top:369.6px;font-size:130px;text-align:left;z-index:30"><div class="hbar" id="hl112b"></div><div class="mask"><div class="ln" id="hl112l0" style="color:#fff">Comment</div></div><div class="mask"><div class="ln" id="hl112l1" style="color:#FEDE5C">“2003”</div></div><div class="hsub" id="hl112s">…and we&#x27;ll make the full rivalry video</div></div>
+<div id="st113" class="stage clip" data-start="399.53" data-duration="9.960000000000036" style="z-index:45"><img class="lbig" id="st113l" src="media/logo.png"><div class="lsweep" id="st113s"></div><div class="lfoot" id="st113f">Follow for more cricket stories</div></div>
+<img class="mark clip" id="mark" src="media/logo.png" data-start="42.45" data-duration="362.04">
+<div class="vig"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const tl = gsap.timeline({paused:true});
+tl.fromTo("#glow",{x:-200,y:0},{x:900,y:200,duration:409.49,ease:"sine.inOut"},0);
+tl.fromTo("#mark",{opacity:0},{opacity:0.55,duration:1},42.45);
+tl.fromTo("#card1",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},0.3)
+tl.to("#card1",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},3.15)
+tl.fromTo("#card1i",{scale:1.12},{scale:1.0,duration:3.4,ease:"none"},0.3)
+tl.fromTo("#card1t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},0.75)
+tl.fromTo("#bd2",{opacity:0,scale:1.08},{opacity:0.28,scale:1,duration:3.8,ease:"none"},0.0)
+tl.to("#bd2",{opacity:0,duration:0.6},3.2)
+tl.fromTo("#hl3b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},0.5)
+tl.fromTo("#hl3l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},0.62)
+tl.fromTo("#hl3l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},0.73)
+tl.to("#hl3",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},3.05)
+tl.fromTo("#fv4",{opacity:0},{opacity:1,duration:0.35},3.6)
+tl.to("#fv4",{opacity:0,duration:0.35},6.85)
+tl.fromTo("#hl5l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},7.12)
+tl.fromTo("#hl5l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},7.23)
+tl.to("#hl5",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},8.85)
+tl.fromTo("#st6",{opacity:0},{opacity:1,duration:0.3},9.22)
+tl.to("#st6",{opacity:0,duration:0.35},11.37)
+tl.fromTo("#st6b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},9.270000000000001)
+tl.fromTo("#st6a",{rotationX:-95,opacity:0},{rotationX:0,opacity:1,duration:1.0,ease:"expo.out"},9.47)
+tl.fromTo("#st6c",{rotationX:-95,opacity:0},{rotationX:0,opacity:1,duration:1.0,ease:"expo.out"},9.67)
+tl.fromTo("#st6w",{scale:1},{scale:1.05,duration:2.5,ease:"none"},9.22)
+tl.fromTo("#card7",{x:-760,rotationY:14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},11.72)
+tl.to("#card7",{x:380,opacity:0,duration:0.55,ease:"power2.in"},14.77)
+tl.fromTo("#card7v",{scale:1.06},{scale:1.0,duration:3.6,ease:"none"},11.72)
+tl.fromTo("#card7t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},12.17)
+tl.fromTo("#hl8b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},11.92)
+tl.fromTo("#hl8l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},12.04)
+tl.fromTo("#hl8l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},12.15)
+tl.fromTo("#hl8l2",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},12.26)
+tl.to("#hl8",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},14.87)
+tl.fromTo("#card9",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},15.68)
+tl.to("#card9",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},18.73)
+tl.fromTo("#card9v",{scale:1.06},{scale:1.0,duration:3.6,ease:"none"},15.68)
+tl.fromTo("#card9t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},16.13)
+tl.fromTo("#od10d0",{yPercent:0},{yPercent:-60,duration:1.4,ease:"expo.out"},16.380000000000003)
+tl.fromTo("#od10",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},16.28)
+tl.fromTo("#od10lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},16.880000000000003)
+tl.to("#od10",{opacity:0,duration:0.45,ease:"power2.in"},18.83)
+tl.fromTo("#card11",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},19.28)
+tl.to("#card11",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},22.03)
+tl.fromTo("#card11v",{scale:1.06},{scale:1.0,duration:3.3,ease:"none"},19.28)
+tl.fromTo("#hl12l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},23.12)
+tl.fromTo("#hl12l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},23.23)
+tl.to("#hl12",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},26.55)
+tl.fromTo("#od13d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},27.400000000000002)
+tl.fromTo("#od13d1",{yPercent:0},{yPercent:-20,duration:1.52,ease:"expo.out"},27.400000000000002)
+tl.fromTo("#od13",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},27.3)
+tl.fromTo("#od13lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},27.900000000000002)
+tl.to("#od13",{opacity:0,duration:0.45,ease:"power2.in"},30.75)
+tl.fromTo("#pl14p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},31.87)
+tl.fromTo("#pl14p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},32.77)
+tl.fromTo("#pl14p2",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},33.67)
+tl.to("#pl14",{opacity:0,duration:0.45},37.02)
+tl.fromTo("#card15",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},31.87)
+tl.to("#card15",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},36.92)
+tl.fromTo("#card15i",{scale:1.12},{scale:1.0,duration:5.6,ease:"none"},31.87)
+tl.fromTo("#card15t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},32.32)
+tl.fromTo("#st16",{opacity:0},{opacity:1,duration:0.3},37.57)
+tl.to("#st16",{opacity:0,duration:0.35},40.22)
+tl.fromTo("#st16n",{y:260,rotationX:55,opacity:0},{y:0,rotationX:0,opacity:1,duration:1.3,ease:"expo.out"},37.67)
+tl.fromTo("#st16r",{opacity:0},{opacity:0.22,duration:1.2},38.07)
+tl.fromTo("#st16n",{rotationY:-10},{rotationY:8,duration:3.0,ease:"sine.inOut"},37.57)
+tl.fromTo("#st16u",{scaleX:0},{scaleX:1,duration:0.9,ease:"expo.out"},38.47)
+tl.fromTo("#st17",{opacity:0},{opacity:1,duration:0.3},40.35)
+tl.to("#st17",{opacity:0,duration:0.35},42.5)
+tl.fromTo("#st17l",{clipPath:"inset(0% 100% 0% 0%)",scale:0.96},{clipPath:"inset(0% 0% 0% 0%)",scale:1,duration:1.1,ease:"expo.inOut"},40.5)
+tl.fromTo("#st17s",{x:-900,opacity:0.0},{x:900,opacity:0.9,duration:1.4,ease:"power2.inOut"},40.95)
+tl.to("#st17s",{opacity:0,duration:0.3},42.25)
+tl.fromTo("#ch18",{opacity:0,x:-30},{opacity:1,x:0,duration:0.8,ease:"expo.out"},42.85)
+tl.to("#ch18",{opacity:0,duration:0.6},46.75)
+tl.fromTo("#tg19n0",{opacity:0.18,y:12},{opacity:1,y:0,duration:0.7,ease:"expo.out"},45.45)
+tl.fromTo("#tg19n0 .tdot",{scale:0.5,backgroundColor:"#555"},{scale:1,backgroundColor:"#FEDE5C",duration:0.5,ease:"back.out(3)"},45.45)
+tl.fromTo("#tg19n1",{opacity:0.18,y:12},{opacity:1,y:0,duration:0.7,ease:"expo.out"},52.47)
+tl.fromTo("#tg19n1 .tdot",{scale:0.5,backgroundColor:"#555"},{scale:1,backgroundColor:"#FEDE5C",duration:0.5,ease:"back.out(3)"},52.47)
+tl.fromTo("#tg19n2",{opacity:0.18,y:12},{opacity:1,y:0,duration:0.7,ease:"expo.out"},54.87)
+tl.fromTo("#tg19n2 .tdot",{scale:0.5,backgroundColor:"#555"},{scale:1,backgroundColor:"#FEDE5C",duration:0.5,ease:"back.out(3)"},54.87)
+tl.fromTo("#tg19n3",{opacity:0.18,y:12},{opacity:1,y:0,duration:0.7,ease:"expo.out"},57.87)
+tl.fromTo("#tg19n3 .tdot",{scale:0.5,backgroundColor:"#555"},{scale:1,backgroundColor:"#FEDE5C",duration:0.5,ease:"back.out(3)"},57.87)
+tl.fromTo("#tg19line",{scaleX:0},{scaleX:1,duration:15.32,ease:"power1.inOut"},43.05)
+tl.fromTo("#tg19",{opacity:0},{opacity:1,duration:0.5},43.05)
+tl.to("#tg19",{opacity:0,duration:0.5},61.42)
+tl.fromTo("#hl20b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},62.24)
+tl.fromTo("#hl20l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},62.36)
+tl.fromTo("#hl20l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},62.47)
+tl.to("#hl20",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},65.39)
+tl.fromTo("#hl21b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},65.94)
+tl.fromTo("#hl21l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},66.06)
+tl.fromTo("#hl21l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},66.17)
+tl.fromTo("#hl21s",{opacity:0,y:16},{opacity:1,y:0,duration:0.8,ease:"expo.out"},66.51)
+tl.to("#hl21",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},69.87)
+tl.fromTo("#hl22l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},70.86)
+tl.fromTo("#hl22l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},70.97)
+tl.to("#hl22",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},72.89)
+tl.fromTo("#od23d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},73.78999999999999)
+tl.fromTo("#od23d1",{yPercent:0},{yPercent:-20,duration:1.52,ease:"expo.out"},73.78999999999999)
+tl.fromTo("#od23",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},73.69)
+tl.fromTo("#od23lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},74.28999999999999)
+tl.to("#od23",{opacity:0,duration:0.45,ease:"power2.in"},79.44)
+tl.fromTo("#card24",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},73.49)
+tl.to("#card24",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},79.54)
+tl.fromTo("#card24i",{scale:1.12},{scale:1.0,duration:6.6,ease:"none"},73.49)
+tl.fromTo("#hl25l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},80.81)
+tl.fromTo("#hl25s",{opacity:0,y:16},{opacity:1,y:0,duration:0.8,ease:"expo.out"},81.15)
+tl.to("#hl25",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},84.84)
+tl.fromTo("#od26d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},85.58999999999999)
+tl.fromTo("#od26d1",{yPercent:0},{yPercent:-30,duration:1.52,ease:"expo.out"},85.58999999999999)
+tl.fromTo("#od26",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},85.49)
+tl.fromTo("#od26lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},86.08999999999999)
+tl.to("#od26",{opacity:0,duration:0.45,ease:"power2.in"},90.44)
+tl.fromTo("#card27",{x:-760,rotationY:14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},91.9)
+tl.to("#card27",{x:380,opacity:0,duration:0.55,ease:"power2.in"},97.35)
+tl.fromTo("#card27i",{scale:1.12},{scale:1.0,duration:6.0,ease:"none"},91.9)
+tl.fromTo("#card27t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},92.35000000000001)
+tl.fromTo("#bd28",{opacity:0,scale:1.08},{opacity:0.28,scale:1,duration:6.4,ease:"none"},91.6)
+tl.to("#bd28",{opacity:0,duration:0.6},97.4)
+tl.fromTo("#card29",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},97.8)
+tl.to("#card29",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},103.45)
+tl.fromTo("#card29i",{scale:1.12},{scale:1.0,duration:6.2,ease:"none"},97.8)
+tl.fromTo("#hl30b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},98.0)
+tl.fromTo("#hl30l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},98.12)
+tl.fromTo("#hl30l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},98.23)
+tl.fromTo("#hl30l2",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},98.34)
+tl.to("#hl30",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},103.35)
+tl.fromTo("#card31",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},104.22)
+tl.to("#card31",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},108.87)
+tl.fromTo("#card31v",{scale:1.06},{scale:1.0,duration:5.2,ease:"none"},104.22)
+tl.fromTo("#hl32b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},104.82)
+tl.fromTo("#hl32l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},104.94)
+tl.fromTo("#hl32l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},105.05)
+tl.to("#hl32",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},108.77)
+tl.fromTo("#ch33",{opacity:0,x:-30},{opacity:1,x:0,duration:0.8,ease:"expo.out"},110.35)
+tl.to("#ch33",{opacity:0,duration:0.6},114.25)
+tl.fromTo("#card34",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},110.55)
+tl.to("#card34",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},117.6)
+tl.fromTo("#card34i",{scale:1.12},{scale:1.0,duration:7.6,ease:"none"},110.55)
+tl.fromTo("#card34t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},111.0)
+tl.fromTo("#hl35b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},112.35)
+tl.fromTo("#hl35l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},112.47)
+tl.fromTo("#hl35l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},112.58)
+tl.fromTo("#hl35l2",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},112.69)
+tl.to("#hl35",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},117.5)
+tl.fromTo("#od36d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},118.97999999999999)
+tl.fromTo("#od36d1",{yPercent:0},{yPercent:0,duration:1.52,ease:"expo.out"},118.97999999999999)
+tl.fromTo("#od36d2",{yPercent:0},{yPercent:-10,duration:1.64,ease:"expo.out"},118.97999999999999)
+tl.fromTo("#od36",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},118.88)
+tl.fromTo("#od36lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},119.47999999999999)
+tl.to("#od36",{opacity:0,duration:0.45,ease:"power2.in"},122.83)
+tl.fromTo("#card37",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},118.78)
+tl.to("#card37",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},122.83)
+tl.fromTo("#card37i",{scale:1.12},{scale:1.0,duration:4.6,ease:"none"},118.78)
+tl.fromTo("#ph38",{y:900,rotationX:18,opacity:0},{y:0,rotationX:0,opacity:1,duration:1.1,ease:"expo.out"},123.77)
+tl.to("#ph38",{y:700,opacity:0,duration:0.55,ease:"power2.in"},130.12)
+tl.fromTo("#od39d0",{yPercent:0},{yPercent:-20,duration:1.4,ease:"expo.out"},124.16999999999999)
+tl.fromTo("#od39d1",{yPercent:0},{yPercent:-70,duration:1.52,ease:"expo.out"},124.16999999999999)
+tl.fromTo("#od39d2",{yPercent:0},{yPercent:-30,duration:1.64,ease:"expo.out"},124.16999999999999)
+tl.fromTo("#od39d4",{yPercent:0},{yPercent:-70,duration:1.88,ease:"expo.out"},124.16999999999999)
+tl.fromTo("#od39",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},124.07)
+tl.fromTo("#od39lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},124.66999999999999)
+tl.to("#od39",{opacity:0,duration:0.45,ease:"power2.in"},126.82)
+tl.fromTo("#od40d0",{yPercent:0},{yPercent:-20,duration:1.4,ease:"expo.out"},127.47)
+tl.fromTo("#od40d1",{yPercent:0},{yPercent:-70,duration:1.52,ease:"expo.out"},127.47)
+tl.fromTo("#od40d2",{yPercent:0},{yPercent:-40,duration:1.64,ease:"expo.out"},127.47)
+tl.fromTo("#od40",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},127.37)
+tl.fromTo("#od40lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},127.97)
+tl.to("#od40",{opacity:0,duration:0.45,ease:"power2.in"},130.12)
+tl.fromTo("#pl41p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},131.76)
+tl.fromTo("#pl41p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},132.86)
+tl.fromTo("#pl41p2",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},133.96)
+tl.to("#pl41",{opacity:0,duration:0.45},142.51)
+tl.fromTo("#card42",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},131.36)
+tl.to("#card42",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},136.81)
+tl.fromTo("#card42i",{scale:1.12},{scale:1.0,duration:6.0,ease:"none"},131.36)
+tl.fromTo("#card43",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},137.36)
+tl.to("#card43",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},142.61)
+tl.fromTo("#card43i",{scale:1.12},{scale:1.0,duration:5.8,ease:"none"},137.36)
+tl.fromTo("#hl44b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},143.78)
+tl.fromTo("#hl44l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},143.9)
+tl.fromTo("#hl44l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},144.01)
+tl.to("#hl44",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},150.33)
+tl.fromTo("#card45",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},143.68)
+tl.to("#card45",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},150.33)
+tl.fromTo("#card45i",{scale:1.12},{scale:1.0,duration:7.2,ease:"none"},143.68)
+tl.fromTo("#card45t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},144.13)
+tl.fromTo("#ch46",{opacity:0,x:-30},{opacity:1,x:0,duration:0.8,ease:"expo.out"},151.73)
+tl.to("#ch46",{opacity:0,duration:0.6},155.63)
+tl.fromTo("#card47",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},151.73)
+tl.to("#card47",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},157.78)
+tl.fromTo("#card47v",{scale:1.06},{scale:1.0,duration:6.6,ease:"none"},151.73)
+tl.fromTo("#card47t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},152.17999999999998)
+tl.fromTo("#hl48b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},154.33)
+tl.fromTo("#hl48l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},154.45)
+tl.fromTo("#hl48l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},154.56)
+tl.to("#hl48",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},157.88)
+tl.fromTo("#card49",{x:-760,rotationY:14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},158.84)
+tl.to("#card49",{x:380,opacity:0,duration:0.55,ease:"power2.in"},162.29)
+tl.fromTo("#card49v",{scale:1.06},{scale:1.0,duration:4.0,ease:"none"},158.84)
+tl.fromTo("#card49t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},159.29)
+tl.fromTo("#card50",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},162.84)
+tl.to("#card50",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},166.49)
+tl.fromTo("#card50i",{scale:1.12},{scale:1.0,duration:4.2,ease:"none"},162.84)
+tl.fromTo("#hl51b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},163.04)
+tl.fromTo("#hl51l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},163.16)
+tl.fromTo("#hl51l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},163.27)
+tl.fromTo("#hl51l2",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},163.38)
+tl.to("#hl51",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},166.59)
+tl.fromTo("#card52",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},167.99)
+tl.to("#card52",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},171.64)
+tl.fromTo("#card52v",{scale:1.06},{scale:1.0,duration:4.2,ease:"none"},167.99)
+tl.fromTo("#od53d0",{yPercent:0},{yPercent:-60,duration:1.4,ease:"expo.out"},172.09)
+tl.fromTo("#od53",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},171.99)
+tl.fromTo("#od53lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},172.59)
+tl.to("#od53",{opacity:0,duration:0.45,ease:"power2.in"},175.64)
+tl.fromTo("#card54",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},176.55)
+tl.to("#card54",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},183.3)
+tl.fromTo("#card54v",{scale:1.06},{scale:1.0,duration:7.3,ease:"none"},176.55)
+tl.fromTo("#card54t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},177.0)
+tl.fromTo("#pl55p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},176.85)
+tl.fromTo("#pl55p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},178.45)
+tl.fromTo("#pl55p2",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},180.05)
+tl.to("#pl55",{opacity:0,duration:0.45},183.3)
+tl.fromTo("#card56",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},184.25)
+tl.to("#card56",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},189.9)
+tl.fromTo("#card56i",{scale:1.12},{scale:1.0,duration:6.2,ease:"none"},184.25)
+tl.fromTo("#hl57b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},184.45)
+tl.fromTo("#hl57l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},184.57)
+tl.fromTo("#hl57l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},184.68)
+tl.to("#hl57",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},190.0)
+tl.fromTo("#od58d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},190.98999999999998)
+tl.fromTo("#od58d1",{yPercent:0},{yPercent:-80,duration:1.52,ease:"expo.out"},190.98999999999998)
+tl.fromTo("#od58",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},190.89)
+tl.fromTo("#od58lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},191.48999999999998)
+tl.to("#od58",{opacity:0,duration:0.45,ease:"power2.in"},194.04)
+tl.fromTo("#card59",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},192.9)
+tl.to("#card59",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},197.75)
+tl.fromTo("#card59v",{scale:1.06},{scale:1.0,duration:5.4,ease:"none"},192.9)
+tl.fromTo("#od60d0",{yPercent:0},{yPercent:-50,duration:1.4,ease:"expo.out"},199.62)
+tl.fromTo("#od60d1",{yPercent:0},{yPercent:-30,duration:1.52,ease:"expo.out"},199.62)
+tl.fromTo("#od60",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},199.52)
+tl.fromTo("#od60lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},200.12)
+tl.to("#od60",{opacity:0,duration:0.45,ease:"power2.in"},207.07)
+tl.fromTo("#card61",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},199.12)
+tl.to("#card61",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},206.97)
+tl.fromTo("#card61v",{scale:1.06},{scale:1.0,duration:8.4,ease:"none"},199.12)
+tl.fromTo("#card62",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},208.16)
+tl.to("#card62",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},215.51)
+tl.fromTo("#card62v",{scale:1.06},{scale:1.0,duration:7.9,ease:"none"},208.16)
+tl.fromTo("#card62t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},208.60999999999999)
+tl.fromTo("#pl63p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},210.56)
+tl.fromTo("#pl63p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},213.16)
+tl.to("#pl63",{opacity:0,duration:0.45},215.51)
+tl.fromTo("#od64d0",{yPercent:0},{yPercent:-50,duration:1.4,ease:"expo.out"},216.81)
+tl.fromTo("#od64d1",{yPercent:0},{yPercent:-30,duration:1.52,ease:"expo.out"},216.81)
+tl.fromTo("#od64d3",{yPercent:0},{yPercent:-20,duration:1.7599999999999998,ease:"expo.out"},216.81)
+tl.fromTo("#od64",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},216.71)
+tl.fromTo("#od64lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},217.31)
+tl.to("#od64",{opacity:0,duration:0.45,ease:"power2.in"},220.46)
+tl.fromTo("#card65",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},221.35)
+tl.to("#card65",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},224.9)
+tl.fromTo("#card65v",{scale:1.06},{scale:1.0,duration:4.1,ease:"none"},221.35)
+tl.fromTo("#hl66b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},221.55)
+tl.fromTo("#hl66l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},221.67)
+tl.fromTo("#hl66l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},221.78)
+tl.to("#hl66",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},225.0)
+tl.fromTo("#ch67",{opacity:0,x:-30},{opacity:1,x:0,duration:0.8,ease:"expo.out"},225.92)
+tl.to("#ch67",{opacity:0,duration:0.6},229.82)
+tl.fromTo("#card68",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},226.12)
+tl.to("#card68",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},232.17)
+tl.fromTo("#card68v",{scale:1.06},{scale:1.0,duration:6.6,ease:"none"},226.12)
+tl.fromTo("#card68t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},226.57)
+tl.fromTo("#hl69b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},226.92)
+tl.fromTo("#hl69l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},227.04)
+tl.fromTo("#hl69l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},227.15)
+tl.fromTo("#hl69l2",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},227.26)
+tl.to("#hl69",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},232.27)
+tl.fromTo("#card70",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},233.12)
+tl.to("#card70",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},238.07)
+tl.fromTo("#card70i",{scale:1.12},{scale:1.0,duration:5.5,ease:"none"},233.12)
+tl.fromTo("#card70t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},233.57)
+tl.fromTo("#od71d0",{yPercent:0},{yPercent:-10,duration:1.4,ease:"expo.out"},233.51999999999998)
+tl.fromTo("#od71d1",{yPercent:0},{yPercent:0,duration:1.52,ease:"expo.out"},233.51999999999998)
+tl.fromTo("#od71d2",{yPercent:0},{yPercent:-20,duration:1.64,ease:"expo.out"},233.51999999999998)
+tl.fromTo("#od71",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},233.42)
+tl.fromTo("#od71lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},234.01999999999998)
+tl.to("#od71",{opacity:0,duration:0.45,ease:"power2.in"},238.17)
+tl.fromTo("#pl72p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},239.3)
+tl.fromTo("#pl72p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},240.5)
+tl.to("#pl72",{opacity:0,duration:0.45},243.75)
+tl.fromTo("#card73",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},239.0)
+tl.to("#card73",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},243.65)
+tl.fromTo("#card73v",{scale:1.06},{scale:1.0,duration:5.2,ease:"none"},239.0)
+tl.fromTo("#card74",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},244.64)
+tl.to("#card74",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},251.39)
+tl.fromTo("#card74v",{scale:1.06},{scale:1.0,duration:7.3,ease:"none"},244.64)
+tl.fromTo("#card74t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},245.08999999999997)
+tl.fromTo("#hl75b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},245.64)
+tl.fromTo("#hl75l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},245.76)
+tl.to("#hl75",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},251.49)
+tl.fromTo("#hl76b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},252.41)
+tl.fromTo("#hl76l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},252.53)
+tl.fromTo("#hl76l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},252.64)
+tl.fromTo("#hl76s",{opacity:0,y:16},{opacity:1,y:0,duration:0.8,ease:"expo.out"},252.98)
+tl.to("#hl76",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},255.96)
+tl.fromTo("#card77",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},252.31)
+tl.to("#card77",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},255.86)
+tl.fromTo("#card77i",{scale:1.12},{scale:1.0,duration:4.1,ease:"none"},252.31)
+tl.fromTo("#card78",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},256.79)
+tl.to("#card78",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},265.94)
+tl.fromTo("#card78i",{scale:1.12},{scale:1.0,duration:9.7,ease:"none"},256.79)
+tl.fromTo("#od79d0",{yPercent:0},{yPercent:-90,duration:3.0,ease:"expo.out"},261.49)
+tl.fromTo("#od79d1",{yPercent:0},{yPercent:-80,duration:3.12,ease:"expo.out"},261.49)
+tl.fromTo("#od79",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},261.39)
+tl.fromTo("#od79lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},261.99)
+tl.to("#od79",{opacity:0,duration:0.45,ease:"power2.in"},266.04)
+tl.fromTo("#card80",{x:-760,rotationY:14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},267.35)
+tl.to("#card80",{x:380,opacity:0,duration:0.55,ease:"power2.in"},272.8)
+tl.fromTo("#card80i",{scale:1.12},{scale:1.0,duration:6.0,ease:"none"},267.35)
+tl.fromTo("#card80t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},267.8)
+tl.fromTo("#card81",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},273.35)
+tl.to("#card81",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},276.8)
+tl.fromTo("#card81v",{scale:1.06},{scale:1.0,duration:4.0,ease:"none"},273.35)
+tl.fromTo("#hl82b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},273.15)
+tl.fromTo("#hl82l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},273.27)
+tl.to("#hl82",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},276.7)
+tl.fromTo("#pl83p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},277.75)
+tl.fromTo("#pl83p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},279.35)
+tl.to("#pl83",{opacity:0,duration:0.45},283.64)
+tl.fromTo("#card84",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},277.55)
+tl.to("#card84",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},283.54)
+tl.fromTo("#card84v",{scale:1.06},{scale:1.0,duration:6.5400000000000205,ease:"none"},277.55)
+tl.fromTo("#st85",{opacity:0},{opacity:1,duration:0.3},284.51)
+tl.to("#st85",{opacity:0,duration:0.35},287.16)
+tl.fromTo("#st85n",{y:260,rotationX:55,opacity:0},{y:0,rotationX:0,opacity:1,duration:1.3,ease:"expo.out"},284.61)
+tl.fromTo("#st85r",{opacity:0},{opacity:0.22,duration:1.2},285.01)
+tl.fromTo("#st85n",{rotationY:-10},{rotationY:8,duration:3.0,ease:"sine.inOut"},284.51)
+tl.fromTo("#st85u",{scaleX:0},{scaleX:1,duration:0.9,ease:"expo.out"},285.40999999999997)
+tl.fromTo("#pl86p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},287.51)
+tl.fromTo("#pl86p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},288.41)
+tl.fromTo("#pl86p2",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},289.31)
+tl.to("#pl86",{opacity:0,duration:0.45},291.36)
+tl.fromTo("#card87",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},287.51)
+tl.to("#card87",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},291.26)
+tl.fromTo("#card87i",{scale:1.12},{scale:1.0,duration:4.3,ease:"none"},287.51)
+tl.fromTo("#od88d0",{yPercent:0},{yPercent:-90,duration:1.4,ease:"expo.out"},292.76000000000005)
+tl.fromTo("#od88d1",{yPercent:0},{yPercent:-70,duration:1.52,ease:"expo.out"},292.76000000000005)
+tl.fromTo("#od88",{opacity:0,scale:0.96},{opacity:1,scale:1,duration:0.5,ease:"power2.out"},292.66)
+tl.fromTo("#od88lab",{opacity:0,y:14},{opacity:1,y:0,duration:0.7,ease:"expo.out"},293.26000000000005)
+tl.to("#od88",{opacity:0,duration:0.45,ease:"power2.in"},302.21)
+tl.fromTo("#card89",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},292.46)
+tl.to("#card89",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},302.31)
+tl.fromTo("#card89i",{scale:1.12},{scale:1.0,duration:10.4,ease:"none"},292.46)
+tl.fromTo("#ch90",{opacity:0,x:-30},{opacity:1,x:0,duration:0.8,ease:"expo.out"},303.53)
+tl.to("#ch90",{opacity:0,duration:0.6},307.43)
+tl.fromTo("#hl91l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},303.65)
+tl.fromTo("#hl91l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},303.76)
+tl.to("#hl91",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},307.18)
+tl.fromTo("#card92",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},308.02)
+tl.to("#card92",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},316.37)
+tl.fromTo("#card92i",{scale:1.12},{scale:1.0,duration:8.9,ease:"none"},308.02)
+tl.fromTo("#card92t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},308.46999999999997)
+tl.fromTo("#pl93p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},309.02)
+tl.fromTo("#pl93p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},310.82)
+tl.to("#pl93",{opacity:0,duration:0.45},316.47)
+tl.fromTo("#card94",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},317.71)
+tl.to("#card94",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},323.56)
+tl.fromTo("#card94v",{scale:1.06},{scale:1.0,duration:6.4,ease:"none"},317.71)
+tl.fromTo("#hl95b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},317.91)
+tl.fromTo("#hl95l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},318.03)
+tl.fromTo("#hl95l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},318.14)
+tl.fromTo("#hl95s",{opacity:0,y:16},{opacity:1,y:0,duration:0.8,ease:"expo.out"},318.48)
+tl.to("#hl95",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},323.66)
+tl.fromTo("#ph96",{y:900,rotationX:18,opacity:0},{y:0,rotationX:0,opacity:1,duration:1.1,ease:"expo.out"},324.72)
+tl.to("#ph96",{y:700,opacity:0,duration:0.55,ease:"power2.in"},332.17)
+tl.fromTo("#pl97p0",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},325.12)
+tl.fromTo("#pl97p1",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},326.72)
+tl.fromTo("#pl97p2",{x:-60,opacity:0},{x:0,opacity:1,duration:0.7,ease:"expo.out"},328.32)
+tl.to("#pl97",{opacity:0,duration:0.45},332.27)
+tl.fromTo("#card98",{x:-760,rotationY:14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},332.72)
+tl.to("#card98",{x:380,opacity:0,duration:0.55,ease:"power2.in"},341.17)
+tl.fromTo("#card98i",{scale:1.12},{scale:1.0,duration:9.0,ease:"none"},332.72)
+tl.fromTo("#hl99b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},333.12)
+tl.fromTo("#hl99l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},333.24)
+tl.fromTo("#hl99l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},333.35)
+tl.to("#hl99",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},341.27)
+tl.fromTo("#st100",{opacity:0},{opacity:1,duration:0.3},342.12)
+tl.to("#st100",{opacity:0,duration:0.35},344.77)
+tl.fromTo("#st100n",{y:260,rotationX:55,opacity:0},{y:0,rotationX:0,opacity:1,duration:1.3,ease:"expo.out"},342.22)
+tl.fromTo("#st100r",{opacity:0},{opacity:0.22,duration:1.2},342.62)
+tl.fromTo("#st100n",{rotationY:-10},{rotationY:8,duration:3.0,ease:"sine.inOut"},342.12)
+tl.fromTo("#st100u",{scaleX:0},{scaleX:1,duration:0.9,ease:"expo.out"},343.02)
+tl.fromTo("#hl101l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},345.24)
+tl.fromTo("#hl101l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},345.35)
+tl.to("#hl101",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},350.78)
+tl.fromTo("#card102",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},352.23)
+tl.to("#card102",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},354.68)
+tl.fromTo("#card102i",{scale:1.12},{scale:1.0,duration:3.0,ease:"none"},352.23)
+tl.fromTo("#hl103b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},355.78)
+tl.fromTo("#hl103l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},355.9)
+tl.to("#hl103",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},365.33)
+tl.fromTo("#card104",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},355.48)
+tl.to("#card104",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},365.23)
+tl.fromTo("#card104v",{scale:1.06},{scale:1.0,duration:10.3,ease:"none"},355.48)
+tl.fromTo("#hl105b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},366.48)
+tl.fromTo("#hl105l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},366.6)
+tl.to("#hl105",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},372.63)
+tl.fromTo("#card106",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},366.18)
+tl.to("#card106",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},372.53)
+tl.fromTo("#card106i",{scale:1.12},{scale:1.0,duration:6.9,ease:"none"},366.18)
+tl.fromTo("#card107",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},373.53)
+tl.to("#card107",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},380.18)
+tl.fromTo("#card107i",{scale:1.12},{scale:1.0,duration:7.2,ease:"none"},373.53)
+tl.fromTo("#hl108l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},381.23)
+tl.fromTo("#hl108l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},381.34)
+tl.to("#hl108",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},384.06)
+tl.fromTo("#hl109l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},384.63)
+tl.to("#hl109",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},386.46)
+tl.fromTo("#hl110l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},386.83)
+tl.fromTo("#hl110l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},386.94)
+tl.to("#hl110",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},389.38)
+tl.fromTo("#card111",{x:760,rotationY:-14,opacity:0},{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"},390.33)
+tl.to("#card111",{x:-380,opacity:0,duration:0.55,ease:"power2.in"},398.78)
+tl.fromTo("#card111i",{scale:1.12},{scale:1.0,duration:9.0,ease:"none"},390.33)
+tl.fromTo("#card111t",{y:30,opacity:0},{y:0,opacity:1,duration:0.7,ease:"expo.out"},390.78)
+tl.fromTo("#hl112b",{scaleY:0},{scaleY:1,duration:0.6,ease:"expo.out"},390.93)
+tl.fromTo("#hl112l0",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},391.05)
+tl.fromTo("#hl112l1",{yPercent:110},{yPercent:0,duration:0.9,ease:"expo.out"},391.16)
+tl.fromTo("#hl112s",{opacity:0,y:16},{opacity:1,y:0,duration:0.8,ease:"expo.out"},391.5)
+tl.to("#hl112",{opacity:0,y:-20,duration:0.45,ease:"power2.in"},398.88)
+tl.fromTo("#st113",{opacity:0},{opacity:1,duration:0.3},399.53)
+tl.to("#st113",{opacity:0,duration:0.35},409.14)
+tl.fromTo("#st113l",{clipPath:"inset(0% 100% 0% 0%)",scale:0.96},{clipPath:"inset(0% 0% 0% 0%)",scale:1,duration:1.1,ease:"expo.inOut"},399.67999999999995)
+tl.fromTo("#st113s",{x:-900,opacity:0.0},{x:900,opacity:0.9,duration:1.4,ease:"power2.inOut"},400.13)
+tl.to("#st113s",{opacity:0,duration:0.3},401.42999999999995)
+tl.fromTo("#st113f",{opacity:0,y:20},{opacity:1,y:0,duration:0.8,ease:"expo.out"},400.72999999999996)
+tl.set({},{},409.49);
+window.__timelines = window.__timelines || {};
+window.__timelines["root"] = tl;
+</script></body></html>

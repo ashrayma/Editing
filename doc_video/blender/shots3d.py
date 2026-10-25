@@ -34,7 +34,7 @@ def reset(frames, res):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     sc = bpy.context.scene
     sc.render.engine = "BLENDER_EEVEE"
-    sc.eevee.taa_render_samples = 48
+    sc.eevee.taa_render_samples = int(os.environ.get("TAA", "48"))
     sc.eevee.use_shadows = True
     sc.render.resolution_x, sc.render.resolution_y = res
     sc.render.fps = FPS
