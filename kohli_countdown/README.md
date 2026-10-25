@@ -59,6 +59,15 @@ Everything lives in `config.json`:
 
 Use photos you have the rights to (your own screenshots/edits, licensed images). Raw broadcast footage gets muted or taken down.
 
+## Brand theme and music
+
+`theme` in config.json sets the accent colour, the background gradient and the logo (`assets/logo.png`). The logo
+wipes on in the hook, sits in every scene's header and opens the outro. The colours are taken from the
+theCricketLounge logo: #FEDE5C yellow on charcoal.
+
+`music.py` writes the background track itself: an original, royalty-free, feel-good house/pop groove (118 BPM,
+G-D-Em-C). It is side-chained to the kick and ducked under the voice. `python3 music.py 30 preview.wav` writes a 30 s preview.
+
 ## Timeline (60.7 s)
 
 | t | scene | motion / SFX |

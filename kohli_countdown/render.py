@@ -20,6 +20,7 @@ from multiprocessing import Pool
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
+import music as bgm
 import sfx
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,8 +34,10 @@ FONTS = {
     "italic": "InterDisplay-BoldItalic.otf",
 }
 
-GOLD = (255, 196, 0)
+GOLD = (255, 196, 0)   # accent; replaced by the brand theme in apply_theme()
 BLUE = (30, 91, 255)
+BG_TOP, BG_BOT = (12, 16, 34), (3, 4, 10)
+LOGO = None
 WHITE = (255, 255, 255)
 MUTED = (160, 176, 210)
 INK = (8, 11, 22)
@@ -121,13 +124,13 @@ def place(layer, im, cx, cy, scale=1.0, alpha=1.0, anchor="c"):
 @lru_cache(maxsize=8)
 def gradient_bg(accent):
     y = np.linspace(0, 1, H)[:, None, None]
-    top = np.array([12, 16, 34], float)
-    bot = np.array([3, 4, 10], float)
+    top = np.array(BG_TOP, float)
+    bot = np.array(BG_BOT, float)
     base = top * (1 - y) + bot * y
     # soft accent glow behind the rank number
     yy, xx = np.mgrid[0:H, 0:W]
     glow = np.exp(-(((xx - W / 2) / 520) ** 2 + ((yy - 520) / 420) ** 2))[..., None]
-    img = base + glow * np.array(accent, float) * 0.28
+    img = base + glow * np.array(accent, float) * 0.16
     return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8))
 
 
@@ -236,7 +239,10 @@ VO_TAIL = {"hook": 0.35, "item": 0.5, "outro": 1.0}
 
 
 def draw_header(layer, rank, t, accent):
-    place(layer, text_img("BEST DAYS AS A KOHLI FAN", "bold", 30, fill=(200, 210, 235), tracking=5), W / 2, 185)
+    if LOGO:
+        draw_logo(layer, 300, W / 2, 182)
+    else:
+        place(layer, text_img("BEST DAYS AS A KOHLI FAN", "bold", 30, fill=(200, 210, 235), tracking=5), W / 2, 185)
     n = CFG.get("_total_ranks", len(CFG["items"]))
     x0, x1, y = 150, 930, 238
     seg = (x1 - x0) / n
@@ -344,7 +350,7 @@ def chip_img(text, accent):
     d = ImageDraw.Draw(im)
     d.rounded_rectangle((0, 0, w - 1, h - 1), 39, fill=(255, 255, 255, 235))
     d.ellipse((12, 12, 66, 66), fill=accent + (255,))
-    d.line([(26, 40), (36, 50), (53, 29)], fill=WHITE, width=7, joint="curve")
+    d.line([(26, 40), (36, 50), (53, 29)], fill=on_color(accent), width=7, joint="curve")
     d.text((86, h / 2), text, font=f, fill=INK, anchor="lm")
     return im
 
@@ -516,25 +522,59 @@ def scene_hook(t, hook):
     if bp > 0:  # TOP 10 badge
         badge = Image.new("RGBA", (260, 260), (0, 0, 0, 0))
         bd = ImageDraw.Draw(badge)
-        bd.ellipse((10, 10, 250, 250), fill=(224, 38, 43, 255), outline=WHITE + (255,), width=6)
+        bd.ellipse((10, 10, 250, 250), fill=GOLD + (255,), outline=WHITE + (255,), width=6)
         top, big = hook.get("badge", ["TOP", "10"])
-        bd.text((130, 100), top, font=font("black", 50), fill=WHITE, anchor="mm")
-        bd.text((130, 162), big, font=font("black", 92), fill=WHITE, anchor="mm")
+        bd.text((130, 100), top, font=font("black", 50), fill=on_color(GOLD), anchor="mm")
+        bd.text((130, 162), big, font=font("black", 92), fill=on_color(GOLD), anchor="mm")
         badge = badge.rotate(-14 + 360 * (1 - ease_out(bp)), resample=Image.BICUBIC)
         place(layer, badge, 870, 510, ease_back(bp), 1)
     tp = prog(t, 1.4, 0.9)
     if tp > 0:
         txt = hook["tease"][:max(1, int(len(hook["tease"]) * tp))]
-        im = text_img(txt.upper(), "xbold", 46, fill=WHITE)
+        im = text_img(txt.upper(), "xbold", 46, fill=on_color(GOLD))
         pill = Image.new("RGBA", (im.width + 70, im.height + 40), (0, 0, 0, 0))
-        ImageDraw.Draw(pill).rounded_rectangle((0, 0, pill.width - 1, pill.height - 1), 30, fill=(224, 38, 43, 240))
+        ImageDraw.Draw(pill).rounded_rectangle((0, 0, pill.width - 1, pill.height - 1), 30, fill=GOLD + (245,))
         pill.alpha_composite(im, (35, 20))
         place(layer, pill, W / 2, 1190, 1, 1)
+    if LOGO:  # brand reveal: the logo wipes on, left to right like its yellow bar
+        draw_logo(layer, 560, W / 2, 330, ease_out(prog(t, 0.05, 0.6)))
     draw_caption(layer, hook, t, VO_START["hook"])
     zoom_dx = int(8 * math.sin(t * 2))
     shake = max(0, 1 - (t - 0.8) / 0.3) if t >= 0.8 else 0
     bg.paste(layer, (zoom_dx + int(14 * shake * math.sin(t * 90)), int(10 * shake * math.cos(t * 70))), layer)
     return bg
+
+
+def on_color(c):
+    """Ink or white, whichever reads on top of colour c."""
+    return INK if (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) > 150 else WHITE
+
+
+@lru_cache(maxsize=8)
+def logo_img(width):
+    im = Image.open(os.path.join(HERE, LOGO)).convert("RGBA")
+    return im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+
+
+def draw_logo(layer, width, cx, cy, reveal=1.0):
+    """Brand logo centred at (cx, cy); `reveal` < 1 wipes it on from the left."""
+    if reveal <= 0:
+        return
+    im = logo_img(width)
+    if reveal < 1:
+        im = im.crop((0, 0, max(1, int(im.width * reveal)), im.height))
+    layer.alpha_composite(im, (int(cx - width / 2), int(cy - im.height / 2)))
+
+
+def apply_theme(theme):
+    """Brand colours: accent for ranks, chips, captions and badges; a dark background to match the logo."""
+    global GOLD, BLUE, BG_TOP, BG_BOT, LOGO
+    if not theme:
+        return
+    GOLD = BLUE = hex_rgb(theme["accent"])
+    BG_TOP, BG_BOT = hex_rgb(theme["bg_top"]), hex_rgb(theme["bg_bottom"])
+    LOGO = theme.get("logo")
+    gradient_bg.cache_clear()
 
 
 def scene_suspense(t, dur):
@@ -570,6 +610,8 @@ def scene_outro(t, outro):
         ay = 1290 + 22 * abs(math.sin(t * 6))
         d = ImageDraw.Draw(layer)
         d.polygon([(W / 2 - 44, ay), (W / 2 + 44, ay), (W / 2, ay + 56)], fill=GOLD + (255,))
+    if LOGO:
+        draw_logo(layer, 620, W / 2, 470, ease_out(prog(t, 0.1, 0.6)))
     draw_caption(layer, outro, t, VO_START["outro"])
     bg.paste(layer, (0, 0), layer)
     return flash(bg, t)
@@ -647,7 +689,7 @@ def build_audio(segs, total, music, path):
         seg = s[: len(mix) - i]
         mix[i:i + len(seg)] += seg * gain * 0.5
     if music:
-        bed = sfx.beat_bed(total)
+        bed = bgm.track(total)
         fade = np.minimum(1, np.minimum(np.arange(len(bed)) / sfx.SR / 0.5, (total - np.arange(len(bed)) / sfx.SR) / 1.5))
         mix[:len(bed)] += bed * np.clip(fade, 0, 1) * 0.22
     vo = np.zeros_like(mix)
@@ -730,6 +772,7 @@ def main():
 def render_part(cfg, prefix):
     global CFG, SEGMENTS
     CFG = cfg
+    apply_theme(CFG.get("theme"))
     out = os.path.join(HERE, CFG["output"])
     os.makedirs(os.path.dirname(out), exist_ok=True)
     attach_voiceover(CFG, os.path.join(os.path.dirname(out), "vo", "manifest.json"), prefix)
