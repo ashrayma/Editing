@@ -8,3 +8,6 @@ kohli_countdown/out/cache/
 doc_video/node_modules/
 doc_video/hf_test.mp4
 doc_video/blender/*.png
+doc_video/blender/renders/
+doc_video/blender/log_*.txt
+doc_video/out/
