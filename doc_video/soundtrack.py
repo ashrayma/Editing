@@ -187,7 +187,7 @@ def main():
 
     for t, kind in ev["events"]:
         if kind == "whoosh":
-            put("whoosh", t - 0.12, 0.32)
+            put("whoosh", t - 0.12, 0.18)
         elif kind == "impact":
             put("impact", t, 0.28)
         elif kind == "soft":
@@ -199,7 +199,7 @@ def main():
             put("pop", t, 0.16)
         elif kind == "hit":
             put("impact", t, 0.34)
-            put("whoosh", t - 0.15, 0.25)
+            put("whoosh", t - 0.15, 0.14)
         elif kind == "swell":
             put("riser", t - 1.6, 0.18)
     put("crowd", s("the_six", 4.2), 0.42)          # the six

@@ -52,6 +52,18 @@ def media(src, kind="photos"):
     return "media/" + os.path.basename(src)
 
 
+def seg(name, start, dur, slow=False):
+    """Cut a segment of the match footage (once). slow=True plays it at 0.5x for breathing room on short moments."""
+    out = os.path.join(HERE, "footage", "clips", f"m_{name}.mp4")
+    if not os.path.exists(out):
+        import subprocess
+        vf = "scale=716:780:flags=lanczos,fps=30" + (",setpts=2.0*PTS,minterpolate=fps=30:mi_mode=blend" if slow else "")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i", os.path.join(HERE, "footage", "match_chase.mp4"),
+                        "-t", str(dur), "-an", "-vf", vf, "-c:v", "libx264", "-crf", "14", "-preset", "slow",
+                        "-pix_fmt", "yuv420p", out], check=True)
+    return os.path.relpath(out, HERE)
+
+
 def img_size(src):
     with Image.open(os.path.join(HERE, src)) as im:
         return im.size
@@ -72,7 +84,7 @@ def anim(line):
 
 # ----------------------------------------------------------------------------- components
 
-def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=1060, maxh=700, z=20, kb=True):
+def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=1150, maxh=960, z=20, kb=True):
     """A media card that glides in from `side`, pushes in slowly, and exits the other way."""
     i = nid("card")
     if video:
@@ -80,9 +92,9 @@ def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=
     else:
         w, h = img_size(src)
     cw, ch = fit(w, h, maxw, maxh)
-    cx = W * (0.67 if side == "right" else 0.33) if side != "center" else W / 2
+    cx = W * (0.665 if side == "right" else 0.335) if side != "center" else W / 2
     EVENTS.append((start, "whoosh"))
-    left, top = round(cx - cw / 2), round(H / 2 - ch / 2 + 10)
+    left, top = round(cx - cw / 2), round(H / 2 - ch / 2)
     rel = media(src)
     if video:
         inner = (f'<video id="{i}v" class="clip" src="{rel}" muted playsinline data-start="{start}" '
@@ -95,7 +107,7 @@ def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=
                + (f'<em>{html.escape(sub)}</em>' if sub else "") + "</div>")
     add(f'<div id="{i}" class="card clip" data-start="{start}" data-duration="{dur}" '
         f'style="left:{left}px;top:{top}px;width:{cw}px;height:{ch}px;z-index:{z}">'
-        f'<div class="frame">{inner}</div>{tag}</div>', start, dur, z)
+        f'<div class="frame">{inner}{'<div class="tagfade"></div>' if label else ''}</div>{tag}</div>', start, dur, z)
     d = 1 if side != "left" else -1
     anim(f'tl.fromTo("#{i}",{{x:{d * 760},rotationY:{-d * 14},opacity:0}},'
          f'{{x:0,rotationY:0,opacity:1,duration:1.0,ease:"expo.out"}},{start})')
@@ -192,7 +204,7 @@ def full_video(src, start, dur, z=40, fade=0.35):
     return i
 
 
-def phone(src, start, dur, side="right", z=25):
+def phone(src, start, dur, side="right", z=25, media_start=0.0):
     """The scorecard screen recording inside a clean phone frame."""
     i = nid("ph")
     EVENTS.append((start, "whoosh"))
@@ -201,7 +213,7 @@ def phone(src, start, dur, side="right", z=25):
     add(f'<div id="{i}" class="phone clip" data-start="{start}" data-duration="{dur}" '
         f'style="left:{round(cx - pw / 2)}px;top:{round(H / 2 - ph_ / 2)}px;width:{pw}px;height:{ph_}px;z-index:{z}">'
         f'<video class="clip" src="{media(src)}" muted playsinline data-start="{start}" data-duration="{dur}" '
-        f'data-media-start="0"></video></div>', start, dur, z)
+        f'data-media-start="{media_start}"></video></div>', start, dur, z)
     d = 1 if side == "right" else -1
     anim(f'tl.fromTo("#{i}",{{y:900,rotationX:18,opacity:0}},{{y:0,rotationX:0,opacity:1,duration:1.1,ease:"expo.out"}},{start})')
     anim(f'tl.to("#{i}",{{y:700,opacity:0,duration:0.55,ease:"power2.in"}},{round(start + dur - 0.55, 2)})')
@@ -255,16 +267,16 @@ def backdrop(src, start, dur, opacity=0.28, z=2):
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.6}},{round(start + dur - 0.6, 2)})')
 
 
-def fullimg(src, start, dur, dim=0.35, ai=True, z=8, push=1.10):
+def fullimg(src, start, dur, dim=0.35, ai=True, z=8, push=1.10, origin="50% 50%", end=1.0):
     """Full-bleed image with a slow push-in, darkened for type on top; AI images carry a small disclosure tag."""
     i = nid("fi")
     EVENTS.append((start, "whoosh"))
     tag = '<div class="aitag">AI illustration</div>' if ai else ""
     add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden">'
-        f'<img id="{i}i" src="{media(src)}" style="width:100%;height:100%;object-fit:cover">'
+        f'<img id="{i}i" src="{media(src)}" style="width:100%;height:100%;object-fit:cover;transform-origin:{origin}">'
         f'<div class="full" style="background:rgba(5,5,6,{dim})"></div>{tag}</div>', start, dur, z)
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.6,ease:"power2.out"}},{start})')
-    anim(f'tl.fromTo("#{i}i",{{scale:{push}}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
+    anim(f'tl.fromTo("#{i}i",{{scale:{push}}},{{scale:{end},duration:{dur},ease:"none"}},{start})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.5}},{round(start + dur - 0.5, 2)})')
 
 
@@ -326,13 +338,16 @@ R3 = "blender/renders/"
 fullimg("assets/ai/ai_ball.png", 0.0, 3.9, dim=0.25)
 headline(["161.3", "KM/H"], 0.5, 3.0, "left", size=150, accent_idx=0)
 full_video(R3 + "speed.mp4", b("hook_fastest", 3.0), 3.6)
-headline(["The fastest ball", "ever recorded."], b("hook_fastest", 6.4), 2.3, "center", size=92, accent_idx=1)
+card(P + "shoaib_bowling.jpg", b("hook_fastest", 6.5), BEAT["hook_fastest"][1] - b("hook_fastest", 6.5) + 0.3, "right",
+     "SHOAIB AKHTAR", "vs England · World Cup 2003")
+headline(["The fastest ball", "ever recorded."], b("hook_fastest", 6.6), BEAT["hook_fastest"][1] - b("hook_fastest", 6.6), "left",
+         size=92, accent_idx=1)
 date_card(b("hook_first_ball", 0.2), 2.5)
-card(C + "shoaib_run.mp4", b("hook_first_ball", 2.7), 3.6, "left", "THE FIRST BALL", "Shoaib to Sachin", video=True, maxh=740)
-headline(["Shoaib", "vs", "Sachin"], b("hook_first_ball", 2.9), 3.4, "right", size=110, accent_idx=1)
-card(C + "six_close.mp4", b("hook_six", 0.0), 3.6, "right", "OFF STUMP, WIDE", "Over third man", video=True, maxh=740)
-odometer("6", b("hook_six", 0.6), 3.0, "left", size=320, label="OVER THIRD MAN")
-card(C + "crowd_flags.mp4", b("hook_six", 3.6), 3.3, "center", video=True, maxw=1300, maxh=760, kb=True)
+card(seg("stance_close", 21.0, 3.8), b("hook_first_ball", 2.7), 3.8, "right", "SACHIN TENDULKAR", "Facing Shoaib's first ball", video=True)
+headline(["Shoaib", "vs", "Sachin"], b("hook_first_ball", 2.9), 3.4, "left", size=110, accent_idx=1)
+card(seg("six_shot", 17.6, 3.2), b("hook_six", 0.0), 3.2, "right", "OVER THIRD MAN", "Six", video=True)
+odometer("6", b("hook_six", 0.6), 2.6, "left", size=320, label="OVER THIRD MAN")
+card(seg("crowd_six", 7.0, 3.8), b("hook_six", 3.2), BEAT["hook_six"][1] - b("hook_six", 3.2) + 0.2, "center", video=True, maxw=1500, maxh=900)
 headline(["This isn't the story", "of one shot."], b("not_one_shot", 0.1), 4.0, "center", size=96, accent_idx=1)
 fullimg("assets/ai/ai_sleepless.png", b("not_one_shot", 4.2), BEAT["not_one_shot"][1] - b("not_one_shot", 4.2) + 0.3, dim=0.35)
 odometer("12", b("not_one_shot", 4.4), 3.9, "left", size=260, label="NIGHTS WITHOUT SLEEP")
@@ -348,21 +363,24 @@ timeline_graphic([("1999", "World Cup during Kargil", b("kargil", 3.0)),
                   ("2001", "Parliament attack", b("parliament", 2.6)),
                   ("2002", "Troops face off at the border", b("parliament", 5.6))],
                  b("kargil", 0.6), BEAT["parliament"][1] - BEAT["kargil"][0] - 0.4)
+card(seg("fans_together", 43.0, 2.0, slow=True), b("no_cricket", 0.0), 3.8, "right", "INDIA & PAKISTAN FANS", video=True)
 headline(["No bilateral", "cricket."], b("no_cricket", 0.1), 3.6, "left", size=110, accent_idx=1)
-headline(["World Cup 2003", "India vs Pakistan"], b("no_cricket", 3.8), BEAT["no_cricket"][1] - b("no_cricket", 3.8), "right",
+card(seg("flags_wave", 83.0, 3.0), b("no_cricket", 3.8), BEAT["no_cricket"][1] - b("no_cricket", 3.8) + 0.2, "left", video=True)
+headline(["World Cup 2003", "India vs Pakistan"], b("no_cricket", 3.9), BEAT["no_cricket"][1] - b("no_cricket", 3.9), "right",
          size=86, accent_idx=1, sub="Centurion, South Africa")
+backdrop(P + "handshake_hires.jpg", b("not_just_match", 0.0), 2.6, opacity=0.4)
 headline(["Not just", "a cricket match."], b("not_just_match", 0.0), 2.6, "center", size=110, accent_idx=1)
+card(P + "sachin_drive_keeper.jpg", b("months_talk", 0.2), 6.8, "right", "SACHIN TENDULKAR", "“People talked of nothing else”")
 odometer("12", b("months_talk", 0.6), 6.2, "left", size=240, label="MONTHS OF BUILD-UP")
-card(P + "collage_three_bowlers.jpg", b("months_talk", 0.4), 6.6, "right")
 card("assets/ai/ai_phone.png", b("phone_calls", 0.1), 5.0, "right", "AI ILLUSTRATION", "The calls kept coming")
 headline(["“Jeetna", "hi hai.”"], b("phone_calls", 0.3), 4.6, "left", size=120, accent_idx=1, sub="Phone calls to the team, every day")
-fullimg("assets/ai/ai_sleepless.png", b("phone_calls", 5.0), BEAT["phone_calls"][1] - b("phone_calls", 5.0) + 0.3, dim=0.4)
+fullimg("assets/ai/ai_sleepless.png", b("phone_calls", 5.0), BEAT["phone_calls"][1] - b("phone_calls", 5.0) + 0.3, dim=0.3,
+        origin="57% 44%", push=2.2, end=1.8)
 odometer("13", b("phone_calls", 5.2), 5.2, "left", size=240, label="RESTLESS NIGHTS BEFORE THE MATCH")
-card(P + "toss_handshake.jpg", b("toss_ties", 0.3), 6.0, "left", "SOURAV GANGULY × WAQAR YOUNIS", "Before the toss")
-backdrop(P + "toss_handshake.jpg", b("toss_ties", 0.0), 6.4)
-card(P + "handshake_hires.jpg", b("toss_ties", 6.2), BEAT["toss_ties"][1] - b("toss_ties", 6.2) + 0.2, "right", maxh=760)
-headline(["A handshake.", "For a moment,", "it felt calm."], b("toss_ties", 6.4), BEAT["toss_ties"][1] - b("toss_ties", 6.4), "left",
-         size=78, accent_idx=0)
+card(P + "toss_handshake.jpg", b("toss_ties", 0.3), 6.2, "left", "SOURAV GANGULY × WAQAR YOUNIS", "Before the toss")
+backdrop(P + "toss_handshake.jpg", b("toss_ties", 0.0), 6.6)
+headline(["Both captains", "swapped team ties."], b("toss_ties", 0.6), 5.6, "right", size=78, accent_idx=1)
+headline(["For a moment,", "it felt calm."], b("toss_ties", 6.6), BEAT["toss_ties"][1] - b("toss_ties", 6.6), "center", size=96, accent_idx=1)
 fullimg("assets/ai/ai_stadium.png", b("match_starts", 0.0), 5.6, dim=0.3)
 headline(["Match 36", "SuperSport Park"], b("match_starts", 0.6), 4.4, "left", size=90, accent_idx=1)
 
@@ -375,80 +393,94 @@ card(P + "harbhajan_celebrates.jpg", b("saeed_101", 0.1), 4.6, "right")
 phone(C + "scorecard_phone.mp4", b("target_274", 0.0), 6.9, "right")
 odometer("273/7", b("target_274", 0.3), 3.2, "left", size=200, label="PAKISTAN, 50 OVERS", color="#fff")
 odometer("274", b("target_274", 3.6), 3.2, "left", size=240, label="TARGET")
-pills(["Wasim Akram", "Waqar Younis", f"Shoaib Akhtar <b>161.3</b>"], b("bowling_attack", 0.6), 11.2, "left", gap=1.1)
-card(P + "shoaib_bowling.jpg", b("bowling_attack", 0.2), 6.0, "right")
-card(P + "collage_three_bowlers.jpg", b("bowling_attack", 6.2), 5.8, "right")
+pills(["Wasim Akram", "Waqar Younis", "Shoaib Akhtar <b>161.3</b>"], b("bowling_attack", 0.6), 7.6, "left", gap=1.1)
+card(P + "collage_three_bowlers.jpg", b("bowling_attack", 0.2), 4.8, "right")
+card(seg("waqar", 101.0, 2.0, slow=True), b("bowling_attack", 5.0), 3.6, "right", "WAQAR YOUNIS", video=True)
+card(seg("shoaib_back", 108.8, 2.0, slow=True), b("bowling_attack", 8.6), BEAT["bowling_attack"][1] - b("bowling_attack", 8.6) + 0.2,
+     "right", "SHOAIB AKHTAR", video=True)
+headline(["The best attack", "in the world."], b("bowling_attack", 8.6), BEAT["bowling_attack"][1] - b("bowling_attack", 8.6), "left",
+         size=92, accent_idx=1)
+card(seg("sachin_close_bat", 63.8, 3.0), b("sachin_plan", 0.0), 3.0, "right", "SACHIN TENDULKAR", video=True)
+card(seg("sachin_pull", 61.0, 2.8), b("sachin_plan", 3.0), BEAT["sachin_plan"][1] - b("sachin_plan", 3.0) + 0.2, "right", video=True)
 headline(["The plan?", "Just bat."], b("sachin_plan", 0.2), 7.0, "left", size=120, accent_idx=1)
-card(P + "sachin_drive_keeper.jpg", b("sachin_plan", 0.1), 7.2, "right", "SACHIN TENDULKAR")
 
 # CHAPTER 3 - THE ASSAULT
 chapter("03", "The Assault", b("wasim_over", 0.0))
-card(C + "wasim.mp4", b("wasim_over", 0.0), 6.6, "right", "OVER 1 · WASIM AKRAM", "Front-foot punch, four", video=True, maxh=760)
-headline(["Ball 3.", "Four."], b("wasim_over", 2.6), 4.0, "left", size=130, accent_idx=1)
-card(C + "shoaib_run.mp4", b("shoaib_runup", 0.0), 4.0, "left", "OVER 2 · SHOAIB AKHTAR", video=True, maxh=760)
-card(P + "shoaib_bowling.jpg", b("shoaib_runup", 4.0), 4.2, "right")
-headline(["The whole", "stadium held", "its breath."], b("shoaib_runup", 4.2), 4.0, "left", size=88, accent_idx=2)
-card(C + "six_close.mp4", b("the_six", 0.6), 4.2, "right", video=True, maxh=760)
-odometer("6", b("the_six", 4.6), 4.1, "center", size=420, label="OVER THIRD MAN")
-card(C + "four_speed.mp4", b("two_fours", 0.0), 7.3, "right", "154.1 KPH", "And Sachin still found the gap", video=True, maxh=760)
+card(seg("wasim_four", 0.0, 4.6), b("wasim_over", 0.0), 4.6, "right", "OVER 1 · WASIM AKRAM", "Front-foot punch, four", video=True)
+headline(["Ball 3.", "Four."], b("wasim_over", 1.2), 5.4, "left", size=130, accent_idx=1)
+card(seg("shoaib_runup", 15.5, 2.1, slow=True), b("shoaib_runup", 0.0), 4.0, "right", "OVER 2 · SHOAIB AKHTAR", "The long run-up", video=True)
+card(seg("sachin_close_140", 41.0, 2.0, slow=True), b("shoaib_runup", 4.0), 3.6, "left", video=True)
+headline(["The whole", "stadium held", "its breath."], b("shoaib_runup", 4.2), 4.0, "right", size=88, accent_idx=2)
+card(seg("six_replay", 11.0, 3.8), b("the_six", 0.4), 3.9, "right", "THE SIX · REPLAY", video=True)
+odometer("6", b("the_six", 4.4), 4.3, "center", size=420, label="OVER THIRD MAN")
+card(seg("four_154", 25.0, 5.0), b("two_fours", 0.0), 5.0, "right", "154.1 KPH", "And Sachin still found the gap", video=True)
+card(seg("four_signal", 33.0, 3.8), b("two_fours", 5.0), BEAT["two_fours"][1] - b("two_fours", 5.0) + 0.2, "right", video=True)
 pills(["Ball 1 · <b>SIX</b>", "Ball 2 · <b>FOUR</b> square leg", "Ball 3 · <b>FOUR</b> off side"], b("two_fours", 0.3), 6.9, "left", gap=1.6)
-card(P + "bowling_card_sachin.jpg", b("three_balls", 0.0), 6.2, "right", maxh=760)
+card(P + "bowling_card_sachin.jpg", b("three_balls", 0.0), 6.2, "right", maxh=900)
 headline(["3 balls.", "3 boundaries."], b("three_balls", 0.2), 6.0, "left", size=110, accent_idx=1)
 odometer("18", b("eighteen", 0.0), 3.6, "center", size=300, label="RUNS OFF THE OVER")
 fullimg("assets/ai/ai_tv_family.png", b("that_feeling", 0.0), 5.6, dim=0.1)
 odometer("53", b("sehwag_53", 0.8), 8.0, "left", size=260, label="IN 5.4 OVERS · RUN RATE 9+")
-card(C + "crowd_flags.mp4", b("sehwag_53", 0.4), 8.4, "right", video=True, maxh=760)
-card(C + "wicket_over.mp4", b("two_wickets", 0.0), 7.9, "right", "WAQAR YOUNIS", "Two wickets in two balls", video=True, maxh=760)
+card(seg("boundary_35", 37.0, 4.0), b("sehwag_53", 0.4), 4.4, "right", video=True)
+card(seg("dive", 50.0, 3.0, slow=True), b("sehwag_53", 4.8), BEAT["sehwag_53"][1] - b("sehwag_53", 4.8) + 0.2, "right", video=True)
+card(seg("after_wickets", 45.0, 4.5), b("two_wickets", 0.0), 4.6, "right", "WAQAR YOUNIS", "Two wickets in two balls", video=True)
 pills(["Sehwag · c Afridi b Waqar · <b>21</b>", "Ganguly · lbw b Waqar · <b>0</b>"], b("two_wickets", 2.4), 5.4, "left", gap=2.6)
 odometer("53/2", b("53_for_2", 0.2), 4.2, "center", size=280, label="FROM 53/0 IN TWO BALLS", color="#fff")
-card(C + "head_down.mp4", b("if_sachin_out", 0.0), 4.1, "right", video=True, maxh=760)
+card(seg("head_down", 97.5, 3.5), b("if_sachin_out", 0.0), 4.1, "right", video=True)
 headline(["If Sachin goes,", "the match goes."], b("if_sachin_out", 0.2), 3.9, "left", size=90, accent_idx=1)
 
 # CHAPTER 4 - THE 98
 chapter("04", "The 98", b("kaif", 0.0))
-card(C + "kaif_back.mp4", b("kaif", 0.2), 6.6, "right", "MOHAMMAD KAIF · 22", "Give Sachin the strike", video=True, maxh=760)
+card(seg("kaif_back", 151.0, 2.0, slow=True), b("kaif", 0.0), 3.4, "right", "MOHAMMAD KAIF · 22", video=True)
+card(seg("kaif_four", 135.0, 5.0), b("kaif", 3.4), BEAT["kaif"][1] - b("kaif", 3.4) + 0.2, "right", "Give Sachin the strike", video=True)
 headline(["Job:", "rotate strike,", "don't get out."], b("kaif", 1.0), 5.8, "left", size=84, accent_idx=0)
 card(P + "sachin_kaif_hug.jpg", b("partnership", 0.0), 5.5, "right", "TENDULKAR & KAIF")
 odometer("102", b("partnership", 0.3), 5.2, "left", size=260, label="RUN PARTNERSHIP")
+card(seg("kaif_out", 153.0, 5.8), b("kaif_out", 0.0), BEAT["kaif_out"][1] - b("kaif_out", 0.0) + 0.2, "right", "KAIF OUT", "India 155/3", video=True)
 pills(["Kaif · <b>35</b> (60)", "India · <b>155/3</b>"], b("kaif_out", 0.3), 4.9, "left", gap=1.2)
-card(C + "running.mp4", b("kaif_out", 0.0), 5.2, "right", video=True, maxh=760)
-card(C + "drinks.mp4", b("cramps", 0.0), 7.3, "right", "CRAMPS", "Every run a struggle", video=True, maxh=760)
+card(seg("sachin_tired", 86.0, 4.8), b("cramps", 0.0), 4.8, "right", "CRAMPS", "Every run a struggle", video=True)
+card(seg("sachin_smile", 131.0, 3.5, slow=True), b("cramps", 4.8), BEAT["cramps"][1] - b("cramps", 4.8) + 0.2, "right", video=True)
 headline(["Cramps."], b("cramps", 1.0), 6.3, "left", size=150, accent_idx=0)
-headline(["A runner", "for Sachin."], b("runner", 0.1), 4.0, "left", size=110, accent_idx=1, sub="Virender Sehwag")
-card(P + "sachin_crouch_cramps.jpg", b("runner", 0.0), 4.1, "right")
-card(P + "sachin_running_shoaib_face.jpg", b("nineties", 0.0), 9.7, "right", maxh=760)
+card(seg("running", 67.0, 5.5), b("runner", 0.0), BEAT["runner"][1] - b("runner", 0.0) + 0.2, "right", "A RUNNER", "Virender Sehwag", video=True)
+headline(["A runner", "for Sachin."], b("runner", 0.1), 4.0, "left", size=110, accent_idx=1)
+card(P + "sachin_running_shoaib_face.jpg", b("nineties", 0.0), 9.7, "right", maxh=900)
 odometer("98", b("nineties", 4.6), 5.1, "left", size=300, label="TWO SHOTS FROM A HUNDRED", roll=3.0)
-card(P + "shoaib_bowling.jpg", b("bouncer", 0.0), 6.0, "left", "SHOAIB AKHTAR", "Back for more")
-card(C + "shoaib_back.mp4", b("bouncer", 6.0), 4.0, "right", video=True, maxh=760)
-headline(["Bouncer."], b("bouncer", 5.8), 4.0, "left", size=170, accent_idx=0)
-pills(["Gloved to point", "c Younis Khan b Shoaib Akhtar"], b("bouncer", 10.4), BEAT["bouncer"][1] - b("bouncer", 10.4), "left", gap=1.6)
-card(C + "sachin_late.mp4", b("bouncer", 10.2), BEAT["bouncer"][1] - b("bouncer", 10.2), "right", video=True, maxh=760)
+card(seg("shoaib_turn", 108.8, 2.0, slow=True), b("bouncer", 0.0), 4.4, "right", "SHOAIB AKHTAR", "Back for more", video=True)
+headline(["Bouncer."], b("bouncer", 4.6), 3.8, "center", size=170, accent_idx=0)
+card(seg("dismissal", 158.8, 5.8), b("bouncer", 8.4), 5.8, "right", "THE BOUNCER", "Gloved to point", video=True)
+pills(["Gloved to point", "c Younis Khan b Shoaib Akhtar"], b("bouncer", 9.4), BEAT["bouncer"][1] - b("bouncer", 9.4), "left", gap=1.8)
+card(seg("walk_off", 164.6, 7.0), b("bouncer", 14.2), BEAT["bouncer"][1] - b("bouncer", 14.2) + 0.2, "right", video=True)
 big98(b("out_98", 0.0), 3.0)
 pills(["<b>98</b> off 75 balls", "<b>12</b> fours · <b>1</b> six", "Two runs short."], b("out_98", 3.0), 4.3, "left", gap=0.9)
-card(P + "collage_three_bowlers.jpg", b("out_98", 3.0), 4.3, "right")
-odometer("97", b("97_needed", 0.4), 10.0, "left", size=260, label="NEEDED · 22 OVERS LEFT · 177/4")
-card(P + "ganguly_waqar_after.jpg", b("97_needed", 0.2), 10.4, "right")
+card(seg("replay", 172.0, 4.8), b("out_98", 3.0), BEAT["out_98"][1] - b("out_98", 3.0) + 0.2, "right", video=True)
+odometer("97", b("97_needed", 0.4), 5.4, "left", size=260, label="NEEDED · 22 OVERS LEFT · 177/4")
+card(seg("pull_two", 128.0, 2.0, slow=True), b("97_needed", 0.2), 5.6, "right", video=True)
+card(seg("afridi", 116.8, 1.7, slow=True), b("97_needed", 5.8), BEAT["97_needed"][1] - b("97_needed", 5.8) + 0.2, "right", video=True)
+headline(["For the first time,", "Pakistan believed."], b("97_needed", 6.0), BEAT["97_needed"][1] - b("97_needed", 6.0), "left",
+         size=84, accent_idx=1)
 
 # CHAPTER 5 - THE FINISH
 chapter("05", "The Finish", b("dravid_yuvraj", 0.0))
+backdrop(P + "dravid_yuvraj_win.jpg", b("dravid_yuvraj", 0.0), 4.4, opacity=0.35)
 headline(["Rahul Dravid", "Yuvraj Singh, 21"], b("dravid_yuvraj", 0.0), 4.1, "center", size=100, accent_idx=1)
-card(P + "dravid_yuvraj_win.jpg", b("finish", 0.0), 8.9, "right", "DRAVID & YUVRAJ", "Finished it off")
+card(P + "dravid_yuvraj_win.jpg", b("finish", 0.0), 8.9, "right", "DRAVID & YUVRAJ", "Finished it off", maxh=900)
 pills(["Yuvraj · <b>50*</b> (53)", "Dravid · <b>44*</b>"], b("finish", 1.0), 7.9, "left", gap=1.8)
-card(C + "dressing_room.mp4", b("won", 0.0), 6.4, "right", video=True, maxh=760)
+card(seg("bench", 147.0, 4.0, slow=True), b("won", 0.0), 6.4, "right", "THE DRESSING ROOM", video=True)
 headline(["India won", "by 6 wickets."], b("won", 0.2), 6.2, "left", size=104, accent_idx=1, sub="276/4 in 45.4 overs")
-phone(C + "scorecard_phone.mp4", b("aftermath", 0.2), 8.0, "right")
+phone(C + "scorecard_phone.mp4", b("aftermath", 0.2), 8.0, "right", media_start=9.0)
 pills(["Pakistan · out in the group stage", "India · into the final",
        "Sachin · <b>673</b> runs · Player of the Tournament"], b("aftermath", 0.6), 7.6, "left", gap=1.6)
-card(P + "india_team_walk.jpg", b("aftermath", 8.2), 9.0, "left")
-headline(["The innings fans", "remember most?"], b("aftermath", 8.6), 8.6, "right", size=86, accent_idx=1)
+card(seg("fifty", 77.0, 5.8), b("aftermath", 8.2), 5.8, "left", "SACHIN'S 60TH ODI FIFTY", video=True)
+card(seg("flags_fifty", 80.0, 3.0, slow=True), b("aftermath", 14.0), 3.6, "left", video=True)
+headline(["The innings fans", "remember most?"], b("aftermath", 8.6), 9.0, "right", size=86, accent_idx=1)
 big98(b("aftermath", 17.6), 3.0)
 headline(["The 98", "at Centurion."], b("aftermath", 20.6), BEAT["aftermath"][1] - b("aftermath", 20.6), "center", size=130, accent_idx=0)
-card(P + "handshake_hires.jpg", b("two_points", 0.0), 3.0, "center", maxh=760)
+card(P + "ganguly_waqar_after.jpg", b("two_points", 0.0), BEAT["two_points"][1] - b("two_points", 0.0) + 0.3, "center", maxw=1400, maxh=880)
 headline(["Belief."], b("belief", 0.3), 10.0, "left", size=170, accent_idx=0)
-card(C + "crowd_celebrate.mp4", b("belief", 0.0), 10.3, "right", video=True, maxh=760)
+card(P + "india_team_walk.jpg", b("belief", 0.0), 10.3, "right")
 headline(["Pride."], b("pride", 0.3), 6.6, "left", size=170, accent_idx=0)
-card(P + "india_team_walk.jpg", b("pride", 0.0), 6.9, "right")
-fullimg("assets/ai/ai_tv_family.png", b("crores", 0.0), 7.2, dim=0.15, push=1.16)
+card(P + "handshake_hires.jpg", b("pride", 0.0), 6.9, "right", maxh=900)
+fullimg("assets/ai/ai_tv_family.png", b("crores", 0.0), 7.2, dim=0.1, origin="50% 38%", push=1.9, end=1.35)
 headline(["Some matches are won", "on the scoreboard."], b("hearts", 0.0), 3.4, "center", size=86, accent_idx=1)
 headline(["Some, in the heart."], b("hearts", 3.4), 2.4, "center", size=96, accent_idx=0)
 headline(["Centurion was", "won in both."], b("hearts", 5.6), BEAT["hearts"][1] - b("hearts", 5.6) + 0.4, "center", size=110, accent_idx=1)
@@ -471,7 +503,9 @@ html,body{{margin:0;background:#060607}}
 .card{{position:absolute;transform-style:preserve-3d}}
 .card .frame{{width:100%;height:100%;border-radius:30px;overflow:hidden;
   box-shadow:0 50px 110px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.08)}}
-.tag{{position:absolute;left:28px;bottom:-74px;display:flex;align-items:center;gap:14px;color:#fff;white-space:nowrap}}
+.tagfade{{position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(0deg,rgba(0,0,0,.75),rgba(0,0,0,0))}}
+.card .frame{{position:relative}}
+.tag{{position:absolute;left:30px;bottom:26px;display:flex;align-items:center;gap:14px;color:#fff;white-space:nowrap}}
 .tag b{{font-weight:800;font-size:23px;letter-spacing:2px}}
 .tag em{{font-style:normal;font-weight:500;font-size:20px;color:rgba(255,255,255,.62)}}
 .tagbar{{width:6px;height:34px;background:{Y};border-radius:3px}}
