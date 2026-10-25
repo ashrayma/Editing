@@ -460,7 +460,9 @@ def stage_file(photos, total):
             backdrop = ""
         elif have:
             bd = blurred_backdrop(p["src"])
-            inner = f'<div id="pk{i}" class="pkb" style="background-image:url(\'{p["src"]}\');background-position:{p.get("pos", "center")}"></div>'
+            bleed = p.get("bleed", 3)  # % the photo extends past the frame; 0 keeps edge details (TV scoreboards) in view
+            inner = (f'<div id="pk{i}" class="pkb" style="inset:-{bleed}%;background-image:url(\'{p["src"]}\');'
+                     f'background-position:{p.get("pos", "center")}"></div>')
             backdrop = f'<div id="pb{i}" class="pbd" style="background-image:url(\'{bd}\')"></div>'
         else:
             inner = f"""<div class="pslot"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.4">
@@ -477,22 +479,32 @@ def stage_file(photos, total):
         divs.append(f'<div id="p{i}" class="clip" data-start="{t0}" data-duration="{r3(t1 - t0)}" style="position:absolute;inset:0;z-index:{i + 1}">'
                     f'{backdrop}<div id="pf{i}" class="pframe"><div id="pz{i}" class="pz">{inner}</div>'
                     f'<div class="pdust">{dust_html}</div>{tag}</div></div>')
-        js.append(f'  tl.set("#pz{i}", {{ scale: 1, x: 0, y: 0 }}, {t0});')
-        for (pt, sc, px, py) in p.get("_punch", []):
-            js.append(f'  tl.to("#pz{i}", {{ scale: {sc}, x: {px}, y: {py}, duration: 0.32, ease: "power3.out" }}, {r3(pt)});')
+        js.append(f'  tl.set("#pz{i}", {{ scale: 1, transformOrigin: "{p.get("focus", "50% 45%")}" }}, {t0});')
+        # each number: the push eases a little further in. Numbers less than 1 s apart merge into one
+        # longer ease, so two tweens never fight over the same zoom (that reads as a stutter).
+        moves = []
+        for (pt, sc, _, _) in sorted(p.get("_punch", [])):
+            if moves and pt - 0.3 < moves[-1][0] + moves[-1][2] + 0.05:
+                start, level, _ = moves[-1]
+                moves[-1] = (start, max(level, sc), max(1.4, pt + 1.1 - start))
+            else:
+                moves.append((pt - 0.3, max([sc] + [m[1] for m in moves]), 1.4))
+        for start, level, dur in moves:
+            js.append(f'  tl.to("#pz{i}", {{ scale: {level}, duration: {r3(dur)}, ease: "sine.inOut", force3D: true }}, {r3(start)});')
         d = -1 if i % 2 == 0 else 1
-        js.append(f'  tl.fromTo("#pf{i}", {{ x: {d} * 1150, opacity: 0, filter: "blur(16px)" }}, '
-                  f'{{ x: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }}, {t0});')
-        if i + 1 < len(photos):  # push: leave toward the side the next picture comes from's opposite
-            js.append(f'  tl.to("#pf{i}", {{ x: {d} * 700, opacity: 0, filter: "blur(14px)", duration: 0.42, ease: "power3.in" }}, '
-                      f'{r3(photos[i + 1]["_t0"])});')
+        # calm transitions: fade in with a short glide; the previous photo just fades away underneath
+        js.append(f'  tl.fromTo("#pf{i}", {{ x: {d * 90}, opacity: 0, scale: 1.02 }}, '
+                  f'{{ x: 0, opacity: 1, scale: 1, duration: 0.7, ease: "power2.out", force3D: true }}, {t0});')
+        if i + 1 < len(photos):
+            js.append(f'  tl.to("#pf{i}", {{ opacity: 0, duration: 0.55, ease: "power1.inOut" }}, {r3(photos[i + 1]["_t0"] + 0.1)});')
         if backdrop:
             js.append(f'  tl.fromTo("#pb{i}", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.6, ease: "power2.out" }}, {t0});')
         if have and p.get("kind") != "text":
+            # one steady push-in toward a fixed point on the subject: same direction the whole time, no drift
             dur = t1 - t0
-            z0, z1 = p.get("zoom", [1.0, 1.0 + min(0.22, 0.012 * dur)])
-            js.append(f'  tl.fromTo("#pk{i}", {{ scale: {z0}, x: {-24 * d}, y: 12 }}, '
-                      f'{{ scale: {z1}, x: {24 * d}, y: -12, duration: {r3(dur)}, ease: "none" }}, {t0});')
+            z0, z1 = p.get("zoom", [1.0, 1.0 + min(0.14, 0.008 * dur)])
+            js.append(f'  tl.fromTo("#pk{i}", {{ scale: {z0}, transformOrigin: "{p.get("focus", "50% 45%")}" }}, '
+                      f'{{ scale: {z1}, duration: {r3(dur)}, ease: "none", force3D: true }}, {t0});')
     return f"""<template>
   <style>
   #root {{ position:absolute; inset:0; font-family:{FONT}; }}

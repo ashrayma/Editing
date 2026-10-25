@@ -345,22 +345,15 @@
    "at": "intro",
    "src": "assets/photos/sachin_vs_waugh.jpg",
    "pos": "center 30%",
-   "zoom": [
-    1.05,
-    1.18
-   ],
+   "focus": "38% 32%",
    "punch": [
     {
      "at": "intro@Sharjah",
-     "scale": 1.14,
-     "x": 60,
-     "y": 30
+     "scale": 1.05
     },
     {
      "at": "intro@1998",
-     "scale": 1.26,
-     "x": 110,
-     "y": 50
+     "scale": 1.1
     }
    ]
   },
@@ -374,65 +367,41 @@
      150
     ]
    ],
-   "sub": "Sharjah Cricket Stadium, UAE",
-   "punch": [
-    {
-     "at": "date@22",
-     "scale": 1.08
-    },
-    {
-     "at": "date@final",
-     "scale": 1.14
-    }
-   ]
+   "sub": "Sharjah Cricket Stadium, UAE"
   },
   {
    "at": "target",
    "src": "assets/photos/sachin_lofted_drive.jpg",
-   "pos": "85% 55%",
-   "zoom": [
-    1.3,
-    1.42
-   ],
+   "pos": "75% 50%",
+   "focus": "70% 45%",
    "punch": [
     {
      "at": "target@284",
-     "scale": 1.2,
-     "x": -60
+     "scale": 1.06
     },
     {
      "at": "context@284",
-     "scale": 1.08,
-     "x": 120,
-     "y": 40
+     "scale": 1.11
     },
     {
      "at": "context@230",
-     "scale": 1.22,
-     "x": 160,
-     "y": 60
+     "scale": 1.16
     }
    ]
   },
   {
    "at": "aussies",
    "src": "assets/photos/sachin_vs_waugh.jpg",
-   "pos": "88% 45%",
-   "zoom": [
-    1.35,
-    1.5
-   ],
+   "pos": "85% 45%",
+   "focus": "80% 40%",
    "punch": [
     {
-     "at": "aussies@Woh team",
-     "scale": 1.12,
-     "x": -40
+     "at": "aussies@kisi",
+     "scale": 1.06
     },
     {
      "at": "aussies@kahin",
-     "scale": 1.24,
-     "x": -90,
-     "y": 30
+     "scale": 1.11
     }
    ]
   },
@@ -440,44 +409,25 @@
    "at": "turn",
    "src": "assets/img/ai_sandstorm.png",
    "tag": "AI-GENERATED",
-   "zoom": [
-    1.0,
-    1.22
-   ],
    "sfx": "whoosh-cinematic.mp3",
    "dust": true,
+   "focus": "50% 40%",
    "punch": [
     {
-     "at": "turn@kuch aisa",
-     "scale": 1.08
-    },
-    {
      "at": "storm@sandstorm",
-     "scale": 1.18,
-     "x": -50
+     "scale": 1.05
     },
     {
      "at": "storm@Pachchees",
-     "scale": 1.3,
-     "x": -120,
-     "y": 40
-    },
-    {
-     "at": "revised@46",
-     "scale": 1.12,
-     "x": 80
+     "scale": 1.1
     },
     {
      "at": "revised@276",
-     "scale": 1.26,
-     "x": 140,
-     "y": -30
+     "scale": 1.15
     },
     {
      "at": "revised@mushkil",
-     "scale": 1.34,
-     "x": 160,
-     "y": -40
+     "scale": 1.2
     }
    ]
   },
@@ -485,16 +435,15 @@
    "at": "real",
    "src": "assets/photos/sachin_lofted_drive.jpg",
    "pos": "30% 40%",
-   "zoom": [
-    1.0,
-    1.14
-   ],
+   "focus": "30% 35%",
    "punch": [
     {
      "at": "real@toofan",
-     "scale": 1.15,
-     "x": 90,
-     "y": 40
+     "scale": 1.06
+    },
+    {
+     "at": "score@143",
+     "scale": 1.12
     }
    ]
   },
@@ -502,74 +451,65 @@
    "at": "shots",
    "src": "assets/photos/sachin_vs_waugh.jpg",
    "pos": "30% 25%",
-   "zoom": [
-    1.2,
-    1.35
-   ],
+   "focus": "35% 30%",
    "punch": [
     {
      "at": "shots@paanch",
-     "scale": 1.18
+     "scale": 1.07
     },
     {
      "at": "shots@dhulaai",
-     "scale": 1.28,
-     "x": 50,
-     "y": 40
+     "scale": 1.13
     }
    ]
   },
   {
    "at": "lost",
-   "src": "assets/photos/sachin_lofted_drive.jpg",
-   "pos": "18% 30%",
-   "zoom": [
-    1.3,
-    1.42
-   ],
+   "src": "assets/photos/desert_storm_target_276.jpg",
+   "pos": "100% center",
+   "focus": "62% 40%",
    "punch": [
     {
      "at": "lost@akele",
-     "scale": 1.14,
-     "x": 60,
-     "y": 40
+     "scale": 1.03
     }
+   ],
+   "bleed": 0,
+   "zoom": [
+    1.0,
+    1.02
    ]
   },
   {
    "at": "bday",
-   "kind": "text",
-   "eyebrow": "Two days later",
-   "lines": [
-    [
-     "THE FINAL",
-     120
-    ],
-    [
-     "<span style='color:#FFB340'>24.04.1998</span>",
-     120
-    ]
+   "src": "assets/photos/final_century_bat_raised.jpg",
+   "pos": "100% center",
+   "focus": "70% 38%",
+   "punch": [
+    {
+     "at": "bday@25th",
+     "scale": 1.03
+    }
+   ],
+   "bleed": 0,
+   "zoom": [
+    1.0,
+    1.02
    ]
   },
   {
    "at": "final",
    "src": "assets/photos/trophy_celebration.jpg",
    "pos": "center 35%",
-   "zoom": [
-    1.0,
-    1.12
-   ],
+   "focus": "45% 40%",
    "punch": [
     {
      "at": "final@134",
-     "scale": 1.14,
-     "y": 30
+     "scale": 1.06
     },
     {
      "at": "final@cup",
-     "scale": 1.26,
-     "x": 40,
-     "y": 50
+     "scale": 1.12
     }
    ]
   },
@@ -592,19 +532,15 @@
    "at": "why",
    "src": "assets/photos/team_victory_lap.jpg",
    "pos": "center 40%",
-   "zoom": [
-    1.0,
-    1.15
-   ]
+   "focus": "45% 45%",
+   "punch": []
   },
   {
    "at": "cta",
    "src": "assets/photos/sachin_vs_waugh.jpg",
    "pos": "center 30%",
-   "zoom": [
-    1.0,
-    1.12
-   ]
+   "focus": "40% 32%",
+   "punch": []
   }
  ],
  "hook": {
