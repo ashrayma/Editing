@@ -5,3 +5,6 @@ kohli_countdown/out/*_preview*.mp4
 kohli_countdown/models/
 kohli_countdown/out/vo/
 kohli_countdown/out/cache/
+doc_video/node_modules/
+doc_video/hf_test.mp4
+doc_video/blender/*.png
