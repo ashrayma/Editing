@@ -311,33 +311,32 @@ def finish(base, name):
 
 
 def main_hq():
-    """Same layout from the higher-resolution stills supplied for the thumbnail (cut_hq_*)."""
+    """Same layout from the supplied stills, upscaled 4x with Real-ESRGAN (cut_x4_*), so every layer is downscaled."""
     base = background()
 
     # LEFT - Shoaib staring across at Sachin, desaturated and set back
-    # sizes keep every still within ~1.2x of its source pixels so nothing is blown up soft
-    sh = load_cut("cut_hq_shoaib_stare.png", 660)
-    sh = regrade(sh, color=0.35, contrast=1.25, bright=0.85, sharpen=(1.2, 110, 1), tint=(60, 130, 90), tint_k=0.25)
+    sh = load_cut("cut_x4_shoaib_stare.png", 760)
+    sh = regrade(sh, color=0.35, contrast=1.25, bright=0.85, sharpen=(1.0, 60, 1), tint=(60, 130, 90), tint_k=0.25)
     sh = directional_light(sh, "right", (225, 240, 230), 0.8)
     sh = fade_bottom(sh, 440, 640)
-    place(base, sh, -40, 40, rim_color=(190, 235, 205), rim_side=1, rim_k=0.3)
+    place(base, sh, -70, 30, rim_color=(190, 235, 205), rim_side=1, rim_k=0.3)
 
     # RIGHT - the upper-cut
-    up = load_cut("cut_wc_sachin_uppercut.png", 540)
-    up = regrade(up, color=1.15, contrast=1.15, bright=1.05, sharpen=(1.2, 120, 1))
+    up = load_cut("cut_x4_sachin_uppercut.png", 600)
+    up = regrade(up, color=1.15, contrast=1.15, bright=1.05, sharpen=(1.0, 60, 1))
     up = directional_light(up, "right", SAFFRON, 0.8)
-    up = fade_bottom(up, 430, 540)
-    ux, uy = W - up.width - 110, 70
-    place(base, up, ux, uy, rim_color=GOLD, rim_side=1, rim_k=0.5)
+    up = fade_bottom(up, 470, 600)
+    ux, uy = W - up.width - 90, 50
+    place(base, up, ux, uy, rim_color=GOLD, rim_side=1, rim_k=0.5, shadow=0)
     ball_with_trail(base, W - 70, 70, ux + up.width - 40, uy + 140)
 
     # CENTRE - the hero close-up
-    hero = load_cut("cut_hq_sachin_cap.png", 700)
-    hero = regrade(hero, color=1.08, contrast=1.1, bright=1.06, sharpen=(1.2, 110, 1))
+    hero = load_cut("cut_x4_sachin_cap.png", 760)
+    hero = regrade(hero, color=1.08, contrast=1.1, bright=1.06, sharpen=(1.0, 50, 1))
     hero = directional_light(hero, "left", (255, 214, 170), 0.45)
-    hero = fade_bottom(hero, 560, 690)
+    hero = fade_bottom(hero, 600, 740)
     # the source photo crops the top of the cap; keep that edge just above the frame
-    hx, hy = 960 - int(hero.width * 0.48), -36
+    hx, hy = 960 - int(hero.width * 0.48), -50
     place(base, hero, hx, hy, wrap=0.45, rim_color=ICE, rim_side=-1, rim_k=0.4, shadow=0.75)
 
     headline(base)
