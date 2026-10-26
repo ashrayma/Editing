@@ -202,7 +202,9 @@ def main():
             put("whoosh", t - 0.15, 0.14)
         elif kind == "swell":
             put("riser", t - 1.6, 0.18)
-    put("crowd", s("the_six", 4.2), 0.42)          # the six
+    put("impact", s("hook_six", 1.35), 0.32)       # bat on ball, in the slowed upper-cut
+    put("crowd", s("hook_six", 2.2), 0.32)
+    put("crowd", s("the_six", 3.0), 0.42)          # the six
     put("crowd", s("three_balls", 0.0), 0.30)
     put("riser", s("bouncer", 3.6), 0.35)          # into the bouncer
     for k in range(6):                             # heartbeat as he reaches the nineties

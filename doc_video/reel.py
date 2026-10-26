@@ -154,6 +154,14 @@ def text(lines, start, dur, size=96, accent=None, y=TEXT_Y, sub=None):
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.35}},{round(start + dur - 0.35, 2)})')
 
 
+def flash(t):
+    """White pop on bat-on-ball."""
+    i = nid("x")
+    events.append((t, "hit"))
+    add(f'<div id="{i}" class="flash clip" data-start="{round(t - 0.05, 2)}" data-duration="0.5"></div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:0.3}},{{opacity:0,duration:0.35,ease:"power2.out"}},{t})')
+
+
 def odo(num, start, dur, size=300, label=None, y=None, color=Y):
     i = nid("o")
     events.append((start + 0.1, "roll"))
@@ -236,10 +244,11 @@ date_card(at("hook_first_ball", 0.1), 2.4)
 card(C + "m_stance_close.mp4", at("hook_first_ball", 2.5), length("hook_first_ball") - 2.5 + GAP, label="SACHIN TENDULKAR", video=True)
 text(["Shoaib vs Sachin"], at("hook_first_ball", 2.7), length("hook_first_ball") - 2.7, size=92, accent=None, sub="First ball")
 # 3. the six
-card(C + "m_six_shot.mp4", at("hook_six", 0.0), 3.3, label="OVER THIRD MAN", video=True)
-odo("6", at("hook_six", 0.4), 2.9, size=280, label="SIX")
-card(C + "m_crowd_six.mp4", at("hook_six", 3.3), length("hook_six") - 3.3 + GAP, video=True)
-text(["Off Shoaib's", "first ball."], at("hook_six", 3.4), length("hook_six") - 3.4, size=92, accent=1)
+card(C + "m_six_ramp.mp4", at("hook_six", 0.0), 4.5, label="SHORT BALL · UPPER-CUT", video=True)
+flash(at("hook_six", 1.35))
+odo("6", at("hook_six", 2.3), 2.2, size=280, label="OVER THIRD MAN")
+card(C + "m_six_crowd_jump.mp4", at("hook_six", 4.5), length("hook_six") - 4.5 + GAP, video=True)
+text(["Off Shoaib's", "first ball."], at("hook_six", 4.6), length("hook_six") - 4.6, size=92, accent=1)
 # 4. 18 off the over
 card(C + "m_four_154.mp4", at("eighteen", -1.6), 1.6 + GAP + 0.6, label="154.1 KPH", video=True)
 odo("18", at("eighteen", 0.0), length("eighteen") + 0.6, size=260, label="RUNS OFF THE OVER")
@@ -274,6 +283,7 @@ html,body{{margin:0;background:#060607}}
 .full{{position:absolute;inset:0;overflow:hidden;z-index:5}}
 .full img,.full video{{width:100%;height:100%;object-fit:cover}}
 .dim{{position:absolute;inset:0}}
+.flash{{position:absolute;inset:0;background:#fff;z-index:55;pointer-events:none}}
 .aitag{{position:absolute;right:36px;top:330px;padding:8px 16px;border-radius:999px;background:rgba(0,0,0,.45);color:rgba(255,255,255,.7);font-size:22px;font-weight:600}}
 .card{{position:absolute;z-index:20}}
 .card .frame{{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;box-shadow:0 50px 110px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.08)}}
@@ -346,7 +356,7 @@ def build_audio():
          "soft": lambda: put("pop", t, 0.10), "pop": lambda: put("pop", t, 0.16),
          "hit": lambda: put("impact", t, 0.34),
          "roll": lambda: [put("tick", t + 0.05 * k, 0.1) for k in range(8)]}[kind]()
-    put("crowd", at("hook_six", 0.5), 0.4)
+    put("crowd", at("hook_six", 2.2), 0.4)
     put("riser", at("bouncer", 2.6), 0.32)
     put("heartbeat", at("bouncer", 8.6), 0.45)
     mix = vo * 0.95 + m * 0.24 + fx * 0.55
