@@ -58,7 +58,7 @@ def seg(name, start, dur, slow=False):
     if not os.path.exists(out):
         import subprocess
         vf = "scale=716:780:flags=lanczos,fps=30" + (",setpts=2.0*PTS,minterpolate=fps=30:mi_mode=blend" if slow else "")
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i", os.path.join(HERE, "footage", "match_chase.mp4"),
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i", os.path.join(HERE, "footage", "match_chase_clean.mp4"),
                         "-t", str(dur), "-an", "-vf", vf, "-c:v", "libx264", "-crf", "14", "-preset", "slow",
                         "-pix_fmt", "yuv420p", out], check=True)
     return os.path.relpath(out, HERE)

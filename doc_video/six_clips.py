@@ -8,7 +8,7 @@ import os
 import subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "footage", "match_chase.mp4")
+SRC = os.path.join(HERE, "footage", "match_chase_clean.mp4")
 OUT = os.path.join(HERE, "footage", "clips")
 ENC = ["-an", "-c:v", "libx264", "-crf", "14", "-preset", "slow", "-pix_fmt", "yuv420p"]
 
