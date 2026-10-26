@@ -1,11 +1,17 @@
-"""Blend Real-ESRGAN output with a plain Lanczos upscale (keeps natural skin texture), cut out, save to thumb/."""
+"""Blend Real-ESRGAN output with a plain Lanczos upscale (keeps natural skin texture), cut out, save to thumb/.
+
+THUMB_SCRATCH holds esrgan.py outputs (sr/up_*.png) and source crops (sr/src_*.png);
+THUMB_UPLOADS holds the supplied stills.
+"""
+import os
+
 import numpy as np
 from PIL import Image, ImageFilter
 from rembg import new_session, remove
 
-S = os.environ.get("THUMB_SCRATCH", "/tmp/thumb_sr")  
-U = "/root/.claude/uploads/f9639e0c-d650-5d7c-847c-d36184625aa6"
-T = "/home/user/Editing/doc_video/thumb"
+S = os.environ.get("THUMB_SCRATCH", "/tmp/thumb_sr")
+U = os.environ.get("THUMB_UPLOADS", S)
+T = os.path.dirname(os.path.abspath(__file__))
 sess = new_session("isnet-general-use")
 
 jobs = [  # (esrgan output, source it was made from, crop box in source px, out name, texture mix)
