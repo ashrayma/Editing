@@ -101,14 +101,6 @@ def directional_light(im, side, color, strength):
     return img(a, "RGBA")
 
 
-def rim(im, color, spread, strength, grow=7):
-    a = im.getchannel("A")
-    edge = Image.fromarray(np.clip(arr(a.filter(ImageFilter.MaxFilter(grow))) - arr(a) * 0.6, 0, 255).astype(np.uint8))
-    glow = Image.new("RGBA", im.size, color + (0,))
-    glow.putalpha(edge.filter(ImageFilter.GaussianBlur(spread)).point(lambda v: int(min(255, v * strength))))
-    return glow
-
-
 def pad(im, p):
     out = Image.new("RGBA", (im.width + 2 * p, im.height + 2 * p), (0, 0, 0, 0))
     out.alpha_composite(im, (p, p))
@@ -125,12 +117,59 @@ def fade_bottom(im, start, end):
     return out
 
 
-def place(base, im, x, y, rims=()):
-    p = 60
-    big = pad(im, p)
-    for color, spread, strength in rims:
-        base.alpha_composite(rim(big, color, spread, strength), (x - p, y - p))
-    base.alpha_composite(im, (x, y))
+def place(base, im, x, y, depth=0.0, haze=0.0, wrap=0.55, rim_color=None, rim_side=1, rim_k=0.0, shadow=0.55):
+    """Composite a cut-out into the scene instead of pasting it on top.
+
+    Defringes the matte (pulls edge colour from the subject's interior so the source photo's
+    background doesn't cling to it), matches its blacks/haze to the scene, drops a soft contact
+    shadow, wraps the blurred scene light around the edges, and adds a directional edge light on
+    the side facing the key light (rim_side 1 = from the right, -1 = from the left).
+    """
+    a = arr(im.getchannel("A")) / 255
+    rgb = arr(im.convert("RGB"))
+    core = arr(im.getchannel("A").filter(ImageFilter.MinFilter(7))) / 255
+    num = np.stack([arr(img(rgb[..., c] * core, "L").filter(ImageFilter.GaussianBlur(6))) for c in range(3)], -1)
+    den = arr(img(core * 255, "L").filter(ImageFilter.GaussianBlur(6)))[..., None] / 255 + 1e-4
+    inner = np.clip(num / den, 0, 255)
+    band = np.clip(1 - core, 0, 1)[..., None] * (den > 0.02)
+    rgb = rgb * (1 - band) + inner * band
+    a = arr(img(a * 255, "L").filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(1.1 + depth))) / 255
+
+    # scene under the subject (for colour match and light wrap)
+    x0, y0, x1, y1 = max(0, x), max(0, y), min(W, x + im.width), min(H, y + im.height)
+    scene = np.zeros_like(rgb)
+    blur_bg = arr(base.convert("RGB").filter(ImageFilter.GaussianBlur(30)))
+    scene[y0 - y:y1 - y, x0 - x:x1 - x] = blur_bg[y0:y1, x0:x1]
+    mean = scene[a > 0.5].mean(0) if (a > 0.5).any() else np.zeros(3)
+
+    if depth:
+        rgb = arr(img(rgb).filter(ImageFilter.GaussianBlur(depth)))
+    lum = rgb.mean(-1, keepdims=True) / 255
+    rgb = rgb + (mean * 0.9 - rgb) * (1 - lum) ** 2 * 0.35  # shadows take the scene's colour
+    rgb = rgb * 0.94 + mean * 0.06
+    rgb = rgb * (1 - haze) + scene * haze  # atmospheric depth for set-back figures
+
+    # light wrap: the scene's blurred light bleeds over the inside of the edge
+    soft = arr(img(a * 255, "L").filter(ImageFilter.GaussianBlur(16))) / 255
+    wrapm = np.clip((a - soft) * 2.2, 0, 1)[..., None] * wrap
+    rgb = rgb + (255 - rgb) * (scene / 255) * wrapm
+
+    # directional edge light on the side facing the key light
+    if rim_color and rim_k:
+        sh = np.roll(a, -rim_side * 10, axis=1)
+        rimm = np.clip(a - sh, 0, 1)
+        rimm = arr(img(rimm * 255, "L").filter(ImageFilter.GaussianBlur(4))) / 255 * a
+        rgb = rgb + (np.array(rim_color, np.float32) - rgb * 0.3) * rimm[..., None] * rim_k
+
+    if shadow:
+        sa = img(a * 255 * shadow, "L").filter(ImageFilter.GaussianBlur(28))
+        sl = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        sl.putalpha(sa)
+        p = 40
+        base.alpha_composite(pad(sl, p).filter(ImageFilter.GaussianBlur(10)), (x - p + 14, y - p + 18))
+
+    out = np.dstack([np.clip(rgb, 0, 255), a * 255])
+    base.alpha_composite(img(out, "RGBA"), (x, y))
 
 
 def shadow_text(base, txt, size, cx, top, fill, stroke=6, shadow=26, tracking=0):
@@ -218,7 +257,7 @@ def main():
     sh = regrade(sh, color=0.32, contrast=1.3, bright=0.85, tint=(60, 130, 90), tint_k=0.3)
     sh = directional_light(sh, "right", (225, 240, 230), 0.9)
     sh = fade_bottom(sh, 500, 720)
-    place(base, sh, -170, -40, rims=[((80, 170, 120), 16, 0.7)])
+    place(base, sh, -170, -40, depth=1.2, haze=0.12, rim_color=(190, 235, 205), rim_side=1, rim_k=0.35)
 
     # RIGHT - the upper-cut: warm saffron/gold key, electric-blue rim
     up = load_cut("cut_wc_sachin_uppercut.png", 700)
@@ -226,7 +265,7 @@ def main():
     up = directional_light(up, "right", SAFFRON, 0.9)
     up = fade_bottom(up, 560, 700)
     ux, uy = W - up.width - 120, 48
-    place(base, up, ux, uy, rims=[(GOLD, 20, 1.0), ((90, 170, 255), 6, 0.9)])
+    place(base, up, ux, uy, depth=0.8, haze=0.06, rim_color=GOLD, rim_side=1, rim_k=0.55)
     # ball flies off the top of the bat toward the upper-right corner
     ball_with_trail(base, W - 92, 74, ux + up.width - 40, uy + 150)
 
@@ -237,7 +276,7 @@ def main():
     hero = fade_bottom(hero, 560, 840)
     face_cx = int(hero.width * 0.55)
     hx, hy = 960 - face_cx, 70
-    place(base, hero, hx, hy, rims=[(ICE, 26, 1.1), ((255, 255, 255), 5, 0.8)])
+    place(base, hero, hx, hy, wrap=0.45, rim_color=ICE, rim_side=-1, rim_k=0.4, shadow=0.75)
     # soft key on the face to lift the helmet shadow, limited to the hero's own pixels
     hero_a = Image.new("L", (W, H), 0)
     hero_a.paste(hero.getchannel("A"), (hx, hy))
@@ -280,7 +319,7 @@ def main_hq():
     sh = regrade(sh, color=0.3, contrast=1.3, bright=0.8, sharpen=(2, 90, 2), tint=(60, 130, 90), tint_k=0.3)
     sh = directional_light(sh, "right", (225, 240, 230), 0.9)
     sh = fade_bottom(sh, 420, 700)
-    place(base, sh, -140, 10, rims=[((80, 170, 120), 16, 0.7)])
+    place(base, sh, -140, 10, depth=1.2, haze=0.12, rim_color=(190, 235, 205), rim_side=1, rim_k=0.35)
 
     # RIGHT - the upper-cut
     up = load_cut("cut_wc_sachin_uppercut.png", 640)
@@ -288,7 +327,7 @@ def main_hq():
     up = directional_light(up, "right", SAFFRON, 0.9)
     up = fade_bottom(up, 500, 640)
     ux, uy = W - up.width - 70, 60
-    place(base, up, ux, uy, rims=[(GOLD, 20, 1.0), ((90, 170, 255), 6, 0.9)])
+    place(base, up, ux, uy, depth=0.8, haze=0.06, rim_color=GOLD, rim_side=1, rim_k=0.55)
     ball_with_trail(base, W - 70, 70, ux + up.width - 40, uy + 140)
 
     # CENTRE - the hero close-up
@@ -297,7 +336,7 @@ def main_hq():
     hero = directional_light(hero, "left", (255, 214, 170), 0.45)
     hero = fade_bottom(hero, 600, 740)
     hx, hy = 960 - int(hero.width * 0.48), 0
-    place(base, hero, hx, hy, rims=[(ICE, 26, 1.1), ((255, 255, 255), 5, 0.8)])
+    place(base, hero, hx, hy, wrap=0.45, rim_color=ICE, rim_side=-1, rim_k=0.4, shadow=0.75)
 
     headline(base)
     finish(base, "thumb_E_wc2003_belief_hq")
