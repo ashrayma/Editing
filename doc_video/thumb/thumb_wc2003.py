@@ -246,7 +246,10 @@ def main():
     b[..., :3] = b[..., :3] + (255 - b[..., :3]) * lift[..., None] * 0.22
     base = img(b, "RGBA")
 
-    # headline zone
+    finish(base, "thumb_D_wc2003_belief")
+
+
+def headline(base):
     floor(base, 560)
     banner(base, "WORLD CUP 2003", 56, W // 2, 668)
     _, _, _, bottom = shadow_text(base, "INDIA'S BELIEF", 200, W // 2, 752, (255, 255, 255), stroke=5, tracking=4)
@@ -259,13 +262,46 @@ def main():
     shadow_text(base, "CHANGED", 92, left + w1 / 2 - l2.getlength(" ") / 2, bottom + 40, (255, 255, 255), stroke=4)
     shadow_text(base, "FOREVER?", 92, left + w1 + w2 / 2, bottom + 40, SAFFRON, stroke=4)
 
+
+def finish(base, name):
     out = grade_and_grain(base)
-    name = "thumb_D_wc2003_belief"
     out.save(os.path.join(HERE, name + ".png"))
     out.save(os.path.join(HERE, name + ".jpg"), quality=94)
     out.resize((320, 180), Image.LANCZOS).save(os.path.join(HERE, name + "_small.png"))
     print("wrote", name)
 
 
+def main_hq():
+    """Same layout from the higher-resolution stills supplied for the thumbnail (cut_hq_*)."""
+    base = background()
+
+    # LEFT - Shoaib staring across at Sachin, desaturated and set back
+    sh = load_cut("cut_hq_shoaib_stare.png", 900)
+    sh = regrade(sh, color=0.3, contrast=1.3, bright=0.8, sharpen=(2, 90, 2), tint=(60, 130, 90), tint_k=0.3)
+    sh = directional_light(sh, "right", (225, 240, 230), 0.9)
+    sh = fade_bottom(sh, 420, 700)
+    place(base, sh, -140, 10, rims=[((80, 170, 120), 16, 0.7)])
+
+    # RIGHT - the upper-cut
+    up = load_cut("cut_wc_sachin_uppercut.png", 640)
+    up = regrade(up, color=1.2, contrast=1.15, bright=1.05, sharpen=(2.5, 140, 2))
+    up = directional_light(up, "right", SAFFRON, 0.9)
+    up = fade_bottom(up, 500, 640)
+    ux, uy = W - up.width - 70, 60
+    place(base, up, ux, uy, rims=[(GOLD, 20, 1.0), ((90, 170, 255), 6, 0.9)])
+    ball_with_trail(base, W - 70, 70, ux + up.width - 40, uy + 140)
+
+    # CENTRE - the hero close-up
+    hero = load_cut("cut_hq_sachin_cap.png", 760)
+    hero = regrade(hero, color=1.08, contrast=1.1, bright=1.06, sharpen=(1.6, 80, 2))
+    hero = directional_light(hero, "left", (255, 214, 170), 0.45)
+    hero = fade_bottom(hero, 600, 740)
+    hx, hy = 960 - int(hero.width * 0.48), 0
+    place(base, hero, hx, hy, rims=[(ICE, 26, 1.1), ((255, 255, 255), 5, 0.8)])
+
+    headline(base)
+    finish(base, "thumb_E_wc2003_belief_hq")
+
 if __name__ == "__main__":
     main()
+    main_hq()
