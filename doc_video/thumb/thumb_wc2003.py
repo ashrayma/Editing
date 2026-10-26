@@ -342,6 +342,38 @@ def main_hq():
     headline(base)
     finish(base, "thumb_E_wc2003_belief_hq")
 
+
+def main_final():
+    """Shoaib head-in-hand (2003 WC kit, 4x upscaled) left, hi-res Sachin hook right, cap close-up centre."""
+    base = background()
+
+    # LEFT - Shoaib, hand to his head: the challenge India answered
+    sh = load_cut("cut_x4_shoaib_head.png", 600)
+    sh = regrade(sh, color=0.55, contrast=1.15, bright=1.12, sharpen=(1.0, 60, 1), tint=(60, 130, 90), tint_k=0.15)
+    sh = directional_light(sh, "right", (225, 240, 230), 0.7)
+    sh = fade_bottom(sh, 470, 600)
+    place(base, sh, -90, 70, rim_color=(190, 235, 205), rim_side=1, rim_k=0.3)
+
+    # RIGHT - Sachin's hook, ball in the air; warm saffron key
+    hk = load_cut("cut_hq_sachin_hook.png", 880)
+    hk = regrade(hk, color=1.1, contrast=1.12, bright=1.02, sharpen=(1.0, 60, 1))
+    hk = directional_light(hk, "right", SAFFRON, 0.75)
+    hk = fade_bottom(hk, 540, 760)
+    place(base, hk, W - hk.width - 40, 20, rim_color=GOLD, rim_side=1, rim_k=0.5, shadow=0)
+
+    # CENTRE - the hero close-up
+    hero = load_cut("cut_x4_sachin_cap.png", 740)
+    hero = regrade(hero, color=1.08, contrast=1.1, bright=1.06, sharpen=(1.0, 50, 1))
+    hero = directional_light(hero, "left", (255, 214, 170), 0.45)
+    hero = fade_bottom(hero, 590, 720)
+    hx, hy = 930 - int(hero.width * 0.48), -50  # cap crop sits just above the frame
+    place(base, hero, hx, hy, wrap=0.45, rim_color=ICE, rim_side=-1, rim_k=0.4, shadow=0.75)
+
+    headline(base)
+    finish(base, "thumb_F_wc2003_belief")
+
+
 if __name__ == "__main__":
     main()
     main_hq()
+    main_final()
