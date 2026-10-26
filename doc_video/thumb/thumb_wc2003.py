@@ -71,6 +71,64 @@ def background():
     return img(a).convert("RGBA")
 
 
+def background_clean():
+    """Clean floodlit night backdrop: colour fields, light beams, bokeh floodlights, smoke. No photo texture."""
+    a = np.zeros((H, W, 3), np.float32) + np.array([7, 9, 16], np.float32)
+    # colour fields: Pakistan green left, India blue centre, saffron/gold right
+    for cx, cy, rx, ry, col, k in [(120, 420, 900, 760, (20, 120, 70), 0.75), (960, 330, 760, 620, (30, 70, 170), 0.8),
+                                   (1780, 360, 900, 760, (230, 120, 25), 0.85), (1650, -80, 600, 420, GOLD, 0.6),
+                                   (260, -80, 560, 400, (190, 230, 210), 0.35)]:
+        a += radial(cx, cy, rx, ry, 1.8)[..., None] * np.array(col, np.float32) * k
+
+    # volumetric beams fanning down from two floodlight towers
+    beams = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(beams)
+    for fx, fy, angles in [(230, -60, (58, 70, 82, 95)), (1700, -60, (88, 100, 112, 124))]:
+        for ang in angles:
+            t = np.radians(ang)
+            for spread, val in [(0.05, 34), (0.02, 40)]:
+                p1 = (fx + 2400 * np.cos(t - spread), fy + 2400 * np.sin(t - spread))
+                p2 = (fx + 2400 * np.cos(t + spread), fy + 2400 * np.sin(t + spread))
+                d.polygon([(fx, fy), p1, p2], fill=val)
+    beams = arr(beams.filter(ImageFilter.GaussianBlur(26))) / 255
+    beams *= np.clip(1 - np.linspace(0, 1, H) * 1.1, 0, 1)[:, None]
+    a += beams[..., None] * np.array([235, 235, 225], np.float32) * 0.9
+
+    # bokeh: out-of-focus stadium lights along the top tiers
+    bok = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(bok)
+    for _ in range(140):
+        x = rng.uniform(0, W)
+        y = rng.normal(110, 45)
+        r = rng.uniform(6, 22)
+        warm = x / W
+        col = tuple(int(c) for c in (np.array([170, 230, 200]) * (1 - warm) + np.array([255, 200, 120]) * warm)
+                    * rng.uniform(0.25, 0.7))
+        d.ellipse((x - r, y - r, x + r, y + r), fill=col)
+    for cx in (230, 1700):  # floodlight heads
+        for i in range(4):
+            for j in range(3):
+                x, y = cx - 54 + i * 36, 18 + j * 30
+                d.ellipse((x - 11, y - 11, x + 11, y + 11), fill=(255, 250, 235))
+    bok = bok.filter(ImageFilter.GaussianBlur(5))
+    a += arr(bok) * 0.9
+    a += arr(bok.filter(ImageFilter.GaussianBlur(40))) * 1.2  # bloom
+
+    # drifting smoke, strongest through the middle band
+    smoke = np.zeros((H, W), np.float32)
+    for scale, amp in [(64, 1.0), (24, 0.5), (10, 0.25)]:
+        n = rng.normal(0, 1, (H // scale + 2, W // scale + 2)).astype(np.float32)
+        n = arr(img(n * 50 + 128, "L").resize((W, H), Image.BICUBIC).filter(ImageFilter.GaussianBlur(scale / 2))) / 255 - 0.5
+        smoke += n * amp
+    band = np.exp(-((np.arange(H) - 420) / 260) ** 2)[:, None]
+    a += np.clip(smoke, 0, None)[..., None] * band[..., None] * np.array([120, 130, 140], np.float32) * 1.4
+
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    v = 1 - 0.7 * np.clip(((xx - W / 2) / (W * 0.62)) ** 2 + ((yy - H * 0.38) / (H * 0.8)) ** 2, 0, 1)
+    a *= v[..., None]
+    return img(a).convert("RGBA")
+
+
 def load_cut(name, height):
     im = Image.open(os.path.join(HERE, name)).convert("RGBA")
     s = height / im.height
@@ -345,21 +403,21 @@ def main_hq():
 
 def main_final():
     """Shoaib head-in-hand (2003 WC kit, 4x upscaled) left, hi-res Sachin hook right, cap close-up centre."""
-    base = background()
+    base = background_clean()
 
     # LEFT - Shoaib, hand to his head: the challenge India answered
-    sh = load_cut("cut_x4_shoaib_head.png", 600)
+    sh = load_cut("cut_x4_shoaib_head.png", 790)
     sh = regrade(sh, color=0.55, contrast=1.15, bright=1.12, sharpen=(1.0, 60, 1), tint=(60, 130, 90), tint_k=0.15)
     sh = directional_light(sh, "right", (225, 240, 230), 0.7)
-    sh = fade_bottom(sh, 470, 600)
-    place(base, sh, -90, 70, rim_color=(190, 235, 205), rim_side=1, rim_k=0.3)
+    sh = fade_bottom(sh, 600, 790)
+    place(base, sh, -270, 10, rim_color=(190, 235, 205), rim_side=1, rim_k=0.3)
 
     # RIGHT - Sachin's hook, ball in the air; warm saffron key
-    hk = load_cut("cut_hq_sachin_hook.png", 880)
+    hk = load_cut("cut_hq_sachin_hook.png", 1050)
     hk = regrade(hk, color=1.1, contrast=1.12, bright=1.02, sharpen=(1.0, 60, 1))
     hk = directional_light(hk, "right", SAFFRON, 0.75)
-    hk = fade_bottom(hk, 540, 760)
-    place(base, hk, W - hk.width - 40, 20, rim_color=GOLD, rim_side=1, rim_k=0.5, shadow=0)
+    hk = fade_bottom(hk, 640, 900)
+    place(base, hk, W - hk.width - 30, 4, rim_color=GOLD, rim_side=1, rim_k=0.5, shadow=0)
 
     # CENTRE - the hero close-up
     hero = load_cut("cut_x4_sachin_cap.png", 740)
