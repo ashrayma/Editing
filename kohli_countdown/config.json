@@ -1,0 +1,538 @@
+{
+  "fps": 30,
+  "music": true,
+  "facecam": null,
+  "facecam_chroma": "0x00FF00",
+  "items": [
+    {
+      "rank": 10,
+      "title": "593 in England",
+      "sub": "Ind vs Eng · Test series · 2018",
+      "stat": 593,
+      "stat_suffix": "",
+      "stat_label": "RUNS · 10 INNINGS · AVG 59.3",
+      "chips": [
+        "2014 tour: just 134 runs",
+        "Top scorer of the series",
+        "Redemption arc complete"
+      ],
+      "image": "assets/photo_10.jpg",
+      "duration": 5.0,
+      "caption": "Number 10. 2014 ka England tour yaad hai? 10 innings mein sirf 134 run. Anderson baar baar off stump ke bahar ki ball pe out karta tha. Sab ne bola Kohli England mein nahi chal sakta. Chaar saal baad wapas gaya aur 593 run thok diye. Series ka top scorer. Isko kehte hain comeback.",
+      "vo_text": "2014 में इंग्लैंड में सिर्फ 134 रन। 2018 में वापस गया, और 593 ठोक दिए।",
+      "vo_file": [
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            13.15,
+            32.05
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 9,
+      "title": "Lord's 2021",
+      "sub": "Ind vs Eng · 2nd Test",
+      "stat": 151,
+      "stat_suffix": "",
+      "stat_label": "RUN WIN AT LORD'S",
+      "quote": "For 60 overs, they should feel hell out there.",
+      "chips": [
+        "England bowled out in 51.5 overs"
+      ],
+      "image": "assets/photo_9.jpg",
+      "duration": 5.2,
+      "caption": "On number 9. Lord's 2021. Last day, England ko bas 60 overs survive karne the. Team huddle mein Kohli ne bola: For 60 overs, they should feel hell out there. Aur sach mein hell feel hua. England 120 pe all out, India 151 runs se jeeta. Lord's pe aisi aggression pehli baar dekhi.",
+      "vo_text": "लॉर्ड्स 2021। फॉर सिक्सटी ओवर्स, दे शुड फील हेल आउट देयर। और इंग्लैंड 120 पर ऑल आउट।",
+      "vo_file": [
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            32.45,
+            49.5
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            50.95,
+            53.45
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 8,
+      "title": "The 71st Century",
+      "sub": "vs Afghanistan · Asia Cup · Dubai 2022",
+      "stat": 1020,
+      "stat_suffix": "",
+      "stat_label": "DAYS OF WAITING",
+      "chips": [
+        "122* off 61 balls",
+        "First T20I hundred",
+        "The King was back"
+      ],
+      "image": "assets/photo_8.jpg",
+      "duration": 5.0,
+      "caption": "Aur number 8. November 2019 se September 2022. 1020 din, na koi century, bas trolls aur Kohli finished wale memes. Phir Asia Cup mein Afghanistan ke against, 61 balls pe 122 not out. Pehli T20 International century. Wo smile, ring ko kiss karna... The King was back.",
+      "vo_text": "एक हज़ार बीस दिन का इंतज़ार। फिर दुबई में आई इकहत्तरवीं सेंचुरी।",
+      "vo_file": [
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            54.35,
+            61.75
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            68.05,
+            76.05
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            76.65,
+            77.75
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 7,
+      "title": "133* in Hobart",
+      "sub": "vs Sri Lanka · CB Series · 2012",
+      "stat": 133,
+      "stat_suffix": "*",
+      "stat_label": "OFF 86 BALLS",
+      "balls": [
+        "2",
+        "6",
+        "4",
+        "4",
+        "4",
+        "4"
+      ],
+      "balls_label": "24 off one Malinga over",
+      "chips": [
+        "321 needed in 40 overs"
+      ],
+      "image": "assets/photo_7.jpg",
+      "duration": 5.6,
+      "caption": "Aur number 7. Hobart 2012. Race mein rehne ke liye India ko 321 chahiye the, wo bhi bas 40 overs mein. Sab ne umeed chhod di thi. Phir Kohli aaya. 86 balls mein 133 not out. Malinga ke ek over mein 24 run. Match 37th over mein khatam kar diya. Wahi din chase master paida hua.",
+      "vo_text": "होबार्ट। चालीस ओवर में तीन सौ इक्कीस चाहिए थे। मलिंगा के एक ओवर में चौबीस मार दिए।",
+      "vo_file": [
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            78.0,
+            96.8
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 6,
+      "title": "82* in Mohali",
+      "sub": "vs Australia · T20 World Cup · 2016",
+      "stat": 82,
+      "stat_suffix": "*",
+      "stat_label": "OFF 51 BALLS",
+      "chips": [
+        "Chasing 161 in a must-win game",
+        "Ran twos like singles",
+        "Took India into the semis"
+      ],
+      "image": "assets/photo_6.jpg",
+      "duration": 5.0,
+      "caption": "Aur number 6. Mohali, 2016 T20 World Cup. Australia ke against do-or-die match, jo jeeta wo semi-final mein. 161 ka chase, aur wickets gir rahe the. Phir Kohli ne akele match uthaya. 51 balls pe 82 not out. Twos aise bhaag raha tha jaise singles. Aur India seedha semi-final mein.",
+      "vo_text": "मोहाली 2016। मस्ट विन मैच, बयासी नॉट आउट, और टू रन ऐसे भागे जैसे सिंगल्स।",
+      "vo_file": [
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            97.3,
+            104.95
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            105.6,
+            106.82
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            110.65,
+            112.5
+          ]
+        },
+        {
+          "file": "vo/raw/long_take.m4a",
+          "trim": [
+            112.9,
+            118.55
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 5,
+      "title": "2011 World Cup",
+      "sub": "Final vs Sri Lanka · Wankhede",
+      "stat": 28,
+      "stat_suffix": " YRS",
+      "stat_label": "OF WAITING ENDED",
+      "quote": "He carried the nation for 21 years. Time we carried him.",
+      "chips": [
+        "Sachin on his shoulders"
+      ],
+      "image": "assets/photo_5.jpg",
+      "duration": 5.2,
+      "caption": "Number 5 pe hai 2 April 2011, Wankhede. 28 saal ke intezaar ke baad India world champion bana, aur 22 saal ka Kohli final mein Gambhir ke saath ek important partnership kar ke aaya. Lekin mujhe sabse zyada wo moment yaad hai jab team ne Sachin ko kandhon pe uthaya, aur Kohli ne kaha, He carried the nation for 21 years. It was time we carried him.",
+      "vo_text": "2011। अट्ठाईस साल का इंतज़ार खत्म। और सचिन को अपने कंधों पर उठाया।",
+      "vo_file": [
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            11.1,
+            16.3
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            17.0,
+            22.6
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            22.8,
+            24.25
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            24.55,
+            26.8
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            28.65,
+            33.2
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 4,
+      "title": "The 50th ODI Ton",
+      "sub": "vs NZ · WC semi-final · Wankhede 2023",
+      "stat": 50,
+      "stat_suffix": "",
+      "stat_label": "ODI HUNDREDS · WORLD RECORD",
+      "chips": [
+        "Broke Sachin's record of 49",
+        "Sachin in the stands, applauding",
+        "Bowed down to his hero"
+      ],
+      "image": "assets/photo_4.jpg",
+      "duration": 5.2,
+      "caption": "Aur number 4 pe hum wapas Wankhede chalte hain, 2023 World Cup ka semi-final. Stands mein khud Sachin baithe the, aur unke saamne Kohli ne apni 50th ODI century maar ke unka record tod diya. Uske baad usne Sachin ki taraf jhuk ke salaam kiya, aur sach mein isse beautiful moment ho hi nahi sakta tha.",
+      "vo_text": "पचासवीं वनडे सेंचुरी। सचिन के सामने, उन्हीं का रिकॉर्ड, वानखेड़े में।",
+      "vo_file": [
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            33.4,
+            43.15
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            47.15,
+            52.5
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 3,
+      "title": "76 in the Final",
+      "sub": "vs South Africa · T20 WC final · 2024",
+      "stat": 76,
+      "stat_suffix": "",
+      "stat_label": "OFF 59 BALLS · PLAYER OF THE FINAL",
+      "chips": [
+        "India were 34/3",
+        "World Champions after 13 years",
+        "Goodbye to T20Is"
+      ],
+      "image": "assets/photo_3.jpg",
+      "duration": 5.2,
+      "caption": "Number 3 pe hai 2024 T20 World Cup ka final. Poore tournament mein Kohli ka bat chup tha, aur har koi uspe sawaal utha raha tha. Final mein India 34 pe 3 tha, aur tab Kohli ne 59 balls mein 76 runs bana ke innings sambhali aur Player of the Match bana. 13 saal baad India phir se world champion tha, aur match ke baad Kohli ne kaha ki ye uska last T20 World Cup tha.",
+      "vo_text": "वर्ल्ड कप फाइनल, चौंतीस पर तीन। कोहली के छिहत्तर। और हम वर्ल्ड चैंपियंस।",
+      "vo_file": [
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            53.15,
+            58.6
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            62.8,
+            71.3
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            73.7,
+            76.5
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            79.55,
+            83.0
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 2,
+      "title": "82* vs Pakistan",
+      "sub": "T20 World Cup · MCG · 2022",
+      "stat": 82,
+      "stat_suffix": "*",
+      "stat_label": "OFF 53 BALLS",
+      "chips": [
+        "India were 31/4",
+        "Back-to-back sixes off Rauf",
+        "90,000 at the MCG lost it"
+      ],
+      "image": "assets/photo_2.jpg",
+      "duration": 5.4,
+      "caption": "Number 2 pe hai MCG 2022, Pakistan ke against, stadium mein 90,000 log. India 31 pe 4 tha, aur lag raha tha ki match haath se nikal gaya. Last 8 balls mein 28 chahiye the, aur tab Rauf ke over mein Kohli ne straight six maara, seedha bowler ke upar se, aur phir agli ball pe ek aur. Kohli goes down the ground, Kohli goes out of the ground! 82 not out, aur aaj bhi wo innings yaad karke goosebumps aate hain.",
+      "vo_text": "एमसीजी। इकतीस पर चार। रउफ को बैक टू बैक सिक्सेस। आज भी गूज़बम्प्स आते हैं।",
+      "vo_file": [
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            84.8,
+            94.0
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            105.65,
+            121.3
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    },
+    {
+      "rank": 1,
+      "title": "RCB. Finally.",
+      "sub": "IPL 2025 final vs PBKS · Ahmedabad",
+      "stat": 18,
+      "stat_suffix": " YRS",
+      "stat_label": "OF LOYALTY · JERSEY NO. 18",
+      "chips": [
+        "Ee sala cup NAMDU",
+        "Tears on the field",
+        "We all cried here"
+      ],
+      "image": "assets/photo_1.jpg",
+      "duration": 6.0,
+      "crowd": true,
+      "caption": "Aur ab number 1. 18 saal, aur jersey number bhi 18. Har saal hum kehte the Ee sala cup namde, aur har saal dil toot jaata tha. RCB teen finals haari, trolls ne kabhi peecha nahi chhoda, lekin Kohli ne bhi RCB ka saath kabhi nahi chhoda. Phir aaya 3 June 2025, aur finally wo din aa gaya. Kohli ground pe baith ke ro pada, aur uske saath hum bhi roye. Ee sala cup... NAMDU!",
+      "vo_text": "अठारह साल। जर्सी नंबर अठारह। ई साला कप... नमदु। हम सब रोए थे।",
+      "vo_file": [
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            139.55,
+            150.93
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            155.35,
+            162.8
+          ]
+        },
+        {
+          "file": "vo/raw/take3.m4a",
+          "trim": [
+            164.45,
+            167.3
+          ]
+        }
+      ],
+      "clip": null,
+      "clip_start": 0
+    }
+  ],
+  "voice": {
+    "tts_voice": "hm_omega",
+    "tts_speed": 1.2,
+    "recording_tempo": 1.06,
+    "tts_fallback": false
+  },
+  "parts": [
+    {
+      "name": "part1",
+      "output": "out/part1.mp4",
+      "ranks": [
+        10,
+        9,
+        8,
+        7,
+        6
+      ],
+      "hook": {
+        "duration": 3.2,
+        "lines": [
+          "RANKING THE",
+          "BEST DAYS AS A",
+          "KOHLI FAN"
+        ],
+        "tease": "Part 1 · #10 to #6",
+        "image": "assets/photo_8.jpg",
+        "caption": "Kohli fan hona easy nahi hai. Bahut heartbreaks dekhe, par kuch din aise the jo life bhar yaad rahenge. Toh chalo rank karte hain. Aur number 1? Usne toh poore desh ko rula diya.",
+        "vo_text": "",
+        "vo_file": [
+          {
+            "file": "vo/raw/long_take.m4a",
+            "trim": [
+              2.25,
+              12.45
+            ]
+          }
+        ],
+        "badge": [
+          "PART",
+          "1"
+        ]
+      },
+      "outro": {
+        "duration": 3.4,
+        "lines": [
+          "TOP 5 IN",
+          "PART 2"
+        ],
+        "cta": "Comment your #1 · Follow for Part 2",
+        "caption": "Ab tum batao, tumhara number 1 kaunsa hai? Comment mein likho, aur Part 2 ke liye follow kar lo!",
+        "vo_text": "",
+        "vo_file": [
+          {
+            "file": "vo/raw/long_take.m4a",
+            "trim": [
+              250.35,
+              255.6
+            ]
+          }
+        ],
+        "ghost": "5"
+      }
+    },
+    {
+      "name": "part2",
+      "output": "out/part2.mp4",
+      "ranks": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "hook": {
+        "duration": 3.2,
+        "lines": [
+          "RANKING THE",
+          "BEST DAYS AS A",
+          "KOHLI FAN"
+        ],
+        "tease": "#1 made the whole nation cry",
+        "image": "assets/photo_2.jpg",
+        "caption": "Welcome back to Part 2 of my top 10 days as a Kohli fan. Ab aate hain top 5 pe, jahan har moment pehle wale se bada hai, aur number 1 ne toh poore desh ko rula diya tha.",
+        "vo_text": "कोहली फैन होने के मेरे बेस्ट दिन... और नंबर वन ने तो पूरे देश को रुला दिया।",
+        "vo_file": [
+          {
+            "file": "vo/raw/take3.m4a",
+            "trim": [
+              1.75,
+              10.9
+            ]
+          }
+        ],
+        "badge": [
+          "PART",
+          "2"
+        ]
+      },
+      "outro": {
+        "duration": 3.4,
+        "lines": [
+          "WHAT'S YOUR",
+          "#1?"
+        ],
+        "cta": "Comment your #1 · Follow for more",
+        "caption": "Ab tum batao, tumhara number 1 kaunsa hai? Comment mein zaroor likhna.",
+        "vo_text": "आपका नंबर वन क्या है? कमेंट करो।",
+        "vo_file": [
+          {
+            "file": "vo/raw/take3.m4a",
+            "trim": [
+              168.5,
+              172.45
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "theme": {
+    "accent": "#FEDE5C",
+    "bg_top": "#1C1C1F",
+    "bg_bottom": "#060607",
+    "logo": "assets/logo.png"
+  }
+}
