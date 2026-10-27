@@ -6,7 +6,8 @@
 Running order:
   1. Virat clip (footage/virat_interview.mp4, whole 14.7 s) - the very first frame of the video,
      with a VIRAT KOHLI name strap once he is on screen
-  2. bridge card   "1 March 2003 · Centurion / India vs Pakistan. / More than a cricket match."
+  2. suspense: trailer-style slams on heavy braam hits - "Why would Virat Kohli... / ...want to bat with
+     Sachin at Centurion, 2003? / It was not just a match. / It changed the belief of Indian cricket."
   3. the film from 0 s up to the quiet beat after "Centurion was won in both." (FILM_CUT)
   4. ending card   "This is why even / Virat Kohli / wishes he was out there."
   5. Virat callback - on camera: "I would have loved to be batting with Sachin Paaji, when he hit that...",
@@ -123,6 +124,124 @@ def sfx_track(name, dur, hits):
         w.setframerate(SR)
         pcm = (np.clip(mix, -1, 1) * 32767).astype(np.int16)
         w.writeframes(np.repeat(pcm[:, None], 2, axis=1).tobytes())
+    return path
+
+
+# ---------- suspense sequence: trailer-style text slams on heavy "braam" hits ----------
+
+def braam(dur=3.2, weight=1.0):
+    """Cinematic low brass hit: detuned saws at A1/E2 through a closing lowpass, plus sub-drop and a noise crack."""
+    from sfx import _lowpass  # same one-pole filter the sfx kit uses
+    t = np.arange(int(SR * dur)) / SR
+    env = np.minimum(t / 0.015, 1) * np.exp(-t * 1.25)
+    x = np.zeros_like(t)
+    for f in (55.0, 55.4, 54.6, 82.4, 82.0, 110.0):
+        x += 2 * ((t * f + rng_sfx.uniform()) % 1.0) - 1
+    cutoff = 140 + 1600 * np.exp(-t * 3.0)
+    x = _lowpass(x / 6, cutoff)
+    sub = np.sin(2 * np.pi * np.cumsum(70 * np.exp(-t * 1.6) + 28) / SR) * np.exp(-t * 0.9)
+    crack = _lowpass(rng_sfx.standard_normal(len(t)), 2500) * np.exp(-t * 28)
+    y = np.tanh(2.2 * (x * env + 0.9 * sub * weight)) + 0.35 * crack
+    # cheap room: a few decaying echoes so the tail breathes
+    out = y.copy()
+    for d, g in ((0.043, 0.35), (0.071, 0.28), (0.113, 0.2), (0.167, 0.14)):
+        k = int(d * SR)
+        out[k:] += y[:-k] * g
+    return out / np.max(np.abs(out))
+
+
+def drone(dur):
+    """Low tension bed that swells across the sequence."""
+    from sfx import _lowpass
+    t = np.arange(int(SR * dur)) / SR
+    hum = np.sin(2 * np.pi * 41.2 * t) + 0.5 * np.sin(2 * np.pi * 61.7 * t + 1.0)
+    air = _lowpass(rng_sfx.standard_normal(len(t)), 300 + 900 * t / dur)
+    swell = (t / dur) ** 1.5
+    return (0.6 * hum + 0.5 * air) * (0.25 + 0.75 * swell) * np.minimum(t / 0.6, 1)
+
+
+rng_sfx = np.random.default_rng(2003)
+
+SUSPENSE = [  # (start, end, slam time, [(text, font, size, colour)], small kicker above)
+    (0.0, 2.5, 0.15, [("Why would Virat Kohli…", BLACK, 112, (255, 255, 255))], None),
+    (2.5, 5.3, 2.65, [("…want to bat with Sachin", BLACK, 104, (255, 255, 255)),
+                      ("at Centurion, 2003?", BLACK, 104, Y)], None),
+    (5.3, 8.1, 5.5, [("It was not just a match.", BLACK, 118, (255, 255, 255))],
+     "1 MARCH 2003  ·  INDIA vs PAKISTAN"),
+    (8.1, 11.6, 8.25, [("It changed the belief", BLACK, 116, (255, 255, 255)),
+                       ("of Indian cricket.", BLACK, 132, Y)], None),
+]
+SUSPENSE_HITS = [(0.15, 0.55, 0.8), (2.65, 0.62, 0.9), (5.5, 0.75, 1.0), (8.25, 1.0, 1.25)]  # (t, gain, sub weight)
+
+
+def suspense():
+    dur = SUSPENSE[-1][1]
+    plate = np.asarray(Image.open(PLATE).convert("RGB"), np.float32) * 0.55
+    beats = []
+    for t0, t1, slam, lines, kicker in SUSPENSE:
+        layers, ys = text_layer([(txt, f, s, c, 0) for txt, f, s, c in lines])
+        block = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        for im, y in zip(layers, ys):
+            block.alpha_composite(im, ((W - im.width) // 2, y))
+        if kicker:
+            ImageDraw.Draw(block).text((W // 2, ys[0] - 30), kicker, font=ImageFont.truetype(XB, 34),
+                                       fill=(200, 200, 200), anchor="ms")
+        beats.append((t0, t1, slam, block))
+
+    path_v = os.path.join(OUT, "suspense_v.mp4")
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                          "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "16",
+                          "-pix_fmt", "yuv420p", path_v], stdin=subprocess.PIPE)
+    shake_rng = np.random.default_rng(7)
+    for i in range(int(round(dur * FPS))):
+        t = i / FPS
+        beat = next(b for b in beats if b[0] <= t < b[1])
+        t0, t1, slam, block = beat
+        frame = plate.copy()
+        if t >= slam:
+            k = t - slam
+            s = 1.0 + 0.14 * np.exp(-k * 22)            # slams in from slightly too big
+            drift = 1.0 + 0.012 * k                      # then a slow push while it holds
+            sc = s * drift
+            bw, bh = int(W * sc), int(H * sc)
+            lay = block.resize((bw, bh), Image.BICUBIC)
+            jx = jy = 0
+            if k < 0.25:                                 # impact shake
+                amp = 14 * (1 - k / 0.25)
+                jx, jy = shake_rng.uniform(-amp, amp, 2)
+            ox, oy = int((W - bw) / 2 + jx), int((H - bh) / 2 + jy)
+            canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            canvas.alpha_composite(lay.crop((max(0, -ox), max(0, -oy), max(0, -ox) + W, max(0, -oy) + H)),
+                                   (max(0, ox), max(0, oy)))
+            a = np.asarray(canvas, np.float32)
+            alpha = a[..., 3:4] / 255 * min(1.0, k / 0.06)
+            frame = frame * (1 - alpha) + a[..., :3] * alpha
+            frame += 255 * 0.22 * np.exp(-k * 16)        # flash on the hit
+        frame *= min(1.0, (t1 - t) / 0.22)               # dip to black between beats
+        frame *= min(1.0, (t - t0 + 0.04) / 0.12) if t0 > 0 else 1.0
+        p.stdin.write(np.clip(frame, 0, 255).astype(np.uint8).tobytes())
+    p.stdin.close()
+    p.wait()
+
+    n = int(dur * SR)
+    mix = drone(dur) * 0.16
+    for t, g, wgt in SUSPENSE_HITS:
+        h = braam(weight=wgt) * g
+        i = int(t * SR)
+        seg = h[: n - i]
+        mix[i:i + len(seg)] += seg
+    tail = int(0.5 * SR)
+    mix[-tail:] *= np.linspace(1, 0, tail) ** 2
+    mix = np.tanh(mix * 1.1) * 0.89
+    path_a = os.path.join(OUT, "suspense_a.wav")
+    with wave.open(path_a, "wb") as w:
+        w.setnchannels(2)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        pcm = (np.clip(mix, -1, 1) * 32767).astype(np.int16)
+        w.writeframes(np.repeat(pcm[:, None], 2, axis=1).tobytes())
+    path = os.path.join(OUT, "suspense.mp4")
+    run("-i", path_v, "-i", path_a, "-map", "0:v", "-map", "1:a", *ENC, "-shortest", path)
     return path
 
 
@@ -258,12 +377,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     parts = [
         virat_hook(),
-        card("bridge",
-             [("1 MARCH 2003  ·  CENTURION", XB, 34, (190, 190, 190), 6),
-              ("India vs Pakistan.", BLACK, 104, (255, 255, 255), 0),
-              ("More than a cricket match.", BLACK, 104, Y, 0)],
-             [0.2, 0.75, 1.75], 5.2,
-             [(0.55, "whoosh", 0.25), (0.75, "impact", 0.35), (1.75, "impact", 0.45)]),
+        suspense(),
         film_part("film_a", 0, FILM_CUT),
         card("ending",
              [("This is why even", BLACK, 92, (255, 255, 255), 0),
