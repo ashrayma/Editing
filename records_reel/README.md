@@ -13,7 +13,9 @@ node capture/record.js           # 4. screen recordings + screenshots of the rec
 python3 transcribe.py vo_raw/*    # 5. phrase-level transcript of the raw takes (Whisper small.en, offline)
 python3 words.py vo_raw/<take>   #    word timestamps (zipformer) for exact cut points
 python3 build_vo.py              #    narration from the edit list in script.py (--tts: temporary AI voice)
-./make.sh                        # 6. composition -> HyperFrames render -> soundtrack -> final mux
+python3 faces.py                 # 6. find the players' faces in every photo / cut-out (YuNet)
+node measure.js && python3 layout.py   # 7. move any type off faces, hide the logo over faces (repeat until 0)
+./make.sh                        # 8. composition -> HyperFrames render -> soundtrack -> final mux
 ```
 
 ## Your voiceover

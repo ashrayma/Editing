@@ -27,6 +27,10 @@ LINE = {ln["id"]: ln for ln in TL["lines"]}
 END_CARD = 2.4
 TOTAL = round(TL["duration"] + END_CARD, 2)
 
+FACES = json.load(open(os.path.join(HERE, "assets", "faces.json")))
+_lp = os.path.join(HERE, "out", "layout.json")
+LAYOUT = json.load(open(_lp)) if os.path.exists(_lp) else {"move": {}, "brand_hide": []}
+
 os.makedirs(MEDIA, exist_ok=True)
 els, js, events = [], [], []
 _n = [0]
@@ -71,6 +75,19 @@ def media(path):
     return "media/" + name
 
 
+def mv(i, top, left=None):
+    """Position of a type element, after any move the face checker (layout.py) decided on."""
+    o = LAYOUT["move"].get(i, {})
+    return o.get("top", top), o.get("left", left)
+
+
+def face_marks(key, ox=0.0, oy=0.0, dw=None, dh=None):
+    """Invisible boxes over each face of an image drawn at (ox, oy, dw, dh) px inside its transformed wrapper;
+    the checker reads their on-screen rects."""
+    return "".join(f'<div class="face" style="left:{ox + x * dw:.0f}px;top:{oy + y * dh:.0f}px;width:{w * dw:.0f}px;'
+                   f'height:{h * dh:.0f}px"></div>' for x, y, w, h in FACES.get(key, []))
+
+
 def merge_classes(h):
     """clip_attrs() puts class="clip" on a tag that may carry its own class too: fold them into one attribute."""
     def fix(m):
@@ -104,7 +121,7 @@ def clip_attrs(start, dur):
 def stage(start, dur, tone="#0b0b0c"):
     """An opaque grain panel: resets the frame for cut-outs and type."""
     i = nid("st")
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};background:{tone}">'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:{tone}">'
         f'<div class="grain"></div><div class="vig"></div></div>')
     return i
 
@@ -124,16 +141,25 @@ def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=
         tall = im.height / im.width >= 1.25
         ih = round(W * im.height / im.width)
     filt = {"grey": "grayscale(1) contrast(1.1) brightness(.85)", "dim": "brightness(.7)"}.get(fx, "none")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        iw, ihh = im.size
     if tall or not band:
-        pos = f"{FOCUS.get(name, '50%')} 30%" if not tall else "50% 30%"
-        inner = (f'<img id="{i}m" src="{src}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;'
-                 f'object-position:{pos};transform-origin:{origin};filter:{filt}">')
+        fx_ = float(FOCUS.get(name, "50%").rstrip("%")) / 100 if not tall else 0.5
+        pos = f"{fx_ * 100:.0f}% 30%"
+        sc = max(W / iw, H / ihh)
+        dw, dh = iw * sc, ihh * sc
+        marks = face_marks("hi/" + name, (W - dw) * fx_, (H - dh) * 0.3, dw, dh)
+        inner = (f'<div id="{i}m" style="position:absolute;inset:0;transform-origin:{origin}">'
+                 f'<img src="{src}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;'
+                 f'object-position:{pos};filter:{filt}">{marks}</div>')
     else:
         top = round(H * 0.42 - ih / 2)
+        marks = face_marks("hi/" + name, 0, 0, W, ih)
         inner = (f'<img src="{fill}" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover">'
-                 f'<img id="{i}m" src="{src}" style="position:absolute;left:0;top:{top}px;width:100%;height:{ih}px;object-fit:cover;'
-                 f'transform-origin:{origin};filter:{filt};box-shadow:0 40px 120px rgba(0,0,0,.75)">')
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};overflow:hidden;background:#000">'
+                 f'<div id="{i}m" style="position:absolute;left:0;top:{top}px;width:100%;height:{ih}px;transform-origin:{origin}">'
+                 f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;filter:{filt};box-shadow:0 40px 120px rgba(0,0,0,.75)">'
+                 f'{marks}</div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};overflow:hidden;background:#000">'
         f'{inner}<div class="shade"></div><div class="vig"></div></div>')
     if side:
         if whoosh:
@@ -156,9 +182,9 @@ def sticker(name, start, dur, side="right", x=None, h=1250, bottom=0, grey=False
         h, w = round(h * 1000 / w), 1000
     left = x if x is not None else (W - w - 20 if side == "right" else 20)
     filt = "grayscale(1) brightness(.9)" if grey else "none"
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:{left}px;bottom:{bottom}px;width:{w}px;height:{h}px;z-index:{z()}">'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer" style="position:absolute;left:{left}px;bottom:{bottom}px;width:{w}px;height:{h}px;z-index:{z()}">'
         f'<img id="{i}m" src="{src}" style="width:100%;height:100%;filter:{filt} drop-shadow(0 30px 40px rgba(0,0,0,.6));'
-        f'transform:{"scaleX(-1)" if flip else "none"}"></div>')
+        f'transform:{"scaleX(-1)" if flip else "none"}">{face_marks("cut/" + name, 0, 0, w, h)}</div>')
     cue(start - 0.08, "whoosh", 0.55)
     dx = 700 if side == "right" else -700
     anim(f'tl.fromTo("#{i}",{{x:{dx},opacity:0}},{{x:0,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
@@ -173,7 +199,7 @@ def video3d(name, start, dur):
     last = media(f"blender/renders/{name}_last.png")
     with open(os.path.join(HERE, "blender", "renders", name + ".len")) as f:
         vlen = float(f.read())
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};background:#030304">'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#030304">'
         f'<img src="{last}" style="position:absolute;inset:0;width:100%;height:100%">'
         f'<video id="{i}v" class="clip" src="{src}" muted playsinline data-start="{start}" data-duration="{min(dur, vlen)}" '
         f'data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>')
@@ -217,8 +243,9 @@ def title(lines, start, dur, y=330, size=120, color="#fff", accent=(), align="ce
     cue(start, sfx, 1.0)
     rows = "".join(f'<div class="mask"><div id="{i}l{k}" class="ln" style="color:{Y if k in accent else color}">'
                    f'{html.escape(t)}</div></div>' for k, t in enumerate(lines))
+    y, _ = mv(i, y)
     add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:70px;right:70px;top:{y}px;z-index:{z()};'
-        f'font-size:{size}px;text-align:{align};font-style:{"italic" if italic else "normal"}" class="title">{rows}</div>')
+        f'font-size:{size}px;text-align:{align};font-style:{"italic" if italic else "normal"}" class="title avoid">{rows}</div>')
     for k in range(len(lines)):
         anim(f'tl.fromTo("#{i}l{k}",{{yPercent:105,filter:"blur(12px)"}},{{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"}},{start + 0.08 * k})')
     return i
@@ -240,7 +267,8 @@ def typed(lines, start, dur, x=70, y=420, header=None, size=56, cps=34, color=Y)
         for c in range(0, len(ln), 3):
             cue(t + c / cps, "key", 0.5)
         t += len(ln) / cps + 0.12
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:{x}px;top:{y}px;z-index:{z()}" class="typed">'
+    y, x = mv(i, y, x)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:{x}px;top:{y}px;z-index:{z()}" class="typed avoid">'
         f'{"".join(rows)}</div>')
     return i
 
@@ -259,8 +287,9 @@ def odo(num, start, dur, y=520, size=330, color=Y, label=None, x=None, sfx=True)
         else:
             cols.append(f'<span>{html.escape(ch)}</span>')
     lab = f'<div class="olab">{html.escape(label)}</div>' if label else ""
+    y, x = mv(i, y, x)
     pos = f"left:{x}px" if x is not None else "left:0;right:0;text-align:center"
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="odo" style="{pos};top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="odo avoid" style="{pos};top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">'
         f'<div class="digits">{"".join(cols)}</div>{lab}</div>')
     anim(f'tl.fromTo("#{i}",{{scale:0.8,opacity:0}},{{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"}},{start})')
     return i
@@ -270,7 +299,8 @@ def tag(txt, start, dur, x=70, y=1250, dark=False):
     """Name tag: yellow pill, the name types in."""
     i = nid("tg")
     chars = "".join(f'<span class="ch">{html.escape(c) if c != " " else "&nbsp;"}</span>' for c in txt)
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tag{" dark" if dark else ""}" style="left:{x}px;top:{y}px;z-index:{z()}">{chars}</div>')
+    y, x = mv(i, y, x)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tag avoid{" dark" if dark else ""}" style="left:{x}px;top:{y}px;z-index:{z()}">{chars}</div>')
     anim(f'tl.fromTo("#{i}",{{scaleX:0}},{{scaleX:1,duration:0.35,ease:"expo.out"}},{start})')
     anim(f'tl.fromTo("#{i} .ch",{{opacity:0}},{{opacity:1,duration:0.01,stagger:0.035}},{start + 0.2})')
     cue(start, "pop", 0.8)
@@ -280,7 +310,8 @@ def tag(txt, start, dur, x=70, y=1250, dark=False):
 def chip(txt, start, dur, x=70, y=300):
     """Small glass label (date / venue)."""
     i = nid("cp")
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="chip" style="left:{x}px;top:{y}px;z-index:{z()}"><span class="dot"></span>{html.escape(txt)}</div>')
+    y, x = mv(i, y, x)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="chip avoid" style="left:{x}px;top:{y}px;z-index:{z()}"><span class="dot"></span>{html.escape(txt)}</div>')
     anim(f'tl.fromTo("#{i}",{{y:24,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"expo.out"}},{start})')
     cue(start, "pop", 0.6)
 
@@ -307,7 +338,8 @@ def bars(a, b, la, lb, start, dur, y=440, unit=""):
 def stamp(txt, start, dur, y=760, size=300, color=Y, rot=-6):
     """Word slams in from big to size with a shake."""
     i = nid("sm")
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="stamp" style="top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">{html.escape(txt)}</div>')
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="stamp avoid" style="top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">{html.escape(txt)}</div>')
     anim(f'tl.fromTo("#{i}",{{scale:2.6,opacity:0,rotation:{rot * 2}}},{{scale:1,opacity:1,rotation:{rot},duration:0.32,ease:"power4.in"}},{start})')
     shake(start + 0.3)
     cue(start + 0.3, "impact", 1.0)
@@ -400,7 +432,8 @@ def captions():
             txt = " ".join(w[0] for w in grp).upper()
             num = any(any(c.isdigit() for c in w[0]) for w in grp)
             i = nid("cap")
-            add(f'<div id="{i}" {clip_attrs(t0, t1 - t0)} class="cap{" num" if num else ""}"><span>{html.escape(txt)}</span></div>')
+            cy, _ = mv(i, 1420)
+            add(f'<div id="{i}" {clip_attrs(t0, t1 - t0)} class="cap avoid{" num" if num else ""}" style="top:{cy}px"><span>{html.escape(txt)}</span></div>')
             anim(f'tl.fromTo("#{i} span",{{scale:0.82,y:14}},{{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"}},{t0})')
 
 
@@ -420,10 +453,10 @@ def edit():
     odo("3", word("h3", 3), e("h3") - word("h3", 3) + 0.3, y=300, size=420, sfx=False)
     cue(word("h3", 3), "impact", 0.8)
     title(["RECORDS"], word("h3", 3) + 0.15, e("h3") - word("h3", 3) + 0.15, y=760, size=120)
-    sticker("kohli_2023_hands", word("h3", 5) - 0.1, e("h3") - word("h3", 5) + 0.4, side="right", h=900)
+    sticker("kohli_2023_hands", word("h3", 5) - 0.1, e("h3") - word("h3", 5) + 0.4, side="right", h=900, bottom=240)
     # split: Kohli in colour, Sachin in grey
     stage(s("h4", -0.2), span("h4", "n1a") + 0.2)
-    sticker("kohli_odi_bat_raise", s("h4", -0.2), span("h4", "n1a") + 0.2, side="left", h=1150, x=-60)
+    sticker("kohli_odi_bat_raise", s("h4", -0.2), span("h4", "n1a") + 0.2, side="left", h=1150, x=-60, bottom=40)
     sticker("sachin_odi_walk", s("h4", -0.1), span("h4", "n1a") + 0.1, side="right", h=1150, x=560, grey=True)
     title(["NEVER", "TOUCHED"], word("h4", 3), span("h4", "n1a") - (word("h4", 3) - s("h4")), y=300, size=130, accent=(1,), sfx="impact")
     glitch(e("h4", 0.1), 0.3)
@@ -506,7 +539,7 @@ def edit():
     # 20 years: a timeline 2003 -> 2023
     stage(s("w2", -0.05), span("w2", "w3") + 0.05)
     tl_line(s("w2"), span("w2", "w3"))
-    photo("kohli_2023_hands", s("w3", -0.05), span("w3", "w4") + 0.05, side="right", push=(1.0, 1.1), origin="50% 25%")
+    photo("kohli_2023_hands", s("w3", -0.05), span("w3", "w4") + 0.05, side="right", push=(1.0, 1.06), origin="50% 45%")
     chip("World Cup 2023", s("w3", 0.1), span("w3", "w4") - 0.1, y=300)
     odo("765", word("w3", 4) - 0.1, span("w3", "w4") - (word("w3", 4) - 0.1 - s("w3")), y=380, size=300, label="RUNS")
     stage(s("w4", -0.05), span("w4", "w6") + 0.05, tone="#0e0e10")
@@ -532,7 +565,7 @@ def edit():
     sticker("kohli_odi_celebrate_wide", s("o1", -0.05), span("o1", "o2") + 0.05, side="left", h=820, x=-120, bottom=520)
     sticker("sachin_test_celebrate", s("o1", 0.05), span("o1", "o2") - 0.05, side="right", h=1300, x=520)
     title(["BETTER", "THAN SACHIN?"], s("o1", 0.1), word("o1", 6) - s("o1", 0.1), y=300, size=104, accent=(1,))
-    stamp("NO.", word("o1", 6) - 0.15, e("o1") - word("o1", 6) + 0.5, y=330, size=330, color="#fff")
+    stamp("NO.", word("o1", 6) - 0.15, s("o2") - word("o1", 6) + 0.1, y=330, size=330, color="#fff")
     photo("sachin_odi_bat_raise", s("o2", -0.05), span("o2", "o3") + 0.05, side="up", push=(1.0, 1.1), origin="50% 20%")
     odo("100", s("o2", 0.05), word("o2", 3) - s("o2", 0.05) + 0.2, y=300, size=300, label="INTERNATIONAL HUNDREDS")
     odo("24", word("o2", 3), e("o2") - word("o2", 3) + 0.25, y=300, size=300, label="YEARS")
@@ -540,12 +573,16 @@ def edit():
     title(["THE", "BENCHMARK"], word("o3", 3), span("o3", "o4") - (word("o3", 3) - s("o3")), y=300, size=128, accent=(1,), sfx="impact")
     # recap: the three, ticked off
     stage(s("o4", -0.05), span("o4", "o5") + 0.05)
-    sticker("kohli_2023_hands", s("o4", -0.05), span("o4", "o5") + 0.05, side="right", h=950, x=380)
+    sticker("kohli_2023_hands", s("o4", -0.05), span("o4", "o5") + 0.05, side="right", h=950, x=380, bottom=240)
     recap(s("o4"), span("o4", "o5"))
     # CTA + logo
     video3d("logo", s("o5", -0.05), TOTAL - s("o5", -0.05))
     comment_cta(s("o5", 0.1), TOTAL - s("o5", 0.1))
-    anim(f'tl.to(".brand",{{opacity:0,duration:0.3}},{s("o5", -0.3)})')
+    # the logo steps aside whenever a face is under it (windows found by layout.py)
+    for a, b in LAYOUT["brand_hide"] + [[s("o5", -0.3), TOTAL + 1]]:
+        anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
+        if b < TOTAL:
+            anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.85,duration:0.25,immediateRender:false}},{b})')
 
 
 def tl_line(start, dur):
@@ -621,6 +658,7 @@ html,body{{margin:0;background:#000}}
 .chip{{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 28px;border-radius:999px;background:rgba(20,20,22,.6);
   backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18);color:#fff;font-size:36px;font-weight:700;white-space:nowrap}}
 .chip .dot{{width:14px;height:14px;border-radius:50%;background:{Y};box-shadow:0 0 14px {Y}}}
+.face{{position:absolute;pointer-events:none}}
 .cap{{position:absolute;left:0;right:0;top:1420px;text-align:center;z-index:900}}
 .cap span{{display:inline-block;padding:10px 22px;border-radius:12px;background:#fff;color:#0b0b0c;font-size:58px;font-weight:900;letter-spacing:-0.01em;
   box-shadow:0 10px 30px rgba(0,0,0,.45)}}
@@ -683,7 +721,7 @@ def build():
 {chr(10).join(els)}
 </div>
 <div id="grainTop"></div>
-<div class="brand"><img src="media/logo.png"></div>
+<div class="brand" id="brand"><img src="media/logo.png"></div>
 </div>
 <script src="gsap.min.js"></script>
 <script>
