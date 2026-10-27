@@ -6,8 +6,10 @@
 Running order:
   1. Virat clip (footage/virat_interview.mp4, whole 14.7 s) - the very first frame of the video,
      with a VIRAT KOHLI name strap once he is on screen
-  2. suspense: trailer-style slams on heavy braam hits - "Why would Virat Kohli... / ...want to bat with
-     Sachin at Centurion, 2003? / It was not just a match. / It changed the belief of Indian cricket."
+  2. suspense: trailer-style text on heavy braam hits over blurred, pushing-in real footage -
+     "Why would Virat Kohli..." (over Virat) / "...want to bat with Sachin at Centurion, 2003?" (the upper-cut) /
+     ICC CRICKET WORLD CUP 2003 SOUTH AFRICA title (Centurion crowd) / "It was not just a match." (flags) /
+     "It changed the belief of Indian cricket." (crowd erupting), dissolving into the film's first frame
   3. the film from 0 s up to the quiet beat after "Centurion was won in both." (FILM_CUT)
   4. ending card   "This is why even / Virat Kohli / wishes he was out there."
   5. Virat callback - on camera: "I would have loved to be batting with Sachin Paaji, when he hit that...",
@@ -44,7 +46,7 @@ FILM_CUT = 390.0        # dark, quiet beat between "Centurion was won in both." 
 VIRAT_ON = 4.6          # first shot of Virat (before that it's the interviewer asking)
 CALLBACK_IN = 10.9      # "I would have loved to be batting..."
 VIRAT_OFF = 13.567      # source cuts from Virat to the interviewer ("...shot off Shoaib")
-ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-r", str(FPS),
+ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "22", "-pix_fmt", "yuv420p", "-r", str(FPS),
        "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-ac", "2"]
 
 
@@ -162,72 +164,280 @@ def drone(dur):
 
 rng_sfx = np.random.default_rng(2003)
 
-SUSPENSE = [  # (start, end, slam time, [(text, font, size, colour)], small kicker above)
-    (0.0, 2.5, 0.15, [("Why would Virat Kohli…", BLACK, 112, (255, 255, 255))], None),
-    (2.5, 5.3, 2.65, [("…want to bat with Sachin", BLACK, 104, (255, 255, 255)),
-                      ("at Centurion, 2003?", BLACK, 104, Y)], None),
-    (5.3, 8.1, 5.5, [("It was not just a match.", BLACK, 118, (255, 255, 255))],
-     "1 MARCH 2003  ·  INDIA vs PAKISTAN"),
-    (8.1, 11.6, 8.25, [("It changed the belief", BLACK, 116, (255, 255, 255)),
-                       ("of Indian cricket.", BLACK, 132, Y)], None),
+CLIPS = os.path.join(HERE, "footage", "clips")
+# Each segment: duration, background, text. Backgrounds are real footage, blurred + graded, slowly pushing in.
+#   ("still", path, t)  -> a frame from a video;  ("clip", name, speed) -> footage/clips/<name>.mp4
+SEGMENTS = [
+    dict(dur=2.6, bg=("still", VIRAT, 12.6), blur_in=True,
+         lines=[[("Why", 0), ("would", 0), ("Virat", 1), ("Kohli…", 1)]], size=118),
+    dict(dur=2.9, bg=("clip", "m_six_sideon", 0.5),
+         lines=[[("…want", 0), ("to", 0), ("bat", 0), ("with", 0), ("Sachin", 0)],
+                [("at", 1), ("Centurion,", 1), ("2003?", 1)]], size=104),
+    dict(dur=4.3, bg=("clip", "crowd_flags", 1.0), title=True),
+    dict(dur=2.6, bg=("clip", "m_flags_wave", 0.8),
+         lines=[[("It", 0), ("was", 0), ("not", 0), ("just", 0), ("a", 0), ("match.", 0)]], size=124),
+    dict(dur=3.7, bg=("clip", "m_six_crowd_jump", 0.8),
+         lines=[[("It", 0), ("changed", 0), ("the", 0), ("belief", 0)],
+                [("of", 1), ("Indian", 1), ("cricket.", 1)]], size=124, final=True),
 ]
-SUSPENSE_HITS = [(0.15, 0.55, 0.8), (2.65, 0.62, 0.9), (5.5, 0.75, 1.0), (8.25, 1.0, 1.25)]  # (t, gain, sub weight)
+STAGGER, RISE = 0.07, 0.38   # per-word delay, per-word rise time
+LINE_GAP = 0.3               # second line starts this long after the first line has landed
+
+
+def bg_frames(spec, dur):
+    """Yield 960x540 RGB frames for one segment (crop off score bar / channel bug, slow, fill 16:9)."""
+    n = int(round(dur * FPS))
+    kind = spec[0]
+    if kind == "still":
+        cmd = ["ffmpeg", "-v", "error", "-ss", str(spec[2]), "-i", spec[1], "-frames:v", "1",
+               "-vf", "crop=2880:1620:400:0,scale=960:540", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]  # drop subtitle line
+        fr = np.frombuffer(subprocess.run(cmd, capture_output=True, check=True).stdout, np.uint8).reshape(540, 960, 3)
+        for _ in range(n):
+            yield fr
+        return
+    _, name, speed = spec
+    vf = (f"crop=716:600:0:50,setpts={1 / speed}*PTS,fps={FPS},"
+          "scale=960:-2,crop=960:540:0:(ih-540)/2")
+    cmd = ["ffmpeg", "-v", "error", "-stream_loop", "-1", "-i", os.path.join(CLIPS, name + ".mp4"),
+           "-vf", vf, "-frames:v", str(n), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    last = None
+    for _ in range(n):
+        buf = p.stdout.read(960 * 540 * 3)
+        if len(buf) == 960 * 540 * 3:
+            last = np.frombuffer(buf, np.uint8).reshape(540, 960, 3)
+        yield last
+    p.stdout.close()
+    p.wait()
+
+
+VIGNETTE = None
+
+
+def grade_bg(small, t, dur, blur_in=False):
+    """Push-in, blur, darken, desaturate toward the film's warm-dark look; returns float 1080p frame."""
+    global VIGNETTE
+    from PIL import ImageFilter
+    im = Image.fromarray(small)
+    z = 1.04 + 0.06 * (t / dur)
+    cw, ch = 960 / z, 540 / z
+    im = im.crop(((960 - cw) / 2, (540 - ch) / 2, (960 + cw) / 2, (540 + ch) / 2)).resize((960, 540), Image.BILINEAR)
+    r = 7 if not blur_in else 0.5 + 6.5 * ease(t / 0.5)
+    im = im.filter(ImageFilter.GaussianBlur(r)).resize((W, H), Image.BILINEAR)
+    a = np.asarray(im, np.float32)
+    lum = a.mean(-1, keepdims=True)
+    a = lum + (a - lum) * 0.55
+    a = a * np.array([1.02, 0.97, 0.9], np.float32)
+    dark = 0.42 if not blur_in else 1.0 - 0.58 * ease(t / 0.5)
+    if VIGNETTE is None:
+        yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+        VIGNETTE = (1 - 0.65 * np.clip(((xx - W / 2) / (W * 0.62)) ** 2 + ((yy - H / 2) / (H * 0.68)) ** 2, 0, 1))[..., None]
+    return a * dark * VIGNETTE
+
+
+def word_images(lines, size):
+    f = ImageFont.truetype(BLACK, size)
+    space = f.getlength(" ")
+    rows = []
+    for line in lines:
+        ims = []
+        for txt, accent in line:
+            l, t, r, b = f.getbbox(txt)
+            im = Image.new("RGBA", (r - l + 40, size + 60), (0, 0, 0, 0))
+            d = ImageDraw.Draw(im)
+            col = Y if accent else (255, 255, 255)
+            d.text((20 - l, 20), txt, font=f, fill=col)
+            ims.append(im)
+        width = sum(i.width - 40 for i in ims) + space * (len(ims) - 1)
+        rows.append((ims, width))
+    lh = int(size * 1.12)
+    top = (H - lh * len(rows)) // 2 - 30
+    placed = []  # (img, x, y, line index, word index)
+    for li, (ims, width) in enumerate(rows):
+        x = (W - width) / 2
+        for wi, im in enumerate(ims):
+            placed.append((im, int(x) - 20, top + li * lh - 20, li, wi))
+            x += im.width - 40 + space
+    return placed, [len(r[0]) for r in rows]
+
+
+def word_start(li, wi, counts, t_text):
+    s = t_text
+    for k in range(li):
+        s += (counts[k] - 1) * STAGGER + RISE + LINE_GAP
+    return s + wi * STAGGER
+
+
+def landing(counts, t_text):
+    li = len(counts) - 1
+    return word_start(li, counts[-1] - 1, counts, t_text) + RISE * 0.7
+
+
+def draw_words(frame, placed, counts, t, t_text, exit_k):
+    from PIL import ImageFilter
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    for im, x, y, li, wi in placed:
+        p = (t - word_start(li, wi, counts, t_text)) / RISE
+        if p <= 0:
+            continue
+        e = ease(p)
+        w = im
+        blur = 9 * (1 - e) + 10 * exit_k
+        if blur > 0.4:
+            w = im.filter(ImageFilter.GaussianBlur(blur))
+        a = e * (1 - exit_k)
+        if a < 1:
+            w = w.copy()
+            w.putalpha(w.getchannel("A").point(lambda v, a=a: int(v * a)))
+        layer.alpha_composite(w, (x, int(y + 46 * (1 - e))))
+    return layer
+
+
+def title_layer(t):
+    """ICC CRICKET WORLD CUP / 2003 (digits rise) / yellow rule / SOUTH AFRICA (wipe) / date line."""
+    from PIL import ImageFilter
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    # kicker with tracking that tightens as it fades in
+    k = ease((t - 0.1) / 0.6)
+    if k > 0:
+        f = ImageFont.truetype(XB, 40)
+        txt = "ICC CRICKET WORLD CUP"
+        track = 34 - 22 * k
+        w = sum(f.getlength(c) for c in txt) + track * (len(txt) - 1)
+        x = (W - w) / 2
+        for c in txt:
+            d.text((x, 250), c, font=f, fill=(235, 235, 235, int(255 * k)))
+            x += f.getlength(c) + track
+    # 2003: each digit rises out of a mask line
+    f = ImageFont.truetype(BLACK, 270)
+    digits = "2003"
+    widths = [f.getlength(c) for c in digits]
+    x0 = (W - sum(widths) - 10 * 3) / 2
+    base_y, mask_bottom = 310, 310 + 300
+    for i, c in enumerate(digits):
+        p = ease((t - 0.45 - i * 0.09) / 0.42)
+        if p > 0:
+            dig = Image.new("RGBA", (int(widths[i]) + 40, 340), (0, 0, 0, 0))
+            ImageDraw.Draw(dig).text((20, 0), c, font=f, fill=Y)
+            off = int(320 * (1 - p))
+            visible = dig.crop((0, 0, dig.width, max(0, min(340, mask_bottom - (base_y + off)))))
+            if visible.height:
+                layer.alpha_composite(visible, (int(x0) - 20, base_y + off))
+        x0 += widths[i] + 10
+    # rule draws out from the centre
+    r = ease((t - 1.25) / 0.45)
+    if r > 0:
+        half = 470 * r
+        d.rectangle((W / 2 - half, 640, W / 2 + half, 647), fill=Y + (255,))
+    # SOUTH AFRICA wipes in left to right
+    wpe = ease((t - 1.45) / 0.55)
+    if wpe > 0:
+        f2 = ImageFont.truetype(BLACK, 92)
+        txt = "SOUTH AFRICA"
+        track = 14
+        w = int(sum(f2.getlength(c) for c in txt) + track * (len(txt) - 1))
+        sa = Image.new("RGBA", (w + 20, 120), (0, 0, 0, 0))
+        sd = ImageDraw.Draw(sa)
+        x = 10
+        for c in txt:
+            sd.text((x, 0), c, font=f2, fill=(255, 255, 255))
+            x += f2.getlength(c) + track
+        sa = sa.crop((0, 0, max(1, int(sa.width * wpe)), sa.height))
+        layer.alpha_composite(sa, ((W - w - 20) // 2, 672))
+    # date line
+    q = ease((t - 2.3) / 0.5)
+    if q > 0:
+        f3 = ImageFont.truetype(XB, 36)
+        txt = "1 MARCH  ·  CENTURION  ·  INDIA vs PAKISTAN"
+        tw = f3.getlength(txt)
+        d.text(((W - tw) / 2, 812 + 20 * (1 - q)), txt, font=f3, fill=(215, 215, 215, int(255 * q)))
+    return layer
+
+
+TITLE_HIT = 0.45 + 3 * 0.09 + 0.3   # "2003" fully landed
 
 
 def suspense():
-    dur = SUSPENSE[-1][1]
-    plate = np.asarray(Image.open(PLATE).convert("RGB"), np.float32) * 0.55
-    beats = []
-    for t0, t1, slam, lines, kicker in SUSPENSE:
-        layers, ys = text_layer([(txt, f, s, c, 0) for txt, f, s, c in lines])
-        block = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-        for im, y in zip(layers, ys):
-            block.alpha_composite(im, ((W - im.width) // 2, y))
-        if kicker:
-            ImageDraw.Draw(block).text((W // 2, ys[0] - 30), kicker, font=ImageFont.truetype(XB, 34),
-                                       fill=(200, 200, 200), anchor="ms")
-        beats.append((t0, t1, slam, block))
-
+    film0 = np.asarray(Image.open(os.path.join(OUT, "film_first.png")).convert("RGB"), np.float32)
     path_v = os.path.join(OUT, "suspense_v.mp4")
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "16",
                           "-pix_fmt", "yuv420p", path_v], stdin=subprocess.PIPE)
-    shake_rng = np.random.default_rng(7)
-    for i in range(int(round(dur * FPS))):
-        t = i / FPS
-        beat = next(b for b in beats if b[0] <= t < b[1])
-        t0, t1, slam, block = beat
-        frame = plate.copy()
-        if t >= slam:
-            k = t - slam
-            s = 1.0 + 0.14 * np.exp(-k * 22)            # slams in from slightly too big
-            drift = 1.0 + 0.012 * k                      # then a slow push while it holds
-            sc = s * drift
-            bw, bh = int(W * sc), int(H * sc)
-            lay = block.resize((bw, bh), Image.BICUBIC)
+    rng_shake = np.random.default_rng(7)
+    hits, whooshes = [], []
+    t_global = 0.0
+    prev_last = None
+    for si, seg in enumerate(SEGMENTS):
+        dur = seg["dur"]
+        title = seg.get("title")
+        t_text = 0.12
+        if title:
+            hit = TITLE_HIT
+        else:
+            placed, counts = word_images(seg["lines"], seg["size"])
+            hit = landing(counts, t_text)
+        hits.append((t_global + hit, 1.0 if seg.get("final") else (0.8 if title else 0.6 + 0.05 * si),
+                     1.3 if seg.get("final") else 1.0))
+        if si:
+            whooshes.append(t_global - 0.22)
+        frames = bg_frames(seg["bg"], dur)
+        for i in range(int(round(dur * FPS))):
+            t = i / FPS
+            frame = grade_bg(next(frames), t, dur, seg.get("blur_in"))
+            if prev_last is not None and t < 0.16:            # quick dissolve from the previous card
+                a = t / 0.16
+                frame = prev_last * (1 - a) + frame * a
+            exit_k = ease((t - (dur - 0.24)) / 0.24) if not seg.get("final") else 0.0
+            layer = title_layer(t) if title else draw_words(frame, placed, counts, t, t_text, exit_k)
+            if title and exit_k > 0:
+                layer.putalpha(layer.getchannel("A").point(lambda v, k=exit_k: int(v * (1 - k))))
+            # punch + shake on the hit
+            k = t - hit
+            sc = 1.0
             jx = jy = 0
-            if k < 0.25:                                 # impact shake
-                amp = 14 * (1 - k / 0.25)
-                jx, jy = shake_rng.uniform(-amp, amp, 2)
-            ox, oy = int((W - bw) / 2 + jx), int((H - bh) / 2 + jy)
-            canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-            canvas.alpha_composite(lay.crop((max(0, -ox), max(0, -oy), max(0, -ox) + W, max(0, -oy) + H)),
-                                   (max(0, ox), max(0, oy)))
-            a = np.asarray(canvas, np.float32)
-            alpha = a[..., 3:4] / 255 * min(1.0, k / 0.06)
-            frame = frame * (1 - alpha) + a[..., :3] * alpha
-            frame += 255 * 0.22 * np.exp(-k * 16)        # flash on the hit
-        frame *= min(1.0, (t1 - t) / 0.22)               # dip to black between beats
-        frame *= min(1.0, (t - t0 + 0.04) / 0.12) if t0 > 0 else 1.0
-        p.stdin.write(np.clip(frame, 0, 255).astype(np.uint8).tobytes())
+            if 0 <= k < 0.3:
+                sc = 1.0 + 0.05 * np.exp(-k * 18)
+                amp = 12 * (1 - k / 0.3)
+                jx, jy = rng_shake.uniform(-amp, amp, 2)
+            if exit_k > 0:
+                sc *= 1 + 0.07 * exit_k
+            if sc != 1.0 or jx or jy:
+                bw, bh = int(W * sc), int(H * sc)
+                big = layer.resize((bw, bh), Image.BILINEAR)
+                ox, oy = int((bw - W) / 2 - jx), int((bh - H) / 2 - jy)
+                layer = big.crop((ox, oy, ox + W, oy + H))
+            la = np.asarray(layer, np.float32)
+            al = la[..., 3:4] / 255
+            frame = frame * (1 - al) + la[..., :3] * al
+            if 0 <= k:
+                frame = frame + 255 * 0.2 * np.exp(-k * 14)    # flash on the hit
+            if t < 0.12 and si:
+                frame = frame + 255 * 0.25 * (1 - t / 0.12)   # flash on the cut
+            if seg.get("final"):                               # flash, then dissolve into the film's first frame
+                f_out = ease((t - (dur - 0.45)) / 0.45)
+                if f_out > 0:
+                    flash = np.sin(np.pi * f_out) * 0.5
+                    frame = frame * (1 - f_out) + film0 * f_out + 255 * flash
+            frame = np.clip(frame, 0, 255)
+            p.stdin.write(frame.astype(np.uint8).tobytes())
+            prev_frame = frame
+        prev_last = prev_frame
+        t_global += dur
     p.stdin.close()
     p.wait()
 
-    n = int(dur * SR)
-    mix = drone(dur) * 0.16
-    for t, g, wgt in SUSPENSE_HITS:
+    total = t_global
+    n = int(total * SR)
+    mix = drone(total) * 0.16
+    for t, g, wgt in hits:
         h = braam(weight=wgt) * g
         i = int(t * SR)
+        seg = h[: n - i]
+        mix[i:i + len(seg)] += seg
+    for t in whooshes:
+        h = whoosh(0.4) * 0.22
+        i = max(0, int(t * SR))
         seg = h[: n - i]
         mix[i:i + len(seg)] += seg
     tail = int(0.5 * SR)
@@ -375,6 +585,7 @@ def film_part(name, start, end=None):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+    run("-i", FILM, "-frames:v", "1", os.path.join(OUT, "film_first.png"))
     parts = [
         virat_hook(),
         suspense(),
