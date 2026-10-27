@@ -10,15 +10,20 @@ python3 prep_photos.py           # 2. cut-outs (rembg) with white outline + blur
 blender/render.sh                # 3. Blender 3D shots (EEVEE on CPU) -> blender/renders/*.mp4
 blender/finish.sh                #    held last frames + clip lengths
 node capture/record.js           # 4. screen recordings + screenshots of the record-book page
-python3 build_vo.py [take.m4a]   # 5. narration: your recording, or the temporary AI voice
+python3 transcribe.py vo_raw/*    # 5. phrase-level transcript of the raw takes (Whisper small.en, offline)
+python3 words.py vo_raw/<take>   #    word timestamps (zipformer) for exact cut points
+python3 build_vo.py              #    narration from the edit list in script.py (--tts: temporary AI voice)
 ./make.sh                        # 6. composition -> HyperFrames render -> soundtrack -> final mux
 ```
 
 ## Your voiceover
-Record the whole script in one take (phone voice memo is fine), with a clear pause (~1 s) between lines,
-and run `python3 build_vo.py path/to/take.m4a`. It cleans the audio (de-noise, EQ, compression), splits it
-at the pauses and maps the pieces onto the script lines in `script.py`; the whole edit re-times itself.
-Keep `script.py` matching what you actually said (the captions come from it).
+`vo_raw/` holds the two takes. `script.py` has the line-by-line text as actually spoken (captions come from it)
+and `PIECES`, the best take of every line in seconds: take A for the hook to "cheat code", take B from
+"Number two" on; the title read-in, the "Number two" false start and the "in the same- / and in the" stumble
+are dropped, and "twenty [three] years" is spliced to "twenty years". `build_vo.py` only cuts where there is
+a real pause (lines spoken in one breath stay joined, only the captions split), except after "Number
+one/two/three", where the 3D chapter card needs the beat. Models (sherpa-onnx, from GitHub releases):
+`models/sherpa-onnx-whisper-small.en`, `models/sherpa-onnx-zipformer-en-2023-06-26`.
 
 ## Pieces
 | file | what |

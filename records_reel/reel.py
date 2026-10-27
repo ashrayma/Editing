@@ -376,9 +376,14 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
+NO_CAPTION = {"n1a", "n1b", "n2a", "n2b", "n3a", "n3b"}  # the 3D chapter cards spell these out already
+
+
 def captions():
     """Lower-third captions, 1-3 words at a time: white box, black heavy caps; numbers get a yellow box."""
     for ln in TL["lines"]:
+        if ln["id"] in NO_CAPTION:
+            continue
         words = ln["words"]
         groups, cur = [], []
         for w in words:
@@ -420,7 +425,7 @@ def edit():
     stage(s("h4", -0.2), span("h4", "n1a") + 0.2)
     sticker("kohli_odi_bat_raise", s("h4", -0.2), span("h4", "n1a") + 0.2, side="left", h=1150, x=-60)
     sticker("sachin_odi_walk", s("h4", -0.1), span("h4", "n1a") + 0.1, side="right", h=1150, x=560, grey=True)
-    title(["NEVER", "TOUCHED"], word("h4", 2), span("h4", "n1a") - (word("h4", 2) - s("h4")), y=300, size=130, accent=(1,), sfx="impact")
+    title(["NEVER", "TOUCHED"], word("h4", 3), span("h4", "n1a") - (word("h4", 3) - s("h4")), y=300, size=130, accent=(1,), sfx="impact")
     glitch(e("h4", 0.1), 0.3)
 
     # ---------------- 1. THE CHASE MASTER
@@ -503,7 +508,7 @@ def edit():
     tl_line(s("w2"), span("w2", "w3"))
     photo("kohli_2023_hands", s("w3", -0.05), span("w3", "w4") + 0.05, side="right", push=(1.0, 1.1), origin="50% 25%")
     chip("World Cup 2023", s("w3", 0.1), span("w3", "w4") - 0.1, y=300)
-    odo("765", word("w3", 3) - 0.1, span("w3", "w4") - (word("w3", 3) - 0.1 - s("w3")), y=380, size=300, label="RUNS")
+    odo("765", word("w3", 4) - 0.1, span("w3", "w4") - (word("w3", 4) - 0.1 - s("w3")), y=380, size=300, label="RUNS")
     stage(s("w4", -0.05), span("w4", "w6") + 0.05, tone="#0e0e10")
     sw = screen("screen_wc", s("w4", -0.05), span("w4", "w6") + 0.05, side="left", focus="80% 30%", zoom=1.3, mstart=1.1)
     anim(f'tl.to("#{sw}",{{opacity:.3,filter:"blur(6px)",duration:0.3}},{s("w5", 0.05)})')
