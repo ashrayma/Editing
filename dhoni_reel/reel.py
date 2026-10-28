@@ -174,7 +174,7 @@ def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=
         if whoosh:
             cue(start - 0.1, "whoosh", 0.8)
         fr = {"left": "xPercent:-100", "right": "xPercent:100", "up": "yPercent:100"}[side]
-        anim(f'tl.fromTo("#{i}",{{{fr}}},{{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"}},{start})')
+        anim(f'tl.fromTo("#{i}",{{{fr}}},{{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"}},{start})')
         # motion-blur feel: a short skew while it travels
         anim(f'tl.fromTo("#{i}m",{{skewX:{-6 if side == "right" else 6 if side == "left" else 0}}},{{skewX:0,duration:0.45,ease:"expo.out"}},{start})')
     anim(f'tl.fromTo("#{i}m",{{scale:{push[0]}}},{{scale:{push[1]},duration:{dur},ease:"none"}},{start})')
@@ -569,8 +569,9 @@ LEGENDS = [("l2", "Jacques", "Kallis", "South Africa", "kallis"), ("l3", "Shane"
 
 def edit():
     # ---------------- HOOK
-    photo("csk_back_7", 0, span("h1", "h2"), side=None, push=(1.16, 1.04), origin="50% 30%")
-    title(["ONE HOT TAKE"], word("h1", 4), span("h1", "h2") - (word("h1", 4) - s("h1")), y=300, size=120, accent=(0,), sfx="impact")
+    photo("csk_back_7", 0, word("h1", 4) + 0.02, side=None, push=(1.16, 1.06), origin="50% 30%")
+    photo("csk_gloves_smile", word("h1", 4), span("h1", "h2") - word("h1", 4) + s("h1"), side="right", push=(1.02, 1.06), origin="50% 20%")
+    title(["ONE HOT TAKE"], word("h1", 4), span("h1", "h2") - (word("h1", 4) - s("h1")), y=1220, size=120, accent=(0,), sfx="impact")
     chip("Growing up", s("h1", 0.2), word("h1", 4) - s("h1", 0.2) + 0.3, y=300)
     photo("india_helmet_smile", s("h2", -0.05), span("h2", "h3") + 0.05, side="right", push=(1.0, 1.04), origin="50% 15%")
     tag("MS DHONI", s("h2", 0.1), span("h2", "h3") - 0.1, y=1330)
@@ -594,6 +595,7 @@ def edit():
     chip("2003 · 2007", word("l8", 4), span("l8", "l9") - (word("l8", 4) - s("l8")), x=None, y=1000)
     stage(s("l9", -0.05), span("l9", "b1") + 0.05, tone="#0d0d0f")
     name_wall(s("l9", -0.05), span("l9", "b1") + 0.05, [l[2] for l in LEGENDS] + ["Ponting"], y=330)
+    flicker(["kallis", "warne", "murali", "dravid", "lara", "steyn", "ponting"], s("l10", -0.02), 1.05)
     title(["ANY ALL-TIME XI"], s("l10", 0.1), span("l10", "b1") - 0.1, y=1080, size=96, accent=(0,), sfx="impact")
     glitch(e("l10", 0.1), 0.3)
 
@@ -621,12 +623,15 @@ def edit():
     leak(e("t1", 0.3), 0.9)
 
     # ---------------- THE PROOF
-    photo("t20wc2007_champagne", s("p1", -0.05), span("p1", "p2") + 0.05, side="left", push=(1.0, 1.1))
+    photo("t20wc2007_champagne", s("p1", -0.05), word("p1", 4) - s("p1", -0.05) + 0.02, side="left", push=(1.0, 1.08))
+    photo("t20wc2007_champagne", word("p1", 4), span("p1", "p2") - (word("p1", 4) - s("p1")), side=None, push=(1.35, 1.45), origin="72% 75%", whoosh=False)
+    flash(word("p1", 4), peak=0.35)
     receipt(1, s("p1"), span("p1", "p2"))
     title(["FIRST TOURNAMENT", "AS CAPTAIN"], s("p1", 0.05), word("p1", 4) - s("p1", 0.05), y=300, size=88, accent=(1,))
     chip("T20 World Cup · 2007", word("p1", 4), span("p1", "p2") - (word("p1", 4) - s("p1")), y=300)
     title(["CHAMPION."], word("p1", 6), span("p1", "p2") - (word("p1", 6) - s("p1")), y=380, size=130, accent=(0,), sfx="impact")
-    photo("test_mace_smile", s("p2", -0.05), span("p2", "p3") + 0.05, side="right", push=(1.0, 1.08), origin="50% 30%")
+    photo("test_mace_smile", s("p2", -0.05), word("p2", 5) - s("p2", -0.05) + 0.02, side="right", push=(1.0, 1.08), origin="50% 30%")
+    photo("test_mace", word("p2", 5), span("p2", "p3") - (word("p2", 5) - s("p2")), side="left", push=(1.04, 1.12), origin="50% 30%")
     receipt(2, s("p2"), span("p2", "p3"))
     stamp("No.1", word("p2", 6), span("p2", "p3") - (word("p2", 6) - s("p2")), y=300, size=260)
     chip("Test rankings · Dec 2009", word("p2", 6) + 0.2, span("p2", "p3") - (word("p2", 6) + 0.2 - s("p2")), y=1080)
@@ -638,7 +643,8 @@ def edit():
     flash(word("p3", 11), peak=0.7)
     cue(word("p3", 11), "crowd", 1.2)
     title(["…WITH A SIX."], word("p3", 9), span("p3", "p4") - (word("p3", 9) - s("p3")), y=300, size=118, accent=(0,), sfx="impact")
-    photo("ct2013_blazer", s("p4", -0.05), span("p4", "p5") + 0.05, side="right", push=(1.0, 1.1))
+    photo("ct2013_blazer", s("p4", -0.05), word("p4", 2) - s("p4", -0.05) + 0.02, side="right", push=(1.0, 1.1))
+    photo("ct2013_suit", word("p4", 2), span("p4", "p5") - (word("p4", 2) - s("p4")), side="left", push=(1.04, 1.12), origin="40% 40%")
     receipt(4, s("p4"), span("p4", "p5"))
     chip("Champions Trophy · 2013", s("p4", 0.15), span("p4", "p5") - 0.15, y=300)
     video3d("trophies", s("p5", -0.05), word("p5", 8) - s("p5", -0.05) + 0.3)
