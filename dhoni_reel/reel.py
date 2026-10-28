@@ -572,14 +572,14 @@ def edit():
     photo("csk_back_7", 0, word("h1", 4) + 0.02, side=None, push=(1.16, 1.06), origin="50% 30%")
     photo("csk_gloves_smile", word("h1", 4), span("h1", "h2") - word("h1", 4) + s("h1"), side="right", push=(1.02, 1.06), origin="50% 20%")
     title(["ONE HOT TAKE"], word("h1", 4), span("h1", "h2") - (word("h1", 4) - s("h1")), y=1220, size=120, accent=(0,), sfx="impact")
-    chip("Growing up", s("h1", 0.2), word("h1", 4) - s("h1", 0.2) + 0.3, y=300)
+    chip("Growing up", s("h1", 0.2), word("h1", 4) - s("h1", 0.2) - 0.05, y=300)
     photo("india_helmet_smile", s("h2", -0.05), span("h2", "h3") + 0.05, side="right", push=(1.0, 1.04), origin="50% 15%")
     tag("MS DHONI", s("h2", 0.1), span("h2", "h3") - 0.1, y=1330)
     title(["GREATEST", "OF ALL TIME"], word("h2", 4), span("h2", "h3") - (word("h2", 4) - s("h2")), y=1100, size=92, accent=(1,), sfx="impact")
     flash(word("h2", 4), peak=0.4)
     stage(s("h3", -0.05), span("h3", "l1") + 0.05, tone="#0c0c0e")
     title(["EVERY ADULT", "TOLD ME…"], s("h3", 0.05), span("h3", "h4") - 0.05, y=330, size=100, accent=(1,))
-    quote_card(s("h4", -0.1), span("h4", "l1") + 0.1, "You'll grow out of it.", "every adult, ever")
+    quote_card(s("h4", -0.1), span("h4", "l1") + 0.1, "You will grow out of it.", "every adult, ever")
 
     # ---------------- THE LEGENDS
     leak(s("l1", -0.3), 0.9)
@@ -619,7 +619,7 @@ def edit():
     video3d("seven", s("t1", -0.05), span("t1", "p1") + 0.05)
     cue(s("t1"), "boom", 1.0)
     flash(s("t1"), peak=0.5)
-    title(["I DIDN'T", "GROW OUT OF IT."], s("t1", 0.15), span("t1", "p1") - 0.15, y=300, size=92, accent=(1,), sfx="impact")
+    title(["I DID NOT", "GROW OUT OF IT."], s("t1", 0.15), span("t1", "p1") - 0.15, y=300, size=92, accent=(1,), sfx="impact")
     leak(e("t1", 0.3), 0.9)
 
     # ---------------- THE PROOF
@@ -633,8 +633,8 @@ def edit():
     photo("test_mace_smile", s("p2", -0.05), word("p2", 5) - s("p2", -0.05) + 0.02, side="right", push=(1.0, 1.08), origin="50% 30%")
     photo("test_mace", word("p2", 5), span("p2", "p3") - (word("p2", 5) - s("p2")), side="left", push=(1.04, 1.12), origin="50% 30%")
     receipt(2, s("p2"), span("p2", "p3"))
-    stamp("No.1", word("p2", 6), span("p2", "p3") - (word("p2", 6) - s("p2")), y=300, size=260)
-    chip("Test rankings · Dec 2009", word("p2", 6) + 0.2, span("p2", "p3") - (word("p2", 6) + 0.2 - s("p2")), y=1080)
+    stamp("No.1", word("p2", 6), span("p2", "p3") - (word("p2", 6) - s("p2")), y=980, size=230)
+    chip("Test rankings · Dec 2009", word("p2", 6) + 0.2, span("p2", "p3") - (word("p2", 6) + 0.2 - s("p2")), y=1250)
     photo("wc2011_six", s("p3", -0.05), word("p3", 4) - s("p3", -0.05), side="up", push=(1.0, 1.1))
     receipt(3, s("p3"), span("p3", "p4"))
     chip("World Cup final · Wankhede · 2011", s("p3", 0.1), word("p3", 4) - s("p3", 0.1), y=300)
@@ -642,7 +642,7 @@ def edit():
     photo("wc2011_six", word("p3", 8), span("p3", "p4") - (word("p3", 8) - s("p3")), side=None, push=(1.15, 1.3), origin="60% 15%")
     flash(word("p3", 11), peak=0.7)
     cue(word("p3", 11), "crowd", 1.2)
-    title(["…WITH A SIX."], word("p3", 9), span("p3", "p4") - (word("p3", 9) - s("p3")), y=300, size=118, accent=(0,), sfx="impact")
+    title(["…IN STYLE."], word("p3", 11), span("p3", "p4") - (word("p3", 11) - s("p3")), y=300, size=130, accent=(0,), sfx="impact")
     photo("ct2013_blazer", s("p4", -0.05), word("p4", 2) - s("p4", -0.05) + 0.02, side="right", push=(1.0, 1.1))
     photo("ct2013_suit", word("p4", 2), span("p4", "p5") - (word("p4", 2) - s("p4")), side="left", push=(1.04, 1.12), origin="40% 40%")
     receipt(4, s("p4"), span("p4", "p5"))
@@ -666,11 +666,12 @@ def edit():
     sticker("csk_back_7", s("p8", -0.05), span("p8", "p9") + 0.05, side="right", h=1250, x=430)
     odo("84", s("p8", 0.05), span("p8", "p9") - 0.05, x=70, y=330, size=330)
     typed(["ODI", "NOT-OUTS", "most ever"], s("p8", 0.4), span("p8", "p9") - 0.4, y=700, size=58)
-    photo("csk_six", s("p9", -0.05), word("p9", 6) - s("p9", -0.05), side="up", push=(1.0, 1.12))
-    photo("stumping_csk", word("p9", 6), span("p9", "o1") - (word("p9", 6) - s("p9")), side=None, push=(1.1, 1.2))
-    duo("csk_back_7", word("p9", 8) - 0.1, span("p9", "o1") - (word("p9", 8) - 0.1 - s("p9")))
-    glitch(word("p9", 8) - 0.1, 0.35, "csk_back_7")
-    stamp("OVER.", word("p9", 10) - 0.1, span("p9", "o1") - (word("p9", 10) - 0.1 - s("p9")), y=360, size=190, color="#fff", rot=-4)
+    photo("csk_six", s("p9", -0.05), word("p9", 4) - s("p9", -0.05), side="up", push=(1.0, 1.12))
+    photo("stumping_csk", word("p9", 4), span("p9", "o1") - (word("p9", 4) - s("p9")), side=None, push=(1.1, 1.2))
+    duo("csk_back_7", word("p9", 6) - 0.1, span("p9", "o1") - (word("p9", 6) - 0.1 - s("p9")))
+    glitch(word("p9", 6) - 0.1, 0.35, "csk_back_7")
+    stamp("NOT OVER", word("p9", 9) - 0.1, span("p9", "o1") - (word("p9", 9) - 0.1 - s("p9")), y=560, size=150, color="#fff", rot=-4)
+    stamp("YET.", word("p9", 11) - 0.05, span("p9", "o1") - (word("p9", 11) - 0.05 - s("p9")), y=730, size=190, rot=-4)
 
     # ---------------- OUTRO
     leak(s("o1", -0.3), 0.9)
@@ -705,7 +706,7 @@ EXTRA_CSS = f"""
 .qt .ch{{display:inline-block}}
 .qt .wd{{white-space:nowrap}}
 .qw{{margin-top:34px;font-size:40px;font-weight:600;color:rgba(255,255,255,.6)}}
-.receipt{{position:absolute;right:50px;top:300px;display:flex;align-items:baseline;gap:8px;padding:12px 20px;border-radius:14px;
+.receipt{{position:absolute;right:50px;top:232px;display:flex;align-items:baseline;gap:8px;padding:12px 20px;border-radius:14px;
   background:rgba(10,10,12,.6);backdrop-filter:blur(14px);box-shadow:inset 0 0 0 1.5px rgba(254,222,92,.5);overflow:hidden}}
 .receipt .rl{{font-size:22px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.7);margin-right:6px}}
 .receipt .rn{{display:inline-block;font-size:44px;font-weight:900;color:{Y}}}
