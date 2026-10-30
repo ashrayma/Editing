@@ -22,10 +22,10 @@ from music import add, bp, clap, hat, hp, hz, lp, pluck, reverb, saw  # noqa: E4
 from sfx import SR  # noqa: E402
 
 rng = np.random.default_rng(11)
-BPM = 128  # full-time (not half-time): drums on 2 and 4 for a driving countdown
+BPM = 132  # full-time: drums on 2 and 4, a 16th-note ostinato for the suspense
 BEAT = 60 / BPM
 BAR = 4 * BEAT
-DM = [(38, [50, 53, 57, 62]), (34, [50, 53, 58, 62]), (41, [53, 57, 60, 65]), (33, [49, 52, 57, 61])]  # Dm Bb F A
+DM = [(38, [50, 53, 57, 62]), (34, [50, 53, 58, 62]), (31, [50, 55, 58, 62]), (33, [49, 52, 57, 61])]  # Dm Bb Gm A (harmonic-minor pull)
 WARM = [(36, [55, 60, 64, 67]), (33, [57, 60, 64, 69]), (29, [57, 60, 65, 69]), (31, [55, 59, 62, 67])]  # C Am F G
 
 
@@ -73,6 +73,18 @@ def dark_pad(notes, d, cutoff=1200):
     return x * env
 
 
+def osti(m, d=0.16):
+    """Staccato low string-like stab for the 16th-note ostinato."""
+    t = _t(d)
+    x = sum(saw(hz(m) * 2 ** (det / 12), t, rng.random()) for det in (-0.08, 0.08))
+    return lp(x, 1400) * np.minimum(1, t / 0.004) * np.exp(-t * 22)
+
+
+def clock():
+    t = _t(0.05)
+    return norm(bp(rng.standard_normal(len(t)), 3000, 9000) * np.exp(-t * 140) + 0.4 * np.sin(2 * np.pi * 1800 * t) * np.exp(-t * 90), 0.6)
+
+
 def bell(m, d=1.2):
     t = _t(d)
     x = sum(a * np.sin(2 * np.pi * hz(m) * r * t) for r, a in ((1, 1), (2.76, 0.35), (5.4, 0.12)))
@@ -87,6 +99,8 @@ def music(total, drop, breaks, outro, thin=(), mute=(), intro_warm=False):
     n = int(SR * (total + 3))
     drums, bass, pads, keys = (np.zeros(n) for _ in range(4))
     K, S, HC, HO = kick(), snare(), hat(), hat(True)
+    CK = clock()
+    OST = {}
     # bars are laid on a grid anchored at the drop so the downbeat lands on "Number one"
     t0 = drop - BAR * np.ceil(drop / BAR)
     b = 0
@@ -106,6 +120,8 @@ def music(total, drop, breaks, outro, thin=(), mute=(), intro_warm=False):
             if ts >= outro or ts < 0:
                 continue
             if ts < drop or any(a <= ts < b2 for a, b2 in thin):  # hook: just a muffled pulse on the downbeats under the filtered pad
+                if q % 4 == 0:  # the ticking clock: suspense
+                    add(drums, CK, ts, 0.16 if q % 8 == 0 else 0.11)
                 if q in (0, 8):
                     add(drums, lp(K, 400), ts, 0.55)
                 if q == 0:
@@ -125,6 +141,10 @@ def music(total, drop, breaks, outro, thin=(), mute=(), intro_warm=False):
                     add(drums, HC, ts + r * BEAT / 12, 0.08)
             if q in (2, 14):
                 add(drums, HO, ts, 0.07)
+            om = root + 12 + (7 if q % 4 == 3 else 0)  # 16th ostinato: root, root, root, fifth
+            if om not in OST:
+                OST[om] = osti(om)
+            add(keys, OST[om], ts, 0.1 if q % 4 == 0 else 0.07)
             if q % 2 == 0:  # plucked minor arp on 8ths: the hook of the beat
                 add(keys, bell(notes[(q // 2) % 4] + 12, 0.5), ts, 0.13)
         t0 += BAR
@@ -237,9 +257,11 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    m = music(total, drop=L["n5"]["start"], breaks=[L[k]["start"] for k in ("n4", "n3", "n2", "n1")],
-              outro=L["q1"]["start"] - 0.1, thin=[(L["n1"]["start"], L["r4"]["start"])],
-              mute=[(L["r2"]["end"] + 0.05, L["r4"]["start"] - 0.02)], intro_warm=False)
+    # hook ticks under a filtered pad, the beat drops on "1,207"; drums drop out before every chapter year;
+    # the semi-final heartbreak thins to the pad, and the music goes dead for "AB's dream was over"
+    m = music(total, drop=L["h3"]["start"], breaks=[L[k]["start"] for k in ("b1", "c1", "d1")] + [L["d4"]["words"][8][1]],
+              outro=L["q2"]["start"] + 0.4, thin=[(L["e2"]["start"], L["f1"]["start"]), (L["f2"]["start"], L["f3"]["start"])],
+              mute=[(L["e2"]["words"][12][1] - 0.05, L["e2"]["end"] + 0.15)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))

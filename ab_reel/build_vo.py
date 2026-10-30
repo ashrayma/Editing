@@ -109,7 +109,7 @@ def near_pause(ps, t, win=0.22):
     return best[1] if best else None
 
 
-FORCE_CUT = {"n1a", "n2a", "n3a"}  # always cut after these (the 3D chapter cards need the breath)
+FORCE_CUT = set()
 
 
 def quiet_point(a, t, win=0.08):
@@ -174,6 +174,33 @@ def edit_groups():
     return groups
 
 
+MAX_PAUSE = 0.14  # long breaths inside a group are shortened to this (tightens the read without cutting words)
+GAP_SCALE = 0.45  # the scripted pause after each line is scaled by this
+TEMPO = 1.045  # gentle speed-up of the whole read (pitch kept)
+
+
+def squeeze(c, ls, maxp=MAX_PAUSE):
+    """Shorten every pause longer than maxp inside one group of audio and remap the line times to match."""
+    cuts = []
+    for p0, p1 in pauses(c, min_len=maxp + 0.06):
+        m, extra = (p0 + p1) / 2, (p1 - p0 - maxp) / 2
+        cuts.append((m - extra, m + extra))
+    if not cuts:
+        return c, ls
+    keep, prev = [], 0.0
+    for a, b in cuts:
+        keep.append(c[int(prev * SR): int(a * SR)])
+        prev = b
+    keep.append(c[int(prev * SR):])
+    f = int(0.006 * SR)
+    for k in keep[1:]:
+        k[:f] *= np.linspace(0, 1, min(f, len(k)))[: len(k[:f])]
+
+    def remap(t):
+        return t - sum(min(b, max(a, t)) - a for a, b in cuts)
+    return np.concatenate(keep), [(l, remap(s0), remap(s1)) for l, s0, s1 in ls]
+
+
 def syllables(w):
     w = re.sub(r"[^a-z0-9]", "", w.lower())
     if w.isdigit():
@@ -191,6 +218,7 @@ def main():
     meta = {lid: (text, cap, gap) for lid, text, cap, gap in LINES}
     parts, t, lines = [np.zeros(int(LEAD * SR), np.float32)], LEAD, []
     for c, ls in groups:
+        c, ls = squeeze(c, ls)
         c = c / max(1e-6, np.abs(c).max()) * 0.9
         for lid, s0, s1 in ls:
             text, cap, _ = meta[lid]
@@ -203,10 +231,19 @@ def main():
             edges = v0 + np.concatenate([[0], np.cumsum(wt)]) / wt.sum() * (v1 - v0)
             lines.append({"id": lid, "text": text, "caption": cap or text, "start": round(t + s0, 3), "end": round(t + s1, 3),
                           "words": [[w, round(t + edges[i], 3), round(t + edges[i + 1], 3)] for i, w in enumerate(words)]})
-        gap = meta[ls[-1][0]][2]
+        gap = meta[ls[-1][0]][2] * GAP_SCALE
         parts += [c.astype(np.float32), np.zeros(int(gap * SR), np.float32)]
         t += len(c) / SR + gap
     vo = np.concatenate(parts)
+    if TEMPO != 1:
+        import subprocess
+        vo = np.frombuffer(subprocess.run(
+            ["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", f"atempo={TEMPO}",
+             "-f", "f32le", "-"], input=vo.astype(np.float32).tobytes(), capture_output=True, check=True).stdout, np.float32)
+        t /= TEMPO
+        for ln in lines:
+            ln["start"], ln["end"] = round(ln["start"] / TEMPO, 3), round(ln["end"] / TEMPO, 3)
+            ln["words"] = [[w, round(a / TEMPO, 3), round(b / TEMPO, 3)] for w, a, b in ln["words"]]
     with wave.open(os.path.join(OUT, "vo.wav"), "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)

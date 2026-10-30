@@ -90,3 +90,7 @@ ab_reel/out/num_*.png
 ab_reel/out/t*.txt
 ab_reel/out/numt.txt
 ab_reel/previews/
+ab_reel/blender/render_*.log
+ab_reel/out/prep.log
+ab_reel/out/events.json
+ab_reel/assets/faces.json.bak

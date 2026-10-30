@@ -127,7 +127,7 @@ def stage(start, dur, tone="#0b0b0c"):
     return i
 
 
-FOCUS = {"mccullum_drive": 0.58}  # manual crop focus (x) for wide photos; otherwise the crop centres on the detected face
+FOCUS = {}  # manual crop focus (x) for wide photos; otherwise the crop centres on the detected face
 
 
 def focus_x(name):
@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"n1", "r4"}  # the 3D #1 card carries it
+NO_CAPTION = {"q2"}  # the comment card carries it
 
 
 def captions():
@@ -525,13 +525,13 @@ def receipt(n, start, dur, total=8):
     anim(f'tl.fromTo("#{i} .rn",{{yPercent:100,opacity:0}},{{yPercent:0,opacity:1,duration:0.35,ease:"back.out(2)"}},{start})')
 
 
-def then_now(start, dur, a_photo, b_photo):
+def then_now(start, dur, a_photo, b_photo, la="THEN", lb="NOW"):
     """Split screen: THEN (grey, 2007) on top, NOW (colour) underneath; the divider wipes across."""
     i = nid("tn")
     sa, sb = media(f"assets/hi/{a_photo}.png"), media(f"assets/hi/{b_photo}.png")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000">'
-        f'<div class="half" id="{i}a" style="top:0"><img src="{sa}" style="filter:grayscale(1) contrast(1.1)"><div class="hl">THEN</div></div>'
-        f'<div class="half" id="{i}b" style="top:960px"><img src="{sb}"><div class="hl" style="color:{Y}">NOW</div></div>'
+        f'<div class="half" id="{i}a" style="top:0"><img src="{sa}" style="filter:grayscale(1) contrast(1.1)"><div class="hl">{html.escape(la)}</div></div>'
+        f'<div class="half" id="{i}b" style="top:960px"><img src="{sb}"><div class="hl" style="color:{Y}">{html.escape(lb)}</div></div>'
         f'<div class="hdiv" id="{i}d"></div></div>')
     anim(f'tl.fromTo("#{i}a",{{xPercent:-100}},{{xPercent:0,duration:0.5,ease:"expo.out"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{xPercent:100}},{{xPercent:0,duration:0.5,ease:"expo.out"}},{start + 0.25})')
@@ -733,139 +733,150 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>MUSCLE</span><i>or</i><span style="color:{Y}">TIMING?</span></div>'
+        f'<div class="mot" id="{i}q"><span>YES</span><i>or</i><span style="color:{Y}">NO?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Drop one word below 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "Timing 🎯"
+    txt = "YES 🐐"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
 
 def edit():
-    # ---------------- HOOK: a star mid-six on frame one, the claim, then the promise
-    photo("rohit_t20_six", 0, word("i1", 9) + 0.02, side=None, push=(1.18, 1.05), origin="50% 30%")
+    def seg(t0, t1):
+        return round(t0, 3), round(t1 - t0, 3)
+
+    # ---------------- HOOK: AB mid-scoop on frame one, the "cheater" claim, the numbers
+    photo("ab_rcb", *seg(0, s("h2")), side=None, push=(1.2, 1.06), origin="60% 30%")
     flash(0.02, peak=0.5)
-    title(["NOT FROM", "THIS PLANET"], word("i1", 4) - 0.05, word("i1", 9) - word("i1", 4) + 0.05, y=300, size=124, accent=(1,), sfx="impact")
-    photo("rohit_pull_mcg", word("i1", 9), span("i1", "i2") - word("i1", 9) + s("i1"), side="right", push=(1.02, 1.1))
-    chip("Stay till the end", word("i1", 9) + 0.1, span("i1", "i2") - (word("i1", 9) + 0.1 - s("i1")), y=300)
-    tag("ROHIT SHARMA", s("i1", 0.2), word("i1", 9) - s("i1", 0.2), y=1300)
-    stage(s("i2", -0.05), span("i2", "n5") + 0.05)
-    title(["THE BIGGEST", "SIX-HITTERS EVER"], s("i2", 0.05), span("i2", "n5") - 0.05, y=250, size=84, accent=(1,))
-    leaderboard(s("i2", 0.3), span("i2", "n5") - 0.3, reveal=False, y=520)
+    tag("AB DE VILLIERS", *seg(0.25, word("h1", 4)), y=1300)
+    stamp("“CHEATER”", *seg(word("h1", 5) - 0.12, s("h2")), y=300, size=170, color="#ff3b3b", rot=-5)
+    glitch(s("h2", -0.03), 0.3, "ab_rcb")
+    photo("ab_pull", *seg(s("h2"), s("h3")), side="right", push=(1.0, 1.1))
+    title(["NUMBERS THAT", "AREN'T NORMAL"], *seg(word("h2", 2), s("h3")), y=300, size=100, accent=(1,), sfx="impact")
 
-    # ---------------- #5 GUPTILL
-    rank_card("num5", "Martin Guptill", "n5", "g5", 5)
-    badge(5, word("n5", 5), span("n5", "n4") - (word("n5", 5) - s("n5")))
-    photo("guptill_wc2015", word("n5", 5), span("n5", "g5") - (word("n5", 5) - s("n5")), side="left", push=(1.0, 1.1))
-    tag("MARTIN GUPTILL", word("n5", 5) + 0.05, span("n5", "g5") - (word("n5", 5) + 0.05 - s("n5")), y=1300)
-    photo("guptill_t20", s("g5", -0.05), word("g5", 8) - s("g5", -0.05), side="right", push=(1.0, 1.12))
-    chip("New Zealand", s("g5", 0.1), word("g5", 8) - s("g5", 0.1), y=300)
-    stat_screen("guptill_t20", "383", ["SIXES", "tall, strong,", "enormous reach"], word("g5", 8), span("g5", "n4") - (word("g5", 8) - s("g5")))
-    flash(word("g5", 8), peak=0.4)
+    stage(*seg(s("h3", -0.05), word("h3", 9) - 0.1))
+    sticker("ab_pink", *seg(s("h3", -0.05), word("h3", 9) - 0.1), side="right", h=1250, x=420)
+    odo("1,207", *seg(word("h3", 2) - 0.1, word("h3", 9) - 0.1), x=60, y=380, size=210, label="WORLD CUP RUNS")
+    video3d("avg", *seg(word("h3", 9) - 0.1, s("h5")))
+    cue(word("h3", 9) - 0.1, "boom", 0.9)
+    title(["HIGHEST", "IN HISTORY"], *seg(word("h4", 3), s("h5")), y=1080, size=104, accent=(1,), sfx="impact")
+    chip("min. 1,000 World Cup runs", *seg(word("h4", 4), s("h5")), x=None, y=300)
+    stage(*seg(s("h5", -0.05), s("h6")), tone="#0e0e10")
+    screen("screen_avg", *seg(s("h5", -0.05), s("h6")), side="left", focus="90% 45%", zoom=1.35)
+    pips([("viv", "Sir Viv Richards")], *seg(word("h5", 4), s("h6")))
+    title(["HIGHER THAN", "SIR VIV"], *seg(s("h5", 0.05), s("h6")), y=250, size=96, accent=(1,))
 
-    # ---------------- #4 McCULLUM
-    rank_card("num4", "Brendon McCullum", "n4", "g4a", 6)
-    badge(4, word("n4", 6), span("n4", "n3") - (word("n4", 6) - s("n4")))
-    photo("mccullum_drive", word("n4", 6), span("n4", "g4a") - (word("n4", 6) - s("n4")), side="right", push=(1.0, 1.1))
-    tag("BRENDON McCULLUM", word("n4", 6) + 0.05, span("n4", "g4a") - (word("n4", 6) + 0.05 - s("n4")), y=1300)
-    photo("mccullum_six", s("g4a", -0.05), span("g4a", "g4b") + 0.05, side="left", push=(1.0, 1.12))
-    title(["PURE", "AGGRESSION"], word("g4a", 3), span("g4a", "g4b") - (word("g4a", 3) - s("g4a")), y=1150, size=100, accent=(1,), sfx="impact")
-    depth_number("mccullum_six", "398", "SIXES", s("g4b", -0.05), span("g4b", "n3") + 0.05)
+    photo("ab_scoop_kneel", *seg(s("h6", -0.05), word("h6", 9)), side="right", push=(1.0, 1.12))
+    title(["FASTER THAN", "ALMOST ANYONE"], *seg(word("h6", 5), word("h6", 9)), y=300, size=96, accent=(1,), sfx="impact")
+    flicker(["ab_scoop_ball", "ab_ramp_ball", "ab_sweep_tall", "ab_rcb", "ab_pull", "ab_scoop_kneel"], *seg(word("h6", 9), word("h6", 13)))
+    stage(*seg(word("h6", 13), s("h7")))
+    sticker("ab_sweep_tall", *seg(word("h6", 13), s("h7")), side="right", h=1250, x=440)
+    odo("117", *seg(word("h6", 13), s("h7")), x=60, y=380, size=240, label="STRIKE RATE")
+    typed(["among everyone", "with 1,000+", "World Cup runs"], *seg(word("h6", 13) + 0.4, s("h7")), y=760, size=50, color="#fff")
 
-    # ---------------- #3 AFRIDI
-    video3d("num3", s("n3", -0.1), span("n3", "a3a") + 0.1)
-    cue(s("n3", -0.6), "riser", 0.7)
-    cue(s("n3"), "boom", 0.9)
-    title(["THE BIG LEAGUES"], word("n3", 4), span("n3", "a3a") - (word("n3", 4) - s("n3")), y=1215, size=90, accent=(0,))
-    photo("afridi_six", s("a3a", -0.05), span("a3a", "n2") + 0.05, side="up", push=(1.0, 1.14))
-    badge(3, s("a3a"), span("a3a", "n2"))
-    tag("SHAHID AFRIDI", s("a3a", 0.05), span("a3a", "a3b") - 0.05 + 0.2, y=1300)
-    stamp("BOOM BOOM", word("a3b", 5), span("a3b", "a3c") - (word("a3b", 5) - s("a3b")), y=300, size=150, rot=-5)
-    glitch(word("a3c", 4), 0.3, "afridi_six")
-    band("476", "SIXES · PURE MUSCLE", word("a3c", 6), span("a3c", "n2") - (word("a3c", 6) - s("a3c")))
+    photo("ab_sweep_old", *seg(s("h7", -0.05), word("h7", 5)), side="left", push=(1.0, 1.1))
+    title(["MOST", "CONSISTENT"], *seg(word("h7", 2), word("h7", 5)), y=300, size=120, accent=(1,), sfx="impact")
+    photo("ab_ramp_ball", *seg(word("h7", 5), word("h7", 14)), side="right", push=(1.0, 1.1))
+    title(["+ ONE OF THE", "FASTEST"], *seg(word("h7", 6), word("h7", 14)), y=300, size=120, accent=(1,), sfx="impact")
+    glitch(word("h7", 14), 0.35, "ab_ramp_ball")
+    stage(*seg(word("h7", 14), s("b0")), tone="#0d0d0f")
+    stamp("IMPOSSIBLE", *seg(word("h7", 15), s("b0")), y=780, size=180, rot=-5)
 
-    # ---------------- #2 GAYLE
-    rank_card("num2", "Chris Gayle", "n2", "c2a", 8)
-    photo("gayle_six", word("n2", 8), span("n2", "c2a") - (word("n2", 8) - s("n2")), side="right", push=(1.0, 1.1))
-    badge(2, word("n2", 8), span("n2", "n1") - (word("n2", 8) - s("n2")))
-    tag("CHRIS GAYLE", word("n2", 8) + 0.05, span("n2", "c2a") - (word("n2", 8) + 0.05 - s("n2")), y=1300)
-    chip("The Universe Boss", word("n2", 5), span("n2", "c2a") - (word("n2", 5) - s("n2")), y=300)
-    stage(s("c2a", -0.05), span("c2a", "c2b") + 0.05)
-    sticker("gayle_six", s("c2a", -0.05), span("c2a", "c2b") + 0.05, side="right", h=1250, x=430)
-    odo("553", s("c2a", 0.05), span("c2a", "c2b") - 0.05, x=70, y=330, size=300)
-    typed(["6'2\"", "built like a", "heavyweight"], s("c2a", 0.3), span("c2a", "c2b") - 0.3, y=700, size=58)
-    duo("gayle_six", s("c2b", -0.05), span("c2b", "n1") + 0.05)
-    title(["NEVER", "BE BROKEN?"], word("c2b", 6), span("c2b", "n1") - (word("c2b", 6) - s("c2b")), y=300, size=130, accent=(1,), sfx="impact")
-    glitch(e("c2b", 0.1), 0.35, "gayle_six")
+    # ---------------- 2007: four ducks... then 146
+    leak(s("b0", -0.3), 0.9)
+    photo("ab_sweep_old", *seg(s("b0", -0.05), s("b1", -0.05)), side=None, fx="grey", push=(1.15, 1.05))
+    title(["HOW IT ALL", "STARTED…"], *seg(word("b0", 2), s("b1", -0.05)), y=300, size=110, accent=(1,))
+    video3d("y2007", *seg(s("b1", -0.05), word("b1", 7)))
+    cue(s("b1", -0.6), "riser", 0.7)
+    cue(s("b1"), "boom", 0.9)
+    duo("ab_dejected", *seg(word("b1", 7), s("b2")), side="up")
+    stamp("4 DUCKS", *seg(word("b1", 12) - 0.1, s("b2")), y=300, size=190, color="#fff", rot=-4)
+    photo("ab_bat_toss", *seg(s("b2", -0.05), s("b3")), side="left", fx="grey", push=(1.0, 1.08))
+    title(["DROPPED", "FOR GOOD?"], *seg(word("b2", 7), s("b3")), y=1050, size=120, accent=(1,), sfx="impact")
+    ducks_at = word("b3", 10) - 1.13  # the 3D 146 breaks through 1.13 s into the shot
+    photo("ab_sweep_old", *seg(s("b3", -0.05), ducks_at), side="right", push=(1.0, 1.1))
+    title(["INSTEAD…"], *seg(s("b3", 0.05), ducks_at), y=300, size=130, accent=(0,))
+    video3d("ducks", *seg(ducks_at, s("b4")))
+    cue(ducks_at, "whoosh", 0.7)
+    for k in range(4):
+        cue(ducks_at + 0.03 + 0.167 * k, "impact", 0.45)
+    cue(word("b3", 10), "boom", 1.0)
+    flash(word("b3", 10), peak=0.55)
+    shake(word("b3", 10), 26)
+    chip("vs West Indies · World Cup 2007", *seg(word("b3", 11), s("b4")), x=None, y=1180)
+    photo("ab_roar", *seg(s("b4", -0.05), s("c1", -0.05)), side="up", push=(1.0, 1.12))
+    title(["FIRST", "GLIMPSE"], *seg(word("b4", 4), s("c1", -0.05)), y=300, size=130, accent=(1,), sfx="impact")
 
-    # ---------------- #1 ... the reveal
-    video3d("num1", s("n1", -0.1), span("n1", "r1") + 0.1)
-    cue(s("n1", -1.0), "riser", 1.0)
-    cue(s("n1"), "boom", 1.0)
-    # your photo of Rohit eating dal chawal goes here when it arrives (assets/photos/rohit_dal_chawal.jpg)
-    if os.path.exists(os.path.join(HERE, "assets", "hi", "rohit_dal_chawal.png")):
-        photo("rohit_dal_chawal", s("r1", -0.05), span("r1", "r2") + 0.05, side="right", push=(1.0, 1.1))
-        stamp("DAL CHAWAL", word("r1", 5) - 0.1, span("r1", "r2") - (word("r1", 5) - 0.1 - s("r1")), y=1150, size=130, rot=-4)
-    else:
-        stage(s("r1", -0.05), span("r1", "r2") + 0.05, tone="#0d0d0f")
-        stamp("DAL CHAWAL", word("r1", 5) - 0.1, span("r1", "r2") - (word("r1", 5) - 0.1 - s("r1")), y=760, size=150, rot=-4)
-        title(["LOVES HIS…"], s("r1", 0.05), word("r1", 5) - s("r1", 0.05) + 1.0, y=520, size=100)
-    stage(s("r2", -0.05), word("r2", 4) - s("r2", -0.05) + 0.02)
-    sticker("rohit_raise_bat", s("r2", -0.05), word("r2", 4) - s("r2", -0.05) + 0.02, side="right", h=1250, x=360)
-    photo("rohit_t20wc_trophy", word("r2", 4), span("r2", "r3") - (word("r2", 4) - s("r2")), side="left", push=(1.0, 1.08))
-    title(["NEVER IN", "A HURRY"], word("r2", 4), span("r2", "r3") - (word("r2", 4) - s("r2")), y=300, size=110, accent=(1,))
-    slowmo("rohit_odi_pull", s("r3", -0.05), span("r3", "r4") + 0.05)
-    hero("rohit_pull_mcg", ["ROHIT", "SHARMA"], s("r4", -0.05), span("r4", "r5") + 0.05)
-    badge(1, s("r4", -0.05), span("r4", "s1") + 0.05)
-    flash(s("r4"), peak=0.6)
-    cue(s("r4"), "boom", 1.0)
-    stage(s("r5", -0.05), span("r5", "r6") + 0.05)
-    versus(s("r5", -0.05), span("r5", "r6") + 0.05, (650, "650+"), (553, "553"), "ROHIT", "GAYLE", y=330)
-    stage(s("r6", -0.05), span("r6", "s1") + 0.05, tone="#0e0e10")
-    screen("screen_sixes", s("r6", -0.05), span("r6", "s1") + 0.05, side="left", focus="85% 30%", zoom=1.3)
-    title(["MOST SIXES", "PER INNINGS TOO"], s("r6", 0.1), span("r6", "s1") - 0.1, y=280, size=84, accent=(1,))
+    # ---------------- 2011: middle order, back-to-back hundreds
+    video3d("y2011", *seg(s("c1", -0.05), word("c1", 2)))
+    cue(s("c1", -0.6), "riser", 0.7)
+    cue(s("c1"), "boom", 0.9)
+    photo("ab_sweep_old", *seg(word("c1", 2), word("c1", 13)), side="right", push=(1.12, 1.0), origin="55% 35%")
+    chip("Moved to the middle order", *seg(word("c1", 6), word("c1", 13)), x=None, y=300)
+    glitch(word("c1", 13), 0.3, "ab_rcb")
+    photo("ab_rcb", *seg(word("c1", 13), s("c2")), side=None, push=(1.2, 1.08), origin="60% 30%")
+    stamp("DANGEROUS", *seg(word("c1", 14), s("c2")), y=300, size=170, rot=-5)
+    stage(*seg(s("c2", -0.05), s("d1", -0.05)))
+    sticker("ab_roar", *seg(s("c2", -0.05), s("d1", -0.05)), side="right", h=1150, x=400)
+    typed(["100 + 100", "back-to-back"], *seg(word("c2", 2), s("d1", -0.05)), x=60, y=360, size=64)
+    odo("88", *seg(word("c2", 8) - 0.1, s("d1", -0.05)), x=60, y=640, size=300, label="AVERAGE · 2011")
 
-    # ---------------- WHY: muscle vs timing
-    leak(s("s1", -0.3), 0.9)
-    stage(s("s1", -0.05), span("s1", "s2") + 0.05)
-    title(["HERE'S WHAT", "MAKES IT", "SPECIAL"], s("s1", 0.05), span("s1", "s2") - 0.05, y=640, size=120, accent=(2,))
-    flicker(["afridi_six", "gayle_six", "mccullum_six", "guptill_t20", "afridi_six", "gayle_six"], s("s2", -0.02), span("s2", "s3") + 0.02)
-    stamp("MUSCLE.", word("s2", 8) - 0.1, span("s2", "s3") - (word("s2", 8) - 0.1 - s("s2")), y=360, size=200, color="#fff", rot=-4)
-    photo("dravid_drive", s("s3", -0.05), word("s4", 6) - s("s3", -0.05), side="left", push=(1.0, 1.08))
-    title(["TIMING:", "THE GENTLE ART"], word("s3", 2), word("s4", 4) - word("s3", 2), y=1150, size=88, accent=(1,))
-    tag("RAHUL DRAVID", word("s4", 3), word("s4", 6) - word("s4", 3), y=1300)
-    photo("williamson_drive", word("s4", 6), span("s4", "s5") - (word("s4", 6) - s("s4")), side="right", push=(1.0, 1.1))
-    tag("KANE WILLIAMSON", word("s4", 6) + 0.05, span("s4", "s5") - (word("s4", 6) + 0.05 - s("s4")), y=1300)
-    chip("Along the ground, for four", word("s4", 12), span("s4", "s5") - (word("s4", 12) - s("s4")), y=300)
-    photo("rohit_mi_pull", s("s5", -0.05), word("s5", 6) - s("s5", -0.05), side="up", push=(1.0, 1.1))
-    title(["SAME SOFT TIMING…"], s("s5", 0.1), word("s5", 6) - s("s5", 0.1), y=1150, size=92, accent=(0,))
-    pips([("dravid_drive", "Rahul Dravid"), ("williamson_drive", "Kane Williamson")], s("s5", 0.1), word("s5", 6) - s("s5", 0.1))
-    video3d("six", word("s5", 6), span("s5", "s6") - (word("s5", 6) - s("s5")))
-    cue(word("s5", 6), "whoosh_big", 1.0)
-    title(["…AIMED AT", "THE SKY"], word("s5", 7), span("s5", "s6") - (word("s5", 7) - s("s5")), y=1150, size=110, accent=(1,), sfx="impact")
-    photo("rohit_pull_mcg", s("s6", -0.05), span("s6", "e1") + 0.05, side=None, push=(1.25, 1.1), origin="60% 25%")
-    title(["A SIX-HITTING", "WEAPON"], word("s6", 9), span("s6", "e1") - (word("s6", 9) - s("s6")), y=300, size=110, accent=(1,), sfx="impact")
+    # ---------------- 2015: the captain's rampage
+    video3d("y2015", *seg(s("d1", -0.05), s("d2")))
+    cue(s("d1", -0.6), "riser", 0.8)
+    cue(s("d1"), "boom", 1.0)
+    hero("ab_scoop_kneel", ["CAPTAIN", "AB"], *seg(s("d2", -0.03), word("d2", 8)))
+    flicker(["ab_scoop_ball", "ab_ramp_ball", "ab_sweep_tall", "ab_scoop_kneel", "ab_rcb", "ab_pink"], *seg(word("d2", 8), s("d3", -0.05)))
+    stamp("RAMPAGE", *seg(word("d2", 10) - 0.1, s("d3", -0.05)), y=300, size=200, color="#ff3b3b", rot=-5)
+    stage(*seg(s("d3", -0.05), s("d4")))
+    sticker("ab_sweep_tall", *seg(s("d3", -0.05), s("d4")), side="right", h=1250, x=500)
+    chip("World Cup 2015", *seg(s("d3"), s("d4")), x=60, y=220)
+    odo("482", *seg(word("d3", 2) - 0.1, s("d4")), x=60, y=320, size=190, label="RUNS")
+    odo("96", *seg(word("d3", 8) - 0.1, s("d4")), x=60, y=660, size=190, label="AVERAGE", color="#fff")
+    odo("144", *seg(word("d3", 14) - 0.1, s("d4")), x=60, y=1000, size=190, label="STRIKE RATE")
+    photo("ab_scoop_ball", *seg(s("d4", -0.05), word("d4", 8) - 0.1), side="left", push=(1.0, 1.12))
+    chip("vs West Indies · Sydney", *seg(s("d4", 0.1), word("d4", 8) - 0.1), x=None, y=300)
+    cue(word("d4", 8) - 0.7, "riser", 0.8)
+    depth_number("ab_ramp_ball", "162*", "OFF 66 BALLS", *seg(word("d4", 8) - 0.1, s("d5")))
+    flash(word("d4", 8) - 0.05, peak=0.5)
+    stage(*seg(s("d5", -0.05), s("d6")), tone="#0e0e10")
+    screen("screen_f150", *seg(s("d5", -0.05), s("d6")), side="right", focus="95% 45%", zoom=1.35)
+    title(["150 IN 64 BALLS"], *seg(word("d5", 2), s("d6")), y=280, size=96, accent=(0,), sfx="impact")
+    photo("ab_scoop_kneel", *seg(s("d6", -0.05), s("e1", -0.05)), side="up", push=(1.0, 1.1))
+    stamp("NOBODY", *seg(s("d6", 0.05), word("d6", 7)), y=300, size=210, color="#fff", rot=-4)
+    band("64", "BALLS · FASTEST ODI 150 EVER", *seg(word("d6", 7), s("e1", -0.05)), y=1160)
 
-    # ---------------- THE PROOF: the full list, now with #1 revealed
-    stage(s("e1", -0.05), span("e1", "e2") + 0.05)
-    title(["THE GIANTS…"], s("e1", 0.05), span("e1", "e2") - 0.05, y=300, size=120)
-    strike_list(s("e1", 0.1), span("e1", "e2") - 0.1, ["CHRIS GAYLE", "SHAHID AFRIDI", "BRENDON McCULLUM", "MARTIN GUPTILL"], y=560)
-    for k, (cutn, x) in enumerate((("guptill_t20", -80), ("mccullum_six", 170), ("afridi_six", 420), ("gayle_six", 640))):
-        sticker(cutn, s("e1", 0.15 + 0.08 * k), span("e1", "e2") - 0.15 - 0.08 * k, side="right" if k % 2 else "left", h=640, x=x, grey=True)
-    stage(s("e2", -0.05), span("e2", "e3") + 0.05)
-    title(["BEAT EVERY", "ONE OF THEM"], s("e2", 0.05), span("e2", "e3") - 0.05, y=250, size=84, accent=(1,))
-    leaderboard(s("e2", 0.15), span("e2", "e3") - 0.15, reveal=True, y=520)
-    video3d("planet", s("e3", -0.05), span("e3", "q1") + 0.05)
-    cue(s("e3"), "boom", 0.8)
-    title(["NOT FROM", "THIS PLANET"], word("e3", 4), span("e3", "q1") - (word("e3", 4) - s("e3")), y=300, size=124, accent=(1,), sfx="impact")
-    photo("rohit_ct_kiss", e("e3", -0.6), span("e3", "q1") - (e("e3", -0.6) - s("e3")), side="up", push=(1.0, 1.06))
+    # ---------------- the semi-final, and the heartbreak
+    photo("ab_pull", *seg(s("e1", -0.05), word("e1", 14) - 0.1), side="right", push=(1.0, 1.1))
+    chip("Semi-final · World Cup 2015", *seg(word("e1", 9), word("e1", 14) - 0.1), x=None, y=300)
+    stage(*seg(word("e1", 14) - 0.1, s("e2")))
+    sticker("ab_bat_toss", *seg(word("e1", 14) - 0.1, s("e2")), side="right", h=1250, x=440)
+    odo("65*", *seg(word("e1", 15) - 0.15, s("e2")), x=60, y=420, size=260, label="NOT OUT")
+    photo("elliott", *seg(s("e2", -0.05), word("e2", 12)), side="left", push=(1.0, 1.1))
+    tag("NEW ZEALAND WIN", *seg(word("e2", 3), word("e2", 12)), y=1300, dark=True)
+    title(["1 BALL", "TO SPARE"], *seg(word("e2", 8), word("e2", 12)), y=250, size=130, accent=(1,), sfx="impact")
+    photo("ab_bat_toss_wide", *seg(word("e2", 12), s("f1", -0.05)), side=None, fx="grey", push=(1.18, 1.06), origin="45% 35%")
+    flash(word("e2", 12), color="#000", peak=0.9)
+
+    # ---------------- the whole story in one frame
+    then_now(*seg(s("f1", -0.05), s("f2")), "ab_dejected", "ab_scoop_ball", la="4 DUCKS", lb="FASTEST 150")
+    video3d("trophy", *seg(s("f2", -0.05), s("f3", -0.05)))
+    cue(s("f2"), "boom", 0.7)
+    title(["NEVER PLAYED", "A FINAL"], *seg(word("f2", 2), s("f3", -0.05)), y=230, size=110, accent=(1,))
+    video3d("avg", *seg(s("f3", -0.05), word("f3", 13)))
+    cue(s("f3"), "boom", 0.8)
+    title(["NO ONE BETTER"], *seg(word("f3", 2), word("f3", 13)), y=1080, size=104, accent=(0,))
+    hero("ab_rcb", ["AB DE", "VILLIERS"], *seg(word("f3", 13), s("q1", -0.05)))
+    flash(word("f3", 13), peak=0.55)
 
     # ---------------- CTA
-    video3d("logo", s("q1", -0.05), TOTAL - s("q1", -0.05))
-    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
-    for a, b in LAYOUT["brand_hide"] + [[s("q1", -0.3), TOTAL + 1]]:
+    photo("ab_bat_toss", *seg(s("q1", -0.05), s("q2", -0.05)), side="up", push=(1.0, 1.1))
+    title(["GREATEST EVER", "WITHOUT A WORLD CUP?"], *seg(word("q1", 3), s("q2", -0.05)), y=250, size=80, accent=(1,), sfx="impact")
+    video3d("logo", s("q2", -0.05), TOTAL - s("q2", -0.05))
+    comment_cta(s("q2", 0.05), TOTAL - s("q2", 0.05))
+    for a, b in LAYOUT["brand_hide"] + [[s("q2", -0.3), TOTAL + 1]]:
         anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
         if b < TOTAL:
             anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.85,duration:0.25,immediateRender:false}},{b})')
