@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q2"}  # the comment card carries it
+NO_CAPTION = {"q2", "d3"}  # the comment card carries it
 
 
 def captions():
@@ -761,10 +761,10 @@ def edit():
     odo("1,207", *seg(word("h3", 2) - 0.1, word("h3", 9) - 0.1), x=60, y=380, size=210, label="WORLD CUP RUNS")
     video3d("avg", *seg(word("h3", 9) - 0.1, s("h5")))
     cue(word("h3", 9) - 0.1, "boom", 0.9)
-    title(["HIGHEST", "IN HISTORY"], *seg(word("h4", 3), s("h5")), y=1080, size=104, accent=(1,), sfx="impact")
-    chip("min. 1,000 World Cup runs", *seg(word("h4", 4), s("h5")), x=None, y=300)
+    title(["HIGHEST", "IN HISTORY"], *seg(word("h4", 3), s("h5")), y=300, size=104, accent=(1,), sfx="impact")
+    chip("min. 1,000 World Cup runs", *seg(word("h4", 4), s("h5")), x=None, y=1310)
     stage(*seg(s("h5", -0.05), s("h6")), tone="#0e0e10")
-    screen("screen_avg", *seg(s("h5", -0.05), s("h6")), side="left", focus="90% 45%", zoom=1.35)
+    screen("screen_avg", *seg(s("h5", -0.05), s("h6")), side="left", focus="50% 45%", zoom=1.3)
     pips([("viv", "Sir Viv Richards")], *seg(word("h5", 4), s("h6")))
     title(["HIGHER THAN", "SIR VIV"], *seg(s("h5", 0.05), s("h6")), y=250, size=96, accent=(1,))
 
@@ -792,7 +792,7 @@ def edit():
     cue(s("b1", -0.6), "riser", 0.7)
     cue(s("b1"), "boom", 0.9)
     duo("ab_dejected", *seg(word("b1", 7), s("b2")), side="up")
-    stamp("4 DUCKS", *seg(word("b1", 12) - 0.1, s("b2")), y=300, size=190, color="#fff", rot=-4)
+    stamp("4 DUCKS", *seg(word("b1", 12) - 0.1, s("b2")), y=1135, size=165, color="#fff", rot=-4)
     photo("ab_bat_toss", *seg(s("b2", -0.05), s("b3")), side="left", fx="grey", push=(1.0, 1.08))
     title(["DROPPED", "FOR GOOD?"], *seg(word("b2", 7), s("b3")), y=1050, size=120, accent=(1,), sfx="impact")
     ducks_at = word("b3", 10) - 1.13  # the 3D 146 breaks through 1.13 s into the shot
@@ -832,20 +832,19 @@ def edit():
     stamp("RAMPAGE", *seg(word("d2", 10) - 0.1, s("d3", -0.05)), y=300, size=200, color="#ff3b3b", rot=-5)
     stage(*seg(s("d3", -0.05), s("d4")))
     sticker("ab_sweep_tall", *seg(s("d3", -0.05), s("d4")), side="right", h=1250, x=500)
-    chip("World Cup 2015", *seg(s("d3"), s("d4")), x=60, y=220)
-    odo("482", *seg(word("d3", 2) - 0.1, s("d4")), x=60, y=320, size=190, label="RUNS")
-    odo("96", *seg(word("d3", 8) - 0.1, s("d4")), x=60, y=660, size=190, label="AVERAGE", color="#fff")
-    odo("144", *seg(word("d3", 14) - 0.1, s("d4")), x=60, y=1000, size=190, label="STRIKE RATE")
+    odo("482", *seg(word("d3", 2) - 0.1, s("d4")), x=60, y=310, size=170, label="RUNS")
+    odo("96", *seg(word("d3", 8) - 0.1, s("d4")), x=60, y=720, size=170, label="AVERAGE", color="#fff")
+    odo("144", *seg(word("d3", 14) - 0.1, s("d4")), x=60, y=1130, size=170, label="STRIKE RATE")
     photo("ab_scoop_ball", *seg(s("d4", -0.05), word("d4", 8) - 0.1), side="left", push=(1.0, 1.12))
     chip("vs West Indies · Sydney", *seg(s("d4", 0.1), word("d4", 8) - 0.1), x=None, y=300)
     cue(word("d4", 8) - 0.7, "riser", 0.8)
-    depth_number("ab_ramp_ball", "162*", "OFF 66 BALLS", *seg(word("d4", 8) - 0.1, s("d5")))
+    depth_number("ab_ramp_ball", "162", "NOT OUT · 66 BALLS", *seg(word("d4", 8) - 0.1, s("d5")))
     flash(word("d4", 8) - 0.05, peak=0.5)
     stage(*seg(s("d5", -0.05), s("d6")), tone="#0e0e10")
-    screen("screen_f150", *seg(s("d5", -0.05), s("d6")), side="right", focus="95% 45%", zoom=1.35)
+    screen("screen_f150", *seg(s("d5", -0.05), s("d6")), side="right", focus="50% 45%", zoom=1.3, mstart=1.2)
     title(["150 IN 64 BALLS"], *seg(word("d5", 2), s("d6")), y=280, size=96, accent=(0,), sfx="impact")
     photo("ab_scoop_kneel", *seg(s("d6", -0.05), s("e1", -0.05)), side="up", push=(1.0, 1.1))
-    stamp("NOBODY", *seg(s("d6", 0.05), word("d6", 7)), y=300, size=210, color="#fff", rot=-4)
+    stamp("NOBODY", *seg(s("d6", 0.05), word("d6", 7)), y=250, size=190, color="#fff", rot=-4)
     band("64", "BALLS · FASTEST ODI 150 EVER", *seg(word("d6", 7), s("e1", -0.05)), y=1160)
 
     # ---------------- the semi-final, and the heartbreak
@@ -867,13 +866,13 @@ def edit():
     title(["NEVER PLAYED", "A FINAL"], *seg(word("f2", 2), s("f3", -0.05)), y=230, size=110, accent=(1,))
     video3d("avg", *seg(s("f3", -0.05), word("f3", 13)))
     cue(s("f3"), "boom", 0.8)
-    title(["NO ONE BETTER"], *seg(word("f3", 2), word("f3", 13)), y=1080, size=104, accent=(0,))
+    title(["NO ONE BETTER"], *seg(word("f3", 2), word("f3", 13)), y=300, size=104, accent=(0,))
     hero("ab_rcb", ["AB DE", "VILLIERS"], *seg(word("f3", 13), s("q1", -0.05)))
     flash(word("f3", 13), peak=0.55)
 
     # ---------------- CTA
     photo("ab_bat_toss", *seg(s("q1", -0.05), s("q2", -0.05)), side="up", push=(1.0, 1.1))
-    title(["GREATEST EVER", "WITHOUT A WORLD CUP?"], *seg(word("q1", 3), s("q2", -0.05)), y=250, size=80, accent=(1,), sfx="impact")
+    title(["GREATEST EVER", "WITHOUT A WORLD CUP?"], *seg(word("q1", 3), s("q2", -0.05)), y=250, size=68, accent=(1,), sfx="impact")
     video3d("logo", s("q2", -0.05), TOTAL - s("q2", -0.05))
     comment_cta(s("q2", 0.05), TOTAL - s("q2", 0.05))
     for a, b in LAYOUT["brand_hide"] + [[s("q2", -0.3), TOTAL + 1]]:
@@ -916,7 +915,7 @@ EXTRA_CSS = f"""
 .hero{{position:absolute;inset:0}}
 .hero .circ{{position:absolute;left:50%;top:640px;width:820px;height:820px;margin-left:-410px;border-radius:50%;background:{Y};
   box-shadow:0 0 120px rgba(254,222,92,.45)}}
-.hero .big{{position:absolute;left:0;right:0;top:1130px;text-align:center;font-size:170px;font-weight:900;color:#fff;letter-spacing:-0.045em;line-height:.9;
+.hero .big{{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:170px;font-weight:900;color:#fff;letter-spacing:-0.045em;line-height:.9;
   text-shadow:0 6px 0 #c8c8c8,0 12px 0 #8d8d8d,0 30px 50px rgba(0,0,0,.6)}}
 .pip{{position:absolute;width:290px;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 4px #fff}}
 .pip img{{width:100%;height:370px;object-fit:cover;object-position:50% 25%;display:block}}

@@ -92,5 +92,8 @@ ab_reel/out/numt.txt
 ab_reel/previews/
 ab_reel/blender/render_*.log
 ab_reel/out/prep.log
-ab_reel/out/events.json
 ab_reel/assets/faces.json.bak
+ab_reel/out/make.log
+ab_reel/hf/media/
+ab_reel/hf/.hyperframes/
+ab_reel/hf/gsap.min.js
