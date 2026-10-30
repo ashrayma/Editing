@@ -1,0 +1,1790 @@
+{
+ "duration": 94.491,
+ "source": "--tts",
+ "lines": [
+  {
+   "id": "i1",
+   "text": "Rohit Sharma is not from this planet, and if you stay till the end, I'll prove it.",
+   "caption": "Rohit Sharma is not from this planet, and if you stay till the end, I'll prove it.",
+   "start": 0.25,
+   "end": 4.7,
+   "words": [
+    [
+     "Rohit",
+     0.25,
+     0.673
+    ],
+    [
+     "Sharma",
+     0.673,
+     1.096
+    ],
+    [
+     "is",
+     1.096,
+     1.307
+    ],
+    [
+     "not",
+     1.307,
+     1.519
+    ],
+    [
+     "from",
+     1.519,
+     1.73
+    ],
+    [
+     "this",
+     1.73,
+     1.941
+    ],
+    [
+     "planet,",
+     1.941,
+     2.364
+    ],
+    [
+     "and",
+     2.364,
+     2.576
+    ],
+    [
+     "if",
+     2.576,
+     2.787
+    ],
+    [
+     "you",
+     2.787,
+     2.999
+    ],
+    [
+     "stay",
+     2.999,
+     3.21
+    ],
+    [
+     "till",
+     3.21,
+     3.421
+    ],
+    [
+     "the",
+     3.421,
+     3.633
+    ],
+    [
+     "end,",
+     3.633,
+     3.844
+    ],
+    [
+     "I'll",
+     3.844,
+     4.056
+    ],
+    [
+     "prove",
+     4.056,
+     4.479
+    ],
+    [
+     "it.",
+     4.479,
+     4.69
+    ]
+   ]
+  },
+  {
+   "id": "i2",
+   "text": "Let's count down the five biggest six-hitters in the history of international cricket.",
+   "caption": "Let's count down the five biggest six-hitters in the history of international cricket.",
+   "start": 5.05,
+   "end": 9.848,
+   "words": [
+    [
+     "Let's",
+     5.05,
+     5.249
+    ],
+    [
+     "count",
+     5.249,
+     5.449
+    ],
+    [
+     "down",
+     5.449,
+     5.648
+    ],
+    [
+     "the",
+     5.648,
+     5.848
+    ],
+    [
+     "five",
+     5.848,
+     6.247
+    ],
+    [
+     "biggest",
+     6.247,
+     6.646
+    ],
+    [
+     "six-hitters",
+     6.646,
+     7.245
+    ],
+    [
+     "in",
+     7.245,
+     7.445
+    ],
+    [
+     "the",
+     7.445,
+     7.644
+    ],
+    [
+     "history",
+     7.644,
+     8.243
+    ],
+    [
+     "of",
+     8.243,
+     8.442
+    ],
+    [
+     "international",
+     8.442,
+     9.44
+    ],
+    [
+     "cricket.",
+     9.44,
+     9.84
+    ]
+   ]
+  },
+  {
+   "id": "n5",
+   "text": "At number five, it's Martin Guptill.",
+   "caption": "At number five, it's Martin Guptill.",
+   "start": 10.448,
+   "end": 12.343,
+   "words": [
+    [
+     "At",
+     10.448,
+     10.635
+    ],
+    [
+     "number",
+     10.635,
+     11.009
+    ],
+    [
+     "five,",
+     11.009,
+     11.383
+    ],
+    [
+     "it's",
+     11.383,
+     11.57
+    ],
+    [
+     "Martin",
+     11.57,
+     11.944
+    ],
+    [
+     "Guptill.",
+     11.944,
+     12.318
+    ]
+   ]
+  },
+  {
+   "id": "g5",
+   "text": "Tall, strong and with an enormous reach, he cleared the rope for New Zealand.",
+   "caption": "Tall, strong and with an enormous reach, he cleared the rope for New Zealand.",
+   "start": 12.593,
+   "end": 16.52,
+   "words": [
+    [
+     "Tall,",
+     12.593,
+     12.799
+    ],
+    [
+     "strong",
+     12.799,
+     13.006
+    ],
+    [
+     "and",
+     13.006,
+     13.212
+    ],
+    [
+     "with",
+     13.212,
+     13.418
+    ],
+    [
+     "an",
+     13.418,
+     13.625
+    ],
+    [
+     "enormous",
+     13.625,
+     14.243
+    ],
+    [
+     "reach,",
+     14.243,
+     14.45
+    ],
+    [
+     "he",
+     14.45,
+     14.656
+    ],
+    [
+     "cleared",
+     14.656,
+     15.069
+    ],
+    [
+     "the",
+     15.069,
+     15.275
+    ],
+    [
+     "rope",
+     15.275,
+     15.688
+    ],
+    [
+     "for",
+     15.688,
+     15.894
+    ],
+    [
+     "New",
+     15.894,
+     16.1
+    ],
+    [
+     "Zealand.",
+     16.1,
+     16.513
+    ]
+   ]
+  },
+  {
+   "id": "n4",
+   "text": "At number four, it's his old teammate Brendon McCullum.",
+   "caption": "At number four, it's his old teammate Brendon McCullum.",
+   "start": 17.02,
+   "end": 20.081,
+   "words": [
+    [
+     "At",
+     17.02,
+     17.238
+    ],
+    [
+     "number",
+     17.238,
+     17.676
+    ],
+    [
+     "four,",
+     17.676,
+     17.894
+    ],
+    [
+     "it's",
+     17.894,
+     18.113
+    ],
+    [
+     "his",
+     18.113,
+     18.331
+    ],
+    [
+     "old",
+     18.331,
+     18.55
+    ],
+    [
+     "teammate",
+     18.55,
+     19.206
+    ],
+    [
+     "Brendon",
+     19.206,
+     19.643
+    ],
+    [
+     "McCullum.",
+     19.643,
+     20.08
+    ]
+   ]
+  },
+  {
+   "id": "g4a",
+   "text": "All forearms and pure aggression,",
+   "caption": "All forearms and pure aggression,",
+   "start": 20.331,
+   "end": 21.984,
+   "words": [
+    [
+     "All",
+     20.331,
+     20.503
+    ],
+    [
+     "forearms",
+     20.503,
+     20.848
+    ],
+    [
+     "and",
+     20.848,
+     21.02
+    ],
+    [
+     "pure",
+     21.02,
+     21.364
+    ],
+    [
+     "aggression,",
+     21.364,
+     21.881
+    ]
+   ]
+  },
+  {
+   "id": "g4b",
+   "text": "he walked out to attack from the very first ball.",
+   "caption": "he walked out to attack from the very first ball.",
+   "start": 22.084,
+   "end": 24.295,
+   "words": [
+    [
+     "he",
+     22.084,
+     22.251
+    ],
+    [
+     "walked",
+     22.251,
+     22.587
+    ],
+    [
+     "out",
+     22.587,
+     22.754
+    ],
+    [
+     "to",
+     22.754,
+     22.922
+    ],
+    [
+     "attack",
+     22.922,
+     23.258
+    ],
+    [
+     "from",
+     23.258,
+     23.425
+    ],
+    [
+     "the",
+     23.425,
+     23.593
+    ],
+    [
+     "very",
+     23.593,
+     23.928
+    ],
+    [
+     "first",
+     23.928,
+     24.096
+    ],
+    [
+     "ball.",
+     24.096,
+     24.264
+    ]
+   ]
+  },
+  {
+   "id": "n3",
+   "text": "At number three, we're entering the big leagues.",
+   "caption": "At number three, we're entering the big leagues.",
+   "start": 24.795,
+   "end": 27.108,
+   "words": [
+    [
+     "At",
+     24.795,
+     24.972
+    ],
+    [
+     "number",
+     24.972,
+     25.328
+    ],
+    [
+     "three,",
+     25.328,
+     25.506
+    ],
+    [
+     "we're",
+     25.506,
+     25.861
+    ],
+    [
+     "entering",
+     25.861,
+     26.394
+    ],
+    [
+     "the",
+     26.394,
+     26.572
+    ],
+    [
+     "big",
+     26.572,
+     26.749
+    ],
+    [
+     "leagues.",
+     26.749,
+     27.105
+    ]
+   ]
+  },
+  {
+   "id": "a3a",
+   "text": "Shahid Afridi.",
+   "caption": "Shahid Afridi.",
+   "start": 27.308,
+   "end": 28.159,
+   "words": [
+    [
+     "Shahid",
+     27.328,
+     27.612
+    ],
+    [
+     "Afridi.",
+     27.612,
+     28.038
+    ]
+   ]
+  },
+  {
+   "id": "a3b",
+   "text": "They didn't call him Boom Boom for nothing.",
+   "caption": "They didn't call him Boom Boom for nothing.",
+   "start": 28.359,
+   "end": 30.131,
+   "words": [
+    [
+     "They",
+     28.369,
+     28.546
+    ],
+    [
+     "didn't",
+     28.546,
+     28.723
+    ],
+    [
+     "call",
+     28.723,
+     28.899
+    ],
+    [
+     "him",
+     28.899,
+     29.076
+    ],
+    [
+     "Boom",
+     29.076,
+     29.253
+    ],
+    [
+     "Boom",
+     29.253,
+     29.429
+    ],
+    [
+     "for",
+     29.429,
+     29.606
+    ],
+    [
+     "nothing.",
+     29.606,
+     29.959
+    ]
+   ]
+  },
+  {
+   "id": "a3c",
+   "text": "He swung at everything with pure muscle and sent it into the crowd.",
+   "caption": "He swung at everything with pure muscle and sent it into the crowd.",
+   "start": 30.331,
+   "end": 33.766,
+   "words": [
+    [
+     "He",
+     30.331,
+     30.511
+    ],
+    [
+     "swung",
+     30.511,
+     30.692
+    ],
+    [
+     "at",
+     30.692,
+     30.872
+    ],
+    [
+     "everything",
+     30.872,
+     31.594
+    ],
+    [
+     "with",
+     31.594,
+     31.775
+    ],
+    [
+     "pure",
+     31.775,
+     32.136
+    ],
+    [
+     "muscle",
+     32.136,
+     32.497
+    ],
+    [
+     "and",
+     32.497,
+     32.678
+    ],
+    [
+     "sent",
+     32.678,
+     32.858
+    ],
+    [
+     "it",
+     32.858,
+     33.039
+    ],
+    [
+     "into",
+     33.039,
+     33.4
+    ],
+    [
+     "the",
+     33.4,
+     33.58
+    ],
+    [
+     "crowd.",
+     33.58,
+     33.761
+    ]
+   ]
+  },
+  {
+   "id": "n2",
+   "text": "At number two, it's the Universe Boss himself, Chris Gayle.",
+   "caption": "At number two, it's the Universe Boss himself, Chris Gayle.",
+   "start": 34.266,
+   "end": 37.394,
+   "words": [
+    [
+     "At",
+     34.266,
+     34.461
+    ],
+    [
+     "number",
+     34.461,
+     34.851
+    ],
+    [
+     "two,",
+     34.851,
+     35.046
+    ],
+    [
+     "it's",
+     35.046,
+     35.241
+    ],
+    [
+     "the",
+     35.241,
+     35.436
+    ],
+    [
+     "Universe",
+     35.436,
+     36.216
+    ],
+    [
+     "Boss",
+     36.216,
+     36.411
+    ],
+    [
+     "himself,",
+     36.411,
+     36.801
+    ],
+    [
+     "Chris",
+     36.801,
+     36.996
+    ],
+    [
+     "Gayle.",
+     36.996,
+     37.386
+    ]
+   ]
+  },
+  {
+   "id": "c2a",
+   "text": "Six foot two and built like a heavyweight.",
+   "caption": "Six foot two and built like a heavyweight.",
+   "start": 37.644,
+   "end": 39.798,
+   "words": [
+    [
+     "Six",
+     37.644,
+     37.84
+    ],
+    [
+     "foot",
+     37.84,
+     38.035
+    ],
+    [
+     "two",
+     38.035,
+     38.231
+    ],
+    [
+     "and",
+     38.231,
+     38.426
+    ],
+    [
+     "built",
+     38.426,
+     38.622
+    ],
+    [
+     "like",
+     38.622,
+     39.012
+    ],
+    [
+     "a",
+     39.012,
+     39.208
+    ],
+    [
+     "heavyweight.",
+     39.208,
+     39.794
+    ]
+   ]
+  },
+  {
+   "id": "c2b",
+   "text": "For years, everyone believed that record would never be broken.",
+   "caption": "For years, everyone believed that record would never be broken.",
+   "start": 39.998,
+   "end": 43.438,
+   "words": [
+    [
+     "For",
+     39.998,
+     40.189
+    ],
+    [
+     "years,",
+     40.189,
+     40.38
+    ],
+    [
+     "everyone",
+     40.38,
+     41.144
+    ],
+    [
+     "believed",
+     41.144,
+     41.718
+    ],
+    [
+     "that",
+     41.718,
+     41.909
+    ],
+    [
+     "record",
+     41.909,
+     42.291
+    ],
+    [
+     "would",
+     42.291,
+     42.482
+    ],
+    [
+     "never",
+     42.482,
+     42.864
+    ],
+    [
+     "be",
+     42.864,
+     43.055
+    ],
+    [
+     "broken.",
+     43.055,
+     43.438
+    ]
+   ]
+  },
+  {
+   "id": "n1",
+   "text": "And at number one...",
+   "caption": "And at number one\u2026",
+   "start": 44.038,
+   "end": 44.905,
+   "words": [
+    [
+     "And",
+     44.048,
+     44.173
+    ],
+    [
+     "at",
+     44.173,
+     44.298
+    ],
+    [
+     "number",
+     44.298,
+     44.548
+    ],
+    [
+     "one\u2026",
+     44.548,
+     44.798
+    ]
+   ]
+  },
+  {
+   "id": "r1",
+   "text": "is a man who loves his dal chawal.",
+   "caption": "is a man who loves his dal chawal.",
+   "start": 45.305,
+   "end": 47.078,
+   "words": [
+    [
+     "is",
+     45.315,
+     45.479
+    ],
+    [
+     "a",
+     45.479,
+     45.643
+    ],
+    [
+     "man",
+     45.643,
+     45.807
+    ],
+    [
+     "who",
+     45.807,
+     45.971
+    ],
+    [
+     "loves",
+     45.971,
+     46.299
+    ],
+    [
+     "his",
+     46.299,
+     46.463
+    ],
+    [
+     "dal",
+     46.463,
+     46.627
+    ],
+    [
+     "chawal.",
+     46.627,
+     46.955
+    ]
+   ]
+  },
+  {
+   "id": "r2",
+   "text": "A man who's never in a hurry,",
+   "caption": "A man who's never in a hurry,",
+   "start": 47.328,
+   "end": 48.728,
+   "words": [
+    [
+     "A",
+     47.328,
+     47.471
+    ],
+    [
+     "man",
+     47.471,
+     47.615
+    ],
+    [
+     "who's",
+     47.615,
+     47.758
+    ],
+    [
+     "never",
+     47.758,
+     48.045
+    ],
+    [
+     "in",
+     48.045,
+     48.188
+    ],
+    [
+     "a",
+     48.188,
+     48.331
+    ],
+    [
+     "hurry,",
+     48.331,
+     48.618
+    ]
+   ]
+  },
+  {
+   "id": "r3",
+   "text": "and who looks just like any regular guy you'd bump into at a family wedding.",
+   "caption": "and who looks just like any regular guy you'd bump into at a family wedding.",
+   "start": 48.828,
+   "end": 52.826,
+   "words": [
+    [
+     "and",
+     48.828,
+     49.002
+    ],
+    [
+     "who",
+     49.002,
+     49.175
+    ],
+    [
+     "looks",
+     49.175,
+     49.349
+    ],
+    [
+     "just",
+     49.349,
+     49.522
+    ],
+    [
+     "like",
+     49.522,
+     49.869
+    ],
+    [
+     "any",
+     49.869,
+     50.216
+    ],
+    [
+     "regular",
+     50.216,
+     50.737
+    ],
+    [
+     "guy",
+     50.737,
+     50.91
+    ],
+    [
+     "you'd",
+     50.91,
+     51.084
+    ],
+    [
+     "bump",
+     51.084,
+     51.257
+    ],
+    [
+     "into",
+     51.257,
+     51.604
+    ],
+    [
+     "at",
+     51.604,
+     51.778
+    ],
+    [
+     "a",
+     51.778,
+     51.951
+    ],
+    [
+     "family",
+     51.951,
+     52.471
+    ],
+    [
+     "wedding.",
+     52.471,
+     52.818
+    ]
+   ]
+  },
+  {
+   "id": "r4",
+   "text": "Rohit Sharma.",
+   "caption": "Rohit Sharma.",
+   "start": 53.326,
+   "end": 54.221,
+   "words": [
+    [
+     "Rohit",
+     53.356,
+     53.736
+    ],
+    [
+     "Sharma.",
+     53.736,
+     54.116
+    ]
+   ]
+  },
+  {
+   "id": "r5",
+   "text": "Almost a hundred more than Gayle.",
+   "caption": "Almost a hundred more than Gayle.",
+   "start": 54.621,
+   "end": 56.12,
+   "words": [
+    [
+     "Almost",
+     54.621,
+     54.899
+    ],
+    [
+     "a",
+     54.899,
+     55.038
+    ],
+    [
+     "hundred",
+     55.038,
+     55.316
+    ],
+    [
+     "more",
+     55.316,
+     55.594
+    ],
+    [
+     "than",
+     55.594,
+     55.733
+    ],
+    [
+     "Gayle.",
+     55.733,
+     56.011
+    ]
+   ]
+  },
+  {
+   "id": "r6",
+   "text": "And he hits more sixes per innings than anyone else on this list.",
+   "caption": "And he hits more sixes per innings than anyone else on this list.",
+   "start": 56.37,
+   "end": 60.001,
+   "words": [
+    [
+     "And",
+     56.37,
+     56.561
+    ],
+    [
+     "he",
+     56.561,
+     56.752
+    ],
+    [
+     "hits",
+     56.752,
+     56.943
+    ],
+    [
+     "more",
+     56.943,
+     57.325
+    ],
+    [
+     "sixes",
+     57.325,
+     57.708
+    ],
+    [
+     "per",
+     57.708,
+     57.899
+    ],
+    [
+     "innings",
+     57.899,
+     58.281
+    ],
+    [
+     "than",
+     58.281,
+     58.472
+    ],
+    [
+     "anyone",
+     58.472,
+     59.045
+    ],
+    [
+     "else",
+     59.045,
+     59.427
+    ],
+    [
+     "on",
+     59.427,
+     59.618
+    ],
+    [
+     "this",
+     59.618,
+     59.809
+    ],
+    [
+     "list.",
+     59.809,
+     60.0
+    ]
+   ]
+  },
+  {
+   "id": "s1",
+   "text": "Here's what makes it so special.",
+   "caption": "Here's what makes it so special.",
+   "start": 60.501,
+   "end": 62.022,
+   "words": [
+    [
+     "Here's",
+     60.501,
+     60.825
+    ],
+    [
+     "what",
+     60.825,
+     60.987
+    ],
+    [
+     "makes",
+     60.987,
+     61.312
+    ],
+    [
+     "it",
+     61.312,
+     61.474
+    ],
+    [
+     "so",
+     61.474,
+     61.636
+    ],
+    [
+     "special.",
+     61.636,
+     61.961
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "Every other name on this list hit sixes with muscle.",
+   "caption": "Every other name on this list hit sixes with muscle.",
+   "start": 62.272,
+   "end": 65.011,
+   "words": [
+    [
+     "Every",
+     62.272,
+     62.782
+    ],
+    [
+     "other",
+     62.782,
+     63.122
+    ],
+    [
+     "name",
+     63.122,
+     63.462
+    ],
+    [
+     "on",
+     63.462,
+     63.632
+    ],
+    [
+     "this",
+     63.632,
+     63.802
+    ],
+    [
+     "list",
+     63.802,
+     63.972
+    ],
+    [
+     "hit",
+     63.972,
+     64.142
+    ],
+    [
+     "sixes",
+     64.142,
+     64.482
+    ],
+    [
+     "with",
+     64.482,
+     64.652
+    ],
+    [
+     "muscle.",
+     64.652,
+     64.992
+    ]
+   ]
+  },
+  {
+   "id": "s3",
+   "text": "In cricket, timing is supposed to be the gentle art,",
+   "caption": "In cricket, timing is supposed to be the gentle art,",
+   "start": 65.261,
+   "end": 67.886,
+   "words": [
+    [
+     "In",
+     65.261,
+     65.436
+    ],
+    [
+     "cricket,",
+     65.436,
+     65.785
+    ],
+    [
+     "timing",
+     65.785,
+     66.135
+    ],
+    [
+     "is",
+     66.135,
+     66.309
+    ],
+    [
+     "supposed",
+     66.309,
+     66.833
+    ],
+    [
+     "to",
+     66.833,
+     67.008
+    ],
+    [
+     "be",
+     67.008,
+     67.183
+    ],
+    [
+     "the",
+     67.183,
+     67.357
+    ],
+    [
+     "gentle",
+     67.357,
+     67.707
+    ],
+    [
+     "art,",
+     67.707,
+     67.881
+    ]
+   ]
+  },
+  {
+   "id": "s4",
+   "text": "the thing Rahul Dravid and Kane Williamson use to stroke the ball along the ground for four.",
+   "caption": "the thing Rahul Dravid and Kane Williamson use to stroke the ball along the ground for four.",
+   "start": 67.986,
+   "end": 73.18,
+   "words": [
+    [
+     "the",
+     67.986,
+     68.193
+    ],
+    [
+     "thing",
+     68.193,
+     68.401
+    ],
+    [
+     "Rahul",
+     68.401,
+     68.816
+    ],
+    [
+     "Dravid",
+     68.816,
+     69.231
+    ],
+    [
+     "and",
+     69.231,
+     69.439
+    ],
+    [
+     "Kane",
+     69.439,
+     69.854
+    ],
+    [
+     "Williamson",
+     69.854,
+     70.477
+    ],
+    [
+     "use",
+     70.477,
+     70.892
+    ],
+    [
+     "to",
+     70.892,
+     71.1
+    ],
+    [
+     "stroke",
+     71.1,
+     71.515
+    ],
+    [
+     "the",
+     71.515,
+     71.723
+    ],
+    [
+     "ball",
+     71.723,
+     71.93
+    ],
+    [
+     "along",
+     71.93,
+     72.345
+    ],
+    [
+     "the",
+     72.345,
+     72.553
+    ],
+    [
+     "ground",
+     72.553,
+     72.761
+    ],
+    [
+     "for",
+     72.761,
+     72.968
+    ],
+    [
+     "four.",
+     72.968,
+     73.176
+    ]
+   ]
+  },
+  {
+   "id": "s5",
+   "text": "Rohit took that same soft timing and aimed it at the sky.",
+   "caption": "Rohit took that same soft timing and aimed it at the sky.",
+   "start": 73.48,
+   "end": 76.727,
+   "words": [
+    [
+     "Rohit",
+     73.48,
+     73.885
+    ],
+    [
+     "took",
+     73.885,
+     74.088
+    ],
+    [
+     "that",
+     74.088,
+     74.29
+    ],
+    [
+     "same",
+     74.29,
+     74.695
+    ],
+    [
+     "soft",
+     74.695,
+     74.898
+    ],
+    [
+     "timing",
+     74.898,
+     75.303
+    ],
+    [
+     "and",
+     75.303,
+     75.505
+    ],
+    [
+     "aimed",
+     75.505,
+     75.91
+    ],
+    [
+     "it",
+     75.91,
+     76.113
+    ],
+    [
+     "at",
+     76.113,
+     76.315
+    ],
+    [
+     "the",
+     76.315,
+     76.518
+    ],
+    [
+     "sky.",
+     76.518,
+     76.72
+    ]
+   ]
+  },
+  {
+   "id": "s6",
+   "text": "He turned the most graceful skill in the game into a six-hitting weapon.",
+   "caption": "He turned the most graceful skill in the game into a six-hitting weapon.",
+   "start": 76.977,
+   "end": 80.493,
+   "words": [
+    [
+     "He",
+     76.977,
+     77.144
+    ],
+    [
+     "turned",
+     77.144,
+     77.478
+    ],
+    [
+     "the",
+     77.478,
+     77.645
+    ],
+    [
+     "most",
+     77.645,
+     77.812
+    ],
+    [
+     "graceful",
+     77.812,
+     78.314
+    ],
+    [
+     "skill",
+     78.314,
+     78.481
+    ],
+    [
+     "in",
+     78.481,
+     78.648
+    ],
+    [
+     "the",
+     78.648,
+     78.815
+    ],
+    [
+     "game",
+     78.815,
+     79.15
+    ],
+    [
+     "into",
+     79.15,
+     79.484
+    ],
+    [
+     "a",
+     79.484,
+     79.651
+    ],
+    [
+     "six-hitting",
+     79.651,
+     80.152
+    ],
+    [
+     "weapon.",
+     80.152,
+     80.487
+    ]
+   ]
+  },
+  {
+   "id": "e1",
+   "text": "So while the giants were muscling it over the rope,",
+   "caption": "So while the giants were muscling it over the rope,",
+   "start": 80.993,
+   "end": 83.205,
+   "words": [
+    [
+     "So",
+     81.013,
+     81.157
+    ],
+    [
+     "while",
+     81.157,
+     81.445
+    ],
+    [
+     "the",
+     81.445,
+     81.589
+    ],
+    [
+     "giants",
+     81.589,
+     81.733
+    ],
+    [
+     "were",
+     81.733,
+     82.021
+    ],
+    [
+     "muscling",
+     82.021,
+     82.309
+    ],
+    [
+     "it",
+     82.309,
+     82.453
+    ],
+    [
+     "over",
+     82.453,
+     82.741
+    ],
+    [
+     "the",
+     82.741,
+     82.885
+    ],
+    [
+     "rope,",
+     82.885,
+     83.173
+    ]
+   ]
+  },
+  {
+   "id": "e2",
+   "text": "Rohit beat every one of them, and he made it look effortless.",
+   "caption": "Rohit beat every one of them, and he made it look effortless.",
+   "start": 83.305,
+   "end": 86.462,
+   "words": [
+    [
+     "Rohit",
+     83.305,
+     83.637
+    ],
+    [
+     "beat",
+     83.637,
+     83.802
+    ],
+    [
+     "every",
+     83.802,
+     84.3
+    ],
+    [
+     "one",
+     84.3,
+     84.631
+    ],
+    [
+     "of",
+     84.631,
+     84.797
+    ],
+    [
+     "them,",
+     84.797,
+     84.963
+    ],
+    [
+     "and",
+     84.963,
+     85.129
+    ],
+    [
+     "he",
+     85.129,
+     85.295
+    ],
+    [
+     "made",
+     85.295,
+     85.626
+    ],
+    [
+     "it",
+     85.626,
+     85.792
+    ],
+    [
+     "look",
+     85.792,
+     85.958
+    ],
+    [
+     "effortless.",
+     85.958,
+     86.455
+    ]
+   ]
+  },
+  {
+   "id": "e3",
+   "text": "That's why I say he's not from this planet.",
+   "caption": "That's why I say he's not from this planet.",
+   "start": 86.812,
+   "end": 88.905,
+   "words": [
+    [
+     "That's",
+     86.812,
+     87.013
+    ],
+    [
+     "why",
+     87.013,
+     87.214
+    ],
+    [
+     "I",
+     87.214,
+     87.415
+    ],
+    [
+     "say",
+     87.415,
+     87.616
+    ],
+    [
+     "he's",
+     87.616,
+     87.817
+    ],
+    [
+     "not",
+     87.817,
+     88.018
+    ],
+    [
+     "from",
+     88.018,
+     88.219
+    ],
+    [
+     "this",
+     88.219,
+     88.42
+    ],
+    [
+     "planet.",
+     88.42,
+     88.822
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Muscle or timing? Drop one word below, and follow for more stories like this.",
+   "caption": "Muscle or timing? Drop one word below, and follow for more stories like this.",
+   "start": 89.405,
+   "end": 94.291,
+   "words": [
+    [
+     "Muscle",
+     89.405,
+     89.849
+    ],
+    [
+     "or",
+     89.849,
+     90.071
+    ],
+    [
+     "timing?",
+     90.071,
+     90.514
+    ],
+    [
+     "Drop",
+     90.514,
+     90.736
+    ],
+    [
+     "one",
+     90.736,
+     91.18
+    ],
+    [
+     "word",
+     91.18,
+     91.402
+    ],
+    [
+     "below,",
+     91.402,
+     91.845
+    ],
+    [
+     "and",
+     91.845,
+     92.067
+    ],
+    [
+     "follow",
+     92.067,
+     92.511
+    ],
+    [
+     "for",
+     92.511,
+     92.733
+    ],
+    [
+     "more",
+     92.733,
+     93.176
+    ],
+    [
+     "stories",
+     93.176,
+     93.62
+    ],
+    [
+     "like",
+     93.62,
+     94.064
+    ],
+    [
+     "this.",
+     94.064,
+     94.285
+    ]
+   ]
+  }
+ ]
+}
