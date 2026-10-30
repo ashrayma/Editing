@@ -239,7 +239,7 @@ def main():
     n = int(SR * total)
     m = music(total, drop=L["n5"]["start"], breaks=[L[k]["start"] for k in ("n4", "n3", "n2", "n1")],
               outro=L["q1"]["start"] - 0.1, thin=[(L["n1"]["start"], L["r4"]["start"])],
-              mute=[(L["r3"]["end"] + 0.05, L["r4"]["start"] - 0.02)], intro_warm=False)
+              mute=[(L["r2"]["end"] + 0.05, L["r4"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))
