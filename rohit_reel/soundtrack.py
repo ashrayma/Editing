@@ -248,10 +248,10 @@ def main():
     hop = 441
     env = np.abs(vo[: n // hop * hop]).reshape(-1, hop).max(1)
     on = np.convolve(env > 0.04, np.ones(25), "same") > 0
-    duck = np.repeat(np.where(on, 0.55, 1.0), hop)
+    duck = np.repeat(np.where(on, 0.62, 1.0), hop)
     duck = np.convolve(duck, np.ones(2205) / 2205, "same")
     m[: len(duck)] *= duck
-    bed = m * 0.38 + fx * 0.62
+    bed = m * 0.46 + fx * 0.62
     write_wav(os.path.join(HERE, "out", "music_sfx_only.wav"), norm(np.tanh(bed * 1.1), 0.9))
     mix = vo * 1.0 + bed
     mix = np.tanh(mix * 1.05) / np.tanh(1.05)

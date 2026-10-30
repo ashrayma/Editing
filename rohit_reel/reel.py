@@ -632,6 +632,22 @@ def strike_list(start, dur, names, y=560):
         cue(t1, "swish", 0.8)
 
 
+def slowmo(name, start, dur):
+    """'Bats like he's in slow motion': a very slow push, ghost echoes trailing behind, SLOW MOTION stretching out."""
+    i = photo(name, start, dur, side=None, push=(1.0, 1.05), whoosh=False)
+    src = media(f"assets/hi/{name}.png")
+    for k in range(3):
+        g = nid("gh")
+        add(f'<div id="{g}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};pointer-events:none;mix-blend-mode:screen;opacity:{0.28 - 0.07 * k}">'
+            f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:blur({2 + 2 * k}px)"></div>')
+        anim(f'tl.fromTo("#{g}",{{x:0,y:0}},{{x:{-26 * (k + 1)},y:{10 * (k + 1)},duration:{dur},ease:"sine.out"}},{start})')
+    t = nid("sm")
+    add(f'<div id="{t}" {clip_attrs(start, dur)} class="slowt avoid" style="z-index:{z()}">SLOW MOTION</div>')
+    anim(f'tl.fromTo("#{t}",{{letterSpacing:"-0.04em",opacity:0}},{{letterSpacing:"0.22em",opacity:1,duration:{dur},ease:"power1.out"}},{start + 0.1})')
+    cue(start, "swish", 0.9)
+    return i
+
+
 def badge(n, start, dur):
     """The rank stays pinned top-left for the player's whole segment (from the new reference)."""
     i = nid("bd")
@@ -798,8 +814,9 @@ def edit():
         title(["LOVES HIS…"], s("r1", 0.05), word("r1", 5) - s("r1", 0.05) + 1.0, y=520, size=100)
     stage(s("r2", -0.05), word("r2", 4) - s("r2", -0.05) + 0.02)
     sticker("rohit_raise_bat", s("r2", -0.05), word("r2", 4) - s("r2", -0.05) + 0.02, side="right", h=1250, x=360)
-    photo("rohit_t20wc_trophy", word("r2", 4), span("r2", "r4") - (word("r2", 4) - s("r2")), side="left", push=(1.0, 1.08))
-    title(["NEVER IN", "A HURRY"], word("r2", 4), span("r2", "r4") - (word("r2", 4) - s("r2")), y=300, size=110, accent=(1,))
+    photo("rohit_t20wc_trophy", word("r2", 4), span("r2", "r3") - (word("r2", 4) - s("r2")), side="left", push=(1.0, 1.08))
+    title(["NEVER IN", "A HURRY"], word("r2", 4), span("r2", "r3") - (word("r2", 4) - s("r2")), y=300, size=110, accent=(1,))
+    slowmo("rohit_odi_pull", s("r3", -0.05), span("r3", "r4") + 0.05)
     hero("rohit_pull_mcg", ["ROHIT", "SHARMA"], s("r4", -0.05), span("r4", "r5") + 0.05)
     badge(1, s("r4", -0.05), span("r4", "s1") + 0.05)
     flash(s("r4"), peak=0.6)
@@ -869,6 +886,8 @@ EXTRA_CSS = f"""
   text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #B98806,0 0 30px rgba(254,222,92,.55)}}
 
 .lboard{{position:absolute;left:50px;right:50px}}
+.slowt{{position:absolute;left:-200px;right:-200px;top:1150px;text-align:center;font-size:96px;font-weight:900;font-style:italic;color:{Y};
+  white-space:nowrap;text-shadow:0 6px 30px rgba(0,0,0,.7)}}
 .dnum{{position:absolute;left:0;right:0;top:260px;text-align:center}}
 .dnum div{{font-size:560px;font-weight:900;font-style:italic;letter-spacing:-0.06em;line-height:.9;color:#FFE14D;
   text-shadow:0 4px 0 #F2C21E,0 8px 0 #DDA90F,0 12px 0 #B98806,0 40px 60px rgba(0,0,0,.5),0 0 60px rgba(254,222,92,.5)}}
