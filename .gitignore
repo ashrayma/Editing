@@ -65,3 +65,7 @@ rohit_reel/out/*.wav
 rohit_reel/out/sheet*.png
 rohit_reel/out/measure.json
 rohit_reel/out/upscale.log
+rohit_reel/out/3d_preview.png
+rohit_reel/out/num_*.png
+rohit_reel/out/t*.txt
+rohit_reel/out/numt.txt
