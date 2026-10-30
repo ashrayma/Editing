@@ -122,7 +122,8 @@ def stage(start, dur, tone="#0b0b0c"):
     """An opaque grain panel: resets the frame for cut-outs and type."""
     i = nid("st")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:{tone}">'
-        f'<div class="grain"></div><div class="vig"></div></div>')
+        f'<div class="gridbg" id="{i}g"></div><div class="grain"></div><div class="vig"></div></div>')
+    anim(f'tl.fromTo("#{i}g",{{x:0,y:0}},{{x:-60,y:-90,duration:{max(0.5, dur)},ease:"none"}},{start})')
     return i
 
 
@@ -257,6 +258,7 @@ def title(lines, start, dur, y=330, size=120, color="#fff", accent=(), align="ce
         f'font-size:{size}px;text-align:{align};font-style:{"italic" if italic else "normal"}" class="title avoid">{rows}</div>')
     for k in range(len(lines)):
         anim(f'tl.fromTo("#{i}l{k}",{{yPercent:105,filter:"blur(12px)"}},{{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"}},{start + 0.08 * k})')
+    anim(f'tl.fromTo("#{i}",{{y:0,scale:1}},{{y:-16,scale:1.03,duration:{max(0.3, dur)},ease:"none"}},{start})')
     return i
 
 
@@ -279,6 +281,7 @@ def typed(lines, start, dur, x=70, y=420, header=None, size=56, cps=34, color=Y)
     y, x = mv(i, y, x)
     add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:{x}px;top:{y}px;z-index:{z()}" class="typed avoid">'
         f'{"".join(rows)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:0}},{{y:-14,duration:{max(0.3, dur)},ease:"none"}},{start})')
     return i
 
 
@@ -307,6 +310,7 @@ def odo(num, start, dur, y=520, size=330, color=Y, label=None, x=None, sfx=True)
         anim(f'tl.fromTo("#{i} .digits",{{scale:1.1}},{{scale:1,duration:0.35,ease:"back.out(3)"}},{land})')
         anim(f'tl.fromTo("#{i} .oshine",{{xPercent:-160}},{{xPercent:260,duration:0.7,ease:"power2.inOut"}},{land})')
         cue(land, "pop", 0.8)
+    anim(f'tl.fromTo("#{i}",{{y:0}},{{y:-18,duration:{max(0.3, dur)},ease:"none"}},{start})')
     if label:
         anim(f'tl.fromTo("#{i} .olab",{{y:20,opacity:0}},{{y:0,opacity:1,duration:0.4,ease:"expo.out"}},{start + 0.35})')
     return i
@@ -426,33 +430,22 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"n1"}  # the 3D #1 card carries it
+NO_CAPTION = {"n1", "r4"}  # the 3D #1 card carries it
 
 
 def captions():
-    """Lower-third captions, 1-3 words at a time: white box, black heavy caps; numbers get a yellow box."""
+    """One word at a time in the lower third: heavy white type with a soft shadow, numbers in yellow, a quick pop."""
     for ln in TL["lines"]:
         if ln["id"] in NO_CAPTION:
             continue
         words = ln["words"]
-        groups, cur = [], []
-        for w in words:
-            cur.append(w)
-            short = len(w[0]) <= 3
-            if len(cur) >= 3 or (len(cur) == 2 and not short) or w[0][-1] in ".,?!…:":
-                groups.append(cur)
-                cur = []
-        if cur:
-            groups.append(cur)
-        for g, grp in enumerate(groups):
-            t0 = grp[0][1]
-            t1 = groups[g + 1][0][1] if g + 1 < len(groups) else ln["end"] + 0.12
-            txt = " ".join(w[0] for w in grp).upper()
-            num = any(any(c.isdigit() for c in w[0]) for w in grp)
+        for k, (w, t0, t1) in enumerate(words):
+            t_next = words[k + 1][1] if k + 1 < len(words) else ln["end"] + 0.12
+            num = any(c.isdigit() for c in w)
             i = nid("cap")
             cy, _ = mv(i, 1420)
-            add(f'<div id="{i}" {clip_attrs(t0, t1 - t0)} class="cap avoid{" num" if num else ""}" style="top:{cy}px"><span>{html.escape(txt)}</span></div>')
-            anim(f'tl.fromTo("#{i} span",{{scale:0.82,y:14}},{{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"}},{t0})')
+            add(f'<div id="{i}" {clip_attrs(t0, t_next - t0)} class="cap1 avoid{" num" if num else ""}" style="top:{cy}px"><span>{html.escape(w.upper().strip(",.…"))}</span></div>')
+            anim(f'tl.fromTo("#{i} span",{{scale:0.7,y:10}},{{scale:1,y:0,duration:0.16,ease:"back.out(2.6)"}},{t0})')
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -639,6 +632,81 @@ def strike_list(start, dur, names, y=560):
         cue(t1, "swish", 0.8)
 
 
+def badge(n, start, dur):
+    """The rank stays pinned top-left for the player's whole segment (from the new reference)."""
+    i = nid("bd")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="badge" style="z-index:{z() + 350}">{n}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0,rotation:-90}},{{scale:1,rotation:0,duration:0.45,ease:"back.out(2.2)"}},{start})')
+    cue(start, "pop", 0.7)
+
+
+def hero(cut, lines, start, dur):
+    """Cut-out on the grid with a big yellow circle behind and chunky white type underneath (reference hook look)."""
+    i = stage(start, dur, tone="#0d0d0f")
+    j = nid("hr")
+    add(f'<div id="{j}" {clip_attrs(start, dur)} class="hero" style="z-index:{z()}"><div class="circ" id="{j}c"></div></div>')
+    anim(f'tl.fromTo("#{j}c",{{scale:0}},{{scale:1,duration:0.55,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{j}c",{{y:0}},{{y:-30,duration:{dur},ease:"none"}},{start})')
+    with Image.open(os.path.join(HERE, "assets", "cut", cut + ".png")) as im:
+        cw = min(1000, round(1250 * im.width / im.height))
+    sticker(cut, start + 0.05, dur - 0.05, side="right", h=1250, x=round((W - cw) / 2), bottom=0)
+    k = nid("hb")
+    rows = "<br>".join(html.escape(t) for t in lines)
+    add(f'<div id="{k}" {clip_attrs(start, dur)} class="hero avoid" style="z-index:{z()}"><div class="big" id="{k}t">{rows}</div></div>')
+    anim(f'tl.fromTo("#{k}t",{{scale:1.6,opacity:0}},{{scale:1,opacity:1,duration:0.35,ease:"power4.in"}},{start + 0.25})')
+    anim(f'tl.fromTo("#{k}t",{{y:0}},{{y:-20,duration:{dur},ease:"none"}},{start + 0.6})')
+    shake(start + 0.6, 18)
+    cue(start + 0.6, "impact", 1.0)
+    return i
+
+
+def pips(cards, start, dur):
+    """Small picture-in-picture cards stacking in at the top right, each with a name strip."""
+    for k, (name, label) in enumerate(cards):
+        i = nid("pp")
+        src = media(f"assets/hi/{name}.png")
+        add(f'<div id="{i}" {clip_attrs(start + 0.35 * k, dur - 0.35 * k)} class="pip" style="right:{50 + 30 * k}px;top:{290 + 410 * k}px;'
+            f'z-index:{z()}"><img src="{src}"><b>{html.escape(label)}</b></div>')
+        anim(f'tl.fromTo("#{i}",{{x:420,rotation:8}},{{x:0,rotation:{(-3, 3)[k % 2]},duration:0.5,ease:"back.out(1.5)"}},{start + 0.35 * k})')
+        cue(start + 0.35 * k, "whoosh", 0.6)
+
+
+def depth_number(cut, num, label, start, dur):
+    """Depth layer: blurred backdrop, a giant number, and the player's cut-out standing in front of it."""
+    i = nid("dp")
+    fill = media(f"assets/fill/{cut}.jpg")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000">'
+        f'<img id="{i}b" src="{fill}" style="position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:brightness(.8) saturate(1.2)">'
+        f'<div class="vig"></div></div>')
+    anim(f'tl.fromTo("#{i}b",{{scale:1.15}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
+    j = nid("dn")
+    add(f'<div id="{j}" {clip_attrs(start, dur)} class="dnum avoid" style="z-index:{z()}"><div id="{j}n">{html.escape(num)}</div><span>{html.escape(label)}</span></div>')
+    anim(f'tl.fromTo("#{j}n",{{yPercent:60,opacity:0,scale:.85}},{{yPercent:0,opacity:1,scale:1,duration:0.6,ease:"expo.out"}},{start + 0.05})')
+    anim(f'tl.fromTo("#{j}",{{y:0,scale:1}},{{y:-30,scale:1.05,duration:{dur},ease:"none"}},{start})')
+    cue(start + 0.05, "impact", 0.9)
+    sticker(cut, start + 0.15, dur - 0.15, side="left", h=1300, x=170)
+
+
+def band(num, label, start, dur, y=1160):
+    """Broadcast lower-third: a yellow band slams across with the number and a label."""
+    i = nid("bn")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="band avoid" style="top:{y}px;z-index:{z()}"><b id="{i}n">{html.escape(num)}</b><span>{html.escape(label)}</span></div>')
+    anim(f'tl.fromTo("#{i}",{{xPercent:-110,skewX:-12}},{{xPercent:0,skewX:0,duration:0.42,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}n",{{scale:1.5}},{{scale:1,duration:0.3,ease:"back.out(2.4)"}},{start + 0.25})')
+    anim(f'tl.fromTo("#{i}",{{x:0}},{{x:-24,duration:{dur},ease:"none"}},{start})')
+    shake(start + 0.3, 14)
+    cue(start, "whoosh_big", 0.9)
+    cue(start + 0.3, "impact", 0.9)
+
+
+def stat_screen(cut, num, lines, start, dur, x=430, h=1250):
+    """The Gayle-style stat screen: outlined cut-out on the right, rolling number + typed descriptor on the left."""
+    stage(start, dur)
+    sticker(cut, start, dur, side="right", h=h, x=x)
+    odo(num, start + 0.1, dur - 0.1, x=70, y=330, size=300)
+    typed(lines, start + 0.35, dur - 0.35, y=700, size=58)
+
+
 def rank_card(num_shot, name, lid, nxt, word_name):
     """'At number N, it's X': the 3D number, then the player's first photo lands on their name."""
     video3d(num_shot, s(lid, -0.1), word(lid, word_name) - s(lid, -0.1) + 0.02)
@@ -673,20 +741,22 @@ def edit():
 
     # ---------------- #5 GUPTILL
     rank_card("num5", "Martin Guptill", "n5", "g5", 5)
+    badge(5, word("n5", 5), span("n5", "n4") - (word("n5", 5) - s("n5")))
     photo("guptill_wc2015", word("n5", 5), span("n5", "g5") - (word("n5", 5) - s("n5")), side="left", push=(1.0, 1.1))
     tag("MARTIN GUPTILL", word("n5", 5) + 0.05, span("n5", "g5") - (word("n5", 5) + 0.05 - s("n5")), y=1300)
-    photo("guptill_t20", s("g5", -0.05), span("g5", "n4") + 0.05, side="right", push=(1.0, 1.12))
-    chip("New Zealand", s("g5", 0.1), span("g5", "n4") - 0.1, y=300)
-    odo("383", word("g5", 8), span("g5", "n4") - (word("g5", 8) - s("g5")), y=380, size=300, label="SIXES")
+    photo("guptill_t20", s("g5", -0.05), word("g5", 8) - s("g5", -0.05), side="right", push=(1.0, 1.12))
+    chip("New Zealand", s("g5", 0.1), word("g5", 8) - s("g5", 0.1), y=300)
+    stat_screen("guptill_t20", "383", ["SIXES", "tall, strong,", "enormous reach"], word("g5", 8), span("g5", "n4") - (word("g5", 8) - s("g5")))
     flash(word("g5", 8), peak=0.4)
 
     # ---------------- #4 McCULLUM
     rank_card("num4", "Brendon McCullum", "n4", "g4a", 6)
+    badge(4, word("n4", 6), span("n4", "n3") - (word("n4", 6) - s("n4")))
     photo("mccullum_drive", word("n4", 6), span("n4", "g4a") - (word("n4", 6) - s("n4")), side="right", push=(1.0, 1.1))
     tag("BRENDON McCULLUM", word("n4", 6) + 0.05, span("n4", "g4a") - (word("n4", 6) + 0.05 - s("n4")), y=1300)
-    photo("mccullum_six", s("g4a", -0.05), span("g4a", "n3") + 0.05, side="left", push=(1.0, 1.12))
-    title(["FROM BALL ONE"], s("g4b", 0.2), span("g4b", "n3") - 0.2, y=300, size=110, accent=(0,), sfx="impact")
-    odo("398", word("g4b", 4), span("g4b", "n3") - (word("g4b", 4) - s("g4b")), y=1000, size=300, label="SIXES")
+    photo("mccullum_six", s("g4a", -0.05), span("g4a", "g4b") + 0.05, side="left", push=(1.0, 1.12))
+    title(["PURE", "AGGRESSION"], word("g4a", 3), span("g4a", "g4b") - (word("g4a", 3) - s("g4a")), y=1150, size=100, accent=(1,), sfx="impact")
+    depth_number("mccullum_six", "398", "SIXES", s("g4b", -0.05), span("g4b", "n3") + 0.05)
 
     # ---------------- #3 AFRIDI
     video3d("num3", s("n3", -0.1), span("n3", "a3a") + 0.1)
@@ -694,14 +764,16 @@ def edit():
     cue(s("n3"), "boom", 0.9)
     title(["THE BIG LEAGUES"], word("n3", 4), span("n3", "a3a") - (word("n3", 4) - s("n3")), y=1215, size=90, accent=(0,))
     photo("afridi_six", s("a3a", -0.05), span("a3a", "n2") + 0.05, side="up", push=(1.0, 1.14))
+    badge(3, s("a3a"), span("a3a", "n2"))
     tag("SHAHID AFRIDI", s("a3a", 0.05), span("a3a", "a3b") - 0.05 + 0.2, y=1300)
     stamp("BOOM BOOM", word("a3b", 5), span("a3b", "a3c") - (word("a3b", 5) - s("a3b")), y=300, size=150, rot=-5)
     glitch(word("a3c", 4), 0.3, "afridi_six")
-    odo("476", word("a3c", 8), span("a3c", "n2") - (word("a3c", 8) - s("a3c")), y=380, size=300, label="SIXES")
+    band("476", "SIXES · PURE MUSCLE", word("a3c", 6), span("a3c", "n2") - (word("a3c", 6) - s("a3c")))
 
     # ---------------- #2 GAYLE
     rank_card("num2", "Chris Gayle", "n2", "c2a", 8)
     photo("gayle_six", word("n2", 8), span("n2", "c2a") - (word("n2", 8) - s("n2")), side="right", push=(1.0, 1.1))
+    badge(2, word("n2", 8), span("n2", "n1") - (word("n2", 8) - s("n2")))
     tag("CHRIS GAYLE", word("n2", 8) + 0.05, span("n2", "c2a") - (word("n2", 8) + 0.05 - s("n2")), y=1300)
     chip("The Universe Boss", word("n2", 5), span("n2", "c2a") - (word("n2", 5) - s("n2")), y=300)
     stage(s("c2a", -0.05), span("c2a", "c2b") + 0.05)
@@ -729,10 +801,10 @@ def edit():
     title(["NEVER IN", "A HURRY"], s("r2", 0.05), span("r2", "r3") - 0.05, y=300, size=110, accent=(1,))
     photo("rohit_t20wc_trophy", s("r3", -0.05), span("r3", "r4") + 0.05, side="left", push=(1.0, 1.08))
     title(["JUST A", "REGULAR GUY"], word("r3", 6), span("r3", "r4") - (word("r3", 6) - s("r3")), y=300, size=110, accent=(1,))
-    photo("rohit_odi_pull", s("r4", -0.05), span("r4", "r5") + 0.05, side="up", push=(1.1, 1.02))
+    hero("rohit_pull_mcg", ["ROHIT", "SHARMA"], s("r4", -0.05), span("r4", "r5") + 0.05)
+    badge(1, s("r4", -0.05), span("r4", "s1") + 0.05)
     flash(s("r4"), peak=0.6)
     cue(s("r4"), "boom", 1.0)
-    title(["ROHIT", "SHARMA"], s("r4", 0.05), span("r4", "r5") - 0.05, y=300, size=150, accent=(1,), sfx="impact")
     stage(s("r5", -0.05), span("r5", "r6") + 0.05)
     versus(s("r5", -0.05), span("r5", "r6") + 0.05, (650, "650+"), (553, "553"), "ROHIT", "GAYLE", y=330)
     stage(s("r6", -0.05), span("r6", "s1") + 0.05, tone="#0e0e10")
@@ -752,7 +824,8 @@ def edit():
     tag("KANE WILLIAMSON", word("s4", 6) + 0.05, span("s4", "s5") - (word("s4", 6) + 0.05 - s("s4")), y=1300)
     chip("Along the ground, for four", word("s4", 12), span("s4", "s5") - (word("s4", 12) - s("s4")), y=300)
     photo("rohit_mi_pull", s("s5", -0.05), word("s5", 6) - s("s5", -0.05), side="up", push=(1.0, 1.1))
-    title(["SAME SOFT TIMING…"], s("s5", 0.1), word("s5", 6) - s("s5", 0.1), y=300, size=92, accent=(0,))
+    title(["SAME SOFT TIMING…"], s("s5", 0.1), word("s5", 6) - s("s5", 0.1), y=1150, size=92, accent=(0,))
+    pips([("dravid_drive", "Rahul Dravid"), ("williamson_drive", "Kane Williamson")], s("s5", 0.1), word("s5", 6) - s("s5", 0.1))
     video3d("six", word("s5", 6), span("s5", "s6") - (word("s5", 6) - s("s5")))
     cue(word("s5", 6), "whoosh_big", 1.0)
     title(["…AIMED AT", "THE SKY"], word("s5", 7), span("s5", "s6") - (word("s5", 7) - s("s5")), y=1150, size=110, accent=(1,), sfx="impact")
@@ -763,6 +836,8 @@ def edit():
     stage(s("e1", -0.05), span("e1", "e2") + 0.05)
     title(["THE GIANTS…"], s("e1", 0.05), span("e1", "e2") - 0.05, y=300, size=120)
     strike_list(s("e1", 0.1), span("e1", "e2") - 0.1, ["CHRIS GAYLE", "SHAHID AFRIDI", "BRENDON McCULLUM", "MARTIN GUPTILL"], y=560)
+    for k, (cutn, x) in enumerate((("guptill_t20", -80), ("mccullum_six", 170), ("afridi_six", 420), ("gayle_six", 640))):
+        sticker(cutn, s("e1", 0.15 + 0.08 * k), span("e1", "e2") - 0.15 - 0.08 * k, side="right" if k % 2 else "left", h=640, x=x, grey=True)
     stage(s("e2", -0.05), span("e2", "e3") + 0.05)
     title(["BEAT EVERY", "ONE OF THEM"], s("e2", 0.05), span("e2", "e3") - 0.05, y=250, size=84, accent=(1,))
     leaderboard(s("e2", 0.15), span("e2", "e3") - 0.15, reveal=True, y=520)
@@ -795,6 +870,28 @@ EXTRA_CSS = f"""
   text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #B98806,0 0 30px rgba(254,222,92,.55)}}
 
 .lboard{{position:absolute;left:50px;right:50px}}
+.dnum{{position:absolute;left:0;right:0;top:260px;text-align:center}}
+.dnum div{{font-size:560px;font-weight:900;font-style:italic;letter-spacing:-0.06em;line-height:.9;color:#FFE14D;
+  text-shadow:0 4px 0 #F2C21E,0 8px 0 #DDA90F,0 12px 0 #B98806,0 40px 60px rgba(0,0,0,.5),0 0 60px rgba(254,222,92,.5)}}
+.dnum span{{display:inline-block;margin-top:10px;font-size:44px;font-weight:900;letter-spacing:.3em;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}}
+.band{{position:absolute;left:0;right:60px;display:flex;align-items:baseline;gap:26px;padding:22px 50px 26px 70px;background:{Y};
+  border-radius:0 26px 26px 0;box-shadow:0 30px 60px rgba(0,0,0,.5)}}
+.band b{{font-size:150px;font-weight:900;font-style:italic;color:#0b0b0c;letter-spacing:-0.05em;line-height:.9;display:inline-block}}
+.band span{{font-size:38px;font-weight:900;color:#0b0b0c;letter-spacing:.12em}}
+.cap1{{position:absolute;left:0;right:0;text-align:center;z-index:900}}
+.cap1 span{{display:inline-block;font-size:78px;font-weight:900;color:#fff;letter-spacing:-0.01em;
+  text-shadow:0 4px 0 rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.75)}}
+.cap1.num span{{color:#FFE14D;text-shadow:0 3px 0 #C29008,0 10px 30px rgba(0,0,0,.75)}}
+.badge{{position:absolute;left:46px;top:236px;width:118px;height:118px;border-radius:50%;background:{Y};color:#0b0b0c;display:flex;
+  align-items:center;justify-content:center;font-size:76px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 6px rgba(254,222,92,.25)}}
+.hero{{position:absolute;inset:0}}
+.hero .circ{{position:absolute;left:50%;top:640px;width:820px;height:820px;margin-left:-410px;border-radius:50%;background:{Y};
+  box-shadow:0 0 120px rgba(254,222,92,.45)}}
+.hero .big{{position:absolute;left:0;right:0;top:1130px;text-align:center;font-size:170px;font-weight:900;color:#fff;letter-spacing:-0.045em;line-height:.9;
+  text-shadow:0 6px 0 #c8c8c8,0 12px 0 #8d8d8d,0 30px 50px rgba(0,0,0,.6)}}
+.pip{{position:absolute;width:290px;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 4px #fff}}
+.pip img{{width:100%;height:370px;object-fit:cover;object-position:50% 25%;display:block}}
+.pip b{{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);color:#fff;font-size:26px;font-weight:800}}
 .slist{{position:absolute;left:70px;right:70px}}
 .slr{{position:relative;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.02em;line-height:1.25;white-space:nowrap}}
 .sll{{position:absolute;left:-10px;right:-10px;top:52%;height:9px;border-radius:5px;background:{Y};transform-origin:left;box-shadow:0 0 18px {Y}}}
@@ -847,7 +944,10 @@ FONT_CSS = "".join(f'@font-face{{font-family:"IDisp";font-weight:{w};font-style:
 CSS = FONT_CSS + EXTRA_CSS + f"""
 html,body{{margin:0;background:#000}}
 #root{{position:relative;width:{W}px;height:{H}px;overflow:hidden;background:#0b0b0c;font-family:"IDisp","Inter Display",system-ui,sans-serif}}
-#world{{position:absolute;inset:0}}
+#cam{{position:absolute;inset:-30px;transform-origin:50% 50%}}
+#world{{position:absolute;inset:30px}}
+.gridbg{{position:absolute;inset:-120px;background-image:linear-gradient(rgba(255,255,255,.045) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.045) 2px,transparent 2px);
+  background-size:120px 120px}}
 .clip{{}}
 .grain{{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.09;mix-blend-mode:overlay}}
 #grainTop{{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.05;z-index:880;pointer-events:none;mix-blend-mode:overlay}}
@@ -925,13 +1025,15 @@ def build():
             shutil.copy(f"/usr/share/fonts/opentype/inter/{f}", os.path.join(MEDIA, f"InterDisplay-{n}{it}.otf"))
     shutil.copy(os.path.join(HERE, "..", "kohli_countdown", "assets", "logo.png"), os.path.join(MEDIA, "logo.png"))
     # grain crawl: jumps every frame (steps), like film
+    # the camera never stops: a slow breathing zoom and drift over the whole reel
+    anim(f'tl.fromTo("#cam",{{scale:1.025,rotation:-0.35,x:-6}},{{scale:1.055,rotation:0.35,x:6,duration:3.2,ease:"sine.inOut",repeat:{int(TOTAL / 3.2) + 1},yoyo:true}},0)')
     anim(f'tl.fromTo("#grainTop",{{x:0,y:0}},{{x:-48,y:-36,duration:{TOTAL},ease:"steps({int(TOTAL * 12)})"}},0)')
     page = f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>
 {SVG_FILTERS}
 <div id="root" data-composition-id="root" data-width="{W}" data-height="{H}" data-fps="{FPS}" data-duration="{TOTAL}">
-<div id="world">
+<div id="cam"><div id="world">
 {chr(10).join(els)}
-</div>
+</div></div>
 <div id="grainTop"></div>
 <div class="brand" id="brand"><img src="media/logo.png"></div>
 </div>

@@ -22,7 +22,7 @@ from music import add, bp, clap, hat, hp, hz, lp, pluck, reverb, saw  # noqa: E4
 from sfx import SR  # noqa: E402
 
 rng = np.random.default_rng(11)
-BPM = 140
+BPM = 128  # full-time (not half-time): drums on 2 and 4 for a driving countdown
 BEAT = 60 / BPM
 BAR = 4 * BEAT
 DM = [(38, [50, 53, 57, 62]), (34, [50, 53, 58, 62]), (41, [53, 57, 60, 65]), (33, [49, 52, 57, 61])]  # Dm Bb F A
@@ -113,18 +113,20 @@ def music(total, drop, breaks, outro, thin=(), mute=(), intro_warm=False):
                 continue
             if any(bt - BEAT * 1.2 <= ts < bt + 0.05 for bt in breaks if bt > drop + 0.5):
                 continue  # the drop-out before each chapter number
-            if q in (0, 10):
-                add(drums, K, ts, 0.75)
-                add(bass, k808(root, BEAT * (2.5 if q == 0 else 1.5)), ts, 0.7)
-            if q == 8:
-                add(drums, S, ts, 0.5)
-            if q % 2 == 0:
-                add(drums, HC, ts, 0.09 if q % 4 else 0.12)
-            if b % 4 == 3 and q >= 12:  # hat roll into the next phrase
+            if q in (0, 6, 10):  # syncopated kick + 808 under it
+                add(drums, K, ts, 0.8 if q == 0 else 0.65)
+                add(bass, k808(root + (0 if q != 10 else 3), BEAT * (1.5 if q == 0 else 1.0)), ts, 0.72)
+            if q in (4, 12):  # clap on 2 and 4
+                add(drums, S, ts, 0.55)
+            if q % 2 == 0 or b % 2:  # 8ths, 16ths every other bar
+                add(drums, HC, ts, (0.1 if q % 4 == 0 else 0.07) if q % 2 == 0 else 0.045)
+            if b % 4 == 3 and q >= 12:  # triplet hat roll into the next phrase
                 for r in range(3):
-                    add(drums, HC, ts + r * BEAT / 12, 0.07)
-            if q == 14 and b % 2:
-                add(drums, HO, ts, 0.08)
+                    add(drums, HC, ts + r * BEAT / 12, 0.08)
+            if q in (2, 14):
+                add(drums, HO, ts, 0.07)
+            if q % 2 == 0:  # plucked minor arp on 8ths: the hook of the beat
+                add(keys, bell(notes[(q // 2) % 4] + 12, 0.5), ts, 0.13)
         t0 += BAR
         b += 1
     tt = np.arange(n) / SR
@@ -246,10 +248,10 @@ def main():
     hop = 441
     env = np.abs(vo[: n // hop * hop]).reshape(-1, hop).max(1)
     on = np.convolve(env > 0.04, np.ones(25), "same") > 0
-    duck = np.repeat(np.where(on, 0.42, 1.0), hop)
+    duck = np.repeat(np.where(on, 0.55, 1.0), hop)
     duck = np.convolve(duck, np.ones(2205) / 2205, "same")
     m[: len(duck)] *= duck
-    bed = m * 0.32 + fx * 0.62
+    bed = m * 0.38 + fx * 0.62
     write_wav(os.path.join(HERE, "out", "music_sfx_only.wav"), norm(np.tanh(bed * 1.1), 0.9))
     mix = vo * 1.0 + bed
     mix = np.tanh(mix * 1.05) / np.tanh(1.05)
