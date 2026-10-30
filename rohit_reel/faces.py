@@ -41,6 +41,10 @@ def main():
         a = rgba[:, :, 3:4].astype(np.float32) / 255
         img = (rgba[:, :, :3] * a + 128 * (1 - a)).astype(np.uint8)
         res["cut/" + os.path.basename(f)[:-4]] = detect(img, det)
+    # hand-placed boxes where the detector locked onto a face in the crowd instead of the player
+    mp = os.path.join(HERE, "assets", "faces_manual.json")
+    if os.path.exists(mp):
+        res.update(json.load(open(mp)))
     json.dump(res, open(os.path.join(HERE, "assets", "faces.json"), "w"), indent=1)
     for k, v in res.items():
         print(f"{k:34s} {len(v)} {v[:2]}")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Original soundtrack for the Dhoni reel: half-time beat + sound design, mixed under the narration.
+"""Original soundtrack for the Rohit reel: half-time beat + sound design, mixed under the narration.
 
     python3 soundtrack.py   ->  out/soundtrack.wav (stereo 44.1 kHz) and out/music_sfx_only.wav (no voice)
 
@@ -235,9 +235,9 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    m = music(total, drop=L["l1"]["start"], breaks=[L["t1"]["start"]], outro=L["o1"]["start"] - 0.1,
-              thin=[(L["b1"]["start"], L["t1"]["start"])], mute=[(L["b4"]["end"] + 0.05, L["t1"]["start"] - 0.02)],
-              intro_warm=True)
+    m = music(total, drop=L["n5"]["start"], breaks=[L[k]["start"] for k in ("n4", "n3", "n2", "n1")],
+              outro=L["q1"]["start"] - 0.1, thin=[(L["n1"]["start"], L["r4"]["start"])],
+              mute=[(L["r3"]["end"] + 0.05, L["r4"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))
