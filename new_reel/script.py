@@ -1,0 +1,63 @@
+"""Kohli vs Tilak Varma: the Chase Master — the script as recorded, split into lines.
+
+(id, spoken text, caption text or None for "same as spoken", pause after in seconds)
+"""
+LINES = [
+    ("k1", "Every time Virat Kohli stayed not out in a T20I chase, India won.", None, 0.2),
+    ("k2", "Eighteen times. Eighteen victories.", "18 times. 18 victories.", 0.3),
+    ("k3", "And now there is someone doing something remarkably similar.", None, 0.2),
+    ("k4", "His name is Tilak Varma.", None, 0.3),
+    ("k5", "Twelve times he finished not out in a T20I chase, and all twelve times India have won.",
+     "12 times he finished not out in a T20I chase, and all 12 times India have won.", 0.3),
+    ("k6", "Remember the Asia Cup final against Pakistan?", None, 0.1),
+    ("k7", "India needed someone to finish the job,", None, 0.1),
+    ("k8", "and Tilak delivered an unbeaten sixty nine under enormous pressure.",
+     "and Tilak delivered an unbeaten 69 under enormous pressure.", 0.5),
+    ("a1", "And honestly, that's phenomenal.", None, 0.1),
+    ("a2", "These guys deserve every bit of appreciation.", None, 0.3),
+    ("a3", "But before we start calling him the next Chase Master,", None, 0.1),
+    ("a4", "there is one statistic you need to hear.", None, 0.5),
+    ("s1", "In ODI cricket, whenever Kohli has remained not out while chasing,", None, 0.1),
+    ("s2", "India have won thirty two out of thirty three matches.", "India have won 32 out of 33 matches.", 0.3),
+    ("s3", "And that one match India lost,", None, 0.2),
+    ("s4", "he was still unbeaten on eighty seven.", "he was still unbeaten on 87.", 0.6),
+    ("p1", "January twenty eleven. Port Elizabeth.", "January 2011. Port Elizabeth.", 0.1),
+    ("p2", "India were chasing two sixty six against South Africa.", "India were chasing 266 against South Africa.", 0.2),
+    ("p3", "A young Virat Kohli was batting beautifully.", None, 0.2),
+    ("p4", "He was on eighty seven, still at the crease, and the South African bowlers couldn't get him out.",
+     "He was on 87, still at the crease, and the South African bowlers couldn't get him out.", 0.4),
+    ("p5", "But then nature has other plans.", None, 0.2),
+    ("p6", "The rain arrived, the match stopped, resumed, and then the rain returned.", None, 0.2),
+    ("p7", "Eventually, India lost by forty eight runs under the Duckworth-Lewis method.",
+     "Eventually, India lost by 48 runs under the Duckworth-Lewis method.", 0.3),
+    ("p8", "South Africa couldn't get Virat out that night.", None, 0.1),
+    ("p9", "The weather took the victory away from him.", None, 0.6),
+    ("t1", "Think about that. Thirty two victories in thirty three ODI chases when he remained unbeaten.",
+     "Think about that. 32 victories in 33 ODI chases when he remained unbeaten.", 0.2),
+    ("t2", "And this is what separates a good record from a legendary career.", None, 0.6),
+    ("v1", "Tilak is doing something special.", None, 0.1),
+    ("v2", "He might become one of India's greatest finishers, and I genuinely hope he does.", None, 0.3),
+    ("v3", "But Virat Kohli didn't earn the title of Chase Master in a few incredible innings.", None, 0.2),
+    ("v4", "He spent more than fifteen years building a legacy that speaks for itself.",
+     "He spent more than 15 years building a legacy that speaks for itself.", 0.4),
+    ("v5", "Tilak can create his own history.", None, 0.1),
+    ("v6", "He can become a legend in his own right,", None, 0.3),
+    ("v7", "but there will never be another Virat Kohli.", None, 0.2),
+    ("v8", "Because some players become legends. Virat Kohli becomes the benchmark.", None, 0.5),
+    ("q1", "Send this to that one friend who has already decided the next Chase Master has arrived.", None, 0.2),
+]
+
+# One long take with retakes; the best take of every line (seconds into the raw file).
+TAKES = {"A": "vo_raw/a_214916.m4a"}
+PIECES = {
+    "k1": [("A", 1.67, 5.25)], "k2": [("A", 5.25, 7.15)], "k3": [("A", 7.15, 10.85)], "k4": [("A", 10.85, 12.85)],
+    "k5": [("A", 12.85, 18.0)], "k6": [("A", 18.0, 20.6)], "k7": [("A", 20.6, 22.6)], "k8": [("A", 22.6, 26.95)],
+    "a1": [("A", 30.8, 33.55)], "a2": [("A", 33.55, 36.85)], "a3": [("A", 36.85, 40.1)], "a4": [("A", 40.1, 43.0)],
+    "s1": [("A", 44.75, 48.4)], "s2": [("A", 48.4, 52.6)], "s3": [("A", 52.6, 55.45)], "s4": [("A", 55.45, 58.6)],
+    "p1": [("A", 61.3, 64.95)], "p2": [("A", 64.95, 67.85)], "p3": [("A", 67.85, 71.0)], "p4": [("A", 71.0, 77.1)],
+    "p5": [("A", 77.9, 81.5)], "p6": [("A", 81.5, 86.4)], "p7": [("A", 86.4, 91.1)], "p8": [("A", 91.4, 94.7)],
+    "p9": [("A", 94.7, 97.4)], "t1": [("A", 101.95, 107.55)], "t2": [("A", 107.55, 112.6)],
+    "v1": [("A", 128.4, 130.05)], "v2": [("A", 130.05, 135.0)], "v3": [("A", 135.0, 140.4)], "v4": [("A", 140.4, 145.6)],
+    "v5": [("A", 154.1, 156.5)], "v6": [("A", 156.5, 159.75)], "v7": [("A", 161.9, 165.6)], "v8": [("A", 165.6, 169.75)],
+    "q1": [("A", 169.75, 175.6)],
+}

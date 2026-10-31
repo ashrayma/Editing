@@ -1,0 +1,1985 @@
+{
+ "duration": 123.263,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "k1",
+   "text": "Every time Virat Kohli stayed not out in a T20I chase, India won.",
+   "caption": "Every time Virat Kohli stayed not out in a T20I chase, India won.",
+   "start": 0.239,
+   "end": 3.943,
+   "words": [
+    [
+     "Every",
+     0.287,
+     0.81
+    ],
+    [
+     "time",
+     0.81,
+     1.158
+    ],
+    [
+     "Virat",
+     1.158,
+     1.506
+    ],
+    [
+     "Kohli",
+     1.506,
+     1.855
+    ],
+    [
+     "stayed",
+     1.855,
+     2.029
+    ],
+    [
+     "not",
+     2.029,
+     2.203
+    ],
+    [
+     "out",
+     2.203,
+     2.377
+    ],
+    [
+     "in",
+     2.377,
+     2.551
+    ],
+    [
+     "a",
+     2.551,
+     2.725
+    ],
+    [
+     "T20I",
+     2.725,
+     2.9
+    ],
+    [
+     "chase,",
+     2.9,
+     3.248
+    ],
+    [
+     "India",
+     3.248,
+     3.596
+    ],
+    [
+     "won.",
+     3.596,
+     3.77
+    ]
+   ]
+  },
+  {
+   "id": "k2",
+   "text": "Eighteen times. Eighteen victories.",
+   "caption": "18 times. 18 victories.",
+   "start": 4.029,
+   "end": 5.598,
+   "words": [
+    [
+     "18",
+     4.067,
+     4.484
+    ],
+    [
+     "times.",
+     4.484,
+     4.763
+    ],
+    [
+     "18",
+     4.763,
+     5.181
+    ],
+    [
+     "victories.",
+     5.181,
+     5.598
+    ]
+   ]
+  },
+  {
+   "id": "k3",
+   "text": "And now there is someone doing something remarkably similar.",
+   "caption": "And now there is someone doing something remarkably similar.",
+   "start": 5.598,
+   "end": 9.167,
+   "words": [
+    [
+     "And",
+     5.598,
+     5.778
+    ],
+    [
+     "now",
+     5.778,
+     5.958
+    ],
+    [
+     "there",
+     5.958,
+     6.318
+    ],
+    [
+     "is",
+     6.318,
+     6.497
+    ],
+    [
+     "someone",
+     6.497,
+     7.036
+    ],
+    [
+     "doing",
+     7.036,
+     7.216
+    ],
+    [
+     "something",
+     7.216,
+     7.756
+    ],
+    [
+     "remarkably",
+     7.756,
+     8.475
+    ],
+    [
+     "similar.",
+     8.475,
+     9.014
+    ]
+   ]
+  },
+  {
+   "id": "k4",
+   "text": "His name is Tilak Varma.",
+   "caption": "His name is Tilak Varma.",
+   "start": 9.254,
+   "end": 10.995,
+   "words": [
+    [
+     "His",
+     9.292,
+     9.498
+    ],
+    [
+     "name",
+     9.498,
+     9.909
+    ],
+    [
+     "is",
+     9.909,
+     10.115
+    ],
+    [
+     "Tilak",
+     10.115,
+     10.526
+    ],
+    [
+     "Varma.",
+     10.526,
+     10.938
+    ]
+   ]
+  },
+  {
+   "id": "k5",
+   "text": "Twelve times he finished not out in a T20I chase, and all twelve times India have won.",
+   "caption": "12 times he finished not out in a T20I chase, and all 12 times India have won.",
+   "start": 11.124,
+   "end": 15.622,
+   "words": [
+    [
+     "12",
+     11.172,
+     11.649
+    ],
+    [
+     "times",
+     11.649,
+     11.967
+    ],
+    [
+     "he",
+     11.967,
+     12.125
+    ],
+    [
+     "finished",
+     12.125,
+     12.603
+    ],
+    [
+     "not",
+     12.603,
+     12.762
+    ],
+    [
+     "out",
+     12.762,
+     12.921
+    ],
+    [
+     "in",
+     12.921,
+     13.079
+    ],
+    [
+     "a",
+     13.079,
+     13.238
+    ],
+    [
+     "T20I",
+     13.238,
+     13.397
+    ],
+    [
+     "chase,",
+     13.397,
+     13.715
+    ],
+    [
+     "and",
+     13.715,
+     13.874
+    ],
+    [
+     "all",
+     13.874,
+     14.033
+    ],
+    [
+     "12",
+     14.033,
+     14.509
+    ],
+    [
+     "times",
+     14.509,
+     14.828
+    ],
+    [
+     "India",
+     14.828,
+     15.145
+    ],
+    [
+     "have",
+     15.145,
+     15.463
+    ],
+    [
+     "won.",
+     15.463,
+     15.622
+    ]
+   ]
+  },
+  {
+   "id": "k6",
+   "text": "Remember the Asia Cup final against Pakistan?",
+   "caption": "Remember the Asia Cup final against Pakistan?",
+   "start": 15.622,
+   "end": 17.995,
+   "words": [
+    [
+     "Remember",
+     15.622,
+     16.13
+    ],
+    [
+     "the",
+     16.13,
+     16.3
+    ],
+    [
+     "Asia",
+     16.3,
+     16.639
+    ],
+    [
+     "Cup",
+     16.639,
+     16.809
+    ],
+    [
+     "final",
+     16.809,
+     17.147
+    ],
+    [
+     "against",
+     17.147,
+     17.487
+    ],
+    [
+     "Pakistan?",
+     17.487,
+     17.995
+    ]
+   ]
+  },
+  {
+   "id": "k7",
+   "text": "India needed someone to finish the job,",
+   "caption": "India needed someone to finish the job,",
+   "start": 17.995,
+   "end": 19.909,
+   "words": [
+    [
+     "India",
+     17.995,
+     18.314
+    ],
+    [
+     "needed",
+     18.314,
+     18.633
+    ],
+    [
+     "someone",
+     18.633,
+     19.112
+    ],
+    [
+     "to",
+     19.112,
+     19.271
+    ],
+    [
+     "finish",
+     19.271,
+     19.59
+    ],
+    [
+     "the",
+     19.59,
+     19.749
+    ],
+    [
+     "job,",
+     19.749,
+     19.909
+    ]
+   ]
+  },
+  {
+   "id": "k8",
+   "text": "and Tilak delivered an unbeaten sixty nine under enormous pressure.",
+   "caption": "and Tilak delivered an unbeaten 69 under enormous pressure.",
+   "start": 19.909,
+   "end": 23.909,
+   "words": [
+    [
+     "and",
+     19.909,
+     20.087
+    ],
+    [
+     "Tilak",
+     20.087,
+     20.443
+    ],
+    [
+     "delivered",
+     20.443,
+     21.154
+    ],
+    [
+     "an",
+     21.154,
+     21.332
+    ],
+    [
+     "unbeaten",
+     21.332,
+     21.866
+    ],
+    [
+     "69",
+     21.866,
+     22.4
+    ],
+    [
+     "under",
+     22.4,
+     22.756
+    ],
+    [
+     "enormous",
+     22.756,
+     23.289
+    ],
+    [
+     "pressure.",
+     23.289,
+     23.823
+    ]
+   ]
+  },
+  {
+   "id": "a1",
+   "text": "And honestly, that's phenomenal.",
+   "caption": "And honestly, that's phenomenal.",
+   "start": 24.124,
+   "end": 25.904,
+   "words": [
+    [
+     "And",
+     24.172,
+     24.364
+    ],
+    [
+     "honestly,",
+     24.364,
+     24.938
+    ],
+    [
+     "that's",
+     24.938,
+     25.129
+    ],
+    [
+     "phenomenal.",
+     25.129,
+     25.895
+    ]
+   ]
+  },
+  {
+   "id": "a2",
+   "text": "These guys deserve every bit of appreciation.",
+   "caption": "These guys deserve every bit of appreciation.",
+   "start": 25.904,
+   "end": 29.11,
+   "words": [
+    [
+     "These",
+     25.904,
+     26.31
+    ],
+    [
+     "guys",
+     26.31,
+     26.513
+    ],
+    [
+     "deserve",
+     26.513,
+     27.122
+    ],
+    [
+     "every",
+     27.122,
+     27.73
+    ],
+    [
+     "bit",
+     27.73,
+     27.933
+    ],
+    [
+     "of",
+     27.933,
+     28.136
+    ],
+    [
+     "appreciation.",
+     28.136,
+     28.947
+    ]
+   ]
+  },
+  {
+   "id": "a3",
+   "text": "But before we start calling him the next Chase Master,",
+   "caption": "But before we start calling him the next Chase Master,",
+   "start": 29.239,
+   "end": 32.014,
+   "words": [
+    [
+     "But",
+     29.287,
+     29.466
+    ],
+    [
+     "before",
+     29.466,
+     30.004
+    ],
+    [
+     "we",
+     30.004,
+     30.184
+    ],
+    [
+     "start",
+     30.184,
+     30.363
+    ],
+    [
+     "calling",
+     30.363,
+     30.722
+    ],
+    [
+     "him",
+     30.722,
+     30.9
+    ],
+    [
+     "the",
+     30.9,
+     31.079
+    ],
+    [
+     "next",
+     31.079,
+     31.259
+    ],
+    [
+     "Chase",
+     31.259,
+     31.617
+    ],
+    [
+     "Master,",
+     31.617,
+     31.976
+    ]
+   ]
+  },
+  {
+   "id": "a4",
+   "text": "there is one statistic you need to hear.",
+   "caption": "there is one statistic you need to hear.",
+   "start": 32.014,
+   "end": 34.78,
+   "words": [
+    [
+     "there",
+     32.043,
+     32.49
+    ],
+    [
+     "is",
+     32.49,
+     32.713
+    ],
+    [
+     "one",
+     32.713,
+     33.16
+    ],
+    [
+     "statistic",
+     33.16,
+     33.83
+    ],
+    [
+     "you",
+     33.83,
+     34.053
+    ],
+    [
+     "need",
+     34.053,
+     34.276
+    ],
+    [
+     "to",
+     34.276,
+     34.5
+    ],
+    [
+     "hear.",
+     34.5,
+     34.722
+    ]
+   ]
+  },
+  {
+   "id": "s1",
+   "text": "In ODI cricket, whenever Kohli has remained not out while chasing,",
+   "caption": "In ODI cricket, whenever Kohli has remained not out while chasing,",
+   "start": 34.995,
+   "end": 38.249,
+   "words": [
+    [
+     "In",
+     35.129,
+     35.285
+    ],
+    [
+     "ODI",
+     35.285,
+     35.597
+    ],
+    [
+     "cricket,",
+     35.597,
+     35.909
+    ],
+    [
+     "whenever",
+     35.909,
+     36.377
+    ],
+    [
+     "Kohli",
+     36.377,
+     36.689
+    ],
+    [
+     "has",
+     36.689,
+     36.845
+    ],
+    [
+     "remained",
+     36.845,
+     37.313
+    ],
+    [
+     "not",
+     37.313,
+     37.469
+    ],
+    [
+     "out",
+     37.469,
+     37.625
+    ],
+    [
+     "while",
+     37.625,
+     37.937
+    ],
+    [
+     "chasing,",
+     37.937,
+     38.249
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "India have won thirty two out of thirty three matches.",
+   "caption": "India have won 32 out of 33 matches.",
+   "start": 38.249,
+   "end": 42.268,
+   "words": [
+    [
+     "India",
+     38.249,
+     38.767
+    ],
+    [
+     "have",
+     38.767,
+     39.285
+    ],
+    [
+     "won",
+     39.285,
+     39.544
+    ],
+    [
+     "32",
+     39.544,
+     40.321
+    ],
+    [
+     "out",
+     40.321,
+     40.58
+    ],
+    [
+     "of",
+     40.58,
+     40.839
+    ],
+    [
+     "33",
+     40.839,
+     41.616
+    ],
+    [
+     "matches.",
+     41.616,
+     42.134
+    ]
+   ]
+  },
+  {
+   "id": "s3",
+   "text": "And that one match India lost,",
+   "caption": "And that one match India lost,",
+   "start": 42.397,
+   "end": 44.837,
+   "words": [
+    [
+     "And",
+     42.435,
+     42.694
+    ],
+    [
+     "that",
+     42.694,
+     42.952
+    ],
+    [
+     "one",
+     42.952,
+     43.469
+    ],
+    [
+     "match",
+     43.469,
+     43.727
+    ],
+    [
+     "India",
+     43.727,
+     44.244
+    ],
+    [
+     "lost,",
+     44.244,
+     44.502
+    ]
+   ]
+  },
+  {
+   "id": "s4",
+   "text": "he was still unbeaten on eighty seven.",
+   "caption": "he was still unbeaten on 87.",
+   "start": 44.923,
+   "end": 47.632,
+   "words": [
+    [
+     "he",
+     44.962,
+     45.224
+    ],
+    [
+     "was",
+     45.224,
+     45.486
+    ],
+    [
+     "still",
+     45.486,
+     45.748
+    ],
+    [
+     "unbeaten",
+     45.748,
+     46.535
+    ],
+    [
+     "on",
+     46.535,
+     46.797
+    ],
+    [
+     "87.",
+     46.797,
+     47.584
+    ]
+   ]
+  },
+  {
+   "id": "p1",
+   "text": "January twenty eleven. Port Elizabeth.",
+   "caption": "January 2011. Port Elizabeth.",
+   "start": 47.89,
+   "end": 50.77,
+   "words": [
+    [
+     "January",
+     48.158,
+     48.718
+    ],
+    [
+     "2011.",
+     48.718,
+     49.837
+    ],
+    [
+     "Port",
+     49.837,
+     50.024
+    ],
+    [
+     "Elizabeth.",
+     50.024,
+     50.77
+    ]
+   ]
+  },
+  {
+   "id": "p2",
+   "text": "India were chasing two sixty six against South Africa.",
+   "caption": "India were chasing 266 against South Africa.",
+   "start": 50.77,
+   "end": 53.622,
+   "words": [
+    [
+     "India",
+     50.77,
+     51.105
+    ],
+    [
+     "were",
+     51.105,
+     51.441
+    ],
+    [
+     "chasing",
+     51.441,
+     51.776
+    ],
+    [
+     "266",
+     51.776,
+     52.53
+    ],
+    [
+     "against",
+     52.53,
+     52.865
+    ],
+    [
+     "South",
+     52.865,
+     53.033
+    ],
+    [
+     "Africa.",
+     53.033,
+     53.536
+    ]
+   ]
+  },
+  {
+   "id": "p3",
+   "text": "A young Virat Kohli was batting beautifully.",
+   "caption": "A young Virat Kohli was batting beautifully.",
+   "start": 53.708,
+   "end": 56.694,
+   "words": [
+    [
+     "A",
+     53.746,
+     53.958
+    ],
+    [
+     "young",
+     53.958,
+     54.17
+    ],
+    [
+     "Virat",
+     54.17,
+     54.594
+    ],
+    [
+     "Kohli",
+     54.594,
+     55.018
+    ],
+    [
+     "was",
+     55.018,
+     55.231
+    ],
+    [
+     "batting",
+     55.231,
+     55.655
+    ],
+    [
+     "beautifully.",
+     55.655,
+     56.502
+    ]
+   ]
+  },
+  {
+   "id": "p4",
+   "text": "He was on eighty seven, still at the crease, and the South African bowlers couldn't get him out.",
+   "caption": "He was on 87, still at the crease, and the South African bowlers couldn't get him out.",
+   "start": 56.78,
+   "end": 62.177,
+   "words": [
+    [
+     "He",
+     56.885,
+     57.111
+    ],
+    [
+     "was",
+     57.111,
+     57.338
+    ],
+    [
+     "on",
+     57.338,
+     57.564
+    ],
+    [
+     "87,",
+     57.564,
+     58.243
+    ],
+    [
+     "still",
+     58.243,
+     58.47
+    ],
+    [
+     "at",
+     58.47,
+     58.696
+    ],
+    [
+     "the",
+     58.696,
+     58.922
+    ],
+    [
+     "crease,",
+     58.922,
+     59.375
+    ],
+    [
+     "and",
+     59.375,
+     59.601
+    ],
+    [
+     "the",
+     59.601,
+     59.828
+    ],
+    [
+     "South",
+     59.828,
+     60.054
+    ],
+    [
+     "African",
+     60.054,
+     60.733
+    ],
+    [
+     "bowlers",
+     60.733,
+     61.186
+    ],
+    [
+     "couldn't",
+     61.186,
+     61.411
+    ],
+    [
+     "get",
+     61.411,
+     61.638
+    ],
+    [
+     "him",
+     61.638,
+     61.864
+    ],
+    [
+     "out.",
+     61.864,
+     62.091
+    ]
+   ]
+  },
+  {
+   "id": "p5",
+   "text": "But then nature has other plans.",
+   "caption": "But then nature has other plans.",
+   "start": 62.349,
+   "end": 65.038,
+   "words": [
+    [
+     "But",
+     62.435,
+     62.724
+    ],
+    [
+     "then",
+     62.724,
+     63.013
+    ],
+    [
+     "nature",
+     63.013,
+     63.881
+    ],
+    [
+     "has",
+     63.881,
+     64.17
+    ],
+    [
+     "other",
+     64.17,
+     64.749
+    ],
+    [
+     "plans.",
+     64.749,
+     65.038
+    ]
+   ]
+  },
+  {
+   "id": "p6",
+   "text": "The rain arrived, the match stopped, resumed, and then the rain returned.",
+   "caption": "The rain arrived, the match stopped, resumed, and then the rain returned.",
+   "start": 65.038,
+   "end": 69.679,
+   "words": [
+    [
+     "The",
+     65.038,
+     65.279
+    ],
+    [
+     "rain",
+     65.279,
+     65.52
+    ],
+    [
+     "arrived,",
+     65.52,
+     66.242
+    ],
+    [
+     "the",
+     66.242,
+     66.482
+    ],
+    [
+     "match",
+     66.482,
+     66.723
+    ],
+    [
+     "stopped,",
+     66.723,
+     67.205
+    ],
+    [
+     "resumed,",
+     67.205,
+     67.927
+    ],
+    [
+     "and",
+     67.927,
+     68.167
+    ],
+    [
+     "then",
+     68.167,
+     68.409
+    ],
+    [
+     "the",
+     68.409,
+     68.65
+    ],
+    [
+     "rain",
+     68.65,
+     68.89
+    ],
+    [
+     "returned.",
+     68.89,
+     69.612
+    ]
+   ]
+  },
+  {
+   "id": "p7",
+   "text": "Eventually, India lost by forty eight runs under the Duckworth-Lewis method.",
+   "caption": "Eventually, India lost by 48 runs under the Duckworth-Lewis method.",
+   "start": 69.766,
+   "end": 73.928,
+   "words": [
+    [
+     "Eventually,",
+     69.804,
+     70.559
+    ],
+    [
+     "India",
+     70.559,
+     70.936
+    ],
+    [
+     "lost",
+     70.936,
+     71.124
+    ],
+    [
+     "by",
+     71.124,
+     71.313
+    ],
+    [
+     "48",
+     71.313,
+     71.879
+    ],
+    [
+     "runs",
+     71.879,
+     72.068
+    ],
+    [
+     "under",
+     72.068,
+     72.445
+    ],
+    [
+     "the",
+     72.445,
+     72.633
+    ],
+    [
+     "Duckworth-Lewis",
+     72.633,
+     73.389
+    ],
+    [
+     "method.",
+     73.389,
+     73.766
+    ]
+   ]
+  },
+  {
+   "id": "p8",
+   "text": "South Africa couldn't get Virat out that night.",
+   "caption": "South Africa couldn't get Virat out that night.",
+   "start": 74.057,
+   "end": 76.679,
+   "words": [
+    [
+     "South",
+     74.134,
+     74.366
+    ],
+    [
+     "Africa",
+     74.366,
+     75.059
+    ],
+    [
+     "couldn't",
+     75.059,
+     75.291
+    ],
+    [
+     "get",
+     75.291,
+     75.522
+    ],
+    [
+     "Virat",
+     75.522,
+     75.986
+    ],
+    [
+     "out",
+     75.986,
+     76.216
+    ],
+    [
+     "that",
+     76.216,
+     76.448
+    ],
+    [
+     "night.",
+     76.448,
+     76.679
+    ]
+   ]
+  },
+  {
+   "id": "p9",
+   "text": "The weather took the victory away from him.",
+   "caption": "The weather took the victory away from him.",
+   "start": 76.679,
+   "end": 78.919,
+   "words": [
+    [
+     "The",
+     76.679,
+     76.855
+    ],
+    [
+     "weather",
+     76.855,
+     77.206
+    ],
+    [
+     "took",
+     77.206,
+     77.381
+    ],
+    [
+     "the",
+     77.381,
+     77.557
+    ],
+    [
+     "victory",
+     77.557,
+     78.083
+    ],
+    [
+     "away",
+     78.083,
+     78.433
+    ],
+    [
+     "from",
+     78.433,
+     78.61
+    ],
+    [
+     "him.",
+     78.61,
+     78.785
+    ]
+   ]
+  },
+  {
+   "id": "t1",
+   "text": "Think about that. Thirty two victories in thirty three ODI chases when he remained unbeaten.",
+   "caption": "Think about that. 32 victories in 33 ODI chases when he remained unbeaten.",
+   "start": 79.177,
+   "end": 84.383,
+   "words": [
+    [
+     "Think",
+     79.215,
+     79.409
+    ],
+    [
+     "about",
+     79.409,
+     79.794
+    ],
+    [
+     "that.",
+     79.794,
+     79.987
+    ],
+    [
+     "32",
+     79.987,
+     80.566
+    ],
+    [
+     "victories",
+     80.566,
+     81.144
+    ],
+    [
+     "in",
+     81.144,
+     81.337
+    ],
+    [
+     "33",
+     81.337,
+     81.916
+    ],
+    [
+     "ODI",
+     81.916,
+     82.301
+    ],
+    [
+     "chases",
+     82.301,
+     82.687
+    ],
+    [
+     "when",
+     82.687,
+     82.879
+    ],
+    [
+     "he",
+     82.879,
+     83.073
+    ],
+    [
+     "remained",
+     83.073,
+     83.651
+    ],
+    [
+     "unbeaten.",
+     83.651,
+     84.23
+    ]
+   ]
+  },
+  {
+   "id": "t2",
+   "text": "And this is what separates a good record from a legendary career.",
+   "caption": "And this is what separates a good record from a legendary career.",
+   "start": 84.469,
+   "end": 89.273,
+   "words": [
+    [
+     "And",
+     84.632,
+     84.86
+    ],
+    [
+     "this",
+     84.86,
+     85.089
+    ],
+    [
+     "is",
+     85.089,
+     85.318
+    ],
+    [
+     "what",
+     85.318,
+     85.546
+    ],
+    [
+     "separates",
+     85.546,
+     86.461
+    ],
+    [
+     "a",
+     86.461,
+     86.69
+    ],
+    [
+     "good",
+     86.69,
+     86.919
+    ],
+    [
+     "record",
+     86.919,
+     87.376
+    ],
+    [
+     "from",
+     87.376,
+     87.605
+    ],
+    [
+     "a",
+     87.605,
+     87.833
+    ],
+    [
+     "legendary",
+     87.833,
+     88.748
+    ],
+    [
+     "career.",
+     88.748,
+     89.206
+    ]
+   ]
+  },
+  {
+   "id": "v1",
+   "text": "Tilak is doing something special.",
+   "caption": "Tilak is doing something special.",
+   "start": 89.531,
+   "end": 90.957,
+   "words": [
+    [
+     "Tilak",
+     89.579,
+     89.883
+    ],
+    [
+     "is",
+     89.883,
+     90.035
+    ],
+    [
+     "doing",
+     90.035,
+     90.188
+    ],
+    [
+     "something",
+     90.188,
+     90.643
+    ],
+    [
+     "special.",
+     90.643,
+     90.947
+    ]
+   ]
+  },
+  {
+   "id": "v2",
+   "text": "He might become one of India's greatest finishers, and I genuinely hope he does.",
+   "caption": "He might become one of India's greatest finishers, and I genuinely hope he does.",
+   "start": 90.957,
+   "end": 95.455,
+   "words": [
+    [
+     "He",
+     90.976,
+     91.15
+    ],
+    [
+     "might",
+     91.15,
+     91.324
+    ],
+    [
+     "become",
+     91.324,
+     91.847
+    ],
+    [
+     "one",
+     91.847,
+     92.195
+    ],
+    [
+     "of",
+     92.195,
+     92.369
+    ],
+    [
+     "India's",
+     92.369,
+     92.718
+    ],
+    [
+     "greatest",
+     92.718,
+     93.066
+    ],
+    [
+     "finishers,",
+     93.066,
+     93.589
+    ],
+    [
+     "and",
+     93.589,
+     93.763
+    ],
+    [
+     "I",
+     93.763,
+     93.937
+    ],
+    [
+     "genuinely",
+     93.937,
+     94.633
+    ],
+    [
+     "hope",
+     94.633,
+     94.982
+    ],
+    [
+     "he",
+     94.982,
+     95.156
+    ],
+    [
+     "does.",
+     95.156,
+     95.33
+    ]
+   ]
+  },
+  {
+   "id": "v3",
+   "text": "But Virat Kohli didn't earn the title of Chase Master in a few incredible innings.",
+   "caption": "But Virat Kohli didn't earn the title of Chase Master in a few incredible innings.",
+   "start": 95.584,
+   "end": 100.675,
+   "words": [
+    [
+     "But",
+     96.062,
+     96.255
+    ],
+    [
+     "Virat",
+     96.255,
+     96.639
+    ],
+    [
+     "Kohli",
+     96.639,
+     97.023
+    ],
+    [
+     "didn't",
+     97.023,
+     97.215
+    ],
+    [
+     "earn",
+     97.215,
+     97.408
+    ],
+    [
+     "the",
+     97.408,
+     97.6
+    ],
+    [
+     "title",
+     97.6,
+     97.984
+    ],
+    [
+     "of",
+     97.984,
+     98.176
+    ],
+    [
+     "Chase",
+     98.176,
+     98.561
+    ],
+    [
+     "Master",
+     98.561,
+     98.945
+    ],
+    [
+     "in",
+     98.945,
+     99.137
+    ],
+    [
+     "a",
+     99.137,
+     99.329
+    ],
+    [
+     "few",
+     99.329,
+     99.522
+    ],
+    [
+     "incredible",
+     99.522,
+     100.29
+    ],
+    [
+     "innings.",
+     100.29,
+     100.675
+    ]
+   ]
+  },
+  {
+   "id": "v4",
+   "text": "He spent more than fifteen years building a legacy that speaks for itself.",
+   "caption": "He spent more than 15 years building a legacy that speaks for itself.",
+   "start": 100.675,
+   "end": 105.766,
+   "words": [
+    [
+     "He",
+     100.675,
+     100.922
+    ],
+    [
+     "spent",
+     100.922,
+     101.17
+    ],
+    [
+     "more",
+     101.17,
+     101.666
+    ],
+    [
+     "than",
+     101.666,
+     101.914
+    ],
+    [
+     "15",
+     101.914,
+     102.657
+    ],
+    [
+     "years",
+     102.657,
+     102.905
+    ],
+    [
+     "building",
+     102.905,
+     103.401
+    ],
+    [
+     "a",
+     103.401,
+     103.649
+    ],
+    [
+     "legacy",
+     103.649,
+     104.392
+    ],
+    [
+     "that",
+     104.392,
+     104.64
+    ],
+    [
+     "speaks",
+     104.64,
+     104.888
+    ],
+    [
+     "for",
+     104.888,
+     105.136
+    ],
+    [
+     "itself.",
+     105.136,
+     105.632
+    ]
+   ]
+  },
+  {
+   "id": "v5",
+   "text": "Tilak can create his own history.",
+   "caption": "Tilak can create his own history.",
+   "start": 105.938,
+   "end": 107.919,
+   "words": [
+    [
+     "Tilak",
+     105.986,
+     106.372
+    ],
+    [
+     "can",
+     106.372,
+     106.566
+    ],
+    [
+     "create",
+     106.566,
+     106.952
+    ],
+    [
+     "his",
+     106.952,
+     107.145
+    ],
+    [
+     "own",
+     107.145,
+     107.339
+    ],
+    [
+     "history.",
+     107.339,
+     107.919
+    ]
+   ]
+  },
+  {
+   "id": "v6",
+   "text": "He can become a legend in his own right,",
+   "caption": "He can become a legend in his own right,",
+   "start": 107.919,
+   "end": 111.029,
+   "words": [
+    [
+     "He",
+     107.919,
+     108.178
+    ],
+    [
+     "can",
+     108.178,
+     108.437
+    ],
+    [
+     "become",
+     108.437,
+     109.214
+    ],
+    [
+     "a",
+     109.214,
+     109.474
+    ],
+    [
+     "legend",
+     109.474,
+     109.992
+    ],
+    [
+     "in",
+     109.992,
+     110.251
+    ],
+    [
+     "his",
+     110.251,
+     110.51
+    ],
+    [
+     "own",
+     110.51,
+     110.769
+    ],
+    [
+     "right,",
+     110.769,
+     111.029
+    ]
+   ]
+  },
+  {
+   "id": "v7",
+   "text": "but there will never be another Virat Kohli.",
+   "caption": "but there will never be another Virat Kohli.",
+   "start": 111.158,
+   "end": 113.828,
+   "words": [
+    [
+     "but",
+     111.206,
+     111.393
+    ],
+    [
+     "there",
+     111.393,
+     111.767
+    ],
+    [
+     "will",
+     111.767,
+     111.955
+    ],
+    [
+     "never",
+     111.955,
+     112.329
+    ],
+    [
+     "be",
+     112.329,
+     112.517
+    ],
+    [
+     "another",
+     112.517,
+     113.078
+    ],
+    [
+     "Virat",
+     113.078,
+     113.454
+    ],
+    [
+     "Kohli.",
+     113.454,
+     113.828
+    ]
+   ]
+  },
+  {
+   "id": "v8",
+   "text": "Because some players become legends. Virat Kohli becomes the benchmark.",
+   "caption": "Because some players become legends. Virat Kohli becomes the benchmark.",
+   "start": 113.828,
+   "end": 117.799,
+   "words": [
+    [
+     "Because",
+     113.828,
+     114.395
+    ],
+    [
+     "some",
+     114.395,
+     114.773
+    ],
+    [
+     "players",
+     114.773,
+     114.963
+    ],
+    [
+     "become",
+     114.963,
+     115.53
+    ],
+    [
+     "legends.",
+     115.53,
+     115.908
+    ],
+    [
+     "Virat",
+     115.908,
+     116.286
+    ],
+    [
+     "Kohli",
+     116.286,
+     116.664
+    ],
+    [
+     "becomes",
+     116.664,
+     117.232
+    ],
+    [
+     "the",
+     117.232,
+     117.421
+    ],
+    [
+     "benchmark.",
+     117.421,
+     117.799
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Send this to that one friend who has already decided the next Chase Master has arrived.",
+   "caption": "Send this to that one friend who has already decided the next Chase Master has arrived.",
+   "start": 117.799,
+   "end": 123.177,
+   "words": [
+    [
+     "Send",
+     117.799,
+     118.011
+    ],
+    [
+     "this",
+     118.011,
+     118.222
+    ],
+    [
+     "to",
+     118.222,
+     118.434
+    ],
+    [
+     "that",
+     118.434,
+     118.646
+    ],
+    [
+     "one",
+     118.646,
+     119.069
+    ],
+    [
+     "friend",
+     119.069,
+     119.28
+    ],
+    [
+     "who",
+     119.28,
+     119.493
+    ],
+    [
+     "has",
+     119.493,
+     119.704
+    ],
+    [
+     "already",
+     119.704,
+     120.339
+    ],
+    [
+     "decided",
+     120.339,
+     120.974
+    ],
+    [
+     "the",
+     120.974,
+     121.186
+    ],
+    [
+     "next",
+     121.186,
+     121.397
+    ],
+    [
+     "Chase",
+     121.397,
+     121.821
+    ],
+    [
+     "Master",
+     121.821,
+     122.244
+    ],
+    [
+     "has",
+     122.244,
+     122.456
+    ],
+    [
+     "arrived.",
+     122.456,
+     123.091
+    ]
+   ]
+  }
+ ]
+}
