@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q2", "d3"}  # the comment card carries it
+NO_CAPTION = {"q1"}  # the comment card carries it
 
 
 def captions():
@@ -525,12 +525,12 @@ def receipt(n, start, dur, total=8):
     anim(f'tl.fromTo("#{i} .rn",{{yPercent:100,opacity:0}},{{yPercent:0,opacity:1,duration:0.35,ease:"back.out(2)"}},{start})')
 
 
-def then_now(start, dur, a_photo, b_photo, la="THEN", lb="NOW"):
+def then_now(start, dur, a_photo, b_photo, la="THEN", lb="NOW", grey=True):
     """Split screen: THEN (grey, 2007) on top, NOW (colour) underneath; the divider wipes across."""
     i = nid("tn")
     sa, sb = media(f"assets/hi/{a_photo}.png"), media(f"assets/hi/{b_photo}.png")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000">'
-        f'<div class="half" id="{i}a" style="top:0"><img src="{sa}" style="filter:grayscale(1) contrast(1.1)"><div class="hl">{html.escape(la)}</div></div>'
+        f'<div class="half" id="{i}a" style="top:0"><img src="{sa}" style="filter:{"grayscale(1) contrast(1.1)" if grey else "none"}"><div class="hl">{html.escape(la)}</div></div>'
         f'<div class="half" id="{i}b" style="top:960px"><img src="{sb}"><div class="hl" style="color:{Y}">{html.escape(lb)}</div></div>'
         f'<div class="hdiv" id="{i}d"></div></div>')
     anim(f'tl.fromTo("#{i}a",{{xPercent:-100}},{{xPercent:0,duration:0.5,ease:"expo.out"}},{start})')
@@ -733,155 +733,153 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>YES</span><i>or</i><span style="color:{Y}">NO?</span></div>'
+        f'<div class="mot" id="{i}q"><span>SEND</span><i>to</i><span style="color:{Y}">THAT FRIEND</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">who already crowned the next Chase Master</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "YES 🐐"
+    txt = "@that_friend 👀"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
+
+
+def rain(start, dur):
+    """Rain streaks falling over the frame (two layers at different speeds)."""
+    i = nid("rn")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};pointer-events:none;overflow:hidden">'
+        f'<div id="{i}a" class="rainl" style="opacity:.55"></div><div id="{i}b" class="rainl" style="opacity:.35;background-size:140px 260px"></div></div>')
+    anim(f'tl.fromTo("#{i}a",{{y:-400}},{{y:0,duration:0.4,repeat:{int(dur / 0.4) + 1},ease:"none"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{y:-520}},{{y:0,duration:0.7,repeat:{int(dur / 0.7) + 1},ease:"none"}},{start})')
+    cue(start, "crowd", 0.5)
 
 
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK: AB mid-scoop on frame one, the "cheater" claim, the numbers
-    photo("ab_rcb", *seg(0, s("h2")), side=None, push=(1.2, 1.06), origin="60% 30%")
+    # ---------------- HOOK: Kohli's chase streak, then the new guy doing the same
+    photo("kohli_mcg_roar", *seg(0, s("k2")), side=None, push=(1.2, 1.06), origin="50% 30%")
     flash(0.02, peak=0.5)
-    tag("AB DE VILLIERS", *seg(0.25, word("h1", 4)), y=1300)
-    stamp("“CHEATER”", *seg(word("h1", 5) - 0.12, s("h2")), y=300, size=170, color="#ff3b3b", rot=-5)
-    glitch(s("h2", -0.03), 0.3, "ab_rcb")
-    photo("ab_pull", *seg(s("h2"), s("h3")), side="right", push=(1.0, 1.1))
-    title(["NUMBERS THAT", "AREN'T NORMAL"], *seg(word("h2", 2), s("h3")), y=300, size=100, accent=(1,), sfx="impact")
+    tag("VIRAT KOHLI", *seg(0.25, word("k1", 9)), y=1300)
+    title(["NOT OUT", "IN A CHASE?"], *seg(word("k1", 4), s("k2")), y=300, size=120, accent=(1,), sfx="impact")
+    stage(*seg(s("k2", -0.05), s("k3")))
+    sticker("kohli_mcg_fist", *seg(s("k2", -0.05), s("k3")), side="right", h=1250, x=430)
+    odo("18", *seg(s("k2"), s("k3")), x=60, y=380, size=300, label="T20I NOT OUTS")
+    stamp("18 WINS", *seg(word("k2", 2) - 0.05, s("k3")), y=900, size=130, rot=-5)
+    glitch(s("k3", -0.03), 0.3, "kohli_mcg_helmet")
+    photo("kohli_mcg_helmet", *seg(s("k3"), s("k4", -0.05)), side="right", push=(1.0, 1.1))
+    title(["SOMEONE", "SIMILAR…"], *seg(word("k3", 7), s("k4", -0.05)), y=300, size=120, accent=(1,))
+    hero("tilak_jump", ["TILAK", "VARMA"], *seg(s("k4", -0.05), s("k5", -0.05)))
+    flash(s("k4"), peak=0.6)
+    cue(s("k4"), "boom", 1.0)
+    stage(*seg(s("k5", -0.05), s("k6")))
+    sticker("tilak_fist", *seg(s("k5", -0.05), s("k6")), side="right", h=1250, x=430)
+    odo("12", *seg(s("k5"), s("k6")), x=60, y=380, size=300, label="T20I NOT OUTS")
+    stamp("12 WINS", *seg(word("k5", 12) - 0.05, s("k6")), y=900, size=130, rot=-5)
+    photo("tilak_roar", *seg(s("k6", -0.05), s("k7")), side="up", push=(1.0, 1.1))
+    chip("Asia Cup final · vs Pakistan", *seg(word("k6", 2), s("k7")), x=None, y=300)
+    photo("tilak_point", *seg(s("k7", -0.05), word("k8", 4) - 0.1), side="right", push=(1.0, 1.1))
+    title(["FINISH", "THE JOB"], *seg(word("k7", 3), word("k8", 4) - 0.1), y=300, size=130, accent=(1,), sfx="impact")
+    depth_number("tilak_raise", "69*", "UNBEATEN · ASIA CUP FINAL", *seg(word("k8", 4) - 0.1, s("a1", -0.05)))
+    flash(word("k8", 5) - 0.05, peak=0.45)
 
-    stage(*seg(s("h3", -0.05), word("h3", 9) - 0.1))
-    sticker("ab_pink", *seg(s("h3", -0.05), word("h3", 9) - 0.1), side="right", h=1250, x=420)
-    odo("1,207", *seg(word("h3", 2) - 0.1, word("h3", 9) - 0.1), x=60, y=380, size=210, label="WORLD CUP RUNS")
-    video3d("avg", *seg(word("h3", 9) - 0.1, s("h5")))
-    cue(word("h3", 9) - 0.1, "boom", 0.9)
-    title(["HIGHEST", "IN HISTORY"], *seg(word("h4", 3), s("h5")), y=300, size=104, accent=(1,), sfx="impact")
-    chip("min. 1,000 World Cup runs", *seg(word("h4", 4), s("h5")), x=None, y=1310)
-    stage(*seg(s("h5", -0.05), s("h6")), tone="#0e0e10")
-    screen("screen_avg", *seg(s("h5", -0.05), s("h6")), side="left", focus="50% 45%", zoom=1.3)
-    pips([("viv", "Sir Viv Richards")], *seg(word("h5", 4), s("h6")))
-    title(["HIGHER THAN", "SIR VIV"], *seg(s("h5", 0.05), s("h6")), y=250, size=96, accent=(1,))
+    # ---------------- the turn
+    then_now(*seg(s("a1", -0.05), s("a3", -0.05)), "kohli_mcg_fist", "tilak_smile", la="VIRAT", lb="TILAK", grey=False)
+    stamp("PHENOMENAL", *seg(word("a1", 3) - 0.05, s("a2")), y=870, size=150, rot=-4)
+    photo("tilak_point", *seg(s("a3", -0.05), s("a4")), side=None, push=(1.18, 1.05), origin="50% 25%")
+    title(["THE NEXT", "CHASE MASTER?"], *seg(word("a3", 6), s("a4")), y=300, size=110, accent=(1,), sfx="impact")
+    glitch(s("a4", -0.03), 0.35, "tilak_point")
+    stage(*seg(s("a4"), s("s1", -0.05)), tone="#0d0d0f")
+    title(["ONE STAT", "YOU NEED", "TO HEAR"], *seg(word("a4", 1), s("s1", -0.05)), y=620, size=130, accent=(2,), sfx="impact")
 
-    photo("ab_scoop_kneel", *seg(s("h6", -0.05), word("h6", 9)), side="right", push=(1.0, 1.12))
-    title(["FASTER THAN", "ALMOST ANYONE"], *seg(word("h6", 5), word("h6", 9)), y=300, size=96, accent=(1,), sfx="impact")
-    flicker(["ab_scoop_ball", "ab_ramp_ball", "ab_sweep_tall", "ab_rcb", "ab_pull", "ab_scoop_kneel"], *seg(word("h6", 9), word("h6", 13)))
-    stage(*seg(word("h6", 13), s("h7")))
-    sticker("ab_sweep_tall", *seg(word("h6", 13), s("h7")), side="right", h=1250, x=440)
-    odo("117", *seg(word("h6", 13), s("h7")), x=60, y=380, size=240, label="STRIKE RATE")
-    typed(["among everyone", "with 1,000+", "World Cup runs"], *seg(word("h6", 13) + 0.4, s("h7")), y=760, size=50, color="#fff")
+    # ---------------- 32 out of 33
+    photo("kohli_raise_ct", *seg(s("s1", -0.05), s("s2", -0.05)), side="right", push=(1.0, 1.1))
+    chip("ODI chases · Kohli not out", *seg(word("s1", 3), s("s2", -0.05)), x=None, y=300)
+    stage(*seg(s("s2", -0.05), s("s3", -0.05)), tone="#0e0e10")
+    screen("screen_odi", *seg(s("s2", -0.05), s("s3", -0.05)), side="left", focus="60% 40%", zoom=1.3, mstart=1.0)
+    odo("32/33", *seg(word("s2", 3) - 0.1, s("s3", -0.05)), x=None, y=260, size=170)
+    duo("kohli_young_raise", *seg(s("s3", -0.05), s("s4", -0.05)), side="left")
+    title(["THAT ONE", "LOSS…"], *seg(word("s3", 2), s("s4", -0.05)), y=300, size=130, accent=(1,), sfx="impact")
+    depth_number("kohli_young_raise", "87*", "STILL UNBEATEN", *seg(s("s4", -0.05), s("p1", -0.05)))
+    cue(word("s4", 5) - 0.6, "riser", 0.8)
 
-    photo("ab_sweep_old", *seg(s("h7", -0.05), word("h7", 5)), side="left", push=(1.0, 1.1))
-    title(["MOST", "CONSISTENT"], *seg(word("h7", 2), word("h7", 5)), y=300, size=120, accent=(1,), sfx="impact")
-    photo("ab_ramp_ball", *seg(word("h7", 5), word("h7", 14)), side="right", push=(1.0, 1.1))
-    title(["+ ONE OF THE", "FASTEST"], *seg(word("h7", 6), word("h7", 14)), y=300, size=120, accent=(1,), sfx="impact")
-    glitch(word("h7", 14), 0.35, "ab_ramp_ball")
-    stage(*seg(word("h7", 14), s("b0")), tone="#0d0d0f")
-    stamp("IMPOSSIBLE", *seg(word("h7", 15), s("b0")), y=780, size=180, rot=-5)
+    # ---------------- Port Elizabeth, 2011
+    photo("stadium_night", *seg(s("p1", -0.05), s("p2", -0.05)), side=None, push=(1.0, 1.12))
+    cue(s("p1"), "boom", 0.9)
+    title(["JANUARY", "2011"], *seg(s("p1", 0.05), s("p2", -0.05)), y=620, size=170, accent=(1,), sfx="impact")
+    chip("Port Elizabeth · India v South Africa", *seg(word("p1", 2), s("p2", -0.05)), x=None, y=1050)
+    stage(*seg(s("p2", -0.05), s("p3", -0.05)))
+    sticker("kohli_young_roar", *seg(s("p2", -0.05), s("p3", -0.05)), side="right", h=1250, x=430)
+    odo("266", *seg(word("p2", 3) - 0.1, s("p3", -0.05)), x=60, y=380, size=260, label="TARGET")
+    photo("kohli_young_roar", *seg(s("p3", -0.05), s("p4", -0.05)), side="up", push=(1.0, 1.1))
+    tag("VIRAT KOHLI · AGE 22", *seg(word("p3", 2), s("p4", -0.05)), y=1300)
+    photo("kohli_young_raise", *seg(s("p4", -0.05), s("p5", -0.05)), side="right", push=(1.0, 1.12))
+    band("87*", "STILL AT THE CREASE", *seg(word("p4", 3) - 0.1, s("p5", -0.05)), y=1160)
+    glitch(s("p5", -0.03), 0.4, "stadium_night")
+    photo("stadium_night", *seg(s("p5"), s("p6", -0.05)), side=None, fx="grey", push=(1.15, 1.05))
+    title(["NATURE HAD", "OTHER PLANS"], *seg(word("p5", 2), s("p6", -0.05)), y=620, size=120, accent=(1,), sfx="impact")
+    photo("rain_ground", *seg(s("p6", -0.05), s("p7", -0.05)), side="left", push=(1.0, 1.1))
+    rain(s("p6", -0.05), span("p6", "p8") + 0.05)
+    for k, (txt, w) in enumerate((("RAIN ARRIVED", 1), ("MATCH STOPPED", 4), ("RESUMED", 6), ("RAIN RETURNED", 10))):
+        chip(txt, *seg(word("p6", w), s("p7", -0.05)), x=None, y=300 + 100 * k)
+    stage(*seg(s("p7", -0.05), s("p8", -0.05)), tone="#0d0d0f")
+    rain(s("p7", -0.05), span("p7", "p8"))
+    title(["INDIA LOST BY"], *seg(word("p7", 1), s("p8", -0.05)), y=380, size=96)
+    odo("48", *seg(word("p7", 4) - 0.1, s("p8", -0.05)), x=None, y=560, size=340, color="#ff3b3b", label="RUNS · DUCKWORTH-LEWIS")
+    duo("kohli_young_roar", *seg(s("p8", -0.05), s("p9", -0.05)), side="up")
+    title(["COULDN'T GET", "HIM OUT"], *seg(word("p8", 2), s("p9", -0.05)), y=1050, size=110, accent=(1,), sfx="impact")
+    photo("rain_ground", *seg(s("p9", -0.05), s("t1", -0.05)), side=None, fx="grey", push=(1.15, 1.05))
+    rain(s("p9", -0.05), span("p9", "t1"))
+    stamp("THE WEATHER WON", *seg(word("p9", 2), s("t1", -0.05)), y=760, size=110, color="#fff", rot=-4)
 
-    # ---------------- 2007: four ducks... then 146
-    leak(s("b0", -0.3), 0.9)
-    photo("ab_sweep_old", *seg(s("b0", -0.05), s("b1", -0.05)), side=None, fx="grey", push=(1.15, 1.05))
-    title(["HOW IT ALL", "STARTED…"], *seg(word("b0", 2), s("b1", -0.05)), y=300, size=110, accent=(1,))
-    video3d("y2007", *seg(s("b1", -0.05), word("b1", 7)))
-    cue(s("b1", -0.6), "riser", 0.7)
-    cue(s("b1"), "boom", 0.9)
-    duo("ab_dejected", *seg(word("b1", 7), s("b2")), side="up")
-    stamp("4 DUCKS", *seg(word("b1", 12) - 0.1, s("b2")), y=1135, size=165, color="#fff", rot=-4)
-    photo("ab_bat_toss", *seg(s("b2", -0.05), s("b3")), side="left", fx="grey", push=(1.0, 1.08))
-    title(["DROPPED", "FOR GOOD?"], *seg(word("b2", 7), s("b3")), y=1050, size=120, accent=(1,), sfx="impact")
-    ducks_at = word("b3", 10) - 1.13  # the 3D 146 breaks through 1.13 s into the shot
-    photo("ab_sweep_old", *seg(s("b3", -0.05), ducks_at), side="right", push=(1.0, 1.1))
-    title(["INSTEAD…"], *seg(s("b3", 0.05), ducks_at), y=300, size=130, accent=(0,))
-    video3d("ducks", *seg(ducks_at, s("b4")))
-    cue(ducks_at, "whoosh", 0.7)
-    for k in range(4):
-        cue(ducks_at + 0.03 + 0.167 * k, "impact", 0.45)
-    cue(word("b3", 10), "boom", 1.0)
-    flash(word("b3", 10), peak=0.55)
-    shake(word("b3", 10), 26)
-    chip("vs West Indies · World Cup 2007", *seg(word("b3", 11), s("b4")), x=None, y=1180)
-    photo("ab_roar", *seg(s("b4", -0.05), s("c1", -0.05)), side="up", push=(1.0, 1.12))
-    title(["FIRST", "GLIMPSE"], *seg(word("b4", 4), s("c1", -0.05)), y=300, size=130, accent=(1,), sfx="impact")
+    # ---------------- the point
+    flicker(["kohli_mcg_six", "kohli_raise_ct", "kohli_fist_t20", "kohli_mcg_fist", "kohli_young_roar", "kohli_mcg_roar"],
+            *seg(s("t1", -0.05), word("t1", 3) - 0.1))
+    stage(*seg(word("t1", 3) - 0.1, s("t2", -0.05)))
+    odo("32/33", *seg(word("t1", 3) - 0.1, s("t2", -0.05)), x=None, y=620, size=230, label="ODI CHASES · UNBEATEN")
+    photo("kohli_kiss", *seg(s("t2", -0.05), s("v1", -0.05)), side="right", push=(1.0, 1.1))
+    title(["A GOOD RECORD…"], *seg(word("t2", 5), s("v1", -0.05)), y=1000, size=92)
+    title(["…A LEGENDARY CAREER"], *seg(word("t2", 9), s("v1", -0.05)), y=1130, size=92, accent=(0,), sfx="impact")
+    leak(s("v1", -0.3), 0.9)
+    photo("tilak_smile", *seg(s("v1", -0.05), word("v2", 5)), side="left", push=(1.0, 1.1))
+    title(["SOMETHING", "SPECIAL"], *seg(word("v1", 2), word("v2", 5)), y=300, size=120, accent=(1,))
+    photo("tilak_fist", *seg(word("v2", 5), s("v3", -0.05)), side="right", push=(1.0, 1.1))
+    title(["INDIA'S GREATEST", "FINISHER?"], *seg(word("v2", 5), s("v3", -0.05)), y=300, size=96, accent=(1,), sfx="impact")
+    photo("kohli_mcg_six", *seg(s("v3", -0.05), s("v4", -0.05)), side="up", push=(1.0, 1.1))
+    stamp("CHASE MASTER", *seg(word("v3", 8) - 0.05, s("v4", -0.05)), y=300, size=130, rot=-4)
+    stage(*seg(s("v4", -0.05), s("v5", -0.05)))
+    sticker("kohli_raise_ct", *seg(s("v4", -0.05), s("v5", -0.05)), side="right", h=1250, x=430)
+    odo("15+", *seg(word("v4", 4) - 0.1, s("v5", -0.05)), x=60, y=380, size=300, label="YEARS")
+    typed(["of building", "a legacy"], *seg(word("v4", 6), s("v5", -0.05)), x=60, y=820, size=60, color="#fff")
+    photo("tilak_raise", *seg(s("v5", -0.05), s("v6")), side="left", push=(1.0, 1.1))
+    title(["HIS OWN", "HISTORY"], *seg(word("v5", 3), s("v6")), y=300, size=130, accent=(1,), sfx="impact")
+    photo("tilak_jump", *seg(s("v6"), s("v7", -0.05)), side="right", push=(1.0, 1.1))
+    title(["A LEGEND", "IN HIS OWN RIGHT"], *seg(word("v6", 3), s("v7", -0.05)), y=300, size=100, accent=(1,))
 
-    # ---------------- 2011: middle order, back-to-back hundreds
-    video3d("y2011", *seg(s("c1", -0.05), word("c1", 2)))
-    cue(s("c1", -0.6), "riser", 0.7)
-    cue(s("c1"), "boom", 0.9)
-    photo("ab_sweep_old", *seg(word("c1", 2), word("c1", 13)), side="right", push=(1.12, 1.0), origin="55% 35%")
-    chip("Moved to the middle order", *seg(word("c1", 6), word("c1", 13)), x=None, y=300)
-    glitch(word("c1", 13), 0.3, "ab_rcb")
-    photo("ab_rcb", *seg(word("c1", 13), s("c2")), side=None, push=(1.2, 1.08), origin="60% 30%")
-    stamp("DANGEROUS", *seg(word("c1", 14), s("c2")), y=300, size=170, rot=-5)
-    stage(*seg(s("c2", -0.05), s("d1", -0.05)))
-    sticker("ab_roar", *seg(s("c2", -0.05), s("d1", -0.05)), side="right", h=1150, x=400)
-    typed(["100 + 100", "back-to-back"], *seg(word("c2", 2), s("d1", -0.05)), x=60, y=360, size=64)
-    odo("88", *seg(word("c2", 8) - 0.1, s("d1", -0.05)), x=60, y=640, size=300, label="AVERAGE · 2011")
-
-    # ---------------- 2015: the captain's rampage
-    video3d("y2015", *seg(s("d1", -0.05), s("d2")))
-    cue(s("d1", -0.6), "riser", 0.8)
-    cue(s("d1"), "boom", 1.0)
-    hero("ab_scoop_kneel", ["CAPTAIN", "AB"], *seg(s("d2", -0.03), word("d2", 8)))
-    flicker(["ab_scoop_ball", "ab_ramp_ball", "ab_sweep_tall", "ab_scoop_kneel", "ab_rcb", "ab_pink"], *seg(word("d2", 8), s("d3", -0.05)))
-    stamp("RAMPAGE", *seg(word("d2", 10) - 0.1, s("d3", -0.05)), y=300, size=200, color="#ff3b3b", rot=-5)
-    stage(*seg(s("d3", -0.05), s("d4")))
-    sticker("ab_sweep_tall", *seg(s("d3", -0.05), s("d4")), side="right", h=1250, x=500)
-    odo("482", *seg(word("d3", 2) - 0.1, s("d4")), x=60, y=310, size=170, label="RUNS")
-    odo("96", *seg(word("d3", 8) - 0.1, s("d4")), x=60, y=720, size=170, label="AVERAGE", color="#fff")
-    odo("144", *seg(word("d3", 14) - 0.1, s("d4")), x=60, y=1130, size=170, label="STRIKE RATE")
-    photo("ab_scoop_ball", *seg(s("d4", -0.05), word("d4", 8) - 0.1), side="left", push=(1.0, 1.12))
-    chip("vs West Indies · Sydney", *seg(s("d4", 0.1), word("d4", 8) - 0.1), x=None, y=300)
-    cue(word("d4", 8) - 0.7, "riser", 0.8)
-    depth_number("ab_ramp_ball", "162", "NOT OUT · 66 BALLS", *seg(word("d4", 8) - 0.1, s("d5")))
-    flash(word("d4", 8) - 0.05, peak=0.5)
-    stage(*seg(s("d5", -0.05), s("d6")), tone="#0e0e10")
-    screen("screen_f150", *seg(s("d5", -0.05), s("d6")), side="right", focus="50% 45%", zoom=1.3, mstart=1.2)
-    title(["150 IN 64 BALLS"], *seg(word("d5", 2), s("d6")), y=280, size=96, accent=(0,), sfx="impact")
-    photo("ab_scoop_kneel", *seg(s("d6", -0.05), s("e1", -0.05)), side="up", push=(1.0, 1.1))
-    stamp("NOBODY", *seg(s("d6", 0.05), word("d6", 7)), y=250, size=190, color="#fff", rot=-4)
-    band("64", "BALLS · FASTEST ODI 150 EVER", *seg(word("d6", 7), s("e1", -0.05)), y=1160)
-
-    # ---------------- the semi-final, and the heartbreak
-    photo("ab_pull", *seg(s("e1", -0.05), word("e1", 14) - 0.1), side="right", push=(1.0, 1.1))
-    chip("Semi-final · World Cup 2015", *seg(word("e1", 9), word("e1", 14) - 0.1), x=None, y=300)
-    stage(*seg(word("e1", 14) - 0.1, s("e2")))
-    sticker("ab_bat_toss", *seg(word("e1", 14) - 0.1, s("e2")), side="right", h=1250, x=440)
-    odo("65*", *seg(word("e1", 15) - 0.15, s("e2")), x=60, y=420, size=260, label="NOT OUT")
-    photo("elliott", *seg(s("e2", -0.05), word("e2", 12)), side="left", push=(1.0, 1.1))
-    tag("NEW ZEALAND WIN", *seg(word("e2", 3), word("e2", 12)), y=1300, dark=True)
-    title(["1 BALL", "TO SPARE"], *seg(word("e2", 8), word("e2", 12)), y=250, size=130, accent=(1,), sfx="impact")
-    photo("ab_bat_toss_wide", *seg(word("e2", 12), s("f1", -0.05)), side=None, fx="grey", push=(1.18, 1.06), origin="45% 35%")
-    flash(word("e2", 12), color="#000", peak=0.9)
-
-    # ---------------- the whole story in one frame
-    then_now(*seg(s("f1", -0.05), s("f2")), "ab_dejected", "ab_scoop_ball", la="4 DUCKS", lb="FASTEST 150")
-    video3d("trophy", *seg(s("f2", -0.05), s("f3", -0.05)))
-    cue(s("f2"), "boom", 0.7)
-    title(["NEVER PLAYED", "A FINAL"], *seg(word("f2", 2), s("f3", -0.05)), y=230, size=110, accent=(1,))
-    video3d("avg", *seg(s("f3", -0.05), word("f3", 13)))
-    cue(s("f3"), "boom", 0.8)
-    title(["NO ONE BETTER"], *seg(word("f3", 2), word("f3", 13)), y=300, size=104, accent=(0,))
-    hero("ab_rcb", ["AB DE", "VILLIERS"], *seg(word("f3", 13), s("q1", -0.05)))
-    flash(word("f3", 13), peak=0.55)
+    # ---------------- the benchmark
+    stage(*seg(s("v7", -0.05), word("v7", 6)), tone="#0d0d0f")
+    title(["THERE WILL", "NEVER BE ANOTHER…"], *seg(s("v7", 0.05), word("v7", 6)), y=620, size=104, accent=(1,))
+    hero("kohli_mcg_roar", ["VIRAT", "KOHLI"], *seg(word("v7", 6), s("v8", -0.05)))
+    flash(word("v7", 6), peak=0.6)
+    cue(word("v7", 6), "boom", 1.0)
+    photo("kohli_mcg_helmet", *seg(s("v8", -0.05), s("q1", -0.05)), side="up", push=(1.0, 1.1))
+    title(["LEGENDS…"], *seg(word("v8", 3), word("v8", 8)), y=300, size=120)
+    stamp("THE BENCHMARK", *seg(word("v8", 8) - 0.05, s("q1", -0.05)), y=300, size=120, rot=-4)
 
     # ---------------- CTA
-    photo("ab_bat_toss", *seg(s("q1", -0.05), s("q2", -0.05)), side="up", push=(1.0, 1.1))
-    title(["GREATEST EVER", "WITHOUT A WORLD CUP?"], *seg(word("q1", 3), s("q2", -0.05)), y=250, size=68, accent=(1,), sfx="impact")
-    video3d("logo", s("q2", -0.05), TOTAL - s("q2", -0.05))
-    comment_cta(s("q2", 0.05), TOTAL - s("q2", 0.05))
-    for a, b in LAYOUT["brand_hide"] + [[s("q2", -0.3), TOTAL + 1]]:
+    video3d("logo", s("q1", -0.05), TOTAL - s("q1", -0.05))
+    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
+    for a, b in LAYOUT["brand_hide"] + [[s("q1", -0.3), TOTAL + 1]]:
+        if a >= s("q1", -0.3):
+            continue
         anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
-        if b < TOTAL:
+        if b < s("q1", -0.3):
             anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.85,duration:0.25,immediateRender:false}},{b})')
+    anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q1", -0.3)})')
 
 
 EXTRA_CSS = f"""
+.rainl{{position:absolute;left:0;right:0;top:-600px;bottom:-600px;background-image:linear-gradient(100deg,transparent 48%,rgba(220,230,255,.55) 49%,transparent 51%);background-size:90px 200px;transform:rotate(8deg)}}
 .odo .digits{{position:relative;transform-origin:50% 60%}}
 .odo.gold{{font-style:italic}}
 .odo.gold .dstrip span,.odo.gold .digits>span:not(.dcol):not(.oshine){{color:#FFE14D;

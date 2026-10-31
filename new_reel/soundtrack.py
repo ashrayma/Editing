@@ -257,11 +257,12 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # hook ticks under a filtered pad, the beat drops on "1,207"; drums drop out before every chapter year;
-    # the semi-final heartbreak thins to the pad, and the music goes dead for "AB's dream was over"
-    m = music(total, drop=L["h3"]["start"], breaks=[L[k]["start"] for k in ("b1", "c1", "d1")] + [L["d4"]["words"][8][1]],
-              outro=L["q2"]["start"] + 0.4, thin=[(L["e2"]["start"], L["f1"]["start"]), (L["f2"]["start"], L["f3"]["start"])],
-              mute=[(L["e2"]["words"][12][1] - 0.05, L["e2"]["end"] + 0.15)], intro_warm=False)
+    # hook ticks under a filtered pad, the beat drops on "Tilak Varma"; drums drop out before "January 2011"
+    # and before "never be another Virat Kohli"; the rain story thins to the pad; dead air just before the payoff
+    W = lambda lid, k: L[lid]["words"][k][1]
+    m = music(total, drop=L["k4"]["start"], breaks=[L["p1"]["start"], L["t1"]["words"][3][1], W("v7", 6)],
+              outro=L["q1"]["start"] + 0.4, thin=[(L["p5"]["start"], L["t1"]["start"]), (L["s3"]["start"], L["p1"]["start"])],
+              mute=[(L["v6"]["end"] + 0.03, L["v7"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))

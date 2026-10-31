@@ -23,9 +23,11 @@ for f in sorted(glob.glob(os.path.join(HERE, "assets", "photos", "*.jpg"))):
     h, w = im.shape[:2]
     if h >= 1600:
         cv2.imwrite(dst, im)
+    elif max(h, w) >= 1100:  # already big: a sharp Lanczos x2 is enough (and far faster than EDSR)
+        cv2.imwrite(dst, cv2.resize(im, (w * 2, h * 2), interpolation=cv2.INTER_LANCZOS4))
     else:
-        if max(h, w) > 700:  # EDSR is slow on big inputs: bring them to ~700 px first, then x4
-            s = 700 / max(h, w)
+        if max(h, w) > 540:  # EDSR is slow on big inputs: bring them to ~540 px first, then x4
+            s = 540 / max(h, w)
             im = cv2.resize(im, (round(w * s), round(h * s)), interpolation=cv2.INTER_AREA)
         cv2.imwrite(dst, sr.upsample(im))
     print(os.path.basename(dst), cv2.imread(dst).shape[:2])
