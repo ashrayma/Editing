@@ -1,0 +1,590 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:"IDisp";font-weight:400;font-style:normal;src:url(media/InterDisplay-Regular.otf)}@font-face{font-family:"IDisp";font-weight:400;font-style:italic;src:url(media/InterDisplay-RegularItalic.otf)}@font-face{font-family:"IDisp";font-weight:600;font-style:normal;src:url(media/InterDisplay-SemiBold.otf)}@font-face{font-family:"IDisp";font-weight:600;font-style:italic;src:url(media/InterDisplay-SemiBoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:700;font-style:normal;src:url(media/InterDisplay-Bold.otf)}@font-face{font-family:"IDisp";font-weight:700;font-style:italic;src:url(media/InterDisplay-BoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:800;font-style:normal;src:url(media/InterDisplay-ExtraBold.otf)}@font-face{font-family:"IDisp";font-weight:800;font-style:italic;src:url(media/InterDisplay-ExtraBoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:900;font-style:normal;src:url(media/InterDisplay-Black.otf)}@font-face{font-family:"IDisp";font-weight:900;font-style:italic;src:url(media/InterDisplay-BlackItalic.otf)}
+html,body{margin:0;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0b0b0c;font-family:"IDisp","Inter Display",system-ui,sans-serif}
+#world{position:absolute;inset:0}
+.clip{}
+.grain{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.09;mix-blend-mode:overlay}
+#grainTop{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.05;z-index:880;pointer-events:none;mix-blend-mode:overlay}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,.15) 34%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%);pointer-events:none}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.title{font-weight:900;letter-spacing:-0.035em;line-height:.98;color:#fff;text-shadow:0 8px 40px rgba(0,0,0,.55)}
+.title .mask{overflow:hidden;padding:0 .04em .06em}
+.title .ln{display:block}
+.typed{font-weight:800;letter-spacing:-0.01em;line-height:1.1}
+.thead{font-size:34px;font-weight:600;font-style:italic;color:rgba(255,255,255,.8);margin-bottom:16px}
+.tline{white-space:nowrap;text-shadow:0 4px 24px rgba(0,0,0,.6)}
+.odo{position:absolute;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 10px 50px rgba(0,0,0,.5)}
+.digits{display:inline-flex}
+.dcol{display:inline-block;height:1em;line-height:1em;overflow:hidden}
+.dstrip{display:flex;flex-direction:column}
+.dstrip span{display:block;height:1em;line-height:1em}
+.olab{font-size:40px;font-weight:800;letter-spacing:.18em;color:#fff;margin-top:6px}
+.tag{position:absolute;padding:14px 26px;border-radius:14px;background:#FEDE5C;color:#0b0b0c;font-size:44px;font-weight:900;letter-spacing:.02em;transform-origin:left;white-space:nowrap}
+.tag.dark{background:#fff}
+.chip{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 28px;border-radius:999px;background:rgba(20,20,22,.6);
+  backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18);color:#fff;font-size:36px;font-weight:700;white-space:nowrap}
+.chip .dot{width:14px;height:14px;border-radius:50%;background:#FEDE5C;box-shadow:0 0 14px #FEDE5C}
+.face{position:absolute;pointer-events:none}
+.cap{position:absolute;left:0;right:0;top:1420px;text-align:center;z-index:900}
+.cap span{display:inline-block;padding:10px 22px;border-radius:12px;background:#fff;color:#0b0b0c;font-size:58px;font-weight:900;letter-spacing:-0.01em;
+  box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.cap.num span{background:#FEDE5C}
+.win{width:1000px;border-radius:22px;overflow:hidden;background:#111;box-shadow:0 60px 140px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12)}
+.win .bar{height:50px;display:flex;align-items:center;gap:10px;padding:0 20px;background:#1c1c20;color:#8d8d94;font-size:20px;font-weight:600}
+.win .bar i{width:14px;height:14px;border-radius:50%;background:#ff5f57}
+.win .bar i:nth-child(2){background:#febc2e}.win .bar i:nth-child(3){background:#28c840}
+.win .bar span{margin-left:16px}
+.bcol{position:absolute;width:300px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bnum{font-size:120px;font-weight:900;color:#fff;letter-spacing:-0.04em;margin-bottom:18px}
+.bbody{position:relative;width:240px;border-radius:6px 6px 0 0;box-shadow:30px 0 0 rgba(0,0,0,.25)}
+.btop{position:absolute;left:0;right:0;top:-18px;height:18px;transform:skewX(-45deg);transform-origin:bottom}
+.blab{margin-top:22px;font-size:42px;font-weight:900;letter-spacing:.12em;color:#fff}
+.stamp{position:absolute;left:0;right:0;text-align:center;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 20px 80px rgba(0,0,0,.6)}
+.leak{position:absolute;inset:-200px;background:radial-gradient(40% 55% at 50% 50%,rgba(255,170,40,.95),rgba(254,222,92,.5) 45%,rgba(0,0,0,0) 75%);mix-blend-mode:screen;pointer-events:none}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slice{position:absolute;left:-200px;right:-200px;background:rgba(254,222,92,.18);mix-blend-mode:difference;border-top:2px solid rgba(255,40,60,.7)}
+.ylab{position:absolute;top:640px;font-size:110px;font-weight:900;color:#fff;letter-spacing:-0.03em}
+.yline{position:absolute;left:90px;right:90px;top:820px;height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden}
+.yfill{position:absolute;inset:0;background:#FEDE5C;transform-origin:left;box-shadow:0 0 24px #FEDE5C}
+.ybig{position:absolute;left:0;right:0;top:930px;text-align:center;font-size:150px;font-weight:900;color:#FEDE5C;letter-spacing:-0.04em}
+.recap{position:absolute;left:70px;top:330px}
+.rrow{display:flex;align-items:center;gap:22px;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:26px;white-space:nowrap}
+.rnum{color:#FEDE5C;width:90px}
+.tick{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:50%;background:#FEDE5C;color:#0b0b0c;font-size:56px}
+.cta{position:absolute;inset:0}
+.bubble{position:absolute;left:110px;right:110px;top:1080px;display:flex;gap:22px;align-items:center;padding:28px 32px;border-radius:30px;
+  background:rgba(30,30,34,.85);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12),0 30px 80px rgba(0,0,0,.6)}
+.av{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#FEDE5C,#f39c12);flex:none}
+.who{font-size:30px;font-weight:700;color:rgba(255,255,255,.6)}
+.what{font-size:46px;font-weight:800;color:#fff;min-height:56px}
+.cta2{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:40px;font-weight:700;color:rgba(255,255,255,.75)}
+.brand{position:absolute;left:0;right:0;top:230px;text-align:center;z-index:950;opacity:.85}
+.brand img{width:230px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><filter id="red"><feColorMatrix type="matrix"
+values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter><filter id="cyan"><feColorMatrix type="matrix"
+values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter></svg>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-fps="30" data-duration="79.8">
+<div id="world">
+<div id="ph1" data-start="0" data-duration="1.26" style="position:absolute;inset:0;z-index:11;overflow:hidden;background:#000" class="clip layer full"><div id="ph1m" style="position:absolute;inset:0;transform-origin:50% 25%"><img src="media/assets_hi_sachin_test_celebrate.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:516px;top:580px;width:116px;height:151px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ti2" data-start="0.4" data-duration="1.11" style="position:absolute;left:70px;right:70px;top:805px;z-index:12;font-size:128px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti2l0" class="ln" style="color:#fff">THE GOD</div></div><div class="mask"><div id="ti2l1" class="ln" style="color:#FEDE5C">OF CRICKET</div></div></div>
+<div id="tg3" data-start="0.75" data-duration="0.76" style="left:70px;top:1230px;z-index:13" class="clip tag avoid"><span class="ch">S</span><span class="ch">A</span><span class="ch">C</span><span class="ch">H</span><span class="ch">I</span><span class="ch">N</span><span class="ch">&nbsp;</span><span class="ch">T</span><span class="ch">E</span><span class="ch">N</span><span class="ch">D</span><span class="ch">U</span><span class="ch">L</span><span class="ch">K</span><span class="ch">A</span><span class="ch">R</span></div>
+<div id="ph4" data-start="1.51" data-duration="1.34" style="position:absolute;inset:0;z-index:14;overflow:hidden;background:#000" class="clip layer full"><div id="ph4m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_sachin_100th_lookup.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:524px;top:483px;width:236px;height:266px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cp5" data-start="1.66" data-duration="1.19" style="left:70px;top:1180px;z-index:15" class="clip chip avoid"><span class="dot"></span>100th international hundred · 2012</div>
+<div id="v36" data-start="2.85" data-duration="0.746" style="position:absolute;inset:0;z-index:16;background:#030304" class="clip layer full"><img src="media/blender_renders_ball_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v36v" class="clip" src="media/blender_renders_ball.mp4" muted playsinline data-start="2.85" data-duration="0.746" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="st7" data-start="3.596" data-duration="1.544" style="position:absolute;inset:0;z-index:17;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="od8" data-start="3.596" data-duration="1.544" style="left:0;right:0;text-align:center;top:300px;font-size:420px;color:#FEDE5C;z-index:18" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od8d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div></div>
+<div id="ti9" data-start="3.746" data-duration="1.394" style="position:absolute;left:70px;right:70px;top:760px;z-index:19;font-size:120px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti9l0" class="ln" style="color:#fff">RECORDS</div></div></div>
+<div id="ct10" data-start="3.984" data-duration="1.156" style="position:absolute;left:522px;bottom:240px;width:538px;height:900px;z-index:20" class="clip layer"><img id="ct10m" src="media/assets_cut_kohli_2023_hands.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:243px;top:411px;width:142px;height:185px"></div></div>
+<div id="st11" data-start="4.64" data-duration="2.25" style="position:absolute;inset:0;z-index:21;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct12" data-start="4.64" data-duration="2.25" style="position:absolute;left:-60px;bottom:40px;width:767px;height:1150px;z-index:22" class="clip layer"><img id="ct12m" src="media/assets_cut_kohli_odi_bat_raise.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:267px;top:486px;width:122px;height:138px"></div></div>
+<div id="ct13" data-start="4.74" data-duration="2.15" style="position:absolute;left:560px;bottom:0px;width:506px;height:1150px;z-index:23" class="clip layer"><img id="ct13m" src="media/assets_cut_sachin_odi_walk.png" style="width:100%;height:100%;filter:grayscale(1) brightness(.9) drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:226px;top:52px;width:119px;height:137px"></div></div>
+<div id="ti14" data-start="5.53" data-duration="1.36" style="position:absolute;left:70px;right:70px;top:300px;z-index:24;font-size:130px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti14l0" class="ln" style="color:#fff">NEVER</div></div><div class="mask"><div id="ti14l1" class="ln" style="color:#FEDE5C">TOUCHED</div></div></div>
+<div id="gl15" class="clip" data-start="6.49" data-duration="0.3" style="position:absolute;inset:0;z-index:425;pointer-events:none"><div class="slice" id="gl15s0" style="top:180px;height:40px"></div><div class="slice" id="gl15s1" style="top:510px;height:77px"></div><div class="slice" id="gl15s2" style="top:840px;height:114px"></div><div class="slice" id="gl15s3" style="top:1170px;height:61px"></div><div class="slice" id="gl15s4" style="top:1500px;height:98px"></div></div>
+<div id="v316" data-start="6.79" data-duration="1.96" style="position:absolute;inset:0;z-index:26;background:#030304" class="clip layer full"><img src="media/blender_renders_num1_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v316v" class="clip" src="media/blender_renders_num1.mp4" muted playsinline data-start="6.79" data-duration="1.4" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="ti17" data-start="7.995" data-duration="0.755" style="position:absolute;left:70px;right:70px;top:1215px;z-index:27;font-size:96px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti17l0" class="ln" style="color:#fff">The Chase</div></div><div class="mask"><div id="ti17l1" class="ln" style="color:#FEDE5C">Master</div></div></div>
+<div id="ph18" data-start="8.7" data-duration="1.466" style="position:absolute;inset:0;z-index:28;overflow:hidden;background:#000" class="clip layer full"><img src="media/assets_fill_kohli_odi_celebrate_wide.jpg" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover"><div id="ph18m" style="position:absolute;left:0;top:522px;width:100%;height:568px;transform-origin:50% 40%"><img src="media/assets_hi_kohli_odi_celebrate_wide.png" style="width:100%;height:100%;object-fit:cover;filter:none;box-shadow:0 40px 120px rgba(0,0,0,.75)"><div class="face" style="left:508px;top:282px;width:87px;height:110px"></div><div class="face" style="left:852px;top:126px;width:91px;height:117px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cp19" data-start="8.85" data-duration="1.316" style="left:70px;top:1110px;z-index:29" class="clip chip avoid"><span class="dot"></span>ODI run chases</div>
+<div id="ph20" data-start="10.166" data-duration="1.474" style="position:absolute;inset:0;z-index:30;overflow:hidden;background:#000" class="clip layer full"><div id="ph20m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_t20_lookup.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:grayscale(1) contrast(1.1) brightness(.85)"><div class="face" style="left:528px;top:807px;width:89px;height:112px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="du21" class="clip" data-start="10.166" data-duration="1.474" style="position:absolute;inset:0;z-index:31;background:#d0141e;mix-blend-mode:multiply;opacity:.85"></div>
+<div id="gl22" class="clip" data-start="10.166" data-duration="0.35" style="position:absolute;inset:0;z-index:432;pointer-events:none"><img id="gl22r" src="media/assets_hi_kohli_t20_lookup.png" class="gimg" style="mix-blend-mode:screen;filter:url(#red)"><img id="gl22c" src="media/assets_hi_kohli_t20_lookup.png" class="gimg" style="mix-blend-mode:screen;filter:url(#cyan)"><div class="slice" id="gl22s0" style="top:180px;height:40px"></div><div class="slice" id="gl22s1" style="top:510px;height:77px"></div><div class="slice" id="gl22s2" style="top:840px;height:114px"></div><div class="slice" id="gl22s3" style="top:1170px;height:61px"></div><div class="slice" id="gl22s4" style="top:1500px;height:98px"></div></div>
+<div id="ti23" data-start="10.625" data-duration="1.015" style="position:absolute;left:70px;right:70px;top:320px;z-index:33;font-size:130px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti23l0" class="ln" style="color:#fff">DIFFERENT</div></div><div class="mask"><div id="ti23l1" class="ln" style="color:#fff">PLAYER</div></div></div>
+<div id="st24" data-start="11.34" data-duration="2.25" style="position:absolute;inset:0;z-index:34;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct25" data-start="11.34" data-duration="2.25" style="position:absolute;left:430px;bottom:0px;width:787px;height:1180px;z-index:35" class="clip layer"><img id="ct25m" src="media/assets_cut_kohli_odi_bat_raise.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:274px;top:499px;width:126px;height:141px"></div></div>
+<div id="od26" data-start="11.44" data-duration="2.15" style="left:70px;top:300px;font-size:360px;color:#FEDE5C;z-index:36" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od26d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od26d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div></div>
+<div id="ty27" data-start="11.79" data-duration="1.8" style="position:absolute;left:70px;top:700px;z-index:37" class="clip typed avoid"><div class="tline" id="ty27r0" style="font-size:54px;color:#FEDE5C"><span class="ch">O</span><span class="ch">D</span><span class="ch">I</span><span class="ch">&nbsp;</span><span class="ch">H</span><span class="ch">U</span><span class="ch">N</span><span class="ch">D</span><span class="ch">R</span><span class="ch">E</span><span class="ch">D</span><span class="ch">S</span></div><div class="tline" id="ty27r1" style="font-size:54px;color:#fff"><span class="ch">i</span><span class="ch">n</span><span class="ch">&nbsp;</span><span class="ch">s</span><span class="ch">u</span><span class="ch">c</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span><span class="ch">s</span><span class="ch">f</span><span class="ch">u</span><span class="ch">l</span></div><div class="tline" id="ty27r2" style="font-size:54px;color:#fff"><span class="ch">c</span><span class="ch">h</span><span class="ch">a</span><span class="ch">s</span><span class="ch">e</span><span class="ch">s</span></div></div>
+<div id="st28" data-start="13.54" data-duration="2.03" style="position:absolute;inset:0;z-index:38;background:#0e0e10" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="sc29" class="clip" data-start="13.54" data-duration="2.03" style="position:absolute;left:40px;top:560px;width:1000px;height:675px;z-index:39;perspective:1800px"><div id="sc29w" class="win" style="transform-origin:40% 55%"><div class="bar"><i></i><i></i><i></i><span>thecricketlounge · record book</span></div><video class="clip" src="media/capture_out_screen_chase.mp4" muted playsinline data-start="13.54" data-duration="2.03" data-media-start="0.3" style="width:1000px;height:625px;display:block"></video></div></div>
+<div id="ti30" data-start="13.69" data-duration="1.88" style="position:absolute;left:70px;right:70px;top:330px;z-index:40;font-size:104px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti30l0" class="ln" style="color:#FEDE5C">#1 ALL-TIME</div></div></div>
+<div id="st31" data-start="15.52" data-duration="1.65" style="position:absolute;inset:0;z-index:41;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="br32" class="clip" data-start="15.52" data-duration="1.65" style="position:absolute;inset:0;z-index:42"><div class="bcol" style="left:190px;top:380px;height:780px"><div class="bnum" id="br32n0">25</div><div class="bbody" id="br32b0" style="height:620px;background:linear-gradient(90deg,#d9b93c,#FEDE5C)"><div class="btop" style="background:#fff2b0"></div></div><div class="blab">KOHLI</div></div><div class="bcol" style="left:600px;top:380px;height:780px"><div class="bnum" id="br32n1">14</div><div class="bbody" id="br32b1" style="height:347px;background:linear-gradient(90deg,#5a5a60,#8d8d94)"><div class="btop" style="background:#c9c9cf"></div></div><div class="blab">SACHIN</div></div></div>
+<div id="ph33" data-start="17.12" data-duration="3.66" style="position:absolute;inset:0;z-index:43;overflow:hidden;background:#000" class="clip layer full"><div id="ph33m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_odi_helmet_bat.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:412px;top:1019px;width:213px;height:266px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ty34" data-start="18.403" data-duration="2.377" style="position:absolute;left:70px;top:300px;z-index:44" class="clip typed avoid"><div class="tline" id="ty34r0" style="font-size:64px;color:#FEDE5C"><span class="ch">A</span><span class="ch">V</span><span class="ch">G</span><span class="ch">&nbsp;</span><span class="ch">9</span><span class="ch">0</span><span class="ch">+</span></div><div class="tline" id="ty34r1" style="font-size:64px;color:#fff"><span class="ch">i</span><span class="ch">n</span><span class="ch">&nbsp;</span><span class="ch">w</span><span class="ch">o</span><span class="ch">n</span><span class="ch">&nbsp;</span><span class="ch">c</span><span class="ch">h</span><span class="ch">a</span><span class="ch">s</span><span class="ch">e</span><span class="ch">s</span></div></div>
+<div id="st35" data-start="20.73" data-duration="0.76" style="position:absolute;inset:0;z-index:45;background:#060606" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="sm36" data-start="20.73" data-duration="0.76" style="top:560px;font-size:560px;color:#FEDE5C;z-index:46" class="clip stamp avoid">90</div>
+<div id="ph37" data-start="21.49" data-duration="2.83" style="position:absolute;inset:0;z-index:47;overflow:hidden;background:#000" class="clip layer full"><div id="ph37m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_roar.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 30%;filter:none"><div class="face" style="left:297px;top:85px;width:159px;height:197px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ti38" data-start="21.54" data-duration="0.87" style="position:absolute;left:70px;right:70px;top:320px;z-index:48;font-size:110px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti38l0" class="ln" style="color:#fff">NOT BATTING</div></div></div>
+<div id="gl39" class="clip" data-start="22.36" data-duration="0.5" style="position:absolute;inset:0;z-index:449;pointer-events:none"><img id="gl39r" src="media/assets_hi_kohli_test_roar.png" class="gimg" style="mix-blend-mode:screen;filter:url(#red)"><img id="gl39c" src="media/assets_hi_kohli_test_roar.png" class="gimg" style="mix-blend-mode:screen;filter:url(#cyan)"><div class="slice" id="gl39s0" style="top:180px;height:40px"></div><div class="slice" id="gl39s1" style="top:510px;height:77px"></div><div class="slice" id="gl39s2" style="top:840px;height:114px"></div><div class="slice" id="gl39s3" style="top:1170px;height:61px"></div><div class="slice" id="gl39s4" style="top:1500px;height:98px"></div></div>
+<div id="ti40" data-start="22.41" data-duration="1.91" style="position:absolute;left:70px;right:70px;top:300px;z-index:50;font-size:170px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti40l0" class="ln" style="color:#FEDE5C">CHEAT</div></div><div class="mask"><div id="ti40l1" class="ln" style="color:#FEDE5C">CODE</div></div></div>
+<div id="lk41" data-start="24.02" data-duration="0.9" style="z-index:451" class="clip leak"></div>
+<div id="v342" data-start="24.22" data-duration="1.65" style="position:absolute;inset:0;z-index:52;background:#030304" class="clip layer full"><img src="media/blender_renders_num2_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v342v" class="clip" src="media/blender_renders_num2.mp4" muted playsinline data-start="24.22" data-duration="1.4" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="ti43" data-start="25.4" data-duration="0.47" style="position:absolute;left:70px;right:70px;top:1215px;z-index:53;font-size:96px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti43l0" class="ln" style="color:#fff">The</div></div><div class="mask"><div id="ti43l1" class="ln" style="color:#FEDE5C">Captain</div></div></div>
+<div id="ph44" data-start="25.82" data-duration="3.26" style="position:absolute;inset:0;z-index:54;overflow:hidden;background:#000" class="clip layer full"><div id="ph44m" style="position:absolute;inset:0;transform-origin:50% 30%"><img src="media/assets_hi_kohli_test_lookup.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:474px;top:384px;width:115px;height:129px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ty45" data-start="26.27" data-duration="1.92" style="position:absolute;left:70px;top:300px;z-index:55" class="clip typed avoid"><div class="tline" id="ty45r0" style="font-size:64px;color:#FEDE5C"><span class="ch">6</span><span class="ch">8</span><span class="ch">&nbsp;</span><span class="ch">T</span><span class="ch">E</span><span class="ch">S</span><span class="ch">T</span><span class="ch">S</span></div><div class="tline" id="ty45r1" style="font-size:64px;color:#fff"><span class="ch">a</span><span class="ch">s</span><span class="ch">&nbsp;</span><span class="ch">c</span><span class="ch">a</span><span class="ch">p</span><span class="ch">t</span><span class="ch">a</span><span class="ch">i</span><span class="ch">n</span></div></div>
+<div id="od46" data-start="28.19" data-duration="0.89" style="left:70px;top:550px;font-size:300px;color:#FEDE5C;z-index:56" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od46d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od46d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">WINS</div></div>
+<div id="st47" data-start="29.03" data-duration="1.98" style="position:absolute;inset:0;z-index:57;background:#0e0e10" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="sc48" class="clip" data-start="29.03" data-duration="1.98" style="position:absolute;left:40px;top:560px;width:1000px;height:675px;z-index:58;perspective:1800px"><div id="sc48w" class="win" style="transform-origin:55% 40%"><div class="bar"><i></i><i></i><i></i><span>thecricketlounge · record book</span></div><video class="clip" src="media/capture_out_screen_capt.mp4" muted playsinline data-start="29.03" data-duration="1.98" data-media-start="1.3" style="width:1000px;height:625px;display:block"></video></div></div>
+<div id="ti49" data-start="29.18" data-duration="1.83" style="position:absolute;left:70px;right:70px;top:300px;z-index:59;font-size:84px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti49l0" class="ln" style="color:#fff">MOST BY AN</div></div><div class="mask"><div id="ti49l1" class="ln" style="color:#FEDE5C">INDIAN CAPTAIN</div></div></div>
+<div id="ph50" data-start="30.96" data-duration="3.09" style="position:absolute;inset:0;z-index:60;overflow:hidden;background:#000" class="clip layer full"><div id="ph50m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_trophy_kiss.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 30%;filter:none"><div class="face" style="left:89px;top:246px;width:146px;height:209px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cp51" data-start="31.21" data-duration="2.84" style="left:70px;top:1110px;z-index:61" class="clip chip avoid"><span class="dot"></span>Australia · 2018–19</div>
+<div id="ti52" data-start="32.112" data-duration="1.938" style="position:absolute;left:70px;right:70px;top:491px;z-index:62;font-size:96px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti52l0" class="ln" style="color:#FEDE5C">FIRST EVER</div></div><div class="mask"><div id="ti52l1" class="ln" style="color:#fff">SERIES WIN</div></div><div class="mask"><div id="ti52l2" class="ln" style="color:#fff">IN AUSTRALIA</div></div></div>
+<div id="fl53" class="clip" data-start="33.319" data-duration="0.4" style="position:absolute;inset:0;background:#fff;z-index:463;pointer-events:none"></div>
+<div id="st54" data-start="34.0" data-duration="3.25" style="position:absolute;inset:0;z-index:64;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct55" data-start="34.0" data-duration="3.25" style="position:absolute;left:430px;bottom:0px;width:564px;height:1180px;z-index:65" class="clip layer"><img id="ct55m" src="media/assets_cut_sachin_test_raise_bat.png" style="width:100%;height:100%;filter:grayscale(1) brightness(.9) drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:114px;top:58px;width:105px;height:126px"></div></div>
+<div id="ty56" data-start="34.35" data-duration="1.38" style="position:absolute;left:70px;top:300px;z-index:66" class="clip typed avoid"><div class="tline" id="ty56r0" style="font-size:64px;color:#d9d9de"><span class="ch">2</span><span class="ch">5</span><span class="ch">&nbsp;</span><span class="ch">T</span><span class="ch">E</span><span class="ch">S</span><span class="ch">T</span><span class="ch">S</span></div><div class="tline" id="ty56r1" style="font-size:64px;color:#fff"><span class="ch">a</span><span class="ch">s</span><span class="ch">&nbsp;</span><span class="ch">c</span><span class="ch">a</span><span class="ch">p</span><span class="ch">t</span><span class="ch">a</span><span class="ch">i</span><span class="ch">n</span></div></div>
+<div id="od57" data-start="35.73" data-duration="1.52" style="left:70px;top:560px;font-size:330px;color:#bdbdc4;z-index:67" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od57d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">WINS</div></div>
+<div id="st58" data-start="37.2" data-duration="1.72" style="position:absolute;inset:0;z-index:68;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="br59" class="clip" data-start="37.2" data-duration="1.72" style="position:absolute;inset:0;z-index:69"><div class="bcol" style="left:190px;top:380px;height:780px"><div class="bnum" id="br59n0">40</div><div class="bbody" id="br59b0" style="height:620px;background:linear-gradient(90deg,#d9b93c,#FEDE5C)"><div class="btop" style="background:#fff2b0"></div></div><div class="blab">KOHLI</div></div><div class="bcol" style="left:600px;top:380px;height:780px"><div class="bnum" id="br59n1">4</div><div class="bbody" id="br59b1" style="height:62px;background:linear-gradient(90deg,#5a5a60,#8d8d94)"><div class="btop" style="background:#c9c9cf"></div></div><div class="blab">SACHIN</div></div></div>
+<div id="ph60" data-start="38.87" data-duration="1.3" style="position:absolute;inset:0;z-index:70;overflow:hidden;background:#000" class="clip layer full"><div id="ph60m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_shush.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:434px;top:198px;width:118px;height:166px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph61" data-start="40.17" data-duration="0.153" style="position:absolute;inset:0;z-index:71;overflow:hidden;background:#000" class="clip layer full"><div id="ph61m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_roar.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 30%;filter:none"><div class="face" style="left:297px;top:85px;width:159px;height:197px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph62" data-start="40.303" data-duration="0.153" style="position:absolute;inset:0;z-index:72;overflow:hidden;background:#000" class="clip layer full"><div id="ph62m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_trophy_kiss.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 30%;filter:none"><div class="face" style="left:89px;top:246px;width:146px;height:209px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph63" data-start="40.437" data-duration="0.153" style="position:absolute;inset:0;z-index:73;overflow:hidden;background:#000" class="clip layer full"><div id="ph63m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_lookup.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:474px;top:384px;width:115px;height:129px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph64" data-start="40.57" data-duration="0.153" style="position:absolute;inset:0;z-index:74;overflow:hidden;background:#000" class="clip layer full"><div id="ph64m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_shush.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:434px;top:198px;width:118px;height:166px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph65" data-start="40.703" data-duration="0.153" style="position:absolute;inset:0;z-index:75;overflow:hidden;background:#000" class="clip layer full"><div id="ph65m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_test_roar.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 30%;filter:none"><div class="face" style="left:297px;top:85px;width:159px;height:197px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ph66" data-start="40.837" data-duration="0.153" style="position:absolute;inset:0;z-index:76;overflow:hidden;background:#000" class="clip layer full"><div id="ph66m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_trophy_kiss.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 30%;filter:none"><div class="face" style="left:89px;top:246px;width:146px;height:209px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="fl67" class="clip" data-start="40.93" data-duration="0.4" style="position:absolute;inset:0;background:#fff;z-index:477;pointer-events:none"></div>
+<div id="ph68" data-start="40.97" data-duration="1.98" style="position:absolute;inset:0;z-index:78;overflow:hidden;background:#000" class="clip layer full"><div id="ph68m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_trophy_kiss.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 30%;filter:none"><div class="face" style="left:89px;top:246px;width:146px;height:209px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ti69" data-start="40.97" data-duration="1.98" style="position:absolute;left:70px;right:70px;top:484px;z-index:79;font-size:118px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti69l0" class="ln" style="color:#fff">WIN AWAY</div></div><div class="mask"><div id="ti69l1" class="ln" style="color:#FEDE5C">FROM HOME</div></div></div>
+<div id="lk70" data-start="42.65" data-duration="0.9" style="z-index:480" class="clip leak"></div>
+<div id="v371" data-start="42.85" data-duration="2.44" style="position:absolute;inset:0;z-index:81;background:#030304" class="clip layer full"><img src="media/blender_renders_num3_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v371v" class="clip" src="media/blender_renders_num3.mp4" muted playsinline data-start="42.85" data-duration="1.4" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="ti72" data-start="44.035" data-duration="1.255" style="position:absolute;left:70px;right:70px;top:1215px;z-index:82;font-size:96px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti72l0" class="ln" style="color:#fff">The Biggest</div></div><div class="mask"><div id="ti72l1" class="ln" style="color:#FEDE5C">Stage</div></div></div>
+<div id="ph73" data-start="45.24" data-duration="3.95" style="position:absolute;inset:0;z-index:83;overflow:hidden;background:#000" class="clip layer full"><div id="ph73m" style="position:absolute;inset:0;transform-origin:40% 30%"><img src="media/assets_hi_sachin_2003_trophy.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:183px;top:264px;width:164px;height:220px"></div><div class="face" style="left:716px;top:118px;width:168px;height:231px"></div><div class="face" style="left:1086px;top:118px;width:118px;height:221px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cp74" data-start="45.39" data-duration="3.8" style="left:70px;top:740px;z-index:84" class="clip chip avoid"><span class="dot"></span>World Cup 2003</div>
+<div id="od75" data-start="47.88" data-duration="1.31" style="left:0;right:0;text-align:center;top:830px;font-size:300px;color:#FEDE5C;z-index:85" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od75d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od75d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od75d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">RUNS</div></div>
+<div id="st76" data-start="49.14" data-duration="2.38" style="position:absolute;inset:0;z-index:86;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="yl77" class="clip" data-start="49.19" data-duration="2.33" style="position:absolute;inset:0;z-index:87"><div class="ylab" style="left:90px">2003</div><div class="ylab" id="yl77y" style="right:90px;color:#FEDE5C">2003</div><div class="yline"><div id="yl77f" class="yfill"></div></div><div class="ybig" id="yl77b">20 YEARS</div></div>
+<div id="ph78" data-start="51.47" data-duration="3.43" style="position:absolute;inset:0;z-index:88;overflow:hidden;background:#000" class="clip layer full"><div id="ph78m" style="position:absolute;inset:0;transform-origin:50% 45%"><img src="media/assets_hi_kohli_2023_hands.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:489px;top:938px;width:282px;height:370px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cp79" data-start="51.62" data-duration="3.28" style="left:70px;top:300px;z-index:89" class="clip chip avoid"><span class="dot"></span>World Cup 2023</div>
+<div id="od80" data-start="53.585" data-duration="1.315" style="left:0;right:0;text-align:center;top:380px;font-size:300px;color:#FEDE5C;z-index:90" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od80d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od80d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od80d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">RUNS</div></div>
+<div id="st81" data-start="54.85" data-duration="3.89" style="position:absolute;inset:0;z-index:91;background:#0e0e10" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="sc82" class="clip" data-start="54.85" data-duration="3.89" style="position:absolute;left:40px;top:560px;width:1000px;height:675px;z-index:92;perspective:1800px"><div id="sc82w" class="win" style="transform-origin:80% 30%"><div class="bar"><i></i><i></i><i></i><span>thecricketlounge · record book</span></div><video class="clip" src="media/capture_out_screen_wc.mp4" muted playsinline data-start="54.85" data-duration="3.8899999999999997" data-media-start="1.1" style="width:1000px;height:625px;display:block"></video></div></div>
+<div id="fl83" class="clip" data-start="57.02" data-duration="0.4" style="position:absolute;inset:0;background:#fff;z-index:493;pointer-events:none"></div>
+<div id="cp84" data-start="55.0" data-duration="3.74" style="left:70px;top:300px;z-index:94" class="clip chip avoid"><span class="dot"></span>Semi-final · Wankhede · 15 Nov 2023</div>
+<div id="ss85" class="clip" data-start="57.04" data-duration="1.7" style="position:absolute;left:90px;top:760px;width:900px;z-index:95"><img src="media/capture_out_shot_wc.png" style="width:900px;border-radius:22px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.9)"></div>
+<div id="ph86" data-start="58.69" data-duration="2.34" style="position:absolute;inset:0;z-index:96;overflow:hidden;background:#000" class="clip layer full"><div id="ph86m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_kohli_odi_helmet_bat.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:412px;top:1019px;width:213px;height:266px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="fl87" class="clip" data-start="59.48" data-duration="0.4" style="position:absolute;inset:0;background:#fff;z-index:497;pointer-events:none"></div>
+<div id="v388" data-start="60.93" data-duration="2.18" style="position:absolute;inset:0;z-index:98;background:#030304" class="clip layer full"><img src="media/blender_renders_fifty_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v388v" class="clip" src="media/blender_renders_fifty.mp4" muted playsinline data-start="60.93" data-duration="2.0" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="st89" data-start="63.06" data-duration="1.99" style="position:absolute;inset:0;z-index:99;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct90" data-start="63.06" data-duration="1.99" style="position:absolute;left:440px;bottom:0px;width:579px;height:1250px;z-index:100" class="clip layer"><img id="ct90m" src="media/assets_cut_kohli_t20_lookup.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:303px;top:207px;width:83px;height:102px"></div></div>
+<div id="od91" data-start="63.5" data-duration="1.55" style="left:70px;top:360px;font-size:360px;color:#FEDE5C;z-index:101" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od91d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od91d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div></div>
+<div id="ty92" data-start="63.9" data-duration="1.15" style="position:absolute;left:70px;top:760px;z-index:102" class="clip typed avoid"><div class="tline" id="ty92r0" style="font-size:56px;color:#FEDE5C"><span class="ch">O</span><span class="ch">D</span><span class="ch">I</span></div><div class="tline" id="ty92r1" style="font-size:56px;color:#fff"><span class="ch">H</span><span class="ch">U</span><span class="ch">N</span><span class="ch">D</span><span class="ch">R</span><span class="ch">E</span><span class="ch">D</span><span class="ch">S</span></div><div class="tline" id="ty92r2" style="font-size:56px;color:#fff"><span class="ch">&amp;</span><span class="ch">&nbsp;</span><span class="ch">c</span><span class="ch">o</span><span class="ch">u</span><span class="ch">n</span><span class="ch">t</span><span class="ch">i</span><span class="ch">n</span><span class="ch">g</span></div></div>
+<div id="st93" data-start="65.0" data-duration="2.23" style="position:absolute;inset:0;z-index:103;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct94" data-start="65.0" data-duration="2.23" style="position:absolute;left:-120px;bottom:520px;width:1000px;height:637px;z-index:104" class="clip layer"><img id="ct94m" src="media/assets_cut_kohli_odi_celebrate_wide.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:446px;top:290px;width:105px;height:134px"></div></div>
+<div id="ct95" data-start="65.1" data-duration="2.13" style="position:absolute;left:520px;bottom:0px;width:685px;height:1300px;z-index:105" class="clip layer"><img id="ct95m" src="media/assets_cut_sachin_test_celebrate.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:326px;top:373px;width:82px;height:107px"></div></div>
+<div id="ti96" data-start="65.15" data-duration="1.857" style="position:absolute;left:70px;right:70px;top:300px;z-index:106;font-size:104px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti96l0" class="ln" style="color:#fff">BETTER</div></div><div class="mask"><div id="ti96l1" class="ln" style="color:#FEDE5C">THAN SACHIN?</div></div></div>
+<div id="sm97" data-start="66.857" data-duration="0.323" style="top:330px;font-size:330px;color:#fff;z-index:107" class="clip stamp avoid">NO.</div>
+<div id="ph98" data-start="67.18" data-duration="3.19" style="position:absolute;inset:0;z-index:108;overflow:hidden;background:#000" class="clip layer full"><div id="ph98m" style="position:absolute;inset:0;transform-origin:50% 20%"><img src="media/assets_hi_sachin_odi_bat_raise.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:439px;top:403px;width:144px;height:183px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="od99" data-start="67.28" data-duration="2.48" style="left:0;right:0;text-align:center;top:650px;font-size:300px;color:#FEDE5C;z-index:109" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od99d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od99d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od99d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">INTERNATIONAL HUNDREDS</div></div>
+<div id="od100" data-start="69.56" data-duration="1.06" style="left:0;right:0;text-align:center;top:1000px;font-size:300px;color:#FEDE5C;z-index:110" class="clip odo avoid"><div class="digits"><span class="dcol"><span class="dstrip" id="od100d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od100d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">YEARS</div></div>
+<div id="ph101" data-start="70.32" data-duration="1.4" style="position:absolute;inset:0;z-index:111;overflow:hidden;background:#000" class="clip layer full"><div id="ph101m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_sachin_young_cut.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:none"><div class="face" style="left:423px;top:162px;width:135px;height:183px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="ti102" data-start="71.124" data-duration="0.596" style="position:absolute;left:70px;right:70px;top:365px;z-index:112;font-size:128px;text-align:center;font-style:normal" class="clip title avoid"><div class="mask"><div id="ti102l0" class="ln" style="color:#fff">THE</div></div><div class="mask"><div id="ti102l1" class="ln" style="color:#FEDE5C">BENCHMARK</div></div></div>
+<div id="st103" data-start="71.67" data-duration="3.08" style="position:absolute;inset:0;z-index:113;background:#0b0b0c" class="clip layer full"><div class="grain"></div><div class="vig"></div></div>
+<div id="ct104" data-start="71.67" data-duration="3.08" style="position:absolute;left:380px;bottom:240px;width:568px;height:950px;z-index:114" class="clip layer"><img id="ct104m" src="media/assets_cut_kohli_2023_hands.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:257px;top:434px;width:150px;height:195px"></div></div>
+<div id="rc105" data-start="71.72" data-duration="3.03" style="z-index:115" class="clip recap"><div class="rrow" id="rc105r0"><span class="rnum">1.</span>Chase Master<span class="tick" id="rc105t0">✓</span></div><div class="rrow" id="rc105r1"><span class="rnum">2.</span>The Captain<span class="tick" id="rc105t1">✓</span></div><div class="rrow" id="rc105r2"><span class="rnum">3.</span>Biggest Stage<span class="tick" id="rc105t2">✓</span></div></div>
+<div id="v3106" data-start="74.7" data-duration="5.1" style="position:absolute;inset:0;z-index:116;background:#030304" class="clip layer full"><img src="media/blender_renders_logo_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v3106v" class="clip" src="media/blender_renders_logo.mp4" muted playsinline data-start="74.7" data-duration="1.8" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="cm107" data-start="74.85" data-duration="4.95" style="z-index:117" class="clip cta"><div class="bubble" id="cm107b"><div class="av"></div><div><div class="who">you</div><div class="what" id="cm107w"></div></div></div><div class="cta2">Which one surprised you most?</div></div>
+<div id="cap108" data-start="0.35" data-duration="0.58" style="top:1420px" class="clip cap avoid"><span>SACHIN IS THE</span></div>
+<div id="cap109" data-start="0.93" data-duration="0.7" style="top:1420px" class="clip cap avoid"><span>GOD OF CRICKET.</span></div>
+<div id="cap110" data-start="1.59" data-duration="0.7" style="top:1420px" class="clip cap avoid"><span>NOBODY&#x27;S ARGUING</span></div>
+<div id="cap111" data-start="2.29" data-duration="0.38" style="top:1420px" class="clip cap avoid"><span>THAT.</span></div>
+<div id="cap112" data-start="2.9" data-duration="0.418" style="top:1420px" class="clip cap avoid"><span>BUT THERE</span></div>
+<div id="cap113" data-start="3.318" data-duration="0.766" style="top:1420px" class="clip cap avoid num"><span>ARE 3 RECORDS</span></div>
+<div id="cap114" data-start="4.084" data-duration="0.557" style="top:1420px" class="clip cap avoid"><span>VIRAT KOHLI</span></div>
+<div id="cap115" data-start="4.641" data-duration="0.319" style="top:1420px" class="clip cap avoid"><span>OWNS…</span></div>
+<div id="cap116" data-start="4.86" data-duration="0.502" style="top:1420px" class="clip cap avoid"><span>THAT SACHIN</span></div>
+<div id="cap117" data-start="5.362" data-duration="0.503" style="top:1420px" class="clip cap avoid"><span>HAS NEVER</span></div>
+<div id="cap118" data-start="5.865" data-duration="0.645" style="top:1420px" class="clip cap avoid"><span>TOUCHED.</span></div>
+<div id="cap119" data-start="8.79" data-duration="0.459" style="top:1420px" class="clip cap avoid"><span>WHEN INDIA</span></div>
+<div id="cap120" data-start="9.249" data-duration="0.612" style="top:1420px" class="clip cap avoid"><span>ARE CHASING,</span></div>
+<div id="cap121" data-start="9.861" data-duration="0.764" style="top:1420px" class="clip cap avoid"><span>KOHLI BECOMES</span></div>
+<div id="cap122" data-start="10.625" data-duration="0.612" style="top:1420px" class="clip cap avoid"><span>A DIFFERENT</span></div>
+<div id="cap123" data-start="11.237" data-duration="0.273" style="top:1420px" class="clip cap avoid"><span>PLAYER.</span></div>
+<div id="cap124" data-start="11.39" data-duration="1.185" style="top:1420px" class="clip cap avoid num"><span>25 ODI HUNDREDS</span></div>
+<div id="cap125" data-start="12.575" data-duration="0.677" style="top:1420px" class="clip cap avoid"><span>IN SUCCESSFUL</span></div>
+<div id="cap126" data-start="13.252" data-duration="0.458" style="top:1420px" class="clip cap avoid"><span>CHASES.</span></div>
+<div id="cap127" data-start="13.59" data-duration="0.382" style="top:1420px" class="clip cap avoid"><span>THE MOST</span></div>
+<div id="cap128" data-start="13.972" data-duration="0.765" style="top:1420px" class="clip cap avoid"><span>BY ANYONE.</span></div>
+<div id="cap129" data-start="14.737" data-duration="0.603" style="top:1420px" class="clip cap avoid"><span>EVER.</span></div>
+<div id="cap130" data-start="15.61" data-duration="1.33" style="top:1420px" class="clip cap avoid num"><span>SACHIN HAS 14.</span></div>
+<div id="cap131" data-start="17.41" data-duration="0.795" style="top:1420px" class="clip cap avoid"><span>AND IN THOSE</span></div>
+<div id="cap132" data-start="18.205" data-duration="0.198" style="top:1420px" class="clip cap avoid"><span>WINS,</span></div>
+<div id="cap133" data-start="18.403" data-duration="1.192" style="top:1420px" class="clip cap avoid"><span>KOHLI AVERAGES</span></div>
+<div id="cap134" data-start="19.595" data-duration="1.005" style="top:1420px" class="clip cap avoid num"><span>NEAR 90.</span></div>
+<div id="cap135" data-start="20.83" data-duration="0.78" style="top:1420px" class="clip cap avoid num"><span>90.</span></div>
+<div id="cap136" data-start="21.49" data-duration="0.92" style="top:1420px" class="clip cap avoid"><span>THAT&#x27;S NOT BATTING.</span></div>
+<div id="cap137" data-start="22.41" data-duration="0.69" style="top:1420px" class="clip cap avoid"><span>THAT&#x27;S A CHEAT</span></div>
+<div id="cap138" data-start="23.1" data-duration="0.84" style="top:1420px" class="clip cap avoid"><span>CODE.</span></div>
+<div id="cap139" data-start="25.87" data-duration="1.02" style="top:1420px" class="clip cap avoid"><span>KOHLI LED INDIA</span></div>
+<div id="cap140" data-start="26.89" data-duration="1.27" style="top:1420px" class="clip cap avoid num"><span>IN 68 TESTS…</span></div>
+<div id="cap141" data-start="28.24" data-duration="0.96" style="top:1420px" class="clip cap avoid num"><span>AND WON 40.</span></div>
+<div id="cap142" data-start="29.08" data-duration="0.338" style="top:1420px" class="clip cap avoid"><span>THE MOST</span></div>
+<div id="cap143" data-start="29.418" data-duration="0.844" style="top:1420px" class="clip cap avoid"><span>BY ANY INDIAN</span></div>
+<div id="cap144" data-start="30.262" data-duration="0.568" style="top:1420px" class="clip cap avoid"><span>CAPTAIN.</span></div>
+<div id="cap145" data-start="31.06" data-duration="0.526" style="top:1420px" class="clip cap avoid"><span>HE GAVE</span></div>
+<div id="cap146" data-start="31.586" data-duration="0.526" style="top:1420px" class="clip cap avoid"><span>INDIA THEIR</span></div>
+<div id="cap147" data-start="32.112" data-duration="0.526" style="top:1420px" class="clip cap avoid"><span>FIRST EVER</span></div>
+<div id="cap148" data-start="32.638" data-duration="0.526" style="top:1420px" class="clip cap avoid"><span>TEST SERIES</span></div>
+<div id="cap149" data-start="33.164" data-duration="1.006" style="top:1420px" class="clip cap avoid"><span>WIN IN AUSTRALIA.</span></div>
+<div id="cap150" data-start="34.05" data-duration="0.933" style="top:1420px" class="clip cap avoid"><span>SACHIN CAPTAINED</span></div>
+<div id="cap151" data-start="34.983" data-duration="0.867" style="top:1420px" class="clip cap avoid num"><span>25 TESTS…</span></div>
+<div id="cap152" data-start="35.73" data-duration="1.29" style="top:1420px" class="clip cap avoid num"><span>AND WON 4.</span></div>
+<div id="cap153" data-start="37.29" data-duration="0.789" style="top:1420px" class="clip cap avoid"><span>DIFFERENT JOB?</span></div>
+<div id="cap154" data-start="38.079" data-duration="0.761" style="top:1420px" class="clip cap avoid"><span>FOR SURE.</span></div>
+<div id="cap155" data-start="38.97" data-duration="0.6" style="top:1420px" class="clip cap avoid"><span>BUT KOHLI</span></div>
+<div id="cap156" data-start="39.57" data-duration="0.6" style="top:1420px" class="clip cap avoid"><span>BUILT A TEAM</span></div>
+<div id="cap157" data-start="40.17" data-duration="0.8" style="top:1420px" class="clip cap avoid"><span>THAT EXPECTED</span></div>
+<div id="cap158" data-start="40.97" data-duration="0.8" style="top:1420px" class="clip cap avoid"><span>TO WIN AWAY</span></div>
+<div id="cap159" data-start="41.77" data-duration="0.8" style="top:1420px" class="clip cap avoid"><span>FROM HOME.</span></div>
+<div id="cap160" data-start="45.34" data-duration="1.54" style="top:1420px" class="clip cap avoid num"><span>2003 WORLD</span></div>
+<div id="cap161" data-start="46.88" data-duration="0.22" style="top:1420px" class="clip cap avoid"><span>CUP:</span></div>
+<div id="cap162" data-start="47.1" data-duration="0.88" style="top:1420px" class="clip cap avoid"><span>SACHIN SCORES</span></div>
+<div id="cap163" data-start="47.98" data-duration="1.33" style="top:1420px" class="clip cap avoid num"><span>673 RUNS.</span></div>
+<div id="cap164" data-start="49.24" data-duration="0.543" style="top:1420px" class="clip cap avoid"><span>A RECORD</span></div>
+<div id="cap165" data-start="49.783" data-duration="0.362" style="top:1420px" class="clip cap avoid"><span>THAT STOOD</span></div>
+<div id="cap166" data-start="50.145" data-duration="1.145" style="top:1420px" class="clip cap avoid num"><span>FOR 20 YEARS.</span></div>
+<div id="cap167" data-start="51.57" data-duration="1.346" style="top:1420px" class="clip cap avoid num"><span>IN 2023,</span></div>
+<div id="cap168" data-start="52.916" data-duration="0.769" style="top:1420px" class="clip cap avoid"><span>KOHLI SCORES</span></div>
+<div id="cap169" data-start="53.685" data-duration="0.985" style="top:1420px" class="clip cap avoid num"><span>765.</span></div>
+<div id="cap170" data-start="54.94" data-duration="0.513" style="top:1420px" class="clip cap avoid"><span>AND IN THE</span></div>
+<div id="cap171" data-start="55.453" data-duration="0.683" style="top:1420px" class="clip cap avoid"><span>SEMI-FINAL,</span></div>
+<div id="cap172" data-start="56.136" data-duration="0.974" style="top:1420px" class="clip cap avoid"><span>AT THE WANKHEDE,</span></div>
+<div id="cap173" data-start="56.99" data-duration="0.583" style="top:1420px" class="clip cap avoid"><span>WITH SACHIN</span></div>
+<div id="cap174" data-start="57.573" data-duration="0.778" style="top:1420px" class="clip cap avoid"><span>WATCHING HIM FROM</span></div>
+<div id="cap175" data-start="58.351" data-duration="0.509" style="top:1420px" class="clip cap avoid"><span>THE STANDS,</span></div>
+<div id="cap176" data-start="58.74" data-duration="0.507" style="top:1420px" class="clip cap avoid"><span>HE HITS</span></div>
+<div id="cap177" data-start="59.247" data-duration="0.506" style="top:1420px" class="clip cap avoid num"><span>HIS 50TH</span></div>
+<div id="cap178" data-start="59.753" data-duration="1.397" style="top:1420px" class="clip cap avoid"><span>ODI CENTURY,</span></div>
+<div id="cap179" data-start="61.03" data-duration="0.777" style="top:1420px" class="clip cap avoid"><span>PASSING SACHIN&#x27;S</span></div>
+<div id="cap180" data-start="61.807" data-duration="1.073" style="top:1420px" class="clip cap avoid num"><span>49.</span></div>
+<div id="cap181" data-start="63.15" data-duration="1.125" style="top:1420px" class="clip cap avoid num"><span>HE&#x27;S ON 55</span></div>
+<div id="cap182" data-start="64.275" data-duration="0.395" style="top:1420px" class="clip cap avoid"><span>NOW.</span></div>
+<div id="cap183" data-start="65.09" data-duration="0.852" style="top:1420px" class="clip cap avoid"><span>SO IS KOHLI</span></div>
+<div id="cap184" data-start="65.942" data-duration="0.639" style="top:1420px" class="clip cap avoid"><span>BETTER THAN</span></div>
+<div id="cap185" data-start="66.581" data-duration="0.426" style="top:1420px" class="clip cap avoid"><span>SACHIN?</span></div>
+<div id="cap186" data-start="67.007" data-duration="0.343" style="top:1420px" class="clip cap avoid"><span>NO.</span></div>
+<div id="cap187" data-start="67.23" data-duration="1.924" style="top:1420px" class="clip cap avoid num"><span>100 INTERNATIONAL</span></div>
+<div id="cap188" data-start="69.154" data-duration="0.406" style="top:1420px" class="clip cap avoid"><span>HUNDREDS.</span></div>
+<div id="cap189" data-start="69.56" data-duration="0.93" style="top:1420px" class="clip cap avoid num"><span>24 YEARS.</span></div>
+<div id="cap190" data-start="70.37" data-duration="0.754" style="top:1420px" class="clip cap avoid"><span>SACHIN IS STILL</span></div>
+<div id="cap191" data-start="71.124" data-duration="0.716" style="top:1420px" class="clip cap avoid"><span>THE BENCHMARK.</span></div>
+<div id="cap192" data-start="71.78" data-duration="0.668" style="top:1420px" class="clip cap avoid"><span>BUT THESE</span></div>
+<div id="cap193" data-start="72.448" data-duration="0.334" style="top:1420px" class="clip cap avoid num"><span>3?</span></div>
+<div id="cap194" data-start="72.782" data-duration="0.89" style="top:1420px" class="clip cap avoid"><span>THESE BELONG</span></div>
+<div id="cap195" data-start="73.672" data-duration="0.848" style="top:1420px" class="clip cap avoid"><span>TO VIRAT.</span></div>
+<div id="cap196" data-start="74.8" data-duration="0.932" style="top:1420px" class="clip cap avoid"><span>WHICH ONE SURPRISED</span></div>
+<div id="cap197" data-start="75.732" data-duration="0.466" style="top:1420px" class="clip cap avoid"><span>YOU THE MOST?</span></div>
+<div id="cap198" data-start="76.198" data-duration="0.466" style="top:1420px" class="clip cap avoid"><span>TELL ME IN</span></div>
+<div id="cap199" data-start="76.664" data-duration="0.656" style="top:1420px" class="clip cap avoid"><span>THE COMMENTS.</span></div>
+</div>
+<div id="grainTop"></div>
+<div class="brand" id="brand"><img src="media/logo.png"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const tl = gsap.timeline({paused:true});
+tl.fromTo("#ph1m",{scale:1.18},{scale:1.05,duration:1.26,ease:"none"},0);
+tl.fromTo("#ti2l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},0.4);
+tl.fromTo("#ti2l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},0.48000000000000004);
+tl.fromTo("#tg3",{scaleX:0},{scaleX:1,duration:0.35,ease:"expo.out"},0.75);
+tl.fromTo("#tg3 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.035},0.95);
+tl.fromTo("#ph4",{xPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},1.51);
+tl.fromTo("#ph4m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},1.51);
+tl.fromTo("#ph4m",{scale:1.0},{scale:1.12,duration:1.34,ease:"none"},1.51);
+tl.fromTo("#cp5",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},1.66);
+tl.fromTo("#od8d0",{yPercent:0},{yPercent:-30,duration:0.9,ease:"expo.out"},3.646);
+tl.fromTo("#od8",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},3.596);
+tl.fromTo("#ti9l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},3.746);
+tl.fromTo("#ct10",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},3.9839999999999995);
+tl.fromTo("#ct10",{y:0},{y:-18,duration:1.1560000000000001,ease:"sine.inOut"},3.9839999999999995);
+tl.fromTo("#ct12",{x:-700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},4.64);
+tl.fromTo("#ct12",{y:0},{y:-18,duration:2.25,ease:"sine.inOut"},4.64);
+tl.fromTo("#ct13",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},4.74);
+tl.fromTo("#ct13",{y:0},{y:-18,duration:2.15,ease:"sine.inOut"},4.74);
+tl.fromTo("#ti14l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},5.53);
+tl.fromTo("#ti14l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},5.61);
+tl.fromTo("#gl15s0",{x:120},{x:-80,duration:0.3,ease:"steps(5)"},6.49);
+tl.fromTo("#gl15s1",{x:-120},{x:80,duration:0.3,ease:"steps(5)"},6.49);
+tl.fromTo("#gl15s2",{x:120},{x:-80,duration:0.3,ease:"steps(5)"},6.49);
+tl.fromTo("#gl15s3",{x:-120},{x:80,duration:0.3,ease:"steps(5)"},6.49);
+tl.fromTo("#gl15s4",{x:120},{x:-80,duration:0.3,ease:"steps(5)"},6.49);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:14,y:-7},{x:-14,y:7},{x:7,y:4},{x:0,y:0}],duration:0.3,ease:"none"},6.49);
+tl.fromTo("#ti17l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},7.995);
+tl.fromTo("#ti17l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},8.075);
+tl.fromTo("#ph18",{xPercent:-100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},8.7);
+tl.fromTo("#ph18m",{skewX:6},{skewX:0,duration:0.45,ease:"expo.out"},8.7);
+tl.fromTo("#ph18m",{scale:1.0},{scale:1.1,duration:1.466000000000001,ease:"none"},8.7);
+tl.fromTo("#cp19",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},8.85);
+tl.fromTo("#ph20m",{scale:1.08},{scale:1.18,duration:1.4740000000000002,ease:"none"},10.166);
+tl.fromTo("#gl22r",{x:-26,opacity:.7},{x:26,opacity:0,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22c",{x:26,opacity:.7},{x:-26,opacity:0,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22s0",{x:120},{x:-80,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22s1",{x:-120},{x:80,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22s2",{x:120},{x:-80,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22s3",{x:-120},{x:80,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#gl22s4",{x:120},{x:-80,duration:0.35,ease:"steps(6)"},10.166);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:14,y:-7},{x:-14,y:7},{x:7,y:4},{x:0,y:0}],duration:0.35,ease:"none"},10.166);
+tl.fromTo("#ti23l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},10.625);
+tl.fromTo("#ti23l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},10.705);
+tl.fromTo("#ct25",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},11.34);
+tl.fromTo("#ct25",{y:0},{y:-18,duration:2.25,ease:"sine.inOut"},11.34);
+tl.fromTo("#od26d0",{yPercent:0},{yPercent:-20,duration:0.9,ease:"expo.out"},11.49);
+tl.fromTo("#od26d1",{yPercent:0},{yPercent:-50,duration:1.05,ease:"expo.out"},11.49);
+tl.fromTo("#od26",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},11.44);
+tl.fromTo("#ty27r0 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},11.79);
+tl.fromTo("#ty27r1 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},12.263);
+tl.fromTo("#ty27r2 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},12.765);
+tl.fromTo("#sc29w",{x:-1100,rotationY:28,rotationX:8},{x:0,rotationY:0,rotationX:0,duration:0.8,ease:"expo.out"},13.54);
+tl.to("#sc29w",{scale:1.35,duration:1.0299999999999998,ease:"power2.inOut"},14.44);
+tl.fromTo("#ti30l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},13.69);
+tl.fromTo("#br32b0",{height:0},{height:620,duration:0.9,ease:"expo.out"},15.67);
+(()=>{const o={v:0};tl.to(o,{v:25,duration:0.9,ease:"expo.out",onUpdate:()=>{document.getElementById("br32n0").textContent=Math.round(o.v)+""}},15.67)})();
+tl.fromTo("#br32b1",{height:0},{height:347,duration:0.9,ease:"expo.out"},15.92);
+(()=>{const o={v:0};tl.to(o,{v:14,duration:0.9,ease:"expo.out",onUpdate:()=>{document.getElementById("br32n1").textContent=Math.round(o.v)+""}},15.92)})();
+tl.fromTo("#ph33",{xPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},17.12);
+tl.fromTo("#ph33m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},17.12);
+tl.fromTo("#ph33m",{scale:1.02},{scale:1.12,duration:3.6599999999999997,ease:"none"},17.12);
+tl.fromTo("#ty34r0 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},18.403);
+tl.fromTo("#ty34r1 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},18.729);
+tl.fromTo("#sm36",{scale:2.6,opacity:0,rotation:-8},{scale:1,opacity:1,rotation:-4,duration:0.32,ease:"power4.in"},20.73);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},21.03);
+tl.fromTo("#ph37",{yPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},21.49);
+tl.fromTo("#ph37m",{skewX:0},{skewX:0,duration:0.45,ease:"expo.out"},21.49);
+tl.fromTo("#ph37m",{scale:1.05},{scale:1.15,duration:2.83,ease:"none"},21.49);
+tl.fromTo("#ti38l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},21.54);
+tl.fromTo("#gl39r",{x:-26,opacity:.7},{x:26,opacity:0,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39c",{x:26,opacity:.7},{x:-26,opacity:0,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39s0",{x:120},{x:-80,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39s1",{x:-120},{x:80,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39s2",{x:120},{x:-80,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39s3",{x:-120},{x:80,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#gl39s4",{x:120},{x:-80,duration:0.5,ease:"steps(10)"},22.36);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:14,y:-7},{x:-14,y:7},{x:7,y:4},{x:0,y:0}],duration:0.5,ease:"none"},22.36);
+tl.fromTo("#ti40l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},22.41);
+tl.fromTo("#ti40l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},22.49);
+tl.fromTo("#lk41",{xPercent:-80,opacity:0},{keyframes:[{xPercent:-20,opacity:1,duration:0.36000000000000004},{xPercent:60,opacity:0,duration:0.54}],ease:"none"},24.02);
+tl.fromTo("#ti43l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},25.4);
+tl.fromTo("#ti43l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},25.479999999999997);
+tl.fromTo("#ph44",{xPercent:-100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},25.82);
+tl.fromTo("#ph44m",{skewX:6},{skewX:0,duration:0.45,ease:"expo.out"},25.82);
+tl.fromTo("#ph44m",{scale:1.0},{scale:1.1,duration:3.26,ease:"none"},25.82);
+tl.fromTo("#ty45r0 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},26.27);
+tl.fromTo("#ty45r1 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},26.625);
+tl.fromTo("#od46d0",{yPercent:0},{yPercent:-40,duration:0.9,ease:"expo.out"},28.240000000000002);
+tl.fromTo("#od46d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},28.240000000000002);
+tl.fromTo("#od46",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},28.19);
+tl.fromTo("#sc48w",{x:1100,rotationY:-28,rotationX:8},{x:0,rotationY:0,rotationX:0,duration:0.8,ease:"expo.out"},29.03);
+tl.to("#sc48w",{scale:1.2,duration:0.98,ease:"power2.inOut"},29.93);
+tl.fromTo("#ti49l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},29.18);
+tl.fromTo("#ti49l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},29.259999999999998);
+tl.fromTo("#ph50",{xPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},30.96);
+tl.fromTo("#ph50m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},30.96);
+tl.fromTo("#ph50m",{scale:1.0},{scale:1.12,duration:3.09,ease:"none"},30.96);
+tl.fromTo("#cp51",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},31.21);
+tl.fromTo("#ti52l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},32.112);
+tl.fromTo("#ti52l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},32.192);
+tl.fromTo("#ti52l2",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},32.272);
+tl.fromTo("#fl53",{opacity:0.35},{opacity:0,duration:0.32,ease:"power2.out"},33.339);
+tl.fromTo("#ct55",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},34.0);
+tl.fromTo("#ct55",{y:0},{y:-18,duration:3.25,ease:"sine.inOut"},34.0);
+tl.fromTo("#ty56r0 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},34.35);
+tl.fromTo("#ty56r1 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},34.705);
+tl.fromTo("#od57d0",{yPercent:0},{yPercent:-40,duration:0.9,ease:"expo.out"},35.779999999999994);
+tl.fromTo("#od57",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},35.73);
+tl.fromTo("#br59b0",{height:0},{height:620,duration:0.9,ease:"expo.out"},37.35);
+(()=>{const o={v:0};tl.to(o,{v:40,duration:0.9,ease:"expo.out",onUpdate:()=>{document.getElementById("br59n0").textContent=Math.round(o.v)+""}},37.35)})();
+tl.fromTo("#br59b1",{height:0},{height:62,duration:0.9,ease:"expo.out"},37.6);
+(()=>{const o={v:0};tl.to(o,{v:4,duration:0.9,ease:"expo.out",onUpdate:()=>{document.getElementById("br59n1").textContent=Math.round(o.v)+""}},37.6)})();
+tl.fromTo("#ph60",{xPercent:-100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},38.87);
+tl.fromTo("#ph60m",{skewX:6},{skewX:0,duration:0.45,ease:"expo.out"},38.87);
+tl.fromTo("#ph60m",{scale:1.0},{scale:1.1,duration:1.3000000000000043,ease:"none"},38.87);
+tl.fromTo("#ph61m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.17);
+tl.fromTo("#ph62m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.303333333333335);
+tl.fromTo("#ph63m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.43666666666667);
+tl.fromTo("#ph64m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.57);
+tl.fromTo("#ph65m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.70333333333333);
+tl.fromTo("#ph66m",{scale:1.18},{scale:1.1,duration:0.15333333333333332,ease:"none"},40.836666666666666);
+tl.fromTo("#fl67",{opacity:0.5},{opacity:0,duration:0.32,ease:"power2.out"},40.949999999999996);
+tl.fromTo("#ph68m",{scale:1.1},{scale:1.2,duration:1.980000000000001,ease:"none"},40.97);
+tl.fromTo("#ti69l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},40.97);
+tl.fromTo("#ti69l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},41.05);
+tl.fromTo("#lk70",{xPercent:-80,opacity:0},{keyframes:[{xPercent:-20,opacity:1,duration:0.36000000000000004},{xPercent:60,opacity:0,duration:0.54}],ease:"none"},42.65);
+tl.fromTo("#ti72l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},44.035);
+tl.fromTo("#ti72l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},44.114999999999995);
+tl.fromTo("#ph73",{xPercent:-100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},45.24);
+tl.fromTo("#ph73m",{skewX:6},{skewX:0,duration:0.45,ease:"expo.out"},45.24);
+tl.fromTo("#ph73m",{scale:1.0},{scale:1.1,duration:3.9499999999999997,ease:"none"},45.24);
+tl.fromTo("#cp74",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},45.39);
+tl.fromTo("#od75d0",{yPercent:0},{yPercent:-60,duration:0.9,ease:"expo.out"},47.92999999999999);
+tl.fromTo("#od75d1",{yPercent:0},{yPercent:-70,duration:1.05,ease:"expo.out"},47.92999999999999);
+tl.fromTo("#od75d2",{yPercent:0},{yPercent:-30,duration:1.2,ease:"expo.out"},47.92999999999999);
+tl.fromTo("#od75",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},47.879999999999995);
+tl.fromTo("#yl77f",{scaleX:0},{scaleX:1,duration:1.4,ease:"power2.inOut"},49.29);
+(()=>{const o={v:2003};tl.to(o,{v:2023,duration:1.4,ease:"power2.inOut",onUpdate:()=>{document.getElementById("yl77y").textContent=Math.round(o.v)}},49.29)})();
+tl.fromTo("#yl77b",{scale:0.6,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.8)"},50.589999999999996);
+tl.fromTo("#ph78",{xPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},51.47);
+tl.fromTo("#ph78m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},51.47);
+tl.fromTo("#ph78m",{scale:1.0},{scale:1.06,duration:3.4299999999999997,ease:"none"},51.47);
+tl.fromTo("#cp79",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},51.62);
+tl.fromTo("#od80d0",{yPercent:0},{yPercent:-70,duration:0.9,ease:"expo.out"},53.635);
+tl.fromTo("#od80d1",{yPercent:0},{yPercent:-60,duration:1.05,ease:"expo.out"},53.635);
+tl.fromTo("#od80d2",{yPercent:0},{yPercent:-50,duration:1.2,ease:"expo.out"},53.635);
+tl.fromTo("#od80",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},53.585);
+tl.fromTo("#sc82w",{x:-1100,rotationY:28,rotationX:8},{x:0,rotationY:0,rotationX:0,duration:0.8,ease:"expo.out"},54.85);
+tl.to("#sc82w",{scale:1.3,duration:2.8899999999999997,ease:"power2.inOut"},55.75);
+tl.to("#sc82",{opacity:.3,filter:"blur(6px)",duration:0.3},57.04);
+tl.fromTo("#fl83",{opacity:0.5},{opacity:0,duration:0.32,ease:"power2.out"},57.04);
+tl.fromTo("#cp84",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},55.0);
+tl.fromTo("#ss85",{x:900,rotation:-12,scale:1.15},{x:0,rotation:-4,scale:1,duration:0.55,ease:"back.out(1.4)"},57.04);
+tl.fromTo("#ph86",{yPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},58.69);
+tl.fromTo("#ph86m",{skewX:0},{skewX:0,duration:0.45,ease:"expo.out"},58.69);
+tl.fromTo("#ph86m",{scale:1.12},{scale:1.0,duration:2.34,ease:"none"},58.69);
+tl.fromTo("#fl87",{opacity:0.6},{opacity:0,duration:0.32,ease:"power2.out"},59.5);
+tl.fromTo("#ct90",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},63.06);
+tl.fromTo("#ct90",{y:0},{y:-18,duration:1.99,ease:"sine.inOut"},63.06);
+tl.fromTo("#od91d0",{yPercent:0},{yPercent:-50,duration:0.9,ease:"expo.out"},63.55);
+tl.fromTo("#od91d1",{yPercent:0},{yPercent:-50,duration:1.05,ease:"expo.out"},63.55);
+tl.fromTo("#od91",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},63.5);
+tl.fromTo("#ty92r0 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},63.9);
+tl.fromTo("#ty92r1 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},64.108);
+tl.fromTo("#ty92r2 .ch",{opacity:0},{opacity:1,duration:0.01,stagger:0.029},64.464);
+tl.fromTo("#ct94",{x:-700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},65.0);
+tl.fromTo("#ct94",{y:0},{y:-18,duration:2.23,ease:"sine.inOut"},65.0);
+tl.fromTo("#ct95",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},65.1);
+tl.fromTo("#ct95",{y:0},{y:-18,duration:2.1300000000000003,ease:"sine.inOut"},65.1);
+tl.fromTo("#ti96l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},65.15);
+tl.fromTo("#ti96l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},65.23);
+tl.fromTo("#sm97",{scale:2.6,opacity:0,rotation:-12},{scale:1,opacity:1,rotation:-6,duration:0.32,ease:"power4.in"},66.857);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},67.157);
+tl.fromTo("#ph98",{yPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},67.18);
+tl.fromTo("#ph98m",{skewX:0},{skewX:0,duration:0.45,ease:"expo.out"},67.18);
+tl.fromTo("#ph98m",{scale:1.0},{scale:1.1,duration:3.19,ease:"none"},67.18);
+tl.fromTo("#od99d0",{yPercent:0},{yPercent:-10,duration:0.9,ease:"expo.out"},67.33);
+tl.fromTo("#od99d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},67.33);
+tl.fromTo("#od99d2",{yPercent:0},{yPercent:0,duration:1.2,ease:"expo.out"},67.33);
+tl.fromTo("#od99",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},67.28);
+tl.fromTo("#od100d0",{yPercent:0},{yPercent:-20,duration:0.9,ease:"expo.out"},69.61);
+tl.fromTo("#od100d1",{yPercent:0},{yPercent:-40,duration:1.05,ease:"expo.out"},69.61);
+tl.fromTo("#od100",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},69.56);
+tl.fromTo("#ph101",{xPercent:100},{xPercent:0,yPercent:0,duration:0.5,ease:"expo.out"},70.32);
+tl.fromTo("#ph101m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},70.32);
+tl.fromTo("#ph101m",{scale:1.0},{scale:1.12,duration:1.4000000000000001,ease:"none"},70.32);
+tl.fromTo("#ti102l0",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},71.124);
+tl.fromTo("#ti102l1",{yPercent:105,filter:"blur(12px)"},{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"},71.204);
+tl.fromTo("#ct104",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},71.67);
+tl.fromTo("#ct104",{y:0},{y:-18,duration:3.0799999999999996,ease:"sine.inOut"},71.67);
+tl.fromTo("#rc105r0",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},71.72);
+tl.fromTo("#rc105t0",{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.35,ease:"back.out(2.5)"},72.82);
+tl.fromTo("#rc105r1",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},71.84);
+tl.fromTo("#rc105t1",{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.35,ease:"back.out(2.5)"},73.07);
+tl.fromTo("#rc105r2",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},71.96);
+tl.fromTo("#rc105t2",{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.35,ease:"back.out(2.5)"},73.32);
+tl.fromTo("#cm107b",{y:60,opacity:0,scale:.9},{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"},75.14999999999999);
+(()=>{const o={n:0};const s="Number 1, no doubt 🔥";tl.to(o,{n:s.length,duration:1.2,ease:"none",onUpdate:()=>{document.getElementById("cm107w").textContent=[...s].slice(0,Math.round(o.n)).join("")}},75.64999999999999)})();
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},0.55);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},1.75);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},3.55);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},4.35);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},5.65);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},7.05);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},11.35);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},12.15);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},18.35);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},24.55);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},29.35);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},31.25);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},32.15);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},34.25);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},38.95);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},43.15);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},65.25);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},67.85);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},69.75);
+tl.fromTo("#brand",{opacity:0},{opacity:.85,duration:0.25,immediateRender:false},71.95);
+tl.fromTo("#brand",{opacity:.85},{opacity:0,duration:0.2,immediateRender:false},74.45);
+tl.fromTo("#cap108 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},0.35);
+tl.fromTo("#cap109 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},0.93);
+tl.fromTo("#cap110 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},1.59);
+tl.fromTo("#cap111 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},2.29);
+tl.fromTo("#cap112 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},2.9);
+tl.fromTo("#cap113 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},3.318);
+tl.fromTo("#cap114 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},4.084);
+tl.fromTo("#cap115 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},4.641);
+tl.fromTo("#cap116 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},4.86);
+tl.fromTo("#cap117 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},5.362);
+tl.fromTo("#cap118 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},5.865);
+tl.fromTo("#cap119 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},8.79);
+tl.fromTo("#cap120 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},9.249);
+tl.fromTo("#cap121 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},9.861);
+tl.fromTo("#cap122 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},10.625);
+tl.fromTo("#cap123 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},11.237);
+tl.fromTo("#cap124 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},11.39);
+tl.fromTo("#cap125 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},12.575);
+tl.fromTo("#cap126 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},13.252);
+tl.fromTo("#cap127 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},13.59);
+tl.fromTo("#cap128 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},13.972);
+tl.fromTo("#cap129 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},14.737);
+tl.fromTo("#cap130 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},15.61);
+tl.fromTo("#cap131 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},17.41);
+tl.fromTo("#cap132 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},18.205);
+tl.fromTo("#cap133 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},18.403);
+tl.fromTo("#cap134 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},19.595);
+tl.fromTo("#cap135 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},20.83);
+tl.fromTo("#cap136 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},21.49);
+tl.fromTo("#cap137 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},22.41);
+tl.fromTo("#cap138 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},23.1);
+tl.fromTo("#cap139 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},25.87);
+tl.fromTo("#cap140 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},26.89);
+tl.fromTo("#cap141 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},28.24);
+tl.fromTo("#cap142 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},29.08);
+tl.fromTo("#cap143 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},29.418);
+tl.fromTo("#cap144 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},30.262);
+tl.fromTo("#cap145 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},31.06);
+tl.fromTo("#cap146 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},31.586);
+tl.fromTo("#cap147 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},32.112);
+tl.fromTo("#cap148 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},32.638);
+tl.fromTo("#cap149 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},33.164);
+tl.fromTo("#cap150 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},34.05);
+tl.fromTo("#cap151 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},34.983);
+tl.fromTo("#cap152 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},35.73);
+tl.fromTo("#cap153 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},37.29);
+tl.fromTo("#cap154 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},38.079);
+tl.fromTo("#cap155 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},38.97);
+tl.fromTo("#cap156 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},39.57);
+tl.fromTo("#cap157 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},40.17);
+tl.fromTo("#cap158 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},40.97);
+tl.fromTo("#cap159 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},41.77);
+tl.fromTo("#cap160 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},45.34);
+tl.fromTo("#cap161 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},46.88);
+tl.fromTo("#cap162 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},47.1);
+tl.fromTo("#cap163 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},47.98);
+tl.fromTo("#cap164 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},49.24);
+tl.fromTo("#cap165 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},49.783);
+tl.fromTo("#cap166 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},50.145);
+tl.fromTo("#cap167 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},51.57);
+tl.fromTo("#cap168 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},52.916);
+tl.fromTo("#cap169 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},53.685);
+tl.fromTo("#cap170 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},54.94);
+tl.fromTo("#cap171 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},55.453);
+tl.fromTo("#cap172 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},56.136);
+tl.fromTo("#cap173 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},56.99);
+tl.fromTo("#cap174 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},57.573);
+tl.fromTo("#cap175 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},58.351);
+tl.fromTo("#cap176 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},58.74);
+tl.fromTo("#cap177 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},59.247);
+tl.fromTo("#cap178 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},59.753);
+tl.fromTo("#cap179 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},61.03);
+tl.fromTo("#cap180 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},61.807);
+tl.fromTo("#cap181 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},63.15);
+tl.fromTo("#cap182 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},64.275);
+tl.fromTo("#cap183 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},65.09);
+tl.fromTo("#cap184 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},65.942);
+tl.fromTo("#cap185 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},66.581);
+tl.fromTo("#cap186 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},67.007);
+tl.fromTo("#cap187 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},67.23);
+tl.fromTo("#cap188 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},69.154);
+tl.fromTo("#cap189 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},69.56);
+tl.fromTo("#cap190 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},70.37);
+tl.fromTo("#cap191 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},71.124);
+tl.fromTo("#cap192 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},71.78);
+tl.fromTo("#cap193 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},72.448);
+tl.fromTo("#cap194 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},72.782);
+tl.fromTo("#cap195 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},73.672);
+tl.fromTo("#cap196 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},74.8);
+tl.fromTo("#cap197 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},75.732);
+tl.fromTo("#cap198 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},76.198);
+tl.fromTo("#cap199 span",{scale:0.82,y:14},{scale:1,y:0,duration:0.22,ease:"back.out(2.2)"},76.664);
+tl.fromTo("#grainTop",{x:0,y:0},{x:-48,y:-36,duration:79.8,ease:"steps(957)"},0);
+tl.set({},{},79.8);
+window.__timelines = window.__timelines || {};
+window.__timelines["root"] = tl;
+</script></body></html>
