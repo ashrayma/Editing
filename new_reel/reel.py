@@ -785,7 +785,6 @@ def edit():
 
     # ---------------- the turn
     then_now(*seg(s("a1", -0.05), s("a3", -0.05)), "kohli_mcg_fist", "tilak_smile", la="VIRAT", lb="TILAK", grey=False)
-    stamp("PHENOMENAL", *seg(word("a1", 3) - 0.05, s("a2")), y=870, size=150, rot=-4)
     photo("tilak_point", *seg(s("a3", -0.05), s("a4")), side=None, push=(1.18, 1.05), origin="50% 25%")
     title(["THE NEXT", "CHASE MASTER?"], *seg(word("a3", 6), s("a4")), y=300, size=110, accent=(1,), sfx="impact")
     glitch(s("a4", -0.03), 0.35, "tilak_point")
@@ -796,7 +795,7 @@ def edit():
     photo("kohli_raise_ct", *seg(s("s1", -0.05), s("s2", -0.05)), side="right", push=(1.0, 1.1))
     chip("ODI chases · Kohli not out", *seg(word("s1", 3), s("s2", -0.05)), x=None, y=300)
     stage(*seg(s("s2", -0.05), s("s3", -0.05)), tone="#0e0e10")
-    screen("screen_odi", *seg(s("s2", -0.05), s("s3", -0.05)), side="left", focus="60% 40%", zoom=1.3, mstart=1.0)
+    screen("screen_odi", *seg(s("s2", -0.05), s("s3", -0.05)), side="left", focus="50% 35%", zoom=1.6, mstart=1.0)
     odo("32/33", *seg(word("s2", 3) - 0.1, s("s3", -0.05)), x=None, y=260, size=170)
     duo("kohli_young_raise", *seg(s("s3", -0.05), s("s4", -0.05)), side="left")
     title(["THAT ONE", "LOSS…"], *seg(word("s3", 2), s("s4", -0.05)), y=300, size=130, accent=(1,), sfx="impact")
@@ -809,7 +808,7 @@ def edit():
     title(["JANUARY", "2011"], *seg(s("p1", 0.05), s("p2", -0.05)), y=620, size=170, accent=(1,), sfx="impact")
     chip("Port Elizabeth · India v South Africa", *seg(word("p1", 2), s("p2", -0.05)), x=None, y=1050)
     stage(*seg(s("p2", -0.05), s("p3", -0.05)))
-    sticker("kohli_young_roar", *seg(s("p2", -0.05), s("p3", -0.05)), side="right", h=1250, x=430)
+    sticker("kohli_young_roar", *seg(s("p2", -0.05), s("p3", -0.05)), side="right", h=1150)
     odo("266", *seg(word("p2", 3) - 0.1, s("p3", -0.05)), x=60, y=380, size=260, label="TARGET")
     photo("kohli_young_roar", *seg(s("p3", -0.05), s("p4", -0.05)), side="up", push=(1.0, 1.1))
     tag("VIRAT KOHLI · AGE 22", *seg(word("p3", 2), s("p4", -0.05)), y=1300)
@@ -830,7 +829,7 @@ def edit():
     title(["COULDN'T GET", "HIM OUT"], *seg(word("p8", 2), s("p9", -0.05)), y=1050, size=110, accent=(1,), sfx="impact")
     photo("rain_ground", *seg(s("p9", -0.05), s("t1", -0.05)), side=None, fx="grey", push=(1.15, 1.05))
     rain(s("p9", -0.05), span("p9", "t1"))
-    stamp("THE WEATHER WON", *seg(word("p9", 2), s("t1", -0.05)), y=760, size=110, color="#fff", rot=-4)
+    title(["THE WEATHER", "WON"], *seg(word("p9", 2), s("t1", -0.05)), y=620, size=140, accent=(1,), sfx="impact")
 
     # ---------------- the point
     flicker(["kohli_mcg_six", "kohli_raise_ct", "kohli_fist_t20", "kohli_mcg_fist", "kohli_young_roar", "kohli_mcg_roar"],
@@ -848,9 +847,9 @@ def edit():
     photo("kohli_mcg_six", *seg(s("v3", -0.05), s("v4", -0.05)), side="up", push=(1.0, 1.1))
     stamp("CHASE MASTER", *seg(word("v3", 8) - 0.05, s("v4", -0.05)), y=300, size=130, rot=-4)
     stage(*seg(s("v4", -0.05), s("v5", -0.05)))
-    sticker("kohli_raise_ct", *seg(s("v4", -0.05), s("v5", -0.05)), side="right", h=1250, x=430)
-    odo("15+", *seg(word("v4", 4) - 0.1, s("v5", -0.05)), x=60, y=380, size=300, label="YEARS")
-    typed(["of building", "a legacy"], *seg(word("v4", 6), s("v5", -0.05)), x=60, y=820, size=60, color="#fff")
+    sticker("kohli_raise_ct", *seg(s("v4", -0.05), s("v5", -0.05)), side="right", h=1200, x=500)
+    odo("15+", *seg(word("v4", 4) - 0.1, s("v5", -0.05)), x=60, y=330, size=250, label="YEARS")
+    typed(["of building", "a legacy"], *seg(word("v4", 6), s("v5", -0.05)), x=60, y=1030, size=60, color="#fff")
     photo("tilak_raise", *seg(s("v5", -0.05), s("v6")), side="left", push=(1.0, 1.1))
     title(["HIS OWN", "HISTORY"], *seg(word("v5", 3), s("v6")), y=300, size=130, accent=(1,), sfx="impact")
     photo("tilak_jump", *seg(s("v6"), s("v7", -0.05)), side="right", push=(1.0, 1.1))
