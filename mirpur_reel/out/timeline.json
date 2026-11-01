@@ -1,0 +1,1162 @@
+{
+ "duration": 68.89,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Virat Kohli's greatest chase wasn't the eighty two not out at the MCG.",
+   "caption": "Virat Kohli's greatest chase wasn't the 82* at the MCG.",
+   "start": 0.239,
+   "end": 4.019,
+   "words": [
+    [
+     "Virat",
+     0.278,
+     0.744
+    ],
+    [
+     "Kohli's",
+     0.744,
+     1.211
+    ],
+    [
+     "greatest",
+     1.211,
+     1.677
+    ],
+    [
+     "chase",
+     1.677,
+     2.144
+    ],
+    [
+     "wasn't",
+     2.144,
+     2.377
+    ],
+    [
+     "the",
+     2.377,
+     2.611
+    ],
+    [
+     "82*",
+     2.611,
+     3.31
+    ],
+    [
+     "at",
+     3.31,
+     3.543
+    ],
+    [
+     "the",
+     3.543,
+     3.776
+    ],
+    [
+     "MCG.",
+     3.776,
+     4.01
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "It was one eighty three, in Mirpur.",
+   "caption": "It was 183, in Mirpur.",
+   "start": 4.019,
+   "end": 6.44,
+   "words": [
+    [
+     "It",
+     4.019,
+     4.26
+    ],
+    [
+     "was",
+     4.26,
+     4.5
+    ],
+    [
+     "183,",
+     4.5,
+     5.584
+    ],
+    [
+     "in",
+     5.584,
+     5.825
+    ],
+    [
+     "Mirpur.",
+     5.825,
+     6.306
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "Now I know what you're thinking.",
+   "caption": "Now I know what you're thinking.",
+   "start": 6.569,
+   "end": 8.148,
+   "words": [
+    [
+     "Now",
+     6.703,
+     6.884
+    ],
+    [
+     "I",
+     6.884,
+     7.064
+    ],
+    [
+     "know",
+     7.064,
+     7.245
+    ],
+    [
+     "what",
+     7.245,
+     7.426
+    ],
+    [
+     "you're",
+     7.426,
+     7.787
+    ],
+    [
+     "thinking.",
+     7.787,
+     8.148
+    ]
+   ]
+  },
+  {
+   "id": "h4",
+   "text": "Nothing beats that night against Pakistan in Melbourne, right?",
+   "caption": "Nothing beats that night against Pakistan in Melbourne, right?",
+   "start": 8.148,
+   "end": 11.402,
+   "words": [
+    [
+     "Nothing",
+     8.148,
+     8.569
+    ],
+    [
+     "beats",
+     8.569,
+     8.78
+    ],
+    [
+     "that",
+     8.78,
+     8.99
+    ],
+    [
+     "night",
+     8.99,
+     9.201
+    ],
+    [
+     "against",
+     9.201,
+     9.622
+    ],
+    [
+     "Pakistan",
+     9.622,
+     10.254
+    ],
+    [
+     "in",
+     10.254,
+     10.464
+    ],
+    [
+     "Melbourne,",
+     10.464,
+     11.096
+    ],
+    [
+     "right?",
+     11.096,
+     11.306
+    ]
+   ]
+  },
+  {
+   "id": "h5",
+   "text": "But hear me out.",
+   "caption": "But hear me out.",
+   "start": 11.445,
+   "end": 12.785,
+   "words": [
+    [
+     "But",
+     11.502,
+     11.797
+    ],
+    [
+     "hear",
+     11.797,
+     12.091
+    ],
+    [
+     "me",
+     12.091,
+     12.385
+    ],
+    [
+     "out.",
+     12.385,
+     12.679
+    ]
+   ]
+  },
+  {
+   "id": "m1",
+   "text": "March twenty twelve.",
+   "caption": "March 2012.",
+   "start": 12.957,
+   "end": 14.191,
+   "words": [
+    [
+     "March",
+     13.005,
+     13.158
+    ],
+    [
+     "2012.",
+     13.158,
+     14.077
+    ]
+   ]
+  },
+  {
+   "id": "m2",
+   "text": "Asia Cup. Mirpur. India versus Pakistan.",
+   "caption": "Asia Cup. Mirpur. India vs Pakistan.",
+   "start": 14.234,
+   "end": 16.77,
+   "words": [
+    [
+     "Asia",
+     14.273,
+     14.727
+    ],
+    [
+     "Cup.",
+     14.727,
+     14.954
+    ],
+    [
+     "Mirpur.",
+     14.954,
+     15.408
+    ],
+    [
+     "India",
+     15.408,
+     15.862
+    ],
+    [
+     "vs",
+     15.862,
+     16.089
+    ],
+    [
+     "Pakistan.",
+     16.089,
+     16.77
+    ]
+   ]
+  },
+  {
+   "id": "m3",
+   "text": "Pakistan smashed three twenty nine.",
+   "caption": "Pakistan smashed 329.",
+   "start": 16.77,
+   "end": 19.278,
+   "words": [
+    [
+     "Pakistan",
+     16.77,
+     17.562
+    ],
+    [
+     "smashed",
+     17.562,
+     18.09
+    ],
+    [
+     "329.",
+     18.09,
+     19.278
+    ]
+   ]
+  },
+  {
+   "id": "m4",
+   "text": "Two hundreds, from Hafeez and Nasir Jamshed.",
+   "caption": "2 hundreds, from Hafeez and Nasir Jamshed.",
+   "start": 19.278,
+   "end": 21.096,
+   "words": [
+    [
+     "2",
+     19.278,
+     19.515
+    ],
+    [
+     "hundreds,",
+     19.515,
+     19.831
+    ],
+    [
+     "from",
+     19.831,
+     19.989
+    ],
+    [
+     "Hafeez",
+     19.989,
+     20.305
+    ],
+    [
+     "and",
+     20.305,
+     20.463
+    ],
+    [
+     "Nasir",
+     20.463,
+     20.78
+    ],
+    [
+     "Jamshed.",
+     20.78,
+     21.096
+    ]
+   ]
+  },
+  {
+   "id": "m5",
+   "text": "Back then, chasing three thirty against Pakistan felt almost impossible.",
+   "caption": "Back then, chasing 330 against Pakistan felt almost impossible.",
+   "start": 21.096,
+   "end": 25.794,
+   "words": [
+    [
+     "Back",
+     21.096,
+     21.319
+    ],
+    [
+     "then,",
+     21.319,
+     21.541
+    ],
+    [
+     "chasing",
+     21.541,
+     21.987
+    ],
+    [
+     "330",
+     21.987,
+     22.989
+    ],
+    [
+     "against",
+     22.989,
+     23.433
+    ],
+    [
+     "Pakistan",
+     23.433,
+     24.101
+    ],
+    [
+     "felt",
+     24.101,
+     24.324
+    ],
+    [
+     "almost",
+     24.324,
+     24.769
+    ],
+    [
+     "impossible.",
+     24.769,
+     25.66
+    ]
+   ]
+  },
+  {
+   "id": "g1",
+   "text": "And it got worse. Gambhir was gone for a duck.",
+   "caption": "And it got worse. Gambhir was gone for a duck.",
+   "start": 25.967,
+   "end": 28.1,
+   "words": [
+    [
+     "And",
+     26.014,
+     26.175
+    ],
+    [
+     "it",
+     26.175,
+     26.335
+    ],
+    [
+     "got",
+     26.335,
+     26.496
+    ],
+    [
+     "worse.",
+     26.496,
+     26.816
+    ],
+    [
+     "Gambhir",
+     26.816,
+     27.138
+    ],
+    [
+     "was",
+     27.138,
+     27.299
+    ],
+    [
+     "gone",
+     27.299,
+     27.619
+    ],
+    [
+     "for",
+     27.619,
+     27.78
+    ],
+    [
+     "a",
+     27.78,
+     27.94
+    ],
+    [
+     "duck.",
+     27.94,
+     28.1
+    ]
+   ]
+  },
+  {
+   "id": "g2",
+   "text": "India were zero for one,",
+   "caption": "India were 0 for 1,",
+   "start": 28.1,
+   "end": 29.813,
+   "words": [
+    [
+     "India",
+     28.1,
+     28.512
+    ],
+    [
+     "were",
+     28.512,
+     28.923
+    ],
+    [
+     "0",
+     28.923,
+     29.233
+    ],
+    [
+     "for",
+     29.233,
+     29.438
+    ],
+    [
+     "1,",
+     29.438,
+     29.746
+    ]
+   ]
+  },
+  {
+   "id": "g3",
+   "text": "and in walked a twenty three year old Virat Kohli.",
+   "caption": "and in walked a 23 year old Virat Kohli.",
+   "start": 29.856,
+   "end": 33.12,
+   "words": [
+    [
+     "and",
+     29.904,
+     30.122
+    ],
+    [
+     "in",
+     30.122,
+     30.339
+    ],
+    [
+     "walked",
+     30.339,
+     30.774
+    ],
+    [
+     "a",
+     30.774,
+     30.991
+    ],
+    [
+     "23",
+     30.991,
+     31.643
+    ],
+    [
+     "year",
+     31.643,
+     31.86
+    ],
+    [
+     "old",
+     31.86,
+     32.078
+    ],
+    [
+     "Virat",
+     32.078,
+     32.513
+    ],
+    [
+     "Kohli.",
+     32.513,
+     32.947
+    ]
+   ]
+  },
+  {
+   "id": "r1",
+   "text": "He didn't panic.",
+   "caption": "He didn't panic.",
+   "start": 33.292,
+   "end": 34.258,
+   "words": [
+    [
+     "He",
+     33.435,
+     33.641
+    ],
+    [
+     "didn't",
+     33.641,
+     33.847
+    ],
+    [
+     "panic.",
+     33.847,
+     34.258
+    ]
+   ]
+  },
+  {
+   "id": "r2",
+   "text": "He batted alongside Sachin Tendulkar, in one of Sachin's last ODIs,",
+   "caption": "He batted alongside Sachin Tendulkar, in one of Sachin's last ODIs,",
+   "start": 34.258,
+   "end": 38.373,
+   "words": [
+    [
+     "He",
+     34.258,
+     34.448
+    ],
+    [
+     "batted",
+     34.448,
+     34.827
+    ],
+    [
+     "alongside",
+     34.827,
+     35.586
+    ],
+    [
+     "Sachin",
+     35.586,
+     35.965
+    ],
+    [
+     "Tendulkar,",
+     35.965,
+     36.533
+    ],
+    [
+     "in",
+     36.533,
+     36.722
+    ],
+    [
+     "one",
+     36.722,
+     37.101
+    ],
+    [
+     "of",
+     37.101,
+     37.292
+    ],
+    [
+     "Sachin's",
+     37.292,
+     37.671
+    ],
+    [
+     "last",
+     37.671,
+     37.86
+    ],
+    [
+     "ODIs,",
+     37.86,
+     38.239
+    ]
+   ]
+  },
+  {
+   "id": "r3",
+   "text": "and then built a massive partnership with Rohit Sharma.",
+   "caption": "and then built a massive partnership with Rohit Sharma.",
+   "start": 38.416,
+   "end": 41.431,
+   "words": [
+    [
+     "and",
+     38.703,
+     38.885
+    ],
+    [
+     "then",
+     38.885,
+     39.067
+    ],
+    [
+     "built",
+     39.067,
+     39.249
+    ],
+    [
+     "a",
+     39.249,
+     39.431
+    ],
+    [
+     "massive",
+     39.431,
+     39.976
+    ],
+    [
+     "partnership",
+     39.976,
+     40.522
+    ],
+    [
+     "with",
+     40.522,
+     40.703
+    ],
+    [
+     "Rohit",
+     40.703,
+     41.067
+    ],
+    [
+     "Sharma.",
+     41.067,
+     41.431
+    ]
+   ]
+  },
+  {
+   "id": "r4",
+   "text": "Umar Gul, Saeed Ajmal, Shahid Afridi. He took all of them on.",
+   "caption": "Umar Gul, Saeed Ajmal, Shahid Afridi. He took all of them on.",
+   "start": 41.56,
+   "end": 44.842,
+   "words": [
+    [
+     "Umar",
+     41.608,
+     41.987
+    ],
+    [
+     "Gul,",
+     41.987,
+     42.177
+    ],
+    [
+     "Saeed",
+     42.177,
+     42.367
+    ],
+    [
+     "Ajmal,",
+     42.367,
+     42.745
+    ],
+    [
+     "Shahid",
+     42.745,
+     43.125
+    ],
+    [
+     "Afridi.",
+     43.125,
+     43.695
+    ],
+    [
+     "He",
+     43.695,
+     43.884
+    ],
+    [
+     "took",
+     43.884,
+     44.074
+    ],
+    [
+     "all",
+     44.074,
+     44.263
+    ],
+    [
+     "of",
+     44.263,
+     44.454
+    ],
+    [
+     "them",
+     44.454,
+     44.643
+    ],
+    [
+     "on.",
+     44.643,
+     44.833
+    ]
+   ]
+  },
+  {
+   "id": "r5",
+   "text": "Twenty two fours.",
+   "caption": "22 fours.",
+   "start": 44.842,
+   "end": 45.895,
+   "words": [
+    [
+     "22",
+     44.842,
+     45.632
+    ],
+    [
+     "fours.",
+     45.632,
+     45.895
+    ]
+   ]
+  },
+  {
+   "id": "r6",
+   "text": "And the faster the asking rate went up, the calmer he got.",
+   "caption": "And the faster the asking rate went up, the calmer he got.",
+   "start": 45.895,
+   "end": 49.627,
+   "words": [
+    [
+     "And",
+     45.895,
+     46.124
+    ],
+    [
+     "the",
+     46.124,
+     46.354
+    ],
+    [
+     "faster",
+     46.354,
+     46.813
+    ],
+    [
+     "the",
+     46.813,
+     47.043
+    ],
+    [
+     "asking",
+     47.043,
+     47.502
+    ],
+    [
+     "rate",
+     47.502,
+     47.962
+    ],
+    [
+     "went",
+     47.962,
+     48.191
+    ],
+    [
+     "up,",
+     48.191,
+     48.421
+    ],
+    [
+     "the",
+     48.421,
+     48.651
+    ],
+    [
+     "calmer",
+     48.651,
+     49.11
+    ],
+    [
+     "he",
+     49.11,
+     49.34
+    ],
+    [
+     "got.",
+     49.34,
+     49.569
+    ]
+   ]
+  },
+  {
+   "id": "n1",
+   "text": "One eighty three off one forty eight balls.",
+   "caption": "183 off 148 balls.",
+   "start": 49.799,
+   "end": 52.22,
+   "words": [
+    [
+     "183",
+     49.971,
+     50.891
+    ],
+    [
+     "off",
+     50.891,
+     51.096
+    ],
+    [
+     "148",
+     51.096,
+     52.015
+    ],
+    [
+     "balls.",
+     52.015,
+     52.22
+    ]
+   ]
+  },
+  {
+   "id": "n2",
+   "text": "His highest ever ODI score.",
+   "caption": "His highest ever ODI score.",
+   "start": 52.22,
+   "end": 54.134,
+   "words": [
+    [
+     "His",
+     52.22,
+     52.433
+    ],
+    [
+     "highest",
+     52.433,
+     52.858
+    ],
+    [
+     "ever",
+     52.858,
+     53.283
+    ],
+    [
+     "ODI",
+     53.283,
+     53.709
+    ],
+    [
+     "score.",
+     53.709,
+     54.134
+    ]
+   ]
+  },
+  {
+   "id": "n3",
+   "text": "India chased it down with thirteen balls to spare.",
+   "caption": "India chased it down with 13 balls to spare.",
+   "start": 54.134,
+   "end": 56.488,
+   "words": [
+    [
+     "India",
+     54.134,
+     54.458
+    ],
+    [
+     "chased",
+     54.458,
+     54.782
+    ],
+    [
+     "it",
+     54.782,
+     54.944
+    ],
+    [
+     "down",
+     54.944,
+     55.106
+    ],
+    [
+     "with",
+     55.106,
+     55.268
+    ],
+    [
+     "13",
+     55.268,
+     55.754
+    ],
+    [
+     "balls",
+     55.754,
+     55.916
+    ],
+    [
+     "to",
+     55.916,
+     56.078
+    ],
+    [
+     "spare.",
+     56.078,
+     56.402
+    ]
+   ]
+  },
+  {
+   "id": "c1",
+   "text": "For me, the MCG was pure magic. But Mirpur was where the Chase Master was born.",
+   "caption": "For me, the MCG was pure magic. But Mirpur was where the Chase Master was born.",
+   "start": 56.66,
+   "end": 62.211,
+   "words": [
+    [
+     "For",
+     56.699,
+     56.943
+    ],
+    [
+     "me,",
+     56.943,
+     57.187
+    ],
+    [
+     "the",
+     57.187,
+     57.431
+    ],
+    [
+     "MCG",
+     57.431,
+     57.675
+    ],
+    [
+     "was",
+     57.675,
+     57.919
+    ],
+    [
+     "pure",
+     57.919,
+     58.407
+    ],
+    [
+     "magic.",
+     58.407,
+     58.895
+    ],
+    [
+     "But",
+     58.895,
+     59.139
+    ],
+    [
+     "Mirpur",
+     59.139,
+     59.627
+    ],
+    [
+     "was",
+     59.627,
+     59.871
+    ],
+    [
+     "where",
+     59.871,
+     60.359
+    ],
+    [
+     "the",
+     60.359,
+     60.603
+    ],
+    [
+     "Chase",
+     60.603,
+     61.091
+    ],
+    [
+     "Master",
+     61.091,
+     61.579
+    ],
+    [
+     "was",
+     61.579,
+     61.823
+    ],
+    [
+     "born.",
+     61.823,
+     62.067
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "So, one eighty three in Mirpur, or eighty two not out at the MCG? Which one gets your vote? Comment below, and follow for more.",
+   "caption": "So, 183 in Mirpur, or 82* at the MCG? Which one gets your vote? Comment below, and follow for more.",
+   "start": 62.383,
+   "end": 68.804,
+   "words": [
+    [
+     "So,",
+     62.431,
+     62.624
+    ],
+    [
+     "183",
+     62.624,
+     63.491
+    ],
+    [
+     "in",
+     63.491,
+     63.684
+    ],
+    [
+     "Mirpur,",
+     63.684,
+     64.07
+    ],
+    [
+     "or",
+     64.07,
+     64.263
+    ],
+    [
+     "82*",
+     64.263,
+     64.841
+    ],
+    [
+     "at",
+     64.841,
+     65.034
+    ],
+    [
+     "the",
+     65.034,
+     65.227
+    ],
+    [
+     "MCG?",
+     65.227,
+     65.42
+    ],
+    [
+     "Which",
+     65.42,
+     65.612
+    ],
+    [
+     "one",
+     65.612,
+     65.998
+    ],
+    [
+     "gets",
+     65.998,
+     66.191
+    ],
+    [
+     "your",
+     66.191,
+     66.385
+    ],
+    [
+     "vote?",
+     66.385,
+     66.77
+    ],
+    [
+     "Comment",
+     66.77,
+     67.156
+    ],
+    [
+     "below,",
+     67.156,
+     67.542
+    ],
+    [
+     "and",
+     67.542,
+     67.734
+    ],
+    [
+     "follow",
+     67.734,
+     68.12
+    ],
+    [
+     "for",
+     68.12,
+     68.313
+    ],
+    [
+     "more.",
+     68.313,
+     68.699
+    ]
+   ]
+  }
+ ]
+}
