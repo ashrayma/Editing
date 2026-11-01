@@ -808,7 +808,7 @@ def edit():
     cue(word("g3", 7), "boom", 1.0)
 
     # ---------------- how he did it
-    photo("kohli_fist", *seg(s("r1", -0.05), s("r2", -0.05)), side="right", push=(1.0, 1.1))
+    photo("kohli_fist", *seg(s("r1", -0.05), s("r2", -0.05)), side="right", push=(1.0, 1.1), band=True)
     title(["NO PANIC"], *seg(s("r1"), s("r2", -0.05)), y=300, size=150, accent=(0,), sfx="impact")
     stage(*seg(s("r2", -0.05), s("r3", -0.05)))
     card("kohli_sachin", *seg(s("r2", -0.05), s("r3", -0.05)), w=720, y=300, rot=-2)
@@ -818,12 +818,12 @@ def edit():
     tag("ROHIT SHARMA", *seg(word("r3", 7), s("r4", -0.05)), y=1300)
     chip("Massive partnership", *seg(word("r3", 4), s("r4", -0.05)), x=None, y=300)
     stage(*seg(s("r4", -0.05), s("r5", -0.05)))
-    for k, (nm, w_, x_, r_) in enumerate((("gul", 0, 40, -6), ("ajmal", 2, 360, 2), ("afridi_malik", 4, 560, 6))):
-        card(nm, *seg(word("r4", w_), s("r5", -0.05)), w=460, y=330 + 60 * k, x=x_, rot=r_, hmax=620)
+    for k, (nm, w_, x_, r_) in enumerate((("gul", 0, 30, -5), ("ajmal", 2, 375, 2), ("afridi_malik", 4, 700, 5))):
+        card(nm, *seg(word("r4", w_), s("r5", -0.05)), w=340, y=420 + 40 * k, x=x_, rot=r_, hmax=520)
     stamp("TOOK THEM ALL ON", *seg(word("r4", 7), s("r5", -0.05)), y=1120, size=100, rot=-4)
     stage(*seg(s("r5", -0.05), s("r6", -0.05)), tone="#0d0d0f")
     odo("22", *seg(s("r5"), s("r6", -0.05)), x=None, y=560, size=380, label="FOURS")
-    photo("kohli_sachin", *seg(s("r6", -0.05), s("n1", -0.05)), side="up", push=(1.0, 1.08))
+    photo("kohli_sachin", *seg(s("r6", -0.05), s("n1", -0.05)), side="up", push=(1.0, 1.08), band=True)
     title(["FASTER RATE…", "CALMER KOHLI"], *seg(word("r6", 8), s("n1", -0.05)), y=300, size=100, accent=(1,), sfx="impact")
 
     # ---------------- the number
@@ -832,14 +832,13 @@ def edit():
     flash(s("n1"), peak=0.55)
     cue(s("n1"), "boom", 1.0)
     photo("kohli_raise_wide", *seg(s("n2", -0.05), s("n3", -0.05)), side="right", push=(1.0, 1.1))
-    band("183", "HIS HIGHEST ODI SCORE", *seg(word("n2", 1), s("n3", -0.05)), y=1160)
+    band("183", "HIS HIGHEST ODI SCORE", *seg(word("n2", 1), s("n3", -0.05)), y=330)
     stage(*seg(s("n3", -0.05), s("c1", -0.05)))
     sticker("kohli_fist", *seg(s("n3", -0.05), s("c1", -0.05)), side="right", h=1100)
     typed(["INDIA 330/4", "won by 6 wickets", "13 balls to spare"], *seg(s("n3"), s("c1", -0.05)), x=60, y=360, size=60)
 
     # ---------------- the verdict
-    then_now(*seg(s("c1", -0.05), s("q1", -0.05)), "mcg_wave", "kohli_raise_wide", la="MCG · MAGIC", lb="MIRPUR", grey=False)
-    stamp("CHASE MASTER BORN", *seg(word("c1", 12) - 0.05, s("q1", -0.05)), y=890, size=96, rot=-3)
+    then_now(*seg(s("c1", -0.05), s("q1", -0.05)), "mcg_wave", "kohli_raise_wide", la="MCG · MAGIC", lb="MIRPUR · BORN", grey=False)
 
     # ---------------- CTA
     video3d("logo", s("q1", -0.05), TOTAL - s("q1", -0.05))
