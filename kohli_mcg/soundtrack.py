@@ -111,43 +111,61 @@ def rewind_fx(dur=1.4):
 def main():
     ev = json.load(open(os.path.join(HERE, "out", "events.json")))
     total, B = ev["total"], ev["beats"]
-    s = lambda beat, off=0.0: B[beat][0] + off  # noqa: E731
-    e = lambda beat: B[beat][1]  # noqa: E731
+    s = lambda n, off=0.0: B[f"l{n:03d}"][0] + off  # noqa: E731
+    e = lambda n: B[f"l{n:03d}"][1]  # noqa: E731
     m = np.zeros(int(SR * total))
 
-    # cold open: suspense (pad + pulse + ticks), cut at the rewind
-    d = s("open_tease", 4.9)
-    m += section(norm(reverb(pad(D_MINOR, d + 2, cutoff=900), 2.0, 0.35)) * 0.5 + norm(pulse(d + 2, 84, lambda t: 0.5 + t / d / 2)) * 0.5
-                 + norm(ticker(d + 2, 120)) * 0.2, 0.0, total, 0.3, 0.4)
-    # 01 silence: sparse sad arps on a cold pad; 02 lifts into the drive at the MCG
-    t1, t2 = e("open_tease") + 0.3, s("mcg", 0.0)
-    m += section(norm(reverb(pad(A_MINOR, t2 - t1 + 2, bar=5.0, cutoff=800), 2.5, 0.4)) * 0.4
-                 + norm(reverb(arps(A_MINOR, t2 - t1 + 2, bar=5.0, step=0.625, gain=0.12), 2.0, 0.45)) * 0.35, t1, total, 2.0, 2.0)
-    # 02 stage: the drive (filtered for the first bars), until "31 for 4" cuts it dead
-    t3 = s("31_4", -0.05)
-    dr = drive(t3 - t2 + 1)
-    k = int(SR * 4)
-    dr[:k] = lp(dr[:k], 700)
-    m += section(dr * 0.75, t2, total, 1.5, 0.05)
-    # 03 the silence after 31/4: low drone, heartbeat SFX carries it; 04 pulse + ticks build
-    t4 = s("hardik", 0.0)
-    m += section(norm(lp(pad(D_MINOR, t4 - t3 + 2, bar=6.0, cutoff=500), 400)) * 0.35, t3 + 0.6, total, 1.5, 1.0)
-    t5 = s("rauf_over", 0.0)
-    m += section(norm(pulse(t5 - t4 + 1, 96, lambda t: min(1, t / (t5 - t4)))) * 0.5
-                 + norm(ticker(t5 - t4 + 1, 120)) * 0.25 + norm(pad(D_MINOR, t5 - t4 + 1, cutoff=900)) * 0.3, t4, total, 1.0, 0.5)
-    # 05 tension peak over Rauf, almost nothing on the TV beat, then the drive slams in on six one
-    t6 = s("tv_off", 0.0)
-    m += section(norm(pulse(t6 - t5 + 1, 120, lambda t: 1.0)) * 0.55 + norm(ticker(t6 - t5 + 1, 160, rise=True)) * 0.3, t5, total, 0.3, 0.6)
-    t7 = s("six_one", 0.0)
-    m += section(norm(lp(pad(A_MINOR, t7 - t6 + 1, cutoff=500), 350)) * 0.25, t6, total, 0.6, 0.2)
-    t8 = e("ashwin") + 0.6
-    m += section(drive(t8 - t7 + 1, bpm=132) * 0.85, t7 + 0.15, total, 0.05, 0.4)
-    # 07 the answer: warm chords + soft arps
-    t9 = s("punch", -0.4)
-    close = norm(reverb(pad(WARM, total - t9 + 2, cutoff=1600), 2.5, 0.4)) * 0.45 + norm(reverb(arps(WARM, total - t9 + 2), 1.5, 0.3)) * 0.35
-    m += section(close, t9, total, 2.0, 3.5)
+    def bed(x, t0, t1, fi=1.5, fo=1.5):
+        nonlocal m
+        m += section(x[: int(SR * (t1 - t0 + 1))], t0, total, fi, fo)
 
-    # voice
+    def suspense(d, bpm=84):
+        return (norm(reverb(pad(D_MINOR, d + 2, cutoff=900), 2.0, 0.35)) * 0.5
+                + norm(pulse(d + 2, bpm, lambda t: 0.5 + min(t / d, 1) / 2)) * 0.5 + norm(ticker(d + 2, 120)) * 0.2)
+
+    def sad(d):
+        return (norm(reverb(pad(A_MINOR, d + 2, bar=5.0, cutoff=800), 2.5, 0.4)) * 0.4
+                + norm(reverb(arps(A_MINOR, d + 2, bar=5.0, step=0.625, gain=0.12), 2.0, 0.45)) * 0.35)
+
+    def warm(d):
+        return (norm(reverb(pad(WARM, d + 2, cutoff=1600), 2.5, 0.4)) * 0.45
+                + norm(reverb(arps(WARM, d + 2), 1.5, 0.3)) * 0.35)
+
+    # cold open: suspense, cut at the rewind; title braam
+    bed(suspense(s(5, 1.0)), 0.0, s(5, 1.0), 0.3, 0.3)
+    # 01 the king: bright, confident groove (the peak years)
+    t0, t1 = s(6, 0.0), s(15, 0.0)
+    bed(norm(music.track(t1 - t0 + 1)) * 0.6, t0 + 3.0, t1, 1.0, 2.5)
+    # 15-32 the silence: sad arps on a cold pad; suspense under Dubai 2021
+    bed(sad(s(23) - s(15) + 1), s(15), s(23), 2.0, 1.5)
+    bed(suspense(s(26) - s(23) + 1, 92), s(23), s(26), 1.0, 1.5)
+    bed(sad(s(33) - s(26) + 1), s(26), s(33, -0.5), 1.5, 1.5)
+    # 03 the return: warm and hopeful, lifting into the 122*
+    bed(warm(s(38) - s(33) + 1), s(33), s(38), 2.0, 1.0)
+    bed(norm(music.track(s(42) - s(38) + 1)) * 0.6, s(38, -0.3), s(42), 0.5, 2.0)
+    bed(suspense(s(44) - s(42) + 1, 72), s(42), s(44), 1.5, 1.0)
+    # 04 the stage: the energetic drive, filtered intro, through Pakistan's innings
+    dr = drive(s(54) - s(44) + 1)
+    k = int(SR * 6)
+    dr[:k] = lp(dr[:k], 700)
+    bed(dr * 0.72, s(44), s(54), 1.5, 0.6)
+    # 05 31 for 4: tension, cut dead on 31/4, a low drone in the silence
+    bed(norm(pulse(s(59) - s(54) + 1, 110, lambda t: 1.0)) * 0.55 + norm(ticker(s(59) - s(54) + 1, 150)) * 0.3, s(54), s(59, -0.05), 0.5, 0.05)
+    bed(norm(lp(pad(D_MINOR, s(64) - s(59) + 2, bar=6.0, cutoff=500), 400)) * 0.35, s(59, 0.6), s(64), 1.5, 1.0)
+    # 06 the plan: pulse + ticks get denser
+    d6 = s(70) - s(64)
+    bed(norm(pulse(d6 + 1, 96, lambda t: min(1, t / d6))) * 0.5 + norm(ticker(d6 + 1, 120)) * 0.25
+        + norm(pad(D_MINOR, d6 + 1, cutoff=900)) * 0.3, s(64), s(70), 1.0, 0.5)
+    # 07: peak tension over Rauf, near-silence on the TV beat, then the drive slams in on the six
+    bed(norm(pulse(s(72) - s(70) + 1, 120, lambda t: 1.0)) * 0.55 + norm(ticker(s(72) - s(70) + 1, 160)) * 0.3, s(70), s(72), 0.3, 0.6)
+    bed(norm(lp(pad(A_MINOR, s(74) - s(72) + 1, cutoff=500), 350)) * 0.25, s(72), s(74), 0.6, 0.2)
+    six = s(74) + (s(75) - s(74)) * 0.55
+    bed(drive(e(92) + 4.0 - six + 1, bpm=132) * 0.85, six - 0.05, e(92) + 4.0, 0.05, 1.5)
+    # 09 the answer: warm close, out with the logo
+    t9 = s(93, -0.4)
+    bed(warm(total - t9 + 2), t9, total, 2.0, 3.5)
+
+    # voice, ducked music
     vo = np.zeros(int(SR * total))
     with wave.open(os.path.join(HERE, "out", "vo_final.wav")) as w:
         v = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
@@ -159,7 +177,7 @@ def main():
     duck = np.convolve(np.repeat(np.where(env, 0.45, 1.0), hop), np.ones(4410) / 4410, "same")
     m[: len(duck)] *= duck
 
-    # SFX on the logged events + the story moments
+    # SFX on the logged events + story moments
     fx = np.zeros(int(SR * total))
     cache = {"braam": braam(), "flatline": flatline(), "rewind": rewind_fx()}
 
@@ -170,21 +188,21 @@ def main():
 
     for t, kind in ev["events"]:
         if kind == "whoosh":
-            put("whoosh", t - 0.12, 0.16)
+            put("whoosh", t - 0.12, 0.15)
         elif kind == "impact":
-            put("impact", t, 0.26)
+            put("impact", t, 0.25)
         elif kind == "soft":
             put("pop", t, 0.10)
         elif kind == "roll":
             for k in range(9):
                 put("tick", t + 0.05 * k, 0.09)
         elif kind == "pop":
-            put("pop", t, 0.14)
+            put("pop", t, 0.13)
         elif kind == "hit":
-            put("impact", t, 0.30)
+            put("impact", t, 0.28)
             put("whoosh", t - 0.15, 0.12)
         elif kind == "cut":
-            put("whoosh", t - 0.1, 0.07)
+            put("whoosh", t - 0.1, 0.06)
         elif kind == "swell":
             put("riser", t - 1.6, 0.15)
         elif kind == "heartbeat":
@@ -193,20 +211,23 @@ def main():
             put("flatline", t, 0.22)
         elif kind == "rewind":
             put("rewind", t, 0.32)
+        elif kind == "freeze":
+            put("camera_shutter", t, 0.3)
+            put("impact", t, 0.2)
         elif kind.startswith("chip_"):
             put("impact" if kind in ("chip_w", "chip_six", "chip_win") else "pop", t, 0.22 if kind != "chip_n" else 0.14)
-    put("braam", e("open_tease") + 0.4, 0.55)             # title hit
-    put("braam", s("31_4", 0.05), 0.5)                    # 31/4
-    put("riser", s("rehook_2", -1.4), 0.3)
-    put("riser", s("six_one", -1.9), 0.35)
-    put("impact", s("six_one", 3.6), 0.45)                # bat on ball, the straight six
-    put("crowd", s("six_one", 3.8), 0.5)
-    put("crowd", s("six_two", 2.0), 0.5)
-    put("crowd", s("no_ball", 2.8), 0.45)
-    put("riser", s("ashwin", -0.2), 0.3)
-    put("crowd", s("ashwin", D_ash := (e("ashwin") - s("ashwin")) * 0.8), 0.6)
-    put("crowd", s("ashwin", D_ash + 3.0), 0.4)
-    put("ding", s("cta", 0.5), 0.22)
+    put("braam", e(6) + 0.9, 0.55)                       # title
+    put("braam", s(59, -0.05), 0.5)                      # 31/4
+    put("riser", s(63, -1.4), 0.3)
+    put("riser", six - 1.9, 0.35)
+    put("impact", six, 0.5)                              # bat on ball
+    put("crowd", six + 0.2, 0.55)
+    put("crowd", s(77) + (s(78) - s(77)) * 0.45, 0.55)   # second six
+    put("crowd", s(83, 1.5), 0.45)                       # no-ball six
+    put("riser", s(91, -0.3), 0.3)
+    put("crowd", e(91) - 0.3, 0.6)                       # the win
+    put("crowd", e(92) + 1.5, 0.45)
+    put("ding", s(99, 0.4), 0.22)
 
     mix = vo * 0.95 + m * 0.24 + fx * 0.55
     mix = np.tanh(mix * 1.05) / np.tanh(1.05)

@@ -19,7 +19,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "kohli_countdown"))
-from beats import BEATS  # noqa: E402
+from beats import BEATS, BREATH  # noqa: E402
 from voiceover import SR, clean_recording, tighten_pauses, voiced_regions  # noqa: E402
 
 BEAT_GAP = 0.42      # silence between beats
@@ -104,8 +104,9 @@ def main():
         if r:  # trim each beat to its own speech
             seg = seg[max(0, int((r[0][0] - 0.05) * SR)): int((r[-1][1] + 0.08) * SR)]
         beats.append({"id": bid, "start": round(t, 3), "end": round(t + len(seg) / SR, 3), "text": dict(BEATS)[bid]})
-        out += [seg, np.zeros(int(SR * BEAT_GAP), np.float32)]
-        t += len(seg) / SR + BEAT_GAP
+        gap = BEAT_GAP + BREATH.get(bid, 0.0)
+        out += [seg, np.zeros(int(SR * gap), np.float32)]
+        t += len(seg) / SR + gap
     a = np.concatenate(out)
     a = a / (np.abs(a).max() + 1e-9) * 0.89
     os.makedirs(os.path.join(HERE, "out"), exist_ok=True)

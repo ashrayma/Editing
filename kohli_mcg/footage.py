@@ -8,31 +8,24 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FONT = "/usr/share/fonts/opentype/inter/Inter-Bold.otf"
 
 FOOTAGE = {
-    "F01": ("Rauf runs in, over 19 (Kohli at the non-striker/striker end)", "cold open, rauf_over"),
-    "F02": ("Haris Rauf close-up (face / celebrating a wicket)", "open_rauf"),
-    "F03": ("Kohli's 70th hundred celebration, Kolkata pink-ball Test, Nov 2019", "drought_70"),
-    "F04": ("Pakistan beat India by 10 wickets, Dubai T20 WC 2021 (winning moment)", "drought_capt"),
-    "F05": ("Kohli dismissed / walking back dejected, any match 2020-22", "drought_capt, drought_voices"),
-    "F06": ("Kohli's 71st hundred, 122* vs Afghanistan, Dubai, 8 Sep 2022 (bat raised)", "comeback_71"),
-    "F07": ("MCG crowd / national anthems, 23 Oct 2022", "mcg"),
-    "F08": ("Arshdeep traps Babar lbw, first ball", "pak_innings"),
-    "F09": ("Iftikhar / Shan Masood hitting (Pakistan innings)", "pak_innings"),
-    "F10": ("KL Rahul out (b Naseem)", "collapse"),
-    "F11": ("Rohit Sharma out (c Iftikhar b Rauf)", "collapse"),
-    "F12": ("Suryakumar out (c Rizwan b Rauf)", "collapse"),
-    "F13": ("Axar Patel run out", "collapse"),
-    "F14": ("Kohli and Hardik batting together / mid-pitch chat", "silence, hardik, asking_rate"),
-    "F15": ("Shaheen's 18th over, boundaries", "eighteen"),
-    "F16": ("THE straight six off Rauf, 19.5, live + replay", "six_one, six_one_why"),
-    "F17": ("The second six off Rauf, 19.6, over fine leg", "six_two"),
-    "F18": ("Nawaz's last over: Hardik caught by Babar", "nawaz"),
-    "F19": ("No-ball full toss hit for six, umpire signals no-ball", "no_ball"),
-    "F20": ("Free hit: Kohli bowled, ball runs to third man, 3 byes", "free_hit"),
-    "F21": ("Dinesh Karthik stumped", "dk_out"),
-    "F22": ("Ashwin leaves the wide, then lifts it over mid-off: winning run", "ashwin"),
-    "F23": ("Kohli punches the ground / roars", "punch, close"),
-    "F24": ("Rohit lifts Kohli on his shoulders", "punch"),
-    "F25": ("Kohli's post-match interview (Mohali comment)", "own_words"),
+    # moments the highlights you sent don't cover (15-minute version)
+    "N01": ("England 2014: Kohli edging Anderson / walking back", "line 8"),
+    "N02": ("IPL 2016: Kohli hundred celebration for RCB", "line 10"),
+    "N03": ("Mohali 2016 WT20: Kohli 82* vs Australia, finishing the chase", "line 11"),
+    "N04": ("England 2018: Edgbaston hundred, Kohli kisses his ring", "line 12"),
+    "N05": ("Adelaide Dec 2020: Kohli run out for 74 / India 36 all out scoreboard", "line 20"),
+    "N06": ("Kohli captaincy press conference 2021-22", "lines 22, 26"),
+    "N07": ("IPL 2022: Kohli out first ball (golden duck)", "line 28"),
+    "N08": ("Kohli and MS Dhoni together", "line 31"),
+    "N09": ("MCG 2022 national anthem, Rohit emotional", "line 48"),
+    "N10": ("MCG 2022: KL Rahul b Naseem (inside edge)", "line 55"),
+    "N11": ("MCG 2022: Rohit c Iftikhar b Rauf", "line 56"),
+    "N12": ("MCG 2022: Suryakumar c Rizwan b Rauf", "line 57"),
+    "N13": ("MCG 2022: Axar Patel run out", "line 58"),
+    "N14": ("MCG 2022: Kohli and Hardik batting together (overs 7-17)", "lines 64-65"),
+    "N15": ("MCG 2022: Rohit lifts Kohli on his shoulders", "line 94"),
+    "N16": ("MCG 2022: Kohli post-match interview", "line 96"),
+    "N17": ("Hobart 2012: Kohli vs Malinga (for the next-episode tease)", "line 100"),
 }
 
 
@@ -65,3 +58,58 @@ def ai(name):
     """AI image: the full-size file once downloaded to assets/ai/, else the small Canva preview."""
     full = os.path.join("assets", "ai", f"{name}.png")
     return full if os.path.exists(os.path.join(HERE, full)) else os.path.join("assets", "ai", "_preview", f"{name}.png")
+
+
+# ----------------------------------------------------------------------------- the user's footage, cut by moment
+# source files live in footage/user/src/ (not in git). (source, start, duration[, crop]) in seconds.
+SRC = {"m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
+VCROP = "crop=720:405:0:437"   # the 16:9 picture inside the vertical upload
+LIB = {
+    # MCG 2022: ICC recap of the last three overs
+    "m_aerial": ("m", 0.0, 0.9), "m_kohli_hit18": ("m", 6.0, 2.0), "m_flags": ("m", 8.0, 4.0),
+    "m_shaheen": ("m", 12.0, 3.0), "m_babar_clap": ("m", 15.0, 1.2), "m_kohli_bat16": ("m", 16.0, 2.0),
+    "m_kohli_walk18": ("m", 18.0, 2.0), "m_rohit_dugout": ("m", 20.0, 1.2), "m_fan_pray": ("m", 21.0, 3.0),
+    "m_six1_close": ("m", 24.0, 4.0), "m_six1_wide": ("m", 28.0, 2.0), "m_rauf_watch": ("m", 30.0, 2.0),
+    "m_crowd_up": ("m", 32.0, 3.0), "m_six2": ("m", 35.0, 3.0), "m_lights": ("m", 38.0, 4.0),
+    "m_kohli_close": ("m", 42.0, 3.0), "m_fans_flag": ("m", 47.0, 2.0), "m_kohli_close2": ("m", 49.0, 1.2),
+    "m_crowd_flags2": ("m", 50.0, 3.0), "m_nawaz": ("m", 53.0, 2.0), "m_hardik_out": ("m", 58.0, 5.0),
+    "m_babar_catch": ("m", 64.0, 3.0), "m_hardik_walk": ("m", 67.0, 3.0), "m_runs": ("m", 70.0, 12.0),
+    "m_fan_pray2": ("m", 83.0, 1.2), "m_noball_six": ("m", 84.0, 6.0), "m_umpire_nb": ("m", 91.0, 2.2),
+    "m_protest": ("m", 93.0, 3.0), "m_kohli_look": ("m", 96.0, 1.2), "m_crowd_nb": ("m", 97.0, 5.0),
+    "m_wide1": ("m", 102.0, 3.0), "m_rohit_dugout2": ("m", 105.0, 1.2), "m_freehit": ("m", 110.0, 8.0),
+    "m_kohli_umpire": ("m", 118.0, 2.0), "m_kohli_back": ("m", 120.0, 2.0), "m_pak_fans": ("m", 122.0, 3.0),
+    "m_dk_stumped": ("m", 125.0, 3.0), "m_scoreboard_out": ("m", 129.0, 2.0), "m_dk_walk": ("m", 131.0, 4.0),
+    "m_ashwin_in": ("m", 135.0, 3.0), "m_ashwin_wide": ("m", 141.0, 4.0), "m_nawaz_head": ("m", 145.0, 1.2),
+    "m_fans_scream": ("m", 146.0, 7.0), "m_ashwin_ready": ("m", 155.0, 3.0), "m_win_shot": ("m", 158.0, 7.0),
+    "m_fans_win": ("m", 165.0, 3.0), "m_celebrate": ("m", 168.0, 3.0), "m_kohli_knees": ("m", 171.0, 3.0),
+    "m_india_win": ("m", 174.0, 3.0), "m_kohli_roar": ("m", 177.0, 2.9),
+    # Dubai 2021
+    "d_field": ("d", 15.0, 5.0), "d_rizwan": ("d", 55.0, 3.0), "d_babar": ("d", 65.0, 3.0),
+    "d_pak_fans": ("d", 70.0, 3.0), "d_babar_shot": ("d", 145.0, 3.0), "d_shami": ("d", 210.0, 3.0),
+    "d_pak_win": ("d", 258.0, 5.0), "d_kohli_congrats": ("d", 263.0, 8.0),
+    # MCG 2022, Pakistan's innings (vertical upload, 16:9 picture cropped out)
+    "p_crowd": ("p", 10.0, 3.0, VCROP), "p_babar_out": ("p", 15.0, 13.0, VCROP), "p_huddle": ("p", 38.0, 4.0, VCROP),
+    "p_babar_walk": ("p", 55.0, 3.0, VCROP), "p_rohit": ("p", 80.0, 2.0, VCROP), "p_dive": ("p", 88.0, 8.0, VCROP),
+    "p_rizwan_out": ("p", 100.0, 12.0, VCROP), "p_rizwan_walk": ("p", 118.0, 4.0, VCROP),
+    "p_iftikhar_six": ("p", 128.0, 5.0, VCROP), "p_shami": ("p", 168.0, 5.0, VCROP), "p_iftikhar_walk": ("p", 174.0, 4.0, VCROP),
+    "p_pak_dugout": ("p", 204.0, 3.0, VCROP), "p_masood50": ("p", 208.0, 5.0, VCROP), "p_hardik": ("p", 228.0, 8.0, VCROP),
+    "p_scorecard": ("p", 268.0, 7.0, VCROP),
+    # Babar lbw, 720p
+    "b_arshdeep": ("b", 0.0, 9.0),
+}
+
+
+def lib(cid, slow=False):
+    """Cut one named moment to 1080p30 (once). slow=True plays it at half speed, frame-blended."""
+    src, start, dur, *crop = LIB[cid]
+    name = cid + ("_slow" if slow else "")
+    out = os.path.join(HERE, "footage", "clips", name + ".mp4")
+    if not os.path.exists(out):
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        vf = (crop[0] + "," if crop else "") + "scale=1920:1080:flags=lanczos,setsar=1,fps=30"
+        if slow:
+            vf += ",setpts=2.0*PTS,minterpolate=fps=30:mi_mode=blend"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i",
+                        os.path.join(HERE, "footage", "user", "src", SRC[src]), "-t", str(dur), "-an", "-vf", vf,
+                        "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p", out], check=True)
+    return os.path.relpath(out, HERE)

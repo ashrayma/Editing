@@ -15,7 +15,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from beats import BEATS  # noqa: E402
+from beats import BEATS, BREATH  # noqa: E402
 
 SR = 44100
 GAP = 0.45          # pause between beats
@@ -33,13 +33,14 @@ def main():
     out, beats, t = [], [], 0.6
     out.append(np.zeros(int(SR * t)))
     for bid, text in BEATS:
-        samples, sr = tts.create(text, voice="hm_omega", speed=1.08, lang="en-us")
+        samples, sr = tts.create(text.replace("...", ","), voice="hm_omega", speed=1.08, lang="en-us")
         x = resample(np.asarray(samples, dtype=np.float64), sr, SR)
         x = x / (np.abs(x).max() + 1e-9) * 0.8
         beats.append({"id": bid, "start": round(t, 3), "end": round(t + len(x) / SR, 3), "text": text})
         out.append(x)
-        out.append(np.zeros(int(SR * GAP)))
-        t += len(x) / SR + GAP
+        gap = GAP + BREATH.get(bid, 0.0)
+        out.append(np.zeros(int(SR * gap)))
+        t += len(x) / SR + gap
         print(f"{bid:16s} {beats[-1]['start']:7.2f} -> {beats[-1]['end']:7.2f}", flush=True)
     a = np.concatenate(out)
     os.makedirs(os.path.join(HERE, "out"), exist_ok=True)

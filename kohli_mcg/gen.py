@@ -431,7 +431,106 @@ def need(steps, end, z=62):
         anim(f'tl.fromTo("#{i}",{{y:-14,opacity:0}},{{y:0,opacity:1,duration:0.4,ease:"expo.out"}},{t})')
 
 
-# ----------------------------------------------------------------------------- the film
+# ----------------------------------------------------------------------------- more components (15-min cut)
+
+def flash(t, z=88, dur=0.32):
+    """White flash: hits on sixes, wickets and the win."""
+    i = nid("fl")
+    add(f'<div id="{i}" class="flash clip" data-start="{t}" data-duration="{dur}" style="z-index:{z}"></div>', t, dur, z)
+    anim(f'tl.fromTo("#{i}",{{opacity:0.85}},{{opacity:0,duration:{dur},ease:"power2.out"}},{t})')
+
+
+def letterbox(start, dur, z=86):
+    """Cinematic bars slide in for the slow-motion moments."""
+    for k, edge in enumerate(("top", "bottom")):
+        i = nid("lb")
+        add(f'<div id="{i}" class="lbar clip" data-start="{start}" data-duration="{dur}" style="{edge}:0;z-index:{z}"></div>',
+            start, dur, z)
+        d = -1 if edge == "top" else 1
+        anim(f'tl.fromTo("#{i}",{{yPercent:{d * 100}}},{{yPercent:0,duration:0.6,ease:"expo.out"}},{start})')
+        anim(f'tl.to("#{i}",{{yPercent:{d * 100},duration:0.5,ease:"power2.in"}},{round(start + dur - 0.5, 2)})')
+
+
+def split(left, right, start, dur, llab=None, rlab=None, lgray=False, rgray=False, z=22):
+    """Two clips side by side, each sliding in from its own edge, labelled underneath (then vs now, us vs them)."""
+    for src, side, lab, gray in ((left, "left", llab, lgray), (right, "right", rlab, rgray)):
+        i = nid("sp")
+        x = 60 if side == "left" else W / 2 + 15
+        is_img = src.lower().endswith((".jpg", ".png"))
+        inner = (f'<img src="{media(src)}" style="width:100%;height:100%;object-fit:cover">' if is_img else
+                 f'<video id="{i}v" class="clip" src="{media(src)}" muted playsinline data-start="{start}" data-duration="{dur}" '
+                 f'data-media-start="0" style="width:100%;height:100%;object-fit:cover"></video>')
+        filt = "filter:grayscale(1) contrast(1.1);" if gray else ""
+        tag = (f'<div class="tag"><span class="tagbar"></span><b>{html.escape(lab)}</b></div>' if lab else "")
+        add(f'<div id="{i}" class="card clip" data-start="{start}" data-duration="{dur}" style="left:{x}px;top:250px;'
+            f'width:{W / 2 - 75}px;height:{round((W / 2 - 75) * 9 / 16)}px;z-index:{z};{filt}">'
+            f'<div class="frame">{inner}<div class="tagfade"></div></div>{tag}</div>', start, dur, z)
+        d = -1 if side == "left" else 1
+        anim(f'tl.fromTo("#{i}",{{x:{d * 600},opacity:0}},{{x:0,opacity:1,duration:0.9,ease:"expo.out"}},{start})')
+        anim(f'tl.to("#{i}",{{opacity:0,duration:0.4}},{round(start + dur - 0.4, 2)})')
+    EVENTS.append((start, "whoosh"))
+
+
+def freeze(clip_path, at, start, dur, gray=True, z=9):
+    """Freeze-frame: one still from a clip, frozen with a flash (for the shot breakdown)."""
+    import subprocess
+    out = os.path.join(MEDIA, "frz_" + os.path.basename(clip_path).rsplit(".", 1)[0] + f"_{at:.1f}.jpg")
+    if not os.path.exists(out):
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(at), "-i", os.path.join(HERE, clip_path), "-frames:v", "1",
+                        "-q:v", "2", out], check=True)
+    i = nid("fz")
+    filt = "filter:grayscale(1) contrast(1.15);" if gray else ""
+    add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden;{filt}">'
+        f'<img id="{i}i" src="media/{os.path.basename(out)}" style="width:100%;height:100%;object-fit:cover">'
+        f'<div class="full" style="background:rgba(5,5,6,.35)"></div></div>', start, dur, z)
+    anim(f'tl.fromTo("#{i}i",{{scale:1.0}},{{scale:1.12,duration:{dur},ease:"none"}},{start})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.4}},{round(start + dur - 0.4, 2)})')
+    flash(start)
+    EVENTS.append((start, "freeze"))
+
+
+def chasebar(runs, wkts, start, dur, target=160, z=64):
+    """Top-centre chase tracker: INDIA runs/wkts, a bar filling toward the target."""
+    i = nid("cb")
+    pct = runs / target * 100
+    add(f'<div id="{i}" class="chase clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">'
+        f'<div class="chtxt"><b>INDIA {runs}/{wkts}</b><span>TARGET {target}</span></div>'
+        f'<div class="chtrack"><div class="chfill" id="{i}f" style="width:{pct:.1f}%"></div></div></div>', start, dur, z)
+    anim(f'tl.fromTo("#{i}",{{y:-30,opacity:0}},{{y:0,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}f",{{scaleX:0}},{{scaleX:1,duration:1.0,ease:"expo.out"}},{start + 0.2})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.4}},{round(start + dur - 0.4, 2)})')
+
+
+def bars(rows, start, dur, z=30):
+    """Horizontal bar race: (label, value, highlight) rows grow to scale with rolling labels."""
+    i = nid("br")
+    mx = max(v for _, v, _ in rows)
+    parts = []
+    for k, (lab, v, hi) in enumerate(rows):
+        parts.append(f'<div class="brow"><div class="blab">{html.escape(lab)}</div><div class="btrack">'
+                     f'<div class="bfill{" hi" if hi else ""}" id="{i}b{k}" style="width:{v / mx * 100:.1f}%"></div></div>'
+                     f'<div class="bval">{v}</div></div>')
+        anim(f'tl.fromTo("#{i}b{k}",{{scaleX:0}},{{scaleX:1,duration:1.3,ease:"expo.out"}},{round(start + 0.3 + 0.35 * k, 2)})')
+        EVENTS.append((round(start + 0.3 + 0.35 * k, 2), "pop"))
+    add(f'<div id="{i}" class="bars clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">{"".join(parts)}</div>',
+        start, dur, z)
+    anim(f'tl.fromTo("#{i}",{{opacity:0,y:20}},{{opacity:1,y:0,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.4}},{round(start + dur - 0.4, 2)})')
+
+
+def quote(text, who, start, dur, side="left", z=32):
+    """A pulled quote: big yellow quote mark, the words revealed line by line, attribution under it."""
+    i = nid("qt")
+    x = "left:150px" if side == "left" else f"right:150px;text-align:right"
+    add(f'<div id="{i}" class="quote clip" data-start="{start}" data-duration="{dur}" style="{x};z-index:{z}">'
+        f'<div class="qmark" id="{i}m">“</div><div class="qtext" id="{i}t">{html.escape(text)}</div>'
+        f'<div class="qwho" id="{i}w">{html.escape(who)}</div></div>', start, dur, z)
+    EVENTS.append((start, "soft"))
+    anim(f'tl.fromTo("#{i}m",{{scale:0.4,opacity:0}},{{scale:1,opacity:1,duration:0.7,ease:"back.out(2)"}},{start})')
+    anim(f'tl.fromTo("#{i}t",{{clipPath:"inset(0% 100% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.4,ease:"power2.inOut"}},{start + 0.3})')
+    anim(f'tl.fromTo("#{i}w",{{opacity:0,y:10}},{{opacity:1,y:0,duration:0.6}},{start + 1.4})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.45}},{round(start + dur - 0.45, 2)})')
+
 
 def shot(name):
     """A rendered 3D shot, or (until blender/render_all.sh has made it) a dark stand-in so the edit still builds."""
@@ -446,139 +545,364 @@ def shot(name):
                         "-c:v", "libx264", "-pix_fmt", "yuv420p", os.path.join(HERE, stub)], check=True)
     return stub
 
+
+# ----------------------------------------------------------------------------- the film (100 lines)
+
+from footage import lib  # noqa: E402
+
 SHOT = "assets/photos/screenshot_drought.png"
 REC = "footage/screenrec_match_centre.mp4"
+PH = "assets/photos/user/"
 
-# COLD OPEN: tease the Rauf over, cut away before the ball lands
-ytag("MCG · 23 OCT 2022", 0.0, BEAT["open_tease"][1])
-hero(clip("F01"), 0.0, b("open_tease", 0.0) + 0.3, dim=0.35, fade=0.01)
-headline(["8 balls.", "28 runs."], 0.25, D("open_equation") + 0.6, "left", size=150, accent_idx=1)
-card(clip("F02"), b("open_rauf", 0.0), D("open_rauf") + 0.3, "right", "HARIS RAUF", "3 overs · 21 runs · 2 wickets", video=True)
-odometer("21", b("open_rauf", 0.5), D("open_rauf") - 0.3, "left", size=280, label="RUNS IN 3 OVERS")
-hero(clip("F16"), b("open_tease", 0.0), 4.8, dim=0.25, media_start=0.0)
-headline(["“The shot of", "the century.”"], b("open_tease", 0.4), 4.2, "center", size=120, accent_idx=1)
-rewind(b("open_tease", 4.9), till_end("open_tease", 4.9, 0.0) - 0.4, "2019")
-full_video(shot("ball"), round(BEAT["open_tease"][1] - 0.45, 2), 0.85, z=78, fade=0.05)
-blackout(round(BEAT["open_tease"][1] + 0.35, 2), 2.9, z=70)
-headline(["31 for 4"], round(BEAT["open_tease"][1] + 0.45, 2), 2.7, "center", size=210, accent_idx=0, z=72,
+
+def L(n):
+    return f"l{n:03d}"
+
+
+def at(n, f=0.0):
+    """Absolute time a fraction f (0..1) into line n."""
+    s, e = BEAT[L(n)]
+    return round(s + f * (e - s), 2)
+
+
+def span(n, a=0.0, b_=1.0, pad=0.2):
+    return at(n, a), round(at(n, b_) - at(n, a) + pad, 2)
+
+
+def to_next(n, a=0.0):
+    """From a fraction of line n to the start of line n+1 (covers the breather after it)."""
+    s = at(n, a)
+    nxt = BEAT.get(L(n + 1), (TOTAL - 5.0,))[0]
+    return s, round(nxt - s + 0.15, 2)
+
+
+def hv(c, n, a=0.0, b_=1.0, **kw):
+    s, d = span(n, a, b_, kw.pop("pad", 0.25))
+    return hero(c, s, d, **kw)
+
+
+def cd(c, n, side="right", label=None, sub=None, a=0.0, b_=1.0, **kw):
+    s, d = span(n, a, b_, kw.pop("pad", 0.25))
+    vid = not c.lower().endswith((".jpg", ".png"))
+    return card(c, s, d, side, label, sub, video=vid, **kw)
+
+
+def hd(lines, n, side="left", a=0.0, b_=1.0, size=110, acc=1, **kw):
+    s, d = span(n, a, b_, kw.pop("pad", 0.0))
+    return headline(lines, round(s + 0.1, 2), d, side, size=size, accent_idx=acc, **kw)
+
+
+def od(text, n, side="left", label=None, a=0.0, b_=1.0, size=260, **kw):
+    s, d = span(n, a, b_, kw.pop("pad", 0.0))
+    return odometer(text, round(s + 0.1, 2), d, side, size=size, label=label, **kw)
+
+
+def pl(items, n, side="left", a=0.0, b_=1.0, **kw):
+    s, d = span(n, a, b_, 0.0)
+    return pills(items, round(s + 0.1, 2), d, side, gap=kw.pop("gap", d / (len(items) + 1.5)), **kw)
+
+
+def yt(text, n, m=None):
+    s = at(n)
+    e = BEAT[L(m or n)][1]
+    ytag(text, s, round(e - s + 0.2, 2))
+
+
+def ch(num, title, n):
+    chapter(num, title, at(n))
+
+
+def black(n, a=0.0, b_=1.0, pad=0.3):
+    s, d = span(n, a, b_, pad)
+    blackout(round(s - 0.1, 2), d + 0.1)
+
+
+# COLD OPEN ------------------------------------------------------------------------------------
+yt("MCG · 23 OCT 2022", 1, 4)
+hv(lib("m_kohli_close"), 1, 0.0, 0.45, dim=0.2, fade=0.01)
+hv(lib("m_flags"), 1, 0.45, 1.0, dim=0.4)
+hd(["8 balls.", "28 runs."], 1, "left", 0.4, 1.0, size=150)
+hv(lib("m_shaheen"), 2, dim=0.55)
+cd(lib("m_rauf_watch"), 2, "right", "HARIS RAUF", "3 overs · 21 runs · 2 wickets")
+od("21", 2, "left", "RUNS IN 3 OVERS", 0.2)
+hv(lib("m_kohli_walk18"), 3, dim=0.35, gray=True)
+hd(["“His time", "is over.”"], 3, "left", 0.45, 1.0, size=120)
+hv(lib("m_six1_close", slow=True), 4, 0.0, 1.0, dim=0.15)
+hd(["“The shot of", "the century.”"], 4, "center", 0.35, 1.0, size=120)
+letterbox(*span(4, 0.0, 1.0, 1.2))
+rewind(at(5, 0.15), round(at(5, 0.85) - at(5, 0.15), 2), "2019")
+hv(lib("m_kohli_walk18"), 5, 0.85, 1.0, dim=0.5, gray=True)
+hv(lib("m_lights"), 6, dim=0.45)
+hd(["1,020 days of silence.", "One night."], 6, "center", 0.05, 1.0, size=110)
+full_video(shot("ball"), round(BEAT[L(6)][1] + 0.15, 2), 0.85, z=78, fade=0.05)
+s0 = round(BEAT[L(6)][1] + 0.9, 2)
+blackout(s0, round(BEAT[L(7)][0] - s0 + 0.1, 2), z=70)
+headline(["31 for 4"], round(s0 + 0.1, 2), round(BEAT[L(7)][0] - s0 - 0.1, 2), "center", size=210, accent_idx=0, z=72,
          sub="The night Kohli came back")
 
-# 01 THE SILENCE (grey: the drought years)
-chapter("01", "The Silence", b("drought_70", 0.0))
-ytag("NOV 2019", b("drought_70", 0.0), D("drought_70"))
-card(clip("F03"), b("drought_70", 0.0), D("drought_70") * 0.6, "right", "CENTURY NO. 70", "vs Bangladesh · Kolkata", video=True)
-headline(["Century", "No. 70"], b("drought_70", 0.2), D("drought_70") * 0.6 - 0.2, "left", size=130, accent_idx=1)
-fullimg(ai("ai_lonely_bat"), b("drought_70", D("drought_70") * 0.6), till_end("drought_70", D("drought_70") * 0.6, 0.3), dim=0.35)
-ecg(b("drought_70", D("drought_70") * 0.6), till_end("drought_70", D("drought_70") * 0.6, 0.3), flat_after=1.2, color="#ff453a")
-full_video(shot("days1020"), pre("drought_days", 0.1), D("drought_days") + 0.4)
-ytag("2019 → 2022", b("drought_capt", 0.0), D("drought_capt") + D("drought_voices") + 0.9)
-pills(["T20I captaincy · <b>gave up</b>", "Test captaincy · <b>gave up</b>", "Dubai 2021 · lost by <b>10 wickets</b>"],
-      b("drought_capt", 0.2), D("drought_capt"), "left", gap=D("drought_capt") / 3.4)
-card(clip("F05"), b("drought_capt", 0.0), D("drought_capt") * 0.55, "right", video=True, gray=True)
-card(clip("F04"), b("drought_capt", D("drought_capt") * 0.55), till_end("drought_capt", D("drought_capt") * 0.55),
-     "right", "T20 WORLD CUP 2021 · DUBAI", "Pakistan win by 10 wickets", video=True, gray=True)
-hero(clip("F05"), pre("drought_voices", 0.1), D("drought_voices") + 0.4, dim=0.55, gray=True, media_start=4.0)
-headline(["“Kohli is finished.”"], b("drought_voices", 0.1), D("drought_voices"), "center", size=120, accent_idx=0)
-ytag("SEP 2022 · DUBAI", b("comeback_71", 0.0), D("comeback_71"))
-card(SHOT, b("comeback_71", 0.0), D("comeback_71") * 0.42, "left", "SCREENSHOT", "From 70 to 71", maxw=880)
-card(clip("F06"), b("comeback_71", 0.0), D("comeback_71") * 0.55, "right", "CENTURY NO. 71", "122* vs Afghanistan", video=True)
-headline(["The real test", "was still to come."], b("comeback_71", D("comeback_71") * 0.55), till_end("comeback_71", D("comeback_71") * 0.55, 0),
-         "center", size=110, accent_idx=1)
+# 01 THE KING -----------------------------------------------------------------------------------
+ch("01", "The King", 7)
+hd(["How high", "he fell from."], 7, "left", size=120)
+cd(PH + "test_bat_raised_close.jpg", 7, "right", "VIRAT KOHLI", "At his peak", maxw=980)
+yt("2014 · ENGLAND", 8, 9)
+cd(clip("N01"), 8, "right", "ENGLAND 2014", "Swing, and Anderson", gray=True)
+od("134", 8, "left", "RUNS IN 10 INNINGS", 0.15, color="#fff")
+pl(["New <b>body</b>", "New <b>diet</b>", "New <b>game</b>"], 9, "left")
+cd(PH + "test_bat_raised_full.jpg", 9, "right", maxw=700)
+yt("2016 · IPL", 10)
+cd(clip("N02"), 10, "right", "IPL 2016 · RCB", "4 hundreds in one season")
+od("973", 10, "left", "RUNS IN ONE IPL SEASON", 0.1, size=280)
+yt("2016 · MOHALI", 11)
+cd(clip("N03"), 11, "right", "MOHALI · vs AUSTRALIA", "82* off 51 · must-win")
+od("82*", 11, "left", "OFF 51 BALLS", 0.05, 0.5)
+quote("This is my best innings.", "VIRAT KOHLI · MOHALI 2016", *span(11, 0.5, 1.0, 0.1))
+yt("2018 · ENGLAND", 12)
+cd(clip("N04"), 12, "right", "ENGLAND 2018", "Same swing. Same Anderson.")
+pl(["2014 · <b>134</b> runs", "2018 · <b>593</b> runs"], 12, "left", 0.2)
+yt("NOV 2019", 13, 14)
+bars([("Sachin Tendulkar", 100, False), ("Ricky Ponting", 71, False), ("Virat Kohli · age 31", 70, True)], *span(13, 0.0, 1.0, 0.2))
+hv(lib("m_kohli_close2"), 14, dim=0.6)
+od("100", 14, "center", "SACHIN'S RECORD · THE ONE HE COULD CHASE", 0.05, size=320)
+hv(lib("m_lights"), 15, dim=0.5, gray=True)
+hd(["Then, after", "No. 70..."], 15, "left", 0.0, 0.7, size=110)
+ecg(*to_next(15, 0.45), flat_after=0.6)
 
-# 02 THE STAGE
-chapter("02", "The Stage", b("mcg", 0.0))
-ytag("MCG · 23 OCT 2022", b("mcg", 0.0), BEAT["target"][1] - BEAT["mcg"][0])
-fullimg(ai("ai_stadium_night"), b("mcg", 0.0), D("mcg") * 0.5, dim=0.3)
-headline(["Melbourne", "Cricket Ground"], b("mcg", 0.3), D("mcg") * 0.5 - 0.3, "left", size=120, accent_idx=1)
-hero(clip("F07"), b("mcg", D("mcg") * 0.5), till_end("mcg", D("mcg") * 0.5), dim=0.4)
-odometer("90,293", b("mcg", D("mcg") * 0.5 + 0.2), till_end("mcg", D("mcg") * 0.5 + 0.2, 0), "left", size=230, label="IN THE STANDS")
-card(clip("F08"), b("pak_innings", 0.0), D("pak_innings") * 0.5, "right", "BABAR AZAM · LBW b ARSHDEEP", "First ball. 0", video=True)
-card(clip("F09"), b("pak_innings", D("pak_innings") * 0.5), till_end("pak_innings", D("pak_innings") * 0.5), "right",
-     "IFTIKHAR 51 · MASOOD 52*", "Pakistan 159/8", video=True)
-pills(["Babar · <b>0</b>", "Rizwan · <b>4</b>", "Iftikhar · <b>51</b>", "Masood · <b>52*</b>"], b("pak_innings", 0.4),
-      D("pak_innings"), "left", gap=D("pak_innings") / 4.5)
-blackout(pre("target", 0.1), D("target") + 0.4)
-odometer("160", b("target", 0.0), D("target") + 0.2, "left", size=300, label="TARGET", z=40)
-headline(["Shaheen.", "Naseem.", "Rauf."], b("target", 0.8), D("target") - 0.6, "right", size=96, accent_idx=2, z=40)
+# 02 THE SILENCE --------------------------------------------------------------------------------
+ch("02", "The Silence", 16)
+yt("23 NOV 2019 · KOLKATA", 16)
+cd(PH + "test_bat_raised_full.jpg", 16, "right", "CENTURY NO. 70", "136 vs Bangladesh · pink-ball Test", maxw=760)
+hd(["Century", "No. 70"], 16, "left", size=140)
+full_video(shot("days1020"), at(17, -0.0), round(BEAT[L(17)][1] - BEAT[L(17)][0] + 0.4, 2))
+yt("MARCH 2020", 18)
+hv(lib("m_lights"), 18, dim=0.45, gray=True, media_start=1.0)
+hd(["Covid.", "Cricket stopped."], 18, "left", size=120)
+fullimg(ai("ai_lonely_bat"), *span(19, 0.0, 1.0, 0.3), dim=0.35)
+pl(["50...", "60...", "70...", "<b>Out.</b>"], 19, "left", 0.25)
+yt("DEC 2020 · ADELAIDE", 20)
+cd(clip("N05"), 20, "right", "ADELAIDE · DEC 2020", "Kohli 74 · run out", gray=True)
+od("36", 20, "left", "ALL OUT · INDIA'S LOWEST IN TESTS", 0.45, size=300, color="#ff453a")
+yt("2021", 21)
+cd(SHOT, 21, "left", "SCREENSHOT", "Still no No. 71", maxw=900)
+hd(["Still no", "century."], 21, "right", 0.2, size=100)
+yt("SEP 2021", 22)
+cd(clip("N06"), 22, "right", "SEPTEMBER 2021", "Stepping down as T20I captain", gray=True)
+hd(["“I'll step down", "as T20 captain.”"], 22, "left", 0.15, size=90)
+yt("24 OCT 2021 · DUBAI", 23, 25)
+hv(lib("d_pak_fans"), 23, dim=0.35)
+hd(["India vs Pakistan.", "Dubai."], 23, "left", size=110)
+cd(lib("d_babar"), 24, "right", "BABAR AZAM · 68*", a=0.0, b_=0.5)
+cd(lib("d_rizwan"), 24, "right", "MOHAMMAD RIZWAN · 79*", a=0.5)
+pl(["Kohli · <b>57</b>", "Pakistan · <b>152/0</b>", "<b>10 wickets</b>"], 24, "left")
+hv(lib("d_pak_win"), 25, 0.0, 0.45, dim=0.3, gray=True)
+hv(lib("d_kohli_congrats"), 25, 0.45, 1.0, dim=0.3, gray=True)
+hd(["First World Cup loss", "to Pakistan."], 25, "left", 0.3, size=96)
+yt("DEC 2021 → JAN 2022", 26, 27)
+cd(clip("N06"), 26, "right", gray=True, media_start=4.0)
+pl(["DEC 2021 · ODI captaincy <b>gone</b>", "JAN 2022 · Test captaincy <b>gone</b>"], 26, "left", 0.1)
+hv(lib("m_kohli_walk18"), 27, dim=0.55, gray=True, media_start=0.5)
+hd(["No captaincy.", "No century."], 27, "center", size=130)
+yt("IPL 2022", 28)
+cd(clip("N07"), 28, "right", "IPL 2022", "Out first ball", gray=True)
+pl(["Golden duck", "Golden duck", "Golden duck"], 28, "left", 0.15)
+hd(["“Rest him.”"], 29, "left", 0.0, 0.36, size=120, acc=0)
+hd(["“Drop him.”"], 29, "right", 0.33, 0.68, size=120, acc=0)
+hd(["“Kohli is finished.”"], 29, "center", 0.66, 1.0, size=120, acc=0)
+hv(lib("m_kohli_walk18"), 29, dim=0.6, gray=True)
+fullimg(PH + "test_bat_raised_close.jpg", *span(30, 0, 1, 0.3), dim=0.7, ai=False)
+quote("I was trying to fake my intensity a bit.", "VIRAT KOHLI · AUGUST 2022", *span(30, 0.1, 1.0, 0.0))
+cd(clip("N08"), 31, "right", "MS DHONI", "The only message")
+hd(["Only one", "message.", "MS Dhoni."], 31, "left", 0.2, size=100, acc=2)
+black(32, 0.0, 1.0, 1.8)
+hd(["Then he did something", "he'd never done."], 32, "center", 0.0, 1.0, size=100, z=40, pad=1.6)
 
-# 03 31 FOR 4
-chapter("03", "31 for 4", b("collapse", 0.0))
-q = D("collapse") / 4
-for k, (fid, who) in enumerate([("F10", "KL RAHUL · 4"), ("F11", "ROHIT SHARMA · 4"), ("F12", "SURYAKUMAR · 15"), ("F13", "AXAR PATEL · RUN OUT")]):
-    hero(clip(fid), b("collapse", q * k), q + 0.15, dim=0.2, fade=0.12)
-    card(clip(fid), b("collapse", q * k + 0.05), q, "left" if k % 2 else "right", who, video=True, maxw=760)
-full_video(shot("score314"), pre("31_4", 0.15), D("31_4") + 0.5)
-hero(clip("F14"), b("silence", 0.0), D("silence") + 0.3, dim=0.45, gray=True)
-headline(["Half the stadium", "went silent."], b("silence", 0.3), D("silence") * 0.5, "left", size=100, accent_idx=1)
-ecg(b("silence", D("silence") * 0.5), till_end("silence", D("silence") * 0.5, 0.3), color="#ff453a", y=760)
-blackout(pre("rehook_2", 0.1), D("rehook_2") + 0.4)
-headline(["The real drama", "hadn't even begun."], b("rehook_2", 0.0), D("rehook_2") + 0.2, "center", size=110, accent_idx=1, z=40)
+# 03 THE RETURN ---------------------------------------------------------------------------------
+ch("03", "The Return", 33)
+hv(lib("m_lights"), 33, dim=0.5, media_start=2.0)
+od("30", 33, "center", "DAYS WITHOUT TOUCHING A BAT", size=340)
+pl(["No nets", "No gym selfies", "No social media"], 34, "left", 0.0, 0.7)
+hd(["Just family."], 34, "right", 0.55, 1.0, size=110, acc=0)
+yt("AUG 2022 · DUBAI", 35, 37)
+split(lib("d_pak_win"), PH + "asia22_bat_smile.jpg", *span(35, 0.0, 1.0, 0.3), llab="DUBAI 2021", rlab="DUBAI 2022", lgray=True)
+pl(["vs Pakistan · <b>35</b>", "vs Hong Kong · <b>59*</b>", "vs Pakistan · <b>60</b>"], 36, "left")
+cd(PH + "asia22_bat_smile.jpg", 36, "right", "ASIA CUP 2022", maxw=900)
+fullimg(PH + "asia22_bat_smile.jpg", *span(37, 0, 1, 0.3), dim=0.25, ai=False, origin="60% 35%", push=1.3, end=1.05)
+hd(["Smiling", "again."], 37, "left", 0.2, size=130)
+yt("8 SEP 2022 · DUBAI", 38, 41)
+cd(PH + "asia22_bat_raised_pant.jpg", 38, "right", "vs AFGHANISTAN", "Opening the batting", maxw=900)
+hd(["vs Afghanistan."], 38, "left", 0.1, size=100)
+fullimg(PH + "asia22_bat_raised_pant.jpg", *span(39, 0, 1, 0.3), dim=0.45, ai=False, origin="40% 40%")
+od("122*", 39, "left", "OFF 61 BALLS · 12 FOURS · 6 SIXES", 0.05, size=300)
+black(40, 0.0, 1.0, 0.3)
+od("71", 40, "center", "1,020 DAYS LATER", size=380, z=40)
+flash(at(40, 0.1))
+fullimg(PH + "asia22_kiss_chain.jpg", *span(41, 0, 1, 0.3), dim=0.15, ai=False, origin="45% 25%", push=1.25, end=1.05)
+hd(["For Anushka", "& Vamika."], 41, "right", 0.5, size=96)
+hv(lib("p_crowd"), 42, dim=0.45)
+hd(["Big match.", "Big bowlers."], 42, "left", 0.25, size=120)
+fullimg(ai("ai_stadium_night"), *to_next(43), dim=0.35)
+hd(["One month", "later."], 43, "left", 0.1, size=120)
 
-# 04 THE PLAN
-chapter("04", "The Plan", b("hardik", 0.0))
-card(clip("F14"), b("hardik", 0.0), D("hardik") + D("asking_rate") + 0.6, "right", "KOHLI × PANDYA", "Take it deep", video=True)
-headline(["Don't lose", "a wicket."], b("hardik", 0.3), D("hardik"), "left", size=120, accent_idx=1)
-odometer("45/4", b("asking_rate", 0.0), D("asking_rate") + 0.2, "left", size=240, label="AFTER 10 OVERS", color="#fff")
-card(clip("F15"), b("eighteen", 0.0), D("eighteen") + 0.3, "right", "SHAHEEN AFRIDI · OVER 18", "17 runs", video=True)
-odometer("48", b("eighteen", 0.2), D("eighteen") * 0.55, "left", size=260, label="NEEDED OFF 18 BALLS")
-odometer("17", b("eighteen", D("eighteen") * 0.6), till_end("eighteen", D("eighteen") * 0.6, 0), "left", size=260, label="RUNS OFF OVER 18")
-blackout(pre("equation_12", 0.1), D("equation_12") + 0.4)
-odometer("31", b("equation_12", 0.0), D("equation_12") + 0.2, "center", size=340, label="OFF 12 BALLS", z=40)
+# 04 THE STAGE ----------------------------------------------------------------------------------
+ch("04", "The Stage", 44)
+yt("T20 WORLD CUP 2022", 44, 45)
+hv(lib("p_crowd"), 44, dim=0.35)
+hd(["India", "vs Pakistan."], 44, "left", 0.2, size=130)
+split(lib("d_pak_win"), lib("p_huddle"), *span(45, 0.0, 1.0, 0.25), llab="DUBAI 2021", rlab="MCG 2022", lgray=True)
+yt("23 OCT 2022 · MCG", 46, 53)
+fullimg(ai("ai_stadium_night"), *span(46, 0, 1, 0.3), dim=0.25)
+pl(["Diwali eve", "Rain all week", "<b>Clear skies</b>"], 46, "left")
+hv(lib("m_flags"), 47, dim=0.35)
+od("90,293", 47, "left", "IN THE STANDS", 0.2, size=240)
+cd(clip("N09"), 48, "right", "NATIONAL ANTHEM", "Rohit Sharma")
+hd(["Rohit wins the toss.", "Bowls first."], 48, "left", size=90)
+hv(lib("b_arshdeep"), 49, dim=0.15)
+od("0", 49, "right", "BABAR AZAM · LBW · FIRST BALL", 0.65, size=300, color="#ff453a")
+cd(lib("p_rizwan_out"), 50, "right", "RIZWAN · c BHUVI b ARSHDEEP", "4", media_start=4.0)
+od("15/2", 50, "left", "PAKISTAN", 0.3, color="#fff")
+hv(lib("p_iftikhar_six"), 51, 0.0, 0.5, dim=0.2)
+cd(lib("p_masood50"), 51, "right", "SHAN MASOOD · 52*", a=0.5)
+pl(["Iftikhar · <b>51</b> (34)", "Masood · <b>52*</b> (42)"], 51, "left", 0.45)
+cd(lib("p_hardik"), 52, "right", "HARDIK 3/30 · ARSHDEEP 3/32")
+od("159/8", 52, "left", "PAKISTAN · 20 OVERS", 0.35, color="#fff")
+black(53, 0.0, 1.0, 1.4)
+od("160", 53, "left", "TARGET", 0.0, 1.0, size=300, z=40, pad=1.3)
+hd(["Shaheen.", "Naseem.", "Rauf."], 53, "right", 0.3, 1.0, size=96, acc=2, z=40, pad=1.3)
 
-# 05 28 OFF 8
-chapter("05", "28 off 8", b("rauf_over", 0.0))
-hero(clip("F01"), b("rauf_over", 0.0), D("rauf_over") * 0.45, dim=0.3, media_start=3.0)
-headline(["Over 19.", "Haris Rauf."], b("rauf_over", 0.2), D("rauf_over") * 0.45 - 0.2, "left", size=120, accent_idx=1)
-full_video(shot("eight28"), b("rauf_over", D("rauf_over") * 0.45), till_end("rauf_over", D("rauf_over") * 0.45, 0.3))
-fullimg(ai("ai_tv_off"), pre("tv_off", 0.1), D("tv_off") + 0.4, dim=0.15)
-hero(clip("F16"), b("six_one", 0.0), D("six_one") + 0.3, dim=0.1)
-odometer("6", b("six_one", D("six_one") * 0.72), till_end("six_one", D("six_one") * 0.72, 0), "right", size=380, label="STRAIGHT DOWN THE GROUND")
-card(clip("F16"), b("six_one_why", 0.0), D("six_one_why") + 0.3, "right", "THE REPLAY", "Back foot · straight bat", video=True, media_start=6.0)
-headline(["No slog.", "No swing.", "Just a straight bat."], b("six_one_why", 0.2), D("six_one_why"), "left", size=86, accent_idx=2)
-hero(clip("F17"), b("six_two", 0.0), D("six_two") + 0.3, dim=0.1)
-odometer("6", b("six_two", D("six_two") * 0.6), till_end("six_two", D("six_two") * 0.6, 0), "left", size=380, label="OVER FINE LEG")
-blackout(pre("equation_6", 0.1), D("equation_6") + 0.4)
-odometer("16", b("equation_6", 0.0), D("equation_6") + 0.2, "center", size=340, label="OFF 6 BALLS", z=40)
+# 05 31 FOR 4 -----------------------------------------------------------------------------------
+ch("05", "31 for 4", 54)
+hv(lib("m_lights"), 54, dim=0.5, media_start=0.5)
+hd(["Then came", "the nightmare."], 54, "center", size=120)
+for n, fid, who, (r, w) in ((55, "N10", "KL RAHUL · b NASEEM · 4", (7, 1)), (56, "N11", "ROHIT · c IFTIKHAR b RAUF · 4", (10, 2)),
+                            (57, "N12", "SURYAKUMAR · c RIZWAN b RAUF · 15", (26, 3)), (58, "N13", "AXAR PATEL · RUN OUT · 2", (31, 4))):
+    hv(clip(fid), n, dim=0.2, fade=0.12)
+    cd(clip(fid), n, "left" if n % 2 else "right", who, maxw=760, media_start=2.0)
+    chasebar(r, w, *span(n, 0.0, 1.0, 0.2))
+    flash(at(n, 0.55))
+full_video(shot("score314"), round(at(59) - 0.15, 2), round(BEAT[L(60)][0] - at(59) + 0.2, 2))
+split(lib("m_fan_pray"), lib("m_pak_fans"), *span(60, 0.0, 1.0, 0.3), llab="SILENCE", rlab="CELEBRATION")
+hv(lib("m_fan_pray2"), 61, dim=0.45, gray=True)
+hd(["Phones checked.", "Phones put down."], 61, "left", size=100)
+hv(lib("m_kohli_walk18"), 62, dim=0.3)
+ecg(*span(62, 0.35, 1.0, 0.3))
+black(63, 0.0, 1.0, 1.4)
+hd(["The real drama", "hadn't even begun."], 63, "center", size=110, z=40, pad=1.3)
 
-# 06 THE LAST OVER: ball-by-ball tracker + the equation updating top-right
-chapter("06", "The Last Over", b("nawaz", 0.0))
-L0, L1 = b("nawaz", 0.0), BEAT["ashwin"][1] + 0.3
-nb, fh, dk, ash = D("nawaz"), D("free_hit"), D("dk_out"), D("ashwin")
-balls = [("W", "w", b("nawaz", nb * 0.38)), ("1", "n", b("nawaz", nb * 0.62)), ("2", "n", b("nawaz", nb * 0.85)),
-         ("6nb", "six", b("no_ball", D("no_ball") * 0.4)), ("wd", "x", b("free_hit", fh * 0.05)),
-         ("3b", "x", b("free_hit", fh * 0.75)), ("W", "w", b("dk_out", dk * 0.15)), ("wd", "x", b("ashwin", ash * 0.3)),
-         ("1", "win", b("ashwin", ash * 0.8))]
+# 06 THE PLAN -----------------------------------------------------------------------------------
+ch("06", "The Plan", 64)
+cd(clip("N14"), 64, "right", "KOHLI × PANDYA", "Take it deep")
+hd(["No more wickets.", "Take it deep."], 64, "left", 0.15, size=100)
+hv(lib("m_kohli_bat16"), 65, dim=0.55)
+od("45/4", 65, "left", "AFTER 10 OVERS", 0.15, color="#fff")
+chasebar(45, 4, *span(65, 0.0, 1.0, 0.2))
+pl(["Required rate <b>11+</b>"], 65, "right", 0.6)
+cd(lib("m_nawaz"), 66, "right", "MOHAMMAD NAWAZ", "One over saved")
+hd(["The hidden plan:", "make Nawaz", "bowl the last."], 66, "left", 0.25, size=96, acc=2)
+hv(lib("m_shaheen"), 67, dim=0.55)
+od("48", 67, "center", "NEEDED OFF 18 BALLS", size=320)
+hv(lib("m_kohli_hit18"), 68, dim=0.2)
+cd(lib("m_shaheen"), 68, "right", "SHAHEEN AFRIDI · OVER 18", "17 runs", a=0.3)
+od("17", 68, "left", "RUNS OFF THE OVER", 0.35)
+black(69, 0.0, 1.0, 1.2)
+od("31", 69, "center", "OFF 12 BALLS", size=360, z=40, pad=1.1)
+
+# 07 28 OFF 8 -----------------------------------------------------------------------------------
+ch("07", "28 off 8", 70)
+hv(lib("m_kohli_close"), 70, dim=0.3, media_start=0.5)
+cd(lib("m_rauf_watch"), 70, "right", "HARIS RAUF · OVER 19", "3 runs off the first 4 balls")
+full_video(shot("eight28"), round(at(71) - 0.1, 2), round(BEAT[L(71)][1] - at(71) + 0.4, 2))
+fullimg(ai("ai_tv_off"), *span(72, 0.0, 0.6, 0.2), dim=0.15)
+hv(lib("m_fan_pray"), 72, 0.55, 1.0, dim=0.3)
+letterbox(*span(73, 0.0, 1.0, 0.0))
+hv(lib("m_kohli_close2"), 73, 0.0, 0.6, dim=0.2)
+hv(lib("m_kohli_bat16"), 73, 0.6, 1.0, dim=0.2)
+s74, d74 = to_next(74)
+hero(lib("m_six1_close", slow=True), s74, round(d74 * 0.55, 2), dim=0.05, fade=0.08)
+hero(lib("m_six1_wide"), round(s74 + d74 * 0.55, 2), round(d74 * 0.2, 2), dim=0.05, fade=0.08)
+hero(lib("m_rauf_watch"), round(s74 + d74 * 0.75, 2), round(d74 * 0.25, 2), dim=0.2, fade=0.08)
+flash(round(s74 + d74 * 0.55, 2))
+odometer("6", round(s74 + d74 * 0.6, 2), round(d74 * 0.4, 2), "right", size=420, label="STRAIGHT BACK OVER THE BOWLER")
+freeze(lib("m_six1_close"), 1.0, *span(75, 0.0, 1.0, 0.3))
+pl(["Back foot", "Straight bat", "Over the bowler's head"], 75, "left", 0.1)
+cd(lib("m_six1_close"), 75, "right", "THE REPLAY", "145-ish, back of a length", a=0.45, maxw=900)
+hv(lib("m_rauf_watch"), 76, dim=0.6, gray=True)
+quote("If DK or Hardik had hit those, it would have hurt. But it was Kohli.", "HARIS RAUF · LATER (PARAPHRASED)",
+      *span(76, 0.0, 1.0, 0.0))
+s77, d77 = to_next(77)
+hero(lib("m_six2", slow=True), s77, round(d77 * 0.7, 2), dim=0.05, fade=0.08)
+hero(lib("m_fans_flag"), round(s77 + d77 * 0.7, 2), round(d77 * 0.3, 2), dim=0.2, fade=0.08)
+flash(round(s77 + d77 * 0.45, 2))
+odometer("6", round(s77 + d77 * 0.5, 2), round(d77 * 0.5, 2), "left", size=420, label="OVER FINE LEG")
+split(lib("m_fans_scream"), lib("m_crowd_flags2"), *span(78, 0.0, 1.0, 0.2), llab="MCG", rlab="90,293")
+black(79, 0.0, 1.0, 1.4)
+od("16", 79, "center", "OFF 6 BALLS", size=360, z=40, pad=1.3)
+
+# 08 THE LAST OVER ------------------------------------------------------------------------------
+ch("08", "The Last Over", 80)
+L0, L1 = at(80), round(BEAT[L(92)][1] + 2.0, 2)
+balls = [("W", "w", at(81, 0.3)), ("1", "n", at(82, 0.25)), ("2", "n", at(82, 0.6)), ("6nb", "six", at(83, 0.6)),
+         ("wd", "x", at(85, 0.2)), ("3b", "x", at(86, 0.7)), ("W", "w", at(88, 0.5)), ("wd", "x", at(90, 0.6)),
+         ("1", "win", at(91, 0.85))]
 tracker("OVER 20 · MOHAMMAD NAWAZ", balls, L0, L1 - L0)
 need([(L0, "NEED <b>16</b> OFF 6"), (balls[0][2], "NEED <b>16</b> OFF 5"), (balls[1][2], "NEED <b>15</b> OFF 4"),
       (balls[2][2], "NEED <b>13</b> OFF 3"), (balls[3][2], "NEED <b>6</b> OFF 3 · FREE HIT"), (balls[4][2], "NEED <b>5</b> OFF 3 · FREE HIT"),
       (balls[5][2], "NEED <b>2</b> OFF 2"), (balls[6][2], "NEED <b>2</b> OFF 1"), (balls[7][2], "NEED <b>1</b> OFF 1"),
       (balls[8][2], "<b>INDIA WIN</b>")], L1)
-card(clip("F18"), b("nawaz", 0.0), D("nawaz") + 0.3, "right", "HARDIK · c BABAR b NAWAZ", "40 off 37", video=True)
-headline(["Last over.", "16 to win."], b("nawaz", 0.2), D("nawaz") * 0.55, "left", size=110, accent_idx=1)
-hero(clip("F19"), b("no_ball", 0.0), D("no_ball") + 0.3, dim=0.15)
-headline(["NO-BALL!"], b("no_ball", D("no_ball") * 0.62), till_end("no_ball", D("no_ball") * 0.62, 0), "left", size=170, accent_idx=0)
-card(clip("F20"), b("free_hit", 0.0), D("free_hit") + 0.3, "right", "FREE HIT", "Bowled, but not out · 3 byes", video=True)
-pills(["Free hit", "Bowled · <b>not out</b>", "Ran <b>3 byes</b>"], b("free_hit", fh * 0.2), fh * 0.85, "left", gap=fh * 0.22)
-card(clip("F21"), b("dk_out", 0.0), D("dk_out") + 0.3, "left", "DINESH KARTHIK · STUMPED", video=True)
-hero(clip("F22"), b("ashwin", 0.0), D("ashwin") + 0.6, dim=0.15)
-headline(["INDIA WIN!"], b("ashwin", ash * 0.82), till_end("ashwin", ash * 0.82, 0.4), "center", size=190, accent_idx=0, z=55)
+cd(lib("m_nawaz"), 80, "right", "MOHAMMAD NAWAZ", "The over they saved")
+hd(["Last over.", "16 to win."], 80, "left", 0.1, size=110)
+hv(lib("m_hardik_out", slow=True), 81, 0.0, 0.7, dim=0.1)
+cd(lib("m_babar_catch"), 81, "right", "HARDIK · c BABAR · 40", a=0.6)
+hv(lib("m_runs"), 82, dim=0.15)
+hv(lib("m_noball_six"), 83, dim=0.1)
+flash(at(83, 0.6))
+hv(lib("m_umpire_nb"), 84, 0.0, 0.4, dim=0.1)
+hd(["NO-BALL!"], 84, "left", 0.05, 0.45, size=170, acc=0)
+cd(lib("m_protest"), 84, "right", "PAKISTAN PROTEST", "The call stands", a=0.4)
+cd(lib("m_wide1"), 85, "right", "WIDE", "Free hit to come")
+hd(["Wide."], 85, "left", 0.1, size=150, acc=0)
+hv(lib("m_freehit"), 86, dim=0.15)
+pl(["Free hit", "Bowled · <b>not out</b>", "Ran <b>3 byes</b>"], 86, "left", 0.25)
+cd(lib("m_kohli_umpire"), 87, "right", "THE RULE", "Free hit: can't be bowled")
+hd(["The rule", "was clear."], 87, "left", 0.2, size=120)
+hv(lib("m_dk_stumped", slow=True), 88, 0.0, 0.75, dim=0.1)
+cd(lib("m_scoreboard_out"), 88, "right", "KARTHIK · STUMPED", a=0.6)
+hv(lib("m_dk_walk"), 89, 0.0, 0.5, dim=0.2)
+hv(lib("m_ashwin_in"), 89, 0.5, 1.0, dim=0.2)
+hd(["Enter", "Ashwin."], 89, "left", 0.4, size=130)
+hv(lib("m_ashwin_wide", slow=True), 90, dim=0.1)
+hd(["Left it.", "Wide."], 90, "left", 0.55, size=120)
+letterbox(*span(91, 0.0, 1.0, 0.0))
+hv(lib("m_ashwin_ready"), 91, 0.0, 0.5, dim=0.15)
+hv(lib("m_win_shot", slow=True), 91, 0.5, 1.0, dim=0.05)
+s92, d92 = to_next(92)
+hero(lib("m_win_shot"), s92, round(d92 * 0.3, 2), dim=0.05, media_start=2.5)
+hero(lib("m_celebrate"), round(s92 + d92 * 0.3, 2), round(d92 * 0.35, 2), dim=0.05)
+hero(lib("m_fans_win"), round(s92 + d92 * 0.65, 2), round(d92 * 0.35, 2), dim=0.1)
+headline(["INDIA WIN!"], round(s92 + 0.2, 2), round(d92 * 0.6, 2), "center", size=200, accent_idx=0, z=55)
+flash(s92)
 
-# 07 THE ANSWER (end within 40 s of the win)
-chapter("07", "The Answer", b("punch", 0.0))
-hero(clip("F23"), b("punch", 0.0), D("punch") * 0.5, dim=0.15)
-card(clip("F24"), b("punch", D("punch") * 0.45), till_end("punch", D("punch") * 0.45), "right", "ROHIT LIFTS KOHLI", video=True)
-headline(["On Rohit's", "shoulders."], b("punch", D("punch") * 0.5), till_end("punch", D("punch") * 0.5, 0), "left", size=110, accent_idx=1)
-full_video(shot("hero82"), pre("82", 0.1), 3.1)
-phone(REC, b("82", 3.0), till_end("82", 3.0, 0.3), "right", media_start=0.0)
-headline(["82* off 53.", "When it looked over."], b("82", 3.2), till_end("82", 3.2, 0), "left", size=96, accent_idx=1)
-card(clip("F25"), b("own_words", 0.0), D("own_words") + 0.3, "right", "VIRAT KOHLI", "After the match", video=True)
-headline(["Mohali used to be", "his best innings.", "Not anymore."], b("own_words", 0.4), D("own_words"), "left", size=86, accent_idx=2)
-hero(clip("F23"), b("close", 0.0), D("close") + 0.3, dim=0.5, media_start=2.0)
-headline(["1,020 days of questions.", "One night. One answer."], b("close", 0.3), D("close"), "center", size=96, accent_idx=1)
-blackout(pre("cta", 0.1), D("cta") + 0.4)
-headline(["MCG or Mohali?"], b("cta", 0.1), D("cta") + 0.1, "center", size=140, accent_idx=0, z=40,
-         sub="Comment below · Next story: Hobart 2012")
-logo_sting(round(BEAT["cta"][1] + 0.3, 2), TOTAL - BEAT["cta"][1] - 0.3, end=True)
+# 09 THE ANSWER ---------------------------------------------------------------------------------
+ch("09", "The Answer", 93)
+hv(lib("m_kohli_knees", slow=True), 93, dim=0.1)
+s94, d94 = to_next(94)
+card(clip("N15"), s94, d94, "right", "ROHIT LIFTS KOHLI", video=True)
+hero(lib("m_kohli_roar"), s94, d94, dim=0.55)
+headline(["On Rohit's", "shoulders."], round(s94 + 0.2, 2), d94 - 0.2, "left", size=110, accent_idx=1)
+full_video(shot("hero82"), round(at(95) - 0.1, 2), 3.1)
+phone(REC, round(at(95) + 3.0, 2), round(BEAT[L(95)][1] - at(95) - 2.8, 2), "right")
+hd(["82* off 53.", "From 31 for 4."], 95, "left", 0.35, size=100)
+cd(clip("N16"), 96, "right", "VIRAT KOHLI", "After the match")
+quote("Mohali was my best. Tonight, this is above it.", "VIRAT KOHLI · MCG (PARAPHRASED)", *span(96, 0.05, 1.0, 0.0))
+hv(lib("m_kohli_walk18"), 97, dim=0.5, gray=True)
+hd(["1,020 days.", "One question."], 97, "center", size=120)
+s98, d98 = to_next(98)
+hero(lib("m_kohli_roar"), s98, d98, dim=0.25)
+headline(["The MCG", "answered."], round(s98 + 0.2, 2), d98 - 0.3, "left", size=130, accent_idx=1)
+black(99)
+hd(["MCG or Mohali?"], 99, "center", size=140, acc=0, z=40, sub="Comment below")
+cd(clip("N17"), 100, "right", "NEXT STORY", "Hobart 2012 · Kohli vs Malinga", a=0.4)
+hd(["Subscribe."], 100, "left", 0.0, 0.5, size=130, acc=0)
+logo_sting(round(BEAT[L(100)][1] + 0.3, 2), round(TOTAL - BEAT[L(100)][1] - 0.3, 2), end=True)
+
 
 CSS = f"""
 html,body{{margin:0;background:#060607}}
@@ -604,11 +928,11 @@ html,body{{margin:0;background:#060607}}
 .hl .ln{{display:block}}
 .hbar{{position:absolute;left:-46px;top:.08em;width:10px;height:calc(100% - .16em);background:{Y};border-radius:5px;transform-origin:top}}
 .hsub{{font-size:28px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.66);margin-top:22px}}
-.odo{{position:absolute;font-weight:800;letter-spacing:-0.04em;line-height:1}}
+.odo{{position:absolute;font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:-0.04em;line-height:1}}
 .digits{{display:inline-flex}}
 .dcol{{display:inline-block;height:1em;overflow:hidden}}
 .dstrip{{display:flex;flex-direction:column}}
-.dstrip span{{height:1em;line-height:1em}}
+.dstrip span{{height:1em;line-height:1em;text-align:center}}
 .dchar{{display:inline-block}}
 .olab{{font-size:24px;font-weight:700;letter-spacing:6px;color:rgba(255,255,255,.72);margin-top:22px}}
 .pills{{position:absolute;display:flex;flex-direction:column;gap:22px}}
@@ -664,6 +988,25 @@ html,body{{margin:0;background:#060607}}
 .need{{position:absolute;right:70px;top:58px;padding:12px 22px;border-radius:999px;background:rgba(10,10,12,.78);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:28px;letter-spacing:2px}}
 .need b{{color:{Y};font-size:34px}}
+.flash{{position:absolute;inset:0;background:#fff}}
+.lbar{{position:absolute;left:0;right:0;height:110px;background:#000}}
+.chase{{position:absolute;left:50%;top:52px;width:620px;margin-left:-310px;padding:14px 22px;border-radius:18px;
+  background:rgba(10,10,12,.78);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}}
+.chtxt{{display:flex;justify-content:space-between;color:#fff;font-weight:700;font-size:24px;letter-spacing:2px}}
+.chtxt span{{color:rgba(255,255,255,.6)}}
+.chtrack{{margin-top:12px;height:10px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden}}
+.chfill{{height:100%;border-radius:5px;background:linear-gradient(90deg,#ff453a,{Y});transform-origin:left}}
+.bars{{position:absolute;left:150px;right:150px;top:330px;display:flex;flex-direction:column;gap:46px}}
+.brow{{display:grid;grid-template-columns:420px 1fr 160px;align-items:center;gap:30px;color:#fff}}
+.blab{{font-size:36px;font-weight:700}}
+.btrack{{height:56px}}
+.bfill{{height:100%;border-radius:12px;background:rgba(255,255,255,.22);transform-origin:left}}
+.bfill.hi{{background:{Y};box-shadow:0 0 40px rgba(254,222,92,.45)}}
+.bval{{font-size:64px;font-weight:900;letter-spacing:-2px;text-align:right}}
+.quote{{position:absolute;top:300px;width:620px;color:#fff}}
+.qmark{{font-size:220px;line-height:.6;color:{Y};font-weight:900;height:110px;transform-origin:left bottom}}
+.qtext{{font-size:56px;font-weight:700;letter-spacing:-1.5px;line-height:1.12}}
+.qwho{{margin-top:30px;font-size:24px;font-weight:700;letter-spacing:5px;color:rgba(255,255,255,.65)}}
 .mark{{position:absolute;right:70px;bottom:56px;width:210px;opacity:.55;z-index:80}}
 """
 
@@ -679,8 +1022,8 @@ def build():
     body = [f'<div class="bg"></div><div class="glow" id="glow"></div><div class="grain"></div>']
     for start, dur, z, h in sorted(els, key=lambda e: e[0]):
         body.append(h)
-    body.append(f'<img class="mark clip" id="mark" src="media/logo.png" data-start="{BEAT["drought_70"][0]}" '
-                f'data-duration="{round(TOTAL - BEAT["drought_70"][0] - 5, 2)}">')
+    body.append(f'<img class="mark clip" id="mark" src="media/logo.png" data-start="{BEAT["l007"][0]}" '
+                f'data-duration="{round(TOTAL - BEAT["l007"][0] - 5, 2)}">')
     body.append('<div class="vig"></div>')
     page = f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="root" data-width="{W}" data-height="{H}" data-fps="{FPS}" data-duration="{TOTAL}">
@@ -690,7 +1033,7 @@ def build():
 <script>
 const tl = gsap.timeline({{paused:true}});
 tl.fromTo("#glow",{{x:-200,y:0}},{{x:900,y:200,duration:{TOTAL},ease:"sine.inOut"}},0);
-tl.fromTo("#mark",{{opacity:0}},{{opacity:0.55,duration:1}},{BEAT["drought_70"][0]});
+tl.fromTo("#mark",{{opacity:0}},{{opacity:0.55,duration:1}},{BEAT["l007"][0]});
 {chr(10).join(js)}
 tl.set({{}},{{}},{TOTAL});
 window.__timelines = window.__timelines || {{}};
