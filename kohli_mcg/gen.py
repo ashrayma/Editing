@@ -17,7 +17,7 @@ import sys
 from PIL import Image, ImageFilter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from footage import ai, clip  # noqa: E402
+from footage import ai, clip, stretch  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "hf_main")
@@ -81,6 +81,8 @@ def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=
          media_start=0.0):
     """A media card that glides in from `side`, pushes in slowly, and exits the other way."""
     i = nid("card")
+    if video:
+        src = stretch(src, dur + media_start)
     if video:
         w, h = 1920, 1080
     else:
@@ -342,6 +344,7 @@ def till_end(beat, off, pad=0.2):
 def hero(src, start, dur, dim=0.3, z=5, gray=False, push=1.08, media_start=0.0, fade=0.35):
     """Real match footage, full-bleed in the centre of the frame, slow push-in, darkened for type on top."""
     i = nid("hv")
+    src = stretch(src, dur + media_start)
     EVENTS.append((start, "cut"))
     filt = "filter:grayscale(1) contrast(1.12);" if gray else ""
     add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden;{filt}">'
@@ -566,6 +569,11 @@ def at(n, f=0.0):
 
 
 def span(n, a=0.0, b_=1.0, pad=0.2):
+    """(start, duration) for fraction a..b of line n. Ending at the line's end, it also covers the pause and any
+    breather after the line, so no bare background shows between lines."""
+    if b_ >= 1.0:
+        from beats import BREATH
+        pad = max(pad, 0.55) + BREATH.get(L(n), 0.0)
     return at(n, a), round(at(n, b_) - at(n, a) + pad, 2)
 
 
@@ -578,6 +586,8 @@ def to_next(n, a=0.0):
 
 def hv(c, n, a=0.0, b_=1.0, **kw):
     s, d = span(n, a, b_, kw.pop("pad", 0.25))
+    if n == 1 and a == 0.0:
+        s, d = 0.0, round(d + s, 2)
     return hero(c, s, d, **kw)
 
 
@@ -631,7 +641,7 @@ hv(lib("m_six1_close", slow=True), 4, 0.0, 1.0, dim=0.15)
 hd(["“The shot of", "the century.”"], 4, "center", 0.35, 1.0, size=120)
 letterbox(*span(4, 0.0, 1.0, 1.2))
 rewind(at(5, 0.15), round(at(5, 0.85) - at(5, 0.15), 2), "2019")
-hv(lib("m_kohli_walk18"), 5, 0.85, 1.0, dim=0.5, gray=True)
+hv(lib("m_kohli_walk18"), 5, 0.0, 1.0, dim=0.4, gray=True)
 hv(lib("m_lights"), 6, dim=0.45)
 hd(["1,020 days of silence.", "One night."], 6, "center", 0.05, 1.0, size=110)
 full_video(shot("ball"), round(BEAT[L(6)][1] + 0.15, 2), 0.85, z=78, fade=0.05)
@@ -672,7 +682,7 @@ ch("02", "The Silence", 16)
 yt("23 NOV 2019 · KOLKATA", 16)
 cd(PH + "test_bat_raised_full.jpg", 16, "right", "CENTURY NO. 70", "136 vs Bangladesh · pink-ball Test", maxw=760)
 hd(["Century", "No. 70"], 16, "left", size=140)
-full_video(shot("days1020"), at(17, -0.0), round(BEAT[L(17)][1] - BEAT[L(17)][0] + 0.4, 2))
+full_video(shot("days1020"), at(17, -0.0), round(BEAT[L(17)][1] - BEAT[L(17)][0] + 0.75, 2))
 yt("MARCH 2020", 18)
 hv(lib("m_lights"), 18, dim=0.45, gray=True, media_start=1.0)
 hd(["Covid.", "Cricket stopped."], 18, "left", size=120)
@@ -719,6 +729,8 @@ hd(["Then he did something", "he'd never done."], 32, "center", 0.0, 1.0, size=1
 ch("03", "The Return", 33)
 hv(lib("m_lights"), 33, dim=0.5, media_start=2.0)
 od("30", 33, "center", "DAYS WITHOUT TOUCHING A BAT", size=340)
+hv(lib("m_lights"), 34, dim=0.55, media_start=0.5)
+cd(PH + "asia22_kiss_chain.jpg", 34, "right", "FAMILY FIRST", a=0.55, maxw=860)
 pl(["No nets", "No gym selfies", "No social media"], 34, "left", 0.0, 0.7)
 hd(["Just family."], 34, "right", 0.55, 1.0, size=110, acc=0)
 yt("AUG 2022 · DUBAI", 35, 37)
@@ -809,7 +821,7 @@ od("31", 69, "center", "OFF 12 BALLS", size=360, z=40, pad=1.1)
 ch("07", "28 off 8", 70)
 hv(lib("m_kohli_close"), 70, dim=0.3, media_start=0.5)
 cd(lib("m_rauf_watch"), 70, "right", "HARIS RAUF · OVER 19", "3 runs off the first 4 balls")
-full_video(shot("eight28"), round(at(71) - 0.1, 2), round(BEAT[L(71)][1] - at(71) + 0.4, 2))
+full_video(shot("eight28"), round(at(71) - 0.1, 2), round(BEAT[L(71)][1] - at(71) + 0.75, 2))
 fullimg(ai("ai_tv_off"), *span(72, 0.0, 0.6, 0.2), dim=0.15)
 hv(lib("m_fan_pray"), 72, 0.55, 1.0, dim=0.3)
 letterbox(*span(73, 0.0, 1.0, 0.0))
@@ -899,6 +911,7 @@ hero(lib("m_kohli_roar"), s98, d98, dim=0.25)
 headline(["The MCG", "answered."], round(s98 + 0.2, 2), d98 - 0.3, "left", size=130, accent_idx=1)
 black(99)
 hd(["MCG or Mohali?"], 99, "center", size=140, acc=0, z=40, sub="Comment below")
+hv(lib("m_kohli_roar"), 100, dim=0.6)
 cd(clip("N17"), 100, "right", "NEXT STORY", "Hobart 2012 · Kohli vs Malinga", a=0.4)
 hd(["Subscribe."], 100, "left", 0.0, 0.5, size=130, acc=0)
 logo_sting(round(BEAT[L(100)][1] + 0.3, 2), round(TOTAL - BEAT[L(100)][1] - 0.3, 2), end=True)

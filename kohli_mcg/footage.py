@@ -68,7 +68,7 @@ LIB = {
     # MCG 2022: ICC recap of the last three overs
     "m_aerial": ("m", 0.0, 0.9), "m_kohli_hit18": ("m", 6.0, 2.0), "m_flags": ("m", 8.0, 4.0),
     "m_shaheen": ("m", 12.0, 3.0), "m_babar_clap": ("m", 15.0, 1.2), "m_kohli_bat16": ("m", 16.0, 2.0),
-    "m_kohli_walk18": ("m", 18.0, 2.0), "m_rohit_dugout": ("m", 20.0, 1.2), "m_fan_pray": ("m", 21.0, 3.0),
+    "m_kohli_walk18": ("m", 18.0, 1.6), "m_rohit_dugout": ("m", 20.0, 1.2), "m_fan_pray": ("m", 21.0, 3.0),
     "m_six1_close": ("m", 24.0, 4.0), "m_six1_wide": ("m", 28.0, 2.0), "m_rauf_watch": ("m", 30.0, 2.0),
     "m_crowd_up": ("m", 32.0, 3.0), "m_six2": ("m", 35.0, 3.0), "m_lights": ("m", 38.0, 4.0),
     "m_kohli_close": ("m", 42.0, 3.0), "m_fans_flag": ("m", 47.0, 2.0), "m_kohli_close2": ("m", 49.0, 1.2),
@@ -97,6 +97,26 @@ LIB = {
     # Babar lbw, 720p
     "b_arshdeep": ("b", 0.0, 9.0),
 }
+
+
+def clip_len(path):
+    """Duration in seconds of a clip under HERE (cached)."""
+    if path not in _LEN:
+        r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                            os.path.join(HERE, path)], capture_output=True, text=True)
+        _LEN[path] = float(r.stdout.strip() or 0)
+    return _LEN[path]
+
+
+_LEN = {}
+
+
+def stretch(path, need):
+    """If a library clip is much shorter than the slot it fills, use its half-speed version instead of freezing."""
+    base = os.path.basename(path).rsplit(".", 1)[0]
+    if base in LIB and clip_len(path) * 1.15 < need:
+        return lib(base, slow=True)
+    return path
 
 
 def lib(cid, slow=False):
