@@ -47,3 +47,20 @@ This version is rewritten for TheCricketLounge: open on action, numbers on scree
 8. Dhoni was Thala... and Raina became Chinna Thala. This pair was the heartbeat of Chennai.
 9. He didn't need the Orange Cap. He needed the big matches.
 10. Mr. IPL: Raina or Kohli? Comment below, and follow. Next up: Dhoni vs Yuvraj.
+
+## English voiceover, conversational (final)
+Twenty-five balls, eighty-seven runs... and the guy who did it never even won an Orange Cap. He's not IPL's top run-scorer either. So why does everyone call Suresh Raina "Mr. IPL"?
+
+Simple. The bigger the match, the better he got. In the playoffs alone he scored 714 runs in just 24 innings, with seven fifties, and nobody has gone past that.
+
+Go back to the 2010 final against Mumbai. CSK were in trouble, and Raina walked in and made 57 not out off 35 balls. That gave Chennai their first-ever title, and he was Player of the Match.
+
+Then came 2014, Qualifier 2 against Punjab. He smashed 87 off just 25 balls at a strike rate of 348, and took 33 runs off a single over.
+
+He was also the first player in IPL history to reach 5000 runs.
+
+And if Dhoni was Thala, Raina was Chinna Thala. Together, they were the heartbeat of Chennai.
+
+He never needed the Orange Cap. He just needed a big match.
+
+So, who's the real Mr. IPL: Raina or Kohli? Tell me in the comments, and follow, because next up it's Dhoni vs Yuvraj.
