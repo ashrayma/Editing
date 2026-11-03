@@ -29,8 +29,15 @@ FOOTAGE = {
 }
 
 
+COVERED = {"N10": "v_rahul_b", "N11": "v_rohit_c", "N12": "v_pak_fan", "N13": "v_axar_ro", "N14": "v_kohli_mid",
+           "N15": "v_rohit_lifts"}
+
+
 def clip(fid, secs=14):
-    """Path (relative to HERE) of the clip to use: the user's footage, normalised, or a labelled slate."""
+    """Path (relative to HERE) of the clip to use: the user's footage (a named moment, or footage/user/<id>.mp4),
+    or a labelled slate."""
+    if fid in COVERED:
+        return lib(COVERED[fid])
     user = os.path.join(HERE, "footage", "user", f"{fid}.mp4")
     if os.path.exists(user):
         out = os.path.join(HERE, "footage", "clips", f"{fid}.mp4")
@@ -62,7 +69,7 @@ def ai(name):
 
 # ----------------------------------------------------------------------------- the user's footage, cut by moment
 # source files live in footage/user/src/ (not in git). (source, start, duration[, crop]) in seconds.
-SRC = {"m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
+SRC = {"v": "v9126.mp4", "m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
 VCROP = "crop=720:405:0:437"   # the 16:9 picture inside the vertical upload
 LIB = {
     # MCG 2022: ICC recap of the last three overs
@@ -94,6 +101,15 @@ LIB = {
     "p_iftikhar_six": ("p", 128.0, 5.0, VCROP), "p_shami": ("p", 168.0, 5.0, VCROP), "p_iftikhar_walk": ("p", 174.0, 4.0, VCROP),
     "p_pak_dugout": ("p", 204.0, 3.0, VCROP), "p_masood50": ("p", 208.0, 5.0, VCROP), "p_hardik": ("p", 228.0, 8.0, VCROP),
     "p_scorecard": ("p", 268.0, 7.0, VCROP),
+    # the 64-second Kohli edit (Video-9126)
+    "v_aerial": ("v", 0.0, 1.0), "v_bigscreen": ("v", 1.0, 1.0), "v_to_win160": ("v", 2.0, 0.5),
+    "v_openers": ("v", 2.5, 0.75), "v_rahul_b": ("v", 3.25, 1.1), "v_dive": ("v", 4.5, 1.6),
+    "v_rohit_c": ("v", 6.25, 1.3), "v_axar_ro": ("v", 7.5, 1.4), "v_pak_crowd": ("v", 9.0, 0.5),
+    "v_pak_fan": ("v", 9.5, 0.7), "v_kohli_card": ("v", 10.2, 2.6), "v_kohli_walkin": ("v", 13.0, 3.0),
+    "v_fan_pray": ("v", 16.0, 2.0), "v_headlines": ("v", 20.4, 8.4), "v_ganguly": ("v", 22.0, 2.2),
+    "v_kohli_low": ("v", 29.0, 2.5), "v_finished": ("v", 34.4, 1.8), "v_kohli_mid": ("v", 38.0, 12.0),
+    "v_rauf_down": ("v", 54.0, 1.0), "v_noball": ("v", 56.5, 0.8), "v_kohli_arms": ("v", 59.5, 0.8),
+    "v_knees": ("v", 60.25, 0.75), "v_rohit_lifts": ("v", 61.0, 0.75), "v_point_sky": ("v", 61.75, 1.7),
     # Babar lbw, 720p
     "b_arshdeep": ("b", 0.0, 9.0),
 }

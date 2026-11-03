@@ -40,7 +40,7 @@ def clean(path, trim=None):
         voiceover.tighten_pauses = keep
 
 
-def auto_split(audio):
+def auto_split(audio, beats=None):
     """Boundaries (seconds) between beats: the set of pauses whose split best matches each beat's share of the
     script (by length), favouring longer pauses. Dynamic programming over all candidate pauses."""
     regions = voiced_regions(audio)
@@ -54,9 +54,10 @@ def auto_split(audio):
         return cum[k]
 
     total = cum[-1]
-    lens = np.array([len(t) for _, t in BEATS], float)
+    beats = beats or BEATS
+    lens = np.array([len(t) for _, t in beats], float)
     exp = lens / lens.sum() * total
-    n, P = len(BEATS), len(cands)
+    n, P = len(beats), len(cands)
     sp = np.array([speech_before(c[0]) for c in cands])
     bonus = np.array([np.log(max(c[1], 0.05) / 0.3) for c in cands])
     INF = 1e18
@@ -85,13 +86,24 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     pieces = []
     if args:
-        audio = np.concatenate([clean(os.path.join(HERE, a) if not os.path.isabs(a) else a) for a in args])
-        cuts = [0.0] + auto_split(audio) + [len(audio) / SR]
-        for k, (bid, _) in enumerate(BEATS):
-            seg = audio[int(cuts[k] * SR): int(cuts[k + 1] * SR)]
-            if bid in MANUAL:
-                seg = np.concatenate([clean_recording(os.path.join(HERE, f), trim=(s, e)) for f, s, e in MANUAL[bid]])
-            pieces.append((bid, tighten_pauses(seg)))
+        # each argument is a file, optionally with the lines it covers: vo_raw/part1.mp3@l001-l048
+        jobs, ids = [], [b for b, _ in BEATS]
+        for k, a in enumerate(args):
+            path, _, rng = a.partition("@")
+            if rng:
+                lo, hi = rng.split("-")
+                sub = BEATS[ids.index(lo): ids.index(hi) + 1]
+            else:
+                sub = BEATS if len(args) == 1 else sys.exit("with several files, give each its lines: file@l001-l048")
+            jobs.append((os.path.join(HERE, path) if not os.path.isabs(path) else path, sub))
+        for path, sub in jobs:
+            audio = clean(path)
+            cuts = [0.0] + auto_split(audio, sub) + [len(audio) / SR]
+            for k, (bid, _) in enumerate(sub):
+                seg = audio[int(cuts[k] * SR): int(cuts[k + 1] * SR)]
+                if bid in MANUAL:
+                    seg = np.concatenate([clean_recording(os.path.join(HERE, f), trim=(s, e)) for f, s, e in MANUAL[bid]])
+                pieces.append((bid, tighten_pauses(seg)))
     else:
         for bid, _ in BEATS:
             if bid not in MANUAL:
