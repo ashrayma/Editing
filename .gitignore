@@ -16,3 +16,13 @@ doc_video/hf_main/.hyperframes/
 doc_video/reel/media/
 doc_video/reel/.hyperframes/
 doc_video/footage/new/
+kohli_mcg/out/
+kohli_mcg/hf_main/media/
+kohli_mcg/hf_main/.hyperframes/
+kohli_mcg/hf_main/gsap.min.js
+kohli_mcg/blender/renders/*/
+kohli_mcg/blender/log_*.txt
+kohli_mcg/blender/render.log
+kohli_mcg/footage/placeholders/
+kohli_mcg/footage/clips/
+kohli_mcg/screenrec/tmp/

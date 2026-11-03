@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Drought tracker</title>
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{background:#0b0b0d;color:#f2f2f2;font:16px/1.4 "Inter",-apple-system,system-ui,sans-serif;width:1200px;padding:48px}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  h1{font-size:34px;letter-spacing:-.5px}.tag{font-size:13px;color:#8e8e96;border:1px solid #26262b;padding:5px 12px;border-radius:99px}
+  .sub{color:#8e8e96;margin-top:6px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:34px}
+  .c{background:#151518;border-radius:22px;padding:26px}
+  .c .k{color:#8e8e96;font-size:13px;letter-spacing:.6px;text-transform:uppercase}
+  .c .v{font-size:56px;font-weight:800;letter-spacing:-1.5px;margin-top:6px}
+  .c .d{color:#c9c9cf;margin-top:4px}
+  .gap{margin-top:20px;background:#151518;border-radius:22px;padding:26px 26px 34px}
+  .track{position:relative;height:10px;border-radius:5px;background:#26262b;margin-top:44px}
+  .fill{position:absolute;inset:0;border-radius:5px;background:linear-gradient(90deg,#ff453a,#FEDE5C)}
+  .pin{position:absolute;top:-40px;transform:translateX(-50%);font-size:13px;color:#8e8e96;white-space:nowrap}
+  .big{font-size:88px;font-weight:900;color:#FEDE5C;letter-spacing:-3px;text-align:center;margin-top:26px}
+  .big small{display:block;font-size:16px;letter-spacing:4px;color:#c9c9cf;font-weight:700}
+</style></head><body>
+  <div class="top"><h1>Virat Kohli · International hundreds</h1><span class="tag">Recreated stats page</span></div>
+  <div class="sub">The gap between century No. 70 and No. 71</div>
+  <div class="row">
+    <div class="c"><div class="k">Century No. 70</div><div class="v">136</div><div class="d">vs Bangladesh · Test · Kolkata · Nov 2019</div></div>
+    <div class="c"><div class="k">Century No. 71</div><div class="v">122*</div><div class="d">vs Afghanistan · T20I · Dubai · 8 Sep 2022</div></div>
+  </div>
+  <div class="gap">
+    <div class="track"><div class="fill"></div>
+      <span class="pin" style="left:0">Nov 2019</span><span class="pin" style="left:33%">2020</span>
+      <span class="pin" style="left:66%">2021</span><span class="pin" style="left:100%">Sep 2022</span></div>
+    <div class="big">1,020<small>DAYS WITHOUT A CENTURY</small></div>
+  </div>
+</body></html>

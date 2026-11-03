@@ -1,0 +1,87 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match Centre</title>
+<style>
+  :root{--bg:#0b0b0d;--card:#151518;--line:#26262b;--txt:#f2f2f2;--mut:#8e8e96;--y:#FEDE5C;--r:#ff453a;--g:#30d158}
+  *{box-sizing:border-box;margin:0}
+  html{background:#0b0b0d;zoom:2}
+  body{background:var(--bg);color:var(--txt);font:15px/1.35 "Inter",-apple-system,system-ui,sans-serif;padding:0 14px 60px}
+  .bar{position:sticky;top:0;background:rgba(11,11,13,.92);backdrop-filter:blur(10px);padding:14px 0 10px;z-index:5;
+       display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+  .bar b{font-size:17px}.rec{font-size:11px;color:var(--mut);border:1px solid var(--line);padding:3px 8px;border-radius:99px}
+  .hero{background:var(--card);border-radius:18px;padding:16px;margin-top:14px}
+  .meta{color:var(--mut);font-size:12px;letter-spacing:.4px;text-transform:uppercase}
+  .team{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;font-size:18px;font-weight:700}
+  .team span{font-variant-numeric:tabular-nums}.team small{color:var(--mut);font-weight:500;font-size:13px;margin-left:6px}
+  .res{margin-top:12px;color:var(--y);font-weight:700}
+  h3{margin:22px 2px 8px;font-size:13px;color:var(--mut);letter-spacing:.6px;text-transform:uppercase}
+  .over{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+  .ohead{display:flex;justify-content:space-between;font-weight:700}.ohead em{font-style:normal;color:var(--mut);font-weight:500}
+  .balls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .b{min-width:36px;height:36px;border-radius:18px;background:#222227;display:flex;align-items:center;justify-content:center;
+     font-weight:700;font-size:13px;padding:0 9px}
+  .b.six{background:var(--y);color:#111}.b.w{background:var(--r)}.b.x{background:#3a3a40;color:var(--y)}
+  .note{margin-top:10px;color:var(--mut);font-size:13px}
+  .need{margin-top:8px;font-size:13px}.need b{color:var(--y)}
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:16px;overflow:hidden}
+  td,th{padding:11px 12px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line)}
+  td:first-child,th:first-child{text-align:left}th{color:var(--mut);font-size:12px;font-weight:600}
+  tr.hi td{color:var(--y);font-weight:700}
+  .eq{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .eq div{background:var(--card);border-radius:14px;padding:12px;text-align:center}
+  .eq b{display:block;font-size:24px}.eq span{color:var(--mut);font-size:11px}
+</style></head><body>
+<div class="bar"><b>Match Centre</b><span class="rec">Recreated scorecard</span></div>
+
+<div class="hero">
+  <div class="meta">T20 World Cup 2022 · Super 12 · MCG · 23 Oct</div>
+  <div class="team">Pakistan <span>159/8 <small>(20)</small></span></div>
+  <div class="team">India <span>160/6 <small>(20)</small></span></div>
+  <div class="res">India won by 4 wickets (off the last ball)</div>
+</div>
+
+<h3>The chase</h3>
+<div class="eq">
+  <div><b>31/4</b><span>after 6.1 overs</span></div>
+  <div><b>48</b><span>needed off 18</span></div>
+  <div><b>28</b><span>needed off 8</span></div>
+</div>
+
+<h3>Over 19 · Haris Rauf</h3>
+<div class="over">
+  <div class="ohead">15 runs <em>India need 31 off 12</em></div>
+  <div class="balls"><div class="b">3 off 4</div><div class="b six">6</div><div class="b six">6</div></div>
+  <div class="note">19.5 Kohli, back of a length: straight back over the bowler. 19.6 Kohli: flicked over fine leg.</div>
+  <div class="need">Need <b>16 off 6</b></div>
+</div>
+
+<h3>Over 20 · Mohammad Nawaz</h3>
+<div class="over">
+  <div class="ohead">17 runs incl. extras <em>India need 16 off 6</em></div>
+  <div class="balls">
+    <div class="b w">W</div><div class="b">1</div><div class="b">2</div><div class="b six">6nb</div>
+    <div class="b x">wd</div><div class="b x">3b</div><div class="b w">W</div><div class="b x">wd</div><div class="b">1</div>
+  </div>
+  <div class="note">Hardik c Babar · waist-high no-ball for six · free hit: Kohli bowled, 3 byes · Karthik stumped · Ashwin leaves a wide, then lifts it over mid-off.</div>
+  <div class="need"><b>India win</b></div>
+</div>
+
+<h3>India batting</h3>
+<table>
+  <tr><th>Batter</th><th>R</th><th>B</th></tr>
+  <tr><td>KL Rahul</td><td>4</td><td>8</td></tr>
+  <tr><td>Rohit Sharma</td><td>4</td><td>7</td></tr>
+  <tr class="hi"><td>Virat Kohli * <small style="color:#8e8e96;font-weight:500">6×4 · 4×6</small></td><td>82</td><td>53</td></tr>
+  <tr><td>Suryakumar Yadav</td><td>15</td><td>10</td></tr>
+  <tr><td>Axar Patel (run out)</td><td>2</td><td>3</td></tr>
+  <tr><td>Hardik Pandya</td><td>40</td><td>37</td></tr>
+</table>
+
+<h3>Pakistan batting · top scorers</h3>
+<table>
+  <tr><th>Batter</th><th>R</th><th>B</th></tr>
+  <tr><td>Shan Masood *</td><td>52</td><td>42</td></tr>
+  <tr><td>Iftikhar Ahmed</td><td>51</td><td>34</td></tr>
+  <tr><td>Babar Azam (lbw, Arshdeep)</td><td>0</td><td>1</td></tr>
+</table>
+</body></html>
