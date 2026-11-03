@@ -433,7 +433,19 @@ def need(steps, end, z=62):
 
 # ----------------------------------------------------------------------------- the film
 
-R3 = "blender/renders/"
+def shot(name):
+    """A rendered 3D shot, or (until blender/render_all.sh has made it) a dark stand-in so the edit still builds."""
+    real = os.path.join("blender", "renders", name + ".mp4")
+    if os.path.exists(os.path.join(HERE, real)):
+        return real
+    stub = os.path.join("footage", "placeholders", "3d_" + name + ".mp4")
+    if not os.path.exists(os.path.join(HERE, stub)):
+        import subprocess
+        os.makedirs(os.path.join(HERE, "footage", "placeholders"), exist_ok=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=0x101012:s=1920x1080:r=30:d=4",
+                        "-c:v", "libx264", "-pix_fmt", "yuv420p", os.path.join(HERE, stub)], check=True)
+    return stub
+
 SHOT = "assets/photos/screenshot_drought.png"
 REC = "footage/screenrec_match_centre.mp4"
 
@@ -446,7 +458,7 @@ odometer("21", b("open_rauf", 0.5), D("open_rauf") - 0.3, "left", size=280, labe
 hero(clip("F16"), b("open_tease", 0.0), 4.8, dim=0.25, media_start=0.0)
 headline(["“The shot of", "the century.”"], b("open_tease", 0.4), 4.2, "center", size=120, accent_idx=1)
 rewind(b("open_tease", 4.9), till_end("open_tease", 4.9, 0.0) - 0.4, "2019")
-full_video(R3 + "ball.mp4", round(BEAT["open_tease"][1] - 0.45, 2), 0.85, z=78, fade=0.05)
+full_video(shot("ball"), round(BEAT["open_tease"][1] - 0.45, 2), 0.85, z=78, fade=0.05)
 blackout(round(BEAT["open_tease"][1] + 0.35, 2), 2.9, z=70)
 headline(["31 for 4"], round(BEAT["open_tease"][1] + 0.45, 2), 2.7, "center", size=210, accent_idx=0, z=72,
          sub="The night Kohli came back")
@@ -458,7 +470,7 @@ card(clip("F03"), b("drought_70", 0.0), D("drought_70") * 0.6, "right", "CENTURY
 headline(["Century", "No. 70"], b("drought_70", 0.2), D("drought_70") * 0.6 - 0.2, "left", size=130, accent_idx=1)
 fullimg(ai("ai_lonely_bat"), b("drought_70", D("drought_70") * 0.6), till_end("drought_70", D("drought_70") * 0.6, 0.3), dim=0.35)
 ecg(b("drought_70", D("drought_70") * 0.6), till_end("drought_70", D("drought_70") * 0.6, 0.3), flat_after=1.2, color="#ff453a")
-full_video(R3 + "days1020.mp4", pre("drought_days", 0.1), D("drought_days") + 0.4)
+full_video(shot("days1020"), pre("drought_days", 0.1), D("drought_days") + 0.4)
 ytag("2019 → 2022", b("drought_capt", 0.0), D("drought_capt") + D("drought_voices") + 0.9)
 pills(["T20I captaincy · <b>gave up</b>", "Test captaincy · <b>gave up</b>", "Dubai 2021 · lost by <b>10 wickets</b>"],
       b("drought_capt", 0.2), D("drought_capt"), "left", gap=D("drought_capt") / 3.4)
@@ -495,7 +507,7 @@ q = D("collapse") / 4
 for k, (fid, who) in enumerate([("F10", "KL RAHUL · 4"), ("F11", "ROHIT SHARMA · 4"), ("F12", "SURYAKUMAR · 15"), ("F13", "AXAR PATEL · RUN OUT")]):
     hero(clip(fid), b("collapse", q * k), q + 0.15, dim=0.2, fade=0.12)
     card(clip(fid), b("collapse", q * k + 0.05), q, "left" if k % 2 else "right", who, video=True, maxw=760)
-full_video(R3 + "score314.mp4", pre("31_4", 0.15), D("31_4") + 0.5)
+full_video(shot("score314"), pre("31_4", 0.15), D("31_4") + 0.5)
 hero(clip("F14"), b("silence", 0.0), D("silence") + 0.3, dim=0.45, gray=True)
 headline(["Half the stadium", "went silent."], b("silence", 0.3), D("silence") * 0.5, "left", size=100, accent_idx=1)
 ecg(b("silence", D("silence") * 0.5), till_end("silence", D("silence") * 0.5, 0.3), color="#ff453a", y=760)
@@ -517,7 +529,7 @@ odometer("31", b("equation_12", 0.0), D("equation_12") + 0.2, "center", size=340
 chapter("05", "28 off 8", b("rauf_over", 0.0))
 hero(clip("F01"), b("rauf_over", 0.0), D("rauf_over") * 0.45, dim=0.3, media_start=3.0)
 headline(["Over 19.", "Haris Rauf."], b("rauf_over", 0.2), D("rauf_over") * 0.45 - 0.2, "left", size=120, accent_idx=1)
-full_video(R3 + "eight28.mp4", b("rauf_over", D("rauf_over") * 0.45), till_end("rauf_over", D("rauf_over") * 0.45, 0.3))
+full_video(shot("eight28"), b("rauf_over", D("rauf_over") * 0.45), till_end("rauf_over", D("rauf_over") * 0.45, 0.3))
 fullimg(ai("ai_tv_off"), pre("tv_off", 0.1), D("tv_off") + 0.4, dim=0.15)
 hero(clip("F16"), b("six_one", 0.0), D("six_one") + 0.3, dim=0.1)
 odometer("6", b("six_one", D("six_one") * 0.72), till_end("six_one", D("six_one") * 0.72, 0), "right", size=380, label="STRAIGHT DOWN THE GROUND")
@@ -556,7 +568,7 @@ chapter("07", "The Answer", b("punch", 0.0))
 hero(clip("F23"), b("punch", 0.0), D("punch") * 0.5, dim=0.15)
 card(clip("F24"), b("punch", D("punch") * 0.45), till_end("punch", D("punch") * 0.45), "right", "ROHIT LIFTS KOHLI", video=True)
 headline(["On Rohit's", "shoulders."], b("punch", D("punch") * 0.5), till_end("punch", D("punch") * 0.5, 0), "left", size=110, accent_idx=1)
-full_video(R3 + "hero82.mp4", pre("82", 0.1), 3.1)
+full_video(shot("hero82"), pre("82", 0.1), 3.1)
 phone(REC, b("82", 3.0), till_end("82", 3.0, 0.3), "right", media_start=0.0)
 headline(["82* off 53.", "When it looked over."], b("82", 3.2), till_end("82", 3.2, 0), "left", size=96, accent_idx=1)
 card(clip("F25"), b("own_words", 0.0), D("own_words") + 0.3, "right", "VIRAT KOHLI", "After the match", video=True)
