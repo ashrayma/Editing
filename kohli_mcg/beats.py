@@ -38,6 +38,9 @@ BREATH = {"l004": 1.2, "l006": 2.6, "l015": 1.5, "l032": 2.0, "l043": 1.5, "l053
           # 15-minute version: a little more air around the big moments
           "l011e": 2.0, "l025c": 1.8, "l048a": 1.2, "l058a": 1.2, "l075b": 2.2, "l087a": 1.0, "l094a": 2.0,
           "l013": 1.0, "l041": 1.5, "l047": 1.2, "l062": 1.2, "l072": 1.5, "l078": 1.5, "l091": 1.0, "l097": 1.5}
+for _k, _v in {"l006": 1.0, "l032": 1.0, "l043": 1.0, "l053": 1.0, "l059": 1.0, "l063": 1.0, "l069": 1.0,
+               "l074": 1.5, "l077": 1.0, "l079": 1.0, "l084": 1.0, "l092": 1.5, "l098": 1.0}.items():
+    BREATH[_k] = BREATH.get(_k, 0.0) + _v          # +14 s of music-only air: lands the cut on 15:00
 NEW = [b for b in [x[0] for x in BEATS] if b[-1].isalpha()]   # lines added for the 15-minute cut
 TEXT = dict(BEATS)
 
