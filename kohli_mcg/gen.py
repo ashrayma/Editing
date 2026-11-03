@@ -559,7 +559,14 @@ PH = "assets/photos/user/"
 
 
 def L(n):
+    """Line id: 11 -> l011, "11a" -> l011a (lines added for the 15-minute cut)."""
+    if isinstance(n, str):
+        return f"l{int(n[:-1]):03d}{n[-1]}" if n[-1].isalpha() else f"l{int(n):03d}"
     return f"l{n:03d}"
+
+
+def has(n):
+    return L(n) in BEAT
 
 
 def at(n, f=0.0):
@@ -580,7 +587,9 @@ def span(n, a=0.0, b_=1.0, pad=0.2):
 def to_next(n, a=0.0):
     """From a fraction of line n to the start of line n+1 (covers the breather after it)."""
     s = at(n, a)
-    nxt = BEAT.get(L(n + 1), (TOTAL - 5.0,))[0]
+    from beats import IDS
+    k = IDS.index(L(n))
+    nxt = BEAT[IDS[k + 1]][0] if k + 1 < len(IDS) and IDS[k + 1] in BEAT else TOTAL - 5.0
     return s, round(nxt - s + 0.15, 2)
 
 
@@ -908,7 +917,7 @@ card(clip("N15"), s94, d94, "right", "ROHIT LIFTS KOHLI", video=True)
 hero(lib("m_kohli_roar"), s94, d94, dim=0.55)
 headline(["On Rohit's", "shoulders."], round(s94 + 0.2, 2), d94 - 0.2, "left", size=110, accent_idx=1)
 full_video(shot("hero82"), round(at(95) - 0.1, 2), 3.1)
-phone(REC, round(at(95) + 3.0, 2), round(BEAT[L(95)][1] - at(95) - 2.8, 2), "right")
+phone(REC, round(at(95) + 3.0, 2), round(BEAT[L(95)][1] - at(95) - 2.2, 2), "right")
 hd(["82* off 53.", "From 31 for 4."], 95, "left", 0.35, size=100)
 hv(lib("v_point_sky"), 96, dim=0.6)
 quote("Mohali was my best. Tonight, this is above it.", "VIRAT KOHLI · MCG (PARAPHRASED)", *span(96, 0.05, 1.0, 0.0))
@@ -923,6 +932,58 @@ hv(lib("m_kohli_roar"), 100, dim=0.6)
 cd(clip("N17"), 100, "right", "NEXT STORY", "Hobart 2012 · Kohli vs Malinga", a=0.4, b_=0.75)
 cd(lib("a_hob_malinga"), 100, "right", "LASITH MALINGA", "24 off one over", a=0.75)
 hd(["Subscribe."], 100, "left", 0.0, 0.5, size=130, acc=0)
+
+# ----------------------------------------------------------------------------- lines added for the 15-minute cut
+if has("11a"):
+    hv(lib("a_wt14_kohli"), "11a", dim=0.5)
+    chasebar(49, 3, *span("11a", 0.0, 1.0, 0.2), target=161)
+    yt("27 MAR 2016 · MOHALI", "11a", 11)
+if has("11b"):
+    hv(lib("a_wt14_together"), "11b", dim=0.4)
+    pl(["1 → <b>2</b>", "1 → <b>2</b>", "1 → <b>2</b>"], "11b", "left", 0.3)
+    hd(["Every single", "became two."], "11b", "right", 0.0, 0.5, size=96)
+if has("11c"):
+    black("11c")
+    od("39", "11c", "center", "NEEDED OFF 18 BALLS", size=340, z=40)
+if has("11d"):
+    hv(lib("a_wt14_hug"), "11d", dim=0.3)
+    hd(["Dhoni finishes.", "Kohli kneels."], "11d", "left", 0.2, size=110)
+if has("11e"):
+    split(lib("a_wt14_kohli"), lib("m_kohli_knees", slow=True), *span("11e", 0.0, 1.0, 0.3),
+          llab="2016", rlab="2022", lgray=True)
+if has("25a"):
+    hv(lib("d_shami"), "25a", dim=0.45, gray=True)
+    hd(["Shami trolled", "for his religion."], "25a", "left", 0.15, size=100)
+if has("25b"):
+    cd(lib("a_presser"), "25b", "right", "VIRAT KOHLI", "Captain, standing up", gray=True, maxw=760)
+    hd(["He stood", "by Shami."], "25b", "left", 0.1, size=120)
+if has("25c"):
+    hv(lib("d_shami"), "25c", dim=0.7, gray=True, media_start=1.0)
+    quote("Attacking someone over their religion is the most pathetic thing a human being can do.",
+          "VIRAT KOHLI · NOVEMBER 2021", *span("25c", 0.0, 1.0, 0.0))
+if has("48a"):
+    split(lib("m_flags"), lib("m_pak_fans"), *span("48a", 0.0, 1.0, 0.25), llab="BLUE", rlab="GREEN")
+if has("58a"):
+    hv(lib("v_pak_crowd"), "58a", 0.0, 0.5, dim=0.3)
+    hv(lib("v_pak_fan"), "58a", 0.5, 1.0, dim=0.3)
+    hd(["No answers."], "58a", "left", 0.3, size=140, acc=0)
+    chasebar(31, 4, *span("58a", 0.0, 1.0, 0.2))
+if has("66a"):
+    hv(lib("v_kohli_mid"), "66a", dim=0.5, media_start=5.0)
+    od("113", "66a", "left", "KOHLI × PANDYA · PARTNERSHIP", 0.1, size=300)
+if has("75a"):
+    hv(lib("m_six1_close", slow=True), "75a", dim=0.45, gray=True)
+    hd(["One mistake", "= caught."], "75a", "left", 0.2, size=120)
+if has("75b"):
+    hv(lib("v_kohli_arms", slow=True), "75b", dim=0.35)
+    hd(["Three years.", "One shot."], "75b", "center", 0.25, size=130)
+if has("87a"):
+    hv(lib("m_freehit"), "87a", dim=0.6, media_start=2.0)
+    pl(["Free hit · <b>only run out</b>", "Ball stays <b>live</b>", "Byes <b>count</b>"], "87a", "left", 0.1)
+if has("94a"):
+    hv(lib("p_hardik"), "94a", dim=0.35, media_start=2.0)
+    hd(["For his", "father."], "94a", "left", 0.3, size=130)
+
 logo_sting(round(BEAT[L(100)][1] + 0.3, 2), round(TOTAL - BEAT[L(100)][1] - 0.3, 2), end=True)
 
 

@@ -19,7 +19,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "kohli_countdown"))
-from beats import BEATS, BREATH  # noqa: E402
+from beats import BEATS, BREATH, NEW  # noqa: E402
 from voiceover import SR, clean_recording, tighten_pauses, voiced_regions  # noqa: E402
 
 BEAT_GAP = 0.42      # silence between beats
@@ -90,9 +90,11 @@ def main():
         jobs, ids = [], [b for b, _ in BEATS]
         for k, a in enumerate(args):
             path, _, rng = a.partition("@")
-            if rng:
+            if rng == "new":   # one file holding only the lines added for the 15-minute cut, in script order
+                sub = [b for b in BEATS if b[0] in NEW]
+            elif rng:
                 lo, hi = rng.split("-")
-                sub = BEATS[ids.index(lo): ids.index(hi) + 1]
+                sub = [b for b in BEATS[ids.index(lo): ids.index(hi) + 1] if b[0] not in NEW]
             else:
                 sub = BEATS if len(args) == 1 else sys.exit("with several files, give each its lines: file@l001-l048")
             jobs.append((os.path.join(HERE, path) if not os.path.isabs(path) else path, sub))
@@ -110,6 +112,12 @@ def main():
                 sys.exit(f"--manual needs a cut list for every beat; {bid} is missing")
             pieces.append((bid, np.concatenate([clean_recording(os.path.join(HERE, f), trim=(s, e)) for f, s, e in MANUAL[bid]])))
 
+    order = {b: k for k, (b, _) in enumerate(BEATS)}
+    pieces.sort(key=lambda p: order[p[0]])          # files may arrive in any order; the film follows the script
+    got = {p[0] for p in pieces}
+    missing = [b for b, _ in BEATS if b not in got]
+    if missing:
+        print("note: no audio yet for", len(missing), "lines:", ", ".join(missing))
     out, beats, t = [np.zeros(int(SR * LEAD), np.float32)], [], LEAD
     for bid, seg in pieces:
         r = voiced_regions(seg)

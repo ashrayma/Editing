@@ -21,6 +21,11 @@
 9. Kohli ne jawab mein apni body badli, apni diet badli, apna game badla.
 10. 2016 IPL mein, ek season mein 973 runs. Chaar centuries. Aaj tak koi us record ke paas nahi pahuncha.
 11. Usi saal Mohali. T20 World Cup, Australia ke khilaaf, jeetna zaroori. Kohli ke 51 gendon mein 82 not out. Kohli ne khud kaha tha, yeh meri best innings hai. Yeh line yaad rakhiyega. Kahani ke end mein wapas aayegi.
+11a. Us raat Mohali mein India ko chahiye the 161. Aur score tha 49 for 3. Saamne Australia ka poora pace attack.
+11b. Phir Kohli ne target ko tukdon mein tod diya. Har single ko double banaya. Dhoni ke saath wicket ke beech aise daude, jaise har run aakhri ho.
+11c. 18 gendon mein 39 chahiye the. Aur Kohli ne Faulkner ko chauke pe chauka maara.
+11d. Dhoni ne chauke se match khatam kiya. Aur Kohli wahin pitch pe ghutno ke bal baith gaye.
+11e. Wahi Kohli. Wahi ghutne. Wahi zameen. Chhe saal baad, MCG pe, yahi scene phir se hone wala tha.
 12. 2018. Wapas England. Wahi swing, wahi Anderson. Is baar 593 runs.
 13. Aur November 2019 tak, Virat Kohli ke naam the 70 international centuries. Sirf Sachin aur Ricky Ponting unse aage the. Aur Kohli sirf 31 saal ke the.
 14. Duniya maan chuki thi, Sachin ka 100 centuries ka record agar koi todega, toh yahi aadmi todega.
@@ -38,6 +43,9 @@
 23. Aur phir aaya 24 October 2021. Dubai. T20 World Cup. India versus Pakistan.
 24. Shaheen Afridi ne Rohit aur Rahul ko shuru mein hi bhej diya. Kohli ne akele 57 banaye. Lekin Babar aur Rizwan ne ek bhi wicket nahi gira, aur 10 wickets se match jeet liya.
 25. World Cup history mein pehli baar, Pakistan ne India ko haraya. Aur captain the, Virat Kohli.
+25a. Haar ke baad social media pe Mohammed Shami ko unke dharm ki wajah se troll kiya gaya.
+25b. Kohli, jo khud captaincy aur form dono se lad rahe the, khul ke Shami ke saath khade hue.
+25c. Unhone kaha, kisi ko uske dharm ki wajah se nishana banana, sabse ghatiya cheez hai jo ek insaan kar sakta hai.
 26. December 2021. ODI captaincy bhi chali gayi. January 2022. South Africa mein series haarne ke baad, Kohli ne Test captaincy bhi chhod di.
 27. Saat saal tak jo aadmi India ka chehra tha, ab uske paas na captaincy thi, na century.
 28. IPL 2022 mein teen baar golden duck. Pehli hi gend pe out. Teen baar.
@@ -67,6 +75,7 @@
 46. 23 October. Diwali se ek din pehle. Melbourne mein poore hafte baarish ka forecast tha. Lekin us shaam aasmaan saaf ho gaya.
 47. Melbourne Cricket Ground. Stadium mein 90,293 log. Aur TV pe crore log.
 48. Rohit Sharma ne toss jeeta, aur pehle bowling chuni. National anthem ke time Rohit ki aankhein bhar aayi thi.
+48a. Stadium ka ek hissa neela tha, ek hissa hara. Dono taraf se naare. Aisa mahaul, jaise yeh World Cup ka final ho.
 49. Aur pehle hi over mein Arshdeep Singh. Babar Azam, pehli gend. LBW. Zero.
 50. Phir Rizwan. Arshdeep ki short ball, aur Bhuvi ka catch. 15 for 2.
 51. Lekin Pakistan ne wapsi ki. Iftikhar Ahmed ne 34 gendon mein 51 thoke. Shan Masood aakhri tak tike rahe, 52 not out.
@@ -80,6 +89,7 @@
 56. Haris Rauf. Rohit Sharma ka shot, seedha Iftikhar ke haath mein. Rohit 4.
 57. Phir Suryakumar Yadav. Rauf ki ek aur ball, Rizwan ka catch. Surya 15.
 58. Aur phir Axar Patel. Run out. 2 runs.
+58a. Australia ki tez pitch, Pakistan ka pace, aur 90 hazaar logon ka shor. India ke top order ke paas koi jawab nahi tha.
 59. (pause) 31 for 4. Saat overs bhi poore nahi hue the.
 60. MCG ka aadha stadium khamosh. Doosra aadha nach raha tha.
 61. Ghar pe log phone utha ke score check kar rahe the, aur wapas rakh rahe the.
@@ -91,6 +101,7 @@
 64. Kohli ke saath aaye Hardik Pandya. Dono ka plan ekdum simple tha. Ab wicket nahi girega. Match ko last over tak le jaana hai.
 65. Isliye shuru mein runs dheere aaye. 10 overs ke baad India 45 for 4. Required rate 11 se upar.
 66. Lekin is plan ke andar ek doosra plan bhi tha. Pakistan ke paas ek spinner tha jiske overs bache the, Mohammad Nawaz. Kohli aur Hardik jaante the ki agar match last tak gaya, toh last over Nawaz hi daalenge.
+66a. Kohli aur Hardik ne 113 runs ki partnership ki. Ek taraf Hardik bade shot dhoondh rahe the, doosri taraf Kohli ek ek run ke liye daud rahe the.
 67. 17 overs ke baad, 18 gendon mein 48 runs chahiye the.
 68. Shaheen Afridi ka 18th over. 17 runs aaye. Pehli baar lagne laga ki shayad...
 69. Ab 12 gendon mein 31.
@@ -103,6 +114,8 @@
 73. (pause) Paanchvi gend. Rauf ki back of a length delivery, 145 ke paas ki speed.
 74. Kohli back foot pe gaye. Na koi slog, na koi swing. Bas bat ka seedha face. Aur gend... seedha bowler ke sir ke upar se. Sightscreen ke paas. Six.
 75. Is shot ko aaj bhi itna khaas kyun maana jaata hai? Kyunki T20 mein, 145 ki short ball ko, back foot se, seedha ground ke upar six maarna... yeh shot cricket ki kitaabon mein hota hi nahi.
+75a. Aur is shot ke liye sirf technique nahi, himmat chahiye thi. Gend thodi bhi idhar udhar hoti, toh catch tha. Aur match khatam.
+75b. Lekin us ek pal mein, Kohli ne teen saal ka saara gussa, saara dard, us ek shot mein daal diya.
 76. Baad mein khud Haris Rauf ne kaha, agar yeh shot Dinesh Karthik ya Hardik maarte, toh unhe bura lagta. Lekin yeh Kohli tha. Aur Kohli aise shot maar sakta hai.
 77. Aur agli hi gend. Fine leg ke upar se. Ek aur six.
 78. Stadium phat pada. Commentary box mein log khade ho gaye.
@@ -118,6 +131,7 @@
 85. Nawaz ka agla ball. Wide. 3 gendon mein 5.
 86. Free hit. Kohli bowled! Lekin free hit pe bowled out nahi hota. Gend stumps se lag ke third man ki taraf gayi. Aur Kohli aur Karthik daud pade. Teen byes.
 87. Pakistan phir umpires se behas karne laga. Lekin rule saaf tha. 2 gendon mein 2.
+87a. Rule yeh hai ki free hit pe batsman sirf run out ho sakta hai. Stumps se lagne ke baad bhi gend live rehti hai. Isliye woh teen runs count hue.
 88. Paanchvi gend. Dinesh Karthik aage nikle, gend miss, aur Rizwan ne stumping kar di. Ek gend, do runs.
 89. (pause) Ab crease pe aaye Ravichandran Ashwin.
 90. Nawaz ki gend leg side ke bahar. Ashwin ne bat hila ke bhi nahi dekha. Chhod di. Wide. Ab ek gend, ek run.
@@ -128,6 +142,7 @@
 
 93. Kohli ghutno pe baith gaye. Zameen pe mukka maara. Aankhon mein aansu.
 94. Rohit Sharma daud ke aaye, aur Kohli ko apne kandhe pe utha liya.
+94a. Hardik Pandya ki aankhon mein bhi aansu the. Unhone yeh jeet apne pita ko dedicate ki, jo ab is duniya mein nahi the.
 95. 53 gendon mein 82 not out. 6 chauke, 4 chhakke. Jab score 31 for 4 tha, tab koi bhi yeh match India ka nahi maan raha tha.
 96. Match ke baad Kohli ne kaha, ki aaj tak woh Mohali ki innings ko apni best maante the. Lekin aaj ki raat, yeh usse bhi upar hai.
 97. Ek hazaar bees din tak duniya ek hi sawaal pooch rahi thi. Kya Virat Kohli wapas aayega?

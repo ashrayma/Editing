@@ -116,7 +116,7 @@ LIB = {
     "a_anderson": ("and", 104.0, 10.0), "a_anderson2": ("and", 0.0, 8.0), "a_kohli_out14": ("and", 116.0, 14.0),
     "a_ipl16_100": ("ipl", 268.0, 28.0), "a_edg_100": ("edg", 324.0, 14.0), "a_edg_ring": ("edg", 366.0, 8.0),
     "a_adl_bat": ("adl", 17.0, 15.0), "a_adl_36": ("adl", 97.0, 3.5), "a_adl_walk": ("adl", 119.0, 3.0),
-    "a_presser": ("pc", 39.0, 20.0), "a_wt14_together": ("wt", 48.0, 8.0), "a_wt14_hug": ("wt", 80.0, 6.0),
+    "a_presser": ("pc", 39.0, 20.0), "a_wt14_together": ("wt", 48.0, 8.0), "a_wt14_kohli": ("wt", 6.0, 4.0), "a_wt14_hug": ("wt", 80.0, 6.0),
     "a_anthem_team": ("an", 3.0, 10.0), "a_anthem_rohit": ("an", 55.0, 9.0), "a_hob_100": ("hob", 164.0, 22.0),
     "a_hob_malinga": ("hob", 234.0, 5.0),
     # Babar lbw, 720p

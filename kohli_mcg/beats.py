@@ -19,10 +19,10 @@ def _parse():
             cur = m.group(1).strip()
             chapters.append(cur)
             continue
-        m = re.match(r"^(\d+)\.\s+(.*)$", ln)
+        m = re.match(r"^(\d+)([a-z]?)\.\s+(.*)$", ln)
         if m and cur:
-            bid = f"l{int(m.group(1)):03d}"
-            text = re.sub(r"\(pause\)\s*", "", m.group(2)).strip()
+            bid = f"l{int(m.group(1)):03d}{m.group(2)}"
+            text = re.sub(r"\(pause\)\s*", "", m.group(3)).strip()
             beats.append((bid, text))
             chapter_of[bid] = cur
     return beats, chapter_of, chapters
@@ -34,7 +34,11 @@ IDS = [b[0] for b in BEATS]
 # music-only breathers (seconds of extra silence after a line) so the big moments land
 BREATH = {"l004": 1.2, "l006": 2.6, "l015": 1.5, "l032": 2.0, "l043": 1.5, "l053": 1.5, "l059": 2.5, "l063": 1.5,
           "l069": 1.2, "l074": 3.0, "l077": 2.5, "l079": 1.5, "l084": 1.5, "l086": 1.0, "l092": 5.0, "l094": 2.0,
-          "l098": 1.5}
+          "l098": 1.5,
+          # 15-minute version: a little more air around the big moments
+          "l011e": 2.0, "l025c": 1.8, "l048a": 1.2, "l058a": 1.2, "l075b": 2.2, "l087a": 1.0, "l094a": 2.0,
+          "l013": 1.0, "l041": 1.5, "l047": 1.2, "l062": 1.2, "l072": 1.5, "l078": 1.5, "l091": 1.0, "l097": 1.5}
+NEW = [b for b in [x[0] for x in BEATS] if b[-1].isalpha()]   # lines added for the 15-minute cut
 TEXT = dict(BEATS)
 
 if __name__ == "__main__":
