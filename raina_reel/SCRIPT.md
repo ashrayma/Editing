@@ -35,3 +35,15 @@ This version is rewritten for TheCricketLounge: open on action, numbers on scree
 | First player to reach 5000 IPL runs (2019) | Believed correct |
 | Never won the Orange Cap, never the all-time top scorer | Correct |
 | ~~First Indian to hit an IPL hundred~~ | **Left out on purpose.** The reference says this, but Manish Pandey (2009) was first. Raina's first IPL hundred came in 2013. |
+
+## English voiceover (alternative)
+1. 25 balls. 87 runs. And this man never even won the Orange Cap.
+2. Not IPL's top run-scorer. No Orange Cap. Yet the world calls him Mr. IPL. Why?
+3. Because the bigger the match, the bigger Raina got.
+4. 24 playoff innings. 714 runs. 7 fifties. Nobody has gone past that.
+5. 2010 final, against Mumbai. CSK in trouble. Raina smashed 57 not out off 35 balls. CSK's first-ever title, and Player of the Match: Raina.
+6. 2014, Qualifier 2, against Punjab. 87 off just 25 balls. A strike rate of 348. 33 runs in a single over.
+7. And the first player ever to reach 5000 IPL runs? Suresh Raina.
+8. Dhoni was Thala... and Raina became Chinna Thala. This pair was the heartbeat of Chennai.
+9. He didn't need the Orange Cap. He needed the big matches.
+10. Mr. IPL: Raina or Kohli? Comment below, and follow. Next up: Dhoni vs Yuvraj.
