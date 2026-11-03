@@ -29,7 +29,8 @@ FOOTAGE = {
 }
 
 
-COVERED = {"N10": "v_rahul_b", "N11": "v_rohit_c", "N12": "v_pak_fan", "N13": "v_axar_ro", "N14": "v_kohli_mid",
+COVERED = {"N01": "a_anderson", "N02": "a_ipl16_100", "N04": "a_edg_100", "N05": "a_adl_bat", "N06": "a_presser",
+           "N08": "a_wt14_hug", "N09": "a_anthem_rohit", "N17": "a_hob_100", "N10": "v_rahul_b", "N11": "v_rohit_c", "N12": "v_pak_fan", "N13": "v_axar_ro", "N14": "v_kohli_mid",
            "N15": "v_rohit_lifts"}
 
 
@@ -69,7 +70,8 @@ def ai(name):
 
 # ----------------------------------------------------------------------------- the user's footage, cut by moment
 # source files live in footage/user/src/ (not in git). (source, start, duration[, crop]) in seconds.
-SRC = {"v": "v9126.mp4", "m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
+SRC = {"adl": "adelaide2020.mp4", "pc": "presser.mp4", "wt": "wt20_2014.mp4", "ipl": "ipl2016.mp4",
+       "edg": "edgbaston2018.mp4", "an": "anthem2022.mp4", "hob": "hobart2012.mp4", "and": "anderson.mp4", "v": "v9126.mp4", "m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
 VCROP = "crop=720:405:0:437"   # the 16:9 picture inside the vertical upload
 LIB = {
     # MCG 2022: ICC recap of the last three overs
@@ -110,6 +112,13 @@ LIB = {
     "v_kohli_low": ("v", 29.0, 2.5), "v_finished": ("v", 34.4, 1.8), "v_kohli_mid": ("v", 38.0, 12.0),
     "v_rauf_down": ("v", 54.0, 1.0), "v_noball": ("v", 56.5, 0.8), "v_kohli_arms": ("v", 59.5, 0.8),
     "v_knees": ("v", 60.25, 0.75), "v_rohit_lifts": ("v", 61.0, 0.75), "v_point_sky": ("v", 61.75, 1.7),
+    # the user's archive clips
+    "a_anderson": ("and", 104.0, 10.0), "a_anderson2": ("and", 0.0, 8.0), "a_kohli_out14": ("and", 116.0, 14.0),
+    "a_ipl16_100": ("ipl", 268.0, 28.0), "a_edg_100": ("edg", 324.0, 14.0), "a_edg_ring": ("edg", 366.0, 8.0),
+    "a_adl_bat": ("adl", 17.0, 15.0), "a_adl_36": ("adl", 97.0, 3.5), "a_adl_walk": ("adl", 119.0, 3.0),
+    "a_presser": ("pc", 39.0, 20.0), "a_wt14_together": ("wt", 48.0, 8.0), "a_wt14_hug": ("wt", 80.0, 6.0),
+    "a_anthem_team": ("an", 3.0, 10.0), "a_anthem_rohit": ("an", 55.0, 9.0), "a_hob_100": ("hob", 164.0, 22.0),
+    "a_hob_malinga": ("hob", 234.0, 5.0),
     # Babar lbw, 720p
     "b_arshdeep": ("b", 0.0, 9.0),
 }
@@ -138,6 +147,8 @@ def stretch(path, need):
 def lib(cid, slow=False):
     """Cut one named moment to 1080p30 (once). slow=True plays it at half speed, frame-blended."""
     src, start, dur, *crop = LIB[cid]
+    if src == "v" and not crop:      # Video-9126 is another channel's edit: crop its watermark (bottom centre) out
+        crop = ["crop=iw*0.88:ih*0.88:iw*0.06:0"]
     name = cid + ("_slow" if slow else "")
     out = os.path.join(HERE, "footage", "clips", name + ".mp4")
     if not os.path.exists(out):
