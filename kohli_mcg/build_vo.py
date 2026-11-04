@@ -82,6 +82,102 @@ def auto_split(audio, beats=None):
     return sorted(cuts)
 
 
+def align_split(audio, beats, raw16k):
+    """Boundaries between beats by forced alignment of the script text (PocketSphinx, tools/align.py): each cut
+    goes in the gap between one line's last word and the next line's first word, at the quietest point."""
+    sys.path.insert(0, os.path.join(HERE, "tools"))
+    from align import align_chunked
+    total = len(audio) / SR
+    chars = sum(len(t) for _, t in beats)
+    expect = {b: total * len(t) / chars for b, t in beats}
+    tm = align_chunked(raw16k, beats, expect)
+    regions = voiced_regions(audio)
+    pauses = [(regions[k][1] + regions[k + 1][0]) / 2 for k in range(len(regions) - 1)]
+    cuts, lo = [], 0.0
+    for (b0, _), (b1, _) in zip(beats, beats[1:]):
+        if b0 in tm and b1 in tm:
+            e, s = tm[b0][1], tm[b1][0]
+            gap = [p for p in pauses if e - 0.25 <= p <= s + 0.25 and p > lo + 0.3]
+            c = min(gap, key=lambda p: abs(p - (e + s) / 2)) if gap else max((e + s) / 2, lo + 0.3)
+        else:
+            c = lo + expect[b0]
+        cuts.append(c)
+        lo = c
+    missing = [b for b, _ in beats if b not in tm]
+    if missing:
+        print("  alignment missed", missing, "(estimated from text length)")
+    return cuts
+
+
+def ref_split(audio, beats, ref, raw16k=None):
+    """Boundaries between beats: a reference read of the same lines (same voice, earlier take) is aligned to this
+    recording with DTW on MFCCs. If the recording's English keywords are given (raw16k), lines they pin down become
+    anchors and the DTW runs separately between anchors, so it cannot drift. Cuts snap to the nearest real pause."""
+    import librosa
+    ref_audio, ref_tl = ref
+    rsr, hop = 16000, 640
+    fr = hop / rsr
+    y = librosa.resample(audio.astype(np.float32), orig_sr=SR, target_sr=rsr)
+    regions = voiced_regions(audio)
+    pauses = [(regions[k][1] + regions[k + 1][0]) / 2 for k in range(len(regions) - 1)]
+    total = len(audio) / SR
+    ids = [bid for bid, _ in beats]
+    rdur = {bid: ref_tl[bid][1] - ref_tl[bid][0] + 0.45 for bid in ids}
+
+    def feat(x):
+        m = librosa.feature.mfcc(y=x, sr=rsr, n_mfcc=20, hop_length=hop)[1:]
+        return (m - m.mean(1, keepdims=True)) / (m.std(1, keepdims=True) + 1e-6)
+
+    def snap(t, lo):
+        near = [p for p in pauses if abs(p - t) < 0.8 and p > lo + 0.3]
+        return min(near, key=lambda p: abs(p - t)) if near else max(t, lo + 0.3)
+
+    # anchors: start times of lines the recogniser pinned, kept only where the implied pace is plausible
+    anchors = {}
+    if raw16k is not None:
+        sys.path.insert(0, os.path.join(HERE, "tools"))
+        from anchors import line_anchors, recognise
+        found = line_anchors(beats, recognise(raw16k))
+        kept, last = [], (0, regions[0][0] if regions else 0.0)
+        for bid in ids:
+            if bid not in found or bid == ids[0]:
+                continue
+            k = ids.index(bid)
+            expect = sum(rdur[x] for x in ids[last[0]:k])
+            if expect > 0 and 0.75 < (found[bid] - last[1]) / expect < 1.35:
+                kept.append((k, found[bid]))
+                last = (k, found[bid])
+        anchors = {k: snap(t - 0.25, 0.0) for k, t in kept}
+
+    # piecewise DTW between anchors (line index -> start time)
+    marks = [(0, regions[0][0] if regions else 0.0)] + sorted(anchors.items()) + [(len(ids), total)]
+    cuts = {}
+    for (k0, t0), (k1, t1) in zip(marks, marks[1:]):
+        seg_ids = ids[k0:k1]
+        if len(seg_ids) == 1:
+            continue
+        parts, rt, t = [], {}, 0.0
+        for bid in seg_ids:
+            a0, a1 = ref_tl[bid]
+            x = ref_audio[int(a0 * rsr): int(a1 * rsr)]
+            parts += [x, np.zeros(int(0.4 * rsr), np.float32)]
+            rt[bid] = t + len(x) / rsr
+            t += len(x) / rsr + 0.4
+        Y = y[int(t0 * rsr): int(t1 * rsr)]
+        _, wp = librosa.sequence.dtw(X=feat(np.concatenate(parts)), Y=feat(Y), metric="euclidean",
+                                     global_constraints=True, band_rad=0.25)
+        wp = wp[::-1]
+        lo = t0
+        for bid in seg_ids[:-1]:
+            j = min(np.searchsorted(wp[:, 0], int((rt[bid] + 0.15) / fr)), len(wp) - 1)
+            c = snap(t0 + wp[j, 1] * fr, lo)
+            cuts[ids.index(bid) + 1] = c
+            lo = c
+    for k, t in anchors.items():
+        cuts[k] = t
+    return [cuts[k] for k in range(1, len(ids))]
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     pieces = []
@@ -93,14 +189,33 @@ def main():
             if rng == "new":   # one file holding only the lines added for the 15-minute cut, in script order
                 sub = [b for b in BEATS if b[0] in NEW]
             elif rng:
-                lo, hi = rng.split("-")
-                sub = [b for b in BEATS[ids.index(lo): ids.index(hi) + 1] if b[0] not in NEW]
+                withnew = rng.endswith("+new")      # file@l001-l048+new: the range read with its added lines
+                lo, hi = rng.replace("+new", "").split("-")
+                sub = [b for b in BEATS[ids.index(lo): ids.index(hi) + 1] if withnew or b[0] not in NEW]
             else:
                 sub = BEATS if len(args) == 1 else sys.exit("with several files, give each its lines: file@l001-l048")
             jobs.append((os.path.join(HERE, path) if not os.path.isabs(path) else path, sub))
+        ref = None
+        for a in sys.argv[1:]:
+            if a.startswith("--ref="):        # --ref=old_vo.wav,old_timeline.json : align against an earlier take
+                wav, tlj = a[6:].split(",")
+                import librosa
+                ra, _ = librosa.load(wav, sr=16000)
+                ref = (ra, {b["id"]: (b["start"], b["end"]) for b in json.load(open(tlj))["beats"]})
         for path, sub in jobs:
             audio = clean(path)
-            cuts = [0.0] + auto_split(audio, sub) + [len(audio) / SR]
+            import subprocess as sp
+            if not ref and "--dp" not in sys.argv:          # default: forced alignment of the script text
+                raw = sp.run(["ffmpeg", "-v", "error", "-i", path, "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
+                             capture_output=True, check=True).stdout
+                split = align_split(audio, sub, raw)
+            elif ref:
+                raw = sp.run(["ffmpeg", "-v", "error", "-i", path, "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
+                             capture_output=True, check=True).stdout
+                split = ref_split(audio, sub, ref, raw)
+            else:
+                split = auto_split(audio, sub)
+            cuts = [0.0] + split + [len(audio) / SR]
             for k, (bid, _) in enumerate(sub):
                 seg = audio[int(cuts[k] * SR): int(cuts[k + 1] * SR)]
                 if bid in MANUAL:

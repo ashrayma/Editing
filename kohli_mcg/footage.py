@@ -137,28 +137,67 @@ _LEN = {}
 
 
 def stretch(path, need):
-    """If a library clip is much shorter than the slot it fills, use its half-speed version instead of freezing."""
+    """Fill a slot without freezing: a library clip much shorter than its slot is swapped for its half-speed
+    version; if even that is short, for a forward-then-reverse ("ping-pong") extension of it."""
     base = os.path.basename(path).rsplit(".", 1)[0]
-    if base in LIB and clip_len(path) * 1.15 < need:
-        return lib(base, slow=True)
-    return path
+    for suf in ("_slow_pp", "_slow", "_m"):
+        if base.endswith(suf):
+            base = base[: -len(suf)]
+    if base not in LIB or clip_len(path) * 1.1 >= need:
+        return path
+    slow = lib(base, slow=True)
+    if clip_len(slow) * 1.1 >= need:
+        return slow
+    out = os.path.join(HERE, "footage", "clips", base + "_slow_pp.mp4")
+    if not os.path.exists(out) or clip_len(os.path.relpath(out, HERE)) < need:
+        loops = int(need // (2 * clip_len(slow))) + 1
+        fc = "[0:v]split[a][b];[b]reverse[r];" + "".join(f"[a{k}]" for k in range(0)) + "[a][r]concat=n=2:v=1[pp]"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, slow), "-filter_complex", fc,
+                        "-map", "[pp]", "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p",
+                        out + ".tmp.mp4"], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-stream_loop", str(max(0, loops - 1)), "-i", out + ".tmp.mp4",
+                        "-c", "copy", out], check=True)
+        os.remove(out + ".tmp.mp4")
+        _LEN.pop(os.path.relpath(out, HERE), None)
+    return os.path.relpath(out, HERE)
+
+
+_FPS = {}
+
+
+def src_fps(path):
+    if path not in _FPS:
+        r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v", "-show_entries", "stream=r_frame_rate",
+                            "-of", "csv=p=0", path], capture_output=True, text=True).stdout.strip().split("/")
+        _FPS[path] = float(r[0]) / float(r[1] if len(r) > 1 else 1)
+    return _FPS[path]
+
+
+MCI = "minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1"
 
 
 def lib(cid, slow=False):
-    """Cut one named moment to 1080p30 (once). slow=True plays it at half speed, frame-blended."""
+    """Cut one named moment to 1080p30 (once). 24/25 fps sources are motion-interpolated to 30 (real in-between
+    frames, no repeated-frame judder); slow=True is a motion-interpolated half-speed version."""
     src, start, dur, *crop = LIB[cid]
     if src == "wt" and not crop:     # the 2014 clips stand in for Mohali 2016: crop the dated broadcast scorebar off
         crop = ["crop=iw*0.82:ih*0.82:iw*0.09:0"]
     if src == "v" and not crop:      # Video-9126 is another channel's edit: crop its watermark (bottom centre) out
         crop = ["crop=iw*0.88:ih*0.88:iw*0.06:0"]
-    name = cid + ("_slow" if slow else "")
+    name = cid + ("_slow" if slow else "_m")
     out = os.path.join(HERE, "footage", "clips", name + ".mp4")
     if not os.path.exists(out):
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        vf = (crop[0] + "," if crop else "") + "scale=1920:1080:flags=lanczos,setsar=1,fps=30"
+        srcp = os.path.join(HERE, "footage", "user", "src", SRC[src])
+        chain = [crop[0]] if crop else []
         if slow:
-            vf += ",setpts=2.0*PTS,minterpolate=fps=30:mi_mode=blend"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i",
-                        os.path.join(HERE, "footage", "user", "src", SRC[src]), "-t", str(dur), "-an", "-vf", vf,
-                        "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p", out], check=True)
+            chain += ["setpts=2.0*PTS", MCI]
+        elif abs(src_fps(srcp) - 30) > 0.5:
+            chain += [MCI]
+        else:
+            chain += ["fps=30"]
+        chain += ["scale=1920:1080:flags=lanczos", "setsar=1"]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i", srcp, "-t", str(dur), "-an",
+                        "-vf", ",".join(chain), "-c:v", "libx264", "-crf", "17", "-preset", "medium",
+                        "-pix_fmt", "yuv420p", out], check=True)
     return os.path.relpath(out, HERE)

@@ -135,6 +135,7 @@ def headline(lines, start, dur, side="left", size=96, accent_idx=None, y=None, a
         f'style="{pos};top:{top}px;font-size:{size}px;text-align:{align};z-index:{z}">{bar}{"".join(rows)}{subh}</div>',
         start, dur, z)
     EVENTS.append((start + 0.1, "impact" if size >= 110 else "soft"))
+    PUNCHES.append(start + 0.15)
     if bar:
         anim(f'tl.fromTo("#{i}b",{{scaleY:0}},{{scaleY:1,duration:0.6,ease:"expo.out"}},{start})')
     for k in range(len(lines)):
@@ -150,6 +151,7 @@ def odometer(text, start, dur, side="left", size=230, label=None, color=Y, roll=
     i = nid("od")
     size = round(size * 0.75)
     EVENTS.append((start + 0.1, "roll"))
+    PUNCHES.append(start + roll * 0.8)
     x = {"left": 150, "right": W - 150, "center": W / 2}[side]
     cols = []
     for k, ch in enumerate(text):
@@ -239,6 +241,7 @@ def timeline_graphic(nodes, start, dur, z=30):
 def chapter(num, title, start, dur=4.5):
     i = nid("ch")
     EVENTS.append((start, "swell"))
+    LEAKS.append(start)
     add(f'<div id="{i}" class="chapter clip" data-start="{start}" data-duration="{dur}">'
         f'<span class="chnum">{num}</span><span class="chbar"></span><span class="chtitle">{html.escape(title)}</span></div>',
         start, dur, 60)
@@ -341,20 +344,66 @@ def till_end(beat, off, pad=0.2):
     return round(BEAT[beat][1] - b(beat, off) + pad, 2)
 
 
-def hero(src, start, dur, dim=0.3, z=5, gray=False, push=1.08, media_start=0.0, fade=0.35):
-    """Real match footage, full-bleed in the centre of the frame, slow push-in, darkened for type on top."""
+SHAKES = []
+LEAKS = []
+PUNCHES = []         # headline/number landings: the shot behind them gets a zoom punch
+HEROES = []          # (start, end, id) of every full-screen shot: punches and shakes are applied to these
+_WHIP = [1]
+
+
+def hero(src, start, dur, dim=0.3, z=5, gray=False, push=1.08, media_start=0.0, fade=0.35, label=None, sub=None,
+         whip=True):
+    """Real match footage, full screen: whips in (slide + motion blur, alternating direction), drifts like a
+    handheld camera with a slow push-in, a soft shade on the left keeps type readable; optional lower-third tag."""
     i = nid("hv")
     src = stretch(src, dur + media_start)
     EVENTS.append((start, "cut"))
     filt = "filter:grayscale(1) contrast(1.12);" if gray else ""
-    add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden;{filt}">'
+    tag = ""
+    if label:
+        tag = (f'<div class="tag lower" id="{i}t"><span class="tagbar"></span><b>{html.escape(label)}</b>'
+               + (f'<em>{html.escape(sub)}</em>' if sub else "") + "</div>")
+    add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden">'
         f'<video id="{i}v" class="clip" src="{media(src)}" muted playsinline data-start="{start}" data-duration="{dur}" '
-        f'data-media-start="{media_start}" style="width:100%;height:100%;object-fit:cover"></video>'
-        f'<div class="full" style="background:rgba(5,5,6,{dim})"></div></div>', start, dur, z)
-    anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:{fade}}},{start})')
-    anim(f'tl.fromTo("#{i}v",{{scale:{push}}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
+        f'data-media-start="{media_start}" style="width:100%;height:100%;object-fit:cover;{filt}"></video>'
+        f'<div class="full" style="background:rgba(5,5,6,{dim})"></div><div class="scrim"></div>{tag}</div>', start, dur, z)
+    d = _WHIP[0]
+    _WHIP[0] = -d
+    if whip and fade > 0.05:
+        anim(f'tl.fromTo("#{i}",{{opacity:0,x:{140 * d},filter:"blur(14px)"}},{{opacity:1,x:0,filter:"blur(0px)",'
+             f'duration:0.45,ease:"expo.out"}},{start})')
+    else:
+        anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:{max(fade, 0.01)}}},{start})')
+    anim(f'tl.fromTo("#{i}v",{{scale:{push},x:{-14 * d},y:6}},{{scale:1.0,x:{14 * d},y:-6,duration:{dur},ease:"sine.inOut"}},{start})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:{fade}}},{round(start + dur - fade, 2)})')
+    if label:
+        anim(f'tl.fromTo("#{i}t",{{x:-40,opacity:0}},{{x:0,opacity:1,duration:0.7,ease:"expo.out"}},{round(start + 0.35, 2)})')
+    HEROES.append((start, start + dur, i))
     return i
+
+
+def punch(t, amt=1.045):
+    """A quick zoom punch on whatever shot is on screen at t (on a beat: a headline landing, a number)."""
+    for a, b_, i in HEROES:
+        if a + 0.45 < t < b_ - 0.6:
+            anim(f'tl.fromTo("#{i}",{{scale:1}},{{scale:{amt},duration:0.12,ease:"power2.out",yoyo:true,repeat:1}},{round(t, 2)})')
+
+
+def shake(t, amp=14):
+    """Camera shake on the shot on screen at t (sixes, wickets, the win)."""
+    for a, b_, i in HEROES:
+        if a + 0.45 < t < b_ - 0.5:
+            anim(f'tl.fromTo("#{i}",{{y:0,rotation:0}},{{keyframes:[{{y:{-amp},rotation:-0.6,duration:0.05}},'
+                 f'{{y:{amp * 0.7},rotation:0.5,duration:0.05}},{{y:{-amp * 0.4},rotation:-0.2,duration:0.06}},'
+                 f'{{y:0,rotation:0,duration:0.1}}]}},{round(t, 2)})')
+
+
+def lightleak(t, dur=1.6, z=84):
+    """A warm light leak sweeping across the frame (chapter openings)."""
+    i = nid("lk")
+    add(f'<div id="{i}" class="leak clip" data-start="{t}" data-duration="{dur}" style="z-index:{z}"></div>', t, dur, z)
+    anim(f'tl.fromTo("#{i}",{{x:-700,opacity:0}},{{x:900,opacity:0.85,duration:{dur},ease:"power1.inOut"}},{t})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.5}},{round(t + dur - 0.5, 2)})')
 
 
 def ytag(text, start, dur):
@@ -440,6 +489,7 @@ def flash(t, z=88, dur=0.32):
     """White flash: hits on sixes, wickets and the win."""
     i = nid("fl")
     add(f'<div id="{i}" class="flash clip" data-start="{t}" data-duration="{dur}" style="z-index:{z}"></div>', t, dur, z)
+    SHAKES.append(t)
     anim(f'tl.fromTo("#{i}",{{opacity:0.85}},{{opacity:0,duration:{dur},ease:"power2.out"}},{t})')
 
 
@@ -601,9 +651,37 @@ def hv(c, n, a=0.0, b_=1.0, **kw):
 
 
 def cd(c, n, side="right", label=None, sub=None, a=0.0, b_=1.0, **kw):
-    s, d = span(n, a, b_, kw.pop("pad", 0.25))
-    vid = not c.lower().endswith((".jpg", ".png"))
-    return card(c, s, d, side, label, sub, video=vid, **kw)
+    """Footage/photo for part of a line, FULL SCREEN with a lower-third tag. Only the screenshot stays a framed card."""
+    s_, d = span(n, a, b_, kw.pop("pad", 0.25))
+    if c == SHOT or kw.pop("framed", False):
+        vid = not c.lower().endswith((".jpg", ".png"))
+        return card(c, s_, d, side, label, sub, video=vid, **kw)
+    if c.lower().endswith((".jpg", ".png")):
+        return photo_full(c, s_, d, label, sub, gray=kw.get("gray", False))
+    return hero(c, s_, d, dim=0.15, z=7, gray=kw.get("gray", False), media_start=kw.get("media_start", 0.0),
+                label=label, sub=sub)
+
+
+def photo_full(src, start, dur, label=None, sub=None, gray=False, z=7):
+    """A photo full screen: blurred copy fills the frame, the photo itself pushes in over it, lower-third tag."""
+    i = nid("ph")
+    EVENTS.append((start, "whoosh"))
+    filt = "filter:grayscale(1) contrast(1.1);" if gray else ""
+    tag = (f'<div class="tag lower" id="{i}t"><span class="tagbar"></span><b>{html.escape(label)}</b>'
+           + (f'<em>{html.escape(sub)}</em>' if sub else "") + "</div>") if label else ""
+    add(f'<div id="{i}" class="full clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};overflow:hidden;{filt}">'
+        f'<img src="{media(src)}" class="full" style="object-fit:cover;filter:blur(30px) brightness(.55);transform:scale(1.15)">'
+        f'<img id="{i}i" src="{media(src)}" class="full" style="object-fit:contain">'
+        f'<div class="scrim"></div>{tag}</div>', start, dur, z)
+    d = _WHIP[0]
+    _WHIP[0] = -d
+    anim(f'tl.fromTo("#{i}",{{opacity:0,x:{140 * d},filter:"blur(14px)"}},{{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}i",{{scale:1.0,x:{-20 * d}}},{{scale:1.12,x:{20 * d},duration:{dur},ease:"sine.inOut"}},{start})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.35}},{round(start + dur - 0.35, 2)})')
+    if label:
+        anim(f'tl.fromTo("#{i}t",{{x:-40,opacity:0}},{{x:0,opacity:1,duration:0.7,ease:"expo.out"}},{round(start + 0.35, 2)})')
+    HEROES.append((start, start + dur, i))
+    return i
 
 
 def hd(lines, n, side="left", a=0.0, b_=1.0, size=110, acc=1, **kw):
@@ -808,7 +886,8 @@ for n, fid, who, (r, w) in ((55, "N10", "KL RAHUL · b NASEEM · 4", (7, 1)), (5
     chasebar(r, w, *span(n, 0.0, 1.0, 0.2))
     flash(at(n, 0.55))
 full_video(shot("score314"), round(at(59) - 0.15, 2), round(BEAT[L(60)][0] - at(59) + 0.2, 2))
-split(lib("m_fan_pray"), lib("m_pak_fans"), *span(60, 0.0, 1.0, 0.3), llab="SILENCE", rlab="CELEBRATION")
+hv(lib("m_fan_pray"), 60, 0.0, 0.5, dim=0.2, label="HALF THE STADIUM", sub="Silent")
+hv(lib("m_pak_fans"), 60, 0.5, 1.0, dim=0.2, label="THE OTHER HALF", sub="Dancing")
 hv(lib("m_fan_pray2"), 61, dim=0.45, gray=True)
 hd(["Phones checked.", "Phones put down."], 61, "left", size=100)
 hv(lib("v_kohli_walkin"), 62, dim=0.3)
@@ -861,7 +940,8 @@ hero(lib("m_six2", slow=True), s77, round(d77 * 0.7, 2), dim=0.05, fade=0.08)
 hero(lib("m_fans_flag"), round(s77 + d77 * 0.7, 2), round(d77 * 0.3, 2), dim=0.2, fade=0.08)
 flash(round(s77 + d77 * 0.45, 2))
 odometer("6", round(s77 + d77 * 0.5, 2), round(d77 * 0.5, 2), "left", size=420, label="OVER FINE LEG")
-split(lib("m_fans_scream"), lib("m_crowd_flags2"), *span(78, 0.0, 1.0, 0.2), llab="MCG", rlab="90,293")
+hv(lib("m_fans_scream"), 78, 0.0, 0.55, dim=0.15)
+hv(lib("m_crowd_flags2"), 78, 0.55, 1.0, dim=0.15)
 black(79, 0.0, 1.0, 1.4)
 od("16", 79, "center", "OFF 6 BALLS", size=360, z=40, pad=1.3)
 
@@ -913,7 +993,7 @@ flash(s92)
 ch("09", "The Answer", 93)
 hv(lib("m_kohli_knees", slow=True), 93, dim=0.1)
 s94, d94 = to_next(94)
-card(clip("N15"), s94, d94, "right", "ROHIT LIFTS KOHLI", video=True)
+hero(clip("N15"), s94, round(d94 * 0.6, 2), dim=0.15, z=7, label="ROHIT LIFTS KOHLI")
 hero(lib("m_kohli_roar"), s94, d94, dim=0.55)
 headline(["On Rohit's", "shoulders."], round(s94 + 0.2, 2), d94 - 0.2, "left", size=110, accent_idx=1)
 full_video(shot("hero82"), round(at(95) - 0.1, 2), 3.1)
@@ -962,7 +1042,8 @@ if has("25c"):
     quote("Attacking someone over their religion is the most pathetic thing a human being can do.",
           "VIRAT KOHLI · NOVEMBER 2021", *span("25c", 0.0, 1.0, 0.0))
 if has("48a"):
-    split(lib("m_flags"), lib("m_pak_fans"), *span("48a", 0.0, 1.0, 0.25), llab="BLUE", rlab="GREEN")
+    hv(lib("m_flags"), "48a", 0.0, 0.5, dim=0.2, label="BLUE")
+    hv(lib("m_pak_fans"), "48a", 0.5, 1.0, dim=0.2, label="GREEN")
 if has("58a"):
     hv(lib("v_pak_crowd"), "58a", 0.0, 0.5, dim=0.3)
     hv(lib("v_pak_fan"), "58a", 0.5, 1.0, dim=0.3)
@@ -984,6 +1065,12 @@ if has("94a"):
     hv(lib("p_hardik"), "94a", dim=0.35, media_start=2.0)
     hd(["For his", "father."], "94a", "left", 0.3, size=130)
 
+for _t in PUNCHES:
+    punch(_t)
+for _t in SHAKES:
+    shake(_t)
+for _t in LEAKS:
+    lightleak(_t)
 logo_sting(round(BEAT[L(100)][1] + 0.3, 2), round(TOTAL - BEAT[L(100)][1] - 0.3, 2), end=True)
 
 
@@ -1090,6 +1177,11 @@ html,body{{margin:0;background:#060607}}
 .qmark{{font-size:220px;line-height:.6;color:{Y};font-weight:900;height:110px;transform-origin:left bottom}}
 .qtext{{font-size:56px;font-weight:700;letter-spacing:-1.5px;line-height:1.12}}
 .qwho{{margin-top:30px;font-size:24px;font-weight:700;letter-spacing:5px;color:rgba(255,255,255,.65)}}
+.scrim{{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.18) 45%,rgba(0,0,0,0) 70%),
+  linear-gradient(0deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 30%)}}
+.tag.lower{{left:70px;bottom:120px}}
+.leak{{position:absolute;top:-200px;bottom:-200px;width:900px;left:0;mix-blend-mode:screen;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,170,60,.55),rgba(255,120,40,.25) 45%,rgba(255,90,30,0) 75%);filter:blur(20px)}}
 .mark{{position:absolute;right:70px;bottom:56px;width:210px;opacity:.55;z-index:80}}
 """
 
