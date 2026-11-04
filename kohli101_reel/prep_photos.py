@@ -28,9 +28,24 @@ def fill(im, name):
     f.save(os.path.join(FILL, name + ".jpg"), quality=88)
 
 
+def main_subject(rgba):
+    """Keep only the biggest connected figure (the player), dropping teammates/umpires rembg also kept."""
+    import cv2
+    al = np.asarray(rgba.getchannel("A")).copy()
+    n, lab, stats, _ = cv2.connectedComponentsWithStats((al > 40).astype(np.uint8), 8)
+    if n <= 2:
+        return rgba
+    big = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+    al[lab != big] = 0
+    out = rgba.copy()
+    out.putalpha(Image.fromarray(al))
+    return out
+
+
 def cutout(im, name, session):
     from rembg import remove
     rgba = remove(im.convert("RGB"), session=session, post_process_mask=True)
+    rgba = main_subject(rgba)
     a = rgba.getchannel("A")
     box = a.point(lambda v: 255 if v > 40 else 0).getbbox()
     rgba = rgba.crop(box)
