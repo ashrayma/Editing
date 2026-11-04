@@ -59,7 +59,7 @@ def flag_background():
     a = a * (1 - al) + chm[..., :3] * al
     # grunge: blotches, grain, scratches, then crush it down to a dark, moody flag
     blot = noise(220)[..., None]
-    a *= 0.55 + 0.6 * blot
+    a *= 0.7 + 0.45 * blot
     grain = rng.normal(0, 1, (H, W, 1)).astype(np.float32)
     a += grain * 10
     scr = Image.new("L", (W, H), 0)
@@ -70,7 +70,7 @@ def flag_background():
         sd.line((x, y, x + ln * np.cos(ang), y + ln * np.sin(ang)), fill=int(rng.uniform(40, 120)), width=1)
     a -= arr(scr)[..., None] * 0.5
     lum = a.mean(-1, keepdims=True)
-    a = (lum + (a - lum) * 0.8) * 0.5
+    a = (lum + (a - lum) * 0.95) * 0.68
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     v = 1 - 0.75 * np.clip(((xx - W / 2) / (W * 0.58)) ** 2 + ((yy - H / 2) / (H * 0.7)) ** 2, 0, 1)
     a *= v[..., None]
@@ -104,13 +104,13 @@ def edge_fade(im, left=0, right=0, top=0):
     return out
 
 
-def grunge_mask(mask, strength=0.35):
-    """Knock speckles and scuffs out of a text/box mask."""
+def grunge_mask(mask, strength=0.12):
+    """Knock fine speckles and light scuffs out of a text/box mask."""
     m = arr(mask) / 255
-    n = noise(14, 2)
-    holes = np.clip((n - (1 - strength)) / 0.08, 0, 1)
-    fine = rng.random((H, W)).astype(np.float32) > 0.985
-    m *= (1 - holes * 0.85) * (1 - fine * 0.9)
+    n = noise(5, 2)
+    holes = np.clip((n - (1 - strength)) / 0.06, 0, 1)
+    fine = rng.random((H, W)).astype(np.float32) > 0.992
+    m *= (1 - holes * 0.55) * (1 - fine * 0.7)
     return img(m * 255, "L")
 
 
@@ -150,7 +150,7 @@ def brush_box(base, box, color=RED):
         d.line((x1, yy, x1 + ln, yy + rng.normal(0, 2)), fill=255, width=int(rng.uniform(3, 9)))
         yy = rng.uniform(y0 + 10, y1 - 10)
         d.line((x0, yy, x0 - rng.uniform(15, 50), yy), fill=255, width=int(rng.uniform(3, 8)))
-    m = grunge_mask(m.filter(ImageFilter.GaussianBlur(1)), 0.25)
+    m = grunge_mask(m.filter(ImageFilter.GaussianBlur(1)), 0.1)
     sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     sh.putalpha(m.filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.8)))
     base.alpha_composite(sh, (10, 14))
