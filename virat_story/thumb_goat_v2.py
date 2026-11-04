@@ -2,7 +2,7 @@
 """1920x1080 thumbnail, v2: "From an Ordinary Boy to the GOAT: The Virat Kohli Story".
 
 Gritty tricolour look: textured saffron / white (Ashoka Chakra) / green background, young Virat
-faded on the far left and one full-colour action shot beside him, each in its own space,
+faded and centred on the left,
 a huge intense close-up on the right, and distressed ORDINARY BOY / TO / GOAT (on a red brush block).
 
     python3 thumb_goat_v2.py  ->  thumb_goat_v2.png / .jpg / _small.png
@@ -162,18 +162,12 @@ def brush_box(base, box, color=RED):
 def main():
     base = flag_background()
 
-    # LEFT - the start: young Virat, faded, in his own space (face only, cropped from the shoulders)
-    yb = load_cut("cut_young.png", 640)
-    yb = yb.crop((int(yb.width * 0.16), 0, int(yb.width * 0.86), yb.height))
-    yb = duotone(regrade(yb, contrast=1.2), opacity=0.62)
-    yb = edge_fade(fade_bottom(yb, 380, 600), left=50, right=70)
-    base.alpha_composite(yb, (10, 20))
-
-    # MIDDLE - the journey: the six, in full colour, clear of both faces
-    sx = load_cut(os.path.join("..", "virat_82", "cut_six.png"), 640)
-    sx = regrade(sx, color=1.2, contrast=1.15, bright=1.05, sharpen=(1.0, 60, 1))
-    sx = fade_bottom(sx, 430, 620)
-    place(base, sx, 500, 10, rim_color=(255, 200, 120), rim_side=1, rim_k=0.4, shadow=0.7)
+    # LEFT - the start: young Virat, faded, centred over the headline
+    yb = load_cut("cut_young.png", 760)
+    yb = yb.crop((int(yb.width * 0.12), 0, int(yb.width * 0.88), yb.height))
+    yb = duotone(regrade(yb, contrast=1.2), opacity=0.7)
+    yb = edge_fade(fade_bottom(yb, 450, 700), left=60, right=60)
+    base.alpha_composite(yb, (560 - yb.width // 2, 0))
 
     # RIGHT - the GOAT, huge and intense
     fc = load_cut("cut_face.png", 1180)
