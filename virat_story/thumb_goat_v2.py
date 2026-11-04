@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """1920x1080 thumbnail, v2: "From an Ordinary Boy to the GOAT: The Virat Kohli Story".
 
-Gritty tricolour look: textured saffron / white (Ashoka Chakra) / green background, a faded duotone
-collage of Virat's journey on the left (young Virat, today's Virat) with one full-colour action shot,
+Gritty tricolour look: textured saffron / white (Ashoka Chakra) / green background, young Virat
+faded on the far left and one full-colour action shot beside him, each in its own space,
 a huge intense close-up on the right, and distressed ORDINARY BOY / TO / GOAT (on a red brush block).
 
     python3 thumb_goat_v2.py  ->  thumb_goat_v2.png / .jpg / _small.png
@@ -47,7 +47,7 @@ def flag_background():
     # Ashoka Chakra, behind the centre
     ch = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(ch)
-    cx, cy, r = 960, 540, 190
+    cx, cy, r = 1110, 520, 150  # in the gap between the six and the close-up
     navy = (0, 0, 128, 255)
     d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=navy, width=16)
     d.ellipse((cx - 30, cy - 30, cx + 30, cy + 30), fill=navy)
@@ -162,18 +162,18 @@ def brush_box(base, box, color=RED):
 def main():
     base = flag_background()
 
-    # LEFT - faded memories: young Virat and today's Virat behind, one colour action shot in front
-    yb = duotone(regrade(load_cut("cut_young.png", 720), contrast=1.2), opacity=0.5)
-    yb = edge_fade(fade_bottom(yb, 420, 700), left=60)
-    base.alpha_composite(yb, (-40, 40))
-    gt = duotone(regrade(load_cut("cut_goat.png", 820), contrast=1.2), opacity=0.42)
-    gt = fade_bottom(gt, 380, 760)
-    base.alpha_composite(gt, (430, -40))
+    # LEFT - the start: young Virat, faded, in his own space (face only, cropped from the shoulders)
+    yb = load_cut("cut_young.png", 640)
+    yb = yb.crop((int(yb.width * 0.16), 0, int(yb.width * 0.86), yb.height))
+    yb = duotone(regrade(yb, contrast=1.2), opacity=0.62)
+    yb = edge_fade(fade_bottom(yb, 380, 600), left=50, right=70)
+    base.alpha_composite(yb, (10, 20))
 
-    sx = load_cut(os.path.join("..", "virat_82", "cut_six.png"), 700)
+    # MIDDLE - the journey: the six, in full colour, clear of both faces
+    sx = load_cut(os.path.join("..", "virat_82", "cut_six.png"), 640)
     sx = regrade(sx, color=1.2, contrast=1.15, bright=1.05, sharpen=(1.0, 60, 1))
-    sx = fade_bottom(sx, 470, 680)
-    place(base, sx, 330 - sx.width // 2 + 150, 30, rim_color=(255, 200, 120), rim_side=1, rim_k=0.4, shadow=0.7)
+    sx = fade_bottom(sx, 430, 620)
+    place(base, sx, 500, 10, rim_color=(255, 200, 120), rim_side=1, rim_k=0.4, shadow=0.7)
 
     # RIGHT - the GOAT, huge and intense
     fc = load_cut("cut_face.png", 1180)
