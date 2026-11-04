@@ -105,18 +105,18 @@ def main():
     place(base, yb, 430 - yb.width // 2, 60, rim_color=(190, 210, 235), rim_side=1, rim_k=0.35, shadow=0.6)
 
     # RIGHT - the GOAT: arms raised, warm key from the floodlights
-    gt = load_cut("cut_goat.png", 1060)
+    gt = load_cut("cut_goat.png", 1130)
     gt = regrade(gt, color=1.12, contrast=1.1, bright=1.04, sharpen=(1.0, 60, 1))
     gt = tw.directional_light(gt, "right", (255, 190, 90), 0.6)
-    gt = fade_bottom(gt, 760, 1040)
-    place(base, gt, 1430 - gt.width // 2, 10, wrap=0.4, rim_color=Y, rim_side=1, rim_k=0.55, shadow=0.7)
+    gt = fade_bottom(gt, 820, 1100)
+    place(base, gt, 1420 - gt.width // 2, -40, wrap=0.4, rim_color=Y, rim_side=1, rim_k=0.55, shadow=0.7)
 
     # bottom band
     tw.floor(base, 640)
-    arrow(base, 905, 905, 95)
-    shadow_text(base, "ORDINARY", 112, 430, 790, (255, 255, 255), stroke=4, tracking=2)
-    shadow_text(base, "BOY", 112, 430, 915, (255, 255, 255), stroke=4, tracking=2)
-    shadow_text(base, "THE GOAT", 250, 1450, 770, Y, stroke=6, tracking=4)
+    arrow(base, 905, 925, 95)
+    shadow_text(base, "ORDINARY", 112, 430, 805, (255, 255, 255), stroke=4, tracking=2)
+    shadow_text(base, "BOY", 112, 430, 930, (255, 255, 255), stroke=4, tracking=2)
+    shadow_text(base, "THE GOAT", 240, 1450, 800, Y, stroke=6, tracking=4)
 
     tag(base, "2008", 60, 60, (255, 255, 255), (40, 44, 52, 235))
     tag(base, "TODAY", W - 210, 60, (15, 12, 4), Y + (255,))
