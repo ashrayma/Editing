@@ -125,6 +125,7 @@ LIB = {
     "r_mohali_dugout": ("ref", 414.0, 5.0),
     "a_wt14_field": ("wt", 0.0, 9.0), "a_wt14_run": ("wt", 32.0, 6.0),
     # more from the long uploads (continuous footage for long lines)
+    "p_dugout2": ("p", 204.0, 3.0), "m_tension": ("m", 146.0, 8.0),
     "an_wide": ("an", 64.0, 16.0), "an_fans": ("an", 28.0, 25.0), "adl_stands": ("adl", 101.0, 10.0),
     # Babar lbw, 720p
     "b_arshdeep": ("b", 0.0, 9.0),
@@ -143,7 +144,8 @@ def clip_len(path):
 _LEN = {}
 
 
-CROPS = {"ref": "crop=iw*0.74:ih*0.74:iw*0.13:0",   # the reference's captions/lower thirds sit low: crop them off
+CROPS = {"p": VCROP,                               # the vertical upload: its 16:9 picture
+         "ref": "crop=iw*0.74:ih*0.74:iw*0.13:0",   # the reference's captions/lower thirds sit low: crop them off
          "wt": "crop=iw*0.82:ih*0.82:iw*0.09:0",    # 2014 broadcast scorebar
          "v": "crop=iw*0.88:ih*0.88:iw*0.06:0"}     # Video-9126's watermark (another channel's edit)
 _PTR = {}
@@ -191,6 +193,7 @@ def take(token, need, offset=0.0):
         p = max(0.0, L - src_need)
     if not fresh:
         _PTR[cid] = p + src_need
+    USES.append((cid, round(p, 1), src_need, round(start + dur, 1)))
     crop = crop[0] if crop else CROPS.get(src)
     name = f"{cid}@{p:.1f}+{src_need:.1f}{'s' if slow else ''}"
     out = os.path.join(HERE, "footage", "clips", name + ".mp4")
@@ -215,6 +218,7 @@ def take(token, need, offset=0.0):
 
 
 PLAN = []
+USES = []
 
 
 def resolve(src, need, offset=0.0):
