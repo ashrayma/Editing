@@ -83,29 +83,42 @@ def auto_split(audio, beats=None):
 
 
 def align_split(audio, beats, raw16k):
-    """Boundaries between beats by forced alignment of the script text (PocketSphinx, tools/align.py): each cut
-    goes in the gap between one line's last word and the next line's first word, at the quietest point."""
+    """Boundaries between beats by forced alignment of the script text (tools/align.py), bounded by lines that an
+    English recogniser pins down (tools/anchors.py) so it cannot drift. Lines the aligner misses get a share of the
+    gap between their aligned neighbours by text length. Every cut is snapped to the nearest real pause."""
     sys.path.insert(0, os.path.join(HERE, "tools"))
-    from align import align_chunked
+    from align import align_anchored
+    from anchors import line_starts, recognise
     total = len(audio) / SR
-    chars = sum(len(t) for _, t in beats)
-    expect = {b: total * len(t) / chars for b, t in beats}
-    tm = align_chunked(raw16k, beats, expect)
+    ids = [b for b, _ in beats]
+    text = dict(beats)
+    tm = align_anchored(raw16k, beats, line_starts(beats, recognise(raw16k), total))
+    # line starts: aligned where known; missing runs interpolated by characters between known neighbours
+    start = {k: tm[b][0] for k, b in enumerate(ids) if b in tm}
+    start.setdefault(0, 0.0)
+    known = sorted(start)
+    bounds = known + [len(ids)]
+    times = dict(start)
+    for k0, k1 in zip(bounds, bounds[1:]):
+        t0 = start[k0]
+        t1 = start[k1] if k1 in start else total
+        span = sum(len(text[ids[k]]) for k in range(k0, k1))
+        acc = 0
+        for k in range(k0, k1):
+            times[k] = t0 + (t1 - t0) * acc / span
+            acc += len(text[ids[k]])
     regions = voiced_regions(audio)
     pauses = [(regions[k][1] + regions[k + 1][0]) / 2 for k in range(len(regions) - 1)]
     cuts, lo = [], 0.0
-    for (b0, _), (b1, _) in zip(beats, beats[1:]):
-        if b0 in tm and b1 in tm:
-            e, s = tm[b0][1], tm[b1][0]
-            gap = [p for p in pauses if e - 0.25 <= p <= s + 0.25 and p > lo + 0.3]
-            c = min(gap, key=lambda p: abs(p - (e + s) / 2)) if gap else max((e + s) / 2, lo + 0.3)
-        else:
-            c = lo + expect[b0]
+    for k in range(1, len(ids)):
+        t = times[k] - 0.15
+        near = [p for p in pauses if abs(p - t) < 0.7 and p > lo + 0.3]
+        c = min(near, key=lambda p: abs(p - t)) if near else max(t, lo + 0.3)
         cuts.append(c)
         lo = c
-    missing = [b for b, _ in beats if b not in tm]
+    missing = [b for b in ids if b not in tm]
     if missing:
-        print("  alignment missed", missing, "(estimated from text length)")
+        print("  interpolated (not aligned):", ", ".join(missing))
     return cuts
 
 

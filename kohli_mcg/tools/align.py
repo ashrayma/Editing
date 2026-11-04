@@ -62,6 +62,8 @@ def tokens(text):
 def align(raw16k, beats):
     """{line id: (start, end)} by forced alignment of the lines' text (in order) to 16 kHz mono int16 audio."""
     from pocketsphinx import Decoder
+    if len(raw16k) < 32000 // 2:                 # less than half a second of audio: nothing to align
+        return {}
     d = Decoder(samprate=16000, bestpath=False, beam=1e-80, wbeam=1e-60, pbeam=1e-80)
     words, owner = [], []
     for bid, text in beats:
@@ -94,42 +96,61 @@ def align(raw16k, beats):
 
 
 def align_chunked(raw16k, beats, expect, chunk=4):
-    """Align `chunk` lines at a time. Each window runs from the current position to the expected end of the chunk
-    plus slack; the window is grown until the alignment succeeds. The last line of each chunk is re-aligned as the
-    first line of the next, so a chunk never has to end exactly at a line boundary."""
-    sr2 = 32000                       # bytes per second (16 kHz int16)
+    """Align `chunk` lines at a time with the tightest window that works (windows grow only on failure), using a
+    pace that keeps updating from the lines already aligned. The last line of each window is re-aligned as the first
+    of the next, since the aligner stretches a window's final word to fill whatever audio is left."""
+    sr2 = 32000
     total = len(raw16k) / sr2
     ids = [b for b, _ in beats]
+    text = dict(beats)
+    pace = sum(expect.values()) / sum(len(t) for t in text.values())      # seconds per character, updated as we go
+    done_chars, done_secs = 0, 0.0
     out, pos, k = {}, 0.0, 0
     while k < len(ids):
-        grp = beats[k:k + chunk]
-        exp = sum(expect[b] for b, _ in grp)
-        res = {}
-        for slack in (1.25, 1.5, 1.9, 2.5):
-            end = min(total, pos + exp * slack + 2.0)
-            res = align(raw16k[int(pos * sr2) & ~1: int(end * sr2) & ~1], grp)
+        res, grp = {}, []
+        for n in (chunk, 2, 1):
+            grp = beats[k:k + n]
+            exp = sum(len(t) for _, t in grp) * pace
+            for slack in (1.08, 1.2, 1.35, 1.55, 1.8):
+                end = min(total, pos + exp * slack + 0.8)
+                res = align(raw16k[int(pos * sr2) & ~1: int(end * sr2) & ~1], grp)
+                if len(res) == len(grp):
+                    break
             if len(res) == len(grp):
                 break
-        if len(res) < len(grp) and len(grp) > 1:
-            for n in (2, 1):                 # retry with fewer lines and a generous window
-                g2 = beats[k:k + n]
-                e2 = sum(expect[b] for b, _ in g2)
-                for slack in (1.6, 2.2, 3.0):
-                    r2 = align(raw16k[int(pos * sr2) & ~1: int(min(total, pos + e2 * slack + 3.0) * sr2) & ~1], g2)
-                    if len(r2) == len(g2):
-                        break
-                if len(r2) == len(g2):
-                    grp, res = g2, r2
-                    break
         if len(res) < len(grp):
-            pos += expect[ids[k]]            # give up on this line: move on by its expected length
+            pos += len(text[ids[k]]) * pace
             k += 1
             continue
-        last = k + len(grp) - 1 if k + len(grp) >= len(ids) else k + len(grp) - 2
+        last = k + len(grp) - 1 if (k + len(grp) >= len(ids) or len(grp) == 1) else k + len(grp) - 2
         for b, _ in grp[: last - k + 1]:
-            if b in res:
-                out[b] = (pos + res[b][0], pos + res[b][1])
-        nxt = ids[last]
-        pos = out[nxt][1] if nxt in out else pos + sum(expect[b] for b in ids[k:last + 1])
+            out[b] = (pos + res[b][0], pos + res[b][1])
+            done_chars += len(text[b])
+        done_secs = out[ids[last]][1]
+        pace = 0.5 * pace + 0.5 * done_secs / max(done_chars, 1)
+        pos = out[ids[last]][1]
         k = last + 1
+    return out
+
+
+def align_anchored(raw16k, beats, starts):
+    """Align lines between consecutive anchored line starts ({line index: time}); each window holds exactly its
+    lines, so errors cannot carry past an anchor. Windows that won't align fall back to align_chunked inside."""
+    sr2 = 32000
+    total = len(raw16k) / sr2
+    ids = [b for b, _ in beats]
+    marks = [(0, 0.0)] + sorted(starts.items()) + [(len(ids), total)]
+    out = {}
+    for (k0, t0), (k1, t1) in zip(marks, marks[1:]):
+        if k1 <= k0:
+            continue
+        a, b = max(0.0, t0 - 0.3), min(total, t1 + 0.3)
+        grp = beats[k0:k1]
+        res = align(raw16k[int(a * sr2) & ~1: int(b * sr2) & ~1], grp) if len(grp) <= 8 else {}
+        if len(res) < len(grp):
+            seg = raw16k[int(a * sr2) & ~1: int(b * sr2) & ~1]
+            chars = sum(len(t) for _, t in grp)
+            res = align_chunked(seg, grp, {x: (b - a) * len(t) / chars for x, t in grp})
+        for x, (s0, s1) in res.items():
+            out[x] = (a + s0, a + s1)
     return out

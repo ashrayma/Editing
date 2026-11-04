@@ -31,7 +31,12 @@ def recognise(raw16k):
 
 def line_anchors(beats, heard):
     """{line id: first matched time} via LCS between the script's anchor words and the recognised words."""
-    script = [(w, bid) for bid, text in beats for w in re.findall(r"[a-z]+", text.lower()) if w in ANCHOR_WORDS]
+    script = []
+    for bid, text in beats:
+        low = text.lower()
+        for m in re.finditer(r"[a-z]+", low):
+            if m.group(0) in ANCHOR_WORDS:
+                script.append((m.group(0), (bid, m.start() / max(len(low), 1))))
     rec = [(w, t) for w, t in heard if w in ANCHOR_WORDS]
     n, m = len(script), len(rec)
     L = np.zeros((n + 1, m + 1), np.int32)
@@ -49,4 +54,29 @@ def line_anchors(beats, heard):
             i += 1
         else:
             j += 1
-    return {k: min(v) for k, v in out.items() if len(v) >= 1}
+    return out
+
+
+def line_starts(beats, heard, total):
+    """{line index: estimated start time} for lines pinned by a recognised keyword, keeping only anchors whose
+    implied pace (seconds per character since the previous anchor) is plausible. A keyword heard at time T,
+    a fraction f into its line's text, puts the line's start at about T - f * (line length in seconds)."""
+    ids = [b for b, _ in beats]
+    text = dict(beats)
+    chars = sum(len(t) for t in text.values())
+    pace = total / chars
+    raw = {}
+    for (bid, f), times in line_anchors(beats, heard).items():
+        est = min(times) - f * len(text[bid]) * pace
+        raw.setdefault(bid, []).append(est)
+    est = {ids.index(b): float(np.median(v)) for b, v in raw.items()}
+    kept, last_k, last_t = {}, 0, 0.0
+    for k in sorted(est):
+        if k == 0:
+            continue
+        span_chars = sum(len(text[b]) for b in ids[last_k:k])
+        r = (est[k] - last_t) / (span_chars * pace)
+        if 0.72 < r < 1.4:
+            kept[k] = est[k]
+            last_k, last_t = k, est[k]
+    return kept
