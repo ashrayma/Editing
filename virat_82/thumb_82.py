@@ -24,9 +24,20 @@ tw.HERE = HERE
 
 def background():
     """The MCG on the night (post-win photo): cover-crop, blur, cool grade, floodlight bloom, vignette."""
-    im = Image.open(os.path.join(HERE, "bg_mcg.jpg")).convert("RGB")
-    s = W / im.width
-    im = im.resize((W, int(im.height * s)), Image.LANCZOS).crop((0, 0, W, H))
+    # stands + lights from either side of the players in the photo, blended at the seam (behind the 82*)
+    src = Image.open(os.path.join(HERE, "bg_mcg.jpg")).convert("RGB")
+    left, right = src.crop((0, 0, 470, 400)), src.crop((730, 0, 1200, 400))
+    joined = Image.new("RGB", (900, 400))
+    joined.paste(left, (0, 0))
+    seam = Image.linear_gradient("L").rotate(90, expand=True).resize((40, 400)).transpose(Image.FLIP_LEFT_RIGHT)
+    joined.paste(right, (430, 0))
+    joined.paste(left.crop((430, 0, 470, 400)), (430, 0), seam)
+    im = joined.resize((W, int(400 * W / 900)), Image.LANCZOS)
+    canvas = Image.new("RGB", (W, H), (6, 8, 14))
+    canvas.paste(im, (0, 0))
+    fade = Image.linear_gradient("L").resize((W, 260)).point(lambda v: 255 - v)
+    canvas.paste(Image.new("RGB", (W, 260), (6, 8, 14)), (0, im.height - 260), Image.eval(fade, lambda v: 255 - v))
+    im = canvas
     im = im.filter(ImageFilter.GaussianBlur(7))
     a = arr(im)
     lum = a.mean(-1, keepdims=True)
@@ -76,25 +87,25 @@ def banner(base, txt, cx, top, size=60):
 
 def main():
     base = background()
-    big_number(base, "82*", 980, 40, 470)
+    big_number(base, "82*", 1010, 50, 440)
 
     # RIGHT - the six off Rauf, a step back
-    sx = load_cut("cut_six.png", 1000)
+    sx = load_cut("cut_six.png", 960)
     sx = regrade(sx, color=1.05, contrast=1.08, bright=0.95, sharpen=(1.0, 60, 1))
     sx = tw.directional_light(sx, "left", (255, 225, 160), 0.5)
     sx = fade_bottom(sx, 700, 960)
-    place(base, sx, 1500 - sx.width // 2, 70, rim_color=(170, 210, 255), rim_side=-1, rim_k=0.45, shadow=0.6)
+    place(base, sx, 1575 - sx.width // 2, 80, rim_color=(170, 210, 255), rim_side=-1, rim_k=0.45, shadow=0.6)
 
     # LEFT - the roar, hero
-    ro = load_cut("cut_roar.png", 1080)
+    ro = load_cut("cut_roar.png", 900)
     ro = regrade(ro, color=1.1, contrast=1.1, bright=1.06, sharpen=(1.0, 60, 1))
     ro = tw.directional_light(ro, "right", (255, 215, 140), 0.55)
-    ro = fade_bottom(ro, 780, 1060)
-    place(base, ro, 560 - ro.width // 2, 20, wrap=0.4, rim_color=Y, rim_side=1, rim_k=0.5, shadow=0.75)
+    ro = fade_bottom(ro, 640, 880)
+    place(base, ro, 400 - ro.width // 2, 90, wrap=0.4, rim_color=Y, rim_side=1, rim_k=0.5, shadow=0.75)
 
     tw.floor(base, 700)
-    shadow_text(base, "THE NIGHT", 150, 980, 800, (255, 255, 255), stroke=5, tracking=4)
-    banner(base, "VS PAKISTAN  ·  MCG 2022", 980, 970, 58)
+    shadow_text(base, "THE NIGHT", 150, 1010, 790, (255, 255, 255), stroke=5, tracking=4)
+    banner(base, "VS PAKISTAN  ·  MCG 2022", 1010, 965, 58)
     finish(base, "thumb_82")
 
 
