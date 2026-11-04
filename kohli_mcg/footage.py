@@ -123,6 +123,7 @@ LIB = {
     "r_mohali_bat": ("ref", 419.0, 4.0), "r_mohali_field": ("ref", 423.0, 7.0), "r_mohali_dhoni": ("ref", 437.0, 7.0),
     "r_mohali_finish": ("ref", 444.0, 9.0), "r_mohali_kneel": ("ref", 450.5, 3.0),
     "r_mohali_dugout": ("ref", 414.0, 5.0),
+    "a_wt14_field": ("wt", 0.0, 9.0), "a_wt14_run": ("wt", 32.0, 6.0),
     # more from the long uploads (continuous footage for long lines)
     "an_wide": ("an", 64.0, 16.0), "an_fans": ("an", 28.0, 25.0), "adl_stands": ("adl", 101.0, 10.0),
     # Babar lbw, 720p
@@ -168,26 +169,28 @@ def src_fps(path):
     return _FPS[path]
 
 
-def lib(cid, slow=False):
-    """A named moment, as a token the edit resolves when it knows how long the shot is (see take())."""
+def lib(cid, slow=False, fresh=False):
+    """A named moment, as a token the edit resolves when it knows how long the shot is (see take()).
+    fresh=True starts at the moment itself even if it was used before (for deliberate callbacks)."""
     assert cid in LIB, cid
-    return f"LIB:{cid}:{int(slow)}"
+    return f"LIB:{cid}:{int(slow)}:{int(fresh)}"
 
 
 def take(token, need, offset=0.0):
     """Cut a continuous shot of exactly `need` seconds for a moment token, from the FULL source video.
     The first use starts at the moment; every later use of the same moment carries on from where the last one
     stopped, so footage is never replayed and never looped. Slow motion (2x) uses half as much source."""
-    _, cid, slow = token.split(":")
-    slow = slow == "1"
+    _, cid, slow, fresh = token.split(":")
+    slow, fresh = slow == "1", fresh == "1"
     src, start, dur, *crop = LIB[cid]
     srcp = os.path.join(HERE, "footage", "user", "src", SRC[src])
     L = clip_len(srcp)
     src_need = round(need * (0.5 if slow else 1.0) + 0.1, 1)
-    p = _PTR.get(cid, start) + offset
+    p = (start if fresh else _PTR.get(cid, start)) + offset
     if p + src_need > L:
         p = max(0.0, L - src_need)
-    _PTR[cid] = p + src_need
+    if not fresh:
+        _PTR[cid] = p + src_need
     crop = crop[0] if crop else CROPS.get(src)
     name = f"{cid}@{p:.1f}+{src_need:.1f}{'s' if slow else ''}"
     out = os.path.join(HERE, "footage", "clips", name + ".mp4")
