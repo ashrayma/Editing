@@ -1179,7 +1179,7 @@ html,body{{margin:0;background:#060607}}
 .qwho{{margin-top:30px;font-size:24px;font-weight:700;letter-spacing:5px;color:rgba(255,255,255,.65)}}
 .scrim{{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.18) 45%,rgba(0,0,0,0) 70%),
   linear-gradient(0deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 30%)}}
-.tag.lower{{left:70px;bottom:120px}}
+.tag.lower{{left:70px;bottom:215px}}
 .leak{{position:absolute;top:-200px;bottom:-200px;width:900px;left:0;mix-blend-mode:screen;pointer-events:none;
   background:radial-gradient(closest-side,rgba(255,170,60,.55),rgba(255,120,40,.25) 45%,rgba(255,90,30,0) 75%);filter:blur(20px)}}
 .mark{{position:absolute;right:70px;bottom:56px;width:210px;opacity:.55;z-index:80}}
