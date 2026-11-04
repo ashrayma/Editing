@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the comment card carries it
+NO_CAPTION = set(LINE)  # the data-reel style: headlines carry the words, no word captions
 
 
 def captions():
@@ -733,126 +733,238 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>183</span><i>or</i><span style="color:{Y}">82*?</span></div>'
+        f'<div class="mot" id="{i}q"><span>YES</span><i>or</i><span style="color:{Y}">NO?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Which one gets your vote? 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Will Kohli get to 101? 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "183. No contest 🔥"
+    txt = "Yes. 101 loading 👑"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
 
-def card(name, start, dur, w=780, y=360, x=None, rot=0.0, hmax=900):
-    """The reference look: a rounded photo card floating on the grid, popping in and drifting."""
-    i = nid("cd")
-    src = media(f"assets/hi/{name}.png")
-    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
-        iw, ih = im.size
-    h = round(w * ih / iw)
-    if h > hmax:
-        w, h = round(hmax * iw / ih), hmax
-    left = x if x is not None else round((W - w) / 2)
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="pcard" style="left:{left}px;top:{y}px;width:{w}px;height:{h}px;z-index:{z()}">'
-        f'<img src="{src}">{face_marks("hi/" + name, 0, 0, w, h)}</div>')
-    anim(f'tl.fromTo("#{i}",{{scale:0.82,opacity:0,y:40,rotation:{rot * 2}}},{{scale:1,opacity:1,y:0,rotation:{rot},duration:0.45,ease:"back.out(1.5)"}},{start})')
-    anim(f'tl.fromTo("#{i} img",{{scale:1.0}},{{scale:1.08,duration:{max(0.5, dur)},ease:"none"}},{start})')
-    anim(f'tl.to("#{i}",{{y:-22,duration:{max(0.5, dur)},ease:"none"}},{start + 0.45})')
-    cue(start, "pop", 0.8)
-    cue(start - 0.06, "whoosh", 0.5)
+GLOWS = {"blue": "48,110,255", "orange": "255,140,40", "green": "40,200,110", "red": "235,50,60",
+         "purple": "150,80,255", "gold": "254,222,92"}
+
+
+def scene(cut, start, dur, glow="blue", h=1120, bottom=360):
+    """The data-reel look: black, one coloured glow, the player's cut-out standing in the middle."""
+    i = stage(start, dur, tone="#050506")
+    g = nid("gw")
+    add(f'<div id="{g}" {clip_attrs(start, dur)} class="glow" style="z-index:{z()};background:radial-gradient(circle at 50% 50%,'
+        f'rgba({GLOWS[glow]},.55) 0%,rgba({GLOWS[glow]},.18) 32%,rgba(0,0,0,0) 62%)"></div>')
+    anim(f'tl.fromTo("#{g}",{{scale:0.7,opacity:0}},{{scale:1,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{g}",{{scale:1.12,duration:{max(0.5, dur)},ease:"sine.inOut"}},{start + 0.6})')
+    if cut:
+        with Image.open(os.path.join(HERE, "assets", "cut", cut + ".png")) as im:
+            cw = min(1000, round(h * im.width / im.height))
+        sticker(cut, start, dur, side="right", h=h, x=round((W - cw) / 2), bottom=bottom)
     return i
+
+
+def hl(lines, start, dur, accent=(), acc_color=Y, y=250, size=150, sfx="soft"):
+    """Condensed headline, top left; lines rise out of a mask one after another."""
+    i = nid("hl")
+    cue(start, sfx, 1.0)
+    rows = "".join(f'<div class="mask"><div id="{i}l{k}" class="hln" style="color:{acc_color if k in accent else "#fff"}">'
+                   f'{html.escape(t)}</div></div>' for k, t in enumerate(lines))
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="hlw avoid" style="top:{y}px;font-size:{size}px;z-index:{z()}">{rows}</div>')
+    for k in range(len(lines)):
+        anim(f'tl.fromTo("#{i}l{k}",{{yPercent:105}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{start + 0.07 * k})')
+    return i
+
+
+def needs(txt, start, dur, y=1180):
+    """Yellow outlined badge, e.g. NEEDS 15."""
+    i = nid("nd")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="needs avoid" style="top:{y}px;z-index:{z()}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0.5,opacity:0}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2.2)"}},{start})')
+    cue(start, "pop", 0.9)
+
+
+def counter(points, start, dur):
+    """The running total pinned at the bottom: label left, number right, a progress bar to 101 with Sachin's 100 marked.
+    points: [(t, value, label)] - each change rolls the number and slides the fill."""
+    i = nid("ct")
+    v0, l0 = points[0][1], points[0][2]
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ctr" style="z-index:{z() + 200}">'
+        f'<div class="ctop"><span id="{i}l">{html.escape(l0)}</span><b id="{i}n">{v0}</b></div>'
+        f'<div class="cbar"><div class="cfill" id="{i}f" style="width:{v0 / 101 * 100:.2f}%"></div>'
+        f'<div class="cmark" style="left:{100 / 101 * 100:.2f}%"><i>SACHIN 100</i></div></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"expo.out"}},{start})')
+    prev = v0
+    for t, v, lab in points[1:]:
+        d = 0.25 + 0.06 * abs(v - prev)
+        anim(f'(()=>{{const o={{v:{prev}}};tl.to(o,{{v:{v},duration:{d:.2f},ease:"power1.inOut",onUpdate:()=>{{document.getElementById("{i}n").textContent=Math.round(o.v)}}}},{t})}})()')
+        anim(f'tl.to("#{i}f",{{width:"{v / 101 * 100:.2f}%",duration:{d:.2f},ease:"power1.inOut"}},{t})')
+        anim(f'tl.call(()=>{{document.getElementById("{i}l").textContent={json.dumps(lab)}}},null,{t})')
+        for k in range(min(12, abs(v - prev))):
+            cue(t + k * d / max(1, abs(v - prev)), "tick", 0.6)
+        prev = v
+
+
+def chart(start, dur):
+    """86 now -> Sachin's 100 (dashed) -> a flag at 101."""
+    i = nid("ch")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:0;top:560px;width:1080px;height:640px;z-index:{z()}">'
+        f'<svg width="1080" height="640" viewBox="0 0 1080 640"><defs><linearGradient id="{i}g" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0" stop-color="rgba(48,110,255,.55)"/><stop offset="1" stop-color="rgba(48,110,255,0)"/></linearGradient></defs>'
+        f'<path id="{i}a" d="M60,520 L240,470 L380,430 L520,330 L640,300 L780,180 L900,120 L900,640 L60,640 Z" fill="url(#{i}g)"/>'
+        f'<path id="{i}p" d="M60,520 L240,470 L380,430 L520,330 L640,300 L780,180 L900,120" fill="none" stroke="#4f8bff" stroke-width="6" stroke-linejoin="round"/>'
+        f'<line x1="60" y1="140" x2="1020" y2="140" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="14 12"/>'
+        f'<circle cx="60" cy="520" r="14" fill="{Y}"/></svg>'
+        f'<div class="chl" style="left:40px;top:430px">86</div><div class="chl" style="left:880px;top:60px;color:#fff">100</div>'
+        f'<div class="chl" id="{i}f" style="left:930px;top:0px;color:#ff3b3b">101 ⚑</div></div>')
+    anim(f'tl.fromTo("#{i}p",{{strokeDasharray:1400,strokeDashoffset:1400}},{{strokeDashoffset:0,duration:1.4,ease:"power2.inOut"}},{start + 0.2})')
+    anim(f'tl.fromTo("#{i}a",{{opacity:0}},{{opacity:1,duration:1.2}},{start + 0.4})')
+    return i
+
+
+def dots(start, dur, n=90, every=6):
+    """90 innings as dots; every 6th lights up yellow - 15 hundreds."""
+    i = nid("dt")
+    cells = "".join(f'<i id="{i}c{k}" class="{"hit" if (k + 1) % every == 0 else ""}"></i>' for k in range(n))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="dgrid avoid" style="z-index:{z()}">{cells}</div>')
+    anim(f'tl.fromTo("#{i} i",{{scale:0,opacity:0}},{{scale:1,opacity:1,duration:0.2,stagger:0.012}},{start})')
+    hits = [k for k in range(n) if (k + 1) % every == 0]
+    for j, k in enumerate(hits):
+        t = start + 1.1 + 0.11 * j
+        anim(f'tl.fromTo("#{i}c{k}",{{backgroundColor:"rgba(255,255,255,.18)",scale:1}},{{backgroundColor:"{Y}",scale:1.25,duration:0.15}},{t})')
+        cue(t, "tick", 0.7)
+
+
+def years(start, dur, a=2026, b=2031):
+    """A row of years filling in one by one, the age underneath counting up."""
+    i = nid("yr")
+    cols = "".join(f'<div class="yc" id="{i}y{k}"><b>{y}</b><span>AGE {38 + k if y < 2031 else 42}</span></div>'
+                   for k, y in enumerate(range(a, b + 1)))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="yrow avoid" style="z-index:{z()}">{cols}</div>')
+    for k in range(b - a + 1):
+        t = start + 0.25 * k
+        anim(f'tl.fromTo("#{i}y{k}",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.35,ease:"back.out(2)"}},{t})')
+        cue(t, "tick", 0.8)
+
+
+def vsbars(start, dur):
+    """Sachin 452 innings for 49 vs Kohli 279 for 50 - the bar length is the innings it took."""
+    i = nid("vb")
+    rows = ((0, "SACHIN", "49 ODI 100s", 452, "#9aa0a6"), (1, "KOHLI", "50 ODI 100s", 279, Y))
+    html_rows = "".join(f'<div class="vbr" id="{i}r{k}"><div class="vbn">{n}<span>{sub}</span></div>'
+                        f'<div class="vbt"><div class="vbf" id="{i}f{k}" style="width:{v / 452 * 100:.1f}%;background:{c}"></div></div>'
+                        f'<div class="vbv" id="{i}v{k}" style="color:{c}">0</div></div>' for k, n, sub, v, c in rows)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="vbars avoid" style="z-index:{z()}"><div class="vbh">INNINGS TAKEN</div>{html_rows}</div>')
+    for k, _, _, v, _ in rows:
+        t0 = start + 0.2 + (0 if k == 0 else (word("d3", 0) - start))
+        anim(f'tl.fromTo("#{i}f{k}",{{scaleX:0}},{{scaleX:1,duration:1.0,ease:"expo.out"}},{t0})')
+        anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{v},duration:1.0,ease:"expo.out",onUpdate:()=>{{document.getElementById("{i}v{k}").textContent=Math.round(o.v)}}}},{t0})}})()')
+        cue(t0, "rise", 0.8)
 
 
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK: not the MCG... Mirpur
-    photo("mcg_wave", *seg(0, s("h2")), side=None, push=(1.18, 1.05), origin="55% 30%")
-    flash(0.02, peak=0.5)
-    title(["NOT THE", "MCG"], *seg(word("h1", 4), s("h2")), y=300, size=140, accent=(1,), sfx="impact")
-    glitch(s("h2", -0.03), 0.3, "mcg_wave")
-    stage(*seg(s("h2"), s("h3")))
-    card("kohli_raise_wide", *seg(s("h2"), s("h3")), w=940, y=330)
-    odo("183", *seg(word("h2", 2) - 0.1, s("h3")), x=None, y=900, size=260, label="MIRPUR · 2012")
-    stage(*seg(s("h3"), s("h5")))
-    card("mcg_shot", *seg(s("h3"), s("h5")), w=760, y=300, rot=-2)
-    title(["THAT NIGHT", "IN MELBOURNE?"], *seg(word("h4", 2), s("h5")), y=1110, size=96, accent=(1,), sfx="impact")
-    stage(*seg(s("h5"), s("m1", -0.05)), tone="#0d0d0f")
-    stamp("HEAR ME OUT", *seg(s("h5", 0.05), s("m1", -0.05)), y=780, size=140, rot=-4)
+    # ---------------- HOOK: Sachin at 38, Kohli at 38
+    scene("sachin_100", *seg(0, s("a2")), glow="blue")
+    flash(0.02, peak=0.4)
+    hl(["SACHIN'S 100TH", "AT AGE 38"], *seg(0.1, s("a2")), accent=(1,))
+    scene("kohli_hands", *seg(s("a2"), s("a3")), glow="orange")
+    hl(["KOHLI JUST", "TURNED 38"], *seg(s("a2", 0.05), s("a3")), accent=(1,), sfx="impact")
+    scene("kohli_raise_wide", *seg(s("a3"), s("b1")), glow="gold")
+    hl(["AND HE'S ON"], *seg(s("a3", 0.05), s("b1")))
+    counter([(s("a3"), 86, "INTERNATIONAL HUNDREDS"),
+             (s("c3", 0.3), 101, "AT 20 ODIs A YEAR"), (s("d1"), 86, "INTERNATIONAL HUNDREDS")], *seg(s("a3"), s("q1")))
+    cue(s("a3"), "boom", 0.8)
 
-    # ---------------- the setting
-    stage(*seg(s("m1", -0.05), s("m3", -0.05)))
-    title(["MARCH", "2012"], *seg(s("m1"), s("m3", -0.05)), y=400, size=170, accent=(1,), sfx="impact")
-    for k, (txt, w) in enumerate((("Asia Cup", 0), ("Mirpur, Bangladesh", 2), ("India vs Pakistan", 3))):
-        chip(txt, *seg(word("m2", w), s("m3", -0.05)), x=None, y=860 + 100 * k)
-    stage(*seg(s("m3", -0.05), s("m4", -0.05)))
-    odo("329", *seg(word("m3", 2) - 0.15, s("m4", -0.05)), x=None, y=300, size=280, color="#3ddc84", label="PAKISTAN · 50 OVERS")
-    card("afridi_malik", *seg(s("m3"), s("m4", -0.05)), w=700, y=760, rot=2)
-    photo("hafeez_jamshed", *seg(s("m4", -0.05), s("m5", -0.05)), side="right", push=(1.0, 1.1))
-    band("100 + 100", "HAFEEZ · NASIR JAMSHED", *seg(word("m4", 1), s("m5", -0.05)), y=1160)
-    stage(*seg(s("m5", -0.05), s("g1", -0.05)))
-    odo("330", *seg(word("m5", 3) - 0.15, s("g1", -0.05)), x=None, y=420, size=320, label="TO WIN")
-    stamp("IMPOSSIBLE?", *seg(word("m5", 7) - 0.05, s("g1", -0.05)), y=1000, size=140, color="#ff3b3b", rot=-4)
+    # ---------------- the math
+    scene("kohli_lookup", *seg(s("b1"), s("b3")), glow="purple")
+    hl(["CAN HE STILL", "GET THERE?"], *seg(s("b1", 0.03), s("b2")), accent=(1,))
+    hl(["LET'S DO", "THE MATH"], *seg(s("b2"), s("b3")), accent=(1,), sfx="impact")
+    stage(*seg(s("b3"), s("b5")), tone="#050506")
+    chart(*seg(s("b3"), s("b5")))
+    hl(["NEEDS 14", "TO EQUAL SACHIN"], *seg(s("b3", 0.03), s("b4")), accent=(0,))
+    hl(["15 TO STAND", "ALONE AT 101"], *seg(s("b4"), s("b5")), accent=(1,), acc_color="#ff3b3b", sfx="impact")
+    scene("kohli_ac22_bat", *seg(s("b5"), s("b6")), glow="green")
+    hl(["ONE FORMAT", "NOW: ODIs"], *seg(s("b5", 0.03), s("b6")), accent=(1,))
+    stage(*seg(s("b6"), s("c1")), tone="#050506")
+    hl(["NO MORE…"], *seg(s("b6"), s("c1")))
+    hl(["TESTS ✕"], *seg(word("b6", 0), s("c1")), accent=(0,), acc_color="#ff3b3b", y=640, size=230, sfx="impact")
+    hl(["T20Is ✕"], *seg(word("b6", 2), s("c1")), accent=(0,), acc_color="#ff3b3b", y=880, size=230, sfx="impact")
+    scene("kohli_ac22_helmet", *seg(s("c1"), s("c2")), glow="blue")
+    hl(["1 ODI HUNDRED", "EVERY 6 INNINGS"], *seg(word("c1", 6), s("c2")), accent=(1,))
+    needs("≈ 1 IN 6", *seg(word("c1", 9), s("c2")))
+    stage(*seg(s("c2"), s("c3")), tone="#050506")
+    hl(["15 HUNDREDS", "= 90 INNINGS"], *seg(s("c2", 0.03), s("c3")), accent=(1,))
+    dots(*seg(s("c2", 0.1), s("c3")))
+    stage(*seg(s("c3"), s("c5")), tone="#050506")
+    hl(["20 ODIs A YEAR", "= 4.5 YEARS"], *seg(s("c3", 0.03), s("c5")), accent=(1,))
+    years(*seg(s("c3", 0.3), s("c5")))
+    scene("kohli_kiss2", *seg(s("c5"), s("c6")), glow="red")
+    hl(["AGE 42", "AT THE 2031 WC"], *seg(s("c5", 0.03), s("c6")), accent=(0,), acc_color="#ff3b3b")
+    glitch(s("c6", -0.03), 0.35, "kohli_kiss2")
+    stage(*seg(s("c6"), s("d1")), tone="#050506")
+    hl(["IMPOSSIBLE?"], *seg(s("c6", 0.05), s("d1")), accent=(0,), acc_color="#ff3b3b", y=720, size=210, sfx="impact")
 
-    # ---------------- 0 for 1, and in walks Kohli
-    photo("gambhir_out", *seg(s("g1", -0.05), s("g2", -0.05)), side="up", push=(1.0, 1.1))
-    stamp("DUCK", *seg(word("g1", 9) - 0.1, s("g2", -0.05)), y=1100, size=220, color="#ff3b3b", rot=-5)
-    stage(*seg(s("g2", -0.05), s("g3", -0.05)), tone="#0d0d0f")
-    odo("0/1", *seg(word("g2", 2) - 0.1, s("g3", -0.05)), x=None, y=620, size=360, color="#ff3b3b", label="INDIA")
-    shake(word("g2", 2) + 0.4)
-    stage(*seg(s("g3", -0.05), word("g3", 7)))
-    title(["IN WALKED", "A 23-YEAR-OLD…"], *seg(s("g3"), word("g3", 7)), y=700, size=110, accent=(1,))
-    hero("kohli_roar", ["VIRAT", "KOHLI"], *seg(word("g3", 7), s("r1", -0.05)))
-    flash(word("g3", 7), peak=0.6)
-    cue(word("g3", 7), "boom", 1.0)
+    # ---------------- the twist
+    scene("kohli_roar", *seg(s("d1"), s("d2")), glow="gold")
+    flash(s("d1"), peak=0.5)
+    cue(s("d1"), "boom", 1.0)
+    hl(["HERE'S", "THE TWIST"], *seg(s("d1", 0.03), s("d2")), accent=(1,), sfx="impact")
+    stage(*seg(s("d2"), s("d4")), tone="#050506")
+    hl(["SAME RECORD.", "FAR FEWER GAMES."], *seg(s("d2", 0.03), s("d4")), accent=(1,), size=120)
+    vsbars(*seg(s("d2"), s("d4")))
+    scene("kohli_test2", *seg(s("d4"), s("d5")), glow="blue")
+    hl(["NOT ABOUT", "HOW GOOD"], *seg(s("d4", 0.03), s("d5")), accent=(1,))
+    scene("kohli_fist", *seg(s("d5"), s("q1")), glow="red")
+    hl(["IT'S ABOUT", "TIME"], *seg(s("d5", 0.03), s("q1")), accent=(1,), acc_color="#ff3b3b", sfx="impact")
 
-    # ---------------- how he did it
-    photo("kohli_fist", *seg(s("r1", -0.05), s("r2", -0.05)), side="right", push=(1.0, 1.1), band=True)
-    title(["NO PANIC"], *seg(s("r1"), s("r2", -0.05)), y=300, size=150, accent=(0,), sfx="impact")
-    stage(*seg(s("r2", -0.05), s("r3", -0.05)))
-    card("kohli_sachin", *seg(s("r2", -0.05), s("r3", -0.05)), w=720, y=300, rot=-2)
-    card("sachin_drive", *seg(word("r2", 8), s("r3", -0.05)), w=380, y=880, x=620, rot=4)
-    tag("WITH SACHIN TENDULKAR", *seg(word("r2", 3), s("r3", -0.05)), x=70, y=1250)
-    photo("rohit_pull", *seg(s("r3", -0.05), s("r4", -0.05)), side="left", push=(1.0, 1.1))
-    tag("ROHIT SHARMA", *seg(word("r3", 7), s("r4", -0.05)), y=1300)
-    chip("Massive partnership", *seg(word("r3", 4), s("r4", -0.05)), x=None, y=300)
-    stage(*seg(s("r4", -0.05), s("r5", -0.05)))
-    for k, (nm, w_, x_, r_) in enumerate((("gul", 0, 30, -5), ("ajmal", 2, 375, 2), ("afridi_malik", 4, 700, 5))):
-        card(nm, *seg(word("r4", w_), s("r5", -0.05)), w=340, y=420 + 40 * k, x=x_, rot=r_, hmax=520)
-    stamp("TOOK THEM ALL ON", *seg(word("r4", 7), s("r5", -0.05)), y=1120, size=100, rot=-4)
-    stage(*seg(s("r5", -0.05), s("r6", -0.05)), tone="#0d0d0f")
-    odo("22", *seg(s("r5"), s("r6", -0.05)), x=None, y=560, size=380, label="FOURS")
-    photo("kohli_sachin", *seg(s("r6", -0.05), s("n1", -0.05)), side="up", push=(1.0, 1.08), band=True)
-    title(["FASTER RATE…", "CALMER KOHLI"], *seg(word("r6", 8), s("n1", -0.05)), y=300, size=100, accent=(1,), sfx="impact")
-
-    # ---------------- the number
-    cue(s("n1", -0.6), "riser", 0.9)
-    depth_number("kohli_roar", "183", "OFF 148 BALLS", *seg(s("n1", -0.05), s("n2", -0.05)))
-    flash(s("n1"), peak=0.55)
-    cue(s("n1"), "boom", 1.0)
-    photo("kohli_raise_wide", *seg(s("n2", -0.05), s("n3", -0.05)), side="right", push=(1.0, 1.1))
-    band("183", "HIS HIGHEST ODI SCORE", *seg(word("n2", 1), s("n3", -0.05)), y=330)
-    stage(*seg(s("n3", -0.05), s("c1", -0.05)))
-    sticker("kohli_fist", *seg(s("n3", -0.05), s("c1", -0.05)), side="right", h=1100)
-    typed(["INDIA 330/4", "won by 6 wickets", "13 balls to spare"], *seg(s("n3"), s("c1", -0.05)), x=60, y=360, size=60)
-
-    # ---------------- the verdict
-    then_now(*seg(s("c1", -0.05), s("q1", -0.05)), "mcg_wave", "kohli_raise_wide", la="MCG · MAGIC", lb="MIRPUR · BORN", grey=False)
-
-    # ---------------- CTA
-    video3d("logo", s("q1", -0.05), TOTAL - s("q1", -0.05))
-    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
+    # ---------------- the question, then the CTA
+    stage(*seg(s("q1"), word("q1", 6)), tone="#050506")
+    hl(["WILL HE GET", "TO 101?"], *seg(s("q1", 0.03), word("q1", 6)), accent=(1,))
+    hl(["??"], *seg(word("q1", 3), word("q1", 6)), accent=(0,), y=700, size=560, sfx="impact")
+    video3d("logo", word("q1", 6), TOTAL - word("q1", 6))
+    comment_cta(word("q1", 6) + 0.05, TOTAL - word("q1", 6) - 0.05)
     for a, b in LAYOUT["brand_hide"]:
-        if a >= s("q1", -0.3):
+        if a >= word("q1", 6) - 0.3:
             continue
         anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
-        if b < s("q1", -0.3):
+        if b < word("q1", 6) - 0.3:
             anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.85,duration:0.25,immediateRender:false}},{b})')
-    anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q1", -0.3)})')
+    anim(f'tl.fromTo("#brand",{{opacity:.85}},{{opacity:0,duration:0.2,immediateRender:false}},{word("q1", 6) - 0.3})')
 
 
 EXTRA_CSS = f"""
+@font-face{{font-family:"Bebas";src:url({media("assets/fonts/BebasNeue.woff2")})}}
+@font-face{{font-family:"Osw";font-weight:700;src:url({media("assets/fonts/Oswald-700.woff2")})}}
+.glow{{position:absolute;left:-200px;right:-200px;top:180px;height:1400px;pointer-events:none}}
+.hlw{{position:absolute;left:70px;right:70px;font-family:"Bebas";line-height:.92;letter-spacing:.01em;text-shadow:0 6px 30px rgba(0,0,0,.6)}}
+.hln{{display:block}}
+.needs{{position:absolute;left:70px;font-family:"Bebas";font-size:84px;color:{Y};border:5px solid {Y};border-radius:10px;padding:2px 22px 0;background:rgba(0,0,0,.55);transform-origin:0 50%}}
+.ctr{{position:absolute;left:70px;right:70px;top:1500px;font-family:"Osw"}}
+.ctop{{display:flex;justify-content:space-between;align-items:flex-end;color:#cfd3da;font-size:30px;letter-spacing:.14em}}
+.ctop b{{font-family:"Bebas";font-size:120px;line-height:.8;color:{Y};letter-spacing:0;font-weight:400}}
+.cbar{{position:relative;height:22px;margin-top:14px;background:rgba(255,255,255,.12);border-radius:6px}}
+.cfill{{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2f6bff,#4f8bff);border-radius:6px;box-shadow:0 0 24px rgba(79,139,255,.6)}}
+.cmark{{position:absolute;top:-14px;bottom:-14px;width:4px;background:#fff}}
+.cmark i{{position:absolute;right:10px;top:46px;font-style:normal;font-size:22px;color:#fff;letter-spacing:.1em;white-space:nowrap}}
+.chl{{position:absolute;font-family:"Bebas";font-size:84px;color:{Y}}}
+.dgrid{{position:absolute;left:110px;top:620px;width:860px;display:grid;grid-template-columns:repeat(10,1fr);gap:22px}}
+.dgrid i{{display:block;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18)}}
+.yrow{{position:absolute;left:60px;right:60px;top:720px;display:flex;justify-content:space-between}}
+.yc{{display:flex;flex-direction:column;align-items:center;gap:10px}}
+.yc b{{font-family:"Bebas";font-size:96px;color:#fff;font-weight:400}}
+.yc span{{font-family:"Osw";font-size:28px;color:{Y};letter-spacing:.08em}}
+.yc:last-child b{{color:#ff3b3b}}
+.vbars{{position:absolute;left:70px;right:70px;top:660px}}
+.vbh{{font-family:"Osw";font-size:30px;letter-spacing:.16em;color:#cfd3da;margin-bottom:30px}}
+.vbr{{display:flex;align-items:center;gap:24px;margin-bottom:56px}}
+.vbn{{width:230px;font-family:"Bebas";font-size:84px;color:#fff;line-height:.9}}
+.vbn span{{display:block;font-family:"Osw";font-size:24px;color:#9aa0a6;letter-spacing:.06em}}
+.vbt{{flex:1;height:64px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden}}
+.vbf{{height:100%;border-radius:8px;transform-origin:0 50%}}
+.vbv{{width:150px;text-align:right;font-family:"Bebas";font-size:100px}}
+
 .pcard{{position:absolute;border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 2px rgba(255,255,255,.08)}}
 .pcard img{{width:100%;height:100%;object-fit:cover;display:block}}
 .rainl{{position:absolute;left:0;right:0;top:-600px;bottom:-600px;background-image:linear-gradient(100deg,transparent 48%,rgba(220,230,255,.55) 49%,transparent 51%);background-size:90px 200px;transform:rotate(8deg)}}

@@ -257,11 +257,11 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # hook ticks under a filtered pad, the beat drops on "March 2012"; drums drop out before "0 for 1" and "183";
-    # dead air just before the number lands
-    m = music(total, drop=L["m1"]["start"], breaks=[L["g2"]["start"], L["n1"]["start"]],
-              outro=L["q1"]["start"] + 0.4, thin=[(L["g1"]["start"], L["g3"]["words"][7][1])],
-              mute=[(L["r6"]["end"] + 0.03, L["n1"]["start"] - 0.02)], intro_warm=False)
+    # hook ticks under a filtered pad; the beat drops on "Let's do the math"; drums out before "Sounds impossible"
+    # and "here's the twist"; dead air right before the twist lands
+    m = music(total, drop=L["b2"]["start"], breaks=[L["c6"]["start"], L["d1"]["start"]],
+              outro=L["q1"]["words"][6][1] + 0.3, thin=[(L["c5"]["start"], L["d1"]["start"])],
+              mute=[(L["c6"]["end"] + 0.03, L["d1"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))
