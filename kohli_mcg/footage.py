@@ -70,7 +70,7 @@ def ai(name):
 
 # ----------------------------------------------------------------------------- the user's footage, cut by moment
 # source files live in footage/user/src/ (not in git). (source, start, duration[, crop]) in seconds.
-SRC = {"adl": "adelaide2020.mp4", "pc": "presser.mp4", "wt": "wt20_2014.mp4", "ipl": "ipl2016.mp4",
+SRC = {"ref": "reference144.mp4", "adl": "adelaide2020.mp4", "pc": "presser.mp4", "wt": "wt20_2014.mp4", "ipl": "ipl2016.mp4",
        "edg": "edgbaston2018.mp4", "an": "anthem2022.mp4", "hob": "hobart2012.mp4", "and": "anderson.mp4", "v": "v9126.mp4", "m": "mcg_recap.mp4", "d": "dubai2021.mp4", "p": "pak_innings_vertical.mp4", "b": "babar_lbw.mp4"}
 VCROP = "crop=720:405:0:437"   # the 16:9 picture inside the vertical upload
 LIB = {
@@ -119,6 +119,12 @@ LIB = {
     "a_presser": ("pc", 39.0, 20.0), "a_wt14_together": ("wt", 56.0, 3.0), "a_wt14_kohli": ("wt", 24.0, 3.5), "a_wt14_hug": ("wt", 82.0, 6.5),
     "a_anthem_team": ("an", 3.0, 10.0), "a_anthem_rohit": ("an", 55.0, 9.0), "a_hob_100": ("hob", 164.0, 22.0),
     "a_hob_malinga": ("hob", 234.0, 5.0),
+    # Mohali 2016 (the only footage of it: the 144p reference video; its captions are cropped off, shown as archive)
+    "r_mohali_bat": ("ref", 419.0, 4.0), "r_mohali_field": ("ref", 423.0, 7.0), "r_mohali_dhoni": ("ref", 437.0, 7.0),
+    "r_mohali_finish": ("ref", 444.0, 9.0), "r_mohali_kneel": ("ref", 450.5, 3.0),
+    "r_mohali_dugout": ("ref", 414.0, 5.0),
+    # more from the long uploads (continuous footage for long lines)
+    "an_wide": ("an", 64.0, 16.0), "an_fans": ("an", 28.0, 25.0), "adl_stands": ("adl", 101.0, 10.0),
     # Babar lbw, 720p
     "b_arshdeep": ("b", 0.0, 9.0),
 }
@@ -136,33 +142,22 @@ def clip_len(path):
 _LEN = {}
 
 
-def stretch(path, need):
-    """Fill a slot without freezing: a library clip much shorter than its slot is swapped for its half-speed
-    version; if even that is short, for a forward-then-reverse ("ping-pong") extension of it."""
-    base = os.path.basename(path).rsplit(".", 1)[0]
-    for suf in ("_slow_pp", "_slow", "_m"):
-        if base.endswith(suf):
-            base = base[: -len(suf)]
-    if base not in LIB or clip_len(path) * 1.1 >= need:
-        return path
-    slow = lib(base, slow=True)
-    if clip_len(slow) * 1.1 >= need:
-        return slow
-    out = os.path.join(HERE, "footage", "clips", base + "_slow_pp.mp4")
-    if not os.path.exists(out) or clip_len(os.path.relpath(out, HERE)) < need:
-        loops = int(need // (2 * clip_len(slow))) + 1
-        fc = "[0:v]split[a][b];[b]reverse[r];" + "".join(f"[a{k}]" for k in range(0)) + "[a][r]concat=n=2:v=1[pp]"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, slow), "-filter_complex", fc,
-                        "-map", "[pp]", "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p",
-                        out + ".tmp.mp4"], check=True)
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-stream_loop", str(max(0, loops - 1)), "-i", out + ".tmp.mp4",
-                        "-c", "copy", out], check=True)
-        os.remove(out + ".tmp.mp4")
-        _LEN.pop(os.path.relpath(out, HERE), None)
-    return os.path.relpath(out, HERE)
-
-
+CROPS = {"ref": "crop=iw*0.74:ih*0.74:iw*0.13:0",   # the reference's captions/lower thirds sit low: crop them off
+         "wt": "crop=iw*0.82:ih*0.82:iw*0.09:0",    # 2014 broadcast scorebar
+         "v": "crop=iw*0.88:ih*0.88:iw*0.06:0"}     # Video-9126's watermark (another channel's edit)
+_PTR = {}
+_LEN = {}
 _FPS = {}
+MCI = "minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1"
+
+
+def clip_len(path):
+    """Duration in seconds of a file (path relative to HERE, or absolute); cached."""
+    if path not in _LEN:
+        r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                            os.path.join(HERE, path)], capture_output=True, text=True)
+        _LEN[path] = float(r.stdout.strip() or 0)
+    return _LEN[path]
 
 
 def src_fps(path):
@@ -173,23 +168,32 @@ def src_fps(path):
     return _FPS[path]
 
 
-MCI = "minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1"
-
-
 def lib(cid, slow=False):
-    """Cut one named moment to 1080p30 (once). 24/25 fps sources are motion-interpolated to 30 (real in-between
-    frames, no repeated-frame judder); slow=True is a motion-interpolated half-speed version."""
+    """A named moment, as a token the edit resolves when it knows how long the shot is (see take())."""
+    assert cid in LIB, cid
+    return f"LIB:{cid}:{int(slow)}"
+
+
+def take(token, need, offset=0.0):
+    """Cut a continuous shot of exactly `need` seconds for a moment token, from the FULL source video.
+    The first use starts at the moment; every later use of the same moment carries on from where the last one
+    stopped, so footage is never replayed and never looped. Slow motion (2x) uses half as much source."""
+    _, cid, slow = token.split(":")
+    slow = slow == "1"
     src, start, dur, *crop = LIB[cid]
-    if src == "wt" and not crop:     # the 2014 clips stand in for Mohali 2016: crop the dated broadcast scorebar off
-        crop = ["crop=iw*0.82:ih*0.82:iw*0.09:0"]
-    if src == "v" and not crop:      # Video-9126 is another channel's edit: crop its watermark (bottom centre) out
-        crop = ["crop=iw*0.88:ih*0.88:iw*0.06:0"]
-    name = cid + ("_slow" if slow else "_m")
+    srcp = os.path.join(HERE, "footage", "user", "src", SRC[src])
+    L = clip_len(srcp)
+    src_need = round(need * (0.5 if slow else 1.0) + 0.1, 1)
+    p = _PTR.get(cid, start) + offset
+    if p + src_need > L:
+        p = max(0.0, L - src_need)
+    _PTR[cid] = p + src_need
+    crop = crop[0] if crop else CROPS.get(src)
+    name = f"{cid}@{p:.1f}+{src_need:.1f}{'s' if slow else ''}"
     out = os.path.join(HERE, "footage", "clips", name + ".mp4")
     if not os.path.exists(out):
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        srcp = os.path.join(HERE, "footage", "user", "src", SRC[src])
-        chain = [crop[0]] if crop else []
+        chain = [crop] if crop else []
         if slow:
             chain += ["setpts=2.0*PTS", MCI]
         elif abs(src_fps(srcp) - 30) > 0.5:
@@ -197,7 +201,19 @@ def lib(cid, slow=False):
         else:
             chain += ["fps=30"]
         chain += ["scale=1920:1080:flags=lanczos", "setsar=1"]
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-i", srcp, "-t", str(dur), "-an",
-                        "-vf", ",".join(chain), "-c:v", "libx264", "-crf", "17", "-preset", "medium",
-                        "-pix_fmt", "yuv420p", out], check=True)
+        cmd = ["ffmpeg", "-v", "error", "-y", "-ss", f"{p:.2f}", "-i", srcp, "-t", f"{src_need:.2f}", "-an",
+               "-vf", ",".join(chain), "-c:v", "libx264", "-crf", "17", "-preset", "medium", "-pix_fmt", "yuv420p", out]
+        if os.environ.get("PLAN_ONLY"):          # planning pass: just list the cuts (cut_all.py runs them in parallel)
+            PLAN.append(cmd)
+            _LEN[os.path.relpath(out, HERE)] = need
+        else:
+            subprocess.run(cmd, check=True)
     return os.path.relpath(out, HERE)
+
+
+PLAN = []
+
+
+def resolve(src, need, offset=0.0):
+    """A path for the edit: moment tokens are cut to length; anything else (3D renders, recordings) as is."""
+    return take(src, need, offset) if isinstance(src, str) and src.startswith("LIB:") else src

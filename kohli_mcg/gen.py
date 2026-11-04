@@ -17,7 +17,7 @@ import sys
 from PIL import Image, ImageFilter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from footage import ai, clip, stretch  # noqa: E402
+from footage import ai, clip, resolve  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "hf_main")
@@ -52,6 +52,8 @@ def media(src, kind="photos"):
     srcp = os.path.join(HERE, src)
     dst = os.path.join(MEDIA, os.path.basename(src))
     dst = os.path.join(MEDIA, src.replace("/", "_"))
+    if os.environ.get("PLAN_ONLY") and not os.path.exists(srcp):
+        return "media/" + os.path.basename(dst)          # planning pass: the clip is cut later
     if not os.path.exists(dst) or os.path.getmtime(srcp) > os.path.getmtime(dst):
         shutil.copy(srcp, dst)
     return "media/" + os.path.basename(dst)
@@ -81,8 +83,8 @@ def card(src, start, dur, side="right", label=None, sub=None, video=False, maxw=
          media_start=0.0):
     """A media card that glides in from `side`, pushes in slowly, and exits the other way."""
     i = nid("card")
-    if video:
-        src = stretch(src, dur + media_start)
+    if video and src.startswith("LIB:"):
+        src, media_start = resolve(src, dur, media_start), 0.0
     if video:
         w, h = 1920, 1080
     else:
@@ -356,7 +358,8 @@ def hero(src, start, dur, dim=0.3, z=5, gray=False, push=1.08, media_start=0.0, 
     """Real match footage, full screen: whips in (slide + motion blur, alternating direction), drifts like a
     handheld camera with a slow push-in, a soft shade on the left keeps type readable; optional lower-third tag."""
     i = nid("hv")
-    src = stretch(src, dur + media_start)
+    if src.startswith("LIB:"):
+        src, media_start = resolve(src, dur, media_start), 0.0
     EVENTS.append((start, "cut"))
     filt = "filter:grayscale(1) contrast(1.12);" if gray else ""
     tag = ""
@@ -508,6 +511,7 @@ def split(left, right, start, dur, llab=None, rlab=None, lgray=False, rgray=Fals
     """Two clips side by side, each sliding in from its own edge, labelled underneath (then vs now, us vs them)."""
     for src, side, lab, gray in ((left, "left", llab, lgray), (right, "right", rlab, rgray)):
         i = nid("sp")
+        src = resolve(src, dur)
         x = 60 if side == "left" else W / 2 + 15
         is_img = src.lower().endswith((".jpg", ".png"))
         inner = (f'<img src="{media(src)}" style="width:100%;height:100%;object-fit:cover">' if is_img else
@@ -527,8 +531,9 @@ def split(left, right, start, dur, llab=None, rlab=None, lgray=False, rgray=Fals
 def freeze(clip_path, at, start, dur, gray=True, z=9):
     """Freeze-frame: one still from a clip, frozen with a flash (for the shot breakdown)."""
     import subprocess
+    clip_path = resolve(clip_path, at + 1.0)
     out = os.path.join(MEDIA, "frz_" + os.path.basename(clip_path).rsplit(".", 1)[0] + f"_{at:.1f}.jpg")
-    if not os.path.exists(out):
+    if not os.path.exists(out) and not os.environ.get("PLAN_ONLY"):
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(at), "-i", os.path.join(HERE, clip_path), "-frames:v", "1",
                         "-q:v", "2", out], check=True)
     i = nid("fz")
@@ -719,17 +724,16 @@ yt("MCG · 23 OCT 2022", 1, 4)
 hv(lib("m_kohli_close"), 1, 0.0, 0.45, dim=0.2, fade=0.01)
 hv(lib("m_flags"), 1, 0.45, 1.0, dim=0.4)
 hd(["8 balls.", "28 runs."], 1, "left", 0.4, 1.0, size=150)
-hv(lib("m_shaheen"), 2, dim=0.55)
 cd(lib("m_rauf_watch"), 2, "right", "HARIS RAUF", "3 overs · 21 runs · 2 wickets")
 od("21", 2, "left", "RUNS IN 3 OVERS", 0.2)
-hv(lib("m_kohli_walk18"), 3, dim=0.35, gray=True)
+hv(lib("v_kohli_walkin"), 3, dim=0.35, gray=True)
 hd(["“His time", "is over.”"], 3, "left", 0.45, 1.0, size=120)
 hv(lib("m_six1_close", slow=True), 4, 0.0, 1.0, dim=0.15)
 hd(["“The shot of", "the century.”"], 4, "center", 0.35, 1.0, size=120)
 letterbox(*span(4, 0.0, 1.0, 1.2))
 rewind(at(5, 0.15), round(at(5, 0.85) - at(5, 0.15), 2), "2019")
 hv(lib("m_kohli_walk18"), 5, 0.0, 1.0, dim=0.4, gray=True)
-hv(lib("m_lights"), 6, dim=0.45)
+hv(lib("an_wide"), 6, dim=0.5)
 hd(["1,020 days of silence.", "One night."], 6, "center", 0.05, 1.0, size=110)
 full_video(shot("ball"), round(BEAT[L(6)][1] + 0.15, 2), 0.85, z=78, fade=0.05)
 s0 = round(BEAT[L(6)][1] + 0.9, 2)
@@ -751,8 +755,8 @@ yt("2016 · IPL", 10)
 cd(clip("N02"), 10, "right", "IPL 2016 · RCB", "4 hundreds in one season", media_start=12.0)
 od("973", 10, "left", "RUNS IN ONE IPL SEASON", 0.1, size=280)
 yt("2016 · MOHALI", 11)
-backdrop(PH + "test_bat_raised_close.jpg", *span(11, 0.0, 1.0, 0.4), opacity=0.45)
-cd(PH + "rcb_roar.jpg", 11, "right", "VIRAT KOHLI", "The chase master", a=0.0, b_=0.5, maxw=900)
+hv(lib("r_mohali_bat"), 11, 0.0, 0.45, dim=0.3, gray=True, label="MOHALI 2016", sub="82* vs Australia")
+hv(lib("r_mohali_dugout"), 11, 0.45, 1.0, dim=0.45, gray=True)
 od("82*", 11, "left", "OFF 51 BALLS", 0.05, 0.5)
 quote("This is my best innings.", "VIRAT KOHLI · MOHALI 2016", *span(11, 0.5, 1.0, 0.1))
 yt("2018 · ENGLAND", 12)
@@ -763,7 +767,7 @@ yt("NOV 2019", 13, 14)
 bars([("Sachin Tendulkar", 100, False), ("Ricky Ponting", 71, False), ("Virat Kohli · age 31", 70, True)], *span(13, 0.0, 1.0, 0.2))
 hv(lib("m_kohli_close2"), 14, dim=0.6)
 od("100", 14, "center", "SACHIN'S RECORD · THE ONE HE COULD CHASE", 0.05, size=320)
-hv(lib("m_lights"), 15, dim=0.5, gray=True)
+hv(lib("a_kohli_out14"), 15, dim=0.5, gray=True)
 hd(["Then, after", "No. 70..."], 15, "left", 0.0, 0.7, size=110)
 ecg(*to_next(15, 0.45), flat_after=0.6)
 
@@ -774,7 +778,7 @@ cd(PH + "test_bat_raised_full.jpg", 16, "right", "CENTURY NO. 70", "136 vs Bangl
 hd(["Century", "No. 70"], 16, "left", size=140)
 full_video(shot("days1020"), at(17, -0.0), round(BEAT[L(17)][1] - BEAT[L(17)][0] + 0.75, 2))
 yt("MARCH 2020", 18)
-hv(lib("m_lights"), 18, dim=0.45, gray=True, media_start=1.0)
+hv(lib("adl_stands"), 18, dim=0.4, gray=True)
 hd(["Covid.", "Cricket stopped."], 18, "left", size=120)
 fullimg(ai("ai_lonely_bat"), *span(19, 0.0, 1.0, 0.3), dim=0.35)
 pl(["50...", "60...", "70...", "<b>Out.</b>"], 19, "left", 0.25)
@@ -801,10 +805,10 @@ hd(["First World Cup loss", "to Pakistan."], 25, "left", 0.3, size=96)
 yt("DEC 2021 → JAN 2022", 26, 27)
 cd(lib("v_ganguly"), 26, "right", "THE HEADLINES", "December 2021")
 pl(["DEC 2021 · ODI captaincy <b>gone</b>", "JAN 2022 · Test captaincy <b>gone</b>"], 26, "left", 0.1)
-hv(lib("m_kohli_walk18"), 27, dim=0.55, gray=True, media_start=0.5)
+hv(lib("a_adl_walk"), 27, dim=0.55, gray=True)
 hd(["No captaincy.", "No century."], 27, "center", size=130)
 yt("IPL 2022", 28)
-hv(lib("m_kohli_walk18"), 28, dim=0.55, gray=True)
+hv(lib("a_kohli_out14"), 28, dim=0.55, gray=True)
 pl(["Golden duck", "Golden duck", "Golden duck"], 28, "left", 0.15)
 hv(lib("v_headlines"), 29, 0.0, 0.72, dim=0.05)
 hv(lib("v_finished"), 29, 0.72, 1.0, dim=0.35, gray=True)
@@ -819,10 +823,9 @@ hd(["Then he did something", "he'd never done."], 32, "center", 0.0, 1.0, size=1
 
 # 03 THE RETURN ---------------------------------------------------------------------------------
 ch("03", "The Return", 33)
-hv(lib("m_lights"), 33, dim=0.5, media_start=2.0)
+hv(lib("v_kohli_low"), 33, dim=0.5, gray=True)
 od("30", 33, "center", "DAYS WITHOUT TOUCHING A BAT", size=340)
-hv(lib("m_lights"), 34, dim=0.55, media_start=0.5)
-cd(PH + "asia22_kiss_chain.jpg", 34, "right", "FAMILY FIRST", a=0.55, maxw=860)
+cd(PH + "asia22_kiss_chain.jpg", 34, "right", "FAMILY FIRST")
 pl(["No nets", "No gym selfies", "No social media"], 34, "left", 0.0, 0.7)
 hd(["Just family."], 34, "right", 0.55, 1.0, size=110, acc=0)
 yt("AUG 2022 · DUBAI", 35, 37)
@@ -855,8 +858,8 @@ split(lib("d_pak_win"), lib("p_huddle"), *span(45, 0.0, 1.0, 0.25), llab="DUBAI 
 yt("23 OCT 2022 · MCG", 46, 53)
 fullimg(ai("ai_stadium_night"), *span(46, 0, 1, 0.3), dim=0.25)
 pl(["Diwali eve", "Rain all week", "<b>Clear skies</b>"], 46, "left")
-hv(lib("v_aerial"), 47, 0.0, 0.5, dim=0.3)
-hv(lib("m_flags"), 47, 0.5, 1.0, dim=0.35)
+hv(lib("an_wide"), 47, 0.0, 0.5, dim=0.3)
+hv(lib("an_wide"), 47, 0.5, 1.0, dim=0.35)
 od("90,293", 47, "left", "IN THE STANDS", 0.2, size=240)
 hv(lib("a_anthem_team"), 48, 0.0, 0.5, dim=0.5)
 cd(clip("N09"), 48, "right", "NATIONAL ANTHEM", "Rohit Sharma", a=0.4)
@@ -877,7 +880,7 @@ hd(["Shaheen.", "Naseem.", "Rauf."], 53, "right", 0.3, 1.0, size=96, acc=2, z=40
 
 # 05 31 FOR 4 -----------------------------------------------------------------------------------
 ch("05", "31 for 4", 54)
-hv(lib("m_lights"), 54, dim=0.5, media_start=0.5)
+hv(lib("v_openers"), 54, dim=0.5)
 hd(["Then came", "the nightmare."], 54, "center", size=120)
 for n, fid, who, (r, w) in ((55, "N10", "KL RAHUL · b NASEEM · 4", (7, 1)), (56, "N11", "ROHIT · c IFTIKHAR b RAUF · 4", (10, 2)),
                             (57, "N12", "SURYAKUMAR · c RIZWAN b RAUF · 15", (26, 3)), (58, "N13", "AXAR PATEL · RUN OUT · 2", (31, 4))):
@@ -932,7 +935,7 @@ odometer("6", round(s74 + d74 * 0.6, 2), round(d74 * 0.4, 2), "right", size=420,
 freeze(lib("m_six1_close"), 1.0, *span(75, 0.0, 1.0, 0.3))
 pl(["Back foot", "Straight bat", "Over the bowler's head"], 75, "left", 0.1)
 cd(lib("m_six1_close"), 75, "right", "THE REPLAY", "145-ish, back of a length", a=0.45, maxw=900)
-hv(lib("m_rauf_watch"), 76, dim=0.6, gray=True)
+hv(lib("v_rauf_down"), 76, dim=0.6, gray=True)
 quote("If DK or Hardik had hit those, it would have hurt. But it was Kohli.", "HARIS RAUF · LATER (PARAPHRASED)",
       *span(76, 0.0, 1.0, 0.0))
 s77, d77 = to_next(77)
@@ -1015,21 +1018,21 @@ hd(["Subscribe."], 100, "left", 0.0, 0.5, size=130, acc=0)
 
 # ----------------------------------------------------------------------------- lines added for the 15-minute cut
 if has("11a"):
-    hv(lib("a_wt14_kohli"), "11a", dim=0.5)
+    hv(lib("r_mohali_field"), "11a", dim=0.4, gray=True)
     chasebar(49, 3, *span("11a", 0.0, 1.0, 0.2), target=161)
     yt("27 MAR 2016 · MOHALI", "11a", 11)
 if has("11b"):
-    hv(lib("a_wt14_together"), "11b", dim=0.4)
+    hv(lib("r_mohali_dhoni"), "11b", dim=0.4, gray=True)
     pl(["1 → <b>2</b>", "1 → <b>2</b>", "1 → <b>2</b>"], "11b", "left", 0.3)
     hd(["Every single", "became two."], "11b", "right", 0.0, 0.5, size=96)
 if has("11c"):
     black("11c")
     od("39", "11c", "center", "NEEDED OFF 18 BALLS", size=340, z=40)
 if has("11d"):
-    hv(lib("a_wt14_hug"), "11d", dim=0.3)
+    hv(lib("r_mohali_finish"), "11d", dim=0.3, gray=True)
     hd(["Dhoni finishes.", "Kohli kneels."], "11d", "left", 0.2, size=110)
 if has("11e"):
-    split(lib("a_wt14_kohli"), lib("m_kohli_knees", slow=True), *span("11e", 0.0, 1.0, 0.3),
+    split(lib("r_mohali_kneel"), lib("m_kohli_knees", slow=True), *span("11e", 0.0, 1.0, 0.3),
           llab="2016", rlab="2022", lgray=True)
 if has("25a"):
     hv(lib("d_shami"), "25a", dim=0.45, gray=True)
@@ -1042,7 +1045,7 @@ if has("25c"):
     quote("Attacking someone over their religion is the most pathetic thing a human being can do.",
           "VIRAT KOHLI · NOVEMBER 2021", *span("25c", 0.0, 1.0, 0.0))
 if has("48a"):
-    hv(lib("m_flags"), "48a", 0.0, 0.5, dim=0.2, label="BLUE")
+    hv(lib("an_fans"), "48a", 0.0, 0.5, dim=0.2, label="BLUE")
     hv(lib("m_pak_fans"), "48a", 0.5, 1.0, dim=0.2, label="GREEN")
 if has("58a"):
     hv(lib("v_pak_crowd"), "58a", 0.0, 0.5, dim=0.3)
