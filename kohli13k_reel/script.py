@@ -11,7 +11,7 @@ LINES = [
     ("p1", "The record used to belong to Ricky Ponting.", None, 0.1),
     ("p2", "Twelve thousand six hundred and sixty two runs, in three hundred and thirty innings.",
      "12,662 runs, in 330 innings.", 0.2),
-    ("p3", "Kohli went past it in just two hundred and fifty one innings.", "Kohli went past it in just 251 innings.", 0.3),
+    ("p3", "Kohli went past in just two hundred and fifty one.", "Kohli went past in just 251.", 0.3),
     ("p4", "Ponting averaged forty two at number three.", "Ponting averaged 42 at No. 3.", 0.1),
     ("p5", "Kohli averages over sixty one.", "Kohli averages over 61.", 0.3),
     ("p6", "Ponting made twenty nine hundreds there.", "Ponting made 29 hundreds there.", 0.1),
@@ -22,10 +22,10 @@ LINES = [
      "So, is Virat the greatest No. 3 of all time? Tell me in the comments, and follow for more.", 0.2),
 ]
 
-TAKES = {"A": "vo_raw/a_190819.m4a"}
+TAKES = {"B": "vo_raw/b_192239.m4a"}  # second recording (vo_raw/a_190819.m4a was the first)
 PIECES = {
-    "l1": [("A", 1.6, 3.35)], "l2": [("A", 3.35, 6.0)], "l3": [("A", 6.4, 8.45)], "l4": [("A", 8.45, 10.05)],
-    "p1": [("A", 10.05, 12.3)], "p2": [("A", 12.3, 18.2)], "p3": [("A", 20.8, 24.7)],
-    "p4": [("A", 24.8, 27.2)], "p5": [("A", 27.2, 29.3)], "p6": [("A", 29.3, 31.4)], "p7": [("A", 31.4, 33.2)],
-    "r1": [("A", 33.3, 36.75)], "r2": [("A", 39.9, 43.9)], "q1": [("A", 43.9, 48.2)],
+    "l1": [("B", 1.7, 3.72)], "l2": [("B", 3.72, 6.2)], "l3": [("B", 6.2, 7.65)], "l4": [("B", 7.65, 9.2)],
+    "p1": [("B", 23.3, 25.86)], "p2": [("B", 25.86, 30.6)], "p3": [("B", 31.0, 34.9)],
+    "p4": [("B", 35.0, 37.35)], "p5": [("B", 37.35, 39.0)], "p6": [("B", 51.0, 53.4)], "p7": [("B", 53.4, 54.5)],
+    "r1": [("B", 54.5, 57.9)], "r2": [("B", 60.3, 65.4)], "q1": [("B", 65.4, 70.4)],
 }
