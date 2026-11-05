@@ -20,6 +20,7 @@ from thumb_wc2003 import ANTON, H, W, arr, fade_bottom, finish, img, load_cut, p
 
 tw.HERE = HERE
 RED = (214, 26, 34)
+CHAKRA = (1110, 520, 150)  # centre x, y, radius; callers may move it into their layout's gap
 rng = np.random.default_rng(2008)
 
 
@@ -47,7 +48,7 @@ def flag_background():
     # Ashoka Chakra, behind the centre
     ch = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(ch)
-    cx, cy, r = 1110, 520, 150  # in the gap between the six and the close-up
+    cx, cy, r = CHAKRA
     navy = (0, 0, 128, 255)
     d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=navy, width=16)
     d.ellipse((cx - 30, cy - 30, cx + 30, cy + 30), fill=navy)
