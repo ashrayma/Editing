@@ -743,10 +743,27 @@ def comment_cta(start, dur):
     cue(start, "pop", 1.0)
 
 
-def bg(name, start, dur, grade="dark", credit="PHOTO: BCCI", push=(1.0, 1.08), side=None, origin="50% 35%", band=False):
-    """News look: a full-bleed photo, graded dark (or B&W / blue), slow push, photo credit at the bottom."""
-    i = photo(name, start, dur, side=side, fx="grey" if grade == "bw" else None, push=push, origin=origin, whoosh=bool(side), band=band)
-    tint = {"dark": "rgba(0,0,0,0)", "bw": "rgba(0,0,0,.15)", "blue": "rgba(10,30,90,.35)"}[grade]
+def bg(name, start, dur, grade="dark", credit="PHOTO: BCCI", push=(1.0, 1.08), side=None, origin="50% 35%", tall=False):
+    """News look: a big photo, graded dark (or B&W / blue), slow push, photo credit at the bottom.
+    tall=True: the photo fills the top 1260 px (for low-res / wide shots), cropped on the face, type sits below it."""
+    if tall:
+        i = nid("tp")
+        src = media(f"assets/hi/{name}.png")
+        with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+            iw, ih = im.size
+        bh = 1260
+        dw, dh = max(W, iw * bh / ih), max(bh, ih * W / iw)
+        fxp = min(1.0, max(0.0, (W / 2 - focus_x(name) * dw) / (W - dw))) if dw > W + 1 else 0.5
+        filt = "grayscale(1) contrast(1.1) brightness(.85)" if grade == "bw" else "none"
+        marks = face_marks("hi/" + name, (W - dw) * fxp, (bh - dh) * 0.3, dw, dh)
+        add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#05070d;overflow:hidden">'
+            f'<div id="{i}m" style="position:absolute;left:0;top:0;width:100%;height:{bh}px;transform-origin:{origin}">'
+            f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:{fxp * 100:.1f}% 30%;filter:{filt}">{marks}</div>'
+            f'<div class="tfade"></div></div>')
+        anim(f'tl.fromTo("#{i}m",{{scale:{push[0]}}},{{scale:{push[1]},duration:{dur},ease:"none"}},{start})')
+    else:
+        i = photo(name, start, dur, side=side, fx="grey" if grade == "bw" else None, push=push, origin=origin, whoosh=bool(side))
+    tint = {"dark": "rgba(0,0,0,0)", "bw": "rgba(0,0,0,.1)", "blue": "rgba(10,30,90,.28)"}[grade]
     g = nid("gr")
     add(f'<div id="{g}" {clip_attrs(start, dur)} class="ngrade" style="z-index:{z()};background-color:{tint}"></div>')
     if credit:
@@ -807,10 +824,10 @@ def vs_scene(start, dur, cells):
         cols = "".join(f'<div class="vc"><i>{lab}</i><b id="{i}v{r}{k}">&nbsp;</b></div>' for k, lab in enumerate(("INNINGS", "AVERAGE", "100s")))
         return f'<div class="vpill">{name}</div><div class="vbox">{cols}</div>'
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#05070d">'
-        f'<div class="vh" id="{i}a" style="top:0"><img src="{ka}" style="object-position:50% 45%"><div class="vsh"></div>'
-        f'<div class="vstack" style="top:560px">{box(0, "VIRAT KOHLI · 13,000+ RUNS")}<div class="credit2">PHOTO: BCCI</div></div></div>'
-        f'<div class="vh" id="{i}b" style="top:960px"><img src="{pa}" style="object-position:50% 30%"><div class="vsh"></div>'
-        f'<div class="vstack" style="top:330px">{box(1, "RICKY PONTING · 12,662 RUNS")}<div class="credit2">PHOTO: GETTY IMAGES</div></div></div>'
+        f'<div class="vh" id="{i}a" style="top:0"><img src="{ka}" style="object-position:50% 32%"><div class="vsh"></div>'
+        f'<div class="vstack" style="top:700px">{box(0, "VIRAT KOHLI · 13,000+ RUNS")}<div class="credit2">PHOTO: BCCI</div></div></div>'
+        f'<div class="vh" id="{i}b" style="top:960px"><img src="{pa}" style="object-position:40% 18%"><div class="vsh"></div>'
+        f'<div class="vstack" style="top:600px">{box(1, "RICKY PONTING · 12,662 RUNS")}<div class="credit2">PHOTO: GETTY IMAGES</div></div></div>'
         f'<div class="vsb" id="{i}x">VS</div></div>')
     anim(f'tl.fromTo("#{i}a",{{yPercent:-100}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{yPercent:100}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{start + 0.1})')
@@ -859,25 +876,25 @@ def edit():
         return round(t0, 3), round(t1 - t0, 3)
 
     # ---------------- 55 years... nobody... at No. 3
-    bg("kohli_13k_bat_bw", *seg(0, s("l3", -0.05)), grade="bw", push=(1.15, 1.04), band=True)
+    bg("kohli_13k_bat_bw", *seg(0, s("l3", -0.05)), grade="bw", push=(1.12, 1.03), tall=True)
     ntag("ONE-DAY INTERNATIONALS · SINCE 1971", *seg(0.1, s("l3", -0.05)))
-    nbig(["55 YEARS"], *seg(0.15, s("l2")), sub="OF ODI CRICKET")
-    nbig(["NOBODY"], *seg(s("l2"), word("l2", 5)), sub="HAD EVER DONE THIS")
-    nbig(["AT NO. 3"], *seg(word("l2", 5), s("l3", -0.05)))
+    nbig(["55 YEARS"], *seg(0.15, s("l2")), sub="OF ODI CRICKET", y=1180, size=170)
+    nbig(["NOBODY"], *seg(s("l2"), word("l2", 5)), sub="HAD EVER DONE THIS", y=1180, size=170)
+    nbig(["AT NO. 3"], *seg(word("l2", 5), s("l3", -0.05)), y=1200, size=170)
     # ---------------- 13,000
     flash(s("l3", -0.05), peak=0.7)
     cue(s("l3", -0.05), "boom", 1.0)
-    bg("kohli_13k_celebrate", *seg(s("l3", -0.05), s("p1", -0.05)), grade="blue", push=(1.0, 1.1), band=True)
+    bg("kohli_13k_celebrate", *seg(s("l3", -0.05), s("p1", -0.05)), grade="blue", push=(1.0, 1.08), tall=True)
     ntag("NOV 2026 · ODI · NO. 3", *seg(s("l3"), s("p1", -0.05)), color="#2f6bff")
-    sbox(12954, 13000, *seg(s("l3"), s("l4")), sub="ODI RUNS AT NO. 3", pill="THE FIRST EVER")
-    sbox(13000, 13000, *seg(s("l4"), s("p1", -0.05)), sub="VIRAT KOHLI", pill="THE FIRST EVER", gold_sub=True)
+    sbox(12954, 13000, *seg(s("l3"), s("l4")), sub="ODI RUNS AT NO. 3", pill="THE FIRST EVER", y=1220)
+    sbox(13000, 13000, *seg(s("l4"), s("p1", -0.05)), sub="VIRAT KOHLI", pill="THE FIRST EVER", gold_sub=True, y=1220)
     # ---------------- Ponting's record
     bg("ponting_helmet", *seg(s("p1", -0.05), s("p2", -0.05)), credit="PHOTO: GETTY IMAGES", side="right", push=(1.0, 1.1))
     ntag("THE OLD RECORD", *seg(s("p1"), s("p2", -0.05)), color="#e3262f")
-    nbig(["RICKY", "PONTING"], *seg(word("p1", 5), s("p2", -0.05)), color="#FFD54A", y=1000, size=150, sfx="soft")
+    nbig(["RICKY", "PONTING"], *seg(word("p1", 5), s("p2", -0.05)), color="#FFD54A", y=1180, size=150, sfx="soft")
     bg("ponting_bat", *seg(s("p2", -0.05), s("p3", -0.05)), credit="PHOTO: GETTY IMAGES", side="left", push=(1.0, 1.1))
-    sbox(0, 12662, *seg(s("p2"), s("p3", -0.05)), sub="RUNS AT NO. 3", y=1000, roll=s("p2", 0.1))
-    sbox(330, 330, *seg(word("p2", 3), s("p3", -0.05)), sub="INNINGS", y=1290)
+    sbox(0, 12662, *seg(s("p2"), s("p3", -0.05)), sub="RUNS AT NO. 3", y=1100, roll=s("p2", 0.1))
+    sbox(330, 330, *seg(word("p2", 3), s("p3", -0.05)), sub="INNINGS", y=1360)
     # ---------------- head to head
     vs_scene(*seg(s("p3", -0.05), s("r1", -0.05)), [
         (1, 0, "330", s("p3")), (0, 0, "251", word("p3", 6)),
@@ -885,9 +902,10 @@ def edit():
         (1, 2, "29", word("p6", 2)), (0, 2, "48", word("p7", 2))])
     # ---------------- nobody close / birthday
     stage(*seg(s("r1", -0.05), s("r2", -0.05)), tone="#060a1a")
+    sticker("kohli_point_wc", *seg(s("r1", -0.05), s("r2", -0.05)), side="right", h=620, x=560, bottom=0)
     ranks(*seg(s("r1", -0.05), s("r2", -0.05)))
     bg("kohli_cap_glasses", *seg(s("r2", -0.05), s("q1", -0.05)), grade="blue", side="up", push=(1.0, 1.08))
-    notebox("ALL OF THIS", "A DAY BEFORE HIS 38TH BIRTHDAY", *seg(word("r2", 2), s("q1", -0.05)), t2=word("r2", 6))
+    notebox("ALL OF THIS", "A DAY BEFORE HIS 38TH BIRTHDAY", *seg(word("r2", 2), s("q1", -0.05)), t2=word("r2", 6), y=1260)
     # ---------------- CTA
     video3d("logo", s("q1", -0.05), TOTAL - s("q1", -0.05))
     comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
@@ -901,6 +919,7 @@ def edit():
 
 
 EXTRA_CSS = f"""
+.tfade{{position:absolute;left:0;right:0;top:960px;height:320px;background:linear-gradient(180deg,rgba(5,7,13,0),#05070d)}}
 .ngrade{{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.05) 30%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.92) 100%)}}
 .credit{{position:absolute;left:0;right:0;top:1560px;text-align:center;font:600 20px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55)}}
 .credit2{{text-align:center;font:600 18px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55);margin-top:12px}}
