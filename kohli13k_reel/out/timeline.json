@@ -1,0 +1,627 @@
+{
+ "duration": 35.543,
+ "source": "--tts",
+ "lines": [
+  {
+   "id": "l1",
+   "text": "Fifty five years of ODI cricket.",
+   "caption": "55 years of ODI cricket.",
+   "start": 0.239,
+   "end": 2.12,
+   "words": [
+    [
+     "55",
+     0.249,
+     0.864
+    ],
+    [
+     "years",
+     0.864,
+     1.07
+    ],
+    [
+     "of",
+     1.07,
+     1.275
+    ],
+    [
+     "ODI",
+     1.275,
+     1.685
+    ],
+    [
+     "cricket.",
+     1.685,
+     2.096
+    ]
+   ]
+  },
+  {
+   "id": "l2",
+   "text": "Nobody had ever done this at number three.",
+   "caption": "Nobody had ever done this at No. 3.",
+   "start": 2.206,
+   "end": 4.251,
+   "words": [
+    [
+     "Nobody",
+     2.206,
+     2.683
+    ],
+    [
+     "had",
+     2.683,
+     2.842
+    ],
+    [
+     "ever",
+     2.842,
+     3.161
+    ],
+    [
+     "done",
+     3.161,
+     3.479
+    ],
+    [
+     "this",
+     3.479,
+     3.638
+    ],
+    [
+     "at",
+     3.638,
+     3.798
+    ],
+    [
+     "No.",
+     3.798,
+     3.957
+    ],
+    [
+     "3.",
+     3.957,
+     4.196
+    ]
+   ]
+  },
+  {
+   "id": "l3",
+   "text": "Thirteen thousand runs.",
+   "caption": "13,000 runs.",
+   "start": 4.38,
+   "end": 5.634,
+   "words": [
+    [
+     "13,000",
+     4.399,
+     5.489
+    ],
+    [
+     "runs.",
+     5.489,
+     5.633
+    ]
+   ]
+  },
+  {
+   "id": "l4",
+   "text": "Virat Kohli is the first ever.",
+   "caption": "Virat Kohli is the first ever.",
+   "start": 5.678,
+   "end": 7.315,
+   "words": [
+    [
+     "Virat",
+     5.678,
+     6.039
+    ],
+    [
+     "Kohli",
+     6.039,
+     6.401
+    ],
+    [
+     "is",
+     6.401,
+     6.582
+    ],
+    [
+     "the",
+     6.582,
+     6.763
+    ],
+    [
+     "first",
+     6.763,
+     6.944
+    ],
+    [
+     "ever.",
+     6.944,
+     7.304
+    ]
+   ]
+  },
+  {
+   "id": "p1",
+   "text": "The record used to belong to Ricky Ponting.",
+   "caption": "The record used to belong to Ricky Ponting.",
+   "start": 7.487,
+   "end": 9.671,
+   "words": [
+    [
+     "The",
+     7.487,
+     7.655
+    ],
+    [
+     "record",
+     7.655,
+     7.99
+    ],
+    [
+     "used",
+     7.99,
+     8.326
+    ],
+    [
+     "to",
+     8.326,
+     8.494
+    ],
+    [
+     "belong",
+     8.494,
+     8.83
+    ],
+    [
+     "to",
+     8.83,
+     8.997
+    ],
+    [
+     "Ricky",
+     8.997,
+     9.333
+    ],
+    [
+     "Ponting.",
+     9.333,
+     9.669
+    ]
+   ]
+  },
+  {
+   "id": "p2",
+   "text": "Twelve thousand six hundred and sixty two runs, in three hundred and thirty innings.",
+   "caption": "12,662 runs, in 330 innings.",
+   "start": 9.714,
+   "end": 14.097,
+   "words": [
+    [
+     "12,662",
+     9.762,
+     11.789
+    ],
+    [
+     "runs,",
+     11.789,
+     12.06
+    ],
+    [
+     "in",
+     12.06,
+     12.33
+    ],
+    [
+     "330",
+     12.33,
+     13.546
+    ],
+    [
+     "innings.",
+     13.546,
+     14.087
+    ]
+   ]
+  },
+  {
+   "id": "p3",
+   "text": "Kohli went past it in just two hundred and fifty one.",
+   "caption": "Kohli went past it in just 251.",
+   "start": 14.183,
+   "end": 16.797,
+   "words": [
+    [
+     "Kohli",
+     14.183,
+     14.629
+    ],
+    [
+     "went",
+     14.629,
+     14.852
+    ],
+    [
+     "past",
+     14.852,
+     15.075
+    ],
+    [
+     "it",
+     15.075,
+     15.298
+    ],
+    [
+     "in",
+     15.298,
+     15.521
+    ],
+    [
+     "just",
+     15.521,
+     15.744
+    ],
+    [
+     "251.",
+     15.744,
+     16.747
+    ]
+   ]
+  },
+  {
+   "id": "p4",
+   "text": "Ponting averaged forty two at number three.",
+   "caption": "Ponting averaged 42 at No. 3.",
+   "start": 16.926,
+   "end": 18.988,
+   "words": [
+    [
+     "Ponting",
+     16.926,
+     17.252
+    ],
+    [
+     "averaged",
+     17.252,
+     17.9
+    ],
+    [
+     "42",
+     17.9,
+     18.388
+    ],
+    [
+     "at",
+     18.388,
+     18.549
+    ],
+    [
+     "No.",
+     18.549,
+     18.712
+    ],
+    [
+     "3.",
+     18.712,
+     18.955
+    ]
+   ]
+  },
+  {
+   "id": "p5",
+   "text": "Kohli averages over sixty one.",
+   "caption": "Kohli averages over 61.",
+   "start": 19.031,
+   "end": 20.878,
+   "words": [
+    [
+     "Kohli",
+     19.031,
+     19.352
+    ],
+    [
+     "averages",
+     19.352,
+     19.996
+    ],
+    [
+     "over",
+     19.996,
+     20.319
+    ],
+    [
+     "61.",
+     20.319,
+     20.801
+    ]
+   ]
+  },
+  {
+   "id": "p6",
+   "text": "Ponting made twenty nine hundreds there.",
+   "caption": "Ponting made 29 hundreds there.",
+   "start": 21.008,
+   "end": 22.902,
+   "words": [
+    [
+     "Ponting",
+     21.008,
+     21.34
+    ],
+    [
+     "made",
+     21.34,
+     21.672
+    ],
+    [
+     "29",
+     21.672,
+     22.17
+    ],
+    [
+     "hundreds",
+     22.17,
+     22.502
+    ],
+    [
+     "there.",
+     22.502,
+     22.835
+    ]
+   ]
+  },
+  {
+   "id": "p7",
+   "text": "Kohli has forty eight.",
+   "caption": "Kohli has 48.",
+   "start": 22.945,
+   "end": 23.918,
+   "words": [
+    [
+     "Kohli",
+     22.945,
+     23.245
+    ],
+    [
+     "has",
+     23.245,
+     23.395
+    ],
+    [
+     "48.",
+     23.395,
+     23.845
+    ]
+   ]
+  },
+  {
+   "id": "r1",
+   "text": "Sangakkara, Kallis, Williamson. Nobody else is even close.",
+   "caption": "Sangakkara, Kallis, Williamson. Nobody else is even close.",
+   "start": 24.09,
+   "end": 27.397,
+   "words": [
+    [
+     "Sangakkara,",
+     24.09,
+     24.785
+    ],
+    [
+     "Kallis,",
+     24.785,
+     25.133
+    ],
+    [
+     "Williamson.",
+     25.133,
+     25.654
+    ],
+    [
+     "Nobody",
+     25.654,
+     26.175
+    ],
+    [
+     "else",
+     26.175,
+     26.522
+    ],
+    [
+     "is",
+     26.522,
+     26.697
+    ],
+    [
+     "even",
+     26.697,
+     27.044
+    ],
+    [
+     "close.",
+     27.044,
+     27.391
+    ]
+   ]
+  },
+  {
+   "id": "r2",
+   "text": "And he did all of it a day before his thirty eighth birthday.",
+   "caption": "And he did all of it a day before his 38th birthday.",
+   "start": 27.526,
+   "end": 30.246,
+   "words": [
+    [
+     "And",
+     27.526,
+     27.707
+    ],
+    [
+     "he",
+     27.707,
+     27.889
+    ],
+    [
+     "did",
+     27.889,
+     28.07
+    ],
+    [
+     "all",
+     28.07,
+     28.251
+    ],
+    [
+     "of",
+     28.251,
+     28.433
+    ],
+    [
+     "it",
+     28.433,
+     28.613
+    ],
+    [
+     "a",
+     28.613,
+     28.794
+    ],
+    [
+     "day",
+     28.794,
+     28.976
+    ],
+    [
+     "before",
+     28.976,
+     29.52
+    ],
+    [
+     "his",
+     29.52,
+     29.7
+    ],
+    [
+     "38th",
+     29.7,
+     29.881
+    ],
+    [
+     "birthday.",
+     29.881,
+     30.244
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "So, is Virat Kohli the greatest number three of all time? Tell me in the comments, and follow for more.",
+   "caption": "So, is Virat Kohli the greatest No. 3 of all time? Tell me in the comments, and follow for more.",
+   "start": 30.418,
+   "end": 35.457,
+   "words": [
+    [
+     "So,",
+     30.418,
+     30.601
+    ],
+    [
+     "is",
+     30.601,
+     30.783
+    ],
+    [
+     "Virat",
+     30.783,
+     31.147
+    ],
+    [
+     "Kohli",
+     31.147,
+     31.512
+    ],
+    [
+     "the",
+     31.512,
+     31.695
+    ],
+    [
+     "greatest",
+     31.695,
+     32.059
+    ],
+    [
+     "No.",
+     32.059,
+     32.242
+    ],
+    [
+     "3",
+     32.242,
+     32.515
+    ],
+    [
+     "of",
+     32.515,
+     32.698
+    ],
+    [
+     "all",
+     32.698,
+     32.879
+    ],
+    [
+     "time?",
+     32.879,
+     33.245
+    ],
+    [
+     "Tell",
+     33.245,
+     33.427
+    ],
+    [
+     "me",
+     33.427,
+     33.61
+    ],
+    [
+     "in",
+     33.61,
+     33.791
+    ],
+    [
+     "the",
+     33.791,
+     33.974
+    ],
+    [
+     "comments,",
+     33.974,
+     34.339
+    ],
+    [
+     "and",
+     34.339,
+     34.521
+    ],
+    [
+     "follow",
+     34.521,
+     34.885
+    ],
+    [
+     "for",
+     34.885,
+     35.068
+    ],
+    [
+     "more.",
+     35.068,
+     35.433
+    ]
+   ]
+  }
+ ]
+}
