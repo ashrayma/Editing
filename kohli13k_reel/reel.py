@@ -756,14 +756,14 @@ def bg(name, start, dur, grade="dark", credit="PHOTO: BCCI", push=(1.0, 1.08), s
         fxp = min(1.0, max(0.0, (W / 2 - focus_x(name) * dw) / (W - dw))) if dw > W + 1 else 0.5
         filt = "grayscale(1) contrast(1.1) brightness(.85)" if grade == "bw" else "none"
         marks = face_marks("hi/" + name, (W - dw) * fxp, (bh - dh) * 0.3, dw, dh)
-        add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#05070d;overflow:hidden">'
+        add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#0b0b0c;overflow:hidden">'
             f'<div id="{i}m" style="position:absolute;left:0;top:0;width:100%;height:{bh}px;transform-origin:{origin}">'
             f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:{fxp * 100:.1f}% 30%;filter:{filt}">{marks}</div>'
             f'<div class="tfade"></div></div>')
         anim(f'tl.fromTo("#{i}m",{{scale:{push[0]}}},{{scale:{push[1]},duration:{dur},ease:"none"}},{start})')
     else:
         i = photo(name, start, dur, side=side, fx="grey" if grade == "bw" else None, push=push, origin=origin, whoosh=bool(side))
-    tint = {"dark": "rgba(0,0,0,0)", "bw": "rgba(0,0,0,.1)", "blue": "rgba(10,30,90,.28)"}[grade]
+    tint = {"dark": "rgba(0,0,0,0)", "bw": "rgba(0,0,0,.1)", "blue": "rgba(11,11,12,.25)"}[grade]
     g = nid("gr")
     add(f'<div id="{g}" {clip_attrs(start, dur)} class="ngrade" style="z-index:{z()};background-color:{tint}"></div>')
     if credit:
@@ -772,13 +772,13 @@ def bg(name, start, dur, grade="dark", credit="PHOTO: BCCI", push=(1.0, 1.08), s
     return i
 
 
-def ntag(txt, start, dur, color="#e3262f"):
+def ntag(txt, start, dur, color=Y):
     i = nid("tg")
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ntag" style="z-index:{z() + 150};background:{color}">{html.escape(txt)}</div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ntag" style="z-index:{z() + 150};background:{color};color:{"#111" if color in (Y, "#fff") else "#fff"}">{html.escape(txt)}</div>')
     anim(f'tl.fromTo("#{i}",{{x:-40,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
 
 
-def nbig(lines, start, dur, color="#ff3340", sub=None, y=860, size=190, sfx="impact"):
+def nbig(lines, start, dur, color=Y, sub=None, y=860, size=190, sfx="impact"):
     """The huge italic headline that blurs in."""
     i = nid("nb")
     cue(start, sfx, 1.0)
@@ -885,13 +885,13 @@ def edit():
     flash(s("l3", -0.05), peak=0.7)
     cue(s("l3", -0.05), "boom", 1.0)
     bg("kohli_13k_celebrate", *seg(s("l3", -0.05), s("p1", -0.05)), grade="blue", push=(1.0, 1.08), tall=True)
-    ntag("NOV 2026 · ODI · NO. 3", *seg(s("l3"), s("p1", -0.05)), color="#2f6bff")
+    ntag("NOV 2026 · ODI · NO. 3", *seg(s("l3"), s("p1", -0.05)), color="#fff")
     sbox(12954, 13000, *seg(s("l3"), s("l4")), sub="ODI RUNS AT NO. 3", pill="THE FIRST EVER", y=1220)
     sbox(13000, 13000, *seg(s("l4"), s("p1", -0.05)), sub="VIRAT KOHLI", pill="THE FIRST EVER", gold_sub=True, y=1220)
     # ---------------- Ponting's record
     bg("ponting_helmet", *seg(s("p1", -0.05), s("p2", -0.05)), credit="PHOTO: GETTY IMAGES", side="right", push=(1.0, 1.1))
-    ntag("THE OLD RECORD", *seg(s("p1"), s("p2", -0.05)), color="#e3262f")
-    nbig(["RICKY", "PONTING"], *seg(word("p1", 5), s("p2", -0.05)), color="#FFD54A", y=1180, size=150, sfx="soft")
+    ntag("THE OLD RECORD", *seg(s("p1"), s("p2", -0.05)), color="#fff")
+    nbig(["RICKY", "PONTING"], *seg(word("p1", 5), s("p2", -0.05)), color="#fff", y=1180, size=150, sfx="soft")
     bg("ponting_bat", *seg(s("p2", -0.05), s("p3", -0.05)), credit="PHOTO: GETTY IMAGES", side="left", push=(1.0, 1.1))
     sbox(0, 12662, *seg(s("p2"), s("p3", -0.05)), sub="RUNS AT NO. 3", y=1100, roll=s("p2", 0.1))
     sbox(330, 330, *seg(word("p2", 3), s("p3", -0.05)), sub="INNINGS", y=1360)
@@ -901,7 +901,7 @@ def edit():
         (1, 1, "42.48", word("p4", 2)), (0, 1, "61+", word("p5", 3)),
         (1, 2, "29", word("p6", 2)), (0, 2, "48", word("p7", 2))])
     # ---------------- nobody close / birthday
-    stage(*seg(s("r1", -0.05), s("r2", -0.05)), tone="#060a1a")
+    stage(*seg(s("r1", -0.05), s("r2", -0.05)), tone="#0b0b0c")
     sticker("kohli_point_wc", *seg(s("r1", -0.05), s("r2", -0.05)), side="right", h=620, x=560, bottom=0)
     ranks(*seg(s("r1", -0.05), s("r2", -0.05)))
     bg("kohli_cap_glasses", *seg(s("r2", -0.05), s("q1", -0.05)), grade="blue", side="up", push=(1.0, 1.08))
@@ -919,37 +919,37 @@ def edit():
 
 
 EXTRA_CSS = f"""
-.tfade{{position:absolute;left:0;right:0;top:960px;height:320px;background:linear-gradient(180deg,rgba(5,7,13,0),#05070d)}}
+.tfade{{position:absolute;left:0;right:0;top:960px;height:320px;background:linear-gradient(180deg,rgba(11,11,12,0),#0b0b0c)}}
 .ngrade{{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.05) 30%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.92) 100%)}}
 .credit{{position:absolute;left:0;right:0;top:1560px;text-align:center;font:600 20px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55)}}
 .credit2{{text-align:center;font:600 18px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55);margin-top:12px}}
 .ntag{{position:absolute;left:70px;top:330px;color:#fff;font:800 24px "IDisp";letter-spacing:.1em;padding:9px 18px;border-radius:999px}}
 .nbig{{position:absolute;left:30px;right:30px;text-align:center;font-family:"IDisp";font-weight:900;font-style:italic;letter-spacing:-.03em;line-height:.92;text-transform:uppercase;text-shadow:0 0 50px rgba(0,0,0,.6),0 8px 30px rgba(0,0,0,.6)}}
 .nsub{{font:700 38px "IDisp";font-style:normal;letter-spacing:.3em;color:#fff;margin-top:22px;text-shadow:none}}
-.sbox{{position:absolute;left:80px;right:80px;text-align:center;background:rgba(8,12,26,.84);border:2px solid rgba(255,255,255,.16);border-radius:28px;padding:30px 20px 34px;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
-.sbox b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:170px;line-height:1;color:#FFD54A;text-shadow:0 4px 0 #C99A10,0 0 40px rgba(255,213,74,.35)}}
+.sbox{{position:absolute;left:80px;right:80px;text-align:center;background:rgba(14,14,16,.86);border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 20px 34px;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
+.sbox b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:170px;line-height:1;color:{Y};text-shadow:0 4px 0 #b8941e,0 0 40px rgba(254,222,92,.35)}}
 .sbox span{{display:block;font:800 40px "IDisp";letter-spacing:.14em;color:#fff;margin-top:10px}}
-.sbox span.gsub{{font-style:italic;font-size:84px;letter-spacing:-.01em;color:#FFD54A;font-weight:900}}
+.sbox span.gsub{{font-style:italic;font-size:84px;letter-spacing:-.01em;color:{Y};font-weight:900}}
 .spill{{position:absolute;left:50%;top:-30px;transform:translateX(-50%);background:{Y};color:#111;font:900 26px "IDisp";font-style:italic;letter-spacing:.06em;padding:8px 22px;border-radius:999px;white-space:nowrap}}
 .vh{{position:absolute;left:0;right:0;height:960px;overflow:hidden}}
 .vh img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
 .vsh{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75))}}
 .vstack{{position:absolute;left:60px;right:60px}}
 .vpill{{display:table;margin:0 auto -18px;position:relative;z-index:2;background:{Y};color:#111;font:900 24px "IDisp";letter-spacing:.06em;padding:8px 20px;border-radius:999px}}
-.vbox{{display:flex;background:rgba(8,12,26,.86);border:2px solid rgba(255,255,255,.16);border-radius:24px;padding:34px 30px 22px}}
+.vbox{{display:flex;background:rgba(14,14,16,.88);border:2px solid rgba(254,222,92,.35);border-radius:24px;padding:34px 30px 22px}}
 .vc{{flex:0 0 30%;text-align:left}}.vc:nth-child(2){{flex-basis:40%}}
 .vc i{{display:block;font:700 22px "IDisp";font-style:normal;letter-spacing:.14em;color:#aab}}
-.vc b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:90px;line-height:1.05;color:#FFD54A;text-shadow:0 3px 0 #C99A10}}
-.vsb{{position:absolute;left:50%;top:960px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:#0a1030;border:4px solid {Y};color:{Y};font:900 48px "IDisp";font-style:italic;display:flex;align-items:center;justify-content:center;z-index:5}}
+.vc b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:90px;line-height:1.05;color:{Y};text-shadow:0 3px 0 #b8941e}}
+.vsb{{position:absolute;left:50%;top:960px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:#111;border:4px solid {Y};color:{Y};font:900 48px "IDisp";font-style:italic;display:flex;align-items:center;justify-content:center;z-index:5}}
 .ranks{{position:absolute;left:70px;right:70px;top:420px}}
-.rh{{font-family:"IDisp";font-weight:900;font-style:italic;font-size:68px;color:#FFD54A;line-height:1;margin-bottom:40px}}
+.rh{{font-family:"IDisp";font-weight:900;font-style:italic;font-size:68px;color:{Y};line-height:1;margin-bottom:40px}}
 .rr{{margin-bottom:34px}}
 .rl{{display:flex;justify-content:space-between;font:800 30px "IDisp";letter-spacing:.06em;color:#dfe3ea;margin-bottom:10px}}
 .rr.rtop .rl{{color:{Y}}}
 .rt{{height:20px;background:rgba(255,255,255,.08);border-radius:6px}}
-.rf{{height:100%;background:linear-gradient(90deg,#3a5bd9,#7c95ff);border-radius:6px;transform-origin:0 50%}}
+.rf{{height:100%;background:linear-gradient(90deg,#55555c,#c9c9cf);border-radius:6px;transform-origin:0 50%}}
 .rr.rtop .rf{{background:linear-gradient(90deg,#e0a800,{Y})}}
-.rfoot{{margin-top:60px;font-family:"IDisp";font-weight:900;font-style:italic;font-size:78px;color:#FFD54A;text-align:center}}
+.rfoot{{margin-top:60px;font-family:"IDisp";font-weight:900;font-style:italic;font-size:78px;color:{Y};text-align:center}}
 
 @font-face{{font-family:"Bebas";src:url({media("assets/fonts/BebasNeue.woff2")})}}
 @font-face{{font-family:"Osw";font-weight:700;src:url({media("assets/fonts/Oswald-700.woff2")})}}
@@ -1134,8 +1134,8 @@ html,body{{margin:0;background:#000}}
 .who{{font-size:30px;font-weight:700;color:rgba(255,255,255,.6)}}
 .what{{font-size:46px;font-weight:800;color:#fff;min-height:56px}}
 .cta2{{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:40px;font-weight:700;color:rgba(255,255,255,.75)}}
-.brand{{position:absolute;left:0;right:0;top:230px;text-align:center;z-index:950;opacity:.85}}
-.brand img{{width:230px}}
+.brand{{position:absolute;right:56px;top:300px;text-align:right;z-index:950;opacity:.95}}
+.brand img{{width:250px}}
 """
 
 SVG_FILTERS = """<svg width="0" height="0" style="position:absolute"><filter id="red"><feColorMatrix type="matrix"
