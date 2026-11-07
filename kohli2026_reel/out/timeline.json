@@ -1,0 +1,1267 @@
+{
+ "duration": 64.364,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "s1",
+   "text": "How does Virat Kohli keep doing this?",
+   "caption": "How does Virat Kohli keep doing this?",
+   "start": 0.239,
+   "end": 2.364,
+   "words": [
+    [
+     "How",
+     0.287,
+     0.513
+    ],
+    [
+     "does",
+     0.513,
+     0.738
+    ],
+    [
+     "Virat",
+     0.738,
+     1.189
+    ],
+    [
+     "Kohli",
+     1.189,
+     1.639
+    ],
+    [
+     "keep",
+     1.639,
+     1.865
+    ],
+    [
+     "doing",
+     1.865,
+     2.09
+    ],
+    [
+     "this?",
+     2.09,
+     2.316
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "He's thirty eight years old.",
+   "caption": "He's 38 years old.",
+   "start": 2.493,
+   "end": 3.737,
+   "words": [
+    [
+     "He's",
+     2.531,
+     2.724
+    ],
+    [
+     "38",
+     2.724,
+     3.303
+    ],
+    [
+     "years",
+     3.303,
+     3.496
+    ],
+    [
+     "old.",
+     3.496,
+     3.689
+    ]
+   ]
+  },
+  {
+   "id": "s3",
+   "text": "And what he's doing in ODI cricket right now will blow your mind.",
+   "caption": "And what he's doing in ODI cricket right now will blow your mind.",
+   "start": 3.78,
+   "end": 7.665,
+   "words": [
+    [
+     "And",
+     3.828,
+     4.079
+    ],
+    [
+     "what",
+     4.079,
+     4.332
+    ],
+    [
+     "he's",
+     4.332,
+     4.584
+    ],
+    [
+     "doing",
+     4.584,
+     4.835
+    ],
+    [
+     "in",
+     4.835,
+     5.088
+    ],
+    [
+     "ODI",
+     5.088,
+     5.591
+    ],
+    [
+     "cricket",
+     5.591,
+     6.096
+    ],
+    [
+     "right",
+     6.096,
+     6.347
+    ],
+    [
+     "now",
+     6.347,
+     6.6
+    ],
+    [
+     "will",
+     6.6,
+     6.852
+    ],
+    [
+     "blow",
+     6.852,
+     7.103
+    ],
+    [
+     "your",
+     7.103,
+     7.356
+    ],
+    [
+     "mind.",
+     7.356,
+     7.608
+    ]
+   ]
+  },
+  {
+   "id": "s4",
+   "text": "But that's not even the wild part.",
+   "caption": "But that's not even the wild part.",
+   "start": 7.794,
+   "end": 9.172,
+   "words": [
+    [
+     "But",
+     7.833,
+     7.992
+    ],
+    [
+     "that's",
+     7.992,
+     8.153
+    ],
+    [
+     "not",
+     8.153,
+     8.313
+    ],
+    [
+     "even",
+     8.313,
+     8.633
+    ],
+    [
+     "the",
+     8.633,
+     8.794
+    ],
+    [
+     "wild",
+     8.794,
+     8.954
+    ],
+    [
+     "part.",
+     8.954,
+     9.115
+    ]
+   ]
+  },
+  {
+   "id": "s5",
+   "text": "This could be the best ODI year of his entire career.",
+   "caption": "This could be the best ODI year of his entire career.",
+   "start": 9.301,
+   "end": 12.804,
+   "words": [
+    [
+     "This",
+     9.34,
+     9.567
+    ],
+    [
+     "could",
+     9.567,
+     9.795
+    ],
+    [
+     "be",
+     9.795,
+     10.023
+    ],
+    [
+     "the",
+     10.023,
+     10.251
+    ],
+    [
+     "best",
+     10.251,
+     10.478
+    ],
+    [
+     "ODI",
+     10.478,
+     10.934
+    ],
+    [
+     "year",
+     10.934,
+     11.162
+    ],
+    [
+     "of",
+     11.162,
+     11.389
+    ],
+    [
+     "his",
+     11.389,
+     11.617
+    ],
+    [
+     "entire",
+     11.617,
+     12.3
+    ],
+    [
+     "career.",
+     12.3,
+     12.756
+    ]
+   ]
+  },
+  {
+   "id": "s6",
+   "text": "Think about it.",
+   "caption": "Think about it.",
+   "start": 12.933,
+   "end": 13.526,
+   "words": [
+    [
+     "Think",
+     12.971,
+     13.098
+    ],
+    [
+     "about",
+     13.098,
+     13.351
+    ],
+    [
+     "it.",
+     13.351,
+     13.478
+    ]
+   ]
+  },
+  {
+   "id": "s7",
+   "text": "His strike rate this year is over one twenty.",
+   "caption": "His strike rate this year is over 120.",
+   "start": 13.569,
+   "end": 16.124,
+   "words": [
+    [
+     "His",
+     13.608,
+     13.778
+    ],
+    [
+     "strike",
+     13.778,
+     14.119
+    ],
+    [
+     "rate",
+     14.119,
+     14.459
+    ],
+    [
+     "this",
+     14.459,
+     14.63
+    ],
+    [
+     "year",
+     14.63,
+     14.799
+    ],
+    [
+     "is",
+     14.799,
+     14.969
+    ],
+    [
+     "over",
+     14.969,
+     15.31
+    ],
+    [
+     "120.",
+     15.31,
+     16.077
+    ]
+   ]
+  },
+  {
+   "id": "s8",
+   "text": "He has never scored this fast in his whole ODI career.",
+   "caption": "He has never scored this fast in his whole ODI career.",
+   "start": 16.167,
+   "end": 19.478,
+   "words": [
+    [
+     "He",
+     16.215,
+     16.415
+    ],
+    [
+     "has",
+     16.415,
+     16.616
+    ],
+    [
+     "never",
+     16.616,
+     17.016
+    ],
+    [
+     "scored",
+     17.016,
+     17.417
+    ],
+    [
+     "this",
+     17.417,
+     17.618
+    ],
+    [
+     "fast",
+     17.618,
+     17.818
+    ],
+    [
+     "in",
+     17.818,
+     18.018
+    ],
+    [
+     "his",
+     18.018,
+     18.219
+    ],
+    [
+     "whole",
+     18.219,
+     18.619
+    ],
+    [
+     "ODI",
+     18.619,
+     19.02
+    ],
+    [
+     "career.",
+     19.02,
+     19.421
+    ]
+   ]
+  },
+  {
+   "id": "s9",
+   "text": "Thirty eight years old.",
+   "caption": "38 years old.",
+   "start": 19.608,
+   "end": 20.622,
+   "words": [
+    [
+     "38",
+     19.646,
+     20.174
+    ],
+    [
+     "years",
+     20.174,
+     20.35
+    ],
+    [
+     "old.",
+     20.35,
+     20.526
+    ]
+   ]
+  },
+  {
+   "id": "s10",
+   "text": "The fag end of his career.",
+   "caption": "The fag end of his career.",
+   "start": 20.665,
+   "end": 22.081,
+   "words": [
+    [
+     "The",
+     20.703,
+     20.894
+    ],
+    [
+     "fag",
+     20.894,
+     21.083
+    ],
+    [
+     "end",
+     21.083,
+     21.274
+    ],
+    [
+     "of",
+     21.274,
+     21.463
+    ],
+    [
+     "his",
+     21.463,
+     21.654
+    ],
+    [
+     "career.",
+     21.654,
+     22.033
+    ]
+   ]
+  },
+  {
+   "id": "s11",
+   "text": "He's already achieved everything.",
+   "caption": "He's already achieved everything.",
+   "start": 22.124,
+   "end": 23.856,
+   "words": [
+    [
+     "He's",
+     22.163,
+     22.312
+    ],
+    [
+     "already",
+     22.312,
+     22.761
+    ],
+    [
+     "achieved",
+     22.761,
+     23.211
+    ],
+    [
+     "everything.",
+     23.211,
+     23.809
+    ]
+   ]
+  },
+  {
+   "id": "s12",
+   "text": "And he's still pulling out his best.",
+   "caption": "And he's still pulling out his best.",
+   "start": 23.9,
+   "end": 25.718,
+   "words": [
+    [
+     "And",
+     23.938,
+     24.154
+    ],
+    [
+     "he's",
+     24.154,
+     24.37
+    ],
+    [
+     "still",
+     24.37,
+     24.588
+    ],
+    [
+     "pulling",
+     24.588,
+     25.02
+    ],
+    [
+     "out",
+     25.02,
+     25.236
+    ],
+    [
+     "his",
+     25.236,
+     25.454
+    ],
+    [
+     "best.",
+     25.454,
+     25.67
+    ]
+   ]
+  },
+  {
+   "id": "s13",
+   "text": "Incredible.",
+   "caption": "Incredible.",
+   "start": 25.804,
+   "end": 26.598,
+   "words": [
+    [
+     "Incredible.",
+     25.842,
+     26.512
+    ]
+   ]
+  },
+  {
+   "id": "s14",
+   "text": "It's insane!",
+   "caption": "It's insane!",
+   "start": 26.641,
+   "end": 27.531,
+   "words": [
+    [
+     "It's",
+     26.679,
+     26.88
+    ],
+    [
+     "insane!",
+     26.88,
+     27.483
+    ]
+   ]
+  },
+  {
+   "id": "e1",
+   "text": "Let me explain.",
+   "caption": "Let me explain.",
+   "start": 27.66,
+   "end": 28.349,
+   "words": [
+    [
+     "Let",
+     27.699,
+     27.849
+    ],
+    [
+     "me",
+     27.849,
+     28.0
+    ],
+    [
+     "explain.",
+     28.0,
+     28.301
+    ]
+   ]
+  },
+  {
+   "id": "e2",
+   "text": "The old Kohli formula was simple.",
+   "caption": "The old Kohli formula was simple.",
+   "start": 28.435,
+   "end": 30.12,
+   "words": [
+    [
+     "The",
+     28.474,
+     28.633
+    ],
+    [
+     "old",
+     28.633,
+     28.793
+    ],
+    [
+     "Kohli",
+     28.793,
+     29.113
+    ],
+    [
+     "formula",
+     29.113,
+     29.592
+    ],
+    [
+     "was",
+     29.592,
+     29.752
+    ],
+    [
+     "simple.",
+     29.752,
+     30.072
+    ]
+   ]
+  },
+  {
+   "id": "e3",
+   "text": "Settle in first, then attack.",
+   "caption": "Settle in first, then attack.",
+   "start": 30.163,
+   "end": 31.895,
+   "words": [
+    [
+     "Settle",
+     30.211,
+     30.678
+    ],
+    [
+     "in",
+     30.678,
+     30.912
+    ],
+    [
+     "first,",
+     30.912,
+     31.145
+    ],
+    [
+     "then",
+     31.145,
+     31.379
+    ],
+    [
+     "attack.",
+     31.379,
+     31.847
+    ]
+   ]
+  },
+  {
+   "id": "e4",
+   "text": "Now? He attacks from ball one.",
+   "caption": "Now? He attacks from ball one.",
+   "start": 31.981,
+   "end": 33.971,
+   "words": [
+    [
+     "Now?",
+     32.019,
+     32.257
+    ],
+    [
+     "He",
+     32.257,
+     32.495
+    ],
+    [
+     "attacks",
+     32.495,
+     32.971
+    ],
+    [
+     "from",
+     32.971,
+     33.21
+    ],
+    [
+     "ball",
+     33.21,
+     33.447
+    ],
+    [
+     "one.",
+     33.447,
+     33.923
+    ]
+   ]
+  },
+  {
+   "id": "e5",
+   "text": "He changed his intent completely.",
+   "caption": "He changed his intent completely.",
+   "start": 34.057,
+   "end": 35.981,
+   "words": [
+    [
+     "He",
+     34.096,
+     34.279
+    ],
+    [
+     "changed",
+     34.279,
+     34.647
+    ],
+    [
+     "his",
+     34.647,
+     34.831
+    ],
+    [
+     "intent",
+     34.831,
+     35.198
+    ],
+    [
+     "completely.",
+     35.198,
+     35.933
+    ]
+   ]
+  },
+  {
+   "id": "e6",
+   "text": "At the stage where most players slow down,",
+   "caption": "At the stage where most players slow down,",
+   "start": 36.024,
+   "end": 38.282,
+   "words": [
+    [
+     "At",
+     36.062,
+     36.279
+    ],
+    [
+     "the",
+     36.279,
+     36.497
+    ],
+    [
+     "stage",
+     36.497,
+     36.931
+    ],
+    [
+     "where",
+     36.931,
+     37.366
+    ],
+    [
+     "most",
+     37.366,
+     37.583
+    ],
+    [
+     "players",
+     37.583,
+     37.8
+    ],
+    [
+     "slow",
+     37.8,
+     38.017
+    ],
+    [
+     "down,",
+     38.017,
+     38.234
+    ]
+   ]
+  },
+  {
+   "id": "e7",
+   "text": "Kohli got even more aggressive.",
+   "caption": "Kohli got even more aggressive.",
+   "start": 38.303,
+   "end": 40.035,
+   "words": [
+    [
+     "Kohli",
+     38.342,
+     38.636
+    ],
+    [
+     "got",
+     38.636,
+     38.783
+    ],
+    [
+     "even",
+     38.783,
+     39.078
+    ],
+    [
+     "more",
+     39.078,
+     39.371
+    ],
+    [
+     "aggressive.",
+     39.371,
+     39.959
+    ]
+   ]
+  },
+  {
+   "id": "e8",
+   "text": "And just when you think there's nothing left for him to prove,",
+   "caption": "And just when you think there's nothing left for him to prove,",
+   "start": 40.122,
+   "end": 42.811,
+   "words": [
+    [
+     "And",
+     40.16,
+     40.334
+    ],
+    [
+     "just",
+     40.334,
+     40.507
+    ],
+    [
+     "when",
+     40.507,
+     40.68
+    ],
+    [
+     "you",
+     40.68,
+     40.855
+    ],
+    [
+     "think",
+     40.855,
+     41.028
+    ],
+    [
+     "there's",
+     41.028,
+     41.375
+    ],
+    [
+     "nothing",
+     41.375,
+     41.722
+    ],
+    [
+     "left",
+     41.722,
+     41.896
+    ],
+    [
+     "for",
+     41.896,
+     42.069
+    ],
+    [
+     "him",
+     42.069,
+     42.242
+    ],
+    [
+     "to",
+     42.242,
+     42.416
+    ],
+    [
+     "prove,",
+     42.416,
+     42.763
+    ]
+   ]
+  },
+  {
+   "id": "e9",
+   "text": "he finds something more.",
+   "caption": "he finds something more.",
+   "start": 42.833,
+   "end": 44.077,
+   "words": [
+    [
+     "he",
+     42.871,
+     43.034
+    ],
+    [
+     "finds",
+     43.034,
+     43.199
+    ],
+    [
+     "something",
+     43.199,
+     43.691
+    ],
+    [
+     "more.",
+     43.691,
+     44.019
+    ]
+   ]
+  },
+  {
+   "id": "y1",
+   "text": "If you watched twenty sixteen Virat Kohli, you know how special he was.",
+   "caption": "If you watched 2016 Virat Kohli, you know how special he was.",
+   "start": 44.206,
+   "end": 48.12,
+   "words": [
+    [
+     "If",
+     44.244,
+     44.426
+    ],
+    [
+     "you",
+     44.426,
+     44.608
+    ],
+    [
+     "watched",
+     44.608,
+     44.971
+    ],
+    [
+     "2016",
+     44.971,
+     46.062
+    ],
+    [
+     "Virat",
+     46.062,
+     46.426
+    ],
+    [
+     "Kohli,",
+     46.426,
+     46.789
+    ],
+    [
+     "you",
+     46.789,
+     46.971
+    ],
+    [
+     "know",
+     46.971,
+     47.153
+    ],
+    [
+     "how",
+     47.153,
+     47.335
+    ],
+    [
+     "special",
+     47.335,
+     47.699
+    ],
+    [
+     "he",
+     47.699,
+     47.88
+    ],
+    [
+     "was.",
+     47.88,
+     48.062
+    ]
+   ]
+  },
+  {
+   "id": "y2",
+   "text": "But I genuinely think twenty twenty six Virat Kohli, in ODIs, is even better.",
+   "caption": "But I genuinely think 2026 Virat Kohli, in ODIs, is even better.",
+   "start": 48.206,
+   "end": 53.517,
+   "words": [
+    [
+     "But",
+     48.244,
+     48.453
+    ],
+    [
+     "I",
+     48.453,
+     48.661
+    ],
+    [
+     "genuinely",
+     48.661,
+     49.496
+    ],
+    [
+     "think",
+     49.496,
+     49.704
+    ],
+    [
+     "2026",
+     49.704,
+     50.956
+    ],
+    [
+     "Virat",
+     50.956,
+     51.373
+    ],
+    [
+     "Kohli,",
+     51.373,
+     51.79
+    ],
+    [
+     "in",
+     51.79,
+     51.999
+    ],
+    [
+     "ODIs,",
+     51.999,
+     52.416
+    ],
+    [
+     "is",
+     52.416,
+     52.625
+    ],
+    [
+     "even",
+     52.625,
+     53.042
+    ],
+    [
+     "better.",
+     53.042,
+     53.459
+    ]
+   ]
+  },
+  {
+   "id": "o1",
+   "text": "He's on another level.",
+   "caption": "He's on another level.",
+   "start": 53.646,
+   "end": 54.9,
+   "words": [
+    [
+     "He's",
+     53.694,
+     53.856
+    ],
+    [
+     "on",
+     53.856,
+     54.019
+    ],
+    [
+     "another",
+     54.019,
+     54.507
+    ],
+    [
+     "level.",
+     54.507,
+     54.833
+    ]
+   ]
+  },
+  {
+   "id": "o2",
+   "text": "He is one of one.",
+   "caption": "He is one of one.",
+   "start": 54.943,
+   "end": 56.254,
+   "words": [
+    [
+     "He",
+     55.0,
+     55.166
+    ],
+    [
+     "is",
+     55.166,
+     55.331
+    ],
+    [
+     "one",
+     55.331,
+     55.661
+    ],
+    [
+     "of",
+     55.661,
+     55.827
+    ],
+    [
+     "one.",
+     55.827,
+     56.158
+    ]
+   ]
+  },
+  {
+   "id": "o3",
+   "text": "And as Indians, we're lucky to call him our own.",
+   "caption": "And as Indians, we're lucky to call him our own.",
+   "start": 56.34,
+   "end": 58.694,
+   "words": [
+    [
+     "And",
+     56.378,
+     56.552
+    ],
+    [
+     "as",
+     56.552,
+     56.727
+    ],
+    [
+     "Indians,",
+     56.727,
+     57.076
+    ],
+    [
+     "we're",
+     57.076,
+     57.425
+    ],
+    [
+     "lucky",
+     57.425,
+     57.773
+    ],
+    [
+     "to",
+     57.773,
+     57.948
+    ],
+    [
+     "call",
+     57.948,
+     58.122
+    ],
+    [
+     "him",
+     58.122,
+     58.297
+    ],
+    [
+     "our",
+     58.297,
+     58.472
+    ],
+    [
+     "own.",
+     58.472,
+     58.646
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "So what do you think? Twenty sixteen Kohli, or twenty twenty six Kohli? Comment below, and follow for more!",
+   "caption": "So what do you think? 2016 Kohli, or 2026 Kohli? Comment below, and follow for more!",
+   "start": 58.823,
+   "end": 64.278,
+   "words": [
+    [
+     "So",
+     58.861,
+     59.029
+    ],
+    [
+     "what",
+     59.029,
+     59.197
+    ],
+    [
+     "do",
+     59.197,
+     59.365
+    ],
+    [
+     "you",
+     59.365,
+     59.532
+    ],
+    [
+     "think?",
+     59.532,
+     59.7
+    ],
+    [
+     "2016",
+     59.7,
+     60.706
+    ],
+    [
+     "Kohli,",
+     60.706,
+     61.042
+    ],
+    [
+     "or",
+     61.042,
+     61.21
+    ],
+    [
+     "2026",
+     61.21,
+     62.216
+    ],
+    [
+     "Kohli?",
+     62.216,
+     62.552
+    ],
+    [
+     "Comment",
+     62.552,
+     62.887
+    ],
+    [
+     "below,",
+     62.887,
+     63.223
+    ],
+    [
+     "and",
+     63.223,
+     63.39
+    ],
+    [
+     "follow",
+     63.39,
+     63.726
+    ],
+    [
+     "for",
+     63.726,
+     63.894
+    ],
+    [
+     "more!",
+     63.894,
+     64.23
+    ]
+   ]
+  }
+ ]
+}

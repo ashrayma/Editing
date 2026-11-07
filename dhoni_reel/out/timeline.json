@@ -1,0 +1,1444 @@
+{
+ "duration": 76.42,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Growing up, I had one hot take I would not shut up about.",
+   "caption": "Growing up, I had one hot take I would not shut up about.",
+   "start": 0.25,
+   "end": 4.7,
+   "words": [
+    [
+     "Growing",
+     0.29,
+     0.803
+    ],
+    [
+     "up,",
+     0.803,
+     1.059
+    ],
+    [
+     "I",
+     1.059,
+     1.316
+    ],
+    [
+     "had",
+     1.316,
+     1.572
+    ],
+    [
+     "one",
+     1.572,
+     2.085
+    ],
+    [
+     "hot",
+     2.085,
+     2.342
+    ],
+    [
+     "take",
+     2.342,
+     2.855
+    ],
+    [
+     "I",
+     2.855,
+     3.111
+    ],
+    [
+     "would",
+     3.111,
+     3.368
+    ],
+    [
+     "not",
+     3.368,
+     3.624
+    ],
+    [
+     "shut",
+     3.624,
+     3.881
+    ],
+    [
+     "up",
+     3.881,
+     4.137
+    ],
+    [
+     "about.",
+     4.137,
+     4.65
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "MS Dhoni is the greatest of all time.",
+   "caption": "MS Dhoni is the greatest of all time.",
+   "start": 5.0,
+   "end": 6.72,
+   "words": [
+    [
+     "MS",
+     5.05,
+     5.202
+    ],
+    [
+     "Dhoni",
+     5.202,
+     5.505
+    ],
+    [
+     "is",
+     5.505,
+     5.657
+    ],
+    [
+     "the",
+     5.657,
+     5.809
+    ],
+    [
+     "greatest",
+     5.809,
+     6.113
+    ],
+    [
+     "of",
+     6.113,
+     6.265
+    ],
+    [
+     "all",
+     6.265,
+     6.416
+    ],
+    [
+     "time.",
+     6.416,
+     6.72
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "And every adult told me the same thing...",
+   "caption": "And every adult told me the same thing\u2026",
+   "start": 6.72,
+   "end": 9.04,
+   "words": [
+    [
+     "And",
+     6.72,
+     6.892
+    ],
+    [
+     "every",
+     6.892,
+     7.41
+    ],
+    [
+     "adult",
+     7.41,
+     7.755
+    ],
+    [
+     "told",
+     7.755,
+     7.928
+    ],
+    [
+     "me",
+     7.928,
+     8.1
+    ],
+    [
+     "the",
+     8.1,
+     8.272
+    ],
+    [
+     "same",
+     8.272,
+     8.618
+    ],
+    [
+     "thing\u2026",
+     8.618,
+     8.79
+    ]
+   ]
+  },
+  {
+   "id": "h4",
+   "text": "You will grow out of it.",
+   "caption": "\u201cYou will grow out of it.\u201d",
+   "start": 9.24,
+   "end": 10.61,
+   "words": [
+    [
+     "\u201cYou",
+     9.28,
+     9.445
+    ],
+    [
+     "will",
+     9.445,
+     9.61
+    ],
+    [
+     "grow",
+     9.61,
+     9.775
+    ],
+    [
+     "out",
+     9.775,
+     9.94
+    ],
+    [
+     "of",
+     9.94,
+     10.105
+    ],
+    [
+     "it.\u201d",
+     10.105,
+     10.27
+    ]
+   ]
+  },
+  {
+   "id": "l1",
+   "text": "Because look who else was playing back then.",
+   "caption": "Because look who else was playing back then.",
+   "start": 11.21,
+   "end": 13.95,
+   "words": [
+    [
+     "Because",
+     11.25,
+     11.986
+    ],
+    [
+     "look",
+     11.986,
+     12.232
+    ],
+    [
+     "who",
+     12.232,
+     12.477
+    ],
+    [
+     "else",
+     12.477,
+     12.968
+    ],
+    [
+     "was",
+     12.968,
+     13.214
+    ],
+    [
+     "playing",
+     13.214,
+     13.459
+    ],
+    [
+     "back",
+     13.459,
+     13.705
+    ],
+    [
+     "then.",
+     13.705,
+     13.95
+    ]
+   ]
+  },
+  {
+   "id": "l2",
+   "text": "Jacques Kallis.",
+   "caption": "Jacques Kallis.",
+   "start": 13.95,
+   "end": 14.65,
+   "words": [
+    [
+     "Jacques",
+     13.95,
+     14.3
+    ],
+    [
+     "Kallis.",
+     14.3,
+     14.65
+    ]
+   ]
+  },
+  {
+   "id": "l3",
+   "text": "Shane Warne.",
+   "caption": "Shane Warne.",
+   "start": 14.65,
+   "end": 15.29,
+   "words": [
+    [
+     "Shane",
+     14.82,
+     15.05
+    ],
+    [
+     "Warne.",
+     15.05,
+     15.28
+    ]
+   ]
+  },
+  {
+   "id": "l4",
+   "text": "Muttiah Muralitharan.",
+   "caption": "Muttiah Muralitharan.",
+   "start": 15.29,
+   "end": 16.09,
+   "words": [
+    [
+     "Muttiah",
+     15.3,
+     15.526
+    ],
+    [
+     "Muralitharan.",
+     15.526,
+     16.09
+    ]
+   ]
+  },
+  {
+   "id": "l5",
+   "text": "Rahul Dravid.",
+   "caption": "Rahul Dravid.",
+   "start": 16.09,
+   "end": 17.05,
+   "words": [
+    [
+     "Rahul",
+     16.09,
+     16.5
+    ],
+    [
+     "Dravid.",
+     16.5,
+     16.91
+    ]
+   ]
+  },
+  {
+   "id": "l6",
+   "text": "Brian Lara.",
+   "caption": "Brian Lara.",
+   "start": 17.15,
+   "end": 17.8,
+   "words": [
+    [
+     "Brian",
+     17.2,
+     17.303
+    ],
+    [
+     "Lara.",
+     17.303,
+     17.51
+    ]
+   ]
+  },
+  {
+   "id": "l7",
+   "text": "Dale Steyn.",
+   "caption": "Dale Steyn.",
+   "start": 17.8,
+   "end": 18.32,
+   "words": [
+    [
+     "Dale",
+     17.8,
+     18.147
+    ],
+    [
+     "Steyn.",
+     18.147,
+     18.32
+    ]
+   ]
+  },
+  {
+   "id": "l8",
+   "text": "And Ricky Ponting... two World Cups as captain.",
+   "caption": "And Ricky Ponting\u2026 2 World Cups as captain.",
+   "start": 18.32,
+   "end": 21.1,
+   "words": [
+    [
+     "And",
+     18.32,
+     18.557
+    ],
+    [
+     "Ricky",
+     18.557,
+     19.032
+    ],
+    [
+     "Ponting\u2026",
+     19.032,
+     19.507
+    ],
+    [
+     "2",
+     19.507,
+     19.863
+    ],
+    [
+     "World",
+     19.863,
+     20.1
+    ],
+    [
+     "Cups",
+     20.1,
+     20.338
+    ],
+    [
+     "as",
+     20.338,
+     20.575
+    ],
+    [
+     "captain.",
+     20.575,
+     21.05
+    ]
+   ]
+  },
+  {
+   "id": "l9",
+   "text": "Proper, proper legends.",
+   "caption": "Proper, proper legends.",
+   "start": 21.4,
+   "end": 22.85,
+   "words": [
+    [
+     "Proper,",
+     21.44,
+     21.893
+    ],
+    [
+     "proper",
+     21.893,
+     22.347
+    ],
+    [
+     "legends.",
+     22.347,
+     22.8
+    ]
+   ]
+  },
+  {
+   "id": "l10",
+   "text": "Every one of them could walk into any all-time eleven.",
+   "caption": "Every one of them could walk into any all-time XI.",
+   "start": 23.1,
+   "end": 26.21,
+   "words": [
+    [
+     "Every",
+     23.15,
+     23.676
+    ],
+    [
+     "one",
+     23.676,
+     24.026
+    ],
+    [
+     "of",
+     24.026,
+     24.202
+    ],
+    [
+     "them",
+     24.202,
+     24.377
+    ],
+    [
+     "could",
+     24.377,
+     24.552
+    ],
+    [
+     "walk",
+     24.552,
+     24.728
+    ],
+    [
+     "into",
+     24.728,
+     25.078
+    ],
+    [
+     "any",
+     25.078,
+     25.429
+    ],
+    [
+     "all-time",
+     25.429,
+     25.955
+    ],
+    [
+     "XI.",
+     25.955,
+     26.13
+    ]
+   ]
+  },
+  {
+   "id": "b1",
+   "text": "So I grew up.",
+   "caption": "So I grew up.",
+   "start": 26.81,
+   "end": 27.74,
+   "words": [
+    [
+     "So",
+     26.87,
+     27.068
+    ],
+    [
+     "I",
+     27.068,
+     27.265
+    ],
+    [
+     "grew",
+     27.265,
+     27.462
+    ],
+    [
+     "up.",
+     27.462,
+     27.66
+    ]
+   ]
+  },
+  {
+   "id": "b2",
+   "text": "I watched every one of them. I went through every record.",
+   "caption": "I watched every one of them. I went through every record.",
+   "start": 28.04,
+   "end": 31.62,
+   "words": [
+    [
+     "I",
+     28.1,
+     28.296
+    ],
+    [
+     "watched",
+     28.296,
+     28.687
+    ],
+    [
+     "every",
+     28.687,
+     29.273
+    ],
+    [
+     "one",
+     29.273,
+     29.664
+    ],
+    [
+     "of",
+     29.664,
+     29.86
+    ],
+    [
+     "them.",
+     29.86,
+     30.056
+    ],
+    [
+     "I",
+     30.056,
+     30.251
+    ],
+    [
+     "went",
+     30.251,
+     30.447
+    ],
+    [
+     "through",
+     30.447,
+     30.642
+    ],
+    [
+     "every",
+     30.642,
+     31.229
+    ],
+    [
+     "record.",
+     31.229,
+     31.62
+    ]
+   ]
+  },
+  {
+   "id": "b3",
+   "text": "I really tried to change my mind.",
+   "caption": "I really tried to change my mind.",
+   "start": 31.62,
+   "end": 33.06,
+   "words": [
+    [
+     "I",
+     31.62,
+     31.779
+    ],
+    [
+     "really",
+     31.779,
+     32.097
+    ],
+    [
+     "tried",
+     32.097,
+     32.256
+    ],
+    [
+     "to",
+     32.256,
+     32.414
+    ],
+    [
+     "change",
+     32.414,
+     32.732
+    ],
+    [
+     "my",
+     32.732,
+     32.891
+    ],
+    [
+     "mind.",
+     32.891,
+     33.05
+    ]
+   ]
+  },
+  {
+   "id": "b4",
+   "text": "And now... I can finally tell you something.",
+   "caption": "And now\u2026 I can finally tell you something.",
+   "start": 33.06,
+   "end": 35.48,
+   "words": [
+    [
+     "And",
+     33.06,
+     33.246
+    ],
+    [
+     "now\u2026",
+     33.246,
+     33.432
+    ],
+    [
+     "I",
+     33.432,
+     33.617
+    ],
+    [
+     "can",
+     33.617,
+     33.803
+    ],
+    [
+     "finally",
+     33.803,
+     34.361
+    ],
+    [
+     "tell",
+     34.361,
+     34.547
+    ],
+    [
+     "you",
+     34.547,
+     34.732
+    ],
+    [
+     "something.",
+     34.732,
+     35.29
+    ]
+   ]
+  },
+  {
+   "id": "t1",
+   "text": "I did not grow out of it.",
+   "caption": "I did not grow out of it.",
+   "start": 36.38,
+   "end": 38.37,
+   "words": [
+    [
+     "I",
+     36.42,
+     36.69
+    ],
+    [
+     "did",
+     36.69,
+     36.96
+    ],
+    [
+     "not",
+     36.96,
+     37.23
+    ],
+    [
+     "grow",
+     37.23,
+     37.5
+    ],
+    [
+     "out",
+     37.5,
+     37.77
+    ],
+    [
+     "of",
+     37.77,
+     38.04
+    ],
+    [
+     "it.",
+     38.04,
+     38.31
+    ]
+   ]
+  },
+  {
+   "id": "p1",
+   "text": "First tournament as captain? He wins the T20 World Cup.",
+   "caption": "First tournament as captain? He wins the T20 World Cup.",
+   "start": 39.07,
+   "end": 41.73,
+   "words": [
+    [
+     "First",
+     39.12,
+     39.32
+    ],
+    [
+     "tournament",
+     39.32,
+     39.92
+    ],
+    [
+     "as",
+     39.92,
+     40.12
+    ],
+    [
+     "captain?",
+     40.12,
+     40.52
+    ],
+    [
+     "He",
+     40.52,
+     40.72
+    ],
+    [
+     "wins",
+     40.72,
+     40.92
+    ],
+    [
+     "the",
+     40.92,
+     41.12
+    ],
+    [
+     "T20",
+     41.12,
+     41.32
+    ],
+    [
+     "World",
+     41.32,
+     41.52
+    ],
+    [
+     "Cup.",
+     41.52,
+     41.72
+    ]
+   ]
+  },
+  {
+   "id": "p2",
+   "text": "Then he takes India to number one in Test cricket.",
+   "caption": "Then he takes India to No. 1 in Test cricket.",
+   "start": 41.73,
+   "end": 44.21,
+   "words": [
+    [
+     "Then",
+     41.73,
+     41.906
+    ],
+    [
+     "he",
+     41.906,
+     42.083
+    ],
+    [
+     "takes",
+     42.083,
+     42.435
+    ],
+    [
+     "India",
+     42.435,
+     42.788
+    ],
+    [
+     "to",
+     42.788,
+     42.964
+    ],
+    [
+     "No.",
+     42.964,
+     43.14
+    ],
+    [
+     "1",
+     43.14,
+     43.405
+    ],
+    [
+     "in",
+     43.405,
+     43.581
+    ],
+    [
+     "Test",
+     43.581,
+     43.757
+    ],
+    [
+     "cricket.",
+     43.757,
+     44.11
+    ]
+   ]
+  },
+  {
+   "id": "p3",
+   "text": "Twenty eleven World Cup final, ninety-one not out, and he finishes it off in style.",
+   "caption": "2011 World Cup final\u2026 91 not out, and he finishes it off in style.",
+   "start": 44.56,
+   "end": 49.07,
+   "words": [
+    [
+     "2011",
+     44.83,
+     45.828
+    ],
+    [
+     "World",
+     45.828,
+     45.995
+    ],
+    [
+     "Cup",
+     45.995,
+     46.161
+    ],
+    [
+     "final\u2026",
+     46.161,
+     46.494
+    ],
+    [
+     "91",
+     46.494,
+     46.993
+    ],
+    [
+     "not",
+     46.993,
+     47.16
+    ],
+    [
+     "out,",
+     47.16,
+     47.326
+    ],
+    [
+     "and",
+     47.326,
+     47.492
+    ],
+    [
+     "he",
+     47.492,
+     47.659
+    ],
+    [
+     "finishes",
+     47.659,
+     48.158
+    ],
+    [
+     "it",
+     48.158,
+     48.324
+    ],
+    [
+     "off",
+     48.324,
+     48.491
+    ],
+    [
+     "in",
+     48.491,
+     48.657
+    ],
+    [
+     "style.",
+     48.657,
+     48.99
+    ]
+   ]
+  },
+  {
+   "id": "p4",
+   "text": "Twenty thirteen, the Champions Trophy.",
+   "caption": "2013, the Champions Trophy.",
+   "start": 49.47,
+   "end": 51.16,
+   "words": [
+    [
+     "2013,",
+     49.82,
+     50.551
+    ],
+    [
+     "the",
+     50.551,
+     50.673
+    ],
+    [
+     "Champions",
+     50.673,
+     50.916
+    ],
+    [
+     "Trophy.",
+     50.916,
+     51.16
+    ]
+   ]
+  },
+  {
+   "id": "p5",
+   "text": "That makes him the only captain in history to win all three ICC white-ball trophies.",
+   "caption": "That makes him the only captain in history to win all 3 ICC white-ball trophies.",
+   "start": 51.16,
+   "end": 55.19,
+   "words": [
+    [
+     "That",
+     51.16,
+     51.325
+    ],
+    [
+     "makes",
+     51.325,
+     51.654
+    ],
+    [
+     "him",
+     51.654,
+     51.819
+    ],
+    [
+     "the",
+     51.819,
+     51.983
+    ],
+    [
+     "only",
+     51.983,
+     52.313
+    ],
+    [
+     "captain",
+     52.313,
+     52.642
+    ],
+    [
+     "in",
+     52.642,
+     52.807
+    ],
+    [
+     "history",
+     52.807,
+     53.301
+    ],
+    [
+     "to",
+     53.301,
+     53.466
+    ],
+    [
+     "win",
+     53.466,
+     53.63
+    ],
+    [
+     "all",
+     53.63,
+     53.795
+    ],
+    [
+     "3",
+     53.795,
+     54.042
+    ],
+    [
+     "ICC",
+     54.042,
+     54.207
+    ],
+    [
+     "white-ball",
+     54.207,
+     54.701
+    ],
+    [
+     "trophies.",
+     54.701,
+     55.03
+    ]
+   ]
+  },
+  {
+   "id": "p6",
+   "text": "Five IPL titles as captain.",
+   "caption": "5 IPL titles as captain.",
+   "start": 55.64,
+   "end": 57.75,
+   "words": [
+    [
+     "5",
+     55.78,
+     56.174
+    ],
+    [
+     "IPL",
+     56.174,
+     56.437
+    ],
+    [
+     "titles",
+     56.437,
+     56.962
+    ],
+    [
+     "as",
+     56.962,
+     57.225
+    ],
+    [
+     "captain.",
+     57.225,
+     57.75
+    ]
+   ]
+  },
+  {
+   "id": "p7",
+   "text": "The most stumpings in international cricket.",
+   "caption": "The most stumpings in international cricket.",
+   "start": 57.75,
+   "end": 59.75,
+   "words": [
+    [
+     "The",
+     57.75,
+     57.905
+    ],
+    [
+     "most",
+     57.905,
+     58.06
+    ],
+    [
+     "stumpings",
+     58.06,
+     58.37
+    ],
+    [
+     "in",
+     58.37,
+     58.525
+    ],
+    [
+     "international",
+     58.525,
+     59.3
+    ],
+    [
+     "cricket.",
+     59.3,
+     59.61
+    ]
+   ]
+  },
+  {
+   "id": "p8",
+   "text": "The most not-outs in ODI history,",
+   "caption": "The most not-outs in ODI history,",
+   "start": 60.05,
+   "end": 62.04,
+   "words": [
+    [
+     "The",
+     60.23,
+     60.411
+    ],
+    [
+     "most",
+     60.411,
+     60.592
+    ],
+    [
+     "not-outs",
+     60.592,
+     60.954
+    ],
+    [
+     "in",
+     60.954,
+     61.135
+    ],
+    [
+     "ODI",
+     61.135,
+     61.497
+    ],
+    [
+     "history,",
+     61.497,
+     62.04
+    ]
+   ]
+  },
+  {
+   "id": "p9",
+   "text": "because when Dhoni is out there, the match is not over yet.",
+   "caption": "because when Dhoni is out there, the match is not over yet.",
+   "start": 62.04,
+   "end": 65.29,
+   "words": [
+    [
+     "because",
+     62.04,
+     62.603
+    ],
+    [
+     "when",
+     62.603,
+     62.791
+    ],
+    [
+     "Dhoni",
+     62.791,
+     63.166
+    ],
+    [
+     "is",
+     63.166,
+     63.354
+    ],
+    [
+     "out",
+     63.354,
+     63.541
+    ],
+    [
+     "there,",
+     63.541,
+     63.916
+    ],
+    [
+     "the",
+     63.916,
+     64.104
+    ],
+    [
+     "match",
+     64.104,
+     64.292
+    ],
+    [
+     "is",
+     64.292,
+     64.479
+    ],
+    [
+     "not",
+     64.479,
+     64.667
+    ],
+    [
+     "over",
+     64.667,
+     65.042
+    ],
+    [
+     "yet.",
+     65.042,
+     65.23
+    ]
+   ]
+  },
+  {
+   "id": "o1",
+   "text": "So no, I never grew out of it.",
+   "caption": "So no, I never grew out of it.",
+   "start": 65.89,
+   "end": 68.22,
+   "words": [
+    [
+     "So",
+     65.94,
+     66.193
+    ],
+    [
+     "no,",
+     66.193,
+     66.447
+    ],
+    [
+     "I",
+     66.447,
+     66.7
+    ],
+    [
+     "never",
+     66.7,
+     67.207
+    ],
+    [
+     "grew",
+     67.207,
+     67.46
+    ],
+    [
+     "out",
+     67.46,
+     67.713
+    ],
+    [
+     "of",
+     67.713,
+     67.967
+    ],
+    [
+     "it.",
+     67.967,
+     68.22
+    ]
+   ]
+  },
+  {
+   "id": "o2",
+   "text": "MS Dhoni is the greatest of all time.",
+   "caption": "MS Dhoni is the greatest of all time.",
+   "start": 68.22,
+   "end": 70.48,
+   "words": [
+    [
+     "MS",
+     68.22,
+     68.425
+    ],
+    [
+     "Dhoni",
+     68.425,
+     68.834
+    ],
+    [
+     "is",
+     68.834,
+     69.038
+    ],
+    [
+     "the",
+     69.038,
+     69.243
+    ],
+    [
+     "greatest",
+     69.243,
+     69.652
+    ],
+    [
+     "of",
+     69.652,
+     69.856
+    ],
+    [
+     "all",
+     69.856,
+     70.061
+    ],
+    [
+     "time.",
+     70.061,
+     70.47
+    ]
+   ]
+  },
+  {
+   "id": "o3",
+   "text": "I said it back then. I'm saying it now.",
+   "caption": "I said it back then. I'm saying it now.",
+   "start": 70.48,
+   "end": 72.83,
+   "words": [
+    [
+     "I",
+     70.48,
+     70.728
+    ],
+    [
+     "said",
+     70.728,
+     70.976
+    ],
+    [
+     "it",
+     70.976,
+     71.223
+    ],
+    [
+     "back",
+     71.223,
+     71.471
+    ],
+    [
+     "then.",
+     71.471,
+     71.719
+    ],
+    [
+     "I'm",
+     71.719,
+     71.967
+    ],
+    [
+     "saying",
+     71.967,
+     72.214
+    ],
+    [
+     "it",
+     72.214,
+     72.462
+    ],
+    [
+     "now.",
+     72.462,
+     72.71
+    ]
+   ]
+  },
+  {
+   "id": "o4",
+   "text": "Who was your childhood GOAT? Tell me in the comments.",
+   "caption": "Who was your childhood GOAT? Tell me in the comments.",
+   "start": 73.23,
+   "end": 76.22,
+   "words": [
+    [
+     "Who",
+     73.27,
+     73.468
+    ],
+    [
+     "was",
+     73.468,
+     73.667
+    ],
+    [
+     "your",
+     73.667,
+     73.865
+    ],
+    [
+     "childhood",
+     73.865,
+     74.262
+    ],
+    [
+     "GOAT?",
+     74.262,
+     74.46
+    ],
+    [
+     "Tell",
+     74.46,
+     74.658
+    ],
+    [
+     "me",
+     74.658,
+     74.857
+    ],
+    [
+     "in",
+     74.857,
+     75.055
+    ],
+    [
+     "the",
+     75.055,
+     75.253
+    ],
+    [
+     "comments.",
+     75.253,
+     75.65
+    ]
+   ]
+  }
+ ]
+}

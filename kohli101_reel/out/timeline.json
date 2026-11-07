@@ -1,0 +1,995 @@
+{
+ "duration": 55.885,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "a1",
+   "text": "Sachin Tendulkar scored his hundredth international century at the age of thirty eight.",
+   "caption": "Sachin Tendulkar scored his 100th international century at the age of 38.",
+   "start": 0.239,
+   "end": 4.0,
+   "words": [
+    [
+     "Sachin",
+     0.373,
+     0.655
+    ],
+    [
+     "Tendulkar",
+     0.655,
+     1.076
+    ],
+    [
+     "scored",
+     1.076,
+     1.357
+    ],
+    [
+     "his",
+     1.357,
+     1.497
+    ],
+    [
+     "100th",
+     1.497,
+     1.637
+    ],
+    [
+     "international",
+     1.637,
+     2.34
+    ],
+    [
+     "century",
+     2.34,
+     2.762
+    ],
+    [
+     "at",
+     2.762,
+     2.901
+    ],
+    [
+     "the",
+     2.901,
+     3.042
+    ],
+    [
+     "age",
+     3.042,
+     3.323
+    ],
+    [
+     "of",
+     3.323,
+     3.464
+    ],
+    [
+     "38.",
+     3.464,
+     3.885
+    ]
+   ]
+  },
+  {
+   "id": "a2",
+   "text": "Virat Kohli has just turned thirty eight.",
+   "caption": "Virat Kohli has just turned 38.",
+   "start": 4.0,
+   "end": 5.952,
+   "words": [
+    [
+     "Virat",
+     4.134,
+     4.325
+    ],
+    [
+     "Kohli",
+     4.325,
+     4.517
+    ],
+    [
+     "has",
+     4.517,
+     4.612
+    ],
+    [
+     "just",
+     4.612,
+     4.708
+    ],
+    [
+     "turned",
+     4.708,
+     4.9
+    ],
+    [
+     "38.",
+     4.9,
+     5.187
+    ]
+   ]
+  },
+  {
+   "id": "a3",
+   "text": "And he's on eighty six.",
+   "caption": "And he's on 86.",
+   "start": 5.952,
+   "end": 7.675,
+   "words": [
+    [
+     "And",
+     6.01,
+     6.271
+    ],
+    [
+     "he's",
+     6.271,
+     6.533
+    ],
+    [
+     "on",
+     6.533,
+     6.794
+    ],
+    [
+     "86.",
+     6.794,
+     7.579
+    ]
+   ]
+  },
+  {
+   "id": "b1",
+   "text": "So, can he still get there?",
+   "caption": "So, can he still get there?",
+   "start": 7.847,
+   "end": 9.033,
+   "words": [
+    [
+     "So,",
+     7.943,
+     8.099
+    ],
+    [
+     "can",
+     8.099,
+     8.255
+    ],
+    [
+     "he",
+     8.255,
+     8.411
+    ],
+    [
+     "still",
+     8.411,
+     8.566
+    ],
+    [
+     "get",
+     8.566,
+     8.722
+    ],
+    [
+     "there?",
+     8.722,
+     9.033
+    ]
+   ]
+  },
+  {
+   "id": "b2",
+   "text": "Let's do the math.",
+   "caption": "Let's do the math.",
+   "start": 9.033,
+   "end": 10.182,
+   "words": [
+    [
+     "Let's",
+     9.033,
+     9.275
+    ],
+    [
+     "do",
+     9.275,
+     9.517
+    ],
+    [
+     "the",
+     9.517,
+     9.758
+    ],
+    [
+     "math.",
+     9.758,
+     10.0
+    ]
+   ]
+  },
+  {
+   "id": "b3",
+   "text": "He needs fourteen to equal Sachin,",
+   "caption": "He needs 14 to equal Sachin,",
+   "start": 10.311,
+   "end": 12.091,
+   "words": [
+    [
+     "He",
+     10.359,
+     10.495
+    ],
+    [
+     "needs",
+     10.495,
+     10.631
+    ],
+    [
+     "14",
+     10.631,
+     11.038
+    ],
+    [
+     "to",
+     11.038,
+     11.174
+    ],
+    [
+     "equal",
+     11.174,
+     11.446
+    ],
+    [
+     "Sachin,",
+     11.446,
+     11.718
+    ]
+   ]
+  },
+  {
+   "id": "b4",
+   "text": "and fifteen to stand alone at one hundred and one.",
+   "caption": "and 15 to stand alone at 101.",
+   "start": 12.091,
+   "end": 15.182,
+   "words": [
+    [
+     "and",
+     12.1,
+     12.296
+    ],
+    [
+     "15",
+     12.296,
+     12.882
+    ],
+    [
+     "to",
+     12.882,
+     13.078
+    ],
+    [
+     "stand",
+     13.078,
+     13.273
+    ],
+    [
+     "alone",
+     13.273,
+     13.858
+    ],
+    [
+     "at",
+     13.858,
+     14.054
+    ],
+    [
+     "101.",
+     14.054,
+     14.933
+    ]
+   ]
+  },
+  {
+   "id": "b5",
+   "text": "But he only plays one format now. ODIs.",
+   "caption": "But he only plays 1 format now. ODIs.",
+   "start": 15.311,
+   "end": 18.0,
+   "words": [
+    [
+     "But",
+     15.703,
+     15.902
+    ],
+    [
+     "he",
+     15.902,
+     16.101
+    ],
+    [
+     "only",
+     16.101,
+     16.499
+    ],
+    [
+     "plays",
+     16.499,
+     16.698
+    ],
+    [
+     "1",
+     16.698,
+     16.996
+    ],
+    [
+     "format",
+     16.996,
+     17.393
+    ],
+    [
+     "now.",
+     17.393,
+     17.592
+    ],
+    [
+     "ODIs.",
+     17.592,
+     17.99
+    ]
+   ]
+  },
+  {
+   "id": "b6",
+   "text": "No Tests. No T20Is.",
+   "caption": "No Tests. No T20Is.",
+   "start": 18.0,
+   "end": 19.598,
+   "words": [
+    [
+     "No",
+     18.0,
+     18.359
+    ],
+    [
+     "Tests.",
+     18.359,
+     18.718
+    ],
+    [
+     "No",
+     18.718,
+     19.077
+    ],
+    [
+     "T20Is.",
+     19.077,
+     19.435
+    ]
+   ]
+  },
+  {
+   "id": "c1",
+   "text": "Across his career, Kohli has scored an ODI hundred roughly once every six innings.",
+   "caption": "Across his career, Kohli has scored an ODI hundred roughly once every 6 innings.",
+   "start": 19.727,
+   "end": 24.608,
+   "words": [
+    [
+     "Across",
+     19.89,
+     20.239
+    ],
+    [
+     "his",
+     20.239,
+     20.414
+    ],
+    [
+     "career,",
+     20.414,
+     20.765
+    ],
+    [
+     "Kohli",
+     20.765,
+     21.114
+    ],
+    [
+     "has",
+     21.114,
+     21.289
+    ],
+    [
+     "scored",
+     21.289,
+     21.638
+    ],
+    [
+     "an",
+     21.638,
+     21.813
+    ],
+    [
+     "ODI",
+     21.813,
+     22.164
+    ],
+    [
+     "hundred",
+     22.164,
+     22.513
+    ],
+    [
+     "roughly",
+     22.513,
+     22.863
+    ],
+    [
+     "once",
+     22.863,
+     23.212
+    ],
+    [
+     "every",
+     23.212,
+     23.737
+    ],
+    [
+     "6",
+     23.737,
+     23.999
+    ],
+    [
+     "innings.",
+     23.999,
+     24.349
+    ]
+   ]
+  },
+  {
+   "id": "c2",
+   "text": "Fifteen hundreds at the same rate means about ninety innings.",
+   "caption": "15 hundreds at the same rate means about 90 innings.",
+   "start": 24.694,
+   "end": 27.44,
+   "words": [
+    [
+     "15",
+     24.77,
+     25.154
+    ],
+    [
+     "hundreds",
+     25.154,
+     25.41
+    ],
+    [
+     "at",
+     25.41,
+     25.538
+    ],
+    [
+     "the",
+     25.538,
+     25.666
+    ],
+    [
+     "same",
+     25.666,
+     25.922
+    ],
+    [
+     "rate",
+     25.922,
+     26.177
+    ],
+    [
+     "means",
+     26.177,
+     26.305
+    ],
+    [
+     "about",
+     26.305,
+     26.561
+    ],
+    [
+     "90",
+     26.561,
+     26.945
+    ],
+    [
+     "innings.",
+     26.945,
+     27.201
+    ]
+   ]
+  },
+  {
+   "id": "c3",
+   "text": "India play around twenty ODIs a year.",
+   "caption": "India play around 20 ODIs a year.",
+   "start": 27.44,
+   "end": 30.225,
+   "words": [
+    [
+     "India",
+     28.005,
+     28.244
+    ],
+    [
+     "play",
+     28.244,
+     28.364
+    ],
+    [
+     "around",
+     28.364,
+     28.603
+    ],
+    [
+     "20",
+     28.603,
+     28.962
+    ],
+    [
+     "ODIs",
+     28.962,
+     29.201
+    ],
+    [
+     "a",
+     29.201,
+     29.321
+    ],
+    [
+     "year.",
+     29.321,
+     29.44
+    ]
+   ]
+  },
+  {
+   "id": "c4",
+   "text": "That's four and a half years.",
+   "caption": "That's 4.5 years.",
+   "start": 30.225,
+   "end": 31.737,
+   "words": [
+    [
+     "That's",
+     30.225,
+     30.5
+    ],
+    [
+     "4.5",
+     30.5,
+     31.327
+    ],
+    [
+     "years.",
+     31.327,
+     31.603
+    ]
+   ]
+  },
+  {
+   "id": "c5",
+   "text": "He'd be forty two, at the twenty thirty one World Cup.",
+   "caption": "He'd be 42, at the 2031 World Cup.",
+   "start": 31.823,
+   "end": 34.713,
+   "words": [
+    [
+     "He'd",
+     31.967,
+     32.144
+    ],
+    [
+     "be",
+     32.144,
+     32.322
+    ],
+    [
+     "42,",
+     32.322,
+     32.856
+    ],
+    [
+     "at",
+     32.856,
+     33.034
+    ],
+    [
+     "the",
+     33.034,
+     33.212
+    ],
+    [
+     "2031",
+     33.212,
+     34.28
+    ],
+    [
+     "World",
+     34.28,
+     34.458
+    ],
+    [
+     "Cup.",
+     34.458,
+     34.636
+    ]
+   ]
+  },
+  {
+   "id": "c6",
+   "text": "Sounds impossible, right?",
+   "caption": "Sounds impossible, right?",
+   "start": 34.734,
+   "end": 36.466,
+   "words": [
+    [
+     "Sounds",
+     34.782,
+     35.021
+    ],
+    [
+     "impossible,",
+     35.021,
+     35.978
+    ],
+    [
+     "right?",
+     35.978,
+     36.217
+    ]
+   ]
+  },
+  {
+   "id": "d1",
+   "text": "But here's the twist.",
+   "caption": "But here's the twist.",
+   "start": 36.552,
+   "end": 37.787,
+   "words": [
+    [
+     "But",
+     36.61,
+     36.812
+    ],
+    [
+     "here's",
+     36.812,
+     37.218
+    ],
+    [
+     "the",
+     37.218,
+     37.421
+    ],
+    [
+     "twist.",
+     37.421,
+     37.624
+    ]
+   ]
+  },
+  {
+   "id": "d2",
+   "text": "Sachin needed four hundred and fifty two innings for forty nine ODI centuries.",
+   "caption": "Sachin needed 452 innings for 49 ODI centuries.",
+   "start": 37.83,
+   "end": 42.088,
+   "words": [
+    [
+     "Sachin",
+     38.002,
+     38.416
+    ],
+    [
+     "needed",
+     38.416,
+     38.831
+    ],
+    [
+     "452",
+     38.831,
+     39.763
+    ],
+    [
+     "innings",
+     39.763,
+     40.177
+    ],
+    [
+     "for",
+     40.177,
+     40.384
+    ],
+    [
+     "49",
+     40.384,
+     41.005
+    ],
+    [
+     "ODI",
+     41.005,
+     41.419
+    ],
+    [
+     "centuries.",
+     41.419,
+     42.04
+    ]
+   ]
+  },
+  {
+   "id": "d3",
+   "text": "Kohli got to fifty in just two hundred and seventy nine.",
+   "caption": "Kohli got to 50 in just 279.",
+   "start": 42.131,
+   "end": 45.289,
+   "words": [
+    [
+     "Kohli",
+     42.322,
+     42.727
+    ],
+    [
+     "got",
+     42.727,
+     42.929
+    ],
+    [
+     "to",
+     42.929,
+     43.131
+    ],
+    [
+     "50",
+     43.131,
+     43.737
+    ],
+    [
+     "in",
+     43.737,
+     43.939
+    ],
+    [
+     "just",
+     43.939,
+     44.141
+    ],
+    [
+     "279.",
+     44.141,
+     45.05
+    ]
+   ]
+  },
+  {
+   "id": "d4",
+   "text": "So the question is not whether he is good enough.",
+   "caption": "So the question is not whether he is good enough.",
+   "start": 45.461,
+   "end": 47.787,
+   "words": [
+    [
+     "So",
+     45.557,
+     45.716
+    ],
+    [
+     "the",
+     45.716,
+     45.874
+    ],
+    [
+     "question",
+     45.874,
+     46.19
+    ],
+    [
+     "is",
+     46.19,
+     46.348
+    ],
+    [
+     "not",
+     46.348,
+     46.507
+    ],
+    [
+     "whether",
+     46.507,
+     46.824
+    ],
+    [
+     "he",
+     46.824,
+     46.982
+    ],
+    [
+     "is",
+     46.982,
+     47.14
+    ],
+    [
+     "good",
+     47.14,
+     47.299
+    ],
+    [
+     "enough.",
+     47.299,
+     47.614
+    ]
+   ]
+  },
+  {
+   "id": "d5",
+   "text": "It is whether time gives him enough games.",
+   "caption": "It is whether time gives him enough games.",
+   "start": 47.809,
+   "end": 50.249,
+   "words": [
+    [
+     "It",
+     48.134,
+     48.28
+    ],
+    [
+     "is",
+     48.28,
+     48.427
+    ],
+    [
+     "whether",
+     48.427,
+     48.72
+    ],
+    [
+     "time",
+     48.72,
+     49.012
+    ],
+    [
+     "gives",
+     49.012,
+     49.306
+    ],
+    [
+     "him",
+     49.306,
+     49.453
+    ],
+    [
+     "enough",
+     49.453,
+     49.745
+    ],
+    [
+     "games.",
+     49.745,
+     50.038
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Will Virat Kohli get to one hundred and one? Yes or no, tell me in the comments. And follow for more stories like this.",
+   "caption": "Will Virat Kohli get to 101? Yes or no, tell me in the comments. And follow for more stories like this.",
+   "start": 50.421,
+   "end": 55.799,
+   "words": [
+    [
+     "Will",
+     50.526,
+     50.674
+    ],
+    [
+     "Virat",
+     50.674,
+     50.967
+    ],
+    [
+     "Kohli",
+     50.967,
+     51.261
+    ],
+    [
+     "get",
+     51.261,
+     51.409
+    ],
+    [
+     "to",
+     51.409,
+     51.556
+    ],
+    [
+     "101?",
+     51.556,
+     52.217
+    ],
+    [
+     "Yes",
+     52.217,
+     52.365
+    ],
+    [
+     "or",
+     52.365,
+     52.511
+    ],
+    [
+     "no,",
+     52.511,
+     52.658
+    ],
+    [
+     "tell",
+     52.658,
+     52.806
+    ],
+    [
+     "me",
+     52.806,
+     52.952
+    ],
+    [
+     "in",
+     52.952,
+     53.1
+    ],
+    [
+     "the",
+     53.1,
+     53.247
+    ],
+    [
+     "comments.",
+     53.247,
+     53.541
+    ],
+    [
+     "And",
+     53.541,
+     53.687
+    ],
+    [
+     "follow",
+     53.687,
+     53.982
+    ],
+    [
+     "for",
+     53.982,
+     54.128
+    ],
+    [
+     "more",
+     54.128,
+     54.423
+    ],
+    [
+     "stories",
+     54.423,
+     54.717
+    ],
+    [
+     "like",
+     54.717,
+     55.011
+    ],
+    [
+     "this.",
+     55.011,
+     55.158
+    ]
+   ]
+  }
+ ]
+}

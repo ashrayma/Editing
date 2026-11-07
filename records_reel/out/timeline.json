@@ -1,0 +1,1373 @@
+{
+ "duration": 77.4,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Sachin is the God of cricket.",
+   "caption": "Sachin is the God of cricket.",
+   "start": 0.25,
+   "end": 1.51,
+   "words": [
+    [
+     "Sachin",
+     0.35,
+     0.64
+    ],
+    [
+     "is",
+     0.64,
+     0.785
+    ],
+    [
+     "the",
+     0.785,
+     0.93
+    ],
+    [
+     "God",
+     0.93,
+     1.075
+    ],
+    [
+     "of",
+     1.075,
+     1.22
+    ],
+    [
+     "cricket.",
+     1.22,
+     1.51
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "Nobody's arguing that.",
+   "caption": "Nobody's arguing that.",
+   "start": 1.51,
+   "end": 2.55,
+   "words": [
+    [
+     "Nobody's",
+     1.59,
+     2.01
+    ],
+    [
+     "arguing",
+     2.01,
+     2.29
+    ],
+    [
+     "that.",
+     2.29,
+     2.43
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "But there are three records Virat Kohli owns...",
+   "caption": "But there are 3 records Virat Kohli owns\u2026",
+   "start": 2.85,
+   "end": 4.84,
+   "words": [
+    [
+     "But",
+     2.9,
+     3.039
+    ],
+    [
+     "there",
+     3.039,
+     3.318
+    ],
+    [
+     "are",
+     3.318,
+     3.596
+    ],
+    [
+     "3",
+     3.596,
+     3.805
+    ],
+    [
+     "records",
+     3.805,
+     4.084
+    ],
+    [
+     "Virat",
+     4.084,
+     4.362
+    ],
+    [
+     "Kohli",
+     4.362,
+     4.641
+    ],
+    [
+     "owns\u2026",
+     4.641,
+     4.78
+    ]
+   ]
+  },
+  {
+   "id": "h4",
+   "text": "that Sachin has never touched.",
+   "caption": "that Sachin has never touched.",
+   "start": 4.84,
+   "end": 6.39,
+   "words": [
+    [
+     "that",
+     4.86,
+     5.028
+    ],
+    [
+     "Sachin",
+     5.028,
+     5.362
+    ],
+    [
+     "has",
+     5.362,
+     5.53
+    ],
+    [
+     "never",
+     5.53,
+     5.865
+    ],
+    [
+     "touched.",
+     5.865,
+     6.2
+    ]
+   ]
+  },
+  {
+   "id": "n1a",
+   "text": "Number one.",
+   "caption": "Number one.",
+   "start": 6.89,
+   "end": 7.445,
+   "words": [
+    [
+     "Number",
+     6.94,
+     7.17
+    ],
+    [
+     "one.",
+     7.17,
+     7.4
+    ]
+   ]
+  },
+  {
+   "id": "n1b",
+   "text": "The Chase Master.",
+   "caption": "The Chase Master.",
+   "start": 7.995,
+   "end": 8.75,
+   "words": [
+    [
+     "The",
+     8.085,
+     8.215
+    ],
+    [
+     "Chase",
+     8.215,
+     8.475
+    ],
+    [
+     "Master.",
+     8.475,
+     8.735
+    ]
+   ]
+  },
+  {
+   "id": "c1",
+   "text": "When India are chasing, Kohli becomes a different player.",
+   "caption": "When India are chasing, Kohli becomes a different player.",
+   "start": 8.75,
+   "end": 11.39,
+   "words": [
+    [
+     "When",
+     8.79,
+     8.943
+    ],
+    [
+     "India",
+     8.943,
+     9.249
+    ],
+    [
+     "are",
+     9.249,
+     9.555
+    ],
+    [
+     "chasing,",
+     9.555,
+     9.861
+    ],
+    [
+     "Kohli",
+     9.861,
+     10.166
+    ],
+    [
+     "becomes",
+     10.166,
+     10.625
+    ],
+    [
+     "a",
+     10.625,
+     10.778
+    ],
+    [
+     "different",
+     10.778,
+     11.237
+    ],
+    [
+     "player.",
+     11.237,
+     11.39
+    ]
+   ]
+  },
+  {
+   "id": "c2",
+   "text": "Twenty-five ODI hundreds in successful chases.",
+   "caption": "25 ODI hundreds in successful chases.",
+   "start": 11.39,
+   "end": 13.59,
+   "words": [
+    [
+     "25",
+     11.39,
+     11.898
+    ],
+    [
+     "ODI",
+     11.898,
+     12.236
+    ],
+    [
+     "hundreds",
+     12.236,
+     12.575
+    ],
+    [
+     "in",
+     12.575,
+     12.744
+    ],
+    [
+     "successful",
+     12.744,
+     13.252
+    ],
+    [
+     "chases.",
+     13.252,
+     13.59
+    ]
+   ]
+  },
+  {
+   "id": "c3",
+   "text": "The most by anyone. Ever.",
+   "caption": "The most by anyone. Ever.",
+   "start": 13.59,
+   "end": 15.22,
+   "words": [
+    [
+     "The",
+     13.59,
+     13.781
+    ],
+    [
+     "most",
+     13.781,
+     13.972
+    ],
+    [
+     "by",
+     13.972,
+     14.164
+    ],
+    [
+     "anyone.",
+     14.164,
+     14.737
+    ],
+    [
+     "Ever.",
+     14.737,
+     15.12
+    ]
+   ]
+  },
+  {
+   "id": "c4",
+   "text": "Sachin has fourteen.",
+   "caption": "Sachin has 14.",
+   "start": 15.57,
+   "end": 16.82,
+   "words": [
+    [
+     "Sachin",
+     15.61,
+     15.997
+    ],
+    [
+     "has",
+     15.997,
+     16.19
+    ],
+    [
+     "14.",
+     16.19,
+     16.77
+    ]
+   ]
+  },
+  {
+   "id": "c5",
+   "text": "And in those wins, Kohli averages near ninety.",
+   "caption": "And in those wins, Kohli averages near 90.",
+   "start": 17.17,
+   "end": 20.48,
+   "words": [
+    [
+     "And",
+     17.41,
+     17.609
+    ],
+    [
+     "in",
+     17.609,
+     17.807
+    ],
+    [
+     "those",
+     17.807,
+     18.205
+    ],
+    [
+     "wins,",
+     18.205,
+     18.403
+    ],
+    [
+     "Kohli",
+     18.403,
+     18.801
+    ],
+    [
+     "averages",
+     18.801,
+     19.595
+    ],
+    [
+     "near",
+     19.595,
+     19.794
+    ],
+    [
+     "90.",
+     19.794,
+     20.39
+    ]
+   ]
+  },
+  {
+   "id": "c6",
+   "text": "Ninety.",
+   "caption": "90.",
+   "start": 20.78,
+   "end": 21.49,
+   "words": [
+    [
+     "90.",
+     20.83,
+     21.49
+    ]
+   ]
+  },
+  {
+   "id": "c7",
+   "text": "That's not batting. That's a cheat code.",
+   "caption": "That's not batting. That's a cheat code.",
+   "start": 21.49,
+   "end": 23.82,
+   "words": [
+    [
+     "That's",
+     21.49,
+     21.72
+    ],
+    [
+     "not",
+     21.72,
+     21.95
+    ],
+    [
+     "batting.",
+     21.95,
+     22.41
+    ],
+    [
+     "That's",
+     22.41,
+     22.64
+    ],
+    [
+     "a",
+     22.64,
+     22.87
+    ],
+    [
+     "cheat",
+     22.87,
+     23.1
+    ],
+    [
+     "code.",
+     23.1,
+     23.56
+    ]
+   ]
+  },
+  {
+   "id": "n2a",
+   "text": "Number two.",
+   "caption": "Number two.",
+   "start": 24.32,
+   "end": 24.85,
+   "words": [
+    [
+     "Number",
+     24.38,
+     24.667
+    ],
+    [
+     "two.",
+     24.667,
+     24.81
+    ]
+   ]
+  },
+  {
+   "id": "n2b",
+   "text": "The Captain.",
+   "caption": "The Captain.",
+   "start": 25.4,
+   "end": 25.87,
+   "words": [
+    [
+     "The",
+     25.41,
+     25.563
+    ],
+    [
+     "Captain.",
+     25.563,
+     25.87
+    ]
+   ]
+  },
+  {
+   "id": "k1",
+   "text": "Kohli led India in sixty-eight Tests...",
+   "caption": "Kohli led India in 68 Tests\u2026",
+   "start": 25.87,
+   "end": 28.04,
+   "words": [
+    [
+     "Kohli",
+     25.87,
+     26.278
+    ],
+    [
+     "led",
+     26.278,
+     26.482
+    ],
+    [
+     "India",
+     26.482,
+     26.89
+    ],
+    [
+     "in",
+     26.89,
+     27.094
+    ],
+    [
+     "68",
+     27.094,
+     27.706
+    ],
+    [
+     "Tests\u2026",
+     27.706,
+     27.91
+    ]
+   ]
+  },
+  {
+   "id": "k2",
+   "text": "and won forty.",
+   "caption": "and won 40.",
+   "start": 28.19,
+   "end": 29.08,
+   "words": [
+    [
+     "and",
+     28.24,
+     28.408
+    ],
+    [
+     "won",
+     28.408,
+     28.576
+    ],
+    [
+     "40.",
+     28.576,
+     29.08
+    ]
+   ]
+  },
+  {
+   "id": "k3",
+   "text": "The most by any Indian captain.",
+   "caption": "The most by any Indian captain.",
+   "start": 29.08,
+   "end": 30.71,
+   "words": [
+    [
+     "The",
+     29.08,
+     29.249
+    ],
+    [
+     "most",
+     29.249,
+     29.418
+    ],
+    [
+     "by",
+     29.418,
+     29.587
+    ],
+    [
+     "any",
+     29.587,
+     29.924
+    ],
+    [
+     "Indian",
+     29.924,
+     30.262
+    ],
+    [
+     "captain.",
+     30.262,
+     30.6
+    ]
+   ]
+  },
+  {
+   "id": "k4",
+   "text": "He gave India their first ever Test series win in Australia.",
+   "caption": "He gave India their first ever Test series win in Australia.",
+   "start": 31.01,
+   "end": 34.05,
+   "words": [
+    [
+     "He",
+     31.06,
+     31.235
+    ],
+    [
+     "gave",
+     31.235,
+     31.586
+    ],
+    [
+     "India",
+     31.586,
+     31.936
+    ],
+    [
+     "their",
+     31.936,
+     32.112
+    ],
+    [
+     "first",
+     32.112,
+     32.287
+    ],
+    [
+     "ever",
+     32.287,
+     32.638
+    ],
+    [
+     "Test",
+     32.638,
+     32.813
+    ],
+    [
+     "series",
+     32.813,
+     33.164
+    ],
+    [
+     "win",
+     33.164,
+     33.339
+    ],
+    [
+     "in",
+     33.339,
+     33.514
+    ],
+    [
+     "Australia.",
+     33.514,
+     34.04
+    ]
+   ]
+  },
+  {
+   "id": "k5",
+   "text": "Sachin captained twenty-five Tests...",
+   "caption": "Sachin captained 25 Tests\u2026",
+   "start": 34.05,
+   "end": 35.73,
+   "words": [
+    [
+     "Sachin",
+     34.05,
+     34.423
+    ],
+    [
+     "captained",
+     34.423,
+     34.983
+    ],
+    [
+     "25",
+     34.983,
+     35.543
+    ],
+    [
+     "Tests\u2026",
+     35.543,
+     35.73
+    ]
+   ]
+  },
+  {
+   "id": "k6",
+   "text": "and won four.",
+   "caption": "and won 4.",
+   "start": 35.73,
+   "end": 36.9,
+   "words": [
+    [
+     "and",
+     35.73,
+     36.033
+    ],
+    [
+     "won",
+     36.033,
+     36.336
+    ],
+    [
+     "4.",
+     36.336,
+     36.79
+    ]
+   ]
+  },
+  {
+   "id": "k7",
+   "text": "Different job? For sure.",
+   "caption": "Different job? For sure.",
+   "start": 37.25,
+   "end": 38.72,
+   "words": [
+    [
+     "Different",
+     37.29,
+     37.881
+    ],
+    [
+     "job?",
+     37.881,
+     38.079
+    ],
+    [
+     "For",
+     38.079,
+     38.276
+    ],
+    [
+     "sure.",
+     38.276,
+     38.67
+    ]
+   ]
+  },
+  {
+   "id": "k8",
+   "text": "But Kohli built a team that expected to win away from home.",
+   "caption": "But Kohli built a team that expected to win away from home.",
+   "start": 38.92,
+   "end": 42.45,
+   "words": [
+    [
+     "But",
+     38.97,
+     39.17
+    ],
+    [
+     "Kohli",
+     39.17,
+     39.57
+    ],
+    [
+     "built",
+     39.57,
+     39.77
+    ],
+    [
+     "a",
+     39.77,
+     39.97
+    ],
+    [
+     "team",
+     39.97,
+     40.17
+    ],
+    [
+     "that",
+     40.17,
+     40.37
+    ],
+    [
+     "expected",
+     40.37,
+     40.97
+    ],
+    [
+     "to",
+     40.97,
+     41.17
+    ],
+    [
+     "win",
+     41.17,
+     41.37
+    ],
+    [
+     "away",
+     41.37,
+     41.77
+    ],
+    [
+     "from",
+     41.77,
+     41.97
+    ],
+    [
+     "home.",
+     41.97,
+     42.37
+    ]
+   ]
+  },
+  {
+   "id": "n3a",
+   "text": "Number three.",
+   "caption": "Number three.",
+   "start": 42.95,
+   "end": 43.485,
+   "words": [
+    [
+     "Number",
+     43.0,
+     43.287
+    ],
+    [
+     "three.",
+     43.287,
+     43.43
+    ]
+   ]
+  },
+  {
+   "id": "n3b",
+   "text": "The biggest stage.",
+   "caption": "The biggest stage.",
+   "start": 44.035,
+   "end": 44.99,
+   "words": [
+    [
+     "The",
+     44.045,
+     44.203
+    ],
+    [
+     "biggest",
+     44.203,
+     44.519
+    ],
+    [
+     "stage.",
+     44.519,
+     44.835
+    ]
+   ]
+  },
+  {
+   "id": "w1",
+   "text": "Two thousand three World Cup: Sachin scores six hundred and seventy-three runs.",
+   "caption": "2003 World Cup: Sachin scores 673 runs.",
+   "start": 45.29,
+   "end": 49.19,
+   "words": [
+    [
+     "2003",
+     45.34,
+     46.66
+    ],
+    [
+     "World",
+     46.66,
+     46.88
+    ],
+    [
+     "Cup:",
+     46.88,
+     47.1
+    ],
+    [
+     "Sachin",
+     47.1,
+     47.54
+    ],
+    [
+     "scores",
+     47.54,
+     47.98
+    ],
+    [
+     "673",
+     47.98,
+     48.97
+    ],
+    [
+     "runs.",
+     48.97,
+     49.19
+    ]
+   ]
+  },
+  {
+   "id": "w2",
+   "text": "A record that stood for twenty years.",
+   "caption": "A record that stood for 20 years.",
+   "start": 49.19,
+   "end": 51.17,
+   "words": [
+    [
+     "A",
+     49.24,
+     49.421
+    ],
+    [
+     "record",
+     49.421,
+     49.783
+    ],
+    [
+     "that",
+     49.783,
+     49.964
+    ],
+    [
+     "stood",
+     49.964,
+     50.145
+    ],
+    [
+     "for",
+     50.145,
+     50.326
+    ],
+    [
+     "20",
+     50.326,
+     50.869
+    ],
+    [
+     "years.",
+     50.869,
+     51.05
+    ]
+   ]
+  },
+  {
+   "id": "w3",
+   "text": "In twenty twenty-three, Kohli scores seven hundred and sixty-five.",
+   "caption": "In 2023, Kohli scores 765.",
+   "start": 51.52,
+   "end": 54.55,
+   "words": [
+    [
+     "In",
+     51.57,
+     51.762
+    ],
+    [
+     "2023,",
+     51.762,
+     52.916
+    ],
+    [
+     "Kohli",
+     52.916,
+     53.3
+    ],
+    [
+     "scores",
+     53.3,
+     53.685
+    ],
+    [
+     "765.",
+     53.685,
+     54.55
+    ]
+   ]
+  },
+  {
+   "id": "w4",
+   "text": "And in the semi-final, at the Wankhede,",
+   "caption": "And in the semi-final, at the Wankhede,",
+   "start": 54.9,
+   "end": 56.99,
+   "words": [
+    [
+     "And",
+     54.94,
+     55.111
+    ],
+    [
+     "in",
+     55.111,
+     55.282
+    ],
+    [
+     "the",
+     55.282,
+     55.453
+    ],
+    [
+     "semi-final,",
+     55.453,
+     56.136
+    ],
+    [
+     "at",
+     56.136,
+     56.307
+    ],
+    [
+     "the",
+     56.307,
+     56.478
+    ],
+    [
+     "Wankhede,",
+     56.478,
+     56.99
+    ]
+   ]
+  },
+  {
+   "id": "w5",
+   "text": "with Sachin watching him from the stands,",
+   "caption": "with Sachin watching him from the stands,",
+   "start": 56.99,
+   "end": 58.74,
+   "words": [
+    [
+     "with",
+     56.99,
+     57.184
+    ],
+    [
+     "Sachin",
+     57.184,
+     57.573
+    ],
+    [
+     "watching",
+     57.573,
+     57.962
+    ],
+    [
+     "him",
+     57.962,
+     58.157
+    ],
+    [
+     "from",
+     58.157,
+     58.351
+    ],
+    [
+     "the",
+     58.351,
+     58.546
+    ],
+    [
+     "stands,",
+     58.546,
+     58.74
+    ]
+   ]
+  },
+  {
+   "id": "w6",
+   "text": "he hits his fiftieth ODI century,",
+   "caption": "he hits his 50th ODI century,",
+   "start": 58.74,
+   "end": 61.03,
+   "words": [
+    [
+     "he",
+     58.74,
+     58.993
+    ],
+    [
+     "hits",
+     58.993,
+     59.247
+    ],
+    [
+     "his",
+     59.247,
+     59.5
+    ],
+    [
+     "50th",
+     59.5,
+     59.753
+    ],
+    [
+     "ODI",
+     59.753,
+     60.26
+    ],
+    [
+     "century,",
+     60.26,
+     61.02
+    ]
+   ]
+  },
+  {
+   "id": "w7",
+   "text": "passing Sachin's forty-nine.",
+   "caption": "passing Sachin's 49.",
+   "start": 61.03,
+   "end": 62.76,
+   "words": [
+    [
+     "passing",
+     61.03,
+     61.419
+    ],
+    [
+     "Sachin's",
+     61.419,
+     61.807
+    ],
+    [
+     "49.",
+     61.807,
+     62.39
+    ]
+   ]
+  },
+  {
+   "id": "w8",
+   "text": "He's on fifty-five now.",
+   "caption": "He's on 55 now.",
+   "start": 63.11,
+   "end": 64.55,
+   "words": [
+    [
+     "He's",
+     63.15,
+     63.375
+    ],
+    [
+     "on",
+     63.375,
+     63.6
+    ],
+    [
+     "55",
+     63.6,
+     64.275
+    ],
+    [
+     "now.",
+     64.275,
+     64.5
+    ]
+   ]
+  },
+  {
+   "id": "o1",
+   "text": "So is Kohli better than Sachin? No.",
+   "caption": "So is Kohli better than Sachin? No.",
+   "start": 65.05,
+   "end": 67.23,
+   "words": [
+    [
+     "So",
+     65.09,
+     65.303
+    ],
+    [
+     "is",
+     65.303,
+     65.516
+    ],
+    [
+     "Kohli",
+     65.516,
+     65.942
+    ],
+    [
+     "better",
+     65.942,
+     66.368
+    ],
+    [
+     "than",
+     66.368,
+     66.581
+    ],
+    [
+     "Sachin?",
+     66.581,
+     67.007
+    ],
+    [
+     "No.",
+     67.007,
+     67.22
+    ]
+   ]
+  },
+  {
+   "id": "o2",
+   "text": "A hundred international hundreds. Twenty-four years.",
+   "caption": "100 international hundreds. 24 years.",
+   "start": 67.23,
+   "end": 70.37,
+   "words": [
+    [
+     "100",
+     67.23,
+     68.142
+    ],
+    [
+     "international",
+     68.142,
+     69.154
+    ],
+    [
+     "hundreds.",
+     69.154,
+     69.56
+    ],
+    [
+     "24",
+     69.56,
+     70.167
+    ],
+    [
+     "years.",
+     70.167,
+     70.37
+    ]
+   ]
+  },
+  {
+   "id": "o3",
+   "text": "Sachin is still the benchmark.",
+   "caption": "Sachin is still the benchmark.",
+   "start": 70.37,
+   "end": 71.72,
+   "words": [
+    [
+     "Sachin",
+     70.37,
+     70.747
+    ],
+    [
+     "is",
+     70.747,
+     70.936
+    ],
+    [
+     "still",
+     70.936,
+     71.124
+    ],
+    [
+     "the",
+     71.124,
+     71.313
+    ],
+    [
+     "benchmark.",
+     71.313,
+     71.69
+    ]
+   ]
+  },
+  {
+   "id": "o4",
+   "text": "But these three? These belong to Virat.",
+   "caption": "But these 3? These belong to Virat.",
+   "start": 71.72,
+   "end": 74.4,
+   "words": [
+    [
+     "But",
+     71.78,
+     72.003
+    ],
+    [
+     "these",
+     72.003,
+     72.448
+    ],
+    [
+     "3?",
+     72.448,
+     72.782
+    ],
+    [
+     "These",
+     72.782,
+     73.227
+    ],
+    [
+     "belong",
+     73.227,
+     73.672
+    ],
+    [
+     "to",
+     73.672,
+     73.895
+    ],
+    [
+     "Virat.",
+     73.895,
+     74.34
+    ]
+   ]
+  },
+  {
+   "id": "o5",
+   "text": "Which one surprised you the most? Tell me in the comments.",
+   "caption": "Which one surprised you the most? Tell me in the comments.",
+   "start": 74.75,
+   "end": 77.2,
+   "words": [
+    [
+     "Which",
+     74.8,
+     74.955
+    ],
+    [
+     "one",
+     74.955,
+     75.266
+    ],
+    [
+     "surprised",
+     75.266,
+     75.732
+    ],
+    [
+     "you",
+     75.732,
+     75.887
+    ],
+    [
+     "the",
+     75.887,
+     76.043
+    ],
+    [
+     "most?",
+     76.043,
+     76.198
+    ],
+    [
+     "Tell",
+     76.198,
+     76.353
+    ],
+    [
+     "me",
+     76.353,
+     76.509
+    ],
+    [
+     "in",
+     76.509,
+     76.664
+    ],
+    [
+     "the",
+     76.664,
+     76.819
+    ],
+    [
+     "comments.",
+     76.819,
+     77.13
+    ]
+   ]
+  }
+ ]
+}

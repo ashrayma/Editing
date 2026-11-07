@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Record Book · theCricketLounge</title>
+<style>
+@font-face{font-family:I;src:local("Inter Display"),local("Inter")}
+:root{--y:#FEDE5C}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0d0f;color:#f2f2f2;font-family:"Inter Display",Inter,system-ui,sans-serif}
+.top{display:flex;align-items:center;gap:22px;padding:22px 40px;border-bottom:1px solid #222;background:#111114;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
+.brand i{width:6px;height:28px;background:var(--y);border-radius:3px}
+.search{flex:1;max-width:560px;display:flex;align-items:center;gap:12px;background:#1b1b20;border:1px solid #2c2c33;border-radius:12px;padding:12px 16px;font-size:18px;color:#bbb}
+.search.focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(254,222,92,.18)}
+#q{color:#fff}
+.caret{width:2px;height:22px;background:var(--y);animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.tabs{display:flex;gap:8px;padding:22px 40px 0}
+.tab{padding:10px 18px;border-radius:999px;background:#18181c;color:#aaa;font-weight:600;font-size:16px;border:1px solid #26262c;cursor:pointer}
+.tab.on{background:var(--y);color:#111;border-color:var(--y)}
+.wrap{padding:26px 40px 80px}
+h1{font-size:34px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:#8a8a92;font-size:16px;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:20px;background:#121215;border-radius:14px;overflow:hidden}
+th{text-align:left;color:#8a8a92;font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;padding:14px 20px;background:#16161a}
+td{padding:18px 20px;border-top:1px solid #1f1f24}
+td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right}
+th.n{text-align:right}
+tr.hl td{background:rgba(254,222,92,.12)}
+tr.hl td.n{color:var(--y)}
+tr.dim td{opacity:.35}
+.sec{display:none}.sec.on{display:block}
+.note{color:#6c6c74;font-size:14px;margin-top:14px}
+.empty{height:600px}
+</style></head><body>
+<div class="top"><div class="brand"><i></i>theCricketLounge<span style="color:#777;font-weight:600">&nbsp;Record Book</span></div>
+<div class="search" id="s"><span>🔍</span><span id="q"></span><span class="caret"></span></div></div>
+<div class="tabs"><div class="tab on" data-t="avg">Best World Cup average</div><div class="tab" data-t="f150">Fastest ODI 150</div></div>
+<div class="wrap">
+<div class="sec on" id="avg"><h1>Highest batting average at Men's World Cups</h1><div class="sub">ODI World Cups · minimum 1,000 runs · as of Oct 2026</div>
+<table><tr><th>#</th><th>Player</th><th>Team</th><th class="n">Runs</th><th class="n">Average</th></tr>
+<tr id="a-ab"><td>1</td><td>AB de Villiers</td><td>South Africa</td><td class="n">1,207</td><td class="n">63.52</td></tr>
+<tr id="a-viv"><td>2</td><td>Viv Richards</td><td>West Indies</td><td class="n">1,013</td><td class="n">63.31</td></tr>
+</table><div class="note">AB scored them at a strike rate of 117.29, one of the fastest of anyone with 1,000+ World Cup runs</div></div>
+<div class="sec" id="f150"><h1>Fastest 150 in ODI cricket</h1><div class="sub">Men's ODIs · balls faced to reach 150</div>
+<table><tr><th>#</th><th>Player</th><th>Match</th><th class="n">Balls</th></tr>
+<tr id="f-ab"><td>1</td><td>AB de Villiers</td><td>v West Indies · Sydney · World Cup 2015</td><td class="n">64</td></tr>
+<tr id="f-jb"><td>2</td><td>Jos Buttler</td><td>v Netherlands · Amstelveen · 2022</td><td class="n">65</td></tr>
+</table><div class="note">AB finished on 162* off 66 balls</div></div>
+<div class="empty"></div></div>
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id===t.dataset.t));});
+window.typeQ=async(txt)=>{const q=document.getElementById('q');document.getElementById('s').classList.add('focus');for(const ch of txt){q.textContent+=ch;await new Promise(r=>setTimeout(r,70+Math.random()*60));}};
+window.hl=(ids)=>{document.querySelectorAll('tr').forEach(r=>r.classList.remove('hl'));ids.forEach(i=>document.getElementById(i).classList.add('hl'));};
+</script></body></html>

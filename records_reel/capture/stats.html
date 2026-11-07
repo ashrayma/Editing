@@ -1,0 +1,64 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Record Book · theCricketLounge</title>
+<style>
+@font-face{font-family:I;src:local("Inter Display"),local("Inter")}
+:root{--y:#FEDE5C}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0d0f;color:#f2f2f2;font-family:"Inter Display",Inter,system-ui,sans-serif}
+.top{display:flex;align-items:center;gap:22px;padding:22px 40px;border-bottom:1px solid #222;background:#111114;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
+.brand i{width:6px;height:28px;background:var(--y);border-radius:3px}
+.search{flex:1;max-width:560px;display:flex;align-items:center;gap:12px;background:#1b1b20;border:1px solid #2c2c33;border-radius:12px;padding:12px 16px;font-size:18px;color:#bbb}
+.search.focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(254,222,92,.18)}
+#q{color:#fff}
+.caret{width:2px;height:22px;background:var(--y);animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.tabs{display:flex;gap:8px;padding:22px 40px 0}
+.tab{padding:10px 18px;border-radius:999px;background:#18181c;color:#aaa;font-weight:600;font-size:16px;border:1px solid #26262c;cursor:pointer}
+.tab.on{background:var(--y);color:#111;border-color:var(--y)}
+.wrap{padding:26px 40px 80px}
+h1{font-size:34px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:#8a8a92;font-size:16px;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:20px;background:#121215;border-radius:14px;overflow:hidden}
+th{text-align:left;color:#8a8a92;font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;padding:14px 20px;background:#16161a}
+td{padding:18px 20px;border-top:1px solid #1f1f24}
+td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right}
+th.n{text-align:right}
+tr.hl td{background:rgba(254,222,92,.12)}
+tr.hl td.n{color:var(--y)}
+tr.dim td{opacity:.35}
+.sec{display:none}.sec.on{display:block}
+.note{color:#6c6c74;font-size:14px;margin-top:14px}
+.empty{height:600px}
+</style></head><body>
+<div class="top"><div class="brand"><i></i>theCricketLounge<span style="color:#777;font-weight:600">&nbsp;Record Book</span></div>
+<div class="search" id="s"><span>🔍</span><span id="q"></span><span class="caret"></span></div></div>
+<div class="tabs"><div class="tab on" data-t="chase">Chase hundreds</div><div class="tab" data-t="capt">Test captaincy</div><div class="tab" data-t="wc">World Cup runs</div></div>
+<div class="wrap">
+<div class="sec on" id="chase"><h1>Most ODI hundreds in successful chases</h1><div class="sub">Men's ODIs · team won while chasing · as of Sep 2026</div>
+<table><tr><th>#</th><th>Player</th><th class="n">Hundreds</th></tr>
+<tr id="r-kohli"><td>1</td><td>Virat Kohli</td><td class="n">25</td></tr>
+<tr id="r-rohit"><td>2</td><td>Rohit Sharma</td><td class="n">14</td></tr>
+<tr id="r-sachin"><td>2</td><td>Sachin Tendulkar</td><td class="n">14</td></tr>
+</table><div class="note">Kohli in won chases: 6,374 runs, average 90+</div></div>
+<div class="sec" id="capt"><h1>Most Test wins as India captain</h1><div class="sub">Men's Tests</div>
+<table><tr><th>#</th><th>Captain</th><th class="n">Tests</th><th class="n">Won</th></tr>
+<tr id="c-kohli"><td>1</td><td>Virat Kohli</td><td class="n">68</td><td class="n">40</td></tr>
+<tr><td>2</td><td>MS Dhoni</td><td class="n">60</td><td class="n">27</td></tr>
+<tr><td>3</td><td>Sourav Ganguly</td><td class="n">49</td><td class="n">21</td></tr>
+<tr id="c-sachin"><td>–</td><td>Sachin Tendulkar</td><td class="n">25</td><td class="n">4</td></tr>
+</table><div class="note">2018–19: India's first Test series win in Australia</div></div>
+<div class="sec" id="wc"><h1>Most runs in a single World Cup</h1><div class="sub">Men's ODI World Cup</div>
+<table><tr><th>#</th><th>Player</th><th>Edition</th><th class="n">Runs</th></tr>
+<tr id="w-kohli"><td>1</td><td>Virat Kohli</td><td>2023</td><td class="n">765</td></tr>
+<tr id="w-sachin"><td>2</td><td>Sachin Tendulkar</td><td>2003</td><td class="n">673</td></tr>
+<tr><td>3</td><td>Matthew Hayden</td><td>2007</td><td class="n">659</td></tr>
+<tr><td>4</td><td>Rohit Sharma</td><td>2019</td><td class="n">648</td></tr>
+<tr><td>5</td><td>David Warner</td><td>2019</td><td class="n">647</td></tr>
+</table><div class="note">Sachin's 673 stood for 20 years</div></div>
+<div class="empty"></div></div>
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id===t.dataset.t));});
+window.typeQ=async(txt)=>{const q=document.getElementById('q');document.getElementById('s').classList.add('focus');for(const ch of txt){q.textContent+=ch;await new Promise(r=>setTimeout(r,70+Math.random()*60));}};
+window.hl=(ids)=>{document.querySelectorAll('tr').forEach(r=>r.classList.remove('hl'));ids.forEach(i=>document.getElementById(i).classList.add('hl'));};
+</script></body></html>
