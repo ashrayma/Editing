@@ -1,0 +1,1021 @@
+{
+ "duration": 51.852,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "a1",
+   "text": "Mohammed Shami has announced his retirement from Test cricket.",
+   "caption": "Mohammed Shami has announced his retirement from Test cricket.",
+   "start": 0.239,
+   "end": 3.167,
+   "words": [
+    [
+     "Mohammed",
+     0.278,
+     0.751
+    ],
+    [
+     "Shami",
+     0.751,
+     1.067
+    ],
+    [
+     "has",
+     1.067,
+     1.225
+    ],
+    [
+     "announced",
+     1.225,
+     1.699
+    ],
+    [
+     "his",
+     1.699,
+     1.856
+    ],
+    [
+     "retirement",
+     1.856,
+     2.488
+    ],
+    [
+     "from",
+     2.488,
+     2.646
+    ],
+    [
+     "Test",
+     2.646,
+     2.804
+    ],
+    [
+     "cricket.",
+     2.804,
+     3.12
+    ]
+   ]
+  },
+  {
+   "id": "a2",
+   "text": "He hadn't played a Test for India in over three years.",
+   "caption": "He hadn't played a Test for India in over 3 years.",
+   "start": 3.297,
+   "end": 6.005,
+   "words": [
+    [
+     "He",
+     3.335,
+     3.529
+    ],
+    [
+     "hadn't",
+     3.529,
+     3.723
+    ],
+    [
+     "played",
+     3.723,
+     3.918
+    ],
+    [
+     "a",
+     3.918,
+     4.112
+    ],
+    [
+     "Test",
+     4.112,
+     4.306
+    ],
+    [
+     "for",
+     4.306,
+     4.5
+    ],
+    [
+     "India",
+     4.5,
+     4.889
+    ],
+    [
+     "in",
+     4.889,
+     5.083
+    ],
+    [
+     "over",
+     5.083,
+     5.472
+    ],
+    [
+     "3",
+     5.472,
+     5.763
+    ],
+    [
+     "years.",
+     5.763,
+     5.957
+    ]
+   ]
+  },
+  {
+   "id": "a3",
+   "text": "And nobody was talking about it.",
+   "caption": "And nobody was talking about it.",
+   "start": 6.027,
+   "end": 7.7,
+   "words": [
+    [
+     "And",
+     6.065,
+     6.22
+    ],
+    [
+     "nobody",
+     6.22,
+     6.685
+    ],
+    [
+     "was",
+     6.685,
+     6.84
+    ],
+    [
+     "talking",
+     6.84,
+     7.15
+    ],
+    [
+     "about",
+     7.15,
+     7.46
+    ],
+    [
+     "it.",
+     7.46,
+     7.615
+    ]
+   ]
+  },
+  {
+   "id": "a4",
+   "text": "Think about what India has lost.",
+   "caption": "Think about what India has lost.",
+   "start": 7.831,
+   "end": 9.601,
+   "words": [
+    [
+     "Think",
+     7.868,
+     8.078
+    ],
+    [
+     "about",
+     8.078,
+     8.5
+    ],
+    [
+     "what",
+     8.5,
+     8.711
+    ],
+    [
+     "India",
+     8.711,
+     9.131
+    ],
+    [
+     "has",
+     9.131,
+     9.343
+    ],
+    [
+     "lost.",
+     9.343,
+     9.553
+    ]
+   ]
+  },
+  {
+   "id": "b1",
+   "text": "Shami had the most beautiful seam position in world cricket.",
+   "caption": "Shami had the most beautiful seam position in world cricket.",
+   "start": 9.73,
+   "end": 12.936,
+   "words": [
+    [
+     "Shami",
+     9.768,
+     10.158
+    ],
+    [
+     "had",
+     10.158,
+     10.353
+    ],
+    [
+     "the",
+     10.353,
+     10.547
+    ],
+    [
+     "most",
+     10.547,
+     10.743
+    ],
+    [
+     "beautiful",
+     10.743,
+     11.328
+    ],
+    [
+     "seam",
+     11.328,
+     11.522
+    ],
+    [
+     "position",
+     11.522,
+     12.107
+    ],
+    [
+     "in",
+     12.107,
+     12.302
+    ],
+    [
+     "world",
+     12.302,
+     12.498
+    ],
+    [
+     "cricket.",
+     12.498,
+     12.888
+    ]
+   ]
+  },
+  {
+   "id": "b2",
+   "text": "Bolt upright.",
+   "caption": "Bolt upright.",
+   "start": 12.978,
+   "end": 13.973,
+   "words": [
+    [
+     "Bolt",
+     13.016,
+     13.32
+    ],
+    [
+     "upright.",
+     13.32,
+     13.925
+    ]
+   ]
+  },
+  {
+   "id": "b3",
+   "text": "Every single ball.",
+   "caption": "Every single ball.",
+   "start": 13.995,
+   "end": 15.239,
+   "words": [
+    [
+     "Every",
+     14.033,
+     14.574
+    ],
+    [
+     "single",
+     14.574,
+     14.935
+    ],
+    [
+     "ball.",
+     14.935,
+     15.115
+    ]
+   ]
+  },
+  {
+   "id": "b4",
+   "text": "On flat pitches, where other bowlers got nothing,",
+   "caption": "On flat pitches, where other bowlers got nothing,",
+   "start": 15.325,
+   "end": 17.842,
+   "words": [
+    [
+     "On",
+     15.364,
+     15.55
+    ],
+    [
+     "flat",
+     15.55,
+     15.736
+    ],
+    [
+     "pitches,",
+     15.736,
+     16.108
+    ],
+    [
+     "where",
+     16.108,
+     16.481
+    ],
+    [
+     "other",
+     16.481,
+     16.854
+    ],
+    [
+     "bowlers",
+     16.854,
+     17.226
+    ],
+    [
+     "got",
+     17.226,
+     17.412
+    ],
+    [
+     "nothing,",
+     17.412,
+     17.785
+    ]
+   ]
+  },
+  {
+   "id": "b5",
+   "text": "that seam still found movement.",
+   "caption": "that seam still found movement.",
+   "start": 17.864,
+   "end": 19.654,
+   "words": [
+    [
+     "that",
+     17.902,
+     18.145
+    ],
+    [
+     "seam",
+     18.145,
+     18.389
+    ],
+    [
+     "still",
+     18.389,
+     18.632
+    ],
+    [
+     "found",
+     18.632,
+     18.876
+    ],
+    [
+     "movement.",
+     18.876,
+     19.606
+    ]
+   ]
+  },
+  {
+   "id": "c1",
+   "text": "Two hundred and twenty nine Test wickets, at an average under twenty eight.",
+   "caption": "229 Test wickets, at an average under 28.",
+   "start": 19.782,
+   "end": 23.792,
+   "words": [
+    [
+     "229",
+     19.82,
+     20.775
+    ],
+    [
+     "Test",
+     20.775,
+     20.987
+    ],
+    [
+     "wickets,",
+     20.987,
+     21.411
+    ],
+    [
+     "at",
+     21.411,
+     21.623
+    ],
+    [
+     "an",
+     21.623,
+     21.835
+    ],
+    [
+     "average",
+     21.835,
+     22.683
+    ],
+    [
+     "under",
+     22.683,
+     23.108
+    ],
+    [
+     "28.",
+     23.108,
+     23.744
+    ]
+   ]
+  },
+  {
+   "id": "c2",
+   "text": "And overseas, when India needed a breakthrough,",
+   "caption": "And overseas, when India needed a breakthrough,",
+   "start": 23.878,
+   "end": 26.233,
+   "words": [
+    [
+     "And",
+     23.916,
+     24.105
+    ],
+    [
+     "overseas,",
+     24.105,
+     24.672
+    ],
+    [
+     "when",
+     24.672,
+     24.861
+    ],
+    [
+     "India",
+     24.861,
+     25.239
+    ],
+    [
+     "needed",
+     25.239,
+     25.617
+    ],
+    [
+     "a",
+     25.617,
+     25.807
+    ],
+    [
+     "breakthrough,",
+     25.807,
+     26.184
+    ]
+   ]
+  },
+  {
+   "id": "c3",
+   "text": "the ball went to Shami.",
+   "caption": "the ball went to Shami.",
+   "start": 26.254,
+   "end": 27.469,
+   "words": [
+    [
+     "the",
+     26.292,
+     26.48
+    ],
+    [
+     "ball",
+     26.48,
+     26.668
+    ],
+    [
+     "went",
+     26.668,
+     26.856
+    ],
+    [
+     "to",
+     26.856,
+     27.045
+    ],
+    [
+     "Shami.",
+     27.045,
+     27.421
+    ]
+   ]
+  },
+  {
+   "id": "d1",
+   "text": "Remember Lord's, twenty twenty one?",
+   "caption": "Remember Lord's, 2021?",
+   "start": 27.598,
+   "end": 29.234,
+   "words": [
+    [
+     "Remember",
+     27.636,
+     28.101
+    ],
+    [
+     "Lord's,",
+     28.101,
+     28.256
+    ],
+    [
+     "2021?",
+     28.256,
+     29.187
+    ]
+   ]
+  },
+  {
+   "id": "d2",
+   "text": "He didn't just bowl.",
+   "caption": "He didn't just bowl.",
+   "start": 29.278,
+   "end": 30.215,
+   "words": [
+    [
+     "He",
+     29.316,
+     29.529
+    ],
+    [
+     "didn't",
+     29.529,
+     29.742
+    ],
+    [
+     "just",
+     29.742,
+     29.955
+    ],
+    [
+     "bowl.",
+     29.955,
+     30.167
+    ]
+   ]
+  },
+  {
+   "id": "d3",
+   "text": "He batted.",
+   "caption": "He batted.",
+   "start": 30.237,
+   "end": 30.898,
+   "words": [
+    [
+     "He",
+     30.276,
+     30.46
+    ],
+    [
+     "batted.",
+     30.46,
+     30.831
+    ]
+   ]
+  },
+  {
+   "id": "d4",
+   "text": "Fifty six not out, alongside Bumrah, and India won.",
+   "caption": "56* alongside Bumrah, and India won.",
+   "start": 30.919,
+   "end": 34.086,
+   "words": [
+    [
+     "56*",
+     30.957,
+     31.668
+    ],
+    [
+     "alongside",
+     31.668,
+     32.616
+    ],
+    [
+     "Bumrah,",
+     32.616,
+     33.09
+    ],
+    [
+     "and",
+     33.09,
+     33.327
+    ],
+    [
+     "India",
+     33.327,
+     33.801
+    ],
+    [
+     "won.",
+     33.801,
+     34.038
+    ]
+   ]
+  },
+  {
+   "id": "e1",
+   "text": "Then came the injuries.",
+   "caption": "Then came the injuries.",
+   "start": 34.258,
+   "end": 35.531,
+   "words": [
+    [
+     "Then",
+     34.297,
+     34.466
+    ],
+    [
+     "came",
+     34.466,
+     34.805
+    ],
+    [
+     "the",
+     34.805,
+     34.975
+    ],
+    [
+     "injuries.",
+     34.975,
+     35.483
+    ]
+   ]
+  },
+  {
+   "id": "e2",
+   "text": "Ankle surgery. Months out of the game.",
+   "caption": "Ankle surgery. Months out of the game.",
+   "start": 35.574,
+   "end": 37.612,
+   "words": [
+    [
+     "Ankle",
+     35.612,
+     35.967
+    ],
+    [
+     "surgery.",
+     35.967,
+     36.5
+    ],
+    [
+     "Months",
+     36.5,
+     36.678
+    ],
+    [
+     "out",
+     36.678,
+     36.855
+    ],
+    [
+     "of",
+     36.855,
+     37.033
+    ],
+    [
+     "the",
+     37.033,
+     37.21
+    ],
+    [
+     "game.",
+     37.21,
+     37.565
+    ]
+   ]
+  },
+  {
+   "id": "e3",
+   "text": "He came back.",
+   "caption": "He came back.",
+   "start": 37.699,
+   "end": 38.378,
+   "words": [
+    [
+     "He",
+     37.737,
+     37.885
+    ],
+    [
+     "came",
+     37.885,
+     38.182
+    ],
+    [
+     "back.",
+     38.182,
+     38.33
+    ]
+   ]
+  },
+  {
+   "id": "e4",
+   "text": "He took wickets.",
+   "caption": "He took wickets.",
+   "start": 38.399,
+   "end": 39.212,
+   "words": [
+    [
+     "He",
+     38.437,
+     38.619
+    ],
+    [
+     "took",
+     38.619,
+     38.801
+    ],
+    [
+     "wickets.",
+     38.801,
+     39.165
+    ]
+   ]
+  },
+  {
+   "id": "e5",
+   "text": "But the Test call never came.",
+   "caption": "But the Test call never came.",
+   "start": 39.234,
+   "end": 40.823,
+   "words": [
+    [
+     "But",
+     39.273,
+     39.46
+    ],
+    [
+     "the",
+     39.46,
+     39.648
+    ],
+    [
+     "Test",
+     39.648,
+     39.836
+    ],
+    [
+     "call",
+     39.836,
+     40.024
+    ],
+    [
+     "never",
+     40.024,
+     40.399
+    ],
+    [
+     "came.",
+     40.399,
+     40.775
+    ]
+   ]
+  },
+  {
+   "id": "f1",
+   "text": "This is the man who took seven wickets in a World Cup semi-final, and twenty four in that World Cup.",
+   "caption": "This is the man who took 7 wickets in a World Cup semi-final, and 24 in that World Cup.",
+   "start": 40.995,
+   "end": 45.952,
+   "words": [
+    [
+     "This",
+     41.043,
+     41.233
+    ],
+    [
+     "is",
+     41.233,
+     41.424
+    ],
+    [
+     "the",
+     41.424,
+     41.615
+    ],
+    [
+     "man",
+     41.615,
+     41.806
+    ],
+    [
+     "who",
+     41.806,
+     41.996
+    ],
+    [
+     "took",
+     41.996,
+     42.187
+    ],
+    [
+     "7",
+     42.187,
+     42.473
+    ],
+    [
+     "wickets",
+     42.473,
+     42.855
+    ],
+    [
+     "in",
+     42.855,
+     43.045
+    ],
+    [
+     "a",
+     43.045,
+     43.235
+    ],
+    [
+     "World",
+     43.235,
+     43.426
+    ],
+    [
+     "Cup",
+     43.426,
+     43.616
+    ],
+    [
+     "semi-final,",
+     43.616,
+     44.379
+    ],
+    [
+     "and",
+     44.379,
+     44.569
+    ],
+    [
+     "24",
+     44.569,
+     45.142
+    ],
+    [
+     "in",
+     45.142,
+     45.332
+    ],
+    [
+     "that",
+     45.332,
+     45.523
+    ],
+    [
+     "World",
+     45.523,
+     45.714
+    ],
+    [
+     "Cup.",
+     45.714,
+     45.904
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "So here's the question.",
+   "caption": "So here's the question.",
+   "start": 46.081,
+   "end": 47.048,
+   "words": [
+    [
+     "So",
+     46.12,
+     46.266
+    ],
+    [
+     "here's",
+     46.266,
+     46.56
+    ],
+    [
+     "the",
+     46.56,
+     46.706
+    ],
+    [
+     "question.",
+     46.706,
+     47.0
+    ]
+   ]
+  },
+  {
+   "id": "q2",
+   "text": "Was Mohammed Shami's Test career finished too soon?",
+   "caption": "Was Mohammed Shami's Test career finished too soon?",
+   "start": 47.091,
+   "end": 49.742,
+   "words": [
+    [
+     "Was",
+     47.129,
+     47.312
+    ],
+    [
+     "Mohammed",
+     47.312,
+     47.862
+    ],
+    [
+     "Shami's",
+     47.862,
+     48.229
+    ],
+    [
+     "Test",
+     48.229,
+     48.411
+    ],
+    [
+     "career",
+     48.411,
+     48.778
+    ],
+    [
+     "finished",
+     48.778,
+     49.327
+    ],
+    [
+     "too",
+     49.327,
+     49.511
+    ],
+    [
+     "soon?",
+     49.511,
+     49.694
+    ]
+   ]
+  },
+  {
+   "id": "q3",
+   "text": "Tell me in the comments, and follow for more.",
+   "caption": "Tell me in the comments, and follow for more.",
+   "start": 49.871,
+   "end": 51.766,
+   "words": [
+    [
+     "Tell",
+     49.909,
+     50.059
+    ],
+    [
+     "me",
+     50.059,
+     50.211
+    ],
+    [
+     "in",
+     50.211,
+     50.361
+    ],
+    [
+     "the",
+     50.361,
+     50.512
+    ],
+    [
+     "comments,",
+     50.512,
+     50.813
+    ],
+    [
+     "and",
+     50.813,
+     50.964
+    ],
+    [
+     "follow",
+     50.964,
+     51.265
+    ],
+    [
+     "for",
+     51.265,
+     51.416
+    ],
+    [
+     "more.",
+     51.416,
+     51.718
+    ]
+   ]
+  }
+ ]
+}
