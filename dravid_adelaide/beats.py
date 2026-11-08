@@ -8,4 +8,6 @@ BEATS = [((m.group(1).lower() if m.group(1).startswith("H") else f"l{int(m.group
          if m]
 IDS = [b for b, _ in BEATS]
 TEXT = dict(BEATS)
-BREATH = {"h3": 0.4, "l02": 0.6, "l10": 0.5, "l13": 0.4, "l17": 0.8, "l24": 0.4}
+# fast-paced 1:30 cut: these lines are recorded but left out of the edit
+DROP = {"l03", "l19", "l20", "l21"}
+BREATH = {"h3": 0.15, "l02": 0.3, "l10": 0.25, "l13": 0.15, "l17": 0.4}

@@ -20,10 +20,12 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "kohli_countdown"))
 sys.path.insert(0, os.path.join(HERE, "..", "kohli_mcg", "tools"))
 from align import align_chunked  # noqa: E402
-from beats import BEATS, BREATH  # noqa: E402
-from voiceover import SR, voiced_regions  # noqa: E402
+from beats import BEATS, BREATH, DROP  # noqa: E402
+from voiceover import SR, tighten_pauses, voiced_regions  # noqa: E402
 
-GAP, LEAD = 0.3, 0.3
+GAP, LEAD = 0.12, 0.15
+TEMPO = 1.07       # slight speed-up for a fast-paced Short (ElevenLabs voice stays natural)
+KEEP = 0.16        # longest pause kept inside a line
 
 
 def load(path):
@@ -72,13 +74,20 @@ def main():
         sys.exit(f"no audio for: {missing}")
     out, beats, t = [np.zeros(int(SR * LEAD), np.float32)], [], LEAD
     for b, text in BEATS:
-        seg = pieces[b]
+        if b in DROP:
+            continue
+        seg = tighten_pauses(pieces[b], keep=KEEP)
         beats.append({"id": b, "start": round(t, 3), "end": round(t + len(seg) / SR, 3), "text": text})
         gap = GAP + BREATH.get(b, 0.0)
         out += [seg, np.zeros(int(SR * gap), np.float32)]
         t += len(seg) / SR + gap
         print(f"{b:4s} {beats[-1]['start']:6.2f} -> {beats[-1]['end']:6.2f}  {text[:55]}")
     a = np.concatenate(out)
+    a = np.frombuffer(subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af",
+                                      f"atempo={TEMPO}", "-f", "f32le", "-"], input=a.astype(np.float32).tobytes(),
+                                     capture_output=True, check=True).stdout, np.float32)
+    for x in beats:
+        x["start"], x["end"] = round(x["start"] / TEMPO, 3), round(x["end"] / TEMPO, 3)
     a = a / (np.abs(a).max() + 1e-9) * 0.89
     with wave.open(os.path.join(HERE, "out", "vo_final.wav"), "wb") as w:
         w.setnchannels(1)

@@ -24,7 +24,7 @@ MEDIA = os.path.join(OUT, "media")
 W, H, FPS = 1080, 1920, 30
 Y = "#FEDE5C"
 RED = "#ff453a"
-TAIL = 3.2
+TAIL = 3.0
 VO_OFFSET = 0.0
 P = "assets/photos/"
 R3 = "blender/renders/"
@@ -32,6 +32,7 @@ R3 = "blender/renders/"
 os.makedirs(MEDIA, exist_ok=True)
 TL = json.load(open(os.path.join(HERE, "out", "vo_timeline.json")))
 BEAT = {b["id"]: (b["start"], b["end"]) for b in TL["beats"]}
+ORDER = [b["id"] for b in TL["beats"]]          # lines in the edit (dropped lines are absent)
 TOTAL = round(TL["duration"] + TAIL, 2)
 els, js, EVENTS, SHOTS = [], [], [], []
 _n, _whip = [0], [1]
@@ -71,8 +72,8 @@ def span(n, a=0.0, b=1.0):
     """(start, duration) for fraction a..b of line n; ending at the line's end it runs to the next line's start."""
     s = at(n, a)
     if b >= 1.0:
-        k = IDS.index(L(n))
-        e = BEAT[IDS[k + 1]][0] + 0.15 if k + 1 < len(IDS) else TOTAL
+        k = ORDER.index(L(n))
+        e = BEAT[ORDER[k + 1]][0] + 0.15 if k + 1 < len(ORDER) else TOTAL
     else:
         e = at(n, b)
     return s, round(e - s, 2)
@@ -101,9 +102,9 @@ def photo(src, n, a=0.0, b=1.0, label=None, sub=None, gray=False, origin="50% 40
         f'<div class="scrim"></div>{tag}</div>')
     dd = _whip[0]
     _whip[0] = -dd
-    anim(f'tl.fromTo("#{i}",{{opacity:0,x:{120 * dd},filter:"blur(14px)"}},{{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"}},{s})')
+    anim(f'tl.fromTo("#{i}",{{opacity:0,x:{120 * dd},filter:"blur(14px)"}},{{opacity:1,x:0,filter:"blur(0px)",duration:0.28,ease:"expo.out"}},{s})')
     anim(f'tl.fromTo("#{i}i",{{scale:{base},x:{-18 * dd}}},{{scale:{round(base * push, 3)},x:{18 * dd},duration:{d},ease:"sine.inOut"}},{s})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
     if label:
         anim(f'tl.fromTo("#{i}t",{{x:-40,opacity:0}},{{x:0,opacity:1,duration:0.6,ease:"expo.out"}},{round(s + 0.3, 2)})')
     SHOTS.append((s, s + d, i))
@@ -146,10 +147,10 @@ def headline(lines, n, a=0.0, b=1.0, size=110, acc=(), y=1180, sub=None, z=30, s
         SHAKES.append(s + 0.35)
     else:
         for k in range(len(lines)):
-            anim(f'tl.fromTo("#{i}l{k}",{{yPercent:110}},{{yPercent:0,duration:0.8,ease:"expo.out"}},{round(s + 0.1 + 0.1 * k, 2)})')
+            anim(f'tl.fromTo("#{i}l{k}",{{yPercent:110}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{round(s + 0.05 + 0.08 * k, 2)})')
     if sub:
         anim(f'tl.fromTo("#{i}s",{{opacity:0,y:14}},{{opacity:1,y:0,duration:0.6}},{round(s + 0.4, 2)})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def odo(num, n, a=0.0, b=1.0, label=None, y=1100, size=300, color=Y, z=30):
@@ -163,7 +164,7 @@ def odo(num, n, a=0.0, b=1.0, label=None, y=1100, size=300, color=Y, z=30):
         if ch.isdigit():
             strip = "".join(f"<span>{q}</span>" for q in "0123456789")
             cols.append(f'<span class="dcol"><span class="dstrip" id="{i}d{k}">{strip}</span></span>')
-            anim(f'tl.fromTo("#{i}d{k}",{{yPercent:0}},{{yPercent:{-int(ch) * 10},duration:{1.1 + 0.12 * k},ease:"expo.out"}},{s + 0.1})')
+            anim(f'tl.fromTo("#{i}d{k}",{{yPercent:0}},{{yPercent:{-int(ch) * 10},duration:{0.7 + 0.08 * k},ease:"expo.out"}},{s + 0.05})')
         else:
             cols.append(f'<span class="dchar">{html.escape(ch)}</span>')
     lab = f'<div class="olab" id="{i}lb">{html.escape(label)}</div>' if label else ""
@@ -171,8 +172,8 @@ def odo(num, n, a=0.0, b=1.0, label=None, y=1100, size=300, color=Y, z=30):
         f'<div class="digits">{"".join(cols)}</div>{lab}</div>')
     anim(f'tl.fromTo("#{i}",{{opacity:0,scale:0.92}},{{opacity:1,scale:1,duration:0.4}},{s})')
     if label:
-        anim(f'tl.fromTo("#{i}lb",{{opacity:0,y:12}},{{opacity:1,y:0,duration:0.5}},{s + 0.6})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+        anim(f'tl.fromTo("#{i}lb",{{opacity:0,y:12}},{{opacity:1,y:0,duration:0.35}},{s + 0.35})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def pills(items, n, a=0.0, b=1.0, y=1080, z=30):
@@ -184,7 +185,7 @@ def pills(items, n, a=0.0, b=1.0, y=1080, z=30):
     for k in range(len(items)):
         EVENTS.append((round(s + 0.1 + gap * k, 2), "pop"))
         anim(f'tl.fromTo("#{i}p{k}",{{y:30,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"expo.out"}},{round(s + 0.1 + gap * k, 2)})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def ytag(text, n, m):
@@ -193,7 +194,7 @@ def ytag(text, n, m):
     i = nid("y")
     add(f'<div id="{i}" class="ytag clip" data-start="{s}" data-duration="{d}">{html.escape(text)}</div>')
     anim(f'tl.fromTo("#{i}",{{clipPath:"inset(0% 100% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:0.5,ease:"expo.out"}},{s})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def flash(t):
@@ -214,11 +215,11 @@ def bars(rows, n, a=0.0, b=1.0, y=1000, z=30):
         parts.append(f'<div class="brow"><div class="blab">{html.escape(lab)}</div><div class="btrack">'
                      f'<div class="bfill" id="{i}f{k}" style="width:{v / mx * 100:.1f}%;background:{c}"></div></div>'
                      f'<div class="bval">{v}</div></div>')
-        anim(f'tl.fromTo("#{i}f{k}",{{scaleX:0}},{{scaleX:1,duration:1.2,ease:"expo.out"}},{round(s + 0.2 + 0.3 * k, 2)})')
+        anim(f'tl.fromTo("#{i}f{k}",{{scaleX:0}},{{scaleX:1,duration:0.8,ease:"expo.out"}},{round(s + 0.1 + 0.2 * k, 2)})')
         EVENTS.append((round(s + 0.2 + 0.3 * k, 2), "pop"))
     add(f'<div id="{i}" class="bars clip" data-start="{s}" data-duration="{d}" style="top:{y}px;z-index:{z}">{"".join(parts)}</div>')
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.3}},{s})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def clock(hours, n, a=0.0, b=1.0, y=760, z=30):
@@ -233,7 +234,7 @@ def clock(hours, n, a=0.0, b=1.0, y=760, z=30):
     anim(f'tl.fromTo("#{i}",{{opacity:0,scale:0.9}},{{opacity:1,scale:1,duration:0.5,ease:"expo.out"}},{s})')
     anim(f'tl.fromTo("#{i}h",{{rotation:0}},{{rotation:{360 * hours},duration:{min(d - 0.6, 3.2)},ease:"power2.inOut"}},{s + 0.2})')
     anim(f'tl.fromTo("#{i}n",{{innerText:0}},{{innerText:{hours},duration:{min(d - 0.6, 3.2)},snap:{{innerText:1}},ease:"power2.inOut"}},{s + 0.2})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def chase(runs, target, n, a=0.0, b=1.0, y=300, z=60, label="INDIA"):
@@ -243,8 +244,8 @@ def chase(runs, target, n, a=0.0, b=1.0, y=300, z=60, label="INDIA"):
         f'<div class="chtxt"><b>{label} {runs}</b><span>TARGET {target}</span></div>'
         f'<div class="chtrack"><div class="chfill" id="{i}f" style="width:{runs / target * 100:.1f}%"></div></div></div>')
     anim(f'tl.fromTo("#{i}",{{y:-30,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"expo.out"}},{s})')
-    anim(f'tl.fromTo("#{i}f",{{scaleX:0}},{{scaleX:1,duration:1.4,ease:"expo.out"}},{s + 0.2})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.fromTo("#{i}f",{{scaleX:0}},{{scaleX:1,duration:0.9,ease:"expo.out"}},{s + 0.1})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def faceoff(cards, n, a=0.0, b=1.0, y=520, z=30, reveal=None):
@@ -259,7 +260,7 @@ def faceoff(cards, n, a=0.0, b=1.0, y=520, z=30, reveal=None):
         EVENTS.append((t, "impact"))
         anim(f'tl.fromTo("#{i}c{k}",{{x:{-500 if k % 2 == 0 else 500},opacity:0}},{{x:0,opacity:1,duration:0.6,ease:"expo.out"}},{round(t, 2)})')
     add(f'<div id="{i}" class="faceoff clip" data-start="{s}" data-duration="{d}" style="top:{y}px;z-index:{z}">{"".join(parts)}</div>')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
     return i
 
 
@@ -272,9 +273,9 @@ def poll(options, n, a=0.0, b=1.0, y=900, z=40):
         f'<div class="pq">WHO WAS THE REAL HERO?</div>{rows}<div class="pc">Comment your pick</div></div>')
     for k in range(len(options)):
         EVENTS.append((round(s + 0.5 + 0.35 * k, 2), "pop"))
-        anim(f'tl.fromTo("#{i}o{k}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.5,ease:"expo.out"}},{round(s + 0.5 + 0.35 * k, 2)})')
+        anim(f'tl.fromTo("#{i}o{k}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{round(s + 0.3 + 0.25 * k, 2)})')
     anim(f'tl.fromTo("#{i}",{{opacity:0,y:30}},{{opacity:1,y:0,duration:0.5,ease:"expo.out"}},{s})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def date_card(top, bottom, n, a=0.0, b=1.0, z=30):
@@ -287,7 +288,7 @@ def date_card(top, bottom, n, a=0.0, b=1.0, z=30):
     anim(f'tl.fromTo("#{i}b",{{scaleY:0}},{{scaleY:1,duration:0.5,ease:"expo.out"}},{s})')
     anim(f'tl.fromTo("#{i}a",{{rotationX:-95,opacity:0}},{{rotationX:0,opacity:1,duration:0.8,ease:"expo.out"}},{s + 0.15})')
     anim(f'tl.fromTo("#{i}c",{{rotationX:-95,opacity:0}},{{rotationX:0,opacity:1,duration:0.8,ease:"expo.out"}},{s + 0.35})')
-    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(s + d - 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.15}},{round(s + d - 0.15, 2)})')
 
 
 def end_card(start, dur):
@@ -303,50 +304,66 @@ PUNCHES, SHAKES = [], []
 
 # ----------------------------------------------------------------------------- the Short
 
-# HOOK: Travis Head is to India what Dravid & Laxman were to Australia
-photo(P + "dravid_handshake.png", "h1", origin="70% 40%", push=1.25)
-pills(["TRAVIS HEAD <b>→ INDIA</b>", "DRAVID & LAXMAN <b>→ AUSTRALIA</b>"], "h1", 0.2, 1.0, y=1080)
-photo(P + "dravid_bat_gloves.png", "h2", push=1.3)
-headline(["A different", "plan."], "h2", 0.35, 1.0, size=130, acc=(1,), y=1130)
-photo(P + "adelaide_oval.png", "h3", origin="50% 60%")
-headline(["Adelaide 2003."], "h3", 0.2, 1.0, size=120, acc=(0,), y=1150)
+# Photo slots. Each slot is one picture; drop a new file into assets/photos/ under the slot's name (any of
+# .jpg/.jpeg/.png/.webp) and it replaces the fallback still from the reference reel.
+FALLBACK = {"travis_head": "dravid_handshake", "dravid_laxman": "dravid_handshake", "dravid_closeup": "dravid_bat_gloves",
+            "adelaide_oval": "adelaide_oval", "ponting": "ponting_242", "aus_team": "aus_2003_team",
+            "laxman": "dravid_handshake", "dravid_bat": "dravid_bat_gloves", "agarkar_bowl": "agarkar",
+            "agarkar_wicket": "agarkar", "dravid_win": "dravid_arms_raised", "india_celebrate": "dravid_arms_raised"}
+
+
+def PH(slot):
+    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+        if os.path.exists(os.path.join(HERE, P + slot + ext)):
+            return P + slot + ext
+    return P + FALLBACK[slot] + ".png"
+
+
+# HOOK: Travis Head is to India what Dravid & Laxman were to Australia (two cuts)
+photo(PH("travis_head"), "h1", 0.0, 0.5, origin="50% 35%", push=1.2)
+photo(PH("dravid_laxman"), "h1", 0.5, 1.0, origin="50% 35%", push=1.2)
+pills(["TRAVIS HEAD <b>→ INDIA</b>", "DRAVID & LAXMAN <b>→ AUSTRALIA</b>"], "h1", 0.1, 1.0, y=1080)
+photo(PH("dravid_closeup"), "h2", push=1.3)
+headline(["A different", "plan."], "h2", 0.3, 1.0, size=130, acc=(1,), y=1130)
+photo(PH("adelaide_oval"), "h3", origin="50% 60%", push=1.25)
+headline(["Adelaide 2003."], "h3", 0.1, 1.0, size=120, acc=(0,), y=1150)
 
 # 1-2: 556, Ponting 242 ... and Australia LOST
-shot3d("s556", 1, 0.0, 0.45)
-photo(P + "ponting_242.png", 1, 0.45, 1.0, origin="50% 30%")
-odo("242", 1, 0.5, 1.0, label="PONTING ALONE", y=1150, size=260)
-photo(P + "aus_2003_team.png", 2, gray=True, origin="50% 30%")
-headline(["LOST."], 2, 0.35, 1.0, size=260, acc=(0,), y=1050, stamp=True)
-headline(["And yet…"], 2, 0.0, 0.4, size=90, y=1150)
+shot3d("s556", 1, 0.0, 0.4)
+photo(PH("ponting"), 1, 0.4, 1.0, origin="50% 30%", push=1.25)
+odo("242", 1, 0.45, 1.0, label="PONTING ALONE", y=1150, size=260)
+photo(PH("aus_team"), 2, gray=True, origin="50% 30%", push=1.25)
+headline(["And yet…"], 2, 0.0, 0.35, size=90, y=1150)
+headline(["LOST."], 2, 0.3, 1.0, size=260, acc=(0,), y=1050, stamp=True)
 
-# 3-5 THE SETTING
-ytag("ADELAIDE · DEC 2003", 3, 9)
-photo(P + "adelaide_oval.png", 3, origin="50% 60%")
-date_card("DECEMBER 2003", "ADELAIDE", 3)
-photo(P + "aus_2003_team.png", 4, origin="50% 20%", push=1.25)
-pills(["Hayden", "Langer", "Ponting", "Martyn", "Gilchrist", "Steve Waugh"], 4, 0.1, 1.0, y=1020)
+# 4-5 THE SETTING
+ytag("ADELAIDE · DEC 2003", 4, 9)
+photo(PH("aus_team"), 4, origin="50% 20%", push=1.3)
+pills(["Hayden", "Langer", "Ponting", "Martyn", "Gilchrist", "Steve Waugh"], 4, 0.05, 1.0, y=1020)
 stage(5)
 odo("556", 5, 0.0, 1.0, label="AUSTRALIA · 1ST INNINGS", y=760, size=300, color="#fff")
-headline(["Enormous", "pressure."], 5, 0.4, 1.0, size=110, acc=(1,), y=1200)
+headline(["Enormous", "pressure."], 5, 0.35, 1.0, size=110, acc=(1,), y=1200)
 
 # 6-9 DRAVID & LAXMAN
-photo(P + "dravid_handshake.png", 6, label="DRAVID & LAXMAN")
-headline(["Dravid", "& Laxman."], 6, 0.25, 1.0, size=120, acc=(0,), y=1150)
-photo(P + "dravid_bat_gloves.png", 7, push=1.3)
-odo("148", 7, 0.05, 1.0, label="VVS LAXMAN", y=1100, size=300)
-stage(8)
-clock(10, 8, 0.0, 1.0, y=420)
+photo(PH("laxman"), 6, 0.0, 0.5, push=1.25)
+photo(PH("dravid_bat"), 6, 0.5, 1.0, push=1.25)
+headline(["Dravid", "& Laxman."], 6, 0.15, 1.0, size=120, acc=(0,), y=1150)
+photo(PH("laxman"), 7, push=1.3, origin="40% 35%")
+odo("148", 7, 0.0, 1.0, label="VVS LAXMAN", y=1100, size=300)
+stage(8, 0.0, 0.45)
+clock(10, 8, 0.0, 0.45, y=620)
+photo(PH("dravid_bat"), 8, 0.45, 1.0, push=1.3, origin="55% 35%")
 odo("233", 8, 0.45, 1.0, label="RAHUL DRAVID", y=1150, size=300)
 stage(9)
 bars([("AUSTRALIA", 556, "rgba(255,255,255,.35)"), ("INDIA", 523, Y)], 9, 0.0, 1.0, y=820)
-headline(["Just 33 behind."], 9, 0.45, 1.0, size=100, acc=(0,), y=1420)
+headline(["Just 33 behind."], 9, 0.35, 1.0, size=100, acc=(0,), y=1420)
 
 # 10-13 THE TWIST: AGARKAR
 stage(10)
 headline(["But the real twist", "was still coming."], 10, 0.0, 1.0, size=96, acc=(1,), y=860)
 ytag("2ND INNINGS", 11, 13)
-photo(P + "agarkar.png", 11, label="AJIT AGARKAR", sub="Spell of his life", origin="50% 30%")
-photo(P + "agarkar.png", 12, push=1.35, origin="60% 25%")
+photo(PH("agarkar_bowl"), 11, label="AJIT AGARKAR", sub="Spell of his life", origin="50% 30%", push=1.3)
+photo(PH("agarkar_wicket"), 12, push=1.35, origin="60% 25%")
 odo("6/41", 12, 0.0, 1.0, label="AGARKAR", y=1100, size=320)
 shot3d("s196", 13)
 flash(at(13, 0.45))
@@ -354,45 +371,24 @@ flash(at(13, 0.45))
 # 14-17 THE CHASE
 stage(14)
 odo("230", 14, 0.0, 1.0, label="TO WIN", y=760, size=340)
-photo(P + "dravid_handshake.png", 15, origin="70% 40%", push=1.3)
+photo(PH("dravid_closeup"), 15, 0.0, 0.5, push=1.3, origin="50% 35%")
+photo(PH("dravid_bat"), 15, 0.5, 1.0, push=1.3, origin="60% 35%")
 chase(160, 230, 15, label="INDIA")
-headline(["Dravid stood", "in the way."], 15, 0.3, 1.0, size=100, acc=(0,), y=1180)
+headline(["Dravid stood", "in the way."], 15, 0.2, 1.0, size=100, acc=(0,), y=1180)
 shot3d("s72", 16)
-photo(P + "dravid_arms_raised.png", 17, label="INDIA WIN", sub="by 4 wickets", origin="50% 35%")
-flash(at(17, 0.1))
+photo(PH("dravid_win"), 17, label="INDIA WIN", sub="by 4 wickets", origin="50% 35%", push=1.25)
+flash(at(17, 0.05))
 chase(233, 230, 17, label="INDIA")
 
-# 18-22 THINK ABOUT IT
+# 18, 22-24 THINK ABOUT IT
 stage(18, 0.0, 1.0)
 headline(["Think about it."], 18, 0.0, 1.0, size=110, y=900)
-stage(19, 0.0, 1.0)
-stage(20, 0.0, 1.0)
-stage(21, 0.0, 1.0)
-s19 = at(19)
-fo_s, _ = span(19)
-_, _d = span(21)
-fo_d = round(span(21)[0] + _d - fo_s, 2)
-i = nid("fo")
-cards = [(P + "ponting_242.png", "PONTING", "242", "1st innings"),
-         (P + "dravid_arms_raised.png", "DRAVID", "233 & 72*", "305 runs, out once"),
-         (P + "agarkar.png", "AGARKAR", "6/41", "2nd innings")]
-parts = []
-for k, (img, name, stat, sub) in enumerate(cards):
-    t = at(19 + k, 0.05)
-    parts.append(f'<div class="fcard" id="{i}c{k}"><img src="{media(img)}"><div class="ftxt"><div class="fname">{html.escape(name)}</div>'
-                 f'<div class="fstat">{html.escape(stat)}</div><div class="fsub">{html.escape(sub)}</div></div></div>')
-    EVENTS.append((t, "impact"))
-    PUNCHES.append(t + 0.3)
-    anim(f'tl.fromTo("#{i}c{k}",{{x:{-600 if k % 2 == 0 else 600},opacity:0}},{{x:0,opacity:1,duration:0.6,ease:"expo.out"}},{t})')
-add(f'<div id="{i}" class="faceoff clip" data-start="{fo_s}" data-duration="{fo_d}" style="top:330px;z-index:30">{"".join(parts)}</div>')
-anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(fo_s + fo_d - 0.3, 2)})')
-
-photo(P + "dravid_arms_raised.png", 22, origin="50% 30%", push=1.3)
-headline(["India beat Australia", "in Australia."], 22, 0.1, 1.0, size=96, acc=(1,), y=1180)
-photo(P + "adelaide_oval.png", 23, gray=True, push=1.3)
-headline(["Not just a", "Test victory."], 23, 0.05, 1.0, size=110, acc=(1,), y=1150)
-photo(P + "dravid_bat_gloves.png", 24, push=1.25)
-headline(["Indian cricket", "had arrived."], 24, 0.05, 1.0, size=110, acc=(1,), y=1150)
+photo(PH("india_celebrate"), 22, origin="50% 30%", push=1.3)
+headline(["India beat Australia", "in Australia."], 22, 0.05, 1.0, size=96, acc=(1,), y=1180)
+photo(PH("adelaide_oval"), 23, gray=True, push=1.3)
+headline(["Not just a", "Test victory."], 23, 0.0, 1.0, size=110, acc=(1,), y=1150)
+photo(PH("dravid_laxman"), 24, push=1.3)
+headline(["Indian cricket", "had arrived."], 24, 0.0, 1.0, size=110, acc=(1,), y=1150)
 flash(at(24, 0.1))
 
 # 25 CTA

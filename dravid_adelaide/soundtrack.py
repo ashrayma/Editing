@@ -42,14 +42,14 @@ def main():
     t1 = s("l06")
     bed(km.norm(km.reverb(km.pad(km.A_MINOR, t1 - d + 2, bar=4.0, cutoff=800), 2.0, 0.4)) * 0.4, d + 0.8, t1, 1.0, 0.8)
     t2 = s("l10")
-    dr = km.drive(t2 - t1 + 1, bpm=124)
+    dr = km.drive(t2 - t1 + 1, bpm=128)
     k = int(SR * 3)
     dr[:k] = lp(dr[:k], 700)
     bed(dr * 0.7, t1, t2, 0.8, 0.1)
     t3 = s("l11")
     bed(km.norm(lp(km.pad(km.D_MINOR, t3 - t2 + 2, cutoff=500), 400)) * 0.3, t2, t3, 0.3, 0.1)
     t4 = s("l18")
-    bed(km.drive(t4 - t3 + 1, bpm=132) * 0.85, t3 - 0.05, t4, 0.05, 0.8)
+    bed(km.drive(t4 - t3 + 1, bpm=138) * 0.85, t3 - 0.05, t4, 0.05, 0.8)
     bed(km.norm(km.reverb(km.pad(km.WARM, total - t4 + 2, cutoff=1600), 2.5, 0.4)) * 0.45
         + km.norm(km.reverb(km.arps(km.WARM, total - t4 + 2), 1.5, 0.3)) * 0.35, t4 - 0.3, total, 1.5, 2.5)
 
