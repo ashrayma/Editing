@@ -143,8 +143,9 @@ def main():
     d7 = d7.resize((int(d7.width * 1060 / d7.height), 1060), Image.LANCZOS)
     d7 = regrade(d7, color=1.0, contrast=1.1, bright=1.04, sharpen=(1.0, 60, 1), tint=(170, 200, 240), tint_k=0.1)
     d7 = fade_bottom(d7, 640, 1000)
-    place(base, d7, 470 - d7.width // 2, 10, wrap=0.45, rim_color=(170, 210, 255), rim_side=1, rim_k=0.5,
-          shadow=0.75)
+    x7, y7 = 470 - d7.width // 2, 10
+    place(base, d7, x7, y7, wrap=0.45, rim_color=(170, 210, 255), rim_side=1, rim_k=0.5, shadow=0.75)
+    base = face_light(base, d7, x7, y7, (490, 245), 105, 0.34)  # lift the helmet shadow
 
     # RIGHT - 2011: the winning six, warm floodlight
     d11 = Image.open(os.path.join(HERE, "cut_2011.png")).convert("RGBA")
