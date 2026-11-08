@@ -1,0 +1,355 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#060607}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0a0a0b;font-family:"Inter Display","Inter",system-ui,sans-serif}
+.bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 40%,#1b1b1e 0%,#0b0b0c 55%,#050506 100%)}
+.grain{position:absolute;inset:0;opacity:.07;mix-blend-mode:overlay;background-image:url(media/grain.png);z-index:95}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.6) 100%);z-index:90}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;overflow:hidden}
+.stage{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 45%,#1a1a1d,#050506)}
+.scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.35) 38%,rgba(0,0,0,0) 60%),
+  linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 18%)}
+.tag{position:absolute;left:60px;bottom:470px;display:flex;align-items:center;gap:14px;color:#fff}
+.tag b{font-weight:800;font-size:30px;letter-spacing:3px}
+.tag em{font-style:normal;font-weight:500;font-size:28px;color:rgba(255,255,255,.7)}
+.tagbar{width:7px;height:40px;background:#FEDE5C;border-radius:3px}
+.hl{position:absolute;left:60px;right:60px;text-align:center;font-weight:800;letter-spacing:-0.03em;line-height:1.04;color:#fff;
+  text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.hl .mask{overflow:hidden;padding-bottom:.06em}
+.hl .ln{display:block}
+.sub{font-size:34px;font-weight:600;color:rgba(255,255,255,.75);margin-top:20px;letter-spacing:0}
+.odo{position:absolute;left:0;right:0;text-align:center;font-weight:900;letter-spacing:-0.04em;line-height:1;
+  font-variant-numeric:tabular-nums;text-shadow:0 10px 50px rgba(0,0,0,.6)}
+.digits{display:inline-flex}
+.dcol{display:inline-block;height:1em;overflow:hidden}
+.dstrip{display:flex;flex-direction:column}
+.dstrip span{height:1em;line-height:1em;text-align:center}
+.dchar{display:inline-block}
+.olab{font-size:34px;font-weight:700;letter-spacing:7px;color:rgba(255,255,255,.8);margin-top:24px}
+.pills{position:absolute;left:0;right:0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px;padding:0 70px}
+.pill{display:flex;align-items:center;gap:14px;padding:18px 30px;border-radius:999px;background:rgba(10,10,12,.72);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);color:#fff;font-size:40px;font-weight:700}
+.pill b{color:#FEDE5C}
+.pill .dot{width:14px;height:14px;border-radius:50%;background:#FEDE5C}
+.ytag{position:absolute;left:60px;top:270px;padding:10px 20px;background:#FEDE5C;color:#0a0a0b;font-weight:800;font-size:30px;
+  letter-spacing:3px;border-radius:8px;z-index:85}
+.flash{position:absolute;inset:0;background:#fff}
+.bars{position:absolute;left:70px;right:70px;display:flex;flex-direction:column;gap:50px}
+.brow{display:flex;flex-direction:column;gap:14px;color:#fff}
+.blab{font-size:38px;font-weight:800;letter-spacing:5px}
+.btrack{height:70px}
+.bfill{height:100%;border-radius:14px;transform-origin:left}
+.bval{font-size:90px;font-weight:900;letter-spacing:-3px}
+.clock{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:30px}
+.dial{position:relative;width:420px;height:420px;border-radius:50%;box-shadow:inset 0 0 0 6px rgba(255,255,255,.85),0 0 60px rgba(254,222,92,.2)}
+.ctk{position:absolute;left:207px;top:12px;width:6px;height:30px;background:rgba(255,255,255,.7);transform-origin:3px 198px}
+.hand{position:absolute;left:204px;top:50px;width:12px;height:160px;background:#FEDE5C;border-radius:6px;transform-origin:6px 160px;
+  box-shadow:0 0 20px rgba(254,222,92,.6)}
+.hub{position:absolute;left:192px;top:192px;width:36px;height:36px;border-radius:50%;background:#fff}
+.clab{color:#fff;font-weight:900;font-size:120px;letter-spacing:-2px}
+.clab span{color:#FEDE5C}
+.chase{position:absolute;left:70px;right:70px;padding:22px 30px;border-radius:24px;background:rgba(10,10,12,.8);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.chtxt{display:flex;justify-content:space-between;color:#fff;font-size:36px;font-weight:800;letter-spacing:3px}
+.chtxt span{color:rgba(255,255,255,.6)}
+.chtrack{margin-top:16px;height:16px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden}
+.chfill{height:100%;background:linear-gradient(90deg,#ff453a,#FEDE5C);transform-origin:left;max-width:100%}
+.faceoff{position:absolute;left:60px;right:60px;display:flex;flex-direction:column;gap:34px}
+.fcard{display:flex;align-items:center;gap:30px;padding:22px;border-radius:30px;background:rgba(18,18,20,.92);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.fcard img{width:250px;height:250px;object-fit:cover;object-position:50% 25%;border-radius:20px}
+.fname{color:rgba(255,255,255,.75);font-size:34px;font-weight:800;letter-spacing:6px}
+.fstat{color:#FEDE5C;font-size:100px;font-weight:900;letter-spacing:-3px;line-height:1.05}
+.fsub{color:rgba(255,255,255,.7);font-size:30px;font-weight:600}
+.poll{position:absolute;left:70px;right:70px;display:flex;flex-direction:column;gap:26px}
+.pq{color:#fff;font-size:64px;font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:20px}
+.popt{display:flex;align-items:center;gap:24px;padding:30px 34px;border-radius:26px;background:rgba(255,255,255,.08);
+  box-shadow:inset 0 0 0 2px rgba(254,222,92,.35);color:#fff;font-size:46px;font-weight:800}
+.pnum{width:64px;height:64px;border-radius:50%;background:#FEDE5C;color:#111;display:flex;align-items:center;justify-content:center;font-size:36px}
+.pc{color:rgba(255,255,255,.7);font-size:36px;font-weight:600;text-align:center;margin-top:16px}
+.datec{position:absolute;left:110px;top:700px;perspective:1200px}
+.dbar{position:absolute;left:-40px;top:10px;width:14px;height:330px;border-radius:7px;background:#FEDE5C;transform-origin:top}
+.d1{font-size:110px;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.05}
+.d2{font-size:170px;font-weight:900;color:#FEDE5C;letter-spacing:-4px;line-height:1}
+.logo{position:absolute;left:90px;width:900px;top:820px}
+.follow{position:absolute;left:0;right:0;top:1050px;text-align:center;color:rgba(255,255,255,.8);font-size:44px;font-weight:600}
+.mark{position:absolute;right:50px;top:280px;width:200px;opacity:.5;z-index:80}
+</style></head><body>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-fps="30" data-duration="115.13">
+<div class="bg"></div>
+<div id="ph1" class="full clip" data-start="0.3" data-duration="5.48" style="z-index:5;"><img src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph1i" src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:contain;object-position:70% 40%;transform-origin:70% 40%"><div class="scrim"></div></div>
+<div id="p2" class="pills clip" data-start="1.31" data-duration="4.47" style="top:1080px;z-index:30"><div class="pill" id="p2p0"><span class="dot"></span>TRAVIS HEAD <b>→ INDIA</b></div><div class="pill" id="p2p1"><span class="dot"></span>DRAVID & LAXMAN <b>→ AUSTRALIA</b></div></div>
+<div id="ph3" class="full clip" data-start="5.63" data-duration="5.75" style="z-index:5;"><img src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph3i" src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:contain;object-position:50% 40%;transform-origin:50% 40%"><div class="scrim"></div></div>
+<div id="h4" class="hl clip" data-start="7.53" data-duration="3.9" style="top:1130px;font-size:130px;z-index:30"><div class="mask"><div class="ln" id="h4l0" style="color:#fff">A different</div></div><div class="mask"><div class="ln" id="h4l1" style="color:#FEDE5C">plan.</div></div></div>
+<div id="ph5" class="full clip" data-start="11.23" data-duration="4.15" style="z-index:5;"><img src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph5i" src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;object-position:50% 60%;transform-origin:50% 60%"><div class="scrim"></div></div>
+<div id="h6" class="hl clip" data-start="11.94" data-duration="3.49" style="top:1150px;font-size:120px;z-index:30"><div class="mask"><div class="ln" id="h6l0" style="color:#FEDE5C">Adelaide 2003.</div></div></div>
+<video id="v7" class="full clip" src="media/blender_renders_s556.stub.mp4" muted playsinline data-start="15.23" data-duration="2.85" data-media-start="0" style="z-index:6"></video>
+<div id="ph8" class="full clip" data-start="18.08" data-duration="3.93" style="z-index:5;"><img src="media/assets_photos_ponting_242.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph8i" src="media/assets_photos_ponting_242.png" class="full" style="object-fit:cover;object-position:50% 30%;transform-origin:50% 30%"><div class="scrim"></div></div>
+<div id="o9" class="odo clip" data-start="18.44" data-duration="3.62" style="top:1150px;font-size:260px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o9d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o9d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o9d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o9lb">PONTING ALONE</div></div>
+<div id="ph10" class="full clip" data-start="21.86" data-duration="4.14" style="z-index:5;filter:grayscale(1) contrast(1.12);"><img src="media/assets_photos_aus_2003_team.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph10i" src="media/assets_photos_aus_2003_team.png" class="full" style="object-fit:contain;object-position:50% 30%;transform-origin:50% 30%"><div class="scrim"></div></div>
+<div id="h11" class="hl clip" data-start="22.99" data-duration="3.06" style="top:1050px;font-size:260px;z-index:30"><div class="mask"><div class="ln" id="h11l0" style="color:#FEDE5C">LOST.</div></div></div>
+<div id="h12" class="hl clip" data-start="21.91" data-duration="1.24" style="top:1150px;font-size:90px;z-index:30"><div class="mask"><div class="ln" id="h12l0" style="color:#fff">And yet…</div></div></div>
+<div id="y13" class="ytag clip" data-start="25.85" data-duration="28.68">ADELAIDE · DEC 2003</div>
+<div id="ph14" class="full clip" data-start="25.85" data-duration="3.06" style="z-index:5;"><img src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph14i" src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;object-position:50% 60%;transform-origin:50% 60%"><div class="scrim"></div></div>
+<div id="dc15" class="datec clip" data-start="25.85" data-duration="3.06" style="z-index:30"><div class="dbar" id="dc15b"></div><div class="d1" id="dc15a">DECEMBER 2003</div><div class="d2" id="dc15c">ADELAIDE</div></div>
+<div id="ph16" class="full clip" data-start="28.76" data-duration="4.47" style="z-index:5;"><img src="media/assets_photos_aus_2003_team.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph16i" src="media/assets_photos_aus_2003_team.png" class="full" style="object-fit:contain;object-position:50% 20%;transform-origin:50% 20%"><div class="scrim"></div></div>
+<div id="p17" class="pills clip" data-start="29.16" data-duration="4.07" style="top:1020px;z-index:30"><div class="pill" id="p17p0"><span class="dot"></span>Hayden</div><div class="pill" id="p17p1"><span class="dot"></span>Langer</div><div class="pill" id="p17p2"><span class="dot"></span>Ponting</div><div class="pill" id="p17p3"><span class="dot"></span>Martyn</div><div class="pill" id="p17p4"><span class="dot"></span>Gilchrist</div><div class="pill" id="p17p5"><span class="dot"></span>Steve Waugh</div></div>
+<div id="st18" class="stage clip" data-start="33.08" data-duration="5.67" style="z-index:4"></div>
+<div id="o19" class="odo clip" data-start="33.13" data-duration="5.67" style="top:760px;font-size:300px;color:#fff;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o19d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o19d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o19d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o19lb">AUSTRALIA · 1ST INNINGS</div></div>
+<div id="h20" class="hl clip" data-start="35.22" data-duration="3.58" style="top:1200px;font-size:110px;z-index:30"><div class="mask"><div class="ln" id="h20l0" style="color:#fff">Enormous</div></div><div class="mask"><div class="ln" id="h20l1" style="color:#FEDE5C">pressure.</div></div></div>
+<div id="ph21" class="full clip" data-start="38.6" data-duration="3.63" style="z-index:5;"><img src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph21i" src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:contain;object-position:50% 40%;transform-origin:50% 40%"><div class="scrim"></div><div class="tag" id="ph21t"><span class="tagbar"></span><b>DRAVID &amp; LAXMAN</b></div></div>
+<div id="h22" class="hl clip" data-start="39.45" data-duration="2.83" style="top:1150px;font-size:120px;z-index:30"><div class="mask"><div class="ln" id="h22l0" style="color:#FEDE5C">Dravid</div></div><div class="mask"><div class="ln" id="h22l1" style="color:#fff">&amp; Laxman.</div></div></div>
+<div id="ph23" class="full clip" data-start="42.08" data-duration="2.85" style="z-index:5;"><img src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph23i" src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:contain;object-position:50% 40%;transform-origin:50% 40%"><div class="scrim"></div></div>
+<div id="o24" class="odo clip" data-start="42.25" data-duration="2.73" style="top:1100px;font-size:300px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o24d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o24d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o24d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o24lb">VVS LAXMAN</div></div>
+<div id="st25" class="stage clip" data-start="44.78" data-duration="6.26" style="z-index:4"></div>
+<div id="ck26" class="clock clip" data-start="44.78" data-duration="6.26" style="top:420px;z-index:30"><div class="dial"><div class="ctk" style="transform:rotate(0deg)"></div><div class="ctk" style="transform:rotate(30deg)"></div><div class="ctk" style="transform:rotate(60deg)"></div><div class="ctk" style="transform:rotate(90deg)"></div><div class="ctk" style="transform:rotate(120deg)"></div><div class="ctk" style="transform:rotate(150deg)"></div><div class="ctk" style="transform:rotate(180deg)"></div><div class="ctk" style="transform:rotate(210deg)"></div><div class="ctk" style="transform:rotate(240deg)"></div><div class="ctk" style="transform:rotate(270deg)"></div><div class="ctk" style="transform:rotate(300deg)"></div><div class="ctk" style="transform:rotate(330deg)"></div><div class="hand" id="ck26h"></div><div class="hub"></div></div><div class="clab"><span id="ck26n">0</span>+ HOURS</div></div>
+<div id="o27" class="odo clip" data-start="47.44" data-duration="3.65" style="top:1150px;font-size:300px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o27d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o27d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o27d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o27lb">RAHUL DRAVID</div></div>
+<div id="st28" class="stage clip" data-start="50.89" data-duration="3.79" style="z-index:4"></div>
+<div id="b29" class="bars clip" data-start="50.89" data-duration="3.79" style="top:820px;z-index:30"><div class="brow"><div class="blab">AUSTRALIA</div><div class="btrack"><div class="bfill" id="b29f0" style="width:100.0%;background:rgba(255,255,255,.35)"></div></div><div class="bval">556</div></div><div class="brow"><div class="blab">INDIA</div><div class="btrack"><div class="bfill" id="b29f1" style="width:94.1%;background:#FEDE5C"></div></div><div class="bval">523</div></div></div>
+<div id="h30" class="hl clip" data-start="52.44" data-duration="2.29" style="top:1420px;font-size:100px;z-index:30"><div class="mask"><div class="ln" id="h30l0" style="color:#FEDE5C">Just 33 behind.</div></div></div>
+<div id="st31" class="stage clip" data-start="54.53" data-duration="3.01" style="z-index:4"></div>
+<div id="h32" class="hl clip" data-start="54.58" data-duration="3.01" style="top:860px;font-size:96px;z-index:30"><div class="mask"><div class="ln" id="h32l0" style="color:#fff">But the real twist</div></div><div class="mask"><div class="ln" id="h32l1" style="color:#FEDE5C">was still coming.</div></div></div>
+<div id="y33" class="ytag clip" data-start="57.39" data-duration="14.46">2ND INNINGS</div>
+<div id="ph34" class="full clip" data-start="57.39" data-duration="4.53" style="z-index:5;"><img src="media/assets_photos_agarkar.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph34i" src="media/assets_photos_agarkar.png" class="full" style="object-fit:cover;object-position:50% 30%;transform-origin:50% 30%"><div class="scrim"></div><div class="tag" id="ph34t"><span class="tagbar"></span><b>AJIT AGARKAR</b><em>Spell of his life</em></div></div>
+<div id="ph35" class="full clip" data-start="61.77" data-duration="3.16" style="z-index:5;"><img src="media/assets_photos_agarkar.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph35i" src="media/assets_photos_agarkar.png" class="full" style="object-fit:cover;object-position:60% 25%;transform-origin:60% 25%"><div class="scrim"></div></div>
+<div id="o36" class="odo clip" data-start="61.82" data-duration="3.16" style="top:1100px;font-size:320px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o36d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dchar">/</span><span class="dcol"><span class="dstrip" id="o36d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o36d3"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o36lb">AGARKAR</div></div>
+<video id="v37" class="full clip" src="media/blender_renders_s196.stub.mp4" muted playsinline data-start="64.78" data-duration="7.62" data-media-start="0" style="z-index:6"></video>
+<div id="x38" class="flash clip" data-start="67.83" data-duration="0.4" style="z-index:88"></div>
+<div id="st39" class="stage clip" data-start="72.25" data-duration="2.95" style="z-index:4"></div>
+<div id="o40" class="odo clip" data-start="72.3" data-duration="2.95" style="top:760px;font-size:340px;color:#FEDE5C;z-index:30"><div class="digits"><span class="dcol"><span class="dstrip" id="o40d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o40d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="o40d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab" id="o40lb">TO WIN</div></div>
+<div id="ph41" class="full clip" data-start="75.05" data-duration="4.7" style="z-index:5;"><img src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph41i" src="media/assets_photos_dravid_handshake.png" class="full" style="object-fit:contain;object-position:70% 40%;transform-origin:70% 40%"><div class="scrim"></div></div>
+<div id="cb42" class="chase clip" data-start="75.05" data-duration="4.7" style="top:300px;z-index:60"><div class="chtxt"><b>INDIA 160</b><span>TARGET 230</span></div><div class="chtrack"><div class="chfill" id="cb42f" style="width:69.6%"></div></div></div>
+<div id="h43" class="hl clip" data-start="76.38" data-duration="3.42" style="top:1180px;font-size:100px;z-index:30"><div class="mask"><div class="ln" id="h43l0" style="color:#FEDE5C">Dravid stood</div></div><div class="mask"><div class="ln" id="h43l1" style="color:#fff">in the way.</div></div></div>
+<video id="v44" class="full clip" src="media/blender_renders_s72.stub.mp4" muted playsinline data-start="79.6" data-duration="3.0" data-media-start="0" style="z-index:6"></video>
+<div id="ph45" class="full clip" data-start="82.45" data-duration="3.26" style="z-index:5;"><img src="media/assets_photos_dravid_arms_raised.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph45i" src="media/assets_photos_dravid_arms_raised.png" class="full" style="object-fit:contain;object-position:50% 35%;transform-origin:50% 35%"><div class="scrim"></div><div class="tag" id="ph45t"><span class="tagbar"></span><b>INDIA WIN</b><em>by 4 wickets</em></div></div>
+<div id="x46" class="flash clip" data-start="82.65" data-duration="0.4" style="z-index:88"></div>
+<div id="cb47" class="chase clip" data-start="82.45" data-duration="3.26" style="top:300px;z-index:60"><div class="chtxt"><b>INDIA 233</b><span>TARGET 230</span></div><div class="chtrack"><div class="chfill" id="cb47f" style="width:101.3%"></div></div></div>
+<div id="st48" class="stage clip" data-start="85.56" data-duration="1.24" style="z-index:4"></div>
+<div id="h49" class="hl clip" data-start="85.61" data-duration="1.24" style="top:900px;font-size:110px;z-index:30"><div class="mask"><div class="ln" id="h49l0" style="color:#fff">Think about it.</div></div></div>
+<div id="st50" class="stage clip" data-start="86.65" data-duration="2.74" style="z-index:4"></div>
+<div id="st51" class="stage clip" data-start="89.24" data-duration="4.47" style="z-index:4"></div>
+<div id="st52" class="stage clip" data-start="93.56" data-duration="2.29" style="z-index:4"></div>
+<div id="fo53" class="faceoff clip" data-start="86.65" data-duration="9.2" style="top:330px;z-index:30"><div class="fcard" id="fo53c0"><img src="media/assets_photos_ponting_242.png"><div class="ftxt"><div class="fname">PONTING</div><div class="fstat">242</div><div class="fsub">1st innings</div></div></div><div class="fcard" id="fo53c1"><img src="media/assets_photos_dravid_arms_raised.png"><div class="ftxt"><div class="fname">DRAVID</div><div class="fstat">233 &amp; 72*</div><div class="fsub">305 runs, out once</div></div></div><div class="fcard" id="fo53c2"><img src="media/assets_photos_agarkar.png"><div class="ftxt"><div class="fname">AGARKAR</div><div class="fstat">6/41</div><div class="fsub">2nd innings</div></div></div></div>
+<div id="ph54" class="full clip" data-start="95.7" data-duration="3.64" style="z-index:5;"><img src="media/assets_photos_dravid_arms_raised.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph54i" src="media/assets_photos_dravid_arms_raised.png" class="full" style="object-fit:contain;object-position:50% 30%;transform-origin:50% 30%"><div class="scrim"></div></div>
+<div id="h55" class="hl clip" data-start="96.07" data-duration="3.32" style="top:1180px;font-size:96px;z-index:30"><div class="mask"><div class="ln" id="h55l0" style="color:#fff">India beat Australia</div></div><div class="mask"><div class="ln" id="h55l1" style="color:#FEDE5C">in Australia.</div></div></div>
+<div id="ph56" class="full clip" data-start="99.19" data-duration="2.15" style="z-index:5;filter:grayscale(1) contrast(1.12);"><img src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph56i" src="media/assets_photos_adelaide_oval.png" class="full" style="object-fit:cover;object-position:50% 40%;transform-origin:50% 40%"><div class="scrim"></div></div>
+<div id="h57" class="hl clip" data-start="99.32" data-duration="2.07" style="top:1150px;font-size:110px;z-index:30"><div class="mask"><div class="ln" id="h57l0" style="color:#fff">Not just a</div></div><div class="mask"><div class="ln" id="h57l1" style="color:#FEDE5C">Test victory.</div></div></div>
+<div id="ph58" class="full clip" data-start="101.19" data-duration="3.98" style="z-index:5;"><img src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)"><img id="ph58i" src="media/assets_photos_dravid_bat_gloves.png" class="full" style="object-fit:contain;object-position:50% 40%;transform-origin:50% 40%"><div class="scrim"></div></div>
+<div id="h59" class="hl clip" data-start="101.4" data-duration="3.82" style="top:1150px;font-size:110px;z-index:30"><div class="mask"><div class="ln" id="h59l0" style="color:#fff">Indian cricket</div></div><div class="mask"><div class="ln" id="h59l1" style="color:#FEDE5C">had arrived.</div></div></div>
+<div id="x60" class="flash clip" data-start="101.5" data-duration="0.4" style="z-index:88"></div>
+<div id="st61" class="stage clip" data-start="105.02" data-duration="10.11" style="z-index:4"></div>
+<div id="pl62" class="poll clip" data-start="105.02" data-duration="10.11" style="top:640px;z-index:40"><div class="pq">WHO WAS THE REAL HERO?</div><div class="popt" id="pl62o0"><span class="pnum">1</span>Rahul Dravid · 233 &amp; 72*</div><div class="popt" id="pl62o1"><span class="pnum">2</span>VVS Laxman · 148</div><div class="popt" id="pl62o2"><span class="pnum">3</span>Ajit Agarkar · 6/41</div><div class="pc">Comment your pick</div></div>
+<div id="end63" class="stage clip" data-start="111.93" data-duration="3.2" style="z-index:70"><img class="logo" id="end63l" src="media/logo.png"><div class="follow" id="end63f">Follow for more cricket stories</div></div>
+<img class="mark clip" id="mark" src="media/logo.png" data-start="0.2" data-duration="111.63">
+<div class="vig"></div><div class="grain"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const tl = gsap.timeline({paused:true});
+tl.fromTo("#ph1",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},0.3)
+tl.fromTo("#ph1i",{scale:1.45,x:-18},{scale:1.812,x:18,duration:5.48,ease:"sine.inOut"},0.3)
+tl.to("#ph1",{opacity:0,duration:0.3},5.48)
+tl.fromTo("#p2p0",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},1.41)
+tl.fromTo("#p2p1",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},2.88)
+tl.to("#p2",{opacity:0,duration:0.3},5.48)
+tl.fromTo("#ph3",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},5.63)
+tl.fromTo("#ph3i",{scale:1.45,x:18},{scale:1.885,x:-18,duration:5.75,ease:"sine.inOut"},5.63)
+tl.to("#ph3",{opacity:0,duration:0.3},11.08)
+tl.fromTo("#h4l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},7.63)
+tl.fromTo("#h4l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},7.73)
+tl.to("#h4",{opacity:0,duration:0.3},11.13)
+tl.fromTo("#ph5",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},11.23)
+tl.fromTo("#ph5i",{scale:1.0,x:-18},{scale:1.18,x:18,duration:4.15,ease:"sine.inOut"},11.23)
+tl.to("#ph5",{opacity:0,duration:0.3},15.08)
+tl.fromTo("#h6l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},12.04)
+tl.to("#h6",{opacity:0,duration:0.3},15.13)
+tl.fromTo("#v7",{opacity:0},{opacity:1,duration:0.15},15.23)
+tl.to("#v7",{opacity:0,duration:0.25},17.83)
+tl.fromTo("#ph8",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},18.08)
+tl.fromTo("#ph8i",{scale:1.0,x:18},{scale:1.18,x:-18,duration:3.93,ease:"sine.inOut"},18.08)
+tl.to("#ph8",{opacity:0,duration:0.3},21.71)
+tl.fromTo("#o9d0",{yPercent:0},{yPercent:-20,duration:1.1,ease:"expo.out"},18.540000000000003)
+tl.fromTo("#o9d1",{yPercent:0},{yPercent:-40,duration:1.2200000000000002,ease:"expo.out"},18.540000000000003)
+tl.fromTo("#o9d2",{yPercent:0},{yPercent:-20,duration:1.34,ease:"expo.out"},18.540000000000003)
+tl.fromTo("#o9",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},18.44)
+tl.fromTo("#o9lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},19.040000000000003)
+tl.to("#o9",{opacity:0,duration:0.3},21.76)
+tl.fromTo("#ph10",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},21.86)
+tl.fromTo("#ph10i",{scale:1.45,x:-18},{scale:1.711,x:18,duration:4.14,ease:"sine.inOut"},21.86)
+tl.to("#ph10",{opacity:0,duration:0.3},25.7)
+tl.fromTo("#h11",{scale:2.2,opacity:0},{scale:1,opacity:1,duration:0.35,ease:"power4.in"},22.99)
+tl.to("#h11",{opacity:0,duration:0.3},25.75)
+tl.fromTo("#h12l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},22.01)
+tl.to("#h12",{opacity:0,duration:0.3},22.85)
+tl.fromTo("#y13",{clipPath:"inset(0% 100% 0% 0%)"},{clipPath:"inset(0% 0% 0% 0%)",duration:0.5,ease:"expo.out"},25.85)
+tl.to("#y13",{opacity:0,duration:0.3},54.23)
+tl.fromTo("#ph14",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},25.85)
+tl.fromTo("#ph14i",{scale:1.0,x:18},{scale:1.18,x:-18,duration:3.06,ease:"sine.inOut"},25.85)
+tl.to("#ph14",{opacity:0,duration:0.3},28.61)
+tl.fromTo("#dc15b",{scaleY:0},{scaleY:1,duration:0.5,ease:"expo.out"},25.85)
+tl.fromTo("#dc15a",{rotationX:-95,opacity:0},{rotationX:0,opacity:1,duration:0.8,ease:"expo.out"},26.0)
+tl.fromTo("#dc15c",{rotationX:-95,opacity:0},{rotationX:0,opacity:1,duration:0.8,ease:"expo.out"},26.200000000000003)
+tl.to("#dc15",{opacity:0,duration:0.3},28.61)
+tl.fromTo("#ph16",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},28.76)
+tl.fromTo("#ph16i",{scale:1.45,x:-18},{scale:1.812,x:18,duration:4.47,ease:"sine.inOut"},28.76)
+tl.to("#ph16",{opacity:0,duration:0.3},32.93)
+tl.fromTo("#p17p0",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},29.26)
+tl.fromTo("#p17p1",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},29.76)
+tl.fromTo("#p17p2",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},30.27)
+tl.fromTo("#p17p3",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},30.77)
+tl.fromTo("#p17p4",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},31.27)
+tl.fromTo("#p17p5",{y:30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},31.78)
+tl.to("#p17",{opacity:0,duration:0.3},32.93)
+tl.fromTo("#st18",{opacity:0},{opacity:1,duration:0.2},33.08)
+tl.to("#st18",{opacity:0,duration:0.25},38.5)
+tl.fromTo("#o19d0",{yPercent:0},{yPercent:-50,duration:1.1,ease:"expo.out"},33.230000000000004)
+tl.fromTo("#o19d1",{yPercent:0},{yPercent:-50,duration:1.2200000000000002,ease:"expo.out"},33.230000000000004)
+tl.fromTo("#o19d2",{yPercent:0},{yPercent:-60,duration:1.34,ease:"expo.out"},33.230000000000004)
+tl.fromTo("#o19",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},33.13)
+tl.fromTo("#o19lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},33.730000000000004)
+tl.to("#o19",{opacity:0,duration:0.3},38.5)
+tl.fromTo("#h20l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},35.32)
+tl.fromTo("#h20l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},35.42)
+tl.to("#h20",{opacity:0,duration:0.3},38.5)
+tl.fromTo("#ph21",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},38.6)
+tl.fromTo("#ph21i",{scale:1.45,x:18},{scale:1.711,x:-18,duration:3.63,ease:"sine.inOut"},38.6)
+tl.to("#ph21",{opacity:0,duration:0.3},41.93)
+tl.fromTo("#ph21t",{x:-40,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},38.9)
+tl.fromTo("#h22l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},39.55)
+tl.fromTo("#h22l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},39.65)
+tl.to("#h22",{opacity:0,duration:0.3},41.98)
+tl.fromTo("#ph23",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},42.08)
+tl.fromTo("#ph23i",{scale:1.45,x:-18},{scale:1.885,x:18,duration:2.85,ease:"sine.inOut"},42.08)
+tl.to("#ph23",{opacity:0,duration:0.3},44.63)
+tl.fromTo("#o24d0",{yPercent:0},{yPercent:-10,duration:1.1,ease:"expo.out"},42.35)
+tl.fromTo("#o24d1",{yPercent:0},{yPercent:-40,duration:1.2200000000000002,ease:"expo.out"},42.35)
+tl.fromTo("#o24d2",{yPercent:0},{yPercent:-80,duration:1.34,ease:"expo.out"},42.35)
+tl.fromTo("#o24",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},42.25)
+tl.fromTo("#o24lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},42.85)
+tl.to("#o24",{opacity:0,duration:0.3},44.68)
+tl.fromTo("#st25",{opacity:0},{opacity:1,duration:0.2},44.78)
+tl.to("#st25",{opacity:0,duration:0.25},50.79)
+tl.fromTo("#ck26",{opacity:0,scale:0.9},{opacity:1,scale:1,duration:0.5,ease:"expo.out"},44.78)
+tl.fromTo("#ck26h",{rotation:0},{rotation:3600,duration:3.2,ease:"power2.inOut"},44.980000000000004)
+tl.fromTo("#ck26n",{innerText:0},{innerText:10,duration:3.2,snap:{innerText:1},ease:"power2.inOut"},44.980000000000004)
+tl.to("#ck26",{opacity:0,duration:0.3},50.74)
+tl.fromTo("#o27d0",{yPercent:0},{yPercent:-20,duration:1.1,ease:"expo.out"},47.54)
+tl.fromTo("#o27d1",{yPercent:0},{yPercent:-30,duration:1.2200000000000002,ease:"expo.out"},47.54)
+tl.fromTo("#o27d2",{yPercent:0},{yPercent:-30,duration:1.34,ease:"expo.out"},47.54)
+tl.fromTo("#o27",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},47.44)
+tl.fromTo("#o27lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},48.04)
+tl.to("#o27",{opacity:0,duration:0.3},50.79)
+tl.fromTo("#st28",{opacity:0},{opacity:1,duration:0.2},50.89)
+tl.to("#st28",{opacity:0,duration:0.25},54.43)
+tl.fromTo("#b29f0",{scaleX:0},{scaleX:1,duration:1.2,ease:"expo.out"},51.09)
+tl.fromTo("#b29f1",{scaleX:0},{scaleX:1,duration:1.2,ease:"expo.out"},51.39)
+tl.fromTo("#b29",{opacity:0},{opacity:1,duration:0.3},50.89)
+tl.to("#b29",{opacity:0,duration:0.3},54.38)
+tl.fromTo("#h30l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},52.54)
+tl.to("#h30",{opacity:0,duration:0.3},54.43)
+tl.fromTo("#st31",{opacity:0},{opacity:1,duration:0.2},54.53)
+tl.to("#st31",{opacity:0,duration:0.25},57.29)
+tl.fromTo("#h32l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},54.68)
+tl.fromTo("#h32l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},54.78)
+tl.to("#h32",{opacity:0,duration:0.3},57.29)
+tl.fromTo("#y33",{clipPath:"inset(0% 100% 0% 0%)"},{clipPath:"inset(0% 0% 0% 0%)",duration:0.5,ease:"expo.out"},57.39)
+tl.to("#y33",{opacity:0,duration:0.3},71.55)
+tl.fromTo("#ph34",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},57.39)
+tl.fromTo("#ph34i",{scale:1.0,x:18},{scale:1.18,x:-18,duration:4.53,ease:"sine.inOut"},57.39)
+tl.to("#ph34",{opacity:0,duration:0.3},61.62)
+tl.fromTo("#ph34t",{x:-40,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},57.69)
+tl.fromTo("#ph35",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},61.77)
+tl.fromTo("#ph35i",{scale:1.0,x:-18},{scale:1.35,x:18,duration:3.16,ease:"sine.inOut"},61.77)
+tl.to("#ph35",{opacity:0,duration:0.3},64.63)
+tl.fromTo("#o36d0",{yPercent:0},{yPercent:-60,duration:1.1,ease:"expo.out"},61.92)
+tl.fromTo("#o36d2",{yPercent:0},{yPercent:-40,duration:1.34,ease:"expo.out"},61.92)
+tl.fromTo("#o36d3",{yPercent:0},{yPercent:-10,duration:1.46,ease:"expo.out"},61.92)
+tl.fromTo("#o36",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},61.82)
+tl.fromTo("#o36lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},62.42)
+tl.to("#o36",{opacity:0,duration:0.3},64.68)
+tl.fromTo("#v37",{opacity:0},{opacity:1,duration:0.15},64.78)
+tl.to("#v37",{opacity:0,duration:0.25},72.15)
+tl.fromTo("#x38",{opacity:0.8},{opacity:0,duration:0.35,ease:"power2.out"},67.83)
+tl.fromTo("#st39",{opacity:0},{opacity:1,duration:0.2},72.25)
+tl.to("#st39",{opacity:0,duration:0.25},74.95)
+tl.fromTo("#o40d0",{yPercent:0},{yPercent:-20,duration:1.1,ease:"expo.out"},72.39999999999999)
+tl.fromTo("#o40d1",{yPercent:0},{yPercent:-30,duration:1.2200000000000002,ease:"expo.out"},72.39999999999999)
+tl.fromTo("#o40d2",{yPercent:0},{yPercent:0,duration:1.34,ease:"expo.out"},72.39999999999999)
+tl.fromTo("#o40",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.4},72.3)
+tl.fromTo("#o40lb",{opacity:0,y:12},{opacity:1,y:0,duration:0.5},72.89999999999999)
+tl.to("#o40",{opacity:0,duration:0.3},74.95)
+tl.fromTo("#ph41",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},75.05)
+tl.fromTo("#ph41i",{scale:1.45,x:18},{scale:1.885,x:-18,duration:4.7,ease:"sine.inOut"},75.05)
+tl.to("#ph41",{opacity:0,duration:0.3},79.45)
+tl.fromTo("#cb42",{y:-30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},75.05)
+tl.fromTo("#cb42f",{scaleX:0},{scaleX:1,duration:1.4,ease:"expo.out"},75.25)
+tl.to("#cb42",{opacity:0,duration:0.3},79.45)
+tl.fromTo("#h43l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},76.48)
+tl.fromTo("#h43l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},76.58)
+tl.to("#h43",{opacity:0,duration:0.3},79.5)
+tl.fromTo("#v44",{opacity:0},{opacity:1,duration:0.15},79.6)
+tl.to("#v44",{opacity:0,duration:0.25},82.35)
+tl.fromTo("#ph45",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},82.45)
+tl.fromTo("#ph45i",{scale:1.45,x:-18},{scale:1.711,x:18,duration:3.26,ease:"sine.inOut"},82.45)
+tl.to("#ph45",{opacity:0,duration:0.3},85.41)
+tl.fromTo("#ph45t",{x:-40,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},82.75)
+tl.fromTo("#x46",{opacity:0.8},{opacity:0,duration:0.35,ease:"power2.out"},82.65)
+tl.fromTo("#cb47",{y:-30,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},82.45)
+tl.fromTo("#cb47f",{scaleX:0},{scaleX:1,duration:1.4,ease:"expo.out"},82.65)
+tl.to("#cb47",{opacity:0,duration:0.3},85.41)
+tl.fromTo("#st48",{opacity:0},{opacity:1,duration:0.2},85.56)
+tl.to("#st48",{opacity:0,duration:0.25},86.55)
+tl.fromTo("#h49l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},85.71)
+tl.to("#h49",{opacity:0,duration:0.3},86.55)
+tl.fromTo("#st50",{opacity:0},{opacity:1,duration:0.2},86.65)
+tl.to("#st50",{opacity:0,duration:0.25},89.14)
+tl.fromTo("#st51",{opacity:0},{opacity:1,duration:0.2},89.24)
+tl.to("#st51",{opacity:0,duration:0.25},93.46)
+tl.fromTo("#st52",{opacity:0},{opacity:1,duration:0.2},93.56)
+tl.to("#st52",{opacity:0,duration:0.25},95.6)
+tl.fromTo("#fo53c0",{x:-600,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},86.76)
+tl.fromTo("#fo53c1",{x:600,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},89.44)
+tl.fromTo("#fo53c2",{x:-600,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},93.65)
+tl.to("#fo53",{opacity:0,duration:0.3},95.55)
+tl.fromTo("#ph54",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},95.7)
+tl.fromTo("#ph54i",{scale:1.45,x:18},{scale:1.885,x:-18,duration:3.64,ease:"sine.inOut"},95.7)
+tl.to("#ph54",{opacity:0,duration:0.3},99.04)
+tl.fromTo("#h55l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},96.17)
+tl.fromTo("#h55l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},96.27)
+tl.to("#h55",{opacity:0,duration:0.3},99.09)
+tl.fromTo("#ph56",{opacity:0,x:120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},99.19)
+tl.fromTo("#ph56i",{scale:1.0,x:-18},{scale:1.3,x:18,duration:2.15,ease:"sine.inOut"},99.19)
+tl.to("#ph56",{opacity:0,duration:0.3},101.04)
+tl.fromTo("#h57l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},99.42)
+tl.fromTo("#h57l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},99.52)
+tl.to("#h57",{opacity:0,duration:0.3},101.09)
+tl.fromTo("#ph58",{opacity:0,x:-120,filter:"blur(14px)"},{opacity:1,x:0,filter:"blur(0px)",duration:0.45,ease:"expo.out"},101.19)
+tl.fromTo("#ph58i",{scale:1.45,x:18},{scale:1.812,x:-18,duration:3.98,ease:"sine.inOut"},101.19)
+tl.to("#ph58",{opacity:0,duration:0.3},104.87)
+tl.fromTo("#h59l0",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},101.5)
+tl.fromTo("#h59l1",{yPercent:110},{yPercent:0,duration:0.8,ease:"expo.out"},101.6)
+tl.to("#h59",{opacity:0,duration:0.3},104.92)
+tl.fromTo("#x60",{opacity:0.8},{opacity:0,duration:0.35,ease:"power2.out"},101.5)
+tl.fromTo("#st61",{opacity:0},{opacity:1,duration:0.2},105.02)
+tl.to("#st61",{opacity:0,duration:0.25},114.88)
+tl.fromTo("#pl62o0",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},105.52)
+tl.fromTo("#pl62o1",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},105.87)
+tl.fromTo("#pl62o2",{x:-80,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},106.22)
+tl.fromTo("#pl62",{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:"expo.out"},105.02)
+tl.to("#pl62",{opacity:0,duration:0.3},114.83)
+tl.fromTo("#end63",{opacity:0},{opacity:1,duration:0.3},111.93)
+tl.fromTo("#end63l",{clipPath:"inset(0% 100% 0% 0%)"},{clipPath:"inset(0% 0% 0% 0%)",duration:0.9,ease:"expo.inOut"},112.03)
+tl.fromTo("#end63f",{opacity:0,y:20},{opacity:1,y:0,duration:0.6},112.63000000000001)
+tl.fromTo("#ph3",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},7.68)
+tl.fromTo("#ph5",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},12.09)
+tl.fromTo("#ph8",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},19.54)
+tl.fromTo("#ph10",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},23.14)
+tl.fromTo("#ph21",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},39.6)
+tl.fromTo("#ph23",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},43.35)
+tl.fromTo("#ph35",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},62.92)
+tl.fromTo("#ph41",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},76.53)
+tl.fromTo("#ph54",{scale:1},{scale:1.05,duration:0.12,ease:"power2.out",yoyo:true,repeat:1},96.22)
+tl.fromTo("#ph10",{y:0,rotation:0},{keyframes:[{y:-16,rotation:-0.7,duration:0.05},{y:12,rotation:0.6,duration:0.05},{y:-6,rotation:-0.2,duration:0.06},{y:0,rotation:0,duration:0.1}]},23.34)
+tl.set({},{},115.13);
+window.__timelines = window.__timelines || {};
+window.__timelines["root"] = tl;
+</script></body></html>

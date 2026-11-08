@@ -27,3 +27,12 @@ kohli_mcg/footage/placeholders/
 kohli_mcg/footage/clips/
 kohli_mcg/screenrec/tmp/
 kohli_mcg/footage/user/
+dravid_adelaide/out/
+dravid_adelaide/hf/media/
+dravid_adelaide/hf/.hyperframes/
+dravid_adelaide/hf/gsap.min.js
+dravid_adelaide/blender/renders/
+dravid_adelaide/blender/log_*.txt
+dravid_adelaide/blender/render.log
+dravid_adelaide/footage/src/
+dravid_adelaide/__pycache__/
