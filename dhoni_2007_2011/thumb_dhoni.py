@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """1920x1080 thumbnail: Dhoni's plan from the 2007 T20 World Cup to the 2011 World Cup.
 
-Diagonal split: 2007 (cool, steel-blue, Johannesburg crowd) roar on the left; 2011 (warm gold, Wankhede crowd)
+Diagonal split: 2007 (cool, steel-blue) Dhoni raising his bat in the Sahara kit on the left; 2011 (warm gold, Wankhede crowd)
 winning-six follow-through on the right; giant ghost years behind each; a glowing crack down the split;
 "2007 = 2011?" across the bottom with the "=" in brand yellow and the "?" in red.
 Cut-outs come from Real-ESRGAN 4x upscales; compositing helpers are shared with the other thumbnails.
@@ -87,6 +87,16 @@ def crack(base):
     base.alpha_composite(core.filter(ImageFilter.GaussianBlur(0.8)))
 
 
+def face_light(base, cut, x, y, centre, radius, k):
+    """Soft key light on a face, limited to the figure's own pixels, so it matches the other side's energy."""
+    al = Image.new("L", (W, H), 0)
+    al.paste(cut.getchannel("A"), (x, y))
+    lift = radial(centre[0], centre[1], radius, radius * 1.15, 1.3) * (arr(al) / 255)
+    b = arr(base)
+    b[..., :3] += (np.array([255, 236, 210], np.float32) - b[..., :3]) * lift[..., None] * k
+    return img(np.clip(b, 0, 255), "RGBA")
+
+
 def headline(base, top=820, size=215):
     """2007 = 2011? on a dark band: '=' as two bold brand-yellow bars with glow, '?' red."""
     tw.floor(base, 620)
@@ -128,9 +138,8 @@ def main():
     ghost_year(base, "2007", 470, 30, 400, (150, 185, 235), 60)
     ghost_year(base, "2011", 1470, 30, 400, (255, 200, 110), 70)
 
-    # LEFT - 2007: the roar after the T20 World Cup win, cool light
+    # LEFT - 2007: bat raised in the light-blue Sahara kit, cool light
     d7 = Image.open(os.path.join(HERE, "cut_2007.png")).convert("RGBA")
-    d7 = d7.crop((0, 0, d7.width, int(d7.height * 0.72)))  # head to knees: big enough to read
     d7 = d7.resize((int(d7.width * 1060 / d7.height), 1060), Image.LANCZOS)
     d7 = regrade(d7, color=1.0, contrast=1.1, bright=1.04, sharpen=(1.0, 60, 1), tint=(170, 200, 240), tint_k=0.1)
     d7 = fade_bottom(d7, 640, 1000)
@@ -140,12 +149,13 @@ def main():
     # RIGHT - 2011: the winning six, warm floodlight
     d11 = Image.open(os.path.join(HERE, "cut_2011.png")).convert("RGBA")
     d11 = d11.crop((0, 0, d11.width, int(d11.height * 0.6)))  # bat to thigh
-    d11 = d11.resize((int(d11.width * 1110 / d11.height), 1110), Image.LANCZOS)
-    d11 = regrade(d11, color=1.1, contrast=1.12, bright=1.04, sharpen=(1.0, 60, 1))
+    d11 = d11.resize((int(d11.width * 1260 / d11.height), 1260), Image.LANCZOS)  # ~14% bigger than 2007
+    d11 = regrade(d11, color=1.1, contrast=1.12, bright=1.08, sharpen=(1.0, 60, 1))
     d11 = tw.directional_light(d11, "right", (255, 200, 110), 0.55)
-    d11 = fade_bottom(d11, 680, 1060)
-    place(base, d11, 1440 - d11.width // 2, -10, wrap=0.45, rim_color=(255, 200, 110), rim_side=1, rim_k=0.55,
-          shadow=0.75)
+    d11 = fade_bottom(d11, 780, 1200)
+    x11, y11 = 1440 - d11.width // 2, -30
+    place(base, d11, x11, y11, wrap=0.45, rim_color=(255, 200, 110), rim_side=1, rim_k=0.55, shadow=0.75)
+    base = face_light(base, d11, x11, y11, (1292, 470), 150, 0.26)
 
     crack(base)
     headline(base)
