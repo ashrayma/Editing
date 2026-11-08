@@ -94,7 +94,7 @@ def photo(src, n, a=0.0, b=1.0, label=None, sub=None, gray=False, origin="50% 40
     from PIL import Image
     with Image.open(os.path.join(HERE, src)) as im:
         portrait = im.height / im.width > 1.05
-    fit = fit or ("cover" if portrait else "contain")
+    fit = fit or "cover"                            # always fill the 9:16 frame
     base = 1.0 if fit == "cover" else 1.45          # landscape pictures start larger, so they fill more of the frame
     add(f'<div id="{i}" class="full clip" data-start="{s}" data-duration="{d}" style="z-index:{z};{filt}">'
         f'<img src="{rel}" class="full" style="object-fit:cover;filter:blur(34px) brightness(.5);transform:scale(1.2)">'
@@ -309,7 +309,8 @@ PUNCHES, SHAKES = [], []
 FALLBACK = {"travis_head": "dravid_handshake", "dravid_laxman": "dravid_handshake", "dravid_closeup": "dravid_bat_gloves",
             "adelaide_oval": "adelaide_oval", "ponting": "ponting_242", "aus_team": "aus_2003_team",
             "laxman": "dravid_handshake", "dravid_bat": "dravid_bat_gloves", "agarkar_bowl": "agarkar",
-            "agarkar_wicket": "agarkar", "dravid_win": "dravid_arms_raised", "india_celebrate": "dravid_arms_raised"}
+            "agarkar_wicket": "agarkar", "dravid_win": "dravid_arms_raised", "india_celebrate": "dravid_arms_raised",
+            "ponting_jump": "aus_2003_team", "ponting_roar": "aus_2003_team", "adelaide_oval2": "adelaide_oval"}
 
 
 def PH(slot):
@@ -323,22 +324,22 @@ def PH(slot):
 photo(PH("travis_head"), "h1", 0.0, 0.5, origin="50% 35%", push=1.2)
 photo(PH("dravid_laxman"), "h1", 0.5, 1.0, origin="50% 35%", push=1.2)
 pills(["TRAVIS HEAD <b>→ INDIA</b>", "DRAVID & LAXMAN <b>→ AUSTRALIA</b>"], "h1", 0.1, 1.0, y=1080)
-photo(PH("dravid_closeup"), "h2", push=1.3)
+photo(PH("dravid_closeup"), "h2", push=1.2, origin="40% 8%")
 headline(["A different", "plan."], "h2", 0.3, 1.0, size=130, acc=(1,), y=1130)
-photo(PH("adelaide_oval"), "h3", origin="50% 60%", push=1.25)
+photo(PH("adelaide_oval"), "h3", origin="45% 55%", push=1.2)
 headline(["Adelaide 2003."], "h3", 0.1, 1.0, size=120, acc=(0,), y=1150)
 
 # 1-2: 556, Ponting 242 ... and Australia LOST
 shot3d("s556", 1, 0.0, 0.4)
 photo(PH("ponting"), 1, 0.4, 1.0, origin="50% 30%", push=1.25)
 odo("242", 1, 0.45, 1.0, label="PONTING ALONE", y=1150, size=260)
-photo(PH("aus_team"), 2, gray=True, origin="50% 30%", push=1.25)
+photo(PH("ponting_jump"), 2, gray=True, origin="50% 30%", push=1.25)
 headline(["And yet…"], 2, 0.0, 0.35, size=90, y=1150)
 headline(["LOST."], 2, 0.3, 1.0, size=260, acc=(0,), y=1050, stamp=True)
 
 # 4-5 THE SETTING
 ytag("ADELAIDE · DEC 2003", 4, 9)
-photo(PH("aus_team"), 4, origin="50% 20%", push=1.3)
+photo(PH("ponting_roar"), 4, origin="50% 30%", push=1.3)
 pills(["Hayden", "Langer", "Ponting", "Martyn", "Gilchrist", "Steve Waugh"], 4, 0.05, 1.0, y=1020)
 stage(5)
 odo("556", 5, 0.0, 1.0, label="AUSTRALIA · 1ST INNINGS", y=760, size=300, color="#fff")
@@ -352,7 +353,7 @@ photo(PH("laxman"), 7, push=1.3, origin="40% 35%")
 odo("148", 7, 0.0, 1.0, label="VVS LAXMAN", y=1100, size=300)
 stage(8, 0.0, 0.45)
 clock(10, 8, 0.0, 0.45, y=620)
-photo(PH("dravid_bat"), 8, 0.45, 1.0, push=1.3, origin="55% 35%")
+photo(PH("dravid_bat"), 8, 0.45, 1.0, push=1.25, origin="45% 35%")
 odo("233", 8, 0.45, 1.0, label="RAHUL DRAVID", y=1150, size=300)
 stage(9)
 bars([("AUSTRALIA", 556, "rgba(255,255,255,.35)"), ("INDIA", 523, Y)], 9, 0.0, 1.0, y=820)
@@ -362,16 +363,16 @@ headline(["Just 33 behind."], 9, 0.35, 1.0, size=100, acc=(0,), y=1420)
 stage(10)
 headline(["But the real twist", "was still coming."], 10, 0.0, 1.0, size=96, acc=(1,), y=860)
 ytag("2ND INNINGS", 11, 13)
-photo(PH("agarkar_bowl"), 11, label="AJIT AGARKAR", sub="Spell of his life", origin="50% 30%", push=1.3)
-photo(PH("agarkar_wicket"), 12, push=1.35, origin="60% 25%")
-odo("6/41", 12, 0.0, 1.0, label="AGARKAR", y=1100, size=320)
+photo(PH("agarkar_bowl"), 11, label="AJIT AGARKAR", sub="Spell of his life", origin="40% 40%", push=1.15)
+photo(PH("agarkar_wicket"), 12, push=1.3, origin="40% 45%")
+odo("6/41", 12, 0.0, 1.0, label="AGARKAR", y=1380, size=300)
 shot3d("s196", 13)
 flash(at(13, 0.45))
 
 # 14-17 THE CHASE
 stage(14)
 odo("230", 14, 0.0, 1.0, label="TO WIN", y=760, size=340)
-photo(PH("dravid_closeup"), 15, 0.0, 0.5, push=1.3, origin="50% 35%")
+photo(PH("dravid_closeup"), 15, 0.0, 0.5, push=1.2, origin="40% 8%")
 photo(PH("dravid_bat"), 15, 0.5, 1.0, push=1.3, origin="60% 35%")
 chase(160, 230, 15, label="INDIA")
 headline(["Dravid stood", "in the way."], 15, 0.2, 1.0, size=100, acc=(0,), y=1180)
@@ -383,9 +384,9 @@ chase(233, 230, 17, label="INDIA")
 # 18, 22-24 THINK ABOUT IT
 stage(18, 0.0, 1.0)
 headline(["Think about it."], 18, 0.0, 1.0, size=110, y=900)
-photo(PH("india_celebrate"), 22, origin="50% 30%", push=1.3)
+photo(PH("india_celebrate"), 22, origin="40% 8%", push=1.15)
 headline(["India beat Australia", "in Australia."], 22, 0.05, 1.0, size=96, acc=(1,), y=1180)
-photo(PH("adelaide_oval"), 23, gray=True, push=1.3)
+photo(PH("adelaide_oval2"), 23, gray=True, push=1.2, origin="50% 55%")
 headline(["Not just a", "Test victory."], 23, 0.0, 1.0, size=110, acc=(1,), y=1150)
 photo(PH("dravid_laxman"), 24, push=1.3)
 headline(["Indian cricket", "had arrived."], 24, 0.0, 1.0, size=110, acc=(1,), y=1150)
