@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "doc_video", "thumb"))
 import thumb_wc2003 as tw  # noqa: E402
-from thumb_wc2003 import ANTON, H, W, arr, fade_bottom, finish, img, load_cut, place, radial, regrade  # noqa: E402
+from thumb_wc2003 import ANTON, H, W, arr, fade_bottom, finish, img, place, radial, regrade  # noqa: E402
 
 tw.HERE = HERE
 Y = (255, 222, 89)
@@ -88,29 +88,39 @@ def crack(base):
 
 
 def headline(base, top=820, size=215):
-    """2007 = 2011? on a dark band; '=' brand yellow with glow, '?' red."""
+    """2007 = 2011? on a dark band: '=' as two bold brand-yellow bars with glow, '?' red."""
     tw.floor(base, 620)
     f = ImageFont.truetype(ANTON, size)
-    parts = [("2007", (230, 238, 255)), (" = ", Y), ("2011", (255, 214, 140)), ("?", RED)]
-    widths = [f.getlength(t) for t, _ in parts]
-    x = (W - sum(widths)) / 2
+    eq_w, gap = 150, 46
+    parts = [("2007", (230, 238, 255)), ("=", Y), ("2011", (255, 214, 140)), ("?", RED)]
+    widths = [eq_w if t == "=" else f.getlength(t) for t, _ in parts]
+    widths[0] += gap
+    widths[1] += gap
+    x0 = (W - sum(widths)) / 2
     l, t, r, b = f.getbbox("2007")
+    cap_mid = top + (b - t) / 2
+
+    def draw(target, dx, dy, fill, stroke=0, glow_only=False):
+        d = ImageDraw.Draw(target)
+        xx = x0
+        for (txt, col), w in zip(parts, widths):
+            c = fill or col
+            if txt == "=":
+                bh, sep = 34, 30
+                for yb in (cap_mid - sep / 2 - bh, cap_mid + sep / 2):
+                    d.rectangle((xx + dx, yb + dy, xx + eq_w + dx, yb + bh + dy), fill=c,
+                                outline=(10, 10, 14) if stroke else None, width=stroke)
+            elif not glow_only or txt == "?":
+                d.text((xx + dx, top - t + dy), txt, font=f, fill=c, stroke_width=stroke, stroke_fill=(10, 10, 14))
+            xx += w
+
     sh = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    glow = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    xx = x
-    for (txt, col), w in zip(parts, widths):
-        ImageDraw.Draw(sh).text((xx + 8, top - t + 12), txt, font=f, fill=(0, 0, 0, 235), stroke_width=8,
-                                stroke_fill=(0, 0, 0, 235))
-        if txt.strip() in ("=", "?"):
-            ImageDraw.Draw(glow).text((xx, top - t), txt, font=f, fill=col + (230,))
-        xx += w
+    draw(sh, 8, 12, (0, 0, 0, 235), stroke=8)
     base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(14)))
-    base.alpha_composite(glow.filter(ImageFilter.GaussianBlur(24)))
-    d = ImageDraw.Draw(base)
-    xx = x
-    for (txt, col), w in zip(parts, widths):
-        d.text((xx, top - t), txt, font=f, fill=col, stroke_width=5, stroke_fill=(10, 10, 14))
-        xx += w
+    glow = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    draw(glow, 0, 0, None, glow_only=True)
+    base.alpha_composite(glow.filter(ImageFilter.GaussianBlur(26)))
+    draw(base, 0, 0, None, stroke=5)
 
 
 def main():
@@ -119,18 +129,22 @@ def main():
     ghost_year(base, "2011", 1470, 30, 400, (255, 200, 110), 70)
 
     # LEFT - 2007: the roar after the T20 World Cup win, cool light
-    d7 = load_cut("cut_2007.png", 900)
+    d7 = Image.open(os.path.join(HERE, "cut_2007.png")).convert("RGBA")
+    d7 = d7.crop((0, 0, d7.width, int(d7.height * 0.72)))  # head to knees: big enough to read
+    d7 = d7.resize((int(d7.width * 1060 / d7.height), 1060), Image.LANCZOS)
     d7 = regrade(d7, color=1.0, contrast=1.1, bright=1.04, sharpen=(1.0, 60, 1), tint=(170, 200, 240), tint_k=0.1)
-    d7 = fade_bottom(d7, 600, 860)
-    place(base, d7, 480 - d7.width // 2 - 30, 20, wrap=0.45, rim_color=(170, 210, 255), rim_side=1, rim_k=0.5,
+    d7 = fade_bottom(d7, 640, 1000)
+    place(base, d7, 470 - d7.width // 2, 10, wrap=0.45, rim_color=(170, 210, 255), rim_side=1, rim_k=0.5,
           shadow=0.75)
 
     # RIGHT - 2011: the winning six, warm floodlight
-    d11 = load_cut("cut_2011.png", 1040)
+    d11 = Image.open(os.path.join(HERE, "cut_2011.png")).convert("RGBA")
+    d11 = d11.crop((0, 0, d11.width, int(d11.height * 0.6)))  # bat to thigh
+    d11 = d11.resize((int(d11.width * 1110 / d11.height), 1110), Image.LANCZOS)
     d11 = regrade(d11, color=1.1, contrast=1.12, bright=1.04, sharpen=(1.0, 60, 1))
     d11 = tw.directional_light(d11, "right", (255, 200, 110), 0.55)
-    d11 = fade_bottom(d11, 700, 1000)
-    place(base, d11, 1450 - d11.width // 2, -20, wrap=0.45, rim_color=(255, 200, 110), rim_side=1, rim_k=0.55,
+    d11 = fade_bottom(d11, 680, 1060)
+    place(base, d11, 1440 - d11.width // 2, -10, wrap=0.45, rim_color=(255, 200, 110), rim_side=1, rim_k=0.55,
           shadow=0.75)
 
     crack(base)
