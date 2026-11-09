@@ -94,6 +94,24 @@ def tag(base, txt, x, y):
         xx += f.getlength(c) + track
 
 
+def quote_bubble(base, x0, y0, x1, y1, tail_to):
+    """White speech bubble with Lehmann's radio line, tail pointing at him."""
+    lay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.rounded_rectangle((x0, y0, x1, y1), radius=28, fill=(255, 255, 255, 255))
+    tx, ty = tail_to
+    d.polygon([(x1 - 40, y1 - 70), (x1 - 40, y1 - 10), (tx, ty)], fill=(255, 255, 255, 255))
+    sh = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    sh.putalpha(lay.getchannel("A").filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.7)))
+    base.alpha_composite(sh, (8, 12))
+    base.alpha_composite(lay)
+    d = ImageDraw.Draw(base)
+    f = ImageFont.truetype(ANTON, 74)
+    for i, (txt, col) in enumerate([("“BOOKS ARE THERE", (16, 16, 20)), ("TO SELL.”", RED)]):
+        d.text((x0 + 34, y0 + 22 + i * 86), txt, font=f, fill=col)
+    d.text((x0 + 36, y1 - 52), "— DARREN LEHMANN", font=ImageFont.truetype(ANTON, 34), fill=(90, 90, 100))
+
+
 def headline(base, top=845, size=205):
     tw.floor(base, 640)
     f = ImageFont.truetype(ANTON, size)
@@ -146,6 +164,7 @@ def main():
     sp = sandpaper()
     base.alpha_composite(sp, (960 - sp.width // 2, 610 - sp.height // 2))
     tag(base, "SANDPAPERGATE", 50, 46)
+    quote_bubble(base, 600, 60, 1185, 300, (1300, 330))
     headline(base)
     tw.HERE = HERE
     tw.finish(base, "thumb_everyone_knew")
