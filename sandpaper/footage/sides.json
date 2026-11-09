@@ -1,0 +1,82 @@
+{
+ "bancroft": {
+  "left": 0.391,
+  "right": 0.3,
+  "bottom": 0.512
+ },
+ "bowlers": {
+  "left": 0.249,
+  "right": 0.316,
+  "bottom": 0.087
+ },
+ "hands": {
+  "left": 0.451,
+  "right": 0.0,
+  "bottom": 0.136
+ },
+ "handscomb": {
+  "left": 0.008,
+  "right": 0.124,
+  "bottom": 0.284
+ },
+ "huddle": {
+  "left": 0.451,
+  "right": 0.458,
+  "bottom": 0.542
+ },
+ "khawaja": {
+  "left": 1.0,
+  "right": 1.0,
+  "bottom": 1.0
+ },
+ "lehmann": {
+  "left": 0.822,
+  "right": 0.004,
+  "bottom": 0.386
+ },
+ "pouch": {
+  "left": 0.349,
+  "right": 0.298,
+  "bottom": 0.288
+ },
+ "reel1": {
+  "left": 0.585,
+  "right": 0.626,
+  "bottom": 0.721
+ },
+ "reel2": {
+  "left": 0.647,
+  "right": 0.812,
+  "bottom": 0.808
+ },
+ "sabr": {
+  "left": 1.0,
+  "right": 1.0,
+  "bottom": 1.0
+ },
+ "smith": {
+  "left": 0.377,
+  "right": 0.511,
+  "bottom": 0.67
+ },
+ "walkie": {
+  "left": 0.02,
+  "right": 0.159,
+  "bottom": 0.0
+ },
+ "warner": {
+  "left": 0.574,
+  "right": 0.495,
+  "bottom": 0.509
+ },
+ "warner2": {
+  "left": 0.214,
+  "right": 0.505,
+  "bottom": 0.446
+ },
+ "yellow": {
+  "left": 0.0,
+  "right": 0.025,
+  "bottom": 0.086
+ }
+}

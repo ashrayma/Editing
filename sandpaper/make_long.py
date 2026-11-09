@@ -281,7 +281,7 @@ def build_shots():
                                            T(L(11, 2.4), ("A SUNGLASSES", Y), ("POUCH.", Y), size=88)]))
     a(Shot(L(12), ("clip", "bancroft"), "L", [T(L(12, 0.2), ("ACTING", WHITE), ("BOLLYWOOD", Y), ("WOULD ENVY.", WHITE),
                                                 size=84)]))
-    a(Shot(L(13), None, None, [kick(L(13), "THE BANS"), ], special="bans", hit="braam"))
+    a(Shot(L(13), None, None, [], special="bans", hit="braam"))
     a(Shot(L(14), ("still", "lehmann"), "R", [kick(L(14), "COACH DARREN LEHMANN"),
                                               T(L(14), ("CLEARED BY", WHITE), ("THE INQUIRY.", WHITE), size=80),
                                               T(L(14, 2.3), ("STILL QUIT.", Y), size=96)]))
@@ -296,7 +296,7 @@ def build_shots():
                                               T(L(19), ("HID IT FOR 8 YEARS.", Y), size=64)], hit="impact"))
     a(Shot(L(20), ("still", "sabr"), "LP", [kick(L(20), "THE BOOK"), T(L(20, 1.2), ("SABR", Y), size=200, path=ANTON),
                                             T(L(20, 1.5), ("PATIENCE.", WHITE), size=64)], hit="impact"))
-    a(Shot(L(21), None, None, [T(L(21), ("NOW THE REAL", WHITE), ("DRAMA BEGINS.", Y), size=120, anim="slam",
+    a(Shot(L(21), ("still", "lehmann"), None, [T(L(21), ("NOW THE REAL", WHITE), ("DRAMA BEGINS.", Y), size=120, anim="slam",
                                  align="c", maxw=1500)], special="title", hit="braam"))
     a(Shot(L(22), ("still", "lehmann"), "L", [kick(L(22), "LEHMANN · ABC RADIO"),
                                               T(L(22, 1.0), ("“BOOKS ARE", WHITE), ("THERE TO SELL.”", Y), size=88),
@@ -310,9 +310,9 @@ def build_shots():
                                                                     ("THAT EVERYONE KNEW?”", WHITE), size=68),
                                                                   T(K("k1", 4.6), ("“NAH. I WON'T", Y), ("DENY THAT EITHER.”", Y),
                                                                     size=68)], special="bite"))
-    a(Shot(L(28), None, None, [T(L(28), ("THEN CAME", WHITE), ("THE BIG HIT.", Y), size=120, anim="slam", align="c",
+    a(Shot(L(28), ("clip", "reel1", 20.0), None, [T(L(28), ("THEN CAME", WHITE), ("THE BIG HIT.", Y), size=120, anim="slam", align="c",
                                  maxw=1500)], special="title", hit="braam"))
-    a(Shot(L(29), ("still", "khawaja"), "L", [T(L(29), ("DOUBT MY STORY?", WHITE), ("GO AHEAD.", Y), size=80),
+    a(Shot(L(29), ("still", "khawaja"), "R", [T(L(29), ("DOUBT MY STORY?", WHITE), ("GO AHEAD.", Y), size=80),
                                               T(L(30), ("MY MEMORY?", WHITE), ("IT'S ALL", WHITE), ("WRITTEN DOWN.", Y),
                                                 size=80)]))
     a(Shot(L(31), ("still", "huddle"), "R", [kick(L(31), "KHAWAJA'S CLAIM"),
@@ -333,7 +333,7 @@ def build_shots():
                                                 path=XB_F),
                                               T(L(34, 2.2), ("“WE DIDN'T KNOW.”", Y), size=80),
                                               T(L(34, 4.4), ("WHY WAS KHAWAJA", WHITE), ("SILENT?", RED), size=72)]))
-    a(Shot(L(35), None, None, [T(L(35), ("THE ANSWER STINGS.", WHITE), size=110, anim="slam", align="c", maxw=1500)],
+    a(Shot(L(35), ("clip", "walkie"), None, [T(L(35), ("THE ANSWER STINGS.", WHITE), size=110, anim="slam", align="c", maxw=1500)],
            special="title", hit="impact"))
     a(Shot(L(36), ("clip", "reel2"), "RP", [T(L(36), ("“CALL ME", WHITE), ("A CHICKEN.”", Y), size=110),
                                             T(L(37), ("IN THE TEAM.", WHITE), ("NO FIGHT LEFT.", WHITE), size=64)]))
@@ -345,15 +345,15 @@ def build_shots():
                                                                   T(K("k3", 10.1), ("“CALL ME A CHICKEN", Y),
                                                                     ("OR WHATEVER YOU WANT.”", Y), size=54)],
            special="bite"))
-    a(Shot(L(38), None, None, [T(L(38), ("BUT THE STORY", WHITE), ("ISN'T OVER.", Y), size=120, anim="slam", align="c",
+    a(Shot(L(38), ("clip", "walkie"), None, [T(L(38), ("BUT THE STORY", WHITE), ("ISN'T OVER.", Y), size=120, anim="slam", align="c",
                                  maxw=1500)], special="title", hit="braam"))
     a(Shot(L(39), None, None, [kick(L(39), "THE OTHER SIDE")], special="denials"))
-    a(Shot(L(40), None, None, [], special="ca_file"))
+    a(Shot(L(40), ("still", "huddle"), None, [], special="ca_file"))
     a(Shot(L(41), ("clip", "walkie"), "L", [kick(L(41), "ACCORDING TO CRICKET AUSTRALIA"),
                                             T(L(41, 0.3), ("NO WARNING", WHITE), ("ON THE RADIO.", WHITE), size=80),
                                             T(L(41, 4.6), ("LEHMANN ONLY ASKED:", Y), size=52, path=XB_F),
                                             T(L(41, 5.6), ("“WHAT THE **** IS", WHITE), ("GOING ON?”", WHITE), size=72)]))
-    a(Shot(L(42), None, None, [], special="versus_file"))
+    a(Shot(L(42), ("still", "huddle"), None, [], special="versus_file"))
     a(Shot(L(44), ("still", "huddle"), "C", [T(L(44), ("THE TRUTH?", WHITE), size=72, align="c", maxw=1500),
                                              T(L(44, 1.4), ("ONLY THE DRESSING ROOM WALLS KNOW.", Y), size=60, align="c",
                                                maxw=1500)], dark=0.2))
@@ -543,6 +543,124 @@ LOGO = LOGO.resize((200, int(LOGO.height * 200 / LOGO.width)), Image.LANCZOS)
 LOGO.putalpha(LOGO.getchannel("A").point(lambda v: int(v * 0.8)))
 
 
+# ----------------------------------------------------------------------------- full-screen layout
+
+# landscape media region per layout (x, y, w, h); the rest of the frame is a blurred extension of the same picture
+REGION = {"R": (700, 0, 1220, 1080), "L": (0, 0, 1220, 1080), "C": (0, 0, 1920, 860), None: (0, 0, 1920, 1080)}
+TEXT_COL = {"R": (110, 690), "L": (1270, 600), "RP": (130, 760), "LP": (900, 760)}
+_feather = {}
+
+
+def feather_mask(w, h, sides, f=180):
+    key = (w, h, sides, f)
+    if key not in _feather:
+        m = np.ones((h, w), np.float32)
+        xs, ys = np.arange(w, dtype=np.float32), np.arange(h, dtype=np.float32)
+        if "l" in sides:
+            m *= np.clip(xs / f, 0, 1)[None, :]
+        if "r" in sides:
+            m *= np.clip((w - 1 - xs) / f, 0, 1)[None, :]
+        if "b" in sides:
+            m *= np.clip((h - 1 - ys) / f, 0, 1)[:, None]
+        _feather[key] = img(m ** 1.3 * 255, "L")
+    return _feather[key]
+
+
+def cover(frame, w, h, z=1.0):
+    s = max(w / frame.width, h / frame.height) * z
+    fw, fh = int(frame.width * s) + 1, int(frame.height * s) + 1
+    f = frame.resize((fw, fh), Image.BILINEAR)
+    return f.crop(((fw - w) // 2, (fh - h) // 2, (fw - w) // 2 + w, (fh - h) // 2 + h))
+
+
+def draw_fill(base, frame, region, t, shot, sides):
+    """Media filling a full-height region, feathered into the blurred backdrop on the text side."""
+    x, y, w, h = region
+    k = t - shot.t0
+    z = 1.0 + 0.04 * min(1.0, k / max(1.0, shot.t1 - shot.t0))
+    f = cover(frame, w, h, z).convert("RGBA")
+    m = feather_mask(w, h, sides) if sides else Image.new("L", (w, h), 255)
+    a = ease(k / 0.3)
+    f.putalpha(m.point(lambda v: int(v * a)) if a < 1 else m)
+    base.alpha_composite(f, (x, y))
+
+
+def draw_portrait(base, frame, side, t, shot):
+    """Vertical media at full height on one side, a soft shadow behind it."""
+    k = t - shot.t0
+    h = H
+    w = int(frame.width * h / frame.height)
+    z = 1.0 + 0.03 * min(1.0, k / max(1.0, shot.t1 - shot.t0))
+    f = cover(frame, w, h, z).convert("RGBA")
+    x = W - w - 150 if side == "RP" else 150
+    a = ease(k / 0.3)
+    sh = Image.new("RGBA", (w + 160, h), (0, 0, 0, 0))
+    shm = Image.new("L", (w + 160, h), 0)
+    ImageDraw.Draw(shm).rectangle((80, 0, 80 + w, h), fill=200)
+    sh.putalpha(shm.filter(ImageFilter.GaussianBlur(40)).point(lambda v: int(v * a)))
+    base.alpha_composite(sh, (x - 80, 0))
+    if a < 1:
+        f.putalpha(int(255 * a))
+    base.alpha_composite(f, (x, 0))
+    return x, 0, w, h
+
+
+def side_shade(base, layout):
+    """Darken the text side so headlines read cleanly."""
+    if layout in ("R", "RP"):
+        g = np.clip(1 - XX[0] / 1000, 0, 1) ** 1.2
+    elif layout in ("L", "LP"):
+        g = np.clip((XX[0] - 920) / 1000, 0, 1) ** 1.2
+    elif layout == "C":
+        g = None
+    else:
+        return
+    a = arr(base)
+    if g is not None:
+        a[..., :3] *= (1 - 0.55 * g)[None, :, None]
+    else:
+        gy = np.clip((YY[:, 0] - 700) / 380, 0, 1)
+        a[..., :3] *= (1 - 0.7 * gy)[:, None, None]
+    return img(a, "RGBA")
+
+
+def panels(base, frames, labels, t, shot, label_y=900):
+    """Full-height side-by-side panels (bans, denials, verdict) with labels on a bottom gradient."""
+    n = len(frames)
+    pw = W // n
+    k = t - shot.t0
+    for j, fr in enumerate(frames):
+        kk = k - 0.2 * j
+        if kk < 0 or fr is None:
+            continue
+        sub = Shot(shot.t0 + 0.2 * j)
+        sub.t1 = shot.t1
+        draw_fill(base, fr, (j * pw, 0, pw, H), t, sub, "")
+    a = arr(base)
+    gy = np.clip((YY[:, 0] - (label_y - 260)) / 420, 0, 1)
+    a[..., :3] *= (1 - 0.75 * gy)[:, None, None]
+    for j in range(1, n):  # thin divider lines
+        a[:, j * pw - 3:j * pw + 3, :3] = np.array(Y, np.float32) * 0.9
+    out = img(a, "RGBA")
+    base.paste(out)
+    for j, (top, big, col) in enumerate(labels):
+        kk = k - 0.2 * j - 0.3
+        al = ease(kk / 0.3) * (1 - ease((t - (shot.t1 - 0.2)) / 0.2))
+        if al <= 0:
+            continue
+        cx = j * pw + pw // 2
+        if top:
+            lab = text_img([(top, WHITE)], 40, XB_F, pw - 60, "c")
+            base.alpha_composite(fade(lab, al), (cx - lab.width // 2, label_y - 20))
+        b = text_img([(big, col)], 78, ANTON if len(big) < 14 else BLACK_F, pw - 60, "c")
+        base.alpha_composite(fade(b, al), (cx - b.width // 2, label_y + 40))
+
+
+LOGO = Image.open(os.path.join(ROOT, "kohli_countdown", "assets", "logo.png")).convert("RGBA")
+LOGO = LOGO.resize((200, int(LOGO.height * 200 / LOGO.width)), Image.LANCZOS)
+LOGO.putalpha(LOGO.getchannel("A").point(lambda v: int(v * 0.8)))
+
+
 def render(shots, t, i):
     shot = next(s for s in shots if s.t0 <= t < s.t1)
     if shot.media is None and shot.media_spec is not None:
@@ -551,43 +669,84 @@ def render(shots, t, i):
         shot.extra = {n: Clip(n) for n in ("smith", "warner", "bancroft")}
     frame = shot.media.next() if shot.media else None
     bgsrc = frame
-    if shot.special == "verdict":
-        bgsrc = None
-    a = backdrop(bgsrc, shot.dark)
+    if shot.special in ("verdict", "denials"):
+        bgsrc = still("lehmann")
+    a = backdrop(bgsrc, 0.5 if shot.layout in ("RP", "LP") else shot.dark)
     g = GRAIN[i % len(GRAIN)]
     a = (a + np.repeat(np.repeat(g, 2, 0), 2, 1)[..., None] * 5) * VIG
     base = img(a).convert("RGBA")
-    if shot.special in ("bans", "unknown", "denials", "ca_file", "versus_file", "verdict"):
+    if shot.special == "bans":
+        frs = [shot.extra[n].next() for n in ("smith", "warner", "bancroft")]
+        panels(base, frs, [("STEVE SMITH", "12 MONTHS", Y), ("DAVID WARNER", "12 MONTHS", Y),
+                           ("CAMERON BANCROFT", "9 MONTHS", Y)], t, shot)
+        hdr = text_img([("ONLY THREE BANNED.", WHITE)], 72, BLACK_F, 1600, "c")
+        base.alpha_composite(fade(hdr, ease((t - shot.t0) / 0.3)), ((W - hdr.width) // 2, 60))
+    elif shot.special == "denials":
+        panels(base, [still("lehmann"), still("bowlers")],
+               [("DARREN LEHMANN", "“I DIDN'T KNOW.”", Y), ("THE FOUR BOWLERS", "“WE DIDN'T KNOW.”", Y)], t, shot)
+        draw_texts(base, shot, t, 130, 40)
+    elif shot.special == "verdict":
+        panels(base, [still("khawaja"), still("lehmann")], [("", "KHAWAJA", Y), ("", "LEHMANN", RED)], t, shot,
+               label_y=860)
+        k = t - shot.t0
+        if k > 0.6:
+            q = text_img([("?", Y)], 300, ANTON, 400, "c")
+            s_ = 1 + 0.4 * (1 - ease((k - 0.6) / 0.2))
+            q = q.resize((int(q.width * s_), int(q.height * s_)), Image.BILINEAR)
+            base.alpha_composite(q, ((W - q.width) // 2, 300 - (q.height - 380) // 2))
+        if t > out_t(VO_DUR) - 0.3:
+            k3 = t - (out_t(VO_DUR) - 0.3)
+            v = text_img([("YOUR VERDICT? COMMENT BELOW", WHITE)], 54, XB_F, 1500, "c")
+            base.alpha_composite(fade(v, ease(k3 / 0.4)), ((W - v.width) // 2, 1000))
+    elif shot.special in ("unknown", "ca_file", "versus_file"):
+        if frame is not None:  # the dressing room, full screen and dark, behind the cards
+            draw_fill(base, frame, REGION[None], t, shot, "")
+            a2 = arr(base)
+            a2[..., :3] *= 0.3
+            base = img(a2, "RGBA")
         special(base, shot, t)
     elif shot.special == "title":
-        y = draw_texts(base, shot, t, 0, 380, "c")
+        if frame is not None:
+            draw_fill(base, frame, REGION[None], t, shot, "")
+            a2 = arr(base)
+            a2[..., :3] *= 0.38
+            base = img(a2, "RGBA")
+        draw_texts(base, shot, t, 0, 380, "c")
     else:
         lay = shot.layout
-        if frame is not None and lay is not None:
-            x, y, w, h = draw_card(base, frame, BOX[lay], t, shot)
+        if frame is not None and lay in ("RP", "LP"):
+            x, y, w, h = draw_portrait(base, frame, lay, t, shot)
+            base = side_shade(base, lay)
             if shot.special == "bite":
-                chip(base, "USMAN KHAWAJA · INSTAGRAM", x, y + h + 18, bg=Y)
-                # sound-on badge
+                chip(base, "USMAN KHAWAJA · INSTAGRAM", x + 24, h - 90, bg=Y)
                 pulse = 0.5 + 0.5 * np.sin(t * 6)
-                d = ImageDraw.Draw(base)
-                d.ellipse((x + 24, y + 24, x + 46, y + 46), fill=(232, 48, 48, int(150 + 105 * pulse)))
-        if lay == "C":
-            bx, by, bw, bh = BOX["C"]
-            draw_texts(base, shot, t, 0, 800, "c")
-        elif lay is not None:
-            draw_texts(base, shot, t, TEXT_X[lay] + 30, 200 if lay in ("R", "L") else 230)
+                ImageDraw.Draw(base).ellipse((x + 30, 30, x + 54, 54), fill=(232, 48, 48, int(150 + 105 * pulse)))
+            tx, tw = TEXT_COL[lay]
+            draw_texts(base, shot, t, tx + 30, 230)
+        elif frame is not None:
+            sides = {"R": "l", "L": "r", "C": "b", None: ""}[lay]
+            draw_fill(base, frame, REGION[lay], t, shot, sides)
+            base = side_shade(base, lay) or base
+            if lay == "C":
+                draw_texts(base, shot, t, 0, 850, "c")
+            elif lay is None:
+                draw_texts(base, shot, t, 120, 300)
+            else:
+                tx, tw = TEXT_COL[lay]
+                for tx_ in shot.texts:
+                    tx_.maxw = tx_.maxw or tw
+                draw_texts(base, shot, t, tx + 30, 200)
         else:
             draw_texts(base, shot, t, 120, 300)
-    base.alpha_composite(LOGO, (W - LOGO.width - 50, 40))
-    # close media of shots we've left
-    for s in shots:
-        if s.t1 <= t and s.media is not None:
-            s.media.close()
-            s.media = None
-        if s.t1 <= t and hasattr(s, "extra"):
-            for c in s.extra.values():
+    base.alpha_composite(LOGO, (W - LOGO.width - 50, 40) if shot.layout != "RP" else (50, 40))
+    for s_ in shots:
+        if s_.t1 <= t and s_.media is not None:
+            s_.media.close()
+            s_.media = None
+        if s_.t1 <= t and hasattr(s_, "extra"):
+            for c in s_.extra.values():
                 c.close()
-            del s.extra
+            del s_.extra
     return base.convert("RGB")
 
 
@@ -635,9 +794,9 @@ def soundtrack(path, shots):
 
     fx = np.zeros(n)
     for s in shots:
-        put(fx, sfx.whoosh() * 0.22, max(0, s.t0 - 0.18))
+        put(fx, sfx.whoosh() * 0.12, max(0, s.t0 - 0.18))
         if s.hit == "braam":
-            put(fx, braam(weight=1.1), s.t0, 0.6)
+            put(fx, braam(weight=1.1), s.t0, 0.45)
         elif s.hit == "impact":
             put(fx, sfx.impact(), s.t0 + 0.2, 0.35)
         elif s.hit == "soft":
@@ -651,7 +810,7 @@ def soundtrack(path, shots):
     env = np.convolve(np.abs(speech), np.ones(int(0.3 * SR)) / int(0.3 * SR), mode="same")
     duck = 1 - 0.6 * np.clip(env / (env.max() * 0.2 + 1e-6), 0, 1)
     bduck = np.convolve((np.abs(bite) > 0.01).astype(np.float32), np.ones(int(0.5 * SR)) / int(0.5 * SR), mode="same")
-    mix = voice + bite * 1.05 + mus * duck * (1 - 0.6 * np.clip(bduck * 3, 0, 1)) + fx * 0.5
+    mix = voice + bite * 1.05 + mus * duck * (1 - 0.6 * np.clip(bduck * 3, 0, 1)) + fx * 0.2
     mix = np.tanh(mix * 1.05) * 0.95
     with wave.open(path, "wb") as w:
         w.setnchannels(2)
