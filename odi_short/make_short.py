@@ -81,9 +81,11 @@ class Plate:
     blurred, darkened copy of itself.  Ken Burns zoom/pan is applied per frame from the oversized master.
     """
 
-    def __init__(self, name, mode="cover", focus=(0.5, 0.4), card_scale=1.25, card_y=0.42):
-        self.im = load(name)
-        self.mode, self.focus, self.card_y = mode, focus, card_y
+    def __init__(self, name, mode="cover", focus=(0.5, 0.4), card_scale=1.25, card_y=0.42, mask=False):
+        self.name = name
+        self.im = load(name) if not mask else Image.open(
+            os.path.join(HERE, "masks", name.replace(".jpg", ".png"))).convert("RGB")
+        self.mode, self.focus, self.card_y, self.card_scale = mode, focus, card_y, card_scale
         if mode == "cover":
             s = max(W / self.im.width, H / self.im.height) * 1.18
             self.master = self.im.resize((int(self.im.width * s), int(self.im.height * s)), Image.LANCZOS)
@@ -92,7 +94,7 @@ class Plate:
             bg = self.im.resize((int(self.im.width * s), int(self.im.height * s)), Image.BILINEAR)
             bg = bg.crop(((bg.width - W) // 2, (bg.height - H) // 2, (bg.width - W) // 2 + W, (bg.height - H) // 2 + H))
             bg = bg.filter(ImageFilter.GaussianBlur(28))
-            self.bg = arr(ImageEnhance.Brightness(bg).enhance(0.45))
+            self.bg = arr(ImageEnhance.Brightness(bg).enhance(0.45)) * (0 if mask else 1)
             fw = int(W * card_scale)
             self.fg = self.im.resize((fw, int(self.im.height * fw / self.im.width)), Image.LANCZOS)
 
@@ -129,18 +131,23 @@ class Plate:
 
 # ----------------------------------------------------------------------------- looks
 
+MASK = False  # True while rendering protected-area masks instead of pictures
 GRAIN = [rng.normal(0, 1, (H // 2, W // 2)).astype(np.float32) for _ in range(6)]
 YY, XX = np.mgrid[0:H, 0:W].astype(np.float32)
 VIGNETTE = (1 - 0.55 * np.clip(((XX - W / 2) / (W * 0.62)) ** 2 + ((YY - H / 2) / (H * 0.6)) ** 2, 0, 1))[..., None]
 
 
 def grain(a, amount, i):
+    if MASK:
+        return a
     g = GRAIN[i % len(GRAIN)]
     g = np.repeat(np.repeat(g, 2, 0), 2, 1)[: a.shape[0], : a.shape[1], None]
     return a + g * amount
 
 
 def gray(a, k):
+    if MASK:
+        return a
     if k <= 0:
         return a
     l = a @ np.array([0.299, 0.587, 0.114], np.float32)
@@ -149,6 +156,8 @@ def gray(a, k):
 
 def old_film(a, i, t):
     """Sepia, flicker, grain, vertical scratches, dust."""
+    if MASK:
+        return a
     l = a @ np.array([0.299, 0.587, 0.114], np.float32)
     a = l[..., None] * np.array([1.05, 0.96, 0.82], np.float32)
     a *= 0.92 + 0.08 * np.sin(t * 37) * np.sin(t * 11)
@@ -175,10 +184,14 @@ for k in range(4):
 
 
 def rain(a, i, k):
+    if MASK:
+        return a
     return a * (1 - 0.25 * k) + RAIN_TILES[i % 4] * 230 * k
 
 
 def flash(a, k, color=(255, 255, 255)):
+    if MASK:
+        return a
     return a + (np.array(color, np.float32) - a) * k
 
 
@@ -227,8 +240,16 @@ def text_block(lines, size, path=BLACK_F, gap=0.1, stroke=0, shadow=True):
 class Headline:
     def __init__(self, t_in, t_out, lines, y, size=110, anim="rise", path=BLACK_F, stroke=0):
         self.t_in, self.t_out, self.y, self.anim = t_in, t_out, y, anim
+        self.lines, self.size, self.path, self.stroke = lines, size, path, stroke
         self.im = text_block(lines, size, path, stroke=stroke)
         self.text = "".join(t for t, _ in lines)
+        self.pref_y, self.follow, self.dy, self.cx = y, None, 0, W / 2
+
+    def set_scale(self, k):
+        self.im = text_block(self.lines, int(self.size * k), self.path, stroke=self.stroke)
+
+    def footprint(self):
+        return footprint_of(self.im)
 
     def draw(self, base, t):
         if not (self.t_in <= t < self.t_out):
@@ -260,8 +281,12 @@ class Headline:
         if a < 1:
             im = im.copy()
             im.putalpha(im.getchannel("A").point(lambda v, a=a: int(v * a)))
-        x = int((W - (self.im.width * s if self.anim != "type" else self.im.width)) / 2 + jx)
+        x = int(self.cx - (self.im.width * s if self.anim != "type" else self.im.width) / 2 + jx)
         base.alpha_composite(im, (max(-im.width, x), int(self.y - im.height / 2 + jy)))
+
+
+def footprint_of(im):
+    return (np.asarray(im.getchannel("A")) > 60).astype(np.float32)
 
 
 class Number:
@@ -271,6 +296,25 @@ class Number:
         self.t_in, self.t_out, self.start, self.end, self.y = t_in, t_out, start, end, y
         self.suffix, self.size, self.roll, self.color = suffix, size, roll, color
         self.label = text_block([(label, WHITE)], 54, XB_F) if label else None
+        self.pref_y, self.follow, self.dy, self.cx, self.base_size = y, None, 0, W / 2, size
+
+    def set_scale(self, k):
+        self.size = int(self.base_size * k)
+
+    def footprint(self):
+        """Number at its final value plus the label below, stacked as drawn (centred on y)."""
+        num = text_block([(f"{self.end}{self.suffix}", self.color)], self.size, ANTON)
+        h = int(num.height / 2 + self.size * 0.55 + (self.label.height if self.label else 0))
+        top = num.height // 2
+        fp = np.zeros((top + h + 10, max(num.width, self.label.width if self.label else 0)), np.float32)
+        ox = (fp.shape[1] - num.width) // 2
+        fp[:num.height, ox:ox + num.width] = footprint_of(num)
+        if self.label:
+            lx, ly = (fp.shape[1] - self.label.width) // 2, top + int(self.size * 0.55)
+            lf = footprint_of(self.label)
+            fp[ly:ly + lf.shape[0], lx:lx + lf.shape[1]] = np.maximum(fp[ly:ly + lf.shape[0], lx:lx + lf.shape[1]], lf)
+        self.fp_offset = top  # y is the centre of the number, i.e. top of footprint + top
+        return fp
 
     def draw(self, base, t):
         if not (self.t_in <= t < self.t_out):
@@ -282,13 +326,13 @@ class Number:
         s = 1 + 0.18 * (1 - ease(k / 0.2))
         im = im.resize((int(im.width * s), int(im.height * s)), Image.BILINEAR)
         im.putalpha(im.getchannel("A").point(lambda q: int(q * a)))
-        base.alpha_composite(im, ((W - im.width) // 2, int(self.y - im.height / 2)))
+        base.alpha_composite(im, (int(self.cx - im.width / 2), int(self.y - im.height / 2)))
         if self.label:
             la = ease((k - 0.3) / 0.3) * (1 - ease((t - (self.t_out - 0.18)) / 0.18))
             if la > 0:
                 lb = self.label.copy()
                 lb.putalpha(lb.getchannel("A").point(lambda q: int(q * la)))
-                base.alpha_composite(lb, ((W - lb.width) // 2, int(self.y + self.size * 0.55)))
+                base.alpha_composite(lb, (int(self.cx - lb.width / 2), int(self.y + self.size * 0.55)))
 
 
 class Stamp:
@@ -307,6 +351,13 @@ class Stamp:
         m[holes] *= 0.35
         im.putalpha(img(m, "L"))
         self.im = im.rotate(angle, expand=True, resample=Image.BICUBIC)
+        self.pref_y, self.follow, self.dy, self.cx = y, None, 0, W / 2
+
+    def set_scale(self, k):
+        pass
+
+    def footprint(self):
+        return footprint_of(self.im)
 
     def draw(self, base, t):
         if not (self.t_in <= t < self.t_out):
@@ -324,6 +375,15 @@ class OversBar:
 
     def __init__(self, t_in, t_out, y):
         self.t_in, self.t_out, self.y = t_in, t_out, y
+        self.pref_y, self.follow, self.dy, self.cx = y, None, 0, W / 2
+
+    def set_scale(self, k):
+        pass
+
+    def footprint(self):
+        fp = np.ones((46 + 24 + 60, W - 220), np.float32)
+        self.fp_offset = 0
+        return fp
 
     def draw(self, base, t):
         if not (self.t_in <= t < self.t_out):
@@ -347,21 +407,25 @@ class OversBar:
 # ----------------------------------------------------------------------------- the edit
 
 P = {}
+PM = {}  # the same plates built from the protected-area masks
 
 
 def plates():
     P["dhoni"] = Plate("dhoni_2011_six.jpg", "cover", focus=(0.45, 0.42))
     P["odi71"] = Plate("first_odi_1971.jpg", "card", card_scale=1.7, card_y=0.47)
     P["odi71b"] = Plate("first_odi_1971.jpg", "card", card_scale=2.3, card_y=0.5)
-    P["captains"] = Plate("wc1992_captains_collage.jpg", "cover", focus=(0.5, 0.3))
+    P["captains"] = Plate("wc1992_captains_collage.jpg", "card", card_scale=0.86, card_y=0.4)
     P["opera"] = Plate("wc1992_captains_opera_house.jpg", "card", card_scale=1.6, card_y=0.5)
-    P["trophy"] = Plate("t20wc_trophy_floodlights.jpg", "cover", focus=(0.5, 0.45))
+    P["trophy"] = Plate("t20wc_trophy_floodlights.jpg", "card", card_scale=0.62, card_y=0.31)
     P["kapil"] = Plate("kapil_1983.jpg", "cover", focus=(0.45, 0.4))
     P["sachin"] = Plate("sachin_sharjah_drive.jpg", "cover", focus=(0.4, 0.4))
     P["storm"] = Plate("sachin_desert_storm_gilchrist.jpg", "card", card_scale=1.7, card_y=0.48)
     P["ipl"] = Plate("ipl_rcb_title_wide.jpg", "card", card_scale=1.65, card_y=0.47)
-    P["iplk"] = Plate("ipl_rcb_title_kohli.jpg", "cover", focus=(0.5, 0.35))
+    P["iplk"] = Plate("ipl_rcb_title_kohli.jpg", "card", card_scale=1.0, card_y=0.4)
     P["empty"] = Plate("empty_stands.jpg", "card", card_scale=1.8, card_y=0.5)
+    for k in list(P):
+        q = P[k]
+        PM[k] = Plate(q.name, q.mode, q.focus, card_scale=getattr(q, "card_scale", 1.25), card_y=q.card_y, mask=True)
     P["logo"] = Image.open(os.path.join(ROOT, "kohli_countdown", "assets", "logo.png")).convert("RGBA")
 
 
@@ -468,8 +532,8 @@ def background(t, i):
 def build_overlays():
     hl = []
     add = hl.append
-    add(Headline(0.05, 4.45, [("ODI CRICKET", WHITE), ("IS DYING.", Y)], 560, 150, "slam"))
-    add(Headline(T["reason"], 4.45, [("AND WE MIGHT BE", WHITE), ("THE REASON.", RED)], 1220, 92, "rise"))
+    add(Headline(0.05, T["reason"], [("ODI CRICKET", WHITE), ("IS DYING.", Y)], 560, 150, "slam"))
+    add(Headline(T["reason"], 4.45, [("AND WE MIGHT BE", WHITE), ("THE REASON.", RED)], 400, 110, "rise"))
     add(Headline(T["began"], 7.3, [("HOW DID IT", WHITE), ("BEGIN?", Y)], 820, 140, "rise"))
     add(Headline(T["date"], T["melbourne"] + 1.2, [("5 JAN 1971", Y)], 470, 150, "type", ANTON))
     add(Headline(T["melbourne"], 15.8, [("MELBOURNE, AUSTRALIA", WHITE)], 600, 66, "rise", XB_F))
@@ -513,7 +577,109 @@ def build_overlays():
     add(Headline(88.9, END, [("ODI", Y), ("YA", WHITE), ("T20?", Y)], 820, 210, "slam", ANTON))
     add(Headline(89.4, END, [("COMMENT KARO", WHITE)], 1300, 72, "rise", XB_F))
     add(Headline(89.7, END, [("FOLLOW FOR MORE CRICKET STORIES", (220, 220, 220))], 1420, 44, "rise", XB_F))
+
+    by = {getattr(o, "text", type(o).__name__): o for o in hl}
+
+    def follow(child, parent, dy):
+        by[child].follow, by[child].dy = by[parent], dy
+
+    follow("MELBOURNE, AUSTRALIA", "5 JAN 1971", 140)
+    follow("ONE-DAY MATCH", "TEST MATCH", 170)
+    follow("SACHIN · SHARJAH 1998", "DESERT STORM", 140)
+    follow("DHONI · WORLD CUP 2011", "THE SIX", 160)
+    follow("OversBar", "50 OVERS", 160)
+    follow("COMMENT KARO", "ODIYAT20?", 420)
+    follow("FOLLOW FOR MORE CRICKET STORIES", "COMMENT KARO", 110)
+    by["50 OVERS"].band = (940, BOTTOM_LIMIT)           # below the trophy card
+    by["STARTED FEELINGTOO LONG?"].band = (940, BOTTOM_LIMIT)
+    by["THE PATIENCE OF TEST"].band = (TOP_LIMIT, H // 2)       # stays on the Test half
+    by["THE EXCITEMENT OF T20"].band = (H // 2, BOTTOM_LIMIT)  # stays on the T20 half
     return hl
+
+
+# ----------------------------------------------------------------------------- keep text off faces and players
+
+TOP_LIMIT, BOTTOM_LIMIT = 240, 1640   # below the logo; above the Shorts/Reels caption + button area
+_mask_cache = {}
+
+
+def protected(t):
+    """Protected-area map (0..1, faces = 1, bodies/objects ~0.6) for the picture at time t."""
+    global MASK, P
+    key = round(t, 1)
+    if key not in _mask_cache:
+        saved = P
+        MASK, P = True, {**P, **PM}
+        try:
+            m = background(key, int(key * FPS))[..., 0] / 255
+        finally:
+            MASK, P = False, saved
+        _mask_cache[key] = np.clip(m, 0, 1) ** 2  # faces dominate the cost
+    return _mask_cache[key]
+
+
+def place_overlays(overlays, report=True):
+    """Put every text element where it covers the least of anyone (faces weighted most).
+
+    Each title is placed together with the sub-labels that `follow` it, as one group. Candidates: every height
+    between the logo and the Shorts UI, centred / left / right, at full size or slightly smaller. Groups that
+    are on screen at the same time never overlap each other.
+    """
+    groups = [o for o in overlays if o.follow is None]
+    kids = {id(o): [c for c in overlays if c.follow is o] for o in groups}
+    placed = []
+
+    for o in groups:
+        members = [o] + kids[id(o)]
+        ts = np.linspace(min(m.t_in for m in members) + 0.1, max(m.t_out for m in members) - 0.1, 5)
+        prot = np.max([protected(t) for t in ts], axis=0)
+        lo, hi = getattr(o, "band", (TOP_LIMIT, BOTTOM_LIMIT))
+        best = None
+        for k in (1.0, 0.86, 0.74, 0.64):
+            for m in members:
+                m.set_scale(k)
+            fps = [(m, m.footprint(), getattr(m, "fp_offset", None)) for m in members]
+            for side in ("c", "l", "r"):
+                for y in range(lo, hi, 10):
+                    total = hit = clash = 0.0
+                    ok = True
+                    boxes = []
+                    for m, fp, off in fps:
+                        my = y + (m.dy * k if m is not o else 0)
+                        top = int(my - (off if off is not None else fp.shape[0] // 2))
+                        bot = top + fp.shape[0]
+                        if top < lo - (0 if m is o else 400) or bot > hi or fp.shape[1] > W + 40:
+                            ok = False
+                            break
+                        w = fp.shape[1]
+                        x0 = {"c": (W - w) // 2, "l": min(10, (W - w) // 2), "r": max(W - 10 - w, (W - w) // 2)}[side]
+                        xs = max(0, x0)
+                        reg = prot[top:bot:4, xs:x0 + w:4]
+                        f = fp[:, xs - x0:][::4, ::4][: reg.shape[0], : reg.shape[1]]
+                        hit += float((reg * f).sum())
+                        total += float(f.sum())
+                        boxes.append((m, x0, top, x0 + w, bot))
+                    if not ok:
+                        continue
+                    for q, qx0, qt, qx1, qb in placed:
+                        for m, x0, top, x1, bot in boxes:
+                            if q.t_in < m.t_out and m.t_in < q.t_out and top < qb and qt < bot and x0 < qx1 and qx0 < x1:
+                                clash += 5.0
+                    frac = hit / (total + 1e-6)
+                    c = frac + clash + 0.00006 * abs(y - o.pref_y) + 0.02 * (1 - k) + (0.008 if side != "c" else 0)
+                    if best is None or c < best[0]:
+                        best = (c, frac, k, side, y, boxes)
+        c, frac, k, side, y, boxes = best
+        for m in members:
+            m.set_scale(k)
+        for m, x0, top, x1, bot in boxes:
+            m.y = y + (m.dy * k if m is not o else 0)
+            m.cx = (x0 + x1) / 2
+            placed.append((m, x0, top, x1, bot))
+        if report:
+            name = getattr(o, "text", None) or type(o).__name__
+            print(f"{o.t_in:6.2f}  y={y:5.0f} {side} x{k:.2f}  covers {frac * 100:5.1f}%  {name[:44]}")
+    return overlays
 
 
 def render_frame(i, overlays):
@@ -605,10 +771,30 @@ def soundtrack(path):
 
 # ----------------------------------------------------------------------------- main
 
+def qa_sheet(overlays):
+    """For each overlay, its frame with the protected areas tinted red, so placements can be checked by eye."""
+    th = []
+    for o in overlays:
+        t = min(o.t_out - 0.05, o.t_in + 0.6)
+        fr = arr(render_frame(int(t * FPS), overlays))
+        m = protected(t)[..., None]
+        fr = fr * (1 - 0.45 * m) + np.array([255, 0, 0], np.float32) * 0.45 * m
+        th.append(img(fr).resize((180, 320)))
+    cols = 10
+    sheet = Image.new("RGB", (180 * cols, 320 * ((len(th) + cols - 1) // cols)), "white")
+    for k, im in enumerate(th):
+        sheet.paste(im, ((k % cols) * 180, (k // cols) * 320))
+    sheet.save(os.path.join(OUT, "qa_sheet.jpg"), quality=88)
+    print("qa sheet written")
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     plates()
-    overlays = build_overlays()
+    overlays = place_overlays(build_overlays())
+    if "--qa" in sys.argv:
+        qa_sheet(overlays)
+        return
     if "--preview" in sys.argv:
         times = [0.3, 3.2, 5.5, 9.0, 13.5, 17.0, 20.0, 23.5, 27.5, 30.0, 33.0, 35.0, 39.5, 42.0, 45.8, 47.6, 50.0,
                  52.0, 55.0, 59.0, 61.5, 64.0, 67.5, 69.5, 72.5, 75.5, 79.0, 82.5, 85.5, 87.5, 90.5]
