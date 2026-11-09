@@ -125,22 +125,21 @@ def main():
 
     # LEFT - Khawaja, serious, to camera; warm key
     k = Image.open(os.path.join(HERE, "cut_khawaja.png")).convert("RGBA")
-    k = k.crop((0, 0, k.width, int(k.height * 0.6)))       # head and chin, above the reel's captions
-    k = k.resize((int(k.width * 760 / k.height), 760), Image.LANCZOS)
+    k = k.resize((int(k.width * 1080 / k.height), 1080), Image.LANCZOS)
     k = regrade(k, color=1.05, contrast=1.12, bright=1.06, sharpen=(1.0, 60, 1))
     k = tw.directional_light(k, "left", (255, 190, 110), 0.55)
-    k = fade_bottom(k, 600, 760)
-    kx, ky = 470 - k.width // 2, 40
+    k = fade_bottom(k, 700, 1060)
+    kx, ky = 430 - k.width // 2, 20
     place(base, k, kx, ky, wrap=0.4, rim_color=(255, 190, 110), rim_side=-1, rim_k=0.5, shadow=0.7)
-    base = dh.face_light(base, k, kx, ky, (470, 400), 240, 0.12)
+    base = dh.face_light(base, k, kx, ky, (430, 330), 220, 0.1)
 
     # RIGHT - Lehmann, arms crossed, sunglasses; cold key
     lm = Image.open(os.path.join(HERE, "cut_lehmann.png")).convert("RGBA")
-    lm = lm.resize((int(lm.width * 1000 / lm.height), 1000), Image.LANCZOS)
+    lm = lm.resize((int(lm.width * 1150 / lm.height), 1150), Image.LANCZOS)
     lm = regrade(lm, color=0.85, contrast=1.12, bright=1.0, sharpen=(1.0, 60, 1), tint=(150, 180, 220), tint_k=0.12)
     lm = tw.directional_light(lm, "right", (170, 200, 240), 0.5)
-    lm = fade_bottom(lm, 640, 960)
-    lx, ly = 1450 - lm.width // 2, 0
+    lm = fade_bottom(lm, 700, 1080)
+    lx, ly = 1470 - lm.width // 2, 20
     place(base, lm, lx, ly, wrap=0.4, rim_color=(160, 200, 255), rim_side=1, rim_k=0.5, shadow=0.7)
 
     dh.crack(base)
