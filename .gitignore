@@ -18,3 +18,5 @@ doc_video/reel/.hyperframes/
 doc_video/footage/new/
 odi_short/out/
 sandpaper/footage/
+sandpaper/out/
+sandpaper/vo/*.wav
