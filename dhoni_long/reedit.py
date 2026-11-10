@@ -141,8 +141,9 @@ def slomo(i, a, b):
     """1 s of the shot stretched to 2 s, with the impact hit."""
     d = (b - a) * 2
     x = np.zeros(int(d * SR), np.float32)
-    hit = resample(sfx.impact()) * 0.55 + resample(braam(1.8, 1.0)[: int(1.8 * sfx.SR)]) * 0.35
-    x[: len(hit)] += hit[: len(x)]
+    for h, g in ((resample(sfx.impact()), 0.55), (resample(braam(1.8, 1.0)), 0.35)):
+        h = h[: len(x)]
+        x[: len(h)] += h * g
     out = os.path.join(TMP, f"{i:02d}.mp4")
     run("-ss", str(a), "-t", str(b - a), "-i", SRC, "-i", audio_only(i, x),
         "-filter_complex", "[0:v]setpts=2.0*PTS,minterpolate=fps=30:mi_mode=blend[v]",
