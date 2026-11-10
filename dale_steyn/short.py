@@ -142,7 +142,7 @@ def clip(name, n, a=0.0, b=1.0, z=5, at=0.0):
         f'<video id="{i}v" class="full" src="{media("footage/clips/" + name + ".mp4")}" muted playsinline data-start="{s}" '
         f'data-duration="{d}" data-media-start="{at}"></video><div class="scrim"></div></div>')
     anim(f'tl.fromTo("#{i}",{{opacity:0,x:{90 * dd},filter:"blur(12px)"}},{{opacity:1,x:0,filter:"blur(0px)",duration:0.25,ease:"expo.out"}},{s})')
-    anim(f'tl.fromTo("#{i}v",{{scale:1.04}},{{scale:1.14,duration:{d},ease:"none"}},{s})')
+    anim(f'tl.fromTo("#{i}v",{{scale:1.0}},{{scale:1.03,duration:{d},ease:"none"}},{s})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.12}},{round(s + d - 0.12, 2)})')
     SHOTS.append((s, s + d, i))
 
