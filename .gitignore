@@ -36,3 +36,12 @@ dravid_adelaide/blender/log_*.txt
 dravid_adelaide/blender/render.log
 dravid_adelaide/footage/src/
 dravid_adelaide/__pycache__/
+dale_steyn/out/
+dale_steyn/hf/media/
+dale_steyn/hf/.hyperframes/
+dale_steyn/hf/gsap.min.js
+dale_steyn/blender/renders/
+dale_steyn/blender/log_*.txt
+dale_steyn/blender/render.log
+dale_steyn/footage/clips/
+dale_steyn/__pycache__/
