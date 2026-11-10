@@ -44,19 +44,20 @@ ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420
 EDL = [
     ("clip", 0.00, 78.50, "thumb_open"),          # hook + "4 years earlier" tease + title
     ("clip", 141.20, 149.30, None),                 # 274/6 -> 275 to win
-    ("clip", 199.05, 262.30, None),                 # 114/3 -> out walked Dhoni -> GUWAHATI 2007 (from ~1:27)
+    ("clip", 199.05, 265.70, None),                 # 114/3 -> out walked Dhoni -> GUWAHATI 2007 (from ~1:27)
     ("card", ("PAR ASLI TWIST ABHI BAAKI HAI…", "MURALI NE KHUD KYA BOLA?"), 3.0, None),
-    ("clip", 262.30, 290.05, None),                 # THE MURALI SECRET ... the quote
+    ("clip", 265.70, 290.05, None),                 # THE MURALI SECRET ... the quote
     ("hold", 290.00, 2.0, None),                    # quote breathes: 2 s, music only
     ("clip", 290.05, 370.85, None),                 # the chase ... "not even a toilet break"
     ("beat", 370.85, 0.7, None),                    # comic pause + pop
     ("clip", 370.85, 394.10, None),                 # superstition, the man Dhoni held back
     ("card", ("AUR PHIR WOH OVER AAYA…", "JISKA PLAN 4 SAAL PEHLE BANA THA"), 3.0, None),
     ("clip", 411.75, 429.70, None),                 # THE FINISH, over 49, the 4
-    ("clip", 459.75, 462.05, None),                 # time stood still
-    ("hush", 462.05, 0.5, None),                    # 0.5 s silence before the hit
-    ("slomo", 462.05, 463.05, None),                # impact + 2 s slow-motion still
-    ("clip", 462.05, 486.15, None),                 # the six, MS DHONI, Shastri's call
+    ("clip", 459.75, 463.00, None),                 # time stood still
+    ("hush", 463.00, 0.5, None),                    # 0.5 s silence before the hit
+    ("clip", 463.00, 464.35, None),                 # Kulasekara runs in
+    ("slomo", 464.35, 465.25, None),                # contact: impact + slow-motion follow-through
+    ("clip", 465.25, 486.15, None),                 # ball in the stands, MS DHONI, Shastri's call
     ("clip", 434.15, 445.25, None),                 # Kulasekara: "Dhoni never spoke about that final"
     ("clip", 452.85, 459.75, None),                 # MCA pavilion, L block, seat 210
     ("clip", 500.55, 529.00, None),                 # 28 years. they say a six won it. it was a plan. end screen
