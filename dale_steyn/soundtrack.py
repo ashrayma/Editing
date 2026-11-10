@@ -68,32 +68,21 @@ def main():
             cache[name] = getattr(sfx, name)()
         add(fx, cache[name], max(0.0, t), g)
 
+    # light touch: soft whooshes on cuts (not every one), a hit only on the big stamps/3D, no pops or tick rolls
+    last_w = -9.0
     for t, kind in ev["events"]:
-        if kind == "whoosh":
-            put("whoosh", t - 0.12, 0.16)
-        elif kind == "impact":
-            put("impact", t, 0.26)
-        elif kind == "soft":
-            put("pop", t, 0.10)
-        elif kind == "roll":
-            for q in range(9):
-                put("tick", t + 0.05 * q, 0.09)
-        elif kind == "pop":
-            put("pop", t, 0.13)
+        if kind == "whoosh" and t - last_w > 1.5:
+            put("whoosh", t - 0.12, 0.07)
+            last_w = t
         elif kind == "hit":
-            put("impact", t, 0.3)
-        elif kind == "tick_run":
-            for q in range(28):
-                put("tick", t + 0.12 * q, 0.07)
-    put("braam", s("l03", 0.6), 0.55)                # FEAR.
-    put("riser", s("l08", 0.55) - 1.5, 0.3)
-    put("braam", s("l08", 0.55), 0.6)                # Dale Steyn
-    put("braam", s("l12", 0.5), 0.45)                # that roar
-    put("riser", s("l22", 0.0) - 1.3, 0.25)
-    put("braam", s("l22", 0.3), 0.45)                # who is #1?
-    put("ding", s(LAST, 0.2), 0.22)
+            put("impact", t, 0.16)
+    put("braam", s("l03", 0.6), 0.35)                # FEAR.
+    put("riser", s("l08", 0.55) - 1.5, 0.18)
+    put("braam", s("l08", 0.55), 0.4)                # Dale Steyn
+    put("riser", s("l22", 0.0) - 1.3, 0.15)
+    put("ding", s(LAST, 0.2), 0.15)
 
-    mix = vo * 0.95 + m * 0.24 + fx * 0.55
+    mix = vo * 0.95 + m * 0.24 + fx * 0.4
     mix = np.tanh(mix * 1.05) / np.tanh(1.05)
     mix = mix / max(1e-6, np.abs(mix).max()) * 0.9
     with wave.open(os.path.join(HERE, "out", "soundtrack.wav"), "wb") as w:
