@@ -43,8 +43,8 @@ ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420
 # the new running order: (kind, args)
 EDL = [
     ("clip", 0.00, 78.50, "thumb_open"),          # hook + "4 years earlier" tease + title
-    ("clip", 135.40, 265.70, None),                 # the final from Mahela's 103*: 275, 31/2, 114/3, out walked
-                                                    # Dhoni, GUWAHATI 2007 ... same move, same result
+    ("clip", 141.20, 149.30, None),                 # 274/6 -> 275 to win
+    ("clip", 199.05, 265.70, None),                 # 114/3 -> out walked Dhoni -> GUWAHATI 2007 -> same result
     ("card", ("PAR ASLI TWIST ABHI BAAKI HAI…", "MURALI NE KHUD KYA BOLA?"), 3.0, None),
     ("clip", 265.70, 290.05, None),                 # THE MURALI SECRET ... the quote
     ("hold", 290.00, 2.0, None),                    # quote breathes: 2 s, music only
@@ -52,13 +52,15 @@ EDL = [
     ("beat", 370.85, 0.7, None),                    # comic pause + pop
     ("clip", 370.85, 394.10, None),                 # superstition, the man Dhoni held back
     ("card", ("AUR PHIR WOH OVER AAYA…", "JISKA PLAN 4 SAAL PEHLE BANA THA"), 3.0, None),
-    ("clip", 411.75, 463.00, None),                 # THE FINISH, over 49, the 4, Kulasekara (later at CSK under
-                                                    # Dhoni), Gavaskar and seat 210 L block, time stood still
+    ("clip", 411.75, 429.70, None),                 # THE FINISH, over 49, the 4
+    ("clip", 459.75, 463.00, None),                 # time stood still
     ("hush", 463.00, 0.5, None),                    # 0.5 s silence before the ball
     ("clip", 463.00, 465.25, None),                 # the six, real time
     ("slomo", 464.35, 465.25, None),                # impact + 2x slow-motion replay of the contact
-    ("clip", 465.25, 529.00, None),                 # ball in the stands, MS DHONI, Shastri, 28 years, it was a plan,
-                                                    # end screen
+    ("clip", 465.25, 486.15, None),                 # ball in the stands, MS DHONI, Shastri's call
+    ("clip", 429.70, 459.75, None),                 # Kulasekara in full (later at CSK under Dhoni, his line),
+                                                    # Gavaskar and the ball near seat 210, L block
+    ("clip", 500.55, 529.00, None),                 # 28 years. they say a six won it. it was a plan. end screen
 ]
 
 
