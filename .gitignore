@@ -17,3 +17,10 @@ doc_video/reel/media/
 doc_video/reel/.hyperframes/
 doc_video/footage/new/
 rajat/src/
+rajat/node_modules/
+rajat/reel/media/
+rajat/reel/.hyperframes/
+rajat/out/*.wav
+rajat/out/*.mp4
+rajat/out/snap*/
+rajat/assets/
