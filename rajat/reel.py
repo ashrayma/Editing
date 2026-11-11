@@ -170,6 +170,10 @@ def cutout(slot, start, dur, hint, x, y, h, z=15):
     """A player cut-out (assets/<slot>.png with transparency) standing on the bottom of the media area."""
     i = nid("co")
     rel, _ = asset(slot)
+    if rel:
+        from PIL import Image
+        with Image.open(os.path.join(OUT, rel)) as im:
+            x = round((W - h * im.width / im.height) / 2)  # centre real cut-outs
     inner = (f'<img src="{rel}" style="height:{h}px">' if rel else
              f'<div class="ph cut" style="height:{h}px;width:{round(h * 0.62)}px"><svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="15"/>'
              f'<path d="M12 100c3-34 18-50 38-50s35 16 38 50z"/></svg><span>{html.escape(hint)}</span></div>')
@@ -344,16 +348,18 @@ def build_scenes():
     s, d = at("bcci"), until_next("bcci")
     scene(s, d, "yellow")
     words(["BCCI"], s, d, 330, size=380, colors=["outline"], z=21, sfx_kind="impact")
-    photo("bcci_post", s + 0.25, d - 0.25, "BCCI ANNOUNCEMENT (screen recording)", 150, 600, 780, 640, tilt=2)
+    photo("bcci_post", s + 0.25, d - 0.25, "GAUTAM GAMBHIR (BCCI)", 130, 600, 820, 620, tilt=2)
     label("A FEW PEOPLE AT THE BCCI", span("bcci", 0.45), d - span("bcci", 0.45) + s, 1320, color=INK, bg="#fff", size=40)
 
     # 3. India A card, WITHDRAWN stamp + injury pill
     s, d = at("fifty"), until_next("fifty")
     scene(s, d, "dark")
     label("FOR CONTEXT", s, d, 360, size=34)
-    squad_card(s, d, "INDIA A", "RISING STARS ASIA CUP 2026", "50 OVERS", [("RAJAT PATIDAR", "name")],
-               y=470, stamp="WITHDRAWN", stamp_at=span("fifty", 0.42), tag="8 NOV 2026")
-    label("✚  MANAGING INJURIES", span("fifty", 0.68), d - span("fifty", 0.68) + s, 1200, color="#fff", bg="rgba(229,72,77,.9)", size=40)
+    s2 = span("fifty", 0.38)
+    photo("news_cricinfo", s, s2 - s + 0.2, "NEWS HEADLINE", 70, 520, 940, 597, tag="8 NOV 2026", tilt=-1)
+    squad_card(s2, s + d - s2, "INDIA A", "RISING STARS ASIA CUP 2026", "50 OVERS", [("RAJAT PATIDAR", "name")],
+               y=470, stamp="WITHDRAWN", stamp_at=span("fifty", 0.58))
+    label("✚  MANAGING INJURIES", span("fifty", 0.75), d - span("fifty", 0.75) + s, 1200, color="#fff", bg="rgba(229,72,77,.9)", size=40)
 
     # 4. honestly? I respect that. Your body comes first.
     s, d = at("respect"), until_next("respect")
