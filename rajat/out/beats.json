@@ -70,12 +70,9 @@
   ],
   "ask": [
    60.63,
-   64.43
+   67.29
   ]
  },
- "vo_end": 64.43,
- "note": "ask line has no VO yet",
- "no_vo": [
-  "ask"
- ]
+ "vo_end": 67.29,
+ "no_vo": []
 }

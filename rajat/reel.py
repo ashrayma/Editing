@@ -454,10 +454,10 @@ def build_scenes():
     s = at("ask")
     d = TOTAL - s
     scene(s, d, "yellow")
-    q = span("ask", 0.42)
+    q = span("ask", 0.77)  # "and follow for the next letter"
     words(["GOOD ADVICE?"], s, q - s, 560, size=170, colors=[INK], sfx_kind="impact")
-    words(["OR JUST T20?"], s + 0.9, q - s - 0.9, 790, size=170, colors=[RED], sfx_kind="impact")
-    label("💬  ONE WORD IN THE COMMENTS", s + 1.4, q - s - 1.4, 1060, color="#fff", bg=INK, size=40)
+    words(["OR JUST T20?"], span("ask", 0.19), q - span("ask", 0.19), 790, size=170, colors=[RED], sfx_kind="impact")
+    label("💬  TELL ME IN THE COMMENTS", span("ask", 0.59), q - span("ask", 0.59), 1060, color="#fff", bg=INK, size=40)
     words(["FOLLOW", "FOR THE NEXT", "LETTER"], q, TOTAL - q, 470, size=170, colors=[INK, INK, RED])
     words(["Yours,", "TheCricketLounge"], q + 0.6, TOTAL - q - 0.6, 1130, size=80, font="serif", colors=[INK, INK], stagger=0.2, sfx_kind="pop")
 
