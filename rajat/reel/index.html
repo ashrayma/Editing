@@ -20,6 +20,15 @@ html,body{margin:0;background:#121214}
 .ph svg{width:42%;fill:rgba(255,255,255,.18)}
 .ph.cut{background:rgba(0,0,0,.18);border:4px dashed rgba(0,0,0,.35);border-radius:30px;color:rgba(0,0,0,.6)}
 .ph.cut svg{fill:rgba(0,0,0,.25)}
+.fb{position:absolute;inset:0;z-index:12;overflow:hidden;background:#0d0d0f}
+.fbcover{position:absolute;inset:0}
+.fbcover video,.fbcover img,.fbcover .ph{width:100%;height:100%;object-fit:cover;display:block}
+.fbback{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(38px) brightness(.45) saturate(1.2)}
+.fbfront{position:absolute;left:0;right:0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 72%,transparent 100%)}
+.fbfront img,.fbfront video,.fbfront .ph{width:100%;height:100%;object-fit:cover;display:block}
+.fbshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,15,.75) 0%,rgba(13,13,15,0) 22%,rgba(13,13,15,0) 52%,rgba(13,13,15,.92) 78%,rgba(13,13,15,.96) 100%)}
+.fbshade.cover{background:linear-gradient(180deg,rgba(13,13,15,.55) 0%,rgba(13,13,15,0) 18%,rgba(13,13,15,0) 55%,rgba(13,13,15,.55) 75%,rgba(13,13,15,.8) 100%)}
+.fbtag{position:absolute;left:60px;top:340px;background:#FEDE5C;color:#121214;font:900 34px "Inter Display";letter-spacing:2px;padding:12px 20px;border-radius:8px}
 .cutout{position:absolute;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
 .words{position:absolute;left:50px;right:50px;line-height:.98;letter-spacing:-0.01em}
 .words.anton{text-transform:uppercase}
@@ -73,12 +82,12 @@ html,body{margin:0;background:#121214}
 <div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-fps="30" data-duration="68.89">
 <div class="brand"><img src="media/logo.png"></div>
 <div id="bg1" class="bg dark clip" data-start="0.0" data-duration="3.54"><div class="band"></div></div>
-<div id="ph2" class="photo clip" data-start="0.0" data-duration="3.54" style="left:170px;top:360px;width:740px;height:820px;z-index:20;transform:rotate(-3deg)"><div class="pframe"><video class="clip " src="media/rajat_face.mp4" muted playsinline data-start="0.0" data-duration="3.54" data-media-start="0"></video></div><div class="ptag">RCB CAPTAIN</div></div>
-<div id="w3" class="words serif clip" data-start="0.48" data-duration="3.39" style="top:1230px;font-size:150px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="w3l0" style="color:#fff">Dear Rajat,</div></div></div>
+<div id="fb2" class="fb clip" data-start="0.0" data-duration="3.54"><div class="fbcover" id="fb2m"><video class="clip " src="media/rajat_face.mp4" muted playsinline data-start="0.0" data-duration="3.54" data-media-start="0"></video></div><div class="fbshade cover"></div><div class="fbtag">RCB CAPTAIN</div></div>
+<div id="w3" class="words serif clip" data-start="0.48" data-duration="3.39" style="top:1150px;font-size:170px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="w3l0" style="color:#fff">Dear Rajat,</div></div></div>
 <div id="bg4" class="bg yellow clip" data-start="3.87" data-duration="4.42"><div class="band"></div></div>
-<div id="w5" class="words anton clip" data-start="3.87" data-duration="4.42" style="top:330px;font-size:380px;text-align:center;z-index:21"><div class="mask"><div class="ln" id="w5l0" style="color:transparent;-webkit-text-stroke:6px #121214">BCCI</div></div></div>
-<div id="ph6" class="photo clip" data-start="4.12" data-duration="4.17" style="left:130px;top:600px;width:820px;height:620px;z-index:20;transform:rotate(2deg)"><div class="pframe"><img class="" src="media/bcci_post.jpg"></div></div>
-<div id="lb7" class="label clip" data-start="5.55" data-duration="2.74" style="top:1320px;font-size:40px;color:#121214;background:#fff;padding:10px 22px;border-radius:10px;z-index:31">A FEW PEOPLE AT THE BCCI</div>
+<div id="fb5" class="fb clip" data-start="3.87" data-duration="4.42"><img class="fbback" src="media/bcci_post.jpg"><div class="fbfront" id="fb5m" style="top:400px;height:1080px"><img style="object-position:40% 50%" class="" src="media/bcci_post.jpg"></div><div class="fbshade"></div></div>
+<div id="w6" class="words anton clip" data-start="4.07" data-duration="4.22" style="top:300px;font-size:300px;text-align:center;z-index:31"><div class="mask"><div class="ln" id="w6l0" style="color:#FEDE5C">BCCI</div></div></div>
+<div id="lb7" class="label clip" data-start="5.55" data-duration="2.74" style="top:1280px;font-size:44px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:31">A FEW PEOPLE AT THE BCCI</div>
 <div id="bg8" class="bg dark clip" data-start="8.29" data-duration="4.4"><div class="band"></div></div>
 <div id="lb9" class="label clip" data-start="8.29" data-duration="4.4" style="top:360px;font-size:34px;color:#FEDE5C;z-index:31">FOR CONTEXT</div>
 <div id="ph10" class="photo clip" data-start="8.29" data-duration="1.6900000000000002" style="left:70px;top:520px;width:940px;height:597px;z-index:20;transform:rotate(-1deg)"><div class="pframe"><img class="" src="media/news_cricinfo.png"></div><div class="ptag">8 NOV 2026</div></div>
@@ -105,8 +114,8 @@ html,body{margin:0;background:#121214}
 <div id="bn31" class="bign clip" data-start="30.8" data-duration="1.46" style="top:470px"><div class="bnum anton" id="bn31n" style="font-size:560px;color:#121214">33</div><div class="bsub" id="bn31s"></div><div class="strike" id="bn31k"></div></div>
 <div id="ru32" class="ruler clip" data-start="30.8" data-duration="1.46" style="top:1130px"><div class="rtrack" id="ru32t"><div class="tk maj" style="left:0px"><span>24</span></div><div class="tk maj" style="left:170px"><span>25</span></div><div class="tk maj" style="left:340px"><span>26</span></div><div class="tk maj" style="left:510px"><span>27</span></div><div class="tk maj" style="left:680px"><span>28</span></div><div class="tk maj" style="left:850px"><span>29</span></div><div class="tk maj" style="left:1020px"><span>30</span></div><div class="tk maj" style="left:1190px"><span>31</span></div><div class="tk maj" style="left:1360px"><span>32</span></div><div class="tk maj" style="left:1530px"><span>33</span></div><div class="tk maj" style="left:1700px"><span>34</span></div><div class="tk maj" style="left:1870px"><span>35</span></div><div class="tk maj" style="left:2040px"><span>36</span></div><div class="tk maj" style="left:2210px"><span>37</span></div><div class="tk maj" style="left:2380px"><span>38</span></div><div class="tk maj" style="left:2550px"><span>39</span></div><div class="tk maj" style="left:2720px"><span>40</span></div><div class="tm" style="left:42.5px"></div><div class="tm" style="left:85.0px"></div><div class="tm" style="left:127.5px"></div><div class="tm" style="left:212.5px"></div><div class="tm" style="left:255.0px"></div><div class="tm" style="left:297.5px"></div><div class="tm" style="left:382.5px"></div><div class="tm" style="left:425.0px"></div><div class="tm" style="left:467.5px"></div><div class="tm" style="left:552.5px"></div><div class="tm" style="left:595.0px"></div><div class="tm" style="left:637.5px"></div><div class="tm" style="left:722.5px"></div><div class="tm" style="left:765.0px"></div><div class="tm" style="left:807.5px"></div><div class="tm" style="left:892.5px"></div><div class="tm" style="left:935.0px"></div><div class="tm" style="left:977.5px"></div><div class="tm" style="left:1062.5px"></div><div class="tm" style="left:1105.0px"></div><div class="tm" style="left:1147.5px"></div><div class="tm" style="left:1232.5px"></div><div class="tm" style="left:1275.0px"></div><div class="tm" style="left:1317.5px"></div><div class="tm" style="left:1402.5px"></div><div class="tm" style="left:1445.0px"></div><div class="tm" style="left:1487.5px"></div><div class="tm" style="left:1572.5px"></div><div class="tm" style="left:1615.0px"></div><div class="tm" style="left:1657.5px"></div><div class="tm" style="left:1742.5px"></div><div class="tm" style="left:1785.0px"></div><div class="tm" style="left:1827.5px"></div><div class="tm" style="left:1912.5px"></div><div class="tm" style="left:1955.0px"></div><div class="tm" style="left:1997.5px"></div><div class="tm" style="left:2082.5px"></div><div class="tm" style="left:2125.0px"></div><div class="tm" style="left:2167.5px"></div><div class="tm" style="left:2252.5px"></div><div class="tm" style="left:2295.0px"></div><div class="tm" style="left:2337.5px"></div><div class="tm" style="left:2422.5px"></div><div class="tm" style="left:2465.0px"></div><div class="tm" style="left:2507.5px"></div><div class="tm" style="left:2592.5px"></div><div class="tm" style="left:2635.0px"></div><div class="tm" style="left:2677.5px"></div></div><div class="rmark"></div></div>
 <div id="bg33" class="bg dark clip" data-start="32.26" data-duration="3.16"><div class="band"></div></div>
-<div id="ph34" class="photo clip" data-start="32.26" data-duration="3.16" style="left:90px;top:420px;width:900px;height:760px;z-index:20;transform:rotate(-2deg)"><div class="pframe"><img class="" src="media/ipl_trophy.jpg"></div><div class="ptag">RCB · IPL CHAMPIONS 2025</div></div>
-<div id="lb35" class="label clip" data-start="33.46" data-duration="1.9600000000000009" style="top:1250px;font-size:40px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:31">FIRST TITLE IN 18 SEASONS</div>
+<div id="fb34" class="fb clip" data-start="32.26" data-duration="3.16"><img class="fbback" src="media/ipl_trophy.jpg"><div class="fbfront" id="fb34m" style="top:270px;height:1200px"><img style="object-position:30% 50%" class="" src="media/ipl_trophy.jpg"></div><div class="fbshade"></div><div class="fbtag">RCB · IPL CHAMPIONS 2025</div></div>
+<div id="lb35" class="label clip" data-start="33.46" data-duration="1.9600000000000009" style="top:1290px;font-size:40px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:31">FIRST TITLE IN 18 SEASONS</div>
 <div id="bg36" class="bg dark clip" data-start="35.42" data-duration="3.1"><div class="band"></div></div>
 <div id="lb37" class="label clip" data-start="35.42" data-duration="3.1" style="top:470px;font-size:36px;color:#FEDE5C;z-index:31">EVERY FORMAT</div>
 <div id="ti38" class="tiles clip" data-start="35.42" data-duration="3.1" style="top:620px"><div class="tile" id="ti380"><div class="tt anton">TEST</div><div class="ts">5 DAYS</div><div class="tick" id="ti380c">✓</div></div><div class="tile" id="ti381"><div class="tt anton">ODI</div><div class="ts">50 OVERS</div><div class="tick" id="ti381c">✓</div></div><div class="tile" id="ti382"><div class="tt anton">T20</div><div class="ts">20 OVERS</div><div class="tick" id="ti382c">✓</div></div></div>
@@ -123,7 +132,7 @@ html,body{margin:0;background:#121214}
 <div id="ph49" class="photo clip" data-start="43.97" data-duration="4.230000000000004" style="left:170px;top:1120px;width:260px;height:260px;z-index:25;transform:rotate(0deg)"><div class="pframe"><img class="" src="media/rinku.jpg"></div></div>
 <div id="ph50" class="photo clip" data-start="45.56" data-duration="2.6400000000000006" style="left:650px;top:1120px;width:260px;height:260px;z-index:25;transform:rotate(0deg)"><div class="pframe"><img class="" src="media/badoni.jpg"></div></div>
 <div id="bg51" class="bg dark clip" data-start="48.2" data-duration="3.05"><div class="band"></div></div>
-<div id="ph52" class="photo clip" data-start="48.2" data-duration="3.05" style="left:140px;top:400px;width:800px;height:840px;z-index:20;transform:rotate(2deg)"><div class="pframe"><img class="" src="media/rajat_india.jpg"></div><div class="ptag">INDIA DEBUT · 2023</div></div>
+<div id="fb52" class="fb clip" data-start="48.2" data-duration="3.05"><img class="fbback" src="media/rajat_india.jpg"><div class="fbfront" id="fb52m" style="top:270px;height:1200px"><img style="object-position:74% 50%" class="" src="media/rajat_india.jpg"></div><div class="fbshade"></div><div class="fbtag">INDIA DEBUT · 2023</div></div>
 <div id="bg53" class="bg yellow clip" data-start="51.25" data-duration="3.49"><div class="band"></div></div>
 <div id="w54" class="words anton clip" data-start="51.25" data-duration="3.490000000000002" style="top:470px;font-size:190px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="w54l0" style="color:#121214">GET FIT.</div></div></div>
 <div id="w55" class="words anton clip" data-start="52.08" data-duration="2.6600000000000037" style="top:680px;font-size:190px;text-align:center;z-index:30"><div class="mask"><div class="ln" id="w55l0" style="color:#121214">SCORE BIG.</div></div></div>
@@ -219,17 +228,18 @@ html,body{margin:0;background:#121214}
 <script>
 const tl = gsap.timeline({paused:true});
 tl.fromTo("#bg1",{opacity:0},{opacity:1,duration:0.3},0.0)
-tl.fromTo("#ph2",{scale:0.6,opacity:0},{x:0,y:0,scale:1,opacity:1,duration:0.75,ease:"expo.out"},0.0)
-tl.fromTo("#ph2 .pframe > *",{scale:1.12},{scale:1,duration:3.54,ease:"none"},0.0)
-tl.to("#ph2",{opacity:0,y:-120,duration:0.35,ease:"power2.in"},3.19)
+tl.fromTo("#fb2",{opacity:0},{opacity:1,duration:0.35},0.0)
+tl.fromTo("#fb2m",{scale:1.1},{scale:1,duration:3.54,ease:"none"},0.0)
+tl.fromTo("#fb2 .fbtag",{x:-60,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},0.3)
+tl.to("#fb2",{opacity:0,duration:0.3},3.24)
 tl.fromTo("#w3l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},0.53)
 tl.to("#w3",{opacity:0,duration:0.3},3.57)
 tl.fromTo("#bg4",{clipPath:"polygon(0 0,0 0,0 100%,0 100%)"},{clipPath:"polygon(0 0,130% 0,100% 100%,-30% 100%)",duration:0.55,ease:"expo.inOut"},3.87)
-tl.fromTo("#w5l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},3.92)
-tl.to("#w5",{opacity:0,duration:0.3},7.99)
-tl.fromTo("#ph6",{y:240,opacity:0},{x:0,y:0,scale:1,opacity:1,duration:0.75,ease:"expo.out"},4.12)
-tl.fromTo("#ph6 .pframe > *",{scale:1.12},{scale:1,duration:4.17,ease:"none"},4.12)
-tl.to("#ph6",{opacity:0,y:-120,duration:0.35,ease:"power2.in"},7.94)
+tl.fromTo("#fb5",{opacity:0},{opacity:1,duration:0.35},3.87)
+tl.fromTo("#fb5m",{scale:1.1},{scale:1,duration:4.42,ease:"none"},3.87)
+tl.to("#fb5",{opacity:0,duration:0.3},7.99)
+tl.fromTo("#w6l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},4.12)
+tl.to("#w6",{opacity:0,duration:0.3},7.99)
 tl.fromTo("#lb7",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},5.55)
 tl.to("#lb7",{opacity:0,duration:0.25},8.04)
 tl.fromTo("#bg8",{opacity:0},{opacity:1,duration:0.3},8.29)
@@ -292,9 +302,10 @@ tl.fromTo("#ru32t",{x:200.0},{x:-990.0,duration:1.4,ease:"expo.out"},30.90000000
 tl.fromTo("#ru32",{opacity:0},{opacity:1,duration:0.3},30.8)
 tl.to("#ru32",{opacity:0,duration:0.3},31.96)
 tl.fromTo("#bg33",{opacity:0},{opacity:1,duration:0.3},32.26)
-tl.fromTo("#ph34",{y:240,opacity:0},{x:0,y:0,scale:1,opacity:1,duration:0.75,ease:"expo.out"},32.26)
-tl.fromTo("#ph34 .pframe > *",{scale:1.12},{scale:1,duration:3.16,ease:"none"},32.26)
-tl.to("#ph34",{opacity:0,y:-120,duration:0.35,ease:"power2.in"},35.07)
+tl.fromTo("#fb34",{opacity:0},{opacity:1,duration:0.35},32.26)
+tl.fromTo("#fb34m",{scale:1.1},{scale:1,duration:3.16,ease:"none"},32.26)
+tl.fromTo("#fb34 .fbtag",{x:-60,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},32.56)
+tl.to("#fb34",{opacity:0,duration:0.3},35.12)
 tl.fromTo("#lb35",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},33.46)
 tl.to("#lb35",{opacity:0,duration:0.25},35.17)
 tl.fromTo("#bg36",{opacity:0},{opacity:1,duration:0.3},35.42)
@@ -339,9 +350,10 @@ tl.fromTo("#ph50",{x:700,opacity:0},{x:0,y:0,scale:1,opacity:1,duration:0.75,eas
 tl.fromTo("#ph50 .pframe > *",{scale:1.12},{scale:1,duration:2.6400000000000006,ease:"none"},45.56)
 tl.to("#ph50",{opacity:0,y:-120,duration:0.35,ease:"power2.in"},47.85)
 tl.fromTo("#bg51",{opacity:0},{opacity:1,duration:0.3},48.2)
-tl.fromTo("#ph52",{y:240,opacity:0},{x:0,y:0,scale:1,opacity:1,duration:0.75,ease:"expo.out"},48.2)
-tl.fromTo("#ph52 .pframe > *",{scale:1.12},{scale:1,duration:3.05,ease:"none"},48.2)
-tl.to("#ph52",{opacity:0,y:-120,duration:0.35,ease:"power2.in"},50.9)
+tl.fromTo("#fb52",{opacity:0},{opacity:1,duration:0.35},48.2)
+tl.fromTo("#fb52m",{scale:1.1},{scale:1,duration:3.05,ease:"none"},48.2)
+tl.fromTo("#fb52 .fbtag",{x:-60,opacity:0},{x:0,opacity:1,duration:0.5,ease:"expo.out"},48.5)
+tl.to("#fb52",{opacity:0,duration:0.3},50.95)
 tl.fromTo("#bg53",{clipPath:"polygon(0 0,0 0,0 100%,0 100%)"},{clipPath:"polygon(0 0,130% 0,100% 100%,-30% 100%)",duration:0.55,ease:"expo.inOut"},51.25)
 tl.fromTo("#w54l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},51.3)
 tl.to("#w54",{opacity:0,duration:0.3},54.44)

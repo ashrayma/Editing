@@ -166,6 +166,36 @@ def photo(slot, start, dur, hint, x, y, w, h, tag=None, tilt=0, z=20, enter="up"
     return i
 
 
+def fullbleed(slot, start, dur, hint, pos="50% 50%", fg_h=1200, fg_top=270, tag=None):
+    """Media filling the whole 9:16 frame. Portrait media covers it; landscape media sits large in front of a
+    blurred, darkened copy of itself (no upscaling past what the source can hold). Dark fades top and bottom
+    keep the logo, text and captions readable."""
+    i = nid("fb")
+    events.append((start, "whoosh"))
+    rel, video = asset(slot)
+    portrait = False
+    if rel and not video:
+        from PIL import Image
+        with Image.open(os.path.join(OUT, rel)) as im:
+            portrait = im.width / im.height < 0.75
+    elif rel and video:
+        portrait = True
+    tg = f'<div class="fbtag">{html.escape(tag)}</div>' if tag else ""
+    if portrait:
+        inner = f'<div class="fbcover" id="{i}m">{media_html(slot, start, dur, hint)}</div>'
+    else:
+        back = f'<img class="fbback" src="{rel}">' if rel else ""
+        inner = (f'{back}<div class="fbfront" id="{i}m" style="top:{fg_top}px;height:{fg_h}px">'
+                 f'{media_html(slot, start, dur, hint).replace("<img ", f"<img style=\"object-position:{pos}\" ", 1)}</div>')
+    shade = "fbshade cover" if portrait else "fbshade"
+    add(f'<div id="{i}" class="fb clip" data-start="{start}" data-duration="{dur}">{inner}<div class="{shade}"></div>{tg}</div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.35}},{start})')
+    anim(f'tl.fromTo("#{i}m",{{scale:1.1}},{{scale:1,duration:{dur},ease:"none"}},{start})')
+    if tag:
+        anim(f'tl.fromTo("#{i} .fbtag",{{x:-60,opacity:0}},{{x:0,opacity:1,duration:0.5,ease:"expo.out"}},{round(start + 0.3, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
+
+
 def cutout(slot, start, dur, hint, x, y, h, z=15):
     """A player cut-out (assets/<slot>.png with transparency) standing on the bottom of the media area."""
     i = nid("co")
@@ -341,15 +371,15 @@ def build_scenes():
     # 1. Dear Rajat (face first, per the playbook: open on the star, never a title card)
     s, d = 0.0, until_next("dear")
     scene(s, d, "dark")
-    photo("rajat_face", s, d, "RAJAT FACE CLIP (celebration / interview)", 170, 360, 740, 820, tag="RCB CAPTAIN", tilt=-3, enter="pop")
-    words(["Dear Rajat,"], at("dear", 0.15), d - 0.15, 1230, size=150, font="serif", colors=["#fff"], stagger=0)
+    fullbleed("rajat_face", s, d, "RAJAT FACE CLIP", tag="RCB CAPTAIN")
+    words(["Dear Rajat,"], at("dear", 0.15), d - 0.15, 1150, size=170, font="serif", colors=["#fff"], stagger=0)
 
     # 2. a few people at the BCCI
     s, d = at("bcci"), until_next("bcci")
     scene(s, d, "yellow")
-    words(["BCCI"], s, d, 330, size=380, colors=["outline"], z=21, sfx_kind="impact")
-    photo("bcci_post", s + 0.25, d - 0.25, "GAUTAM GAMBHIR (BCCI)", 130, 600, 820, 620, tilt=2)
-    label("A FEW PEOPLE AT THE BCCI", span("bcci", 0.45), d - span("bcci", 0.45) + s, 1320, color=INK, bg="#fff", size=40)
+    fullbleed("bcci_post", s, d, "GAUTAM GAMBHIR (BCCI)", pos="40% 50%", fg_top=400, fg_h=1080)
+    words(["BCCI"], s + 0.2, d - 0.2, 300, size=300, colors=[Y], z=31, sfx_kind="impact")
+    label("A FEW PEOPLE AT THE BCCI", span("bcci", 0.45), d - span("bcci", 0.45) + s, 1280, color=INK, bg=Y, size=44)
 
     # 3. India A card, WITHDRAWN stamp + injury pill
     s, d = at("fifty"), until_next("fifty")
@@ -400,8 +430,8 @@ def build_scenes():
     # 9. IPL trophy
     s, d = at("trophy"), until_next("trophy")
     scene(s, d, "dark")
-    photo("ipl_trophy", s, d, "RCB IPL TROPHY LIFT (clip or photo)", 90, 420, 900, 760, tag="RCB · IPL CHAMPIONS 2025", tilt=-2)
-    label("FIRST TITLE IN 18 SEASONS", span("trophy", 0.45), s + d - span("trophy", 0.45), 1250, color=INK, bg=Y, size=40)
+    fullbleed("ipl_trophy", s, d, "RCB IPL TROPHY LIFT", pos="30% 50%", tag="RCB · IPL CHAMPIONS 2025")
+    label("FIRST TITLE IN 18 SEASONS", span("trophy", 0.45), s + d - span("trophy", 0.45), 1290, color=INK, bg=Y, size=40)
 
     # 10. T20 suits you
     s, d = at("suits"), until_next("suits")
@@ -433,7 +463,7 @@ def build_scenes():
     # 14. the India cap
     s, d = at("cap"), until_next("cap")
     scene(s, d, "dark")
-    photo("rajat_india", s, d, "RAJAT IN INDIA KIT (debut)", 140, 400, 800, 840, tag="INDIA DEBUT · 2023", tilt=2)
+    fullbleed("rajat_india", s, d, "RAJAT IN INDIA KIT", pos="74% 50%", tag="INDIA DEBUT · 2023")
 
     # 15. get fit, score big, make them call you back
     s, d = at("callback"), until_next("callback")
@@ -497,6 +527,15 @@ html,body{{margin:0;background:{INK}}}
 .ph svg{{width:42%;fill:rgba(255,255,255,.18)}}
 .ph.cut{{background:rgba(0,0,0,.18);border:4px dashed rgba(0,0,0,.35);border-radius:30px;color:rgba(0,0,0,.6)}}
 .ph.cut svg{{fill:rgba(0,0,0,.25)}}
+.fb{{position:absolute;inset:0;z-index:12;overflow:hidden;background:#0d0d0f}}
+.fbcover{{position:absolute;inset:0}}
+.fbcover video,.fbcover img,.fbcover .ph{{width:100%;height:100%;object-fit:cover;display:block}}
+.fbback{{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(38px) brightness(.45) saturate(1.2)}}
+.fbfront{{position:absolute;left:0;right:0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 72%,transparent 100%)}}
+.fbfront img,.fbfront video,.fbfront .ph{{width:100%;height:100%;object-fit:cover;display:block}}
+.fbshade{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,15,.75) 0%,rgba(13,13,15,0) 22%,rgba(13,13,15,0) 52%,rgba(13,13,15,.92) 78%,rgba(13,13,15,.96) 100%)}}
+.fbshade.cover{{background:linear-gradient(180deg,rgba(13,13,15,.55) 0%,rgba(13,13,15,0) 18%,rgba(13,13,15,0) 55%,rgba(13,13,15,.55) 75%,rgba(13,13,15,.8) 100%)}}
+.fbtag{{position:absolute;left:60px;top:340px;background:{Y};color:{INK};font:900 34px "Inter Display";letter-spacing:2px;padding:12px 20px;border-radius:8px}}
 .cutout{{position:absolute;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}}
 .words{{position:absolute;left:50px;right:50px;line-height:.98;letter-spacing:-0.01em}}
 .words.anton{{text-transform:uppercase}}
