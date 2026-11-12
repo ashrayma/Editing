@@ -4,8 +4,8 @@
     python3 make_ipl.py            ->  out/IPL_Ko_Kisne_Maara.mp4 (1920x1080, 30 fps, -14 LUFS)
     python3 make_ipl.py --preview  ->  out/preview_sheet.jpg
 
-Voice: vo/vo_raw.mp3 (line timings in vo/timings.json from align_vo.py), with a 1.5 s full silence inserted
-before the reveal. Look: case-file graphics in the channel's yellow (#FFDE59) on near-black; photos sit in
+Voice: vo/vo_full.wav = the original take plus the 16 recorded inserts (merge_vo.py; timings in
+vo/timings_full.json), with a 1.5 s full silence inserted before the reveal. Look: case-file graphics in the channel's yellow (#FFDE59) on near-black; photos sit in
 yellow-edged panels (the reference's blue panels, re-done in our colours). Everything is drawn here; music and
 SFX are synthesised, so the video is royalty-free apart from the photos.
 """
@@ -35,8 +35,9 @@ MONO = "/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Bold.ttf"
 OUT = os.path.join(HERE, "out")
 rng = np.random.default_rng(2026)
 
-TIM = json.load(open(os.path.join(HERE, "vo", "timings.json")))
+TIM = json.load(open(os.path.join(HERE, "vo", "timings_full.json")))   # original lines + 16 inserts (merge_vo.py)
 LN = TIM["lines"]
+INS = TIM["inserts"]
 GAP_AT, GAP = LN[35]["start"] - 0.2, 1.5          # full silence before the reveal
 
 
@@ -44,6 +45,25 @@ def L(i, off=0.0):
     t = LN[i]["start"] + off
     return t + (GAP if t >= GAP_AT else 0)
 
+
+def SH(t):
+    return t + (GAP if t >= GAP_AT else 0)
+
+
+def I(k, off=0.0):
+    """Start of insert k (1-based) on the output timeline."""
+    return SH(INS[k - 1]["start"] + off)
+
+
+def IE(k):
+    return SH(INS[k - 1]["end"])
+
+
+# each insert owns the frames from the cut before it to the next original line
+WINDOWS = []
+for k in range(1, 17):
+    a, b = INS[k - 1]["start"] - 0.45, INS[k - 1]["end"] + 0.45
+    WINDOWS.append((k, SH(a), SH(b)))
 
 END = TIM["duration"] + GAP + 3.0
 
@@ -129,7 +149,27 @@ PHOTO_PATHS = {
     "kohli": os.path.join(ROOT, "kohli_countdown", "assets", "photo_9.jpg"),
     "kohli2": os.path.join(ROOT, "kohli_countdown", "assets", "photo_4.jpg"),
     "six": os.path.join(ROOT, "odi_short", "assets", "dhoni_2011_six.jpg"),
+    "pitch": os.path.join(HERE, "assets", "pitch_flat.jpg"),
+    "pant": os.path.join(HERE, "assets", "pant_pitch.jpg"),
+    "rcbkneel": os.path.join(ROOT, "kohli_countdown", "assets", "photo_1.jpg"),
+    "slump": os.path.join(ROOT, "kohli_countdown", "assets", "photo_3.jpg"),
+    "batup": os.path.join(ROOT, "kohli_countdown", "assets", "photo_8.jpg"),
+    "team": os.path.join(ROOT, "kohli_countdown", "assets", "photo_5.jpg"),
+    "hit": os.path.join(ROOT, "kohli_countdown", "assets", "photo_2.jpg"),
+    "crowd": os.path.join(ROOT, "virat_82", "bg_mcg.jpg"),
 }
+CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4")}
+_clip = {}
+
+
+def clip_frame(name, t):
+    """Frame of a short clip (looped), cached in memory at 960x540."""
+    if name not in _clip:
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", CLIPS[name], "-vf", "fps=30,scale=960:540",
+                              "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+        _clip[name] = np.frombuffer(raw, np.uint8).reshape(-1, 540, 960, 3)
+    fr = _clip[name]
+    return Image.fromarray(fr[int(t * 30) % len(fr)])
 _ph = {}
 
 
@@ -165,6 +205,10 @@ def backdrop(name, t, t0, t1, dark=0.32, gray=0.0):
             _bg["plate"] = a + g
         return _bg["plate"].copy()
     p = (t - t0) / max(0.5, t1 - t0)
+    if name.startswith("clip:"):
+        im = clip_frame(name[5:], t - t0).resize((W, H), Image.BILINEAR)
+        a = arr(im)
+        return (a * (1 - gray) + a.mean(-1, keepdims=True) * gray) * dark
     im = cover(photo(name), W, H, 1.04 + 0.06 * p)
     a = arr(im)
     if gray:
@@ -202,6 +246,7 @@ class E:
 
     def __init__(self, t0, t1, fn, sfx_kind=None):
         self.t0, self.t1, self.fn, self.sfx = t0, t1, fn, sfx_kind
+        self.win = None          # insert number this element belongs to (None: the original script)
 
 
 def txt(t0, t1, lines, cx, cy, size=120, path=ANTON, anim="rise", maxw=1700, align="c", sfx_kind=None):
@@ -482,6 +527,136 @@ def case_header(t0, t1, txt_="CASE FILE: #IPL2026"):
 
 # ----------------------------------------------------------------------------- the edit
 
+# ----------------------------------------------------------------------------- the 16 inserts
+
+def beat_times(k, n):
+    """Split insert k into n beats at sentence ends (proportional to text length)."""
+    import re as _re
+    text = INS[k - 1]["text"]
+    a, b = I(k), IE(k)
+    sents = [x for x in _re.split(r"(?<=[.?!])\s+", text) if x]
+    cum = np.cumsum([len(x) for x in sents]) / len(text)
+    cuts = [a]
+    for j in range(1, n):
+        f = cum[np.argmin(np.abs(cum[:-1] - j / n))] if len(cum) > 1 else j / n
+        cuts.append(max(cuts[-1] + 0.8, a + (b - a) * f))
+    cuts.append(b + 0.45)
+    return list(zip(cuts[:-1], cuts[1:]))
+
+
+# per insert: beats = (backdrop, dark, gray, [element makers(t0, t1)])
+def T_(lines, size=130, anim="slam", path=ANTON, cy=540, cx=W / 2, maxw=1700):
+    return lambda t0, t1: txt(t0, t1, lines, cx, cy, size, path=path, anim=anim, maxw=maxw)
+
+
+def C_(labels, x=140, y0=300, size=60, bg=Y, fg=INK, step=0.5):
+    def make(t0, t1):
+        return [chip(t0 + step * i, t1, lab, x, y0 + i * 140, bg=bg, fg=fg, size=size) for i, lab in enumerate(labels)]
+    return make
+
+
+def P_(name, box=(1080, 160, 720, 760), **kw):
+    return lambda t0, t1: photo_panel(t0, t1, name, box, **kw)
+
+
+def ST_(word, cy=600, color=RED, size=110):
+    return lambda t0, t1: stamp(t0 + 0.3, t1, word, W / 2, cy, color=color, size=size)
+
+
+PHONE_ROWS = [("BATTER (C)", "+86"), ("BOWLER", "+48"), ("WK", "+22"), ("ALL-ROUNDER", "+31"), ("KOHLI", "OUT")]
+
+INSERT_BEATS = {
+    1: [("six", 0.35, 0.7, [T_([("THE LAST OVER:", WHITE), ("DINNER COULD WAIT", Y)])]),
+        (None, 1, 0, [lambda a, b: tv_gfx(a, b, W / 2, 560, "EVERY BALL", "crowd"),
+                      T_([("ONE TV. EVERY BALL.", Y)], 90, "rise", cy=110)]),
+        ("empty", 0.4, 0.6, [T_([("TODAY?", WHITE)], 200)]),
+        ("empty", 0.3, 0.8, [lambda a, b: phone_gfx(a, b, 1400, 560, PHONE_ROWS, "SECOND SCREEN"),
+                             T_([("MATCH ON.", WHITE), ("MIND ELSEWHERE.", Y)], 120, "rise", cx=640, maxw=1000)])],
+    2: [(None, 1, 0, [T_([("NOT JUST A FEELING", WHITE)], 130, "rise")]),
+        ("clip:pollard", 0.45, 0, [T_([("200 EVERY OTHER GAME", WHITE), ("= NOT SPECIAL", Y)], 120)]),
+        ("crowd", 0.3, 0.6, [T_([("WHAT HAPPENS DAILY", WHITE), ("ISN'T REMEMBERED", RED)], 120, "rise")])],
+    3: [(None, 1, 0, [lambda a, b: case_header(a, b, "OPENING THE CASE…"),
+                      T_([("4 SUSPECTS. 1 TRUTH.", Y)], 130, "rise")]),
+        (None, 1, 0, [lambda a, b: [mugshot(a + 0.2 * i, b, f"0{i + 1}", "???", None, 300 + i * 440, 560, show_q=True)
+                                    for i in range(4)]]),
+        ("ipl", 0.3, 0.5, [lambda a, b: chip(a, b, "STAY TILL THE END", 640, 500, bg=RED, fg=WHITE, size=72)])],
+    4: [(None, 1, 0, [T_([("2023", Y)], 260), T_([("IMPACT PLAYER RULE", WHITE)], 80, "rise", cy=760)]),
+        ("iplk", 0.3, 0, [T_([("MORE CHANCES.", WHITE), ("MORE STRATEGY.", Y)], 130, "rise")]),
+        ("ipl", 0.3, 0.4, [T_([("SWAP 1 PLAYER", WHITE), ("AFTER THE TOSS", Y)], 130)]),
+        (None, 1, 0, [ST_("SMART ON PAPER", 540, Y, 120)])],
+    5: [("slump", 0.4, 0.5, [T_([("THEN: 6 DOWN", WHITE), ("= GAME OVER", RED)], 140)]),
+        (None, 1, 0, [T_([("NO. 7, 8:", WHITE), ("BOWLERS SWINGING", GREY)], 130, "rise")]),
+        ("batup", 0.4, 0, [T_([("NOW: NO. 8", WHITE), ("IS A REAL BATTER", Y)], 130, cx=700, maxw=1100)]),
+        ("hit", 0.35, 0, [T_([("TOP ORDER:", WHITE), ("NO BRAKES", Y)], 150)]),
+        ("clip:pollard", 0.45, 0, [T_([("ATTACK FROM BALL 1", Y)], 140)]),
+        ("slump", 0.35, 0.7, [T_([("BOWLER:", WHITE), ("NO RELIEF", RED)], 160)])],
+    6: [(None, 1, 0, [T_([("NOT JUST MY OPINION", WHITE)], 130, "rise")]),
+        ("iplk", 0.25, 0.6, [T_([("ROHIT SHARMA:", WHITE), ("“NOT A FAN”", Y)], 150),
+                             T_([("ON THE IMPACT PLAYER RULE", GREY)], 56, "rise", path=XB_F, cy=820)]),
+        ("batup", 0.35, 0, [T_([("ALL-ROUNDERS", WHITE), ("NOT BOWLING", RED)], 140, cx=720, maxw=1100)])],
+    7: [(None, 1, 0, [lambda a, b: mugshot(a, b, "01", "IMPACT PLAYER", "iplk", 560, 540, w=460, h=600),
+                      lambda a, b: stamp(a + 0.6, b, "GUILTY", 1300, 540, size=150)]),
+        (None, 1, 0, [C_(["RUNS ↑", "RISK ↑", "BALANCE ↓"], x=760, y0=330, size=80, step=0.6)]),
+        ("ipl", 0.25, 0.6, [T_([("BUT IF IT WAS", WHITE), ("THE ONLY CULPRIT…", Y)], 130, "rise")])],
+    8: [("slump", 0.35, 0.5, [T_([("T20: HARD ENOUGH", WHITE), ("FOR BOWLERS", Y)], 130)]),
+        (None, 1, 0, [C_(["4 OVERS", "FIELD RESTRICTIONS", "SHORT BOUNDARIES"], x=560, y0=330, size=70)]),
+        ("pitch", 0.45, 0, [T_([("HIS LAST HOPE:", WHITE), ("THE PITCH", Y)], 150)]),
+        ("pant", 0.4, 0, [C_(["SWING", "TURN", "UNEVEN BOUNCE"], x=1100, y0=330, size=70)]),
+        ("pitch", 0.35, 0, [T_([("HIS ONLY WEAPON", Y)], 160)])],
+    9: [("pitch", 0.3, 0.6, [T_([("BOWLER =", WHITE), ("BOWLING MACHINE", Y)], 140)]),
+        (None, 1, 0, [T_([("SAME HEIGHT.", WHITE), ("SAME SPEED.", Y)], 160, "rise")]),
+        ("clip:pollard", 0.45, 0, [T_([("JUST STAND & HIT", Y)], 150)]),
+        (None, 1, 0, [T_([("SKILL ↓   GUESSWORK ↑", Y)], 110, path=BLACK_F)])],
+    10: [("team", 0.4, 0, [T_([("WHEN 140", WHITE), ("WAS ENOUGH", Y)], 160, cx=1250, maxw=1100)]),
+         ("crowd", 0.35, 0.3, [T_([("LOW-SCORING", WHITE), ("THRILLERS", Y)], 160, "rise")]),
+         ("pant", 0.3, 0.5, [T_([("EVERY RUN EARNED.", WHITE), ("EVERY WICKET MATTERED.", Y)], 110)])],
+    11: [(None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "FANTASY"),
+                       T_([("A NEW", WHITE), ("AUDIENCE", Y)], 150, "rise", cx=1300, maxw=900)]),
+         ("crowd", 0.3, 0.5, [T_([("NON-FANS", WHITE), ("NOW PICK TEAMS", Y)], 140)]),
+         (None, 1, 0, [T_([("BUT IT CHANGED", WHITE), ("HOW WE WATCH", RED)], 140, "rise")])],
+    12: [("rcbkneel", 0.35, 0, [T_([("THEN:", WHITE), ("WILL MY TEAM WIN?", Y)], 130, cx=1200, maxw=1100)]),
+         (None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "MY POINTS"),
+                       T_([("NOW: HOW MANY", WHITE), ("POINTS?", Y)], 130, "rise", cx=1300, maxw=900)]),
+         ("slump", 0.35, 0.4, [T_([("MAIDEN OVER", WHITE), ("= A FEW POINTS", GREY)], 140)]),
+         ("ipl", 0.3, 0.5, [T_([("MATCH-WINNING 20", WHITE), ("= ZERO FANTASY VALUE", RED)], 120)])],
+    13: [("trophy", 0.4, 0, [T_([("ONE OF THE BIGGEST", WHITE), ("LEAGUES IN THE WORLD", Y)], 120)]),
+         (None, 1, 0, [T_([("MEDIA RIGHTS:", WHITE), ("THOUSANDS OF CRORES", Y)], 130)]),
+         ("ipl", 0.3, 0.5, [T_([("EVERY SECOND", WHITE), ("IS FOR SALE", RED)], 160, "rise")])],
+    14: [(None, 1, 0, [C_(["STRATEGIC TIMEOUT", "INNINGS BREAK", "AD AFTER EVERY WICKET"], x=420, y0=320, size=72,
+                          bg=RED, fg=WHITE)]),
+         ("iplk", 0.3, 0.5, [T_([("THE BROADCAST", WHITE), ("SETS THE PACE", Y)], 140)]),
+         ("clip:pollard", 0.45, 0, [T_([("WHAT SELLS?", WHITE)], 130, "rise", cy=360),
+                                    T_([("THE SIX.", Y)], 200, cy=620)]),
+         (None, 1, 0, [C_(["HIGHLIGHTS: SIX", "REELS: SIX", "ADS: SIX"], x=560, y0=330, size=80)]),
+         ("pitch", 0.3, 0.5, [T_([("A PERFECT YORKER", WHITE), ("HAS NO SPONSOR", RED)], 140)])],
+    15: [(None, 1, 0, [C_(["BOARD → VIEWERS", "BROADCASTER → AD SLOTS", "FANTASY APPS → POINTS"], x=360, y0=280,
+                          size=80, step=1.6)]),
+         ("ipl", 0.25, 0.5, [T_([("EASIEST WAY TO GIVE", WHITE), ("EVERYONE THAT?", WHITE)], 110, "rise", cy=380),
+                             T_([("RUNS.", Y)], 230, cy=700)])],
+    16: [("rcbkneel", 0.35, 0.3, [T_([("THE OLD IPL NIGHTS", Y)], 140, "rise")]),
+         ("crowd", 0.35, 0, [T_([("LAST OVER.", WHITE), ("12 NEEDED.", Y)], 170)]),
+         ("slump", 0.3, 0.7, [T_([("YORKER. YORKER. YORKER.", Y)], 130)]),
+         ("crowd", 0.45, 0, [T_([("THE STADIUM ROSE", WHITE)], 150, "rise")]),
+         (None, 1, 0, [T_([("DRAMA CAME FROM", WHITE), ("THE CONTEST, NOT RUNS", Y)], 120)])],
+}
+
+
+def add_inserts(S, El):
+    for k, beats in INSERT_BEATS.items():
+        _, wa, wb = WINDOWS[k - 1]
+        spans = beat_times(k, len(beats))
+        spans[0] = (wa, spans[0][1])
+        spans[-1] = (spans[-1][0], wb)
+        for (t0, t1), (bg, dark, gray, makers) in zip(spans, beats):
+            S.insert(0, (t0, t1, bg, dark, gray))
+            for mk in makers:
+                out = mk(t0, t1)
+                for e in (out if isinstance(out, list) else [out]):
+                    e.win = k
+                    El.append(e)
+
+
+
 def build():
     S = []   # (t0, t1, backdrop, dark, gray)
     El = []
@@ -562,10 +737,10 @@ def build():
 
     # SUSPECT 02: THE PITCH
     scene(L(16), L(17), None)
-    add(mugshot(L(16), L(17), "02", "THE PITCH", None, 560, 540, w=460, h=600))
+    add(mugshot(L(16), L(17), "02", "THE PITCH", "pant", 560, 540, w=460, h=600))
     add(txt(L(16, 0.4), L(17), [("SUSPECT /02", Y), ("THE PITCH", WHITE)], 1300, 540, 120, align="l", maxw=900))
-    scene(L(17), L(19), None)
-    add(pitch_gfx(L(17), L(19), 600, 560))
+    scene(L(17), L(19), "pitch", 0.3, 0.3)
+    add(photo_panel(L(17), L(19), "pitch", (110, 190, 820, 700)))
     for i, w_ in enumerate(["NO SWING", "NO SEAM", "PREDICTABLE BOUNCE"]):
         add(chip(L(17, 0.6 + 1.1 * i), L(18), w_, 1040, 330 + i * 130, size=56))
     add(stamp(L(18), L(19), "NO MOVEMENT", 1350, 560, color=Y, size=100))
@@ -649,12 +824,17 @@ def build():
     add(txt(L(43, 1.2), END, [("KEEP / BAN?", Y)], W / 2, 500, 220, anim="slam"))
     add(txt(L(43, 2.4), END, [("ONE WORD IN THE COMMENTS", GREY)], W / 2, 680, 60, path=XB_F))
     add(chip(L(44), END, "NEXT: BUMRAH vs ABHISHEK", 640, 860, bg=RED, fg=WHITE, size=52))
+    add_inserts(S, El)
     return S, El
 
 
 LOGO = Image.open(os.path.join(ROOT, "kohli_countdown", "assets", "logo.png")).convert("RGBA")
 LOGO = LOGO.resize((200, int(LOGO.height * 200 / LOGO.width)), Image.LANCZOS)
 LOGO.putalpha(LOGO.getchannel("A").point(lambda v: int(v * 0.8)))
+
+
+def window_at(t):
+    return next((k for k, a, b in WINDOWS if a <= t < b), None)
 
 
 def render(S, El, t, i):
@@ -665,8 +845,9 @@ def render(S, El, t, i):
     if t - sc[0] < 0.08 and sc[0] > 0:  # cut flash
         a = a + 60 * (1 - (t - sc[0]) / 0.08)
     base = img(a).convert("RGBA")
+    w = window_at(t)
     for e in El:
-        if e.t0 <= t < e.t1:
+        if e.t0 <= t < e.t1 and e.win == w:
             e.fn(base, t)
     base.alpha_composite(LOGO, (W - LOGO.width - 46, 36))
     return base.convert("RGB")
@@ -686,7 +867,7 @@ def soundtrack(path, S, El):
         buf[i:i + len(x)] += x * gn
 
     tmp = os.path.join(OUT, "vo44.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "vo", "vo_raw.mp3"), "-ar", str(SR),
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "vo", "vo_full.wav"), "-ar", str(SR),
                     "-ac", "1", tmp], check=True)
     with wave.open(tmp) as w:
         vo = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
