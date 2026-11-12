@@ -426,7 +426,7 @@ def manual(start, dur, stamp_at, y=520):
     for k in range(len(rules)):
         anim(f'tl.fromTo("#{i}r{k}",{{opacity:0,x:-30}},{{opacity:1,x:0,duration:0.35}},{round(start + 0.35 + 0.15 * k, 2)})')
     anim(f'tl.to("#{i}",{{opacity:0,y:-120,duration:0.3}},{round(start + dur - 0.3, 2)})')
-    stamp("CAN'T EXPLAIN", stamp_at, start + dur - stamp_at, y + 300, size=104)
+    stamp("CAN'T EXPLAIN", stamp_at, start + dur - stamp_at, y + 560, size=96)
 
 
 def split(top, bottom, start, dur, bottom_at, strike_at):
@@ -557,99 +557,192 @@ def end_card(start, dur):
 
 # ----------------------------------------------------------------------------- the reel
 
+def glow(start, dur, color):
+    """Dark stage with a coloured radial glow behind the player (Kohli 101 reference look)."""
+    i = nid("gl")
+    add(f'<div id="{i}" class="glow clip" data-start="{start}" data-duration="{dur}" '
+        f'style="background:radial-gradient(70% 45% at 55% 55%,{color},rgba(8,8,10,0) 70%),#08080a"></div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.35}},{start})')
+
+
+def headline(lines, start, dur, colors=None, size=84, y=300):
+    """Top-left two-line headline, revealed line by line."""
+    return words(lines, start, dur, y, size=size, colors=colors or ["#fff", Y], align="band", stagger=0.14, z=45)
+
+
+def player(slot, start, dur, h=1250, x=None, bottom=1750, enter="up", z=30, flip=False):
+    """Big cut-out standing on the bottom of the frame; enters with a rise, slow push-in while on screen."""
+    i = nid("pl")
+    events.append((start, "whoosh"))
+    rel, _ = asset(slot)
+    from PIL import Image
+    with Image.open(os.path.join(OUT, rel)) as im:
+        w = round(h * im.width / im.height)
+    left = round((W - w) / 2) if x is None else x
+    add(f'<div id="{i}" class="player clip" data-start="{start}" data-duration="{dur}" '
+        f'style="left:{left}px;top:{bottom - h}px;width:{w}px;height:{h}px;z-index:{z}">'
+        f'<img src="{rel}" style="{"transform:scaleX(-1);" if flip else ""}"></div>')
+    frm = {"up": "y:260,opacity:0", "left": "x:-500,opacity:0", "right": "x:500,opacity:0"}[enter]
+    anim(f'tl.fromTo("#{i}",{{{frm},scale:0.96}},{{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}",{{scale:1.04,duration:{max(0.5, dur - 0.8)},ease:"none"}},{round(start + 0.8, 2)})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
+
+
+def giant(txt, start, dur, y, size=520, color=Y, outline=False, fill_at=None, z=20):
+    """Huge word behind the player (the Rajat reel's T20 / BCCI move): slams in, outline can fill later."""
+    i = nid("gi")
+    events.append((start + 0.05, "impact"))
+    st = f"color:transparent;-webkit-text-stroke:5px {color}" if outline else f"color:{color}"
+    add(f'<div id="{i}" class="giant anton clip" data-start="{start}" data-duration="{dur}" '
+        f'style="top:{y}px;font-size:{size}px;z-index:{z};{st}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:1.35,opacity:0}},{{scale:1,opacity:1,duration:0.55,ease:"expo.out"}},{start})')
+    if fill_at:
+        events.append((fill_at, "pop"))
+        anim(f'tl.to("#{i}",{{color:"{color}",duration:0.3}},{fill_at})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
+
+
+def tracker(marks):
+    """Persistent bottom bar: 'THE VIRU YEARS' with the year of each chapter ticking over (1999-2013)."""
+    yrs = "".join(f'<span class="tyr" id="ty{k}">{html.escape(y)}</span>' for k, (t, y) in enumerate(marks))
+    add(f'<div class="tracker"><div class="tlab">THE VIRU YEARS</div><div class="tyrs">{yrs}</div>'
+        f'<div class="tbar"><div class="tfill" id="tfill"></div></div><div class="tends"><span>1999</span><span>2013</span></div></div>')
+    anim('tl.fromTo(".tracker",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},0.3)')
+    prev = None
+    for k, (t, y) in enumerate(marks):
+        frac = {"2000s": 0.15, "2004": 0.36, "2008": 0.64, "2011": 0.86}.get(y, 0.05)
+        if prev is not None:
+            anim(f'tl.to("#ty{prev}",{{yPercent:-100,opacity:0,duration:0.3}},{t})')
+        anim(f'tl.fromTo("#ty{k}",{{yPercent:100,opacity:0}},{{yPercent:0,opacity:1,duration:0.4,ease:"expo.out"}},{t})')
+        anim(f'tl.to("#tfill",{{scaleX:{frac},duration:0.8,ease:"expo.out"}},{t})')
+        prev = k
+
+
 def build_scenes():
-    """Clean layout: footage owns the frame (faces stay clear); all text sits in one left-aligned band in the
-    lower part of the screen over a dark fade. No running captions; the band text carries each line."""
-    BY = BAND_Y
-    # 0:00 action first (playbook rule 1), then the claim
+    """Full-frame layout (Kohli 101 reference): headline top-left, big Sehwag cut-outs filling the middle and
+    lower frame over coloured glows, giant words behind him, cards rising, and a running tracker at the bottom."""
+    BLUE, PURPLE, RED_G, GREEN, GOLD, TEAL = ("rgba(40,90,255,.55)", "rgba(140,60,255,.5)", "rgba(230,50,60,.5)",
+                                               "rgba(40,180,90,.45)", "rgba(254,190,40,.45)", "rgba(20,170,200,.45)")
+    # 0:00 action first, then the claim
     s, d = at("hook"), until_next("hook")
     fb("c_cut_aus", 0.0, 1.95)
-    fb("s_drive", 1.9, s + d - 1.9, pos="50% 30%")
-    words(["There was something special about"], s + 0.05, d - 0.05, BY, size=56, font="serif", align="band")
-    words(["SEHWAG"], at("hook", 1.0), s + d - at("hook", 1.0), BY + 80, size=190, colors=[Y], align="band", sfx_kind="impact")
+    glow(1.9, s + d - 1.9, BLUE)
+    giant("VIRU", 1.9, s + d - 1.9, 760, size=600, color="rgba(254,222,92,.9)", outline=True)
+    player("cut_drive", 2.0, s + d - 2.0, h=1350)
+    words(["There was something", "special about"], s + 0.05, d - 0.05, 300, size=74, font="serif", align="band", z=45, colors=["#fff", "#fff"])
+    words(["SEHWAG"], at("hook", 1.0), s + d - at("hook", 1.0), 470, size=150, colors=[Y], align="band", z=45, sfx_kind="impact")
 
-    # the coaching manual can't explain him
+    # no manual could explain him: the manual card rises, gets stamped
     s, d = at("manual"), until_next("manual")
-    fb("s_latecut", s, d, front=True, blur=True)
-    manual(s, d, span("manual", 0.62), y=560)
+    glow(s, d, PURPLE)
+    headline(["No coaching manual", "could explain him."], s, d)
+    manual(s + 0.1, d - 0.1, span("manual", 0.62), y=700)
 
-    # survive vs destroy
-    s = at("survive")
-    d = round(at("destroy") - s + until_next("destroy"), 2)
-    split("c_test_block", "c_big_hit", s, d, round(at("destroy") - 0.1, 2), at("destroy", 0.5))
+    # survive -> destroy
+    s, d = at("survive"), round(at("destroy") - at("survive"), 2)
+    glow(s, d, "rgba(120,120,130,.35)")
+    headline(["Other openers came", "to survive."], s, d, colors=["#fff", "rgba(255,255,255,.6)"])
+    giant("SURVIVE", s + 0.2, d - 0.2, 760, size=300, color="rgba(255,255,255,.55)", outline=True)
+    player("cut_latecut", s + 0.1, d - 0.1, h=1050, bottom=1750)
+    s, d = at("destroy"), until_next("destroy")
+    glow(s, d, RED_G)
+    headline(["Viru came", "to destroy it."], s, d, colors=["#fff", Y])
+    giant("DESTROY", s + 0.1, d - 0.1, 650, size=290, color=Y)
+    player("cut_bighit", s + 0.25, d - 0.25, h=1180)
 
-    # 2000s kid: nobody left the TV
+    # 2000s kid: the TV
     s, d = at("kid"), until_next("kid")
-    fb("c_big_hit_2", s, d, blur=True)
-    tv("tv_drive_nz", s + 0.2, d - 0.2, y=470)
-    label("THE 2000s", s + 0.3, d - 0.3, BY - 40, color=INK, bg=Y, size=34, band=True)
-    words(["Nobody left the TV."], span("kid", 0.62), s + d - span("kid", 0.62), BY + 40, size=96, colors=["#fff"], align="band")
-    follow_pop(round(at("kid", -1.6), 2), 2.2)
+    glow(s, d, GREEN)
+    headline(["For a 2000s kid,", "nobody left the TV."], s, d)
+    tv("tv_drive_nz", s + 0.3, d - 0.3, y=640)
+    giant("2000s", s + 0.6, d - 0.6, 1280, size=300, color="rgba(254,222,92,.8)", outline=True, fill_at=span("kid", 0.6))
+    follow_pop(round(at("kid", -1.8), 2), 2.2)
 
-    # Multan 2004: 309, first Indian triple
+    # Multan 2004: 309 behind him
     s, d = at("multan"), until_next("multan")
-    fb("s_multan", s, d, pos="50% 22%")
-    label("MULTAN · 2004", s + 0.1, d - 0.1, BY - 40, color=INK, bg=Y, size=34, band=True)
-    odo("309", span("multan", 0.3), s + d - span("multan", 0.3), BY + 20, size=220, label="RUNS")
-    label("1st Indian to score a Test triple century", span("multan", 0.62), s + d - span("multan", 0.62), BY + 330, color="#fff", size=34, band=True)
+    glow(s, d, GOLD)
+    headline(["Multan, 2004.", "First Indian Test triple."], s, d)
+    odo("309", span("multan", 0.25), s + d - span("multan", 0.25), 700, size=400, color=Y, label="RUNS")
+    player("cut_multan", s + 0.2, d - 0.2, h=1150, x=640)
 
-    # Chennai 2008: 300 in 278 balls, fastest ever (the shareable number)
+    # Chennai 2008: outline 300 fills, then 278 balls + stamp
     s, d = at("chennai"), until_next("chennai")
-    fb("c_test_sweep", s, 2.2)
-    fb("c_celebrate", round(s + 2.0, 2), round(d - 2.0, 2))
-    label("CHENNAI · 2008", s + 0.1, d - 0.1, BY - 40, color=INK, bg=Y, size=34, band=True)
-    odo("300", span("chennai", 0.22), span("chennai", 0.44) - span("chennai", 0.22), BY + 20, size=220, label="RUNS")
-    odo("278", span("chennai", 0.44), s + d - span("chennai", 0.44), BY + 20, size=220, label="BALLS", color="#fff")
-    stamp("FASTEST EVER", span("chennai", 0.74), s + d - span("chennai", 0.74), BY + 345, size=64, rot=-4)
+    fb("c_test_sweep", s, 2.2, blur=True)
+    fb("c_celebrate", round(s + 2.0, 2), round(d - 2.0, 2), blur=True)
+    headline(["Chennai, 2008.", "Fastest Test triple ever."], s, d)
+    giant("300", span("chennai", 0.12), span("chennai", 0.45) - span("chennai", 0.12), 640, size=520, color=Y, outline=True, fill_at=span("chennai", 0.3))
+    odo("278", span("chennai", 0.45), s + d - span("chennai", 0.45), 640, size=460, label="BALLS", color="#fff", band=False)
+    stamp("FASTEST EVER", span("chennai", 0.74), s + d - span("chennai", 0.74), 1330, size=84, rot=-5)
 
-    # 2011 World Cup first-ball fours
+    # 2011 World Cup: first-ball fours
     s, d = at("wc"), until_next("wc")
-    fb("s_wc2011", s, d, front=True, pos="40% 40%")
-    wc_strip(s + 0.3, d - 0.3, BY - 60, [span("wc", f) for f in (0.42, 0.52, 0.62, 0.72, 0.82)])
+    glow(s, d, BLUE)
+    headline(["World Cup 2011.", "First ball? Four."], s, d)
+    player("cut_wc2011", s + 0.1, d - 0.1, h=780, bottom=1260, x=330)
+    wc_strip(s + 0.5, d - 0.5, 1270, [span("wc", f) for f in (0.42, 0.52, 0.62, 0.72, 0.82)])
 
     # follow ask (spoken)
     s, d = at("follow"), until_next("follow")
-    fb("c_shot_167", s, d, blur=True)
-    words(["true cricket fans only"], s, d, 520, size=84, font="serif", colors=["#fff"])
+    glow(s, d, GOLD)
+    headline(["True cricket fans", "follow this page."], s, d)
     follow_tap(s + 0.2, d - 0.2, y=700)
+    for k, t in enumerate(["Throwbacks", "Records", "Stories you grew up with"]):
+        label(t, round(s + 0.8 + 0.25 * k, 2), round(d - 0.8 - 0.25 * k, 2), 1340 + 110 * k, color="#fff", bg="rgba(255,255,255,.12)", size=34)
 
-    # Ganguly tease, then his own words
+    # Ganguly tease, then his own words full screen
     s, d = at("tease"), until_next("tease")
     fb("ganguly_still", s, d, blur=True)
-    name_tag("SOURAV GANGULY", "Former India captain", s + 0.2, d - 0.2, y=BY)
+    headline(["What Sourav Ganguly", "said next..."], s, d)
+    name_tag("SOURAV GANGULY", "Former India captain", s + 0.4, d - 0.4, y=1250)
     s, d = at("ganguly"), until_next("ganguly")
     fb("ganguly", s, d)
     g0, g1 = T["ganguly"]
-    subtitle("“An opener's job is to keep leaving the ball until it gets old.”", g0 + 0.05, 2.55, y=BY + 80)
-    subtitle("“Sehwag's job was to make it old <b>by hitting it.</b>”", g0 + 2.6, g1 - g0 - 2.4, y=BY + 80)
+    subtitle("“An opener's job is to keep leaving the ball until it gets old.”", g0 + 0.05, 2.55, y=1420)
+    subtitle("“Sehwag's job was to make it old <b>by hitting it.</b>”", g0 + 2.6, g1 - g0 - 2.4, y=1420)
 
-    # the hundred: helmet off, red handkerchief
+    # the hundred: helmet off, red handkerchief, 100 behind him
     s, d = at("hundred"), until_next("hundred")
-    fb("s_helmet", s, span("hundred", 0.36) - s + 0.2, front=True, pos="50% 25%")
-    words(["The helmet came off."], s + 0.1, span("hundred", 0.36) - s, BY + 40, size=84, align="band")
-    fb("s_patka", span("hundred", 0.36), s + d - span("hundred", 0.36), front=True, pos="50% 25%")
-    label("THE RED HANDKERCHIEF", span("hundred", 0.4), s + d - span("hundred", 0.4), BY - 40, color="#fff", bg=RED, size=34, band=True)
-    words(["Like he was batting", "in his backyard."], span("hundred", 0.66), s + d - span("hundred", 0.66), BY + 40, size=74, font="serif", align="band", stagger=0.2)
+    h1 = span("hundred", 0.36)
+    glow(s, d, TEAL)
+    headline(["When the hundred came,", "the helmet came off."], s, h1 - s)
+    giant("100", s + 0.1, h1 - s, 600, size=600, color="rgba(254,222,92,.85)", outline=True, fill_at=round(s + 0.9, 2))
+    player("cut_helmet", s + 0.15, h1 - s - 0.1, h=1300)
+    glow(h1, s + d - h1, RED_G)
+    headline(["The red handkerchief.", "That smile."], h1, s + d - h1, colors=["#fff", Y])
+    player("cut_patka", h1, s + d - h1, h=1080)
+    words(["Like he was batting in his backyard."], span("hundred", 0.66), s + d - span("hundred", 0.66), 490, size=50, font="serif", align="band", z=45)
 
     # trophies, runs, childhood
     s = at("trophies")
     fb("c_drive_nz", s, until_next("trophies"))
-    words(["Some players give you", "TROPHIES."], s, until_next("trophies"), BY, size=84, colors=["#fff", "#fff"], align="band")
+    headline(["Some players give you", "TROPHIES."], s, until_next("trophies"), colors=["#fff", "#fff"])
     s = at("runs")
     fb("c_cut_aus2", s, until_next("runs"))
-    words(["Some give you", "RUNS."], s, until_next("runs"), BY, size=84, colors=["#fff", "#fff"], align="band")
+    headline(["Some give you", "RUNS."], s, until_next("runs"), colors=["#fff", "#fff"])
     s, d = at("childhood"), until_next("childhood")
-    fb("s_laugh", s, d, front=True, pos="50% 25%")
-    words(["Viru gave us", "our childhood."], s, d, BY, size=96, font="serif", colors=["#fff", Y], stagger=0.25, align="band")
+    glow(s, d, GOLD)
+    words(["Viru gave us", "our childhood."], s, d, 300, size=100, font="serif", colors=["#fff", Y], stagger=0.25, align="band", z=45)
+    player("cut_laugh", s + 0.2, d - 0.2, h=1250)
 
-    # the question + follow
+    # the question
     s = at("vote")
     d = round(TOTAL - s - END_HOLD + 0.2, 2)
-    vote("s_bighit", "gayle", s, d)
-    words(["Most dangerous opener?"], span("vote", 0.2), s + d - span("vote", 0.2), BY + 20, size=80, colors=["#fff"], align="band", z=36)
-    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.72), s + d - span("vote", 0.72), BY + 140, color=INK, bg=Y, size=34, z=37, band=True)
+    glow(s, d, "rgba(120,40,40,.4)")
+    headline(["Most dangerous", "opener?"], s, d)
+    player("cut_drive", s + 0.1, d - 0.1, h=1100, x=-40, enter="left")
+    player("cut_gayle", s + 0.25, d - 0.25, h=1100, x=520, enter="right")
+    i = nid("or")
+    add(f'<div id="{i}" class="vor anton clip" data-start="{round(s + 0.6, 2)}" data-duration="{round(d - 0.6, 2)}" style="top:900px;z-index:40">OR</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0,rotation:-30}},{{scale:1,rotation:0,duration:0.5,ease:"back.out(2.5)"}},{round(s + 0.6, 2)})')
+    events.append((round(s + 0.65, 2), "impact"))
+    label("SEHWAG", s + 0.8, d - 0.8, 1560, color="#fff", bg="rgba(18,18,20,.85)", size=34, band=True)
+    label("GAYLE", s + 0.9, d - 0.9, 1560, color="#fff", bg="rgba(18,18,20,.85)", size=34)
+    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.72), s + d - span("vote", 0.72), 1660, color=INK, bg=Y, size=32, z=47)
     follow_pop(span("vote", 0.85), 2.2)
     end_card(round(TOTAL - END_HOLD - 0.1, 2), round(END_HOLD + 0.1, 2))
+
+    tracker([(0.4, "1999"), (at("kid"), "2000s"), (at("multan"), "2004"), (at("chennai"), "2008"), (at("wc"), "2011"),
+             (at("follow"), "VIRU")])
 
 build_scenes()
 
@@ -832,7 +925,7 @@ html,body{{margin:0;background:{INK}}}
 .words{{text-shadow:0 4px 24px rgba(0,0,0,.55)}}
 .odo .olab{{font-size:30px;letter-spacing:10px;margin-top:6px}}
 .stampx{{left:{BAND_X}px;margin-left:0;width:auto;padding:0 28px;border-width:8px;border-radius:12px}}
-.fpop{{top:268px;left:44px;right:auto;border-radius:10px;border-left:6px solid {Y};font-size:24px;padding:10px 16px 10px 10px;gap:10px}}
+.fpop{{top:1680px;left:44px;right:auto;border-radius:10px;border-left:6px solid {Y};font-size:24px;padding:10px 16px 10px 10px;gap:10px}}
 .fpb{{font-size:18px;padding:5px 8px}}
 .subtl{{left:{BAND_X}px;right:170px;text-align:left;font-size:46px;line-height:1.25}}
 .ntag .nn{{font-size:84px}}
@@ -859,6 +952,20 @@ html,body{{margin:0;background:{INK}}}
 .finger{{font-size:100px;top:230px}}
 .tv{{left:150px;width:780px}}
 .tvscreen{{height:520px}}
+
+/* full-frame pass */
+.glow{{position:absolute;inset:0;z-index:2}}
+.player{{position:absolute;transform-origin:50% 100%;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55))}}
+.player img{{width:100%;height:100%;object-fit:contain;object-position:bottom}}
+.giant{{position:absolute;left:0;right:0;text-align:center;line-height:.9;letter-spacing:-0.01em}}
+.tracker{{position:absolute;left:{BAND_X}px;right:{BAND_X}px;top:1770px;z-index:66}}
+.tlab{{font:900 22px "Inter Display";letter-spacing:6px;color:rgba(255,255,255,.75)}}
+.tyrs{{position:absolute;right:0;top:-34px;height:64px;width:260px;overflow:hidden;text-align:right}}
+.tyr{{position:absolute;right:0;top:0;font:400 60px Anton;color:{Y};line-height:64px;opacity:0}}
+.tbar{{margin-top:14px;height:14px;border-radius:7px;background:rgba(255,255,255,.12);overflow:hidden}}
+.tfill{{height:100%;width:100%;background:linear-gradient(90deg,#2f6bff,{Y});transform-origin:left;transform:scaleX(0)}}
+.tends{{display:flex;justify-content:space-between;font:800 18px "Inter Display";color:rgba(255,255,255,.45);margin-top:6px;letter-spacing:3px}}
+.endc{{z-index:75}}
 """
 
 
