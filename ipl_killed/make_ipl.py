@@ -173,10 +173,23 @@ PHOTO_PATHS = {
         "rcb_huddle", "mi_celebrate", "mccullum_2008", "mccullum_2008b", "gt_celebrate", "ceat_timeout",
         "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal",
         "six_crowd", "mi_bowler", "chahar_chepauk", "kuldeep_down", "narine", "hardik_six", "rashid_celebrate",
-        "rashid_six", "rabada_fist", "dhoni_bowled", "mi_pointing", "toss")},
+        "rashid_six", "rabada_fist", "dhoni_bowled", "mi_pointing", "toss", "tv_room_ipl", "family_dinner",
+        "sofa_phone")},
 }
-CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4"),
-         "crowd": os.path.join(HERE, "assets", "crowd_clean.mp4")}
+_A = lambda n: os.path.join(HERE, "assets", n + ".mp4")
+CLIPS = {   # name -> (file, start, end); each segment is shown once
+    "pollard": (_A("pollard_clean"), 0.0, 5.5), "pollard_sad": (_A("pollard_clean"), 5.5, 7.8),
+    "crowd": (_A("crowd_clean"), 0.0, 5.5), "crowd_wide": (_A("crowd_clean"), 5.5, 9.5),
+    "crowd_flags": (_A("crowd_clean"), 9.5, 13.0), "crowd_bowl": (_A("crowd_clean"), 13.2, 16.0),
+    **{"reel_" + n: (_A("reel_" + n), 0.0, 99.0) for n in ("fans", "fans2", "think", "ton")},
+    "reel_six": (_A("reel_six"), 1.2, 99.0),
+}
+# visual for each blank screen, matched to what the voice says there (output seconds -> photo / clip)
+OVERRIDE = [(8.1, "clip:reel_fans"), (12.0, "family_dinner"), (17.7, "tv_room_ipl"), (22.2, "clip:reel_fans2"),
+            (24.8, "sofa_phone"), (120.2, "clip:reel_ton"), (210.0, "clip:reel_think"), (226.4, "clip:pollard_sad"),
+            (355.7, "clip:crowd_wide"), (359.9, "clip:crowd_bowl"), (403.4, "clip:reel_six"),
+            (443.7, "clip:crowd_flags")]
+CLEAN = {17.7, 24.8}   # the photo replaces the screen's graphic (TV / phone)
 INTL = {"trophy", "empty", "kohli", "kohli2", "six", "slump", "batup", "hit", "team", "crowd"}   # never shown
 _clip = {}
 
@@ -207,14 +220,23 @@ class SeqReader:
 SEQ = {"screenrec": SeqReader(os.path.join(HERE, "assets", "screenrec_raw.mp4"), CLIP_SRC[0])}
 
 
-def clip_frame(name, t):
-    """Frame of a short clip (looped), cached in memory at 960x540."""
+def clip_frame(name, t, dur):
+    """Frame of a clip segment, slowed down (blended frames) to fill the scene, never looped."""
     if name not in _clip:
-        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", CLIPS[name], "-vf", "fps=30,scale=960:540",
-                              "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
-        _clip[name] = np.frombuffer(raw, np.uint8).reshape(-1, 540, 960, 3)
+        _clip.clear()   # only the current clip in memory
+        path, a, b = CLIPS[name]
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(a), "-to", str(b), "-i", path, "-vf",
+                              "fps=30,scale=1280:720", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                             capture_output=True, check=True).stdout
+        _clip[name] = np.frombuffer(raw, np.uint8).reshape(-1, 720, 1280, 3)
     fr = _clip[name]
-    return Image.fromarray(fr[int(t * 30) % len(fr)])
+    n = len(fr)
+    rate = max(0.4, min(1.0, (n / 30) / max(dur, 0.1)))
+    f = min(t * rate * 30, n - 1.001)
+    i = int(f)
+    k = f - i
+    a = fr[i].astype(np.float32) * (1 - k) + fr[i + 1].astype(np.float32) * k
+    return Image.fromarray(a.astype(np.uint8))
 _ph = {}
 
 
@@ -241,9 +263,39 @@ GRAIN = [rng.normal(0, 1, (H // 2, W // 2)).astype(np.float32) for _ in range(5)
 _bg = {}
 
 
+_q = np.mgrid[0:H // 4, 0:W // 4].astype(np.float32)
+DUST = rng.uniform(0, 1, (60, 4))
+
+
+def plate(t):
+    """Text screens never sit still: a slow moving spotlight, a drifting grid and floating dust."""
+    yy, xx = _q
+    cx = W / 4 * (0.5 + 0.28 * np.sin(t * 0.23))
+    cy = H / 4 * (0.35 + 0.15 * np.cos(t * 0.17))
+    glow = np.exp(-(((xx - cx) / (W / 4 * 0.45)) ** 2 + ((yy - cy) / (H / 4 * 0.7)) ** 2))
+    sweep = np.exp(-(((xx + yy * 0.6 - ((t * 60) % (W / 4 * 1.8)) + 60) / 30) ** 2)) * 0.35
+    lo = np.stack([glow * 40 + sweep * 30, glow * 34 + sweep * 26, glow * 12 + sweep * 8], -1)
+    a = np.array(Image.fromarray(lo.astype(np.uint8)).resize((W, H), Image.BILINEAR), np.float32)
+    a += np.array(INK, np.float32)
+    off = (t * 14) % 80
+    g = (((XX + off) % 80 < 1.5) | ((YY + off * 0.5) % 80 < 1.5)).astype(np.float32)[..., None] * 9
+    a = a + g
+    im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+    d = ImageDraw.Draw(im)
+    for x0, y0, sp, r in DUST:
+        x = (x0 * W + t * 20 * (sp - 0.5)) % W
+        y = (y0 * H - t * (12 + 30 * sp)) % H
+        rr = 1 + 3 * r
+        c = int(60 + 90 * r)
+        d.ellipse((x - rr, y - rr, x + rr, y + rr), fill=(c, int(c * 0.9), int(c * 0.4)))
+    return arr(im)
+
+
 def backdrop(name, t, t0, t1, dark=0.32, gray=0.0):
     """Full-frame photo, darkened and pushing in; None -> plain dark plate with a faint grid."""
     if name is None:
+        return plate(t)
+    if False:
         if "plate" not in _bg:
             a = np.zeros((H, W, 3), np.float32) + np.array(INK, np.float32)
             a += np.exp(-(((XX - W * 0.5) / (W * 0.55)) ** 2 + ((YY - H * 0.3) / (H * 0.8)) ** 2))[..., None] * \
@@ -256,10 +308,13 @@ def backdrop(name, t, t0, t1, dark=0.32, gray=0.0):
         fr = SEQ[name[4:]].frame(max(0.0, min(t - t0, CLIP_SRC[1] - CLIP_SRC[0] - 0.05)))
         return arr(fr) * dark if fr is not None else np.zeros((H, W, 3), np.float32)
     if name.startswith("clip:"):
-        im = clip_frame(name[5:], t - t0).resize((W, H), Image.BILINEAR)
+        im = cover(clip_frame(name[5:], t - t0, t1 - t0), W, H, 1.0 + 0.08 * p)
         a = arr(im)
         return (a * (1 - gray) + a.mean(-1, keepdims=True) * gray) * dark
-    im = cover(photo(name), W, H, 1.04 + 0.06 * p)
+    d = sum(map(ord, name)) % 4               # Ken Burns: push in + drift, direction varies per photo
+    dx, dy = [(1, 0), (-1, 0), (0, 1), (1, -1)][d]
+    q = ease(p) * 0.6 + p * 0.4
+    im = cover(photo(name), W, H, 1.08 + 0.16 * q, 0.5 + dx * 0.07 * (q - 0.5), 0.45 + dy * 0.05 * (q - 0.5))
     a = arr(im)
     if gray:
         lum = a.mean(-1, keepdims=True)
@@ -721,6 +776,15 @@ def enforce_unique(S, El):
     items = [(s_[0], "scene", j) for j, s_ in enumerate(S) if s_[2]] + \
             [(e.t0, "el", j) for j, e in enumerate(El) if getattr(e, "photo", None)]
     used = set()
+    for k, s_ in enumerate(S):       # matched visuals for the blank screens
+        for at, bg in OVERRIDE:
+            if abs(s_[0] - at) < 0.35 and s_[1] - s_[0] > 0.3:
+                S[k] = (s_[0], s_[1], bg, s_[3], 0.0)
+                if any(abs(at - c) < 0.01 for c in CLEAN):
+                    w = window_at(s_[0] + 0.1)
+                    for e in El:
+                        if e.win == w and getattr(e, "kind", "") != "txt" and s_[0] - 0.05 <= e.t0 < s_[0] + 3:
+                            e.t1 = e.t0
     for t0, kind, j in sorted(items):
         key = S[j][2] if kind == "scene" else El[j].photo
         if key.startswith("seq:"):
@@ -951,8 +1015,18 @@ def window_at(t):
     return next((k for k, a, b in WINDOWS if a <= t < b), None)
 
 
+VIS = {}
+
+
+def vis_end(S, sc):
+    if sc not in VIS:
+        VIS[sc] = min([sc[1]] + [o[0] for o in S if sc[0] < o[0] < sc[1]])
+    return VIS[sc]
+
+
 def render(S, El, t, i):
     sc = next((s for s in S if s[0] <= t < s[1]), S[-1])
+    sc = (sc[0], vis_end(S, sc)) + tuple(sc[2:])
     dark = sc[3] if not sc[2] or str(sc[2]).startswith("seq:") else 0.92
     a = backdrop(sc[2], t, sc[0], sc[1], dark, min(sc[4], 0.25))
     g = GRAIN[i % len(GRAIN)]
@@ -1016,7 +1090,11 @@ def soundtrack(path, S, El):
     put(voice, cl, CLIP_OUT + 0.2)
 
     mus = np.zeros(n)
-    mus += st.section(drone(L(5)) * 0.5, 0.0, END, 0.1, 0.5)
+    # cold open: low hum + clock ticks (no noise bed - it sounded like wind)
+    tt = np.arange(int(SR * L(5))) / SR
+    hum = (np.sin(2 * np.pi * 41.2 * tt) + 0.5 * np.sin(2 * np.pi * 61.7 * tt + 1.0)) * (0.3 + 0.7 * tt / tt[-1])
+    mus += st.section(hum * 0.35, 0.0, END, 0.3, 0.8)
+    mus += st.section(st.ticker(L(5), bpm=120, rise=True) * 0.5, 0.0, END, 0.2, 0.6)
     mus += st.section(st.pad(st.A_MINOR, GAP_OUT - L(5), cutoff=900) * 0.5, L(5), END, 0.8, 0.05)
     mus += st.section(st.pulse(GAP_OUT - L(8), 100, lambda x: 0.45 + 0.3 * (x / max(1, GAP_OUT - L(8)))), L(8), END,
                       0.3, 0.05) * 0.8
@@ -1037,7 +1115,7 @@ def soundtrack(path, S, El):
     put(fx, braam(weight=1.3), GAP_OUT + GAP, 0.45)
     put(fx, braam(weight=1.0), L(36, 1.35), 0.4)
     for s in S:
-        put(fx, sfx.whoosh() * 0.10, max(0, s[0] - 0.15))
+        put(fx, sfx.whoosh() * 0.05, max(0, s[0] - 0.15))
     for e in El:
         if e.sfx == "hit":
             put(fx, sfx.impact(), e.t0, 0.22)
