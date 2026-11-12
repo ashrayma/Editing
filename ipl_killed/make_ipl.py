@@ -173,7 +173,9 @@ PHOTO_PATHS = {
         "rcb_huddle", "mi_celebrate", "mccullum_2008", "mccullum_2008b", "gt_celebrate", "ceat_timeout",
         "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal")},
 }
-CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4")}
+CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4"),
+         "crowd": os.path.join(HERE, "assets", "crowd_clean.mp4")}
+INTL = {"trophy", "empty", "kohli", "kohli2", "six", "slump", "batup", "hit", "team", "crowd"}   # never shown
 _clip = {}
 
 
@@ -216,7 +218,9 @@ _ph = {}
 
 def photo(name):
     if name not in _ph:
-        _ph[name] = Image.open(PHOTO_PATHS[name]).convert("RGB")
+        p = PHOTO_PATHS[name]
+        up = os.path.join(HERE, "assets", "x4", os.path.basename(p))
+        _ph[name] = Image.open(up if os.path.exists(up) else p).convert("RGB")
     return _ph[name]
 
 
@@ -316,7 +320,9 @@ def txt(t0, t1, lines, cx, cy, size=120, path=ANTON, anim="rise", maxw=1700, ali
         else:
             a *= ease(k / 0.25)
             paste_center(base, im, cx, cy + 30 * (1 - ease(k / 0.3)), 1.0, a)
-    return E(t0, t1, draw, sfx_kind or ("hit" if anim == "slam" else None))
+    e = E(t0, t1, draw, sfx_kind or ("hit" if anim == "slam" else None))
+    e.kind, e.lines = "txt", lines
+    return e
 
 
 def stamp(t0, t1, word, cx, cy, color=RED, angle=-9, size=110):
@@ -355,12 +361,15 @@ def chip(t0, t1, label, x, y, bg=Y, fg=INK, size=40):
 
 
 def photo_panel(t0, t1, name, box, **kw):
-    return E(t0, t1, lambda base, t: panel(base, name, box, t, t0, t1, **kw), "whoosh")
+    e = E(t0, t1, lambda base, t: panel(base, name, box, t, t0, t1, **kw), "whoosh")
+    e.photo = name
+    return e
 
 
 def mugshot(t0, t1, num, title, name, cx, cy, w=380, h=470, accent=Y, show_q=False):
     """Suspect card: height-chart background, photo or silhouette, number plate."""
     def draw(base, t):
+        name = e.photo
         k = t - t0
         a = ease(k / 0.2) * (1 - ease((t - (t1 - 0.15)) / 0.15))
         if a <= 0:
@@ -392,7 +401,9 @@ def mugshot(t0, t1, num, title, name, cx, cy, w=380, h=470, accent=Y, show_q=Fal
         if k < 0.12:  # camera flash
             fl = Image.new("RGBA", base.size, (255, 255, 255, int(110 * (1 - k / 0.12))))
             base.alpha_composite(fl)
-    return E(t0, t1, draw, "shutter")
+    e = E(t0, t1, draw, "shutter")
+    e.photo, e.kind = name, "mug"
+    return e
 
 
 def bars(t0, t1, data, cx, cy, maxv, label):
@@ -468,6 +479,7 @@ def phone_gfx(t0, t1, cx, cy, rows, header="MY TEAM"):
 
 
 def tv_gfx(t0, t1, cx, cy, label, name="ipl"):
+    holder = {}
     def draw(base, t):
         k = t - t0
         a = ease(k / 0.25) * (1 - ease((t - (t1 - 0.15)) / 0.15))
@@ -475,7 +487,11 @@ def tv_gfx(t0, t1, cx, cy, label, name="ipl"):
         tv = Image.new("RGBA", (w, h + 70), (0, 0, 0, 0))
         d = ImageDraw.Draw(tv)
         d.rounded_rectangle((0, 0, w - 1, h - 1), radius=50, fill=(58, 46, 34, 255))
-        scr = cover(photo(name), w - 140, h - 120, 1.0).convert("L").convert("RGB")
+        nm = holder["e"].photo
+        if nm is None:
+            scr = Image.new("RGB", (w - 140, h - 120), (40, 40, 44))
+        else:
+            scr = cover(photo(nm), w - 140, h - 120, 1.0).convert("L").convert("RGB")
         a_ = arr(scr)
         a_[::3] *= 0.75
         tv.paste(img(a_ * 0.95), (40, 60))
@@ -486,7 +502,10 @@ def tv_gfx(t0, t1, cx, cy, label, name="ipl"):
         d.line((w - 140, h, w - 100, h + 60), fill=(58, 46, 34, 255), width=14)
         d.text((w / 2 - 30, h - 30), label, font=font(ANTON, 40), fill=Y, anchor="mm")
         paste_center(base, tv, cx, cy, 1 + 0.1 * (1 - ease(k / 0.2)), a)
-    return E(t0, t1, draw, "whoosh")
+    e = E(t0, t1, draw, "whoosh")
+    e.photo, e.kind = name, "tv"
+    holder["e"] = e
+    return e
 
 
 def scale_gfx(t0, t1, cx, cy):
@@ -683,9 +702,34 @@ INSERT_BEATS = {
                        T_([("THE OLD IPL NIGHTS", Y)], 130, "rise", cx=560, maxw=900)]),
          ("crowd", 0.35, 0, [T_([("LAST OVER.", WHITE), ("12 NEEDED.", Y)], 170)]),
          ("slump", 0.3, 0.7, [T_([("YORKER. YORKER. YORKER.", Y)], 130)]),
-         ("crowd", 0.45, 0, [T_([("THE STADIUM ROSE", WHITE)], 150, "rise")]),
+         ("clip:crowd", 0.9, 0, [T_([("THE STADIUM ROSE", WHITE)], 150, "rise")]),
          (None, 1, 0, [T_([("DRAMA CAME FROM", WHITE), ("THE CONTEST, NOT RUNS", Y)], 120)])],
 }
+
+
+MISSING = []
+
+
+def enforce_unique(S, El):
+    """No international photos, no photo or clip shown twice: later repeats become graphic-only and are listed."""
+    items = [(s_[0], "scene", j) for j, s_ in enumerate(S) if s_[2]] + \
+            [(e.t0, "el", j) for j, e in enumerate(El) if getattr(e, "photo", None)]
+    used = set()
+    for t0, kind, j in sorted(items):
+        key = S[j][2] if kind == "scene" else El[j].photo
+        if key.startswith("seq:"):
+            continue
+        if key in INTL or key in used:
+            MISSING.append((t0, key))
+            if kind == "scene":
+                a, b, _, dark, gray = S[j]
+                S[j] = (a, b, None, dark, gray)
+            elif getattr(El[j], "kind", "") in ("mug", "tv"):
+                El[j].photo = None
+            else:
+                El[j].t1 = El[j].t0          # drop the panel
+        else:
+            used.add(key)
 
 
 def add_inserts(S, El):
@@ -874,6 +918,7 @@ def build():
     add(chip(L(44), END, "NEXT: BUMRAH vs ABHISHEK", 640, 860, bg=RED, fg=WHITE, size=52))
     add_inserts(S, El)
     S.insert(0, (CLIP_OUT, CLIP_OUT + CLIP_DUR, "seq:screenrec", 1.0, 0))
+    enforce_unique(S, El)
     for e in (chip(CLIP_OUT + 0.6, CLIP_OUT + CLIP_DUR - 0.3, "ROHIT SHARMA ON THE IMPACT PLAYER RULE", 60, 930, size=40),
               chip(CLIP_OUT + 0.9, CLIP_OUT + CLIP_DUR - 0.3, "CLUB PRAIRIE FIRE PODCAST", 60, 1000, bg=INK, fg=GREY,
                    size=28)):
@@ -887,22 +932,41 @@ LOGO = LOGO.resize((200, int(LOGO.height * 200 / LOGO.width)), Image.LANCZOS)
 LOGO.putalpha(LOGO.getchannel("A").point(lambda v: int(v * 0.8)))
 
 
+BAND = (1 - 0.82 * np.clip((YY - 640) / 300, 0, 1) ** 1.2)[..., None]
+
+
 def window_at(t):
     return next((k for k, a, b in WINDOWS if a <= t < b), None)
 
 
 def render(S, El, t, i):
     sc = next((s for s in S if s[0] <= t < s[1]), S[-1])
-    a = backdrop(sc[2], t, sc[0], sc[1], sc[3], sc[4])
+    dark = sc[3] if not sc[2] or str(sc[2]).startswith("seq:") else 0.92
+    a = backdrop(sc[2], t, sc[0], sc[1], dark, min(sc[4], 0.25))
     g = GRAIN[i % len(GRAIN)]
     a = (a + np.repeat(np.repeat(g, 2, 0), 2, 1)[..., None] * 5) * VIG
     if t - sc[0] < 0.08 and sc[0] > 0:  # cut flash
         a = a + 60 * (1 - (t - sc[0]) / 0.08)
+    photo_mode = bool(sc[2])
+    if photo_mode:   # darken only the bottom band where the words go
+        a = a * BAND
     base = img(a).convert("RGBA")
     w = window_at(t)
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0)) if photo_mode else None
     for e in El:
         if e.t0 <= t < e.t1 and e.win == w:
-            e.fn(base, t)
+            if photo_mode and getattr(e, "kind", "") == "txt":
+                e.fn(layer, t)
+            else:
+                e.fn(base, t)
+    if layer is not None:
+        bb = layer.getchannel("A").getbbox()
+        if bb:
+            blk = layer.crop(bb)
+            s_ = min(1.0, 1700 / blk.width, 330 / blk.height)
+            if s_ < 1:
+                blk = blk.resize((int(blk.width * s_), int(blk.height * s_)), Image.BILINEAR)
+            base.alpha_composite(blk, ((W - blk.width) // 2, int(890 - blk.height / 2)))
     base.alpha_composite(LOGO, (W - LOGO.width - 46, 36))
     return base.convert("RGB")
 
@@ -1002,6 +1066,11 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     S, El = build()
     print(f"total {END:.1f}s, {len(S)} scenes, {len(El)} elements")
+    print(f"{len(MISSING)} spots without a unique IPL photo (graphic only):")
+    for t0, k in sorted(MISSING):
+        txts = [ln[0] for e in El if getattr(e, "kind", "") == "txt" and e.t0 <= t0 + 0.5 < e.t1
+                for ln in (getattr(e, "lines", []) or [])]
+        print(f"  {int(t0 // 60)}:{int(t0 % 60):02d}  (was {k})")
     if "--preview" in sys.argv:
         times = [s[0] + min(1.6, (s[1] - s[0]) * 0.75) for s in S]
         th = [render(S, El, t, int(t * FPS)).resize((320, 180)) for t in times]
