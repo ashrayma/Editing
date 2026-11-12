@@ -41,13 +41,24 @@ INS = TIM["inserts"]
 GAP_AT, GAP = LN[35]["start"] - 0.2, 1.5          # full silence before the reveal
 
 
-def L(i, off=0.0):
-    t = LN[i]["start"] + off
-    return t + (GAP if t >= GAP_AT else 0)
+# Rohit on the Club Prairie Fire podcast (Gilchrist's question + Rohit's answer), played with its own sound
+# right after insert 6 ("Rohit Sharma ne khud kaha tha…"); the voiceover pauses for it
+CLIP_AT = INS[5]["end"] + 0.45          # voiceover time
+CLIP_SRC = (0.3, 39.3)                  # in assets/screenrec_raw.mp4
+CLIP_DUR = CLIP_SRC[1] - CLIP_SRC[0] + 0.4
 
 
 def SH(t):
-    return t + (GAP if t >= GAP_AT else 0)
+    """Voiceover time -> output time (podcast clip and reveal silence pushed in)."""
+    return t + (CLIP_DUR if t >= CLIP_AT else 0) + (GAP if t >= GAP_AT else 0)
+
+
+def L(i, off=0.0):
+    return SH(LN[i]["start"] + off)
+
+
+CLIP_OUT = CLIP_AT
+GAP_OUT = SH(GAP_AT - 1e-6)
 
 
 def I(k, off=0.0):
@@ -63,9 +74,10 @@ def IE(k):
 WINDOWS = []
 for k in range(1, 17):
     a, b = INS[k - 1]["start"] - 0.45, INS[k - 1]["end"] + 0.45
-    WINDOWS.append((k, SH(a), SH(b)))
+    WINDOWS.append((k, SH(a), SH(b - 1e-3) + 1e-3))
+WINDOWS.append(("clip", CLIP_OUT, CLIP_OUT + CLIP_DUR))
 
-END = TIM["duration"] + GAP + 3.0
+END = TIM["duration"] + GAP + CLIP_DUR + 3.0
 
 # ----------------------------------------------------------------------------- helpers
 
@@ -165,6 +177,32 @@ CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4")}
 _clip = {}
 
 
+class SeqReader:
+    """Frames of a longer clip read sequentially through ffmpeg (re-opened if the time jumps)."""
+
+    def __init__(self, path, start):
+        self.path, self.start, self.p, self.t = path, start, None, None
+        self.last = None
+
+    def frame(self, t):
+        if self.p is None or self.t is None or not (0 <= t - self.t < 0.2):
+            if self.p:
+                self.p.kill()
+            self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", str(self.start + t), "-i", self.path,
+                                       "-vf", f"fps={FPS},scale={W}:{H}", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                                      stdout=subprocess.PIPE)
+            self.t = t - 1 / FPS
+        while self.t < t - 1e-6:
+            buf = self.p.stdout.read(W * H * 3)
+            if len(buf) == W * H * 3:
+                self.last = Image.frombuffer("RGB", (W, H), buf, "raw", "RGB", 0, 1)
+            self.t += 1 / FPS
+        return self.last
+
+
+SEQ = {"screenrec": SeqReader(os.path.join(HERE, "assets", "screenrec_raw.mp4"), CLIP_SRC[0])}
+
+
 def clip_frame(name, t):
     """Frame of a short clip (looped), cached in memory at 960x540."""
     if name not in _clip:
@@ -208,6 +246,9 @@ def backdrop(name, t, t0, t1, dark=0.32, gray=0.0):
             _bg["plate"] = a + g
         return _bg["plate"].copy()
     p = (t - t0) / max(0.5, t1 - t0)
+    if name.startswith("seq:"):
+        fr = SEQ[name[4:]].frame(max(0.0, min(t - t0, CLIP_SRC[1] - CLIP_SRC[0] - 0.05)))
+        return arr(fr) * dark if fr is not None else np.zeros((H, W, 3), np.float32)
     if name.startswith("clip:"):
         im = clip_frame(name[5:], t - t0).resize((W, H), Image.BILINEAR)
         a = arr(im)
@@ -796,12 +837,12 @@ def build():
     add(photo_panel(L(33), L(34), "super_sixes", (560, 470, 800, 506)))
     add(txt(L(33), L(34), [("MORE SIXES =", WHITE)], W / 2, 200, 120))
     add(txt(L(33, 1.8), L(34), [("“SIXES BROUGHT TO YOU BY…”", Y)], W / 2, 360, 100))
-    scene(L(34), GAP_AT + GAP, None)
-    add(strings_gfx(L(34), GAP_AT))
-    add(txt(L(34, 1.2), GAP_AT, [("ALL FOUR POINT", WHITE), ("ONE WAY…", RED)], W / 2, 540, 120))
+    scene(L(34), GAP_OUT + GAP, None)
+    add(strings_gfx(L(34), GAP_OUT))
+    add(txt(L(34, 1.2), GAP_OUT, [("ALL FOUR POINT", WHITE), ("ONE WAY…", RED)], W / 2, 540, 120))
 
     # THE REVEAL
-    scene(GAP_AT + GAP, L(36), None)
+    scene(GAP_OUT + GAP, L(36), None)
     pairs = [("IMPACT PLAYER", "MORE RUNS"), ("FLAT PITCH", "MORE RUNS"), ("FANTASY", "MORE POINTS"),
              ("BROADCAST", "MORE SIXES + ADS")]
     for i, (a_, b_) in enumerate(pairs):
@@ -832,6 +873,12 @@ def build():
     add(txt(L(43, 2.4), END, [("ONE WORD IN THE COMMENTS", GREY)], W / 2, 680, 60, path=XB_F))
     add(chip(L(44), END, "NEXT: BUMRAH vs ABHISHEK", 640, 860, bg=RED, fg=WHITE, size=52))
     add_inserts(S, El)
+    S.insert(0, (CLIP_OUT, CLIP_OUT + CLIP_DUR, "seq:screenrec", 1.0, 0))
+    for e in (chip(CLIP_OUT + 0.6, CLIP_OUT + CLIP_DUR - 0.3, "ROHIT SHARMA ON THE IMPACT PLAYER RULE", 60, 930, size=40),
+              chip(CLIP_OUT + 0.9, CLIP_OUT + CLIP_DUR - 0.3, "CLUB PRAIRIE FIRE PODCAST", 60, 1000, bg=INK, fg=GREY,
+                   size=28)):
+        e.win = "clip"
+        El.append(e)
     return S, El
 
 
@@ -879,20 +926,31 @@ def soundtrack(path, S, El):
     with wave.open(tmp) as w:
         vo = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
     voice = np.zeros(n)
-    cut = int(GAP_AT * SR)
-    put(voice, vo[:cut], 0.0)
-    put(voice, vo[cut:], GAP_AT + GAP)
+    c1, c2 = int(CLIP_AT * SR), int(GAP_AT * SR)
+    put(voice, vo[:c1], 0.0)
+    put(voice, vo[c1:c2], CLIP_AT + CLIP_DUR)
+    put(voice, vo[c2:], GAP_OUT + GAP)
+    # the podcast clip's own sound, levelled up to sit with the voiceover
+    tmp2 = os.path.join(OUT, "clip44.wav")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(CLIP_SRC[0]), "-to", str(CLIP_SRC[1]), "-i",
+                    os.path.join(HERE, "assets", "screenrec_raw.mp4"), "-vn", "-ac", "1", "-ar", str(SR),
+                    "-af", "volume=6dB,afade=in:d=0.15,areverse,afade=in:d=0.3,areverse", tmp2], check=True)
+    with wave.open(tmp2) as w:
+        cl = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
+    put(voice, cl, CLIP_OUT + 0.2)
 
     mus = np.zeros(n)
     mus += st.section(drone(L(5)) * 0.5, 0.0, END, 0.1, 0.5)
-    mus += st.section(st.pad(st.A_MINOR, GAP_AT - L(5), cutoff=900) * 0.5, L(5), END, 0.8, 0.05)
-    mus += st.section(st.pulse(GAP_AT - L(8), 100, lambda x: 0.45 + 0.3 * (x / max(1, GAP_AT - L(8)))), L(8), END,
+    mus += st.section(st.pad(st.A_MINOR, GAP_OUT - L(5), cutoff=900) * 0.5, L(5), END, 0.8, 0.05)
+    mus += st.section(st.pulse(GAP_OUT - L(8), 100, lambda x: 0.45 + 0.3 * (x / max(1, GAP_OUT - L(8)))), L(8), END,
                       0.3, 0.05) * 0.8
-    mus += st.section(st.arps(st.A_MINOR, GAP_AT - L(16), step=0.25, gain=0.1), L(16), END, 1.0, 0.05)
-    mus += st.section(st.pulse(END - (GAP_AT + GAP), 72, lambda x: 0.3), GAP_AT + GAP, END, 0.4, 2.0) * 0.7
+    mus += st.section(st.arps(st.A_MINOR, GAP_OUT - L(16), step=0.25, gain=0.1), L(16), END, 1.0, 0.05)
+    mus += st.section(st.pulse(END - (GAP_OUT + GAP), 72, lambda x: 0.3), GAP_OUT + GAP, END, 0.4, 2.0) * 0.7
     mus += st.section(st.pad(st.WARM, END - L(41), cutoff=1200) * 0.45, L(41), END, 1.5, 2.5)
     mus = st.norm(mus, 0.3)
-    mus[int(GAP_AT * SR):int((GAP_AT + GAP) * SR)] = 0  # the one real silence
+    mus[int(GAP_OUT * SR):int((GAP_OUT + GAP) * SR)] = 0  # the one real silence
+    a_, b_ = int(CLIP_OUT * SR), int((CLIP_OUT + CLIP_DUR) * SR)
+    mus[a_:b_] *= 0.15  # podcast clip: music almost out
 
     fx = np.zeros(n)
     hb = sfx.heartbeat()
@@ -900,7 +958,7 @@ def soundtrack(path, S, El):
         put(fx, hb, L(2, 0.2) + 0.85 * k, 0.5)
     put(fx, braam(weight=1.2), L(0, 3.4), 0.5)
     put(fx, braam(weight=1.2), L(41, 2.4), 0.5)
-    put(fx, braam(weight=1.3), GAP_AT + GAP, 0.45)
+    put(fx, braam(weight=1.3), GAP_OUT + GAP, 0.45)
     put(fx, braam(weight=1.0), L(36, 1.35), 0.4)
     for s in S:
         put(fx, sfx.whoosh() * 0.10, max(0, s[0] - 0.15))
