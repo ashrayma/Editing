@@ -181,7 +181,8 @@ CLIPS = {   # name -> (file, start, end); each segment is shown once
     "pollard": (_A("pollard_clean"), 0.0, 5.5), "pollard_sad": (_A("pollard_clean"), 5.5, 7.8),
     "crowd": (_A("crowd_clean"), 0.0, 5.5), "crowd_wide": (_A("crowd_clean"), 5.5, 9.5),
     "crowd_flags": (_A("crowd_clean"), 9.5, 13.0), "crowd_bowl": (_A("crowd_clean"), 13.2, 16.0),
-    **{"reel_" + n: (_A("reel_" + n), 0.0, 99.0) for n in ("fans", "fans2", "think", "ton")},
+    "reel_fans": (_A("reel_fans"), 0.6, 99.0), "reel_fans2": (_A("reel_fans2"), 0.2, 99.0),
+    "reel_think": (_A("reel_think"), 0.2, 99.0), "reel_ton": (_A("reel_ton"), 0.4, 99.0),
     "reel_six": (_A("reel_six"), 1.2, 99.0),
 }
 # visual for each blank screen, matched to what the voice says there (output seconds -> photo / clip)
