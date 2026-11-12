@@ -29,3 +29,13 @@ rajat/out/work-*/
 rajat/out/*.log
 rajat/incoming/
 today/src/
+today/incoming/
+today/assets/
+today/reel/media/
+today/reel/.hyperframes/
+today/out/*.wav
+today/out/*.mp4
+today/out/*.log
+today/out/snap*/
+today/out/.*hf-transaction*/
+today/out/work-*/
