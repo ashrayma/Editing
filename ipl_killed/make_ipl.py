@@ -171,7 +171,9 @@ PHOTO_PATHS = {
     "crowd": os.path.join(ROOT, "virat_82", "bg_mcg.jpg"),
     **{n: os.path.join(HERE, "assets", n + ".jpg") for n in (
         "rcb_huddle", "mi_celebrate", "mccullum_2008", "mccullum_2008b", "gt_celebrate", "ceat_timeout",
-        "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal")},
+        "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal",
+        "six_crowd", "mi_bowler", "chahar_chepauk", "kuldeep_down", "narine", "hardik_six", "rashid_celebrate",
+        "rashid_six", "rabada_fist", "dhoni_bowled", "mi_pointing", "toss")},
 }
 CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4"),
          "crowd": os.path.join(HERE, "assets", "crowd_clean.mp4")}
@@ -708,6 +710,10 @@ INSERT_BEATS = {
 
 
 MISSING = []
+# photos you sent for specific empty spots: output time (m:ss) -> photo
+FILL = {"1:31": "toss", "1:43": "mi_pointing", "1:57": "rashid_celebrate", "2:03": "hardik_six", "2:05": "kuldeep_down",
+        "3:42": "chahar_chepauk", "3:57": "rabada_fist", "4:14": "rashid_six", "4:27": "narine", "5:27": "mi_bowler",
+        "6:26": "six_crowd", "6:35": "dhoni_bowled"}
 
 
 def enforce_unique(S, El):
@@ -720,6 +726,12 @@ def enforce_unique(S, El):
         if key.startswith("seq:"):
             continue
         if key in INTL or key in used:
+            fill = FILL.get(f"{int(t0 // 60)}:{int(t0 % 60):02d}") if kind == "scene" else None
+            if fill and fill not in used:
+                a, b, _, dark, gray = S[j]
+                S[j] = (a, b, fill, dark, gray)
+                used.add(fill)
+                continue
             MISSING.append((t0, key))
             if kind == "scene":
                 a, b, _, dark, gray = S[j]
