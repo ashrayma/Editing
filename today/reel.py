@@ -34,6 +34,7 @@ W, H, FPS = 1080, 1920, 30
 Y, INK, RED = "#FEDE5C", "#121214", "#E5484D"
 SR = sfx.SR
 LEAD, GAP, END_HOLD = 0.25, 0.3, 1.8
+BAND_X, BAND_Y = 64, 1130  # all on-screen text lives in this lower band, clear of faces and the IG buttons
 
 LINES = [
     ("hook", "There was something special about Virender Sehwag."),
@@ -220,17 +221,18 @@ def words(lines, start, dur, y, size=120, colors=None, font="anton", align="cent
     style = lambda c: f"color:transparent;-webkit-text-stroke:6px {INK}" if c == "outline" else f"color:{c}"  # noqa: E731
     rows = "".join(f'<div class="mask"><div class="ln" id="{i}l{k}" style="{style(c)}">{t}</div></div>'
                    for k, (t, c) in enumerate(zip(lines, colors)))
-    add(f'<div id="{i}" class="words {font} clip" data-start="{start}" data-duration="{dur}" '
-        f'style="top:{y}px;font-size:{size}px;text-align:{align};z-index:{z}">{rows}</div>')
+    cls = "tband" if align == "band" else ""
+    add(f'<div id="{i}" class="words {font} {cls} clip" data-start="{start}" data-duration="{dur}" '
+        f'style="top:{y}px;font-size:{size}px;text-align:{"left" if cls else align};z-index:{z}">{rows}</div>')
     for k in range(len(lines)):
         anim(f'tl.fromTo("#{i}l{k}",{{yPercent:110}},{{yPercent:0,duration:0.7,ease:"expo.out"}},{round(start + 0.05 + stagger * k, 2)})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
     return i
 
 
-def label(txt, start, dur, y, color=Y, bg=None, size=34, z=31):
+def label(txt, start, dur, y, color=Y, bg=None, size=34, z=31, band=False):
     i = nid("lb")
-    style = f"top:{y}px;font-size:{size}px;color:{color};" + (f"background:{bg};padding:10px 22px;border-radius:10px;" if bg else "")
+    style = (f"left:{BAND_X}px;transform:none;" if band else "") + f"top:{y}px;font-size:{size}px;color:{color};" + (f"background:{bg};padding:10px 22px;border-radius:10px;" if bg else "")
     add(f'<div id="{i}" class="label clip" data-start="{start}" data-duration="{dur}" style="{style}z-index:{z}">{html.escape(txt)}</div>')
     anim(f'tl.fromTo("#{i}",{{opacity:0,y:16}},{{opacity:1,y:0,duration:0.5,ease:"expo.out"}},{start})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.25}},{round(start + dur - 0.25, 2)})')
@@ -384,7 +386,7 @@ def date_flip(a, b, start, dur, y=380):
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
 
 
-def odo(num, start, dur, y, size=360, label=None, color=Y, gold=False):
+def odo(num, start, dur, y, size=360, label=None, color=Y, gold=False, band=True):
     """Rolling-digit number (Centurion reel style)."""
     i = nid("od")
     events.append((start + 0.1, "roll"))
@@ -398,7 +400,7 @@ def odo(num, start, dur, y, size=360, label=None, color=Y, gold=False):
             cols.append(f'<span>{html.escape(ch)}</span>')
     lab = f'<div class="olab">{html.escape(label)}</div>' if label else ""
     add(f'<div id="{i}" class="odo anton clip{" gold" if gold else ""}" data-start="{start}" data-duration="{dur}" '
-        f'style="top:{y}px;font-size:{size}px;color:{color}"><div class="digits">{"".join(cols)}</div>{lab}</div>')
+        f'style="top:{y}px;font-size:{size}px;color:{color}{";left:" + str(BAND_X) + "px;text-align:left" if band else ""}"><div class="digits">{"".join(cols)}</div>{lab}</div>')
     anim(f'tl.fromTo("#{i}",{{opacity:0,scale:1.15}},{{opacity:1,scale:1,duration:0.4,ease:"expo.out"}},{start})')
     anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
 
@@ -556,99 +558,98 @@ def end_card(start, dur):
 # ----------------------------------------------------------------------------- the reel
 
 def build_scenes():
+    """Clean layout: footage owns the frame (faces stay clear); all text sits in one left-aligned band in the
+    lower part of the screen over a dark fade. No running captions; the band text carries each line."""
+    BY = BAND_Y
     # 0:00 action first (playbook rule 1), then the claim
     s, d = at("hook"), until_next("hook")
     fb("c_cut_aus", 0.0, 1.95)
-    fb("s_drive", 1.9, s + d - 1.9, pos="50% 35%")
-    words(["There was something", "special about"], s + 0.05, d - 0.05, 820, size=92, font="serif", colors=["#fff", "#fff"], stagger=0.15)
-    words(["SEHWAG"], at("hook", 1.0), s + d - at("hook", 1.0), 1010, size=260, colors=[Y], sfx_kind="impact")
+    fb("s_drive", 1.9, s + d - 1.9, pos="50% 30%")
+    words(["There was something special about"], s + 0.05, d - 0.05, BY, size=56, font="serif", align="band")
+    words(["SEHWAG"], at("hook", 1.0), s + d - at("hook", 1.0), BY + 80, size=190, colors=[Y], align="band", sfx_kind="impact")
 
     # the coaching manual can't explain him
     s, d = at("manual"), until_next("manual")
     fb("s_latecut", s, d, front=True, blur=True)
-    manual(s, d, span("manual", 0.62), y=470)
+    manual(s, d, span("manual", 0.62), y=560)
 
     # survive vs destroy
     s = at("survive")
     d = round(at("destroy") - s + until_next("destroy"), 2)
     split("c_test_block", "c_big_hit", s, d, round(at("destroy") - 0.1, 2), at("destroy", 0.5))
-    follow_pop(round(at("survive", 0.6), 2))
 
     # 2000s kid: nobody left the TV
     s, d = at("kid"), until_next("kid")
     fb("c_big_hit_2", s, d, blur=True)
-    date_flip("THE", "2000s", s, span("kid", 0.4) - s, y=330)
-    tv("tv_drive_nz", s + 0.2, d - 0.2, y=640)
-    words(["NOBODY LEFT", "THE TV."], span("kid", 0.68), s + d - span("kid", 0.68), 330, size=140, colors=["#fff", Y])
+    tv("tv_drive_nz", s + 0.2, d - 0.2, y=470)
+    label("THE 2000s", s + 0.3, d - 0.3, BY - 40, color=INK, bg=Y, size=34, band=True)
+    words(["Nobody left the TV."], span("kid", 0.62), s + d - span("kid", 0.62), BY + 40, size=96, colors=["#fff"], align="band")
+    follow_pop(round(at("kid", -1.6), 2), 2.2)
 
     # Multan 2004: 309, first Indian triple
     s, d = at("multan"), until_next("multan")
-    fb("s_multan", s, d, pos="50% 30%", tag="vs PAKISTAN · MULTAN 2004")
-    date_flip("MULTAN", "2004", s, span("multan", 0.3) - s + 0.3, y=470)
-    odo("309", span("multan", 0.3), s + d - span("multan", 0.3), 520, size=400, label="RUNS")
-    label("1ST INDIAN · TEST TRIPLE CENTURY", span("multan", 0.62), s + d - span("multan", 0.62), 1240, color=INK, bg=Y, size=40)
+    fb("s_multan", s, d, pos="50% 22%")
+    label("MULTAN · 2004", s + 0.1, d - 0.1, BY - 40, color=INK, bg=Y, size=34, band=True)
+    odo("309", span("multan", 0.3), s + d - span("multan", 0.3), BY + 20, size=220, label="RUNS")
+    label("1st Indian to score a Test triple century", span("multan", 0.62), s + d - span("multan", 0.62), BY + 330, color="#fff", size=34, band=True)
 
     # Chennai 2008: 300 in 278 balls, fastest ever (the shareable number)
     s, d = at("chennai"), until_next("chennai")
     fb("c_test_sweep", s, 2.2)
     fb("c_celebrate", round(s + 2.0, 2), round(d - 2.0, 2))
-    date_flip("CHENNAI", "2008", s, span("chennai", 0.22) - s + 0.3, y=470)
-    odo("300", span("chennai", 0.22), span("chennai", 0.5) - span("chennai", 0.22), 470, size=380, label="RUNS IN")
-    odo("278", span("chennai", 0.42), s + d - span("chennai", 0.42), 820, size=300, label="BALLS", color="#fff")
-    stamp("FASTEST EVER", span("chennai", 0.74), s + d - span("chennai", 0.74), 470, size=120)
-    follow_pop(round(at("chennai", -0.4), 2), 2.4)
+    label("CHENNAI · 2008", s + 0.1, d - 0.1, BY - 40, color=INK, bg=Y, size=34, band=True)
+    odo("300", span("chennai", 0.22), span("chennai", 0.44) - span("chennai", 0.22), BY + 20, size=220, label="RUNS")
+    odo("278", span("chennai", 0.44), s + d - span("chennai", 0.44), BY + 20, size=220, label="BALLS", color="#fff")
+    stamp("FASTEST EVER", span("chennai", 0.74), s + d - span("chennai", 0.74), BY + 345, size=64, rot=-4)
 
     # 2011 World Cup first-ball fours
     s, d = at("wc"), until_next("wc")
-    fb("s_wc2011", s, d, front=True, pos="40% 50%", tag="WORLD CUP 2011")
-    wc_strip(s + 0.3, d - 0.3, 760, [span("wc", f) for f in (0.42, 0.52, 0.62, 0.72, 0.82)])
+    fb("s_wc2011", s, d, front=True, pos="40% 40%")
+    wc_strip(s + 0.3, d - 0.3, BY - 60, [span("wc", f) for f in (0.42, 0.52, 0.62, 0.72, 0.82)])
 
     # follow ask (spoken)
     s, d = at("follow"), until_next("follow")
     fb("c_shot_167", s, d, blur=True)
-    words(["true cricket", "fans only"], s, d, 400, size=130, font="serif", colors=["#fff", Y])
-    follow_tap(s + 0.2, d - 0.2, y=760)
+    words(["true cricket fans only"], s, d, 520, size=84, font="serif", colors=["#fff"])
+    follow_tap(s + 0.2, d - 0.2, y=700)
 
     # Ganguly tease, then his own words
     s, d = at("tease"), until_next("tease")
     fb("ganguly_still", s, d, blur=True)
-    name_tag("SOURAV GANGULY", "Former India captain", s + 0.2, d - 0.2, y=820)
+    name_tag("SOURAV GANGULY", "Former India captain", s + 0.2, d - 0.2, y=BY)
     s, d = at("ganguly"), until_next("ganguly")
     fb("ganguly", s, d)
     g0, g1 = T["ganguly"]
-    subtitle("“An opener's job is to keep leaving<br>the ball until it gets old.”", g0 + 0.05, 2.55)
-    subtitle("“Sehwag's job was to make it old<br><b>by hitting it.</b>”", g0 + 2.6, g1 - g0 - 2.4)
+    subtitle("“An opener's job is to keep leaving the ball until it gets old.”", g0 + 0.05, 2.55, y=BY + 80)
+    subtitle("“Sehwag's job was to make it old <b>by hitting it.</b>”", g0 + 2.6, g1 - g0 - 2.4, y=BY + 80)
 
     # the hundred: helmet off, red handkerchief
     s, d = at("hundred"), until_next("hundred")
-    fb("s_helmet", s, span("hundred", 0.36) - s + 0.2, front=True, pos="50% 30%")
-    fb("s_patka", span("hundred", 0.36), s + d - span("hundred", 0.36), front=True, pos="50% 30%")
-    label("THE RED HANDKERCHIEF", span("hundred", 0.42), s + d - span("hundred", 0.42), 1240, color="#fff", bg=RED, size=40)
+    fb("s_helmet", s, span("hundred", 0.36) - s + 0.2, front=True, pos="50% 25%")
+    words(["The helmet came off."], s + 0.1, span("hundred", 0.36) - s, BY + 40, size=84, align="band")
+    fb("s_patka", span("hundred", 0.36), s + d - span("hundred", 0.36), front=True, pos="50% 25%")
+    label("THE RED HANDKERCHIEF", span("hundred", 0.4), s + d - span("hundred", 0.4), BY - 40, color="#fff", bg=RED, size=34, band=True)
+    words(["Like he was batting", "in his backyard."], span("hundred", 0.66), s + d - span("hundred", 0.66), BY + 40, size=74, font="serif", align="band", stagger=0.2)
 
     # trophies, runs, childhood
     s = at("trophies")
     fb("c_drive_nz", s, until_next("trophies"))
-    words(["SOME PLAYERS GIVE YOU", "TROPHIES."], s, until_next("trophies"), 470, size=110, colors=["#fff", "#fff"])
+    words(["Some players give you", "TROPHIES."], s, until_next("trophies"), BY, size=84, colors=["#fff", "#fff"], align="band")
     s = at("runs")
     fb("c_cut_aus2", s, until_next("runs"))
-    words(["SOME GIVE YOU", "RUNS."], s, until_next("runs"), 470, size=120, colors=["#fff", "#fff"])
+    words(["Some give you", "RUNS."], s, until_next("runs"), BY, size=84, colors=["#fff", "#fff"], align="band")
     s, d = at("childhood"), until_next("childhood")
-    fb("s_laugh", s, d, front=True, pos="50% 30%")
-    words(["Viru gave us", "our childhood."], s, d, 420, size=130, font="serif", colors=["#fff", Y], stagger=0.25)
+    fb("s_laugh", s, d, front=True, pos="50% 25%")
+    words(["Viru gave us", "our childhood."], s, d, BY, size=96, font="serif", colors=["#fff", Y], stagger=0.25, align="band")
 
     # the question + follow
     s = at("vote")
     d = round(TOTAL - s - END_HOLD + 0.2, 2)
     vote("s_bighit", "gayle", s, d)
-    words(["MOST DANGEROUS", "OPENER?"], span("vote", 0.2), s + d - span("vote", 0.2), 340, size=110, colors=["#fff", Y], z=36)
-    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.75), s + d - span("vote", 0.75), 1240, color=INK, bg=Y, size=42, z=37)
-    follow_pop(span("vote", 0.85), 2.4)
+    words(["Most dangerous opener?"], span("vote", 0.2), s + d - span("vote", 0.2), BY + 20, size=80, colors=["#fff"], align="band", z=36)
+    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.72), s + d - span("vote", 0.72), BY + 140, color=INK, bg=Y, size=34, z=37, band=True)
+    follow_pop(span("vote", 0.85), 2.2)
     end_card(round(TOTAL - END_HOLD - 0.1, 2), round(END_HOLD + 0.1, 2))
-
-    for lid, _ in LINES:
-        if lid not in NO_VO:
-            captions(lid)
-
 
 build_scenes()
 
@@ -820,6 +821,44 @@ html,body{{margin:0;background:{INK}}}
 .elogo{{width:800px}}
 .efol{{background:{Y};color:{INK};font:900 70px "Inter Display";padding:24px 70px;border-radius:22px}}
 .esub{{font:700 40px "Inter Display";color:rgba(255,255,255,.7)}}
+
+/* clean pass: smaller type, one text band, logo top-left */
+.brand{{left:44px;top:196px;transform:none;background:rgba(18,18,20,.55);padding:8px 12px;border-radius:10px;gap:10px;opacity:.92}}
+.brand img{{width:150px}}
+.bfol{{font-size:17px;padding:5px 9px;border-radius:6px}}
+.fbshade{{background:linear-gradient(180deg,rgba(13,13,15,.55) 0%,rgba(13,13,15,0) 16%,rgba(13,13,15,0) 46%,rgba(13,13,15,.78) 60%,rgba(13,13,15,.95) 74%,rgba(13,13,15,.97) 100%)}}
+.fbshade.cover{{background:linear-gradient(180deg,rgba(13,13,15,.5) 0%,rgba(13,13,15,0) 16%,rgba(13,13,15,0) 46%,rgba(13,13,15,.75) 60%,rgba(13,13,15,.93) 76%,rgba(13,13,15,.96) 100%)}}
+.words.tband{{left:{BAND_X}px;right:170px}}
+.words{{text-shadow:0 4px 24px rgba(0,0,0,.55)}}
+.odo .olab{{font-size:30px;letter-spacing:10px;margin-top:6px}}
+.stampx{{left:{BAND_X}px;margin-left:0;width:auto;padding:0 28px;border-width:8px;border-radius:12px}}
+.fpop{{top:268px;left:44px;right:auto;border-radius:10px;border-left:6px solid {Y};font-size:24px;padding:10px 16px 10px 10px;gap:10px}}
+.fpb{{font-size:18px;padding:5px 8px}}
+.subtl{{left:{BAND_X}px;right:170px;text-align:left;font-size:46px;line-height:1.25}}
+.ntag .nn{{font-size:84px}}
+.ntag .ns{{font-size:28px}}
+.ntag{{left:{BAND_X}px}}
+.manual{{left:170px;width:740px;padding:36px 40px 30px}}
+.mhead{{font-size:60px}}
+.mrow{{font-size:32px;padding:11px 0}}
+.wcs{{left:{BAND_X}px;right:170px;padding:22px}}
+.wchead{{font-size:24px;margin-bottom:14px;letter-spacing:4px}}
+.wgrid{{gap:12px}}
+.wcell{{height:104px;border-radius:12px;gap:4px}}
+.wt{{font-size:24px}}
+.wball{{width:46px;height:46px;font-size:30px}}
+.wcount{{font-size:70px;margin-top:10px}}
+.hword{{font-size:150px}}
+.htag{{font-size:30px}}
+.vname{{font-size:70px;bottom:auto;top:330px}}
+.vor{{width:150px;height:150px;margin-left:-75px;top:700px;font-size:80px}}
+.ftap{{left:200px;right:200px;padding:44px 30px;gap:30px}}
+.flogo{{width:420px}}
+.fbtn{{font-size:48px;padding:20px 50px;min-width:340px}}
+.fdone{{top:20px}}
+.finger{{font-size:100px;top:230px}}
+.tv{{left:150px;width:780px}}
+.tvscreen{{height:520px}}
 """
 
 
