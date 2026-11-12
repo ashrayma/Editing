@@ -157,6 +157,9 @@ PHOTO_PATHS = {
     "team": os.path.join(ROOT, "kohli_countdown", "assets", "photo_5.jpg"),
     "hit": os.path.join(ROOT, "kohli_countdown", "assets", "photo_2.jpg"),
     "crowd": os.path.join(ROOT, "virat_82", "bg_mcg.jpg"),
+    **{n: os.path.join(HERE, "assets", n + ".jpg") for n in (
+        "rcb_huddle", "mi_celebrate", "mccullum_2008", "mccullum_2008b", "gt_celebrate", "ceat_timeout",
+        "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal")},
 }
 CLIPS = {"pollard": os.path.join(HERE, "assets", "pollard_clean.mp4")}
 _clip = {}
@@ -579,25 +582,26 @@ INSERT_BEATS = {
                       T_([("4 SUSPECTS. 1 TRUTH.", Y)], 130, "rise")]),
         (None, 1, 0, [lambda a, b: [mugshot(a + 0.2 * i, b, f"0{i + 1}", "???", None, 300 + i * 440, 560, show_q=True)
                                     for i in range(4)]]),
-        ("ipl", 0.3, 0.5, [lambda a, b: chip(a, b, "STAY TILL THE END", 640, 500, bg=RED, fg=WHITE, size=72)])],
+        ("rcb_huddle", 0.3, 0.3, [lambda a, b: chip(a, b, "STAY TILL THE END", 640, 500, bg=RED, fg=WHITE, size=72)])],
     4: [(None, 1, 0, [T_([("2023", Y)], 260), T_([("IMPACT PLAYER RULE", WHITE)], 80, "rise", cy=760)]),
         ("iplk", 0.3, 0, [T_([("MORE CHANCES.", WHITE), ("MORE STRATEGY.", Y)], 130, "rise")]),
-        ("ipl", 0.3, 0.4, [T_([("SWAP 1 PLAYER", WHITE), ("AFTER THE TOSS", Y)], 130)]),
+        ("impact_signal", 0.35, 0, [T_([("SWAP 1 PLAYER", WHITE), ("AFTER THE TOSS", Y)], 130, cx=1300, maxw=1000)]),
         (None, 1, 0, [ST_("SMART ON PAPER", 540, Y, 120)])],
     5: [("slump", 0.4, 0.5, [T_([("THEN: 6 DOWN", WHITE), ("= GAME OVER", RED)], 140)]),
         (None, 1, 0, [T_([("NO. 7, 8:", WHITE), ("BOWLERS SWINGING", GREY)], 130, "rise")]),
         ("batup", 0.4, 0, [T_([("NOW: NO. 8", WHITE), ("IS A REAL BATTER", Y)], 130, cx=700, maxw=1100)]),
-        ("hit", 0.35, 0, [T_([("TOP ORDER:", WHITE), ("NO BRAKES", Y)], 150)]),
+        ("srh_fist", 0.35, 0, [T_([("TOP ORDER:", WHITE), ("NO BRAKES", Y)], 150, cx=1250, maxw=1100)]),
         ("clip:pollard", 0.45, 0, [T_([("ATTACK FROM BALL 1", Y)], 140)]),
         ("slump", 0.35, 0.7, [T_([("BOWLER:", WHITE), ("NO RELIEF", RED)], 160)])],
     6: [(None, 1, 0, [T_([("NOT JUST MY OPINION", WHITE)], 130, "rise")]),
-        ("iplk", 0.25, 0.6, [T_([("ROHIT SHARMA:", WHITE), ("“NOT A FAN”", Y)], 150),
-                             T_([("ON THE IMPACT PLAYER RULE", GREY)], 56, "rise", path=XB_F, cy=820)]),
+        (None, 1, 0, [P_("rohit_mi", (1160, 100, 600, 880), fy=0.3),
+                      T_([("ROHIT SHARMA:", WHITE), ("“NOT A FAN”", Y)], 140, cx=600, maxw=950),
+                      T_([("ON THE IMPACT PLAYER RULE", GREY)], 50, "rise", path=XB_F, cy=760, cx=600, maxw=950)]),
         ("batup", 0.35, 0, [T_([("ALL-ROUNDERS", WHITE), ("NOT BOWLING", RED)], 140, cx=720, maxw=1100)])],
     7: [(None, 1, 0, [lambda a, b: mugshot(a, b, "01", "IMPACT PLAYER", "iplk", 560, 540, w=460, h=600),
                       lambda a, b: stamp(a + 0.6, b, "GUILTY", 1300, 540, size=150)]),
         (None, 1, 0, [C_(["RUNS ↑", "RISK ↑", "BALANCE ↓"], x=760, y0=330, size=80, step=0.6)]),
-        ("ipl", 0.25, 0.6, [T_([("BUT IF IT WAS", WHITE), ("THE ONLY CULPRIT…", Y)], 130, "rise")])],
+        ("srh_arms", 0.25, 0.4, [T_([("BUT IF IT WAS", WHITE), ("THE ONLY CULPRIT…", Y)], 130, "rise")])],
     8: [("slump", 0.35, 0.5, [T_([("T20: HARD ENOUGH", WHITE), ("FOR BOWLERS", Y)], 130)]),
         (None, 1, 0, [C_(["4 OVERS", "FIELD RESTRICTIONS", "SHORT BOUNDARIES"], x=560, y0=330, size=70)]),
         ("pitch", 0.45, 0, [T_([("HIS LAST HOPE:", WHITE), ("THE PITCH", Y)], 150)]),
@@ -607,33 +611,35 @@ INSERT_BEATS = {
         (None, 1, 0, [T_([("SAME HEIGHT.", WHITE), ("SAME SPEED.", Y)], 160, "rise")]),
         ("clip:pollard", 0.45, 0, [T_([("JUST STAND & HIT", Y)], 150)]),
         (None, 1, 0, [T_([("SKILL ↓   GUESSWORK ↑", Y)], 110, path=BLACK_F)])],
-    10: [("team", 0.4, 0, [T_([("WHEN 140", WHITE), ("WAS ENOUGH", Y)], 160, cx=1250, maxw=1100)]),
+    10: [("mi_celebrate", 0.4, 0, [T_([("WHEN 140", WHITE), ("WAS ENOUGH", Y)], 160)]),
          ("crowd", 0.35, 0.3, [T_([("LOW-SCORING", WHITE), ("THRILLERS", Y)], 160, "rise")]),
          ("pant", 0.3, 0.5, [T_([("EVERY RUN EARNED.", WHITE), ("EVERY WICKET MATTERED.", Y)], 110)])],
     11: [(None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "FANTASY"),
                        T_([("A NEW", WHITE), ("AUDIENCE", Y)], 150, "rise", cx=1300, maxw=900)]),
          ("crowd", 0.3, 0.5, [T_([("NON-FANS", WHITE), ("NOW PICK TEAMS", Y)], 140)]),
          (None, 1, 0, [T_([("BUT IT CHANGED", WHITE), ("HOW WE WATCH", RED)], 140, "rise")])],
-    12: [("rcbkneel", 0.35, 0, [T_([("THEN:", WHITE), ("WILL MY TEAM WIN?", Y)], 130, cx=1200, maxw=1100)]),
+    12: [("gt_celebrate", 0.35, 0, [T_([("THEN:", WHITE), ("WILL MY TEAM WIN?", Y)], 130)]),
          (None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "MY POINTS"),
                        T_([("NOW: HOW MANY", WHITE), ("POINTS?", Y)], 130, "rise", cx=1300, maxw=900)]),
          ("slump", 0.35, 0.4, [T_([("MAIDEN OVER", WHITE), ("= A FEW POINTS", GREY)], 140)]),
          ("ipl", 0.3, 0.5, [T_([("MATCH-WINNING 20", WHITE), ("= ZERO FANTASY VALUE", RED)], 120)])],
-    13: [("trophy", 0.4, 0, [T_([("ONE OF THE BIGGEST", WHITE), ("LEAGUES IN THE WORLD", Y)], 120)]),
+    13: [("rcb_huddle", 0.35, 0, [T_([("ONE OF THE BIGGEST", WHITE), ("LEAGUES IN THE WORLD", Y)], 120)]),
          (None, 1, 0, [T_([("MEDIA RIGHTS:", WHITE), ("THOUSANDS OF CRORES", Y)], 130)]),
          ("ipl", 0.3, 0.5, [T_([("EVERY SECOND", WHITE), ("IS FOR SALE", RED)], 160, "rise")])],
-    14: [(None, 1, 0, [C_(["STRATEGIC TIMEOUT", "INNINGS BREAK", "AD AFTER EVERY WICKET"], x=420, y0=320, size=72,
-                          bg=RED, fg=WHITE)]),
+    14: [("ceat_timeout", 0.3, 0, [C_(["STRATEGIC TIMEOUT", "INNINGS BREAK", "AD AFTER EVERY WICKET"], x=420, y0=320,
+                                      size=72, bg=RED, fg=WHITE)]),
          ("iplk", 0.3, 0.5, [T_([("THE BROADCAST", WHITE), ("SETS THE PACE", Y)], 140)]),
          ("clip:pollard", 0.45, 0, [T_([("WHAT SELLS?", WHITE)], 130, "rise", cy=360),
                                     T_([("THE SIX.", Y)], 200, cy=620)]),
-         (None, 1, 0, [C_(["HIGHLIGHTS: SIX", "REELS: SIX", "ADS: SIX"], x=560, y0=330, size=80)]),
+         (None, 1, 0, [P_("super_sixes", (1040, 300, 760, 481)),
+                       C_(["HIGHLIGHTS: SIX", "REELS: SIX", "ADS: SIX"], x=140, y0=330, size=80)]),
          ("pitch", 0.3, 0.5, [T_([("A PERFECT YORKER", WHITE), ("HAS NO SPONSOR", RED)], 140)])],
     15: [(None, 1, 0, [C_(["BOARD → VIEWERS", "BROADCASTER → AD SLOTS", "FANTASY APPS → POINTS"], x=360, y0=280,
                           size=80, step=1.6)]),
          ("ipl", 0.25, 0.5, [T_([("EASIEST WAY TO GIVE", WHITE), ("EVERYONE THAT?", WHITE)], 110, "rise", cy=380),
                              T_([("RUNS.", Y)], 230, cy=700)])],
-    16: [("rcbkneel", 0.35, 0.3, [T_([("THE OLD IPL NIGHTS", Y)], 140, "rise")]),
+    16: [(None, 1, 0, [P_("mccullum_2008b", (1080, 100, 720, 880), fy=0.3),
+                       T_([("THE OLD IPL NIGHTS", Y)], 130, "rise", cx=560, maxw=900)]),
          ("crowd", 0.35, 0, [T_([("LAST OVER.", WHITE), ("12 NEEDED.", Y)], 170)]),
          ("slump", 0.3, 0.7, [T_([("YORKER. YORKER. YORKER.", Y)], 130)]),
          ("crowd", 0.45, 0, [T_([("THE STADIUM ROSE", WHITE)], 150, "rise")]),
@@ -672,7 +678,7 @@ def build():
     scene(L(0, 2.0), L(1), None)
     add(bars(L(0, 2.0), L(1), [("2022", 18, GREY), ("2026", 61, Y)], W / 2, 600, 61, "200+ TOTALS IN THE IPL"))
     add(txt(L(0, 3.4), L(1), [("18 → 61", RED)], W / 2, 150, 120, path=BLACK_F, anim="slam"))
-    scene(L(1), L(1, 3.3), "iplk", 0.4)
+    scene(L(1), L(1, 3.3), "srh_fist", 0.4)
     add(chip(L(1, 0.2), L(1, 3.3), "SIXES ↑", 140, 300, size=64))
     add(chip(L(1, 1.4), L(1, 3.3), "RUNS ↑", 140, 430, size=64))
     scene(L(1, 3.3), L(2), "empty", 0.45, 0.5)
@@ -686,7 +692,7 @@ def build():
     add(txt(L(4), L(5), [("THE REAL CULPRIT?", RED)], W / 2, 140, 96))
 
     # THE CRIME
-    scene(L(5), L(8), "ipl", 0.25, 0.6)
+    scene(L(5), L(8), "mi_celebrate", 0.25, 0.6)
     add(case_header(L(5), L(8)))
     add(txt(L(5, 0.4), L(6), [("THEN: 160 DEFENDED", WHITE), ("LAST-OVER THRILLERS", Y)], W / 2, 560, 120))
     add(txt(L(6), L(7), [("NOW: 220 ISN'T SAFE", WHITE), ("DECIDED BY THE 6TH OVER", Y)], W / 2, 560, 120))
@@ -695,9 +701,9 @@ def build():
 
     # SUSPECT 01: IMPACT PLAYER
     scene(L(8), L(9), None)
-    add(mugshot(L(8), L(9), "01", "IMPACT PLAYER", "iplk", 560, 540, w=460, h=600))
+    add(mugshot(L(8), L(9), "01", "IMPACT PLAYER", "impact_signal", 560, 540, w=460, h=600))
     add(txt(L(8, 0.4), L(9), [("SUSPECT /01", Y), ("IMPACT PLAYER", WHITE)], 1300, 540, 120, align="l", maxw=900))
-    scene(L(9), L(10), "iplk", 0.3)
+    scene(L(9), L(10), "impact_signal", 0.3)
     add(txt(L(9), L(10), [("+1 PLAYER", Y)], W / 2, 420, 220, anim="slam"))
     add(txt(L(9, 1.8), L(10), [("BUT THE EFFECT?", WHITE)], W / 2, 690, 90))
     scene(L(10), L(11), None)
@@ -727,7 +733,7 @@ def build():
     scene(L(13), L(14), None)
     add(scale_gfx(L(13), L(14), W / 2, 560))
     add(txt(L(13, 0.2), L(14), [("ONE RULE BROKE THE BALANCE", WHITE)], W / 2, 150, 90))
-    scene(L(14), L(15), "iplk", 0.25)
+    scene(L(14), L(15), "rcb_huddle", 0.25)
     add(stamp(L(14), L(14, 0.9), "CASE CLOSED?", W / 2, 460, color=Y))
     add(txt(L(14, 0.8), L(15), [("GUILTY?", RED)], W / 2, 640, 200, anim="slam"))
     scene(L(15), L(16), None)
@@ -760,7 +766,7 @@ def build():
     scene(L(23), L(24), None)
     add(mugshot(L(23), L(24), "03", "FANTASY APPS", None, 560, 540, w=460, h=600))
     add(txt(L(23, 0.4), L(24), [("SUSPECT /03", Y), ("FANTASY APPS", WHITE)], 1300, 540, 120, align="l", maxw=900))
-    scene(L(24), L(27), "ipl", 0.25, 0.7)
+    scene(L(24), L(27), "kohli_rcb_walk", 0.25, 0.5)
     add(phone_gfx(L(24), L(27), 560, 560, [("BATTER (C)", "+86"), ("BOWLER", "+48"), ("WK", "+22"),
                                            ("ALL-ROUNDER", "+31"), ("KOHLI", "OUT")]))
     add(txt(L(24), L(25), [("CRORES DON'T WATCH THE MATCH", WHITE), ("THEY WATCH THEIR TEAM", Y)], 1330, 540, 64,
@@ -779,16 +785,17 @@ def build():
     add(mugshot(L(29), L(30), "04", "THE BROADCAST", None, 560, 540, w=460, h=600))
     add(txt(L(29, 0.4), L(30), [("SUSPECT /04", Y), ("THE BROADCAST", WHITE)], 1300, 540, 120, align="l", maxw=900))
     scene(L(30), L(31), None)
-    add(tv_gfx(L(30), L(30, 2.4), W / 2, 520, "IPL 2008", "trophy"))
+    add(tv_gfx(L(30), L(30, 2.4), W / 2, 520, "IPL 2008", "mccullum_2008"))
     add(txt(L(30), L(30, 2.4), [("2008: AN EVENT", Y)], W / 2, 110, 90))
     add(txt(L(30, 2.4), L(31), [("TODAY: 74 MATCHES", WHITE), ("EVERY DAY. DOUBLE-HEADERS.", Y)], W / 2, 540, 120))
-    scene(L(31), L(33), "iplk", 0.35)
+    scene(L(31), L(33), "ceat_timeout", 0.35)
     add(chip(L(31), L(33), "AD BREAK", 120, 120, bg=RED, fg=WHITE, size=56))
     add(chip(L(31, 1.6), L(33), "SPONSORED SIX", 120, 260, bg=Y, size=56))
     add(txt(L(32), L(33), [("BOUNDARY = INVENTORY", Y)], W / 2, 620, 140, anim="slam"))
     scene(L(33), L(34), None)
-    add(txt(L(33), L(34), [("MORE SIXES =", WHITE)], W / 2, 380, 120))
-    add(txt(L(33, 1.8), L(34), [("“SIXES BROUGHT TO YOU BY…”", Y)], W / 2, 600, 110))
+    add(photo_panel(L(33), L(34), "super_sixes", (560, 470, 800, 506)))
+    add(txt(L(33), L(34), [("MORE SIXES =", WHITE)], W / 2, 200, 120))
+    add(txt(L(33, 1.8), L(34), [("“SIXES BROUGHT TO YOU BY…”", Y)], W / 2, 360, 100))
     scene(L(34), GAP_AT + GAP, None)
     add(strings_gfx(L(34), GAP_AT))
     add(txt(L(34, 1.2), GAP_AT, [("ALL FOUR POINT", WHITE), ("ONE WAY…", RED)], W / 2, 540, 120))
@@ -803,7 +810,7 @@ def build():
         add(txt(t0 + 0.6, L(36), [("→ " + b_, Y)], 1320, 230 + i * 190, 72, path=BLACK_F, anim="slam", maxw=800))
     scene(L(36), L(37), None)
     add(merge_gfx(L(36), L(37)))
-    scene(L(37), L(39), "ipl", 0.28)
+    scene(L(37), L(39), "gt_celebrate", 0.28)
     add(txt(L(37), L(37, 2.6), [("IPL ISN'T BORING.", WHITE)], W / 2, 400, 130))
     add(txt(L(37, 2.6), L(38), [("IT'S BUILT TO BE", WHITE), ("PREDICTABLE.", Y)], W / 2, 540, 140, anim="slam"))
     add(txt(L(38) - 0.2, L(39), [("220 SELLS.", Y), ("140 DOESN'T.", GREY)], W / 2, 540, 150, anim="slam"))
@@ -819,7 +826,7 @@ def build():
     for i, w_ in enumerate(["+ SOME GRASS", "LIMIT IMPACT PLAYER", "GIVE BOWLERS A WEAPON"]):
         add(chip(L(42, 1.0 + 1.2 * i), L(43), w_, 140, 300 + i * 140, size=60))
     add(txt(L(42, 5.0), L(43), [("180 = THRILLER", Y)], 1350, 540, 130, anim="slam", maxw=900))
-    scene(L(43), END, None)
+    scene(L(43), END, "srh_arms", 0.2, 0.3)
     add(txt(L(43), END, [("IMPACT PLAYER:", WHITE)], W / 2, 300, 110))
     add(txt(L(43, 1.2), END, [("KEEP / BAN?", Y)], W / 2, 500, 220, anim="slam"))
     add(txt(L(43, 2.4), END, [("ONE WORD IN THE COMMENTS", GREY)], W / 2, 680, 60, path=XB_F))
