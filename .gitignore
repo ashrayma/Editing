@@ -22,3 +22,5 @@ sandpaper/out/
 sandpaper/vo/*.wav
 dhoni_long/src/
 dhoni_long/out/
+ipl_killed/out/
+ipl_killed/vo/*.wav
