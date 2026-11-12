@@ -368,10 +368,10 @@ def captions(lid):
 
 # ----------------------------------------------------------------------------- components new in this reel
 
-def fb(slot, start, dur, hint="", pos="50% 50%", tag=None, front=False, blur=False):
+def fb(slot, start, dur, hint="", pos="50% 50%", tag=None, front=False, blur=False, extra_mono=False):
     """Full-screen media (see fullbleed). front=True forces the blurred-backdrop + large-front layout for small
     photos; blur=True turns the media into a soft, dark backdrop for graphics."""
-    fullbleed(slot, start, dur, hint, pos=pos, tag=tag, force_front=front, extra="blurred" if blur else "")
+    fullbleed(slot, start, dur, hint, pos=pos, tag=tag, force_front=front, extra=("blurred" if blur else "") + (" mono" if extra_mono else ""))
 
 
 def date_flip(a, b, start, dur, y=380):
@@ -610,12 +610,64 @@ def tracker(marks):
     anim('tl.fromTo(".tracker",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},0.3)')
     prev = None
     for k, (t, y) in enumerate(marks):
-        frac = {"2000s": 0.15, "2004": 0.36, "2008": 0.64, "2011": 0.86}.get(y, 0.05)
+        frac = {"1999": 0.03, "2000s": 0.15, "2004": 0.36, "2008": 0.64, "2011": 0.86}.get(y, 1.0)
         if prev is not None:
             anim(f'tl.to("#ty{prev}",{{yPercent:-100,opacity:0,duration:0.3}},{t})')
         anim(f'tl.fromTo("#ty{k}",{{yPercent:100,opacity:0}},{{yPercent:0,opacity:1,duration:0.4,ease:"expo.out"}},{t})')
         anim(f'tl.to("#tfill",{{scaleX:{frac},duration:0.8,ease:"expo.out"}},{t})')
         prev = k
+
+
+def stat_card(value, label, start, dur, y, tag=None, prefix="", suffix="", decimals=0, width=640, size=150):
+    """Frosted stat card with a counting number (Kohli 13k reference)."""
+    i = nid("sc")
+    events.append((start, "whoosh"))
+    events.append((start + 0.2, "roll"))
+    tg = f'<div class="sctag">{html.escape(tag)}</div>' if tag else ""
+    add(f'<div id="{i}" class="scard clip" data-start="{start}" data-duration="{dur}" style="top:{y}px;width:{width}px;margin-left:-{width // 2}px">'
+        f'{tg}<div class="scnum" id="{i}n" style="font-size:{size}px">{prefix}0{suffix}</div><div class="sclab">{html.escape(label)}</div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0}},{{y:0,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f';(()=>{{const o={{v:0}};const el=document.getElementById("{i}n");tl.to(o,{{v:{value},duration:1.3,ease:"expo.out",'
+         f'onUpdate:()=>{{el.textContent="{prefix}"+o.v.toLocaleString("en-US",{{minimumFractionDigits:{decimals},maximumFractionDigits:{decimals}}})+"{suffix}";}}}},{round(start + 0.2, 2)});}})()')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
+
+
+def big_italic(txt, start, dur, y, size=170, color=Y, sub=None):
+    i = nid("bi")
+    events.append((start + 0.05, "impact"))
+    sb = f'<div class="bisub">{html.escape(sub)}</div>' if sub else ""
+    add(f'<div id="{i}" class="bital clip" data-start="{start}" data-duration="{dur}" style="top:{y}px">'
+        f'<div class="bitx" id="{i}t" style="font-size:{size}px;color:{color}">{html.escape(txt)}</div>{sb}</div>')
+    anim(f'tl.fromTo("#{i}t",{{y:80,opacity:0,skewX:-12}},{{y:0,opacity:1,skewX:0,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
+
+
+def pill_top(txt, start, dur, y=300):
+    label(txt, start, dur, y, color=INK, bg=Y, size=26, band=True, z=46)
+
+
+def vs_split(top, bottom, start, dur, rows, names=("SEHWAG", "GAYLE")):
+    """Top/bottom photo comparison with a VS badge and stat rows that count up on each half."""
+    i = nid("vs")
+    events.append((start, "whoosh"))
+    def half(slot, cls, name, vals):
+        cells = "".join(f'<div class="vcell"><div class="vk">{html.escape(k)}</div><div class="vv" id="{i}{cls}{n}">{html.escape(v)}</div></div>'
+                        for n, (k, v) in enumerate(vals))
+        return (f'<div class="vhalf {cls}" id="{i}{cls}"><img src="{asset(slot)[0]}"><div class="vshade"></div>'
+                f'<div class="vpanel"><div class="vnm">{html.escape(name)}</div><div class="vrow">{cells}</div></div></div>')
+    add(f'<div id="{i}" class="vsplit clip" data-start="{start}" data-duration="{dur}">'
+        f'{half(top, "t", names[0], [(k, a) for k, a, b in rows])}{half(bottom, "b", names[1], [(k, b) for k, a, b in rows])}'
+        f'<div class="vsb anton" id="{i}x">VS</div></div>')
+    anim(f'tl.fromTo("#{i}t",{{x:-1080}},{{x:0,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{x:1080}},{{x:0,duration:0.6,ease:"expo.out"}},{round(start + 0.15, 2)})')
+    events.append((round(start + 0.6, 2), "impact"))
+    anim(f'tl.fromTo("#{i}x",{{scale:0,rotation:-30}},{{scale:1,rotation:0,duration:0.5,ease:"back.out(2.5)"}},{round(start + 0.55, 2)})')
+    for n in range(len(rows)):
+        t = round(start + 0.9 + 0.45 * n, 2)
+        events.append((t, "pop"))
+        for c in "tb":
+            anim(f'tl.fromTo("#{i}{c}{n}",{{opacity:0,y:20}},{{opacity:1,y:0,duration:0.35}},{t})')
+    anim(f'tl.to("#{i}",{{opacity:0,duration:0.3}},{round(start + dur - 0.3, 2)})')
 
 
 def build_scenes():
@@ -640,10 +692,9 @@ def build_scenes():
 
     # survive -> destroy
     s, d = at("survive"), round(at("destroy") - at("survive"), 2)
-    glow(s, d, "rgba(120,120,130,.35)")
+    fb("c_test_block", s, d, extra_mono=True)
     headline(["Other openers came", "to survive."], s, d, colors=["#fff", "rgba(255,255,255,.6)"])
-    giant("SURVIVE", s + 0.2, d - 0.2, 760, size=300, color="rgba(255,255,255,.55)", outline=True)
-    player("cut_latecut", s + 0.1, d - 0.1, h=1050, bottom=1750)
+    big_italic("SURVIVE.", s + 0.3, d - 0.3, 1180, size=170, color="rgba(255,255,255,.85)")
     s, d = at("destroy"), until_next("destroy")
     glow(s, d, RED_G)
     headline(["Viru came", "to destroy it."], s, d, colors=["#fff", Y])
@@ -660,19 +711,19 @@ def build_scenes():
 
     # Multan 2004: 309 behind him
     s, d = at("multan"), until_next("multan")
-    glow(s, d, GOLD)
-    headline(["Multan, 2004.", "First Indian Test triple."], s, d)
-    odo("309", span("multan", 0.25), s + d - span("multan", 0.25), 700, size=400, color=Y, label="RUNS")
-    player("cut_multan", s + 0.2, d - 0.2, h=1150, x=640)
+    fb("s_multan", s, d, pos="50% 20%")
+    pill_top("vs PAKISTAN · MULTAN · 2004", s + 0.1, d - 0.1, y=920)
+    headline(["The first Indian", "Test triple century."], s + 0.2, d - 0.2, size=72, y=980)
+    stat_card(309, "RUNS · FIRST INDIAN TO 300", span("multan", 0.25), s + d - span("multan", 0.25), 1300, tag="THE FIRST EVER")
 
     # Chennai 2008: outline 300 fills, then 278 balls + stamp
     s, d = at("chennai"), until_next("chennai")
-    fb("c_test_sweep", s, 2.2, blur=True)
-    fb("c_celebrate", round(s + 2.0, 2), round(d - 2.0, 2), blur=True)
-    headline(["Chennai, 2008.", "Fastest Test triple ever."], s, d)
-    giant("300", span("chennai", 0.12), span("chennai", 0.45) - span("chennai", 0.12), 640, size=520, color=Y, outline=True, fill_at=span("chennai", 0.3))
-    odo("278", span("chennai", 0.45), s + d - span("chennai", 0.45), 640, size=460, label="BALLS", color="#fff", band=False)
-    stamp("FASTEST EVER", span("chennai", 0.74), s + d - span("chennai", 0.74), 1330, size=84, rot=-5)
+    fb("c_test_sweep", s, 2.2)
+    fb("c_celebrate", round(s + 2.0, 2), round(d - 2.0, 2))
+    pill_top("vs SOUTH AFRICA · CHENNAI · 2008", s + 0.1, d - 0.1)
+    headline(["The fastest triple", "century in Tests."], s + 0.2, d - 0.2, size=72, y=360)
+    stat_card(300, "RUNS", span("chennai", 0.22), s + d - span("chennai", 0.22), 1060, width=560, size=130)
+    stat_card(278, "BALLS · FASTEST EVER", span("chennai", 0.45), s + d - span("chennai", 0.45), 1330, width=560, size=130)
 
     # 2011 World Cup: first-ball fours
     s, d = at("wc"), until_next("wc")
@@ -707,10 +758,9 @@ def build_scenes():
     headline(["When the hundred came,", "the helmet came off."], s, h1 - s)
     giant("100", s + 0.1, h1 - s, 600, size=600, color="rgba(254,222,92,.85)", outline=True, fill_at=round(s + 0.9, 2))
     player("cut_helmet", s + 0.15, h1 - s - 0.1, h=1300)
-    glow(h1, s + d - h1, RED_G)
+    fb("s_patka", h1, s + d - h1, front=True, pos="50% 22%")
     headline(["The red handkerchief.", "That smile."], h1, s + d - h1, colors=["#fff", Y])
-    player("cut_patka", h1, s + d - h1, h=1080)
-    words(["Like he was batting in his backyard."], span("hundred", 0.66), s + d - span("hundred", 0.66), 490, size=50, font="serif", align="band", z=45)
+    words(["Like he was batting in his backyard."], span("hundred", 0.62), s + d - span("hundred", 0.62), 1420, size=58, font="serif", align="band", z=45)
 
     # trophies, runs, childhood
     s = at("trophies")
@@ -727,18 +777,9 @@ def build_scenes():
     # the question
     s = at("vote")
     d = round(TOTAL - s - END_HOLD + 0.2, 2)
-    glow(s, d, "rgba(120,40,40,.4)")
-    headline(["Most dangerous", "opener?"], s, d)
-    player("cut_drive", s + 0.1, d - 0.1, h=1100, x=-40, enter="left")
-    player("cut_gayle", s + 0.25, d - 0.25, h=1100, x=520, enter="right")
-    i = nid("or")
-    add(f'<div id="{i}" class="vor anton clip" data-start="{round(s + 0.6, 2)}" data-duration="{round(d - 0.6, 2)}" style="top:900px;z-index:40">OR</div>')
-    anim(f'tl.fromTo("#{i}",{{scale:0,rotation:-30}},{{scale:1,rotation:0,duration:0.5,ease:"back.out(2.5)"}},{round(s + 0.6, 2)})')
-    events.append((round(s + 0.65, 2), "impact"))
-    label("SEHWAG", s + 0.8, d - 0.8, 1560, color="#fff", bg="rgba(18,18,20,.85)", size=34, band=True)
-    label("GAYLE", s + 0.9, d - 0.9, 1560, color="#fff", bg="rgba(18,18,20,.85)", size=34)
-    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.72), s + d - span("vote", 0.72), 1660, color=INK, bg=Y, size=32, z=47)
-    follow_pop(span("vote", 0.85), 2.2)
+    vs_split("s_bighit", "gayle", s, d, [("TEST 300s", "2", "2"), ("ODI BEST", "219", "215"), ("ODI SR", "104+", "87.2")])
+    headline(["Most dangerous", "opener?"], span("vote", 0.2), s + d - span("vote", 0.2), size=80, y=290)
+    label("💬  ONE WORD IN THE COMMENTS", span("vote", 0.72), s + d - span("vote", 0.72), 1650, color=INK, bg=Y, size=30, z=47)
     end_card(round(TOTAL - END_HOLD - 0.1, 2), round(END_HOLD + 0.1, 2))
 
     tracker([(0.4, "1999"), (at("kid"), "2000s"), (at("multan"), "2004"), (at("chennai"), "2008"), (at("wc"), "2011"),
@@ -966,6 +1007,35 @@ html,body{{margin:0;background:{INK}}}
 .tfill{{height:100%;width:100%;background:linear-gradient(90deg,#2f6bff,{Y});transform-origin:left;transform:scaleX(0)}}
 .tends{{display:flex;justify-content:space-between;font:800 18px "Inter Display";color:rgba(255,255,255,.45);margin-top:6px;letter-spacing:3px}}
 .endc{{z-index:75}}
+
+/* mixed pass: full photos + stat cards + VS split */
+.fb.mono .fbcover > *,.fb.mono .fbfront{{filter:grayscale(1) brightness(.8) contrast(1.1)}}
+.scard{{position:absolute;left:50%;z-index:46;background:rgba(18,18,22,.72);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;padding:26px 30px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.5)}}
+.sctag{{position:absolute;left:50%;top:-20px;transform:translateX(-50%);background:{Y};color:{INK};font:900 22px "Inter Display";letter-spacing:2px;
+  padding:6px 14px;border-radius:999px;white-space:nowrap}}
+.scnum{{font-family:"Inter Display";font-weight:900;font-style:italic;color:{Y};line-height:1;letter-spacing:-0.02em;text-shadow:0 0 40px rgba(254,222,92,.35)}}
+.sclab{{font:900 24px "Inter Display";letter-spacing:4px;color:rgba(255,255,255,.85);margin-top:10px}}
+.bital{{position:absolute;left:0;right:0;text-align:center;z-index:45}}
+.bitx{{font-family:"Inter Display";font-weight:900;font-style:italic;letter-spacing:-0.02em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.6)}}
+.bisub{{font:900 26px "Inter Display";letter-spacing:6px;color:rgba(255,255,255,.8);margin-top:12px}}
+.vsplit{{position:absolute;inset:0;z-index:20;background:#08080a}}
+.vhalf{{position:absolute;left:0;right:0;height:958px;overflow:hidden}}
+.vhalf.t{{top:0}}
+.vhalf.b{{top:962px}}
+.vhalf img{{width:100%;height:100%;object-fit:cover;object-position:50% 25%}}
+.vshade{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 60%,rgba(0,0,0,.85))}}
+.vhalf.t .vshade{{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 35%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.88))}}
+.vpanel{{position:absolute;left:{BAND_X}px;right:170px;bottom:40px}}
+.vhalf.t .vpanel{{bottom:120px}}
+.vhalf.b .vpanel{{bottom:330px}}
+.vnm{{display:inline-block;background:{Y};color:{INK};font:900 24px "Inter Display";letter-spacing:3px;padding:6px 12px;border-radius:6px;margin-bottom:12px}}
+.vrow{{display:flex;gap:16px;background:rgba(18,18,22,.75);border-radius:16px;padding:14px 18px}}
+.vcell{{flex:1}}
+.vk{{font:800 18px "Inter Display";letter-spacing:3px;color:rgba(255,255,255,.6)}}
+.vv{{font-family:"Inter Display";font-weight:900;font-style:italic;font-size:64px;color:#fff;line-height:1.05}}
+.vsb{{position:absolute;left:50%;top:900px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:{Y};color:{INK};
+  font-size:66px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(254,222,92,.25);z-index:5}}
 """
 
 

@@ -217,6 +217,35 @@ html,body{margin:0;background:#121214}
 .tfill{height:100%;width:100%;background:linear-gradient(90deg,#2f6bff,#FEDE5C);transform-origin:left;transform:scaleX(0)}
 .tends{display:flex;justify-content:space-between;font:800 18px "Inter Display";color:rgba(255,255,255,.45);margin-top:6px;letter-spacing:3px}
 .endc{z-index:75}
+
+/* mixed pass: full photos + stat cards + VS split */
+.fb.mono .fbcover > *,.fb.mono .fbfront{filter:grayscale(1) brightness(.8) contrast(1.1)}
+.scard{position:absolute;left:50%;z-index:46;background:rgba(18,18,22,.72);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;padding:26px 30px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.sctag{position:absolute;left:50%;top:-20px;transform:translateX(-50%);background:#FEDE5C;color:#121214;font:900 22px "Inter Display";letter-spacing:2px;
+  padding:6px 14px;border-radius:999px;white-space:nowrap}
+.scnum{font-family:"Inter Display";font-weight:900;font-style:italic;color:#FEDE5C;line-height:1;letter-spacing:-0.02em;text-shadow:0 0 40px rgba(254,222,92,.35)}
+.sclab{font:900 24px "Inter Display";letter-spacing:4px;color:rgba(255,255,255,.85);margin-top:10px}
+.bital{position:absolute;left:0;right:0;text-align:center;z-index:45}
+.bitx{font-family:"Inter Display";font-weight:900;font-style:italic;letter-spacing:-0.02em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.6)}
+.bisub{font:900 26px "Inter Display";letter-spacing:6px;color:rgba(255,255,255,.8);margin-top:12px}
+.vsplit{position:absolute;inset:0;z-index:20;background:#08080a}
+.vhalf{position:absolute;left:0;right:0;height:958px;overflow:hidden}
+.vhalf.t{top:0}
+.vhalf.b{top:962px}
+.vhalf img{width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.vshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 60%,rgba(0,0,0,.85))}
+.vhalf.t .vshade{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 35%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.88))}
+.vpanel{position:absolute;left:64px;right:170px;bottom:40px}
+.vhalf.t .vpanel{bottom:120px}
+.vhalf.b .vpanel{bottom:330px}
+.vnm{display:inline-block;background:#FEDE5C;color:#121214;font:900 24px "Inter Display";letter-spacing:3px;padding:6px 12px;border-radius:6px;margin-bottom:12px}
+.vrow{display:flex;gap:16px;background:rgba(18,18,22,.75);border-radius:16px;padding:14px 18px}
+.vcell{flex:1}
+.vk{font:800 18px "Inter Display";letter-spacing:3px;color:rgba(255,255,255,.6)}
+.vv{font-family:"Inter Display";font-weight:900;font-style:italic;font-size:64px;color:#fff;line-height:1.05}
+.vsb{position:absolute;left:50%;top:900px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:#FEDE5C;color:#121214;
+  font-size:66px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(254,222,92,.25);z-index:5}
 </style></head><body>
 <div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-fps="30" data-duration="73.0">
 <div class="brand"><img src="media/logo.png"><span class="bfol" id="bfol">+ FOLLOW</span></div>
@@ -230,70 +259,62 @@ html,body{margin:0;background:#121214}
 <div id="w8" class="words anton tband clip" data-start="3.32" data-duration="3.25" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w8l0" style="color:#fff">No coaching manual</div></div><div class="mask"><div class="ln" id="w8l1" style="color:#FEDE5C">could explain him.</div></div></div>
 <div id="mn9" class="manual clip" data-start="3.42" data-duration="3.15" style="top:700px"><div class="mhead">THE COACHING MANUAL</div><div class="msub">OPENING BATTING · CHAPTER 1</div><div class="mrow" id="mn9r0"><b>1</b>Leave the ball outside off</div><div class="mrow" id="mn9r1"><b>2</b>See off the new ball</div><div class="mrow" id="mn9r2"><b>3</b>Respect the first hour</div><div class="mrow" id="mn9r3"><b>4</b>Never hit in the air early</div></div>
 <div id="st10" class="stampx anton clip" data-start="4.9" data-duration="1.67" style="top:1260px;color:#E5484D;border-color:#E5484D;font-size:96px">CAN&#x27;T EXPLAIN</div>
-<div id="gl11" class="glow clip" data-start="6.57" data-duration="2.73" style="background:radial-gradient(70% 45% at 55% 55%,rgba(120,120,130,.35),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="fb11" class="fb  mono clip" data-start="6.57" data-duration="2.73"><div class="fbcover" id="fb11m"><video class="clip " src="media/c_test_block.mp4" muted playsinline data-start="6.57" data-duration="2.73" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
 <div id="w12" class="words anton tband clip" data-start="6.57" data-duration="2.73" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w12l0" style="color:#fff">Other openers came</div></div><div class="mask"><div class="ln" id="w12l1" style="color:rgba(255,255,255,.6)">to survive.</div></div></div>
-<div id="gi13" class="giant anton clip" data-start="6.7700000000000005" data-duration="2.53" style="top:760px;font-size:300px;z-index:20;color:transparent;-webkit-text-stroke:5px rgba(255,255,255,.55)">SURVIVE</div>
-<div id="pl14" class="player clip" data-start="6.67" data-duration="2.63" style="left:252px;top:700px;width:576px;height:1050px;z-index:30"><img src="media/cut_latecut.png" style=""></div>
-<div id="gl15" class="glow clip" data-start="9.3" data-duration="2.35" style="background:radial-gradient(70% 45% at 55% 55%,rgba(230,50,60,.5),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w16" class="words anton tband clip" data-start="9.3" data-duration="2.35" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w16l0" style="color:#fff">Viru came</div></div><div class="mask"><div class="ln" id="w16l1" style="color:#FEDE5C">to destroy it.</div></div></div>
-<div id="gi17" class="giant anton clip" data-start="9.4" data-duration="2.25" style="top:650px;font-size:290px;z-index:20;color:#FEDE5C">DESTROY</div>
-<div id="pl18" class="player clip" data-start="9.55" data-duration="2.1" style="left:242px;top:570px;width:597px;height:1180px;z-index:30"><img src="media/cut_bighit.png" style=""></div>
-<div id="gl19" class="glow clip" data-start="11.65" data-duration="5.77" style="background:radial-gradient(70% 45% at 55% 55%,rgba(40,180,90,.45),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w20" class="words anton tband clip" data-start="11.65" data-duration="5.77" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w20l0" style="color:#fff">For a 2000s kid,</div></div><div class="mask"><div class="ln" id="w20l1" style="color:#FEDE5C">nobody left the TV.</div></div></div>
-<div id="tv21" class="tv clip" data-start="11.950000000000001" data-duration="5.47" style="top:640px"><div class="tvant"></div><div class="tvbody"><div class="tvscreen"><video class="clip " src="media/tv_drive_nz.mp4" muted playsinline data-start="11.950000000000001" data-duration="5.47" data-media-start="0"></video><div class="scan"></div><div class="glare"></div></div><div class="tvknobs"><i></i><i></i></div></div></div>
-<div id="gi22" class="giant anton clip" data-start="12.25" data-duration="5.17" style="top:1280px;font-size:300px;z-index:20;color:transparent;-webkit-text-stroke:5px rgba(254,222,92,.8)">2000s</div>
-<div id="fp23" class="fpop clip" data-start="14.95" data-duration="2.2"><span class="fpb">+ FOLLOW</span><span>True cricket fans follow <b>TheCricketLounge</b></span></div>
-<div id="gl24" class="glow clip" data-start="17.42" data-duration="7.32" style="background:radial-gradient(70% 45% at 55% 55%,rgba(254,190,40,.45),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w25" class="words anton tband clip" data-start="17.42" data-duration="7.32" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w25l0" style="color:#fff">Multan, 2004.</div></div><div class="mask"><div class="ln" id="w25l1" style="color:#FEDE5C">First Indian Test triple.</div></div></div>
-<div id="od26" class="odo anton clip" data-start="19.12" data-duration="5.620000000000001" style="top:700px;font-size:400px;color:#FEDE5C;left:64px;text-align:left"><div class="digits"><span class="dcol"><span class="dstrip" id="od26d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od26d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od26d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">RUNS</div></div>
-<div id="pl27" class="player clip" data-start="17.62" data-duration="7.12" style="left:640px;top:600px;width:525px;height:1150px;z-index:30"><img src="media/cut_multan.png" style=""></div>
-<div id="fb28" class="fb blurred clip" data-start="24.74" data-duration="2.2"><div class="fbcover" id="fb28m"><video class="clip " src="media/c_test_sweep.mp4" muted playsinline data-start="24.74" data-duration="2.2" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
-<div id="fb29" class="fb blurred clip" data-start="26.74" data-duration="6.42"><div class="fbcover" id="fb29m"><video class="clip " src="media/c_celebrate.mp4" muted playsinline data-start="26.74" data-duration="6.42" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
-<div id="w30" class="words anton tband clip" data-start="24.74" data-duration="8.42" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w30l0" style="color:#fff">Chennai, 2008.</div></div><div class="mask"><div class="ln" id="w30l1" style="color:#FEDE5C">Fastest Test triple ever.</div></div></div>
-<div id="gi31" class="giant anton clip" data-start="25.68" data-duration="2.580000000000002" style="top:640px;font-size:520px;z-index:20;color:transparent;-webkit-text-stroke:5px #FEDE5C">300</div>
-<div id="od32" class="odo anton clip" data-start="28.26" data-duration="4.899999999999995" style="top:640px;font-size:460px;color:#fff"><div class="digits"><span class="dcol"><span class="dstrip" id="od32d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od32d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od32d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span></div><div class="olab">BALLS</div></div>
-<div id="st33" class="stampx anton clip" data-start="30.53" data-duration="2.6299999999999955" style="top:1330px;color:#E5484D;border-color:#E5484D;font-size:84px">FASTEST EVER</div>
-<div id="gl34" class="glow clip" data-start="33.16" data-duration="6.3" style="background:radial-gradient(70% 45% at 55% 55%,rgba(40,90,255,.55),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w35" class="words anton tband clip" data-start="33.16" data-duration="6.3" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w35l0" style="color:#fff">World Cup 2011.</div></div><div class="mask"><div class="ln" id="w35l1" style="color:#FEDE5C">First ball? Four.</div></div></div>
-<div id="pl36" class="player clip" data-start="33.26" data-duration="6.2" style="left:330px;top:480px;width:679px;height:780px;z-index:30"><img src="media/cut_wc2011.png" style=""></div>
-<div id="wc37" class="wcs clip" data-start="33.66" data-duration="5.8" style="top:1270px"><div class="wchead">WORLD CUP 2011 · FIRST BALL</div><div class="wgrid"><div class="wcell" id="wc37c0"><div class="wt">BAN</div><div class="wball" id="wc37b0">4</div></div><div class="wcell" id="wc37c1"><div class="wt">ENG</div><div class="wball" id="wc37b1">4</div></div><div class="wcell" id="wc37c2"><div class="wt">IRE</div><div class="wball" id="wc37b2">4</div></div><div class="wcell" id="wc37c3"><div class="wt">NED</div><div class="wball" id="wc37b3">4</div></div><div class="wcell" id="wc37c4"><div class="wt">SA</div><div class="wball" id="wc37b4">4</div></div><div class="wcell" id="wc37c5"><div class="wt">·</div><div class="wball" id="wc37b5">4</div></div><div class="wcell" id="wc37c6"><div class="wt">·</div><div class="wball" id="wc37b6">4</div></div><div class="wcell" id="wc37c7"><div class="wt">·</div><div class="wball" id="wc37b7">4</div></div></div><div class="wcount anton" id="wc37n">5 / 8</div></div>
-<div id="gl38" class="glow clip" data-start="39.46" data-duration="3.39" style="background:radial-gradient(70% 45% at 55% 55%,rgba(254,190,40,.45),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w39" class="words anton tband clip" data-start="39.46" data-duration="3.39" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w39l0" style="color:#fff">True cricket fans</div></div><div class="mask"><div class="ln" id="w39l1" style="color:#FEDE5C">follow this page.</div></div></div>
-<div id="ft40" class="ftap clip" data-start="39.660000000000004" data-duration="3.19" style="top:700px"><img src="media/logo.png" class="flogo"><div class="fbtn" id="ft40b"><span id="ft40t1">+ FOLLOW</span><span id="ft40t2" class="fdone">FOLLOWING ✓</span></div><div class="finger" id="ft40f">👆</div><div class="fbell" id="ft40l">🔔</div></div>
-<div id="lb41" class="label clip" data-start="40.26" data-duration="2.59" style="top:1340px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Throwbacks</div>
-<div id="lb42" class="label clip" data-start="40.51" data-duration="2.34" style="top:1450px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Records</div>
-<div id="lb43" class="label clip" data-start="40.76" data-duration="2.09" style="top:1560px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Stories you grew up with</div>
-<div id="fb44" class="fb blurred clip" data-start="42.85" data-duration="3.9"><div class="fbcover" id="fb44m"><img class="" src="media/ganguly_still.jpg"></div><div class="fbshade cover"></div></div>
-<div id="w45" class="words anton tband clip" data-start="42.85" data-duration="3.9" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w45l0" style="color:#fff">What Sourav Ganguly</div></div><div class="mask"><div class="ln" id="w45l1" style="color:#FEDE5C">said next...</div></div></div>
-<div id="nt46" class="ntag clip" data-start="43.25" data-duration="3.5" style="top:1250px"><div class="nbar"></div><div><div class="nn anton">SOURAV GANGULY</div><div class="ns">Former India captain</div></div></div>
-<div id="fb47" class="fb  clip" data-start="46.75" data-duration="5.95"><div class="fbcover" id="fb47m"><video class="clip " src="media/ganguly.mp4" muted playsinline data-start="46.75" data-duration="5.95" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
-<div id="sb48" class="subtl clip" data-start="46.8" data-duration="2.55" style="top:1420px">“An opener's job is to keep leaving the ball until it gets old.”</div>
-<div id="sb49" class="subtl clip" data-start="49.35" data-duration="2.9500000000000015" style="top:1420px">“Sehwag's job was to make it old <b>by hitting it.</b>”</div>
-<div id="gl50" class="glow clip" data-start="52.7" data-duration="7.41" style="background:radial-gradient(70% 45% at 55% 55%,rgba(20,170,200,.45),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w51" class="words anton tband clip" data-start="52.7" data-duration="2.4599999999999937" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w51l0" style="color:#fff">When the hundred came,</div></div><div class="mask"><div class="ln" id="w51l1" style="color:#FEDE5C">the helmet came off.</div></div></div>
-<div id="gi52" class="giant anton clip" data-start="52.800000000000004" data-duration="2.4599999999999937" style="top:600px;font-size:600px;z-index:20;color:transparent;-webkit-text-stroke:5px rgba(254,222,92,.85)">100</div>
-<div id="pl53" class="player clip" data-start="52.85" data-duration="2.3599999999999937" style="left:271px;top:450px;width:538px;height:1300px;z-index:30"><img src="media/cut_helmet.png" style=""></div>
-<div id="gl54" class="glow clip" data-start="55.16" data-duration="4.950000000000003" style="background:radial-gradient(70% 45% at 55% 55%,rgba(230,50,60,.5),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w55" class="words anton tband clip" data-start="55.16" data-duration="4.950000000000003" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w55l0" style="color:#fff">The red handkerchief.</div></div><div class="mask"><div class="ln" id="w55l1" style="color:#FEDE5C">That smile.</div></div></div>
-<div id="pl56" class="player clip" data-start="55.16" data-duration="4.950000000000003" style="left:163px;top:670px;width:754px;height:1080px;z-index:30"><img src="media/cut_patka.png" style=""></div>
-<div id="w57" class="words serif tband clip" data-start="57.2" data-duration="2.9099999999999966" style="top:490px;font-size:50px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w57l0" style="color:#fff">Like he was batting in his backyard.</div></div></div>
-<div id="fb58" class="fb  clip" data-start="60.11" data-duration="1.94"><div class="fbcover" id="fb58m"><video class="clip " src="media/c_drive_nz.mp4" muted playsinline data-start="60.11" data-duration="1.94" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
-<div id="w59" class="words anton tband clip" data-start="60.11" data-duration="1.94" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w59l0" style="color:#fff">Some players give you</div></div><div class="mask"><div class="ln" id="w59l1" style="color:#fff">TROPHIES.</div></div></div>
-<div id="fb60" class="fb  clip" data-start="62.05" data-duration="1.57"><div class="fbcover" id="fb60m"><video class="clip " src="media/c_cut_aus2.mp4" muted playsinline data-start="62.05" data-duration="1.57" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
-<div id="w61" class="words anton tband clip" data-start="62.05" data-duration="1.57" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w61l0" style="color:#fff">Some give you</div></div><div class="mask"><div class="ln" id="w61l1" style="color:#fff">RUNS.</div></div></div>
-<div id="gl62" class="glow clip" data-start="63.62" data-duration="2.59" style="background:radial-gradient(70% 45% at 55% 55%,rgba(254,190,40,.45),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w63" class="words serif tband clip" data-start="63.62" data-duration="2.59" style="top:300px;font-size:100px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w63l0" style="color:#fff">Viru gave us</div></div><div class="mask"><div class="ln" id="w63l1" style="color:#FEDE5C">our childhood.</div></div></div>
-<div id="pl64" class="player clip" data-start="63.82" data-duration="2.3899999999999997" style="left:190px;top:500px;width:701px;height:1250px;z-index:30"><img src="media/cut_laugh.png" style=""></div>
-<div id="gl65" class="glow clip" data-start="66.21" data-duration="5.19" style="background:radial-gradient(70% 45% at 55% 55%,rgba(120,40,40,.4),rgba(8,8,10,0) 70%),#08080a"></div>
-<div id="w66" class="words anton tband clip" data-start="66.21" data-duration="5.19" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w66l0" style="color:#fff">Most dangerous</div></div><div class="mask"><div class="ln" id="w66l1" style="color:#FEDE5C">opener?</div></div></div>
-<div id="pl67" class="player clip" data-start="66.30999999999999" data-duration="5.090000000000001" style="left:-40px;top:650px;width:379px;height:1100px;z-index:30"><img src="media/cut_drive.png" style=""></div>
-<div id="pl68" class="player clip" data-start="66.46" data-duration="4.94" style="left:520px;top:650px;width:568px;height:1100px;z-index:30"><img src="media/cut_gayle.png" style=""></div>
-<div id="or69" class="vor anton clip" data-start="66.81" data-duration="4.59" style="top:900px;z-index:40">OR</div>
-<div id="lb70" class="label clip" data-start="67.00999999999999" data-duration="4.390000000000001" style="left:64px;transform:none;top:1560px;font-size:34px;color:#fff;background:rgba(18,18,20,.85);padding:10px 22px;border-radius:10px;z-index:31">SEHWAG</div>
-<div id="lb71" class="label clip" data-start="67.11" data-duration="4.29" style="top:1560px;font-size:34px;color:#fff;background:rgba(18,18,20,.85);padding:10px 22px;border-radius:10px;z-index:31">GAYLE</div>
-<div id="lb72" class="label clip" data-start="69.8" data-duration="1.5999999999999943" style="top:1660px;font-size:32px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:47">💬  ONE WORD IN THE COMMENTS</div>
-<div id="fp73" class="fpop clip" data-start="70.45" data-duration="2.2"><span class="fpb">+ FOLLOW</span><span>True cricket fans follow <b>TheCricketLounge</b></span></div>
-<div id="ec74" class="endc clip" data-start="71.1" data-duration="1.9"><img src="media/logo.png" class="elogo" id="ec74l"><div class="efol" id="ec74f">+ FOLLOW</div><div class="esub" id="ec74s">for every cricket memory</div></div>
+<div id="bi13" class="bital clip" data-start="6.87" data-duration="2.43" style="top:1180px"><div class="bitx" id="bi13t" style="font-size:170px;color:rgba(255,255,255,.85)">SURVIVE.</div></div>
+<div id="gl14" class="glow clip" data-start="9.3" data-duration="2.35" style="background:radial-gradient(70% 45% at 55% 55%,rgba(230,50,60,.5),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w15" class="words anton tband clip" data-start="9.3" data-duration="2.35" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w15l0" style="color:#fff">Viru came</div></div><div class="mask"><div class="ln" id="w15l1" style="color:#FEDE5C">to destroy it.</div></div></div>
+<div id="gi16" class="giant anton clip" data-start="9.4" data-duration="2.25" style="top:650px;font-size:290px;z-index:20;color:#FEDE5C">DESTROY</div>
+<div id="pl17" class="player clip" data-start="9.55" data-duration="2.1" style="left:242px;top:570px;width:597px;height:1180px;z-index:30"><img src="media/cut_bighit.png" style=""></div>
+<div id="gl18" class="glow clip" data-start="11.65" data-duration="5.77" style="background:radial-gradient(70% 45% at 55% 55%,rgba(40,180,90,.45),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w19" class="words anton tband clip" data-start="11.65" data-duration="5.77" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w19l0" style="color:#fff">For a 2000s kid,</div></div><div class="mask"><div class="ln" id="w19l1" style="color:#FEDE5C">nobody left the TV.</div></div></div>
+<div id="tv20" class="tv clip" data-start="11.950000000000001" data-duration="5.47" style="top:640px"><div class="tvant"></div><div class="tvbody"><div class="tvscreen"><video class="clip " src="media/tv_drive_nz.mp4" muted playsinline data-start="11.950000000000001" data-duration="5.47" data-media-start="0"></video><div class="scan"></div><div class="glare"></div></div><div class="tvknobs"><i></i><i></i></div></div></div>
+<div id="gi21" class="giant anton clip" data-start="12.25" data-duration="5.17" style="top:1280px;font-size:300px;z-index:20;color:transparent;-webkit-text-stroke:5px rgba(254,222,92,.8)">2000s</div>
+<div id="fp22" class="fpop clip" data-start="14.95" data-duration="2.2"><span class="fpb">+ FOLLOW</span><span>True cricket fans follow <b>TheCricketLounge</b></span></div>
+<div id="fb23" class="fb  clip" data-start="17.42" data-duration="7.32"><div class="fbcover" id="fb23m"><img class="" src="media/s_multan.jpg"></div><div class="fbshade cover"></div></div>
+<div id="lb24" class="label clip" data-start="17.520000000000003" data-duration="7.220000000000001" style="left:64px;transform:none;top:920px;font-size:26px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:46">vs PAKISTAN · MULTAN · 2004</div>
+<div id="w25" class="words anton tband clip" data-start="17.62" data-duration="7.12" style="top:980px;font-size:72px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w25l0" style="color:#fff">The first Indian</div></div><div class="mask"><div class="ln" id="w25l1" style="color:#FEDE5C">Test triple century.</div></div></div>
+<div id="sc26" class="scard clip" data-start="19.12" data-duration="5.620000000000001" style="top:1300px;width:640px;margin-left:-320px"><div class="sctag">THE FIRST EVER</div><div class="scnum" id="sc26n" style="font-size:150px">0</div><div class="sclab">RUNS · FIRST INDIAN TO 300</div></div>
+<div id="fb27" class="fb  clip" data-start="24.74" data-duration="2.2"><div class="fbcover" id="fb27m"><video class="clip " src="media/c_test_sweep.mp4" muted playsinline data-start="24.74" data-duration="2.2" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
+<div id="fb28" class="fb  clip" data-start="26.74" data-duration="6.42"><div class="fbcover" id="fb28m"><video class="clip " src="media/c_celebrate.mp4" muted playsinline data-start="26.74" data-duration="6.42" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
+<div id="lb29" class="label clip" data-start="24.84" data-duration="8.32" style="left:64px;transform:none;top:300px;font-size:26px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:46">vs SOUTH AFRICA · CHENNAI · 2008</div>
+<div id="w30" class="words anton tband clip" data-start="24.939999999999998" data-duration="8.22" style="top:360px;font-size:72px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w30l0" style="color:#fff">The fastest triple</div></div><div class="mask"><div class="ln" id="w30l1" style="color:#FEDE5C">century in Tests.</div></div></div>
+<div id="sc31" class="scard clip" data-start="26.46" data-duration="6.699999999999996" style="top:1060px;width:560px;margin-left:-280px"><div class="scnum" id="sc31n" style="font-size:130px">0</div><div class="sclab">RUNS</div></div>
+<div id="sc32" class="scard clip" data-start="28.26" data-duration="4.899999999999995" style="top:1330px;width:560px;margin-left:-280px"><div class="scnum" id="sc32n" style="font-size:130px">0</div><div class="sclab">BALLS · FASTEST EVER</div></div>
+<div id="gl33" class="glow clip" data-start="33.16" data-duration="6.3" style="background:radial-gradient(70% 45% at 55% 55%,rgba(40,90,255,.55),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w34" class="words anton tband clip" data-start="33.16" data-duration="6.3" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w34l0" style="color:#fff">World Cup 2011.</div></div><div class="mask"><div class="ln" id="w34l1" style="color:#FEDE5C">First ball? Four.</div></div></div>
+<div id="pl35" class="player clip" data-start="33.26" data-duration="6.2" style="left:330px;top:480px;width:679px;height:780px;z-index:30"><img src="media/cut_wc2011.png" style=""></div>
+<div id="wc36" class="wcs clip" data-start="33.66" data-duration="5.8" style="top:1270px"><div class="wchead">WORLD CUP 2011 · FIRST BALL</div><div class="wgrid"><div class="wcell" id="wc36c0"><div class="wt">BAN</div><div class="wball" id="wc36b0">4</div></div><div class="wcell" id="wc36c1"><div class="wt">ENG</div><div class="wball" id="wc36b1">4</div></div><div class="wcell" id="wc36c2"><div class="wt">IRE</div><div class="wball" id="wc36b2">4</div></div><div class="wcell" id="wc36c3"><div class="wt">NED</div><div class="wball" id="wc36b3">4</div></div><div class="wcell" id="wc36c4"><div class="wt">SA</div><div class="wball" id="wc36b4">4</div></div><div class="wcell" id="wc36c5"><div class="wt">·</div><div class="wball" id="wc36b5">4</div></div><div class="wcell" id="wc36c6"><div class="wt">·</div><div class="wball" id="wc36b6">4</div></div><div class="wcell" id="wc36c7"><div class="wt">·</div><div class="wball" id="wc36b7">4</div></div></div><div class="wcount anton" id="wc36n">5 / 8</div></div>
+<div id="gl37" class="glow clip" data-start="39.46" data-duration="3.39" style="background:radial-gradient(70% 45% at 55% 55%,rgba(254,190,40,.45),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w38" class="words anton tband clip" data-start="39.46" data-duration="3.39" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w38l0" style="color:#fff">True cricket fans</div></div><div class="mask"><div class="ln" id="w38l1" style="color:#FEDE5C">follow this page.</div></div></div>
+<div id="ft39" class="ftap clip" data-start="39.660000000000004" data-duration="3.19" style="top:700px"><img src="media/logo.png" class="flogo"><div class="fbtn" id="ft39b"><span id="ft39t1">+ FOLLOW</span><span id="ft39t2" class="fdone">FOLLOWING ✓</span></div><div class="finger" id="ft39f">👆</div><div class="fbell" id="ft39l">🔔</div></div>
+<div id="lb40" class="label clip" data-start="40.26" data-duration="2.59" style="top:1340px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Throwbacks</div>
+<div id="lb41" class="label clip" data-start="40.51" data-duration="2.34" style="top:1450px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Records</div>
+<div id="lb42" class="label clip" data-start="40.76" data-duration="2.09" style="top:1560px;font-size:34px;color:#fff;background:rgba(255,255,255,.12);padding:10px 22px;border-radius:10px;z-index:31">Stories you grew up with</div>
+<div id="fb43" class="fb blurred clip" data-start="42.85" data-duration="3.9"><div class="fbcover" id="fb43m"><img class="" src="media/ganguly_still.jpg"></div><div class="fbshade cover"></div></div>
+<div id="w44" class="words anton tband clip" data-start="42.85" data-duration="3.9" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w44l0" style="color:#fff">What Sourav Ganguly</div></div><div class="mask"><div class="ln" id="w44l1" style="color:#FEDE5C">said next...</div></div></div>
+<div id="nt45" class="ntag clip" data-start="43.25" data-duration="3.5" style="top:1250px"><div class="nbar"></div><div><div class="nn anton">SOURAV GANGULY</div><div class="ns">Former India captain</div></div></div>
+<div id="fb46" class="fb  clip" data-start="46.75" data-duration="5.95"><div class="fbcover" id="fb46m"><video class="clip " src="media/ganguly.mp4" muted playsinline data-start="46.75" data-duration="5.95" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
+<div id="sb47" class="subtl clip" data-start="46.8" data-duration="2.55" style="top:1420px">“An opener's job is to keep leaving the ball until it gets old.”</div>
+<div id="sb48" class="subtl clip" data-start="49.35" data-duration="2.9500000000000015" style="top:1420px">“Sehwag's job was to make it old <b>by hitting it.</b>”</div>
+<div id="gl49" class="glow clip" data-start="52.7" data-duration="7.41" style="background:radial-gradient(70% 45% at 55% 55%,rgba(20,170,200,.45),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w50" class="words anton tband clip" data-start="52.7" data-duration="2.4599999999999937" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w50l0" style="color:#fff">When the hundred came,</div></div><div class="mask"><div class="ln" id="w50l1" style="color:#FEDE5C">the helmet came off.</div></div></div>
+<div id="gi51" class="giant anton clip" data-start="52.800000000000004" data-duration="2.4599999999999937" style="top:600px;font-size:600px;z-index:20;color:transparent;-webkit-text-stroke:5px rgba(254,222,92,.85)">100</div>
+<div id="pl52" class="player clip" data-start="52.85" data-duration="2.3599999999999937" style="left:271px;top:450px;width:538px;height:1300px;z-index:30"><img src="media/cut_helmet.png" style=""></div>
+<div id="fb53" class="fb  clip" data-start="55.16" data-duration="4.950000000000003"><img class="fbback" src="media/s_patka.jpg"><div class="fbfront" id="fb53m" style="top:270px;height:1200px"><img style="object-position:50% 22%" class="" src="media/s_patka.jpg"></div><div class="fbshade"></div></div>
+<div id="w54" class="words anton tband clip" data-start="55.16" data-duration="4.950000000000003" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w54l0" style="color:#fff">The red handkerchief.</div></div><div class="mask"><div class="ln" id="w54l1" style="color:#FEDE5C">That smile.</div></div></div>
+<div id="w55" class="words serif tband clip" data-start="56.93" data-duration="3.1799999999999997" style="top:1420px;font-size:58px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w55l0" style="color:#fff">Like he was batting in his backyard.</div></div></div>
+<div id="fb56" class="fb  clip" data-start="60.11" data-duration="1.94"><div class="fbcover" id="fb56m"><video class="clip " src="media/c_drive_nz.mp4" muted playsinline data-start="60.11" data-duration="1.94" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
+<div id="w57" class="words anton tband clip" data-start="60.11" data-duration="1.94" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w57l0" style="color:#fff">Some players give you</div></div><div class="mask"><div class="ln" id="w57l1" style="color:#fff">TROPHIES.</div></div></div>
+<div id="fb58" class="fb  clip" data-start="62.05" data-duration="1.57"><div class="fbcover" id="fb58m"><video class="clip " src="media/c_cut_aus2.mp4" muted playsinline data-start="62.05" data-duration="1.57" data-media-start="0"></video></div><div class="fbshade cover"></div></div>
+<div id="w59" class="words anton tband clip" data-start="62.05" data-duration="1.57" style="top:300px;font-size:84px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w59l0" style="color:#fff">Some give you</div></div><div class="mask"><div class="ln" id="w59l1" style="color:#fff">RUNS.</div></div></div>
+<div id="gl60" class="glow clip" data-start="63.62" data-duration="2.59" style="background:radial-gradient(70% 45% at 55% 55%,rgba(254,190,40,.45),rgba(8,8,10,0) 70%),#08080a"></div>
+<div id="w61" class="words serif tband clip" data-start="63.62" data-duration="2.59" style="top:300px;font-size:100px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w61l0" style="color:#fff">Viru gave us</div></div><div class="mask"><div class="ln" id="w61l1" style="color:#FEDE5C">our childhood.</div></div></div>
+<div id="pl62" class="player clip" data-start="63.82" data-duration="2.3899999999999997" style="left:190px;top:500px;width:701px;height:1250px;z-index:30"><img src="media/cut_laugh.png" style=""></div>
+<div id="vs63" class="vsplit clip" data-start="66.21" data-duration="5.19"><div class="vhalf t" id="vs63t"><img src="media/s_bighit.jpg"><div class="vshade"></div><div class="vpanel"><div class="vnm">SEHWAG</div><div class="vrow"><div class="vcell"><div class="vk">TEST 300s</div><div class="vv" id="vs63t0">2</div></div><div class="vcell"><div class="vk">ODI BEST</div><div class="vv" id="vs63t1">219</div></div><div class="vcell"><div class="vk">ODI SR</div><div class="vv" id="vs63t2">104+</div></div></div></div></div><div class="vhalf b" id="vs63b"><img src="media/gayle.jpg"><div class="vshade"></div><div class="vpanel"><div class="vnm">GAYLE</div><div class="vrow"><div class="vcell"><div class="vk">TEST 300s</div><div class="vv" id="vs63b0">2</div></div><div class="vcell"><div class="vk">ODI BEST</div><div class="vv" id="vs63b1">215</div></div><div class="vcell"><div class="vk">ODI SR</div><div class="vv" id="vs63b2">87.2</div></div></div></div></div><div class="vsb anton" id="vs63x">VS</div></div>
+<div id="w64" class="words anton tband clip" data-start="67.21" data-duration="4.189999999999998" style="top:290px;font-size:80px;text-align:left;z-index:45"><div class="mask"><div class="ln" id="w64l0" style="color:#fff">Most dangerous</div></div><div class="mask"><div class="ln" id="w64l1" style="color:#FEDE5C">opener?</div></div></div>
+<div id="lb65" class="label clip" data-start="69.8" data-duration="1.5999999999999943" style="top:1650px;font-size:30px;color:#121214;background:#FEDE5C;padding:10px 22px;border-radius:10px;z-index:47">💬  ONE WORD IN THE COMMENTS</div>
+<div id="ec66" class="endc clip" data-start="71.1" data-duration="1.9"><img src="media/logo.png" class="elogo" id="ec66l"><div class="efol" id="ec66f">+ FOLLOW</div><div class="esub" id="ec66s">for every cricket memory</div></div>
 <div class="tracker"><div class="tlab">THE VIRU YEARS</div><div class="tyrs"><span class="tyr" id="ty0">1999</span><span class="tyr" id="ty1">2000s</span><span class="tyr" id="ty2">2004</span><span class="tyr" id="ty3">2008</span><span class="tyr" id="ty4">2011</span><span class="tyr" id="ty5">VIRU</span></div><div class="tbar"><div class="tfill" id="tfill"></div></div><div class="tends"><span>1999</span><span>2013</span></div></div>
 </div>
 <script src="gsap.min.js"></script>
@@ -325,194 +346,185 @@ tl.fromTo("#mn9r3",{opacity:0,x:-30},{opacity:1,x:0,duration:0.35},4.22)
 tl.to("#mn9",{opacity:0,y:-120,duration:0.3},6.27)
 tl.fromTo("#st10",{scale:2.6,opacity:0,rotation:-16},{scale:1,opacity:1,rotation:-8,duration:0.32,ease:"power4.in"},4.9)
 tl.to("#st10",{opacity:0,duration:0.25},6.32)
-tl.fromTo("#gl11",{opacity:0},{opacity:1,duration:0.35},6.57)
+tl.fromTo("#fb11",{opacity:0},{opacity:1,duration:0.35},6.57)
+tl.fromTo("#fb11m",{scale:1.1},{scale:1,duration:2.73,ease:"none"},6.57)
+tl.to("#fb11",{opacity:0,duration:0.3},9.0)
 tl.fromTo("#w12l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},6.62)
 tl.fromTo("#w12l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},6.76)
 tl.to("#w12",{opacity:0,duration:0.3},9.0)
-tl.fromTo("#gi13",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},6.7700000000000005)
-tl.to("#gi13",{opacity:0,duration:0.3},9.0)
-tl.fromTo("#pl14",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},6.67)
-tl.to("#pl14",{scale:1.04,duration:1.8299999999999998,ease:"none"},7.47)
-tl.to("#pl14",{opacity:0,duration:0.3},9.0)
-tl.fromTo("#gl15",{opacity:0},{opacity:1,duration:0.35},9.3)
-tl.fromTo("#w16l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},9.35)
-tl.fromTo("#w16l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},9.49)
-tl.to("#w16",{opacity:0,duration:0.3},11.35)
-tl.fromTo("#gi17",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},9.4)
-tl.to("#gi17",{opacity:0,duration:0.3},11.35)
-tl.fromTo("#pl18",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},9.55)
-tl.to("#pl18",{scale:1.04,duration:1.3,ease:"none"},10.35)
-tl.to("#pl18",{opacity:0,duration:0.3},11.35)
-tl.fromTo("#gl19",{opacity:0},{opacity:1,duration:0.35},11.65)
-tl.fromTo("#w20l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},11.7)
-tl.fromTo("#w20l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},11.84)
-tl.to("#w20",{opacity:0,duration:0.3},17.12)
-tl.fromTo("#tv21",{scale:0.7,opacity:0,y:120},{scale:1,opacity:1,y:0,duration:0.8,ease:"back.out(1.4)"},11.950000000000001)
-tl.fromTo("#tv21 .tvscreen",{filter:"brightness(4)"},{filter:"brightness(1)",duration:0.5},12.15)
-tl.to("#tv21",{opacity:0,duration:0.3},17.12)
-tl.fromTo("#gi22",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},12.25)
-tl.to("#gi22",{color:"rgba(254,222,92,.8)",duration:0.3},14.71)
-tl.to("#gi22",{opacity:0,duration:0.3},17.12)
-tl.fromTo("#fp23",{x:700},{x:0,duration:0.5,ease:"expo.out"},14.95)
-tl.to("#fp23",{x:700,duration:0.4,ease:"power2.in"},16.75)
-tl.fromTo("#gl24",{opacity:0},{opacity:1,duration:0.35},17.42)
-tl.fromTo("#w25l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},17.47)
-tl.fromTo("#w25l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},17.61)
+tl.fromTo("#bi13t",{y:80,opacity:0,skewX:-12},{y:0,opacity:1,skewX:0,duration:0.6,ease:"expo.out"},6.87)
+tl.to("#bi13",{opacity:0,duration:0.3},9.0)
+tl.fromTo("#gl14",{opacity:0},{opacity:1,duration:0.35},9.3)
+tl.fromTo("#w15l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},9.35)
+tl.fromTo("#w15l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},9.49)
+tl.to("#w15",{opacity:0,duration:0.3},11.35)
+tl.fromTo("#gi16",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},9.4)
+tl.to("#gi16",{opacity:0,duration:0.3},11.35)
+tl.fromTo("#pl17",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},9.55)
+tl.to("#pl17",{scale:1.04,duration:1.3,ease:"none"},10.35)
+tl.to("#pl17",{opacity:0,duration:0.3},11.35)
+tl.fromTo("#gl18",{opacity:0},{opacity:1,duration:0.35},11.65)
+tl.fromTo("#w19l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},11.7)
+tl.fromTo("#w19l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},11.84)
+tl.to("#w19",{opacity:0,duration:0.3},17.12)
+tl.fromTo("#tv20",{scale:0.7,opacity:0,y:120},{scale:1,opacity:1,y:0,duration:0.8,ease:"back.out(1.4)"},11.950000000000001)
+tl.fromTo("#tv20 .tvscreen",{filter:"brightness(4)"},{filter:"brightness(1)",duration:0.5},12.15)
+tl.to("#tv20",{opacity:0,duration:0.3},17.12)
+tl.fromTo("#gi21",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},12.25)
+tl.to("#gi21",{color:"rgba(254,222,92,.8)",duration:0.3},14.71)
+tl.to("#gi21",{opacity:0,duration:0.3},17.12)
+tl.fromTo("#fp22",{x:700},{x:0,duration:0.5,ease:"expo.out"},14.95)
+tl.to("#fp22",{x:700,duration:0.4,ease:"power2.in"},16.75)
+tl.fromTo("#fb23",{opacity:0},{opacity:1,duration:0.35},17.42)
+tl.fromTo("#fb23m",{scale:1.1},{scale:1,duration:7.32,ease:"none"},17.42)
+tl.to("#fb23",{opacity:0,duration:0.3},24.44)
+tl.fromTo("#lb24",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},17.520000000000003)
+tl.to("#lb24",{opacity:0,duration:0.25},24.49)
+tl.fromTo("#w25l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},17.67)
+tl.fromTo("#w25l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},17.81)
 tl.to("#w25",{opacity:0,duration:0.3},24.44)
-tl.fromTo("#od26d0",{yPercent:0},{yPercent:-30,duration:1.1,ease:"expo.out"},19.22)
-tl.fromTo("#od26d1",{yPercent:0},{yPercent:0,duration:1.25,ease:"expo.out"},19.22)
-tl.fromTo("#od26d2",{yPercent:0},{yPercent:-90,duration:1.4000000000000001,ease:"expo.out"},19.22)
-tl.fromTo("#od26",{opacity:0,scale:1.15},{opacity:1,scale:1,duration:0.4,ease:"expo.out"},19.12)
-tl.to("#od26",{opacity:0,duration:0.3},24.44)
-tl.fromTo("#pl27",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},17.62)
-tl.to("#pl27",{scale:1.04,duration:6.32,ease:"none"},18.42)
-tl.to("#pl27",{opacity:0,duration:0.3},24.44)
-tl.fromTo("#fb28",{opacity:0},{opacity:1,duration:0.35},24.74)
-tl.fromTo("#fb28m",{scale:1.1},{scale:1,duration:2.2,ease:"none"},24.74)
-tl.to("#fb28",{opacity:0,duration:0.3},26.64)
-tl.fromTo("#fb29",{opacity:0},{opacity:1,duration:0.35},26.74)
-tl.fromTo("#fb29m",{scale:1.1},{scale:1,duration:6.42,ease:"none"},26.74)
-tl.to("#fb29",{opacity:0,duration:0.3},32.86)
-tl.fromTo("#w30l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},24.79)
-tl.fromTo("#w30l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},24.93)
+tl.fromTo("#sc26",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},19.12)
+;(()=>{const o={v:0};const el=document.getElementById("sc26n");tl.to(o,{v:309,duration:1.3,ease:"expo.out",onUpdate:()=>{el.textContent=""+o.v.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})+"";}},19.32);})()
+tl.to("#sc26",{opacity:0,duration:0.3},24.44)
+tl.fromTo("#fb27",{opacity:0},{opacity:1,duration:0.35},24.74)
+tl.fromTo("#fb27m",{scale:1.1},{scale:1,duration:2.2,ease:"none"},24.74)
+tl.to("#fb27",{opacity:0,duration:0.3},26.64)
+tl.fromTo("#fb28",{opacity:0},{opacity:1,duration:0.35},26.74)
+tl.fromTo("#fb28m",{scale:1.1},{scale:1,duration:6.42,ease:"none"},26.74)
+tl.to("#fb28",{opacity:0,duration:0.3},32.86)
+tl.fromTo("#lb29",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},24.84)
+tl.to("#lb29",{opacity:0,duration:0.25},32.91)
+tl.fromTo("#w30l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},24.99)
+tl.fromTo("#w30l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},25.13)
 tl.to("#w30",{opacity:0,duration:0.3},32.86)
-tl.fromTo("#gi31",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},25.68)
-tl.to("#gi31",{color:"#FEDE5C",duration:0.3},27.09)
-tl.to("#gi31",{opacity:0,duration:0.3},27.96)
-tl.fromTo("#od32d0",{yPercent:0},{yPercent:-20,duration:1.1,ease:"expo.out"},28.36)
-tl.fromTo("#od32d1",{yPercent:0},{yPercent:-70,duration:1.25,ease:"expo.out"},28.36)
-tl.fromTo("#od32d2",{yPercent:0},{yPercent:-80,duration:1.4000000000000001,ease:"expo.out"},28.36)
-tl.fromTo("#od32",{opacity:0,scale:1.15},{opacity:1,scale:1,duration:0.4,ease:"expo.out"},28.26)
-tl.to("#od32",{opacity:0,duration:0.3},32.86)
-tl.fromTo("#st33",{scale:2.6,opacity:0,rotation:-13},{scale:1,opacity:1,rotation:-5,duration:0.32,ease:"power4.in"},30.53)
-tl.to("#st33",{opacity:0,duration:0.25},32.91)
-tl.fromTo("#gl34",{opacity:0},{opacity:1,duration:0.35},33.16)
-tl.fromTo("#w35l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},33.21)
-tl.fromTo("#w35l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},33.35)
-tl.to("#w35",{opacity:0,duration:0.3},39.16)
-tl.fromTo("#pl36",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},33.26)
-tl.to("#pl36",{scale:1.04,duration:5.4,ease:"none"},34.06)
-tl.to("#pl36",{opacity:0,duration:0.3},39.16)
-tl.fromTo("#wc37",{y:200,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},33.66)
-tl.fromTo("#wc37c0",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.86)
-tl.fromTo("#wc37c1",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.91)
-tl.fromTo("#wc37c2",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.96)
-tl.fromTo("#wc37c3",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.01)
-tl.fromTo("#wc37c4",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.06)
-tl.fromTo("#wc37c5",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.11)
-tl.fromTo("#wc37c6",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.16)
-tl.fromTo("#wc37c7",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.21)
-tl.fromTo("#wc37b0",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},35.59)
-tl.to("#wc37c0",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},35.59)
-tl.fromTo("#wc37b1",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},36.17)
-tl.to("#wc37c1",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},36.17)
-tl.fromTo("#wc37b2",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},36.74)
-tl.to("#wc37c2",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},36.74)
-tl.fromTo("#wc37b3",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},37.32)
-tl.to("#wc37c3",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},37.32)
-tl.fromTo("#wc37b4",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},37.9)
-tl.to("#wc37c4",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},37.9)
-tl.fromTo("#wc37n",{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:"expo.out"},38.2)
-tl.to("#wc37",{opacity:0,duration:0.3},39.16)
-tl.fromTo("#gl38",{opacity:0},{opacity:1,duration:0.35},39.46)
-tl.fromTo("#w39l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},39.51)
-tl.fromTo("#w39l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},39.65)
-tl.to("#w39",{opacity:0,duration:0.3},42.55)
-tl.fromTo("#ft40",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.6,ease:"back.out(1.6)"},39.660000000000004)
-tl.fromTo("#ft40f",{x:260,y:260,opacity:0},{x:0,y:0,opacity:1,duration:0.6,ease:"power3.out"},40.81)
-tl.to("#ft40b",{scale:0.9,duration:0.08,yoyo:true,repeat:1},41.41)
-tl.to("#ft40b",{backgroundColor:"#2a2a2f",color:"#fff",duration:0.2},41.51)
-tl.to("#ft40t1",{opacity:0,duration:0.1},41.51)
-tl.fromTo("#ft40t2",{opacity:0},{opacity:1,duration:0.2},41.56)
-tl.to("#ft40f",{opacity:0,duration:0.3},41.81)
-tl.fromTo("#ft40l",{scale:0,rotation:0},{scale:1,rotation:0,duration:0.3,ease:"back.out(3)"},41.71)
-tl.to("#ft40l",{rotation:18,duration:0.08,yoyo:true,repeat:5},42.01)
-tl.to("#ft40",{opacity:0,duration:0.3},42.55)
-tl.fromTo("#lb41",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.26)
+tl.fromTo("#sc31",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},26.46)
+;(()=>{const o={v:0};const el=document.getElementById("sc31n");tl.to(o,{v:300,duration:1.3,ease:"expo.out",onUpdate:()=>{el.textContent=""+o.v.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})+"";}},26.66);})()
+tl.to("#sc31",{opacity:0,duration:0.3},32.86)
+tl.fromTo("#sc32",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},28.26)
+;(()=>{const o={v:0};const el=document.getElementById("sc32n");tl.to(o,{v:278,duration:1.3,ease:"expo.out",onUpdate:()=>{el.textContent=""+o.v.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})+"";}},28.46);})()
+tl.to("#sc32",{opacity:0,duration:0.3},32.86)
+tl.fromTo("#gl33",{opacity:0},{opacity:1,duration:0.35},33.16)
+tl.fromTo("#w34l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},33.21)
+tl.fromTo("#w34l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},33.35)
+tl.to("#w34",{opacity:0,duration:0.3},39.16)
+tl.fromTo("#pl35",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},33.26)
+tl.to("#pl35",{scale:1.04,duration:5.4,ease:"none"},34.06)
+tl.to("#pl35",{opacity:0,duration:0.3},39.16)
+tl.fromTo("#wc36",{y:200,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},33.66)
+tl.fromTo("#wc36c0",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.86)
+tl.fromTo("#wc36c1",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.91)
+tl.fromTo("#wc36c2",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},33.96)
+tl.fromTo("#wc36c3",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.01)
+tl.fromTo("#wc36c4",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.06)
+tl.fromTo("#wc36c5",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.11)
+tl.fromTo("#wc36c6",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.16)
+tl.fromTo("#wc36c7",{scale:0.4,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},34.21)
+tl.fromTo("#wc36b0",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},35.59)
+tl.to("#wc36c0",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},35.59)
+tl.fromTo("#wc36b1",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},36.17)
+tl.to("#wc36c1",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},36.17)
+tl.fromTo("#wc36b2",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},36.74)
+tl.to("#wc36c2",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},36.74)
+tl.fromTo("#wc36b3",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},37.32)
+tl.to("#wc36c3",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},37.32)
+tl.fromTo("#wc36b4",{scale:0},{scale:1,duration:0.35,ease:"back.out(3)"},37.9)
+tl.to("#wc36c4",{backgroundColor:"#FEDE5C",color:"#121214",duration:0.2},37.9)
+tl.fromTo("#wc36n",{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:"expo.out"},38.2)
+tl.to("#wc36",{opacity:0,duration:0.3},39.16)
+tl.fromTo("#gl37",{opacity:0},{opacity:1,duration:0.35},39.46)
+tl.fromTo("#w38l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},39.51)
+tl.fromTo("#w38l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},39.65)
+tl.to("#w38",{opacity:0,duration:0.3},42.55)
+tl.fromTo("#ft39",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.6,ease:"back.out(1.6)"},39.660000000000004)
+tl.fromTo("#ft39f",{x:260,y:260,opacity:0},{x:0,y:0,opacity:1,duration:0.6,ease:"power3.out"},40.81)
+tl.to("#ft39b",{scale:0.9,duration:0.08,yoyo:true,repeat:1},41.41)
+tl.to("#ft39b",{backgroundColor:"#2a2a2f",color:"#fff",duration:0.2},41.51)
+tl.to("#ft39t1",{opacity:0,duration:0.1},41.51)
+tl.fromTo("#ft39t2",{opacity:0},{opacity:1,duration:0.2},41.56)
+tl.to("#ft39f",{opacity:0,duration:0.3},41.81)
+tl.fromTo("#ft39l",{scale:0,rotation:0},{scale:1,rotation:0,duration:0.3,ease:"back.out(3)"},41.71)
+tl.to("#ft39l",{rotation:18,duration:0.08,yoyo:true,repeat:5},42.01)
+tl.to("#ft39",{opacity:0,duration:0.3},42.55)
+tl.fromTo("#lb40",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.26)
+tl.to("#lb40",{opacity:0,duration:0.25},42.6)
+tl.fromTo("#lb41",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.51)
 tl.to("#lb41",{opacity:0,duration:0.25},42.6)
-tl.fromTo("#lb42",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.51)
+tl.fromTo("#lb42",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.76)
 tl.to("#lb42",{opacity:0,duration:0.25},42.6)
-tl.fromTo("#lb43",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},40.76)
-tl.to("#lb43",{opacity:0,duration:0.25},42.6)
-tl.fromTo("#fb44",{opacity:0},{opacity:1,duration:0.35},42.85)
-tl.fromTo("#fb44m",{scale:1.1},{scale:1,duration:3.9,ease:"none"},42.85)
-tl.to("#fb44",{opacity:0,duration:0.3},46.45)
-tl.fromTo("#w45l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},42.9)
-tl.fromTo("#w45l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},43.04)
-tl.to("#w45",{opacity:0,duration:0.3},46.45)
-tl.fromTo("#nt46",{x:-500,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},43.25)
-tl.to("#nt46",{opacity:0,duration:0.3},46.45)
-tl.fromTo("#fb47",{opacity:0},{opacity:1,duration:0.35},46.75)
-tl.fromTo("#fb47m",{scale:1.1},{scale:1,duration:5.95,ease:"none"},46.75)
-tl.to("#fb47",{opacity:0,duration:0.3},52.4)
-tl.fromTo("#sb48",{opacity:0,y:20},{opacity:1,y:0,duration:0.3},46.8)
-tl.to("#sb48",{opacity:0,duration:0.2},49.15)
-tl.fromTo("#sb49",{opacity:0,y:20},{opacity:1,y:0,duration:0.3},49.35)
-tl.to("#sb49",{opacity:0,duration:0.2},52.1)
-tl.fromTo("#gl50",{opacity:0},{opacity:1,duration:0.35},52.7)
-tl.fromTo("#w51l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},52.75)
-tl.fromTo("#w51l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},52.89)
-tl.to("#w51",{opacity:0,duration:0.3},54.86)
-tl.fromTo("#gi52",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},52.800000000000004)
-tl.to("#gi52",{color:"rgba(254,222,92,.85)",duration:0.3},53.6)
-tl.to("#gi52",{opacity:0,duration:0.3},54.96)
-tl.fromTo("#pl53",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},52.85)
-tl.to("#pl53",{scale:1.04,duration:1.5599999999999936,ease:"none"},53.65)
-tl.to("#pl53",{opacity:0,duration:0.3},54.91)
-tl.fromTo("#gl54",{opacity:0},{opacity:1,duration:0.35},55.16)
-tl.fromTo("#w55l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},55.21)
-tl.fromTo("#w55l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},55.35)
+tl.fromTo("#fb43",{opacity:0},{opacity:1,duration:0.35},42.85)
+tl.fromTo("#fb43m",{scale:1.1},{scale:1,duration:3.9,ease:"none"},42.85)
+tl.to("#fb43",{opacity:0,duration:0.3},46.45)
+tl.fromTo("#w44l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},42.9)
+tl.fromTo("#w44l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},43.04)
+tl.to("#w44",{opacity:0,duration:0.3},46.45)
+tl.fromTo("#nt45",{x:-500,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},43.25)
+tl.to("#nt45",{opacity:0,duration:0.3},46.45)
+tl.fromTo("#fb46",{opacity:0},{opacity:1,duration:0.35},46.75)
+tl.fromTo("#fb46m",{scale:1.1},{scale:1,duration:5.95,ease:"none"},46.75)
+tl.to("#fb46",{opacity:0,duration:0.3},52.4)
+tl.fromTo("#sb47",{opacity:0,y:20},{opacity:1,y:0,duration:0.3},46.8)
+tl.to("#sb47",{opacity:0,duration:0.2},49.15)
+tl.fromTo("#sb48",{opacity:0,y:20},{opacity:1,y:0,duration:0.3},49.35)
+tl.to("#sb48",{opacity:0,duration:0.2},52.1)
+tl.fromTo("#gl49",{opacity:0},{opacity:1,duration:0.35},52.7)
+tl.fromTo("#w50l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},52.75)
+tl.fromTo("#w50l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},52.89)
+tl.to("#w50",{opacity:0,duration:0.3},54.86)
+tl.fromTo("#gi51",{scale:1.35,opacity:0},{scale:1,opacity:1,duration:0.55,ease:"expo.out"},52.800000000000004)
+tl.to("#gi51",{color:"rgba(254,222,92,.85)",duration:0.3},53.6)
+tl.to("#gi51",{opacity:0,duration:0.3},54.96)
+tl.fromTo("#pl52",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},52.85)
+tl.to("#pl52",{scale:1.04,duration:1.5599999999999936,ease:"none"},53.65)
+tl.to("#pl52",{opacity:0,duration:0.3},54.91)
+tl.fromTo("#fb53",{opacity:0},{opacity:1,duration:0.35},55.16)
+tl.fromTo("#fb53m",{scale:1.1},{scale:1,duration:4.950000000000003,ease:"none"},55.16)
+tl.to("#fb53",{opacity:0,duration:0.3},59.81)
+tl.fromTo("#w54l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},55.21)
+tl.fromTo("#w54l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},55.35)
+tl.to("#w54",{opacity:0,duration:0.3},59.81)
+tl.fromTo("#w55l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},56.98)
 tl.to("#w55",{opacity:0,duration:0.3},59.81)
-tl.fromTo("#pl56",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},55.16)
-tl.to("#pl56",{scale:1.04,duration:4.150000000000003,ease:"none"},55.96)
-tl.to("#pl56",{opacity:0,duration:0.3},59.81)
-tl.fromTo("#w57l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},57.25)
-tl.to("#w57",{opacity:0,duration:0.3},59.81)
-tl.fromTo("#fb58",{opacity:0},{opacity:1,duration:0.35},60.11)
-tl.fromTo("#fb58m",{scale:1.1},{scale:1,duration:1.94,ease:"none"},60.11)
-tl.to("#fb58",{opacity:0,duration:0.3},61.75)
-tl.fromTo("#w59l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},60.16)
-tl.fromTo("#w59l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},60.3)
-tl.to("#w59",{opacity:0,duration:0.3},61.75)
-tl.fromTo("#fb60",{opacity:0},{opacity:1,duration:0.35},62.05)
-tl.fromTo("#fb60m",{scale:1.1},{scale:1,duration:1.57,ease:"none"},62.05)
-tl.to("#fb60",{opacity:0,duration:0.3},63.32)
-tl.fromTo("#w61l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},62.1)
-tl.fromTo("#w61l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},62.24)
-tl.to("#w61",{opacity:0,duration:0.3},63.32)
-tl.fromTo("#gl62",{opacity:0},{opacity:1,duration:0.35},63.62)
-tl.fromTo("#w63l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},63.67)
-tl.fromTo("#w63l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},63.92)
-tl.to("#w63",{opacity:0,duration:0.3},65.91)
-tl.fromTo("#pl64",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},63.82)
-tl.to("#pl64",{scale:1.04,duration:1.5899999999999996,ease:"none"},64.62)
-tl.to("#pl64",{opacity:0,duration:0.3},65.91)
-tl.fromTo("#gl65",{opacity:0},{opacity:1,duration:0.35},66.21)
-tl.fromTo("#w66l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},66.26)
-tl.fromTo("#w66l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},66.4)
-tl.to("#w66",{opacity:0,duration:0.3},71.1)
-tl.fromTo("#pl67",{x:-500,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},66.30999999999999)
-tl.to("#pl67",{scale:1.04,duration:4.290000000000001,ease:"none"},67.11)
-tl.to("#pl67",{opacity:0,duration:0.3},71.1)
-tl.fromTo("#pl68",{x:500,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},66.46)
-tl.to("#pl68",{scale:1.04,duration:4.140000000000001,ease:"none"},67.26)
-tl.to("#pl68",{opacity:0,duration:0.3},71.1)
-tl.fromTo("#or69",{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.5,ease:"back.out(2.5)"},66.81)
-tl.fromTo("#lb70",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},67.00999999999999)
-tl.to("#lb70",{opacity:0,duration:0.25},71.15)
-tl.fromTo("#lb71",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},67.11)
-tl.to("#lb71",{opacity:0,duration:0.25},71.15)
-tl.fromTo("#lb72",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},69.8)
-tl.to("#lb72",{opacity:0,duration:0.25},71.15)
-tl.fromTo("#fp73",{x:700},{x:0,duration:0.5,ease:"expo.out"},70.45)
-tl.to("#fp73",{x:700,duration:0.4,ease:"power2.in"},72.25)
-tl.fromTo("#ec74",{opacity:0},{opacity:1,duration:0.3},71.1)
-tl.fromTo("#ec74l",{clipPath:"inset(0% 100% 0% 0%)"},{clipPath:"inset(0% 0% 0% 0%)",duration:0.8,ease:"expo.inOut"},71.2)
-tl.fromTo("#ec74f",{scale:0},{scale:1,duration:0.5,ease:"back.out(2.5)"},71.7)
-tl.fromTo("#ec74s",{opacity:0},{opacity:1,duration:0.5},72.0)
+tl.fromTo("#fb56",{opacity:0},{opacity:1,duration:0.35},60.11)
+tl.fromTo("#fb56m",{scale:1.1},{scale:1,duration:1.94,ease:"none"},60.11)
+tl.to("#fb56",{opacity:0,duration:0.3},61.75)
+tl.fromTo("#w57l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},60.16)
+tl.fromTo("#w57l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},60.3)
+tl.to("#w57",{opacity:0,duration:0.3},61.75)
+tl.fromTo("#fb58",{opacity:0},{opacity:1,duration:0.35},62.05)
+tl.fromTo("#fb58m",{scale:1.1},{scale:1,duration:1.57,ease:"none"},62.05)
+tl.to("#fb58",{opacity:0,duration:0.3},63.32)
+tl.fromTo("#w59l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},62.1)
+tl.fromTo("#w59l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},62.24)
+tl.to("#w59",{opacity:0,duration:0.3},63.32)
+tl.fromTo("#gl60",{opacity:0},{opacity:1,duration:0.35},63.62)
+tl.fromTo("#w61l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},63.67)
+tl.fromTo("#w61l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},63.92)
+tl.to("#w61",{opacity:0,duration:0.3},65.91)
+tl.fromTo("#pl62",{y:260,opacity:0,scale:0.96},{x:0,y:0,opacity:1,scale:1,duration:0.8,ease:"expo.out"},63.82)
+tl.to("#pl62",{scale:1.04,duration:1.5899999999999996,ease:"none"},64.62)
+tl.to("#pl62",{opacity:0,duration:0.3},65.91)
+tl.fromTo("#vs63t",{x:-1080},{x:0,duration:0.6,ease:"expo.out"},66.21)
+tl.fromTo("#vs63b",{x:1080},{x:0,duration:0.6,ease:"expo.out"},66.36)
+tl.fromTo("#vs63x",{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.5,ease:"back.out(2.5)"},66.76)
+tl.fromTo("#vs63t0",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},67.11)
+tl.fromTo("#vs63b0",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},67.11)
+tl.fromTo("#vs63t1",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},67.56)
+tl.fromTo("#vs63b1",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},67.56)
+tl.fromTo("#vs63t2",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},68.01)
+tl.fromTo("#vs63b2",{opacity:0,y:20},{opacity:1,y:0,duration:0.35},68.01)
+tl.to("#vs63",{opacity:0,duration:0.3},71.1)
+tl.fromTo("#w64l0",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},67.26)
+tl.fromTo("#w64l1",{yPercent:110},{yPercent:0,duration:0.7,ease:"expo.out"},67.4)
+tl.to("#w64",{opacity:0,duration:0.3},71.1)
+tl.fromTo("#lb65",{opacity:0,y:16},{opacity:1,y:0,duration:0.5,ease:"expo.out"},69.8)
+tl.to("#lb65",{opacity:0,duration:0.25},71.15)
+tl.fromTo("#ec66",{opacity:0},{opacity:1,duration:0.3},71.1)
+tl.fromTo("#ec66l",{clipPath:"inset(0% 100% 0% 0%)"},{clipPath:"inset(0% 0% 0% 0%)",duration:0.8,ease:"expo.inOut"},71.2)
+tl.fromTo("#ec66f",{scale:0},{scale:1,duration:0.5,ease:"back.out(2.5)"},71.7)
+tl.fromTo("#ec66s",{opacity:0},{opacity:1,duration:0.5},72.0)
 tl.fromTo(".tracker",{y:120,opacity:0},{y:0,opacity:1,duration:0.6,ease:"expo.out"},0.3)
 tl.fromTo("#ty0",{yPercent:100,opacity:0},{yPercent:0,opacity:1,duration:0.4,ease:"expo.out"},0.4)
-tl.to("#tfill",{scaleX:0.05,duration:0.8,ease:"expo.out"},0.4)
+tl.to("#tfill",{scaleX:0.03,duration:0.8,ease:"expo.out"},0.4)
 tl.to("#ty0",{yPercent:-100,opacity:0,duration:0.3},11.65)
 tl.fromTo("#ty1",{yPercent:100,opacity:0},{yPercent:0,opacity:1,duration:0.4,ease:"expo.out"},11.65)
 tl.to("#tfill",{scaleX:0.15,duration:0.8,ease:"expo.out"},11.65)
@@ -527,7 +539,7 @@ tl.fromTo("#ty4",{yPercent:100,opacity:0},{yPercent:0,opacity:1,duration:0.4,eas
 tl.to("#tfill",{scaleX:0.86,duration:0.8,ease:"expo.out"},33.16)
 tl.to("#ty4",{yPercent:-100,opacity:0,duration:0.3},39.46)
 tl.fromTo("#ty5",{yPercent:100,opacity:0},{yPercent:0,opacity:1,duration:0.4,ease:"expo.out"},39.46)
-tl.to("#tfill",{scaleX:0.05,duration:0.8,ease:"expo.out"},39.46)
+tl.to("#tfill",{scaleX:1.0,duration:0.8,ease:"expo.out"},39.46)
 for (let t = 3; t < 73.0 - 3; t += 6) tl.to("#bfol",{scale:1.18,duration:0.25,yoyo:true,repeat:1,ease:"power2.out"},t);
 tl.set({},{},73.0);
 window.__timelines = window.__timelines || {};
