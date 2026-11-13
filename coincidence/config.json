@@ -12,7 +12,7 @@
  "voice": {
   "tts_voice": "hm_omega",
   "tts_speed": 1.15,
-  "recording_tempo": 1.06,
+  "recording_tempo": 1.0,
   "tts_fallback": true
  },
  "hook": {
@@ -29,7 +29,16 @@
   "tease": "#1: three captains, one number",
   "image": "assets/trio_183.jpg",
   "caption": "Ye 3 coincidences dekh ke lagega cricket scripted hai. Number 1: teen captain, ek number.",
-  "vo_text": "ये तीन कोइंसिडेंसेस देख के लगेगा, क्रिकेट स्क्रिप्टेड है। नंबर वन: तीन कैप्टन, एक नंबर।"
+  "vo_text": "ये तीन कोइंसिडेंसेस देख के लगेगा, क्रिकेट स्क्रिप्टेड है। नंबर वन: तीन कैप्टन, एक नंबर।",
+  "vo_file": [
+   {
+    "file": "vo/full.mp3",
+    "trim": [
+     0,
+     6.85
+    ]
+   }
+  ]
  },
  "items": [
   {
@@ -48,7 +57,16 @@
    "image": "assets/trio_dbl.jpg",
    "duration": 6.0,
    "caption": "Number 3. Sachin ka 200, Sehwag ka 219, Rohit ka 264. Teeno match India jeeta... aur teeno baar 153 runs se.",
-   "vo_text": "नंबर थ्री। सचिन का दो सौ, सहवाग का दो सौ उन्नीस, रोहित का दो सौ चौंसठ। तीनों मैच इंडिया जीता... और तीनों बार, एक सौ तिरेपन रन से।"
+   "vo_text": "नंबर थ्री। सचिन का दो सौ, सहवाग का दो सौ उन्नीस, रोहित का दो सौ चौंसठ। तीनों मैच इंडिया जीता... और तीनों बार, एक सौ तिरेपन रन से।",
+   "vo_file": [
+    {
+     "file": "vo/full.mp3",
+     "trim": [
+      6.95,
+      18.05
+     ]
+    }
+   ]
   },
   {
    "rank": 2,
@@ -66,7 +84,16 @@
    "image": "assets/zi.png",
    "duration": 6.0,
    "caption": "Number 2. Zaheer Khan, 311 Test wickets. Ishant Sharma, 311 Test wickets. Dono ke 11 five-fors, dono ka ek ten-for.",
-   "vo_text": "नंबर टू। ज़हीर ख़ान, तीन सौ ग्यारह टेस्ट विकेट। इशांत शर्मा, तीन सौ ग्यारह टेस्ट विकेट। दोनों के ग्यारह फाइव-फॉर, दोनों का एक टेन-फॉर।"
+   "vo_text": "नंबर टू। ज़हीर ख़ान, तीन सौ ग्यारह टेस्ट विकेट। इशांत शर्मा, तीन सौ ग्यारह टेस्ट विकेट। दोनों के ग्यारह फाइव-फॉर, दोनों का एक टेन-फॉर।",
+   "vo_file": [
+    {
+     "file": "vo/full.mp3",
+     "trim": [
+      18.2,
+      29.05
+     ]
+    }
+   ]
   },
   {
    "rank": 1,
@@ -85,7 +112,16 @@
    "image": "assets/trio_183.jpg",
    "duration": 7.0,
    "caption": "Aur number 1. Ganguly ka highest ODI score, 183. Dhoni ka, 183 not out. Kohli ka, 183. Aur teeno bane India ke captain.",
-   "vo_text": "और नंबर वन। गांगुली का हाईएस्ट वनडे स्कोर, एक सौ तिरासी। धोनी का, एक सौ तिरासी नॉट आउट। कोहली का, एक सौ तिरासी। और तीनों बने इंडिया के कैप्टन।"
+   "vo_text": "और नंबर वन। गांगुली का हाईएस्ट वनडे स्कोर, एक सौ तिरासी। धोनी का, एक सौ तिरासी नॉट आउट। कोहली का, एक सौ तिरासी। और तीनों बने इंडिया के कैप्टन।",
+   "vo_file": [
+    {
+     "file": "vo/full.mp3",
+     "trim": [
+      29.15,
+      40.95
+     ]
+    }
+   ]
   }
  ],
  "outro": {
@@ -97,6 +133,15 @@
   "cta": "Comment · Part 2: the 11:11 Test",
   "ghost": "?",
   "caption": "183 ya 311? Comment karo. Part 2: 11/11/11 wala Test.",
-  "vo_text": "एक सौ तिरासी, या तीन सौ ग्यारह? कमेंट करो। पार्ट टू: इलेवन इलेवन इलेवन वाला टेस्ट।"
+  "vo_text": "एक सौ तिरासी, या तीन सौ ग्यारह? कमेंट करो। पार्ट टू: इलेवन इलेवन इलेवन वाला टेस्ट।",
+  "vo_file": [
+   {
+    "file": "vo/full.mp3",
+    "trim": [
+     41.1,
+     48.77
+    ]
+   }
+  ]
  }
 }
