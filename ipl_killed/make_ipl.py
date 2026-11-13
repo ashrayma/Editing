@@ -174,7 +174,8 @@ PHOTO_PATHS = {
         "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal",
         "six_crowd", "mi_bowler", "chahar_chepauk", "kuldeep_down", "narine", "hardik_six", "rashid_celebrate",
         "rashid_six", "rabada_fist", "dhoni_bowled", "mi_pointing", "toss", "tv_room_ipl", "family_dinner",
-        "sofa_phone", "roller", "pitch_water")},
+        "sofa_phone", "roller", "pitch_water", "empty_seats",
+        "umpire_impact", "yawn_fan")},
 }
 _A = lambda n: os.path.join(HERE, "assets", n + ".mp4")
 CLIPS = {   # name -> (file, start, end); each segment is shown once
@@ -187,6 +188,7 @@ CLIPS = {   # name -> (file, start, end); each segment is shown once
     "liv_a": (_A("livingstone_clean"), 0.0, 3.6), "liv_b": (_A("livingstone_clean"), 4.4, 7.8),
     "liv_c": (_A("livingstone_clean"), 8.0, 12.8), "liv_fans": (_A("livingstone_clean"), 12.9, 14.9),
     "starc": (_A("starc_clean"), 0.0, 7.8),
+    "kkr_a": (_A("kkr_clean"), 0.0, 4.0), "kkr_c": (_A("kkr_clean"), 9.8, 14.8),
     "jspin": (_A("jadeja_spin_clean"), 0.0, 5.8), "jstoinis": (_A("jadeja_spin_clean"), 8.6, 12.6),
     "jsix": (_A("jadeja_six_clean"), 0.0, 5.2), "jcelebrate": (_A("jadeja_six_clean"), 11.6, 14.3),
 }
@@ -872,7 +874,7 @@ INSERT_BEATS = {
     2: [(None, 1, 0, [lambda a, b: scorewall(a, b, "IPL 2026: 61 TOTALS OF 200+"),
                       T_([("NOT JUST A FEELING", WHITE)], 90, "rise", cy=150)]),
         ("clip:pollard", 0.45, 0, [T_([("200 EVERY OTHER GAME", WHITE), ("= NOT SPECIAL", Y)], 120)]),
-        ("crowd", 0.3, 0.6, [T_([("WHAT HAPPENS DAILY", WHITE), ("ISN'T REMEMBERED", RED)], 120, "rise")])],
+        ("yawn_fan", 0.3, 0.6, [T_([("WHAT HAPPENS DAILY", WHITE), ("ISN'T REMEMBERED", RED)], 120, "rise")])],
     3: [(None, 1, 0, [lambda a, b: case_header(a, b, "OPENING THE CASE…"),
                       T_([("4 SUSPECTS. 1 TRUTH.", Y)], 130, "rise")]),
         (None, 1, 0, [lambda a, b: [mugshot(a + 0.2 * i, b, f"0{i + 1}", "???", None, 300 + i * 440, 560, show_q=True)
@@ -893,7 +895,7 @@ INSERT_BEATS = {
         (None, 1, 0, [P_("rohit_mi", (1160, 100, 600, 880), fy=0.3),
                       T_([("ROHIT SHARMA:", WHITE), ("“NOT A FAN”", Y)], 140, cx=600, maxw=950),
                       T_([("ON THE IMPACT PLAYER RULE", GREY)], 50, "rise", path=XB_F, cy=760, cx=600, maxw=950)]),
-        ("batup", 0.35, 0, [T_([("ALL-ROUNDERS", WHITE), ("NOT BOWLING", RED)], 140, cx=720, maxw=1100)])],
+        ("clip:kkr_c", 0.35, 0, [T_([("ALL-ROUNDERS", WHITE), ("NOT BOWLING", RED)], 140, cx=720, maxw=1100)])],
     7: [(None, 1, 0, [lambda a, b: mugshot(a, b, "01", "IMPACT PLAYER", "iplk", 560, 540, w=460, h=600),
                       lambda a, b: stamp(a + 0.6, b, "GUILTY", 1300, 540, size=150)]),
         (None, 1, 0, [C_(["RUNS ↑", "RISK ↑", "BALANCE ↓"], x=760, y0=330, size=80, step=0.6)]),
@@ -1027,7 +1029,7 @@ def build():
     add(chip(L(1, 1.4), L(1, 3.3), "RUNS ↑", 140, 430, size=64))
     scene(L(1, 3.3), L(2), "empty", 0.45, 0.5)
     add(txt(L(1, 3.3), L(2), [("…BUT THE FANS", WHITE), ("ARE ON THEIR PHONES", Y)], W / 2, 540, 110))
-    scene(L(2), L(3), None)
+    scene(L(2), L(3), "empty_seats")
     add(txt(L(2), L(2, 1.9), [("SOMETHING IS DYING.", WHITE)], W / 2, 540, 120, anim="rise"))
     add(txt(L(2, 1.9), L(3), [("IPL KO", WHITE), ("KISNE MAARA?", RED)], W / 2, 540, 190, anim="slam"))
     scene(L(3), L(5), None)
@@ -1047,7 +1049,7 @@ def build():
     scene(L(8), L(9), None)
     add(mugshot(L(8), L(9), "01", "IMPACT PLAYER", "impact_signal", 560, 540, w=460, h=600))
     add(txt(L(8, 0.4), L(9), [("SUSPECT /01", Y), ("IMPACT PLAYER", WHITE)], 1300, 540, 120, align="l", maxw=900))
-    scene(L(9), L(10), "impact_signal", 0.3)
+    scene(L(9), L(10), "umpire_impact", 0.3)
     add(txt(L(9), L(10), [("+1 PLAYER", Y)], W / 2, 420, 220, anim="slam"))
     add(txt(L(9, 1.8), L(10), [("BUT THE EFFECT?", WHITE)], W / 2, 690, 90))
     scene(L(10), L(11), None)
@@ -1080,7 +1082,7 @@ def build():
     scene(L(14), L(15), "rcb_huddle", 0.25)
     add(stamp(L(14), L(14, 0.9), "CASE CLOSED?", W / 2, 460, color=Y))
     add(txt(L(14, 0.8), L(15), [("GUILTY?", RED)], W / 2, 640, 200, anim="slam"))
-    scene(L(15), L(16), None)
+    scene(L(15), L(16), "clip:kkr_a")
     add(txt(L(15), L(15, 3.4), [("NOT SO FAST.", WHITE)], W / 2, 300, 110))
     add(txt(L(15, 1.2), L(15, 5.2), [("SCORES WERE RISING", WHITE), ("BEFORE 2023", Y)], W / 2, 600, 120))
     add(txt(L(15, 5.2), L(16), [("SOMEONE ELSE", WHITE), ("WAS INVOLVED…", RED)], W / 2, 540, 140, anim="slam"))
