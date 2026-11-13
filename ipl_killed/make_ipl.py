@@ -174,7 +174,7 @@ PHOTO_PATHS = {
         "kohli_rcb_walk", "srh_fist", "srh_arms", "rohit_mi", "super_sixes", "impact_signal",
         "six_crowd", "mi_bowler", "chahar_chepauk", "kuldeep_down", "narine", "hardik_six", "rashid_celebrate",
         "rashid_six", "rabada_fist", "dhoni_bowled", "mi_pointing", "toss", "tv_room_ipl", "family_dinner",
-        "sofa_phone")},
+        "sofa_phone", "roller", "pitch_water")},
 }
 _A = lambda n: os.path.join(HERE, "assets", n + ".mp4")
 CLIPS = {   # name -> (file, start, end); each segment is shown once
@@ -184,6 +184,11 @@ CLIPS = {   # name -> (file, start, end); each segment is shown once
     "reel_fans": (_A("reel_fans"), 0.6, 99.0), "reel_fans2": (_A("reel_fans2"), 0.2, 99.0),
     "reel_think": (_A("reel_think"), 0.2, 99.0), "reel_ton": (_A("reel_ton"), 0.4, 99.0),
     "reel_six": (_A("reel_six"), 1.2, 99.0),
+    "liv_a": (_A("livingstone_clean"), 0.0, 3.6), "liv_b": (_A("livingstone_clean"), 4.4, 7.8),
+    "liv_c": (_A("livingstone_clean"), 8.0, 12.8), "liv_fans": (_A("livingstone_clean"), 12.9, 14.9),
+    "starc": (_A("starc_clean"), 0.0, 7.8),
+    "jspin": (_A("jadeja_spin_clean"), 0.0, 5.8), "jstoinis": (_A("jadeja_spin_clean"), 8.6, 12.6),
+    "jsix": (_A("jadeja_six_clean"), 0.0, 5.2), "jcelebrate": (_A("jadeja_six_clean"), 11.6, 14.3),
 }
 # visual for each blank screen, matched to what the voice says there (output seconds -> photo / clip)
 OVERRIDE = [(8.1, "clip:reel_fans"), (12.0, "family_dinner"), (17.7, "tv_room_ipl"), (22.2, "clip:reel_fans2"),
@@ -247,6 +252,40 @@ def photo(name):
         up = os.path.join(HERE, "assets", "x4", os.path.basename(p))
         _ph[name] = Image.open(up if os.path.exists(up) else p).convert("RGB")
     return _ph[name]
+
+
+FACES = json.load(open(os.path.join(HERE, "assets", "faces.json"))) if os.path.exists(
+    os.path.join(HERE, "assets", "faces.json")) else {}
+
+
+def face_box(name):
+    """Union of the main faces in a photo (relative coords), or None."""
+    fs = FACES.get(name) or []
+    if not fs:
+        return None
+    big = max((f[2] - f[0]) * (f[3] - f[1]) for f in fs)
+    fs = [f for f in fs if (f[2] - f[0]) * (f[3] - f[1]) >= 0.25 * big]
+    return (min(f[0] for f in fs), min(f[1] for f in fs), max(f[2] for f in fs), max(f[3] for f in fs))
+
+
+def frame(name, w, h, z, drift=(0.0, 0.0), ty=0.36):
+    """Crop of a photo at zoom z that keeps the faces in view, high in the frame (text sits at the bottom)."""
+    im = photo(name)
+    fb = face_box(name)
+    if fb is None:
+        return cover(im, w, h, z, 0.5 + drift[0], 0.40 + drift[1])
+    x0, y0, x1, y1 = fb
+    s0 = max(w / im.width, h / im.height)
+    # zoom never pushes the faces out: face block at most 80% wide / 55% high of the frame
+    zmax = min((0.8 * w) / max(1, (x1 - x0) * im.width * s0), (0.55 * h) / max(1, (y1 - y0) * im.height * s0))
+    z = max(1.0, min(z, zmax))
+    s = s0 * z
+    fw, fh = int(im.width * s) + 1, int(im.height * s) + 1
+    cx = (x0 + x1) / 2 * fw + drift[0] * w
+    cy = (y0 + y1) / 2 * fh + drift[1] * h
+    x = int(np.clip(cx - w / 2, 0, fw - w))
+    y = int(np.clip(cy - ty * h, 0, fh - h))
+    return im.resize((fw, fh), Image.BILINEAR).crop((x, y, x + w, y + h))
 
 
 def cover(im, w, h, z=1.0, fx=0.5, fy=0.45):
@@ -315,7 +354,7 @@ def backdrop(name, t, t0, t1, dark=0.32, gray=0.0):
     d = sum(map(ord, name)) % 4               # Ken Burns: push in + drift, direction varies per photo
     dx, dy = [(1, 0), (-1, 0), (0, 1), (1, -1)][d]
     q = ease(p) * 0.6 + p * 0.4
-    im = cover(photo(name), W, H, 1.08 + 0.16 * q, 0.5 + dx * 0.07 * (q - 0.5), 0.45 + dy * 0.05 * (q - 0.5))
+    im = frame(name, W, H, 1.08 + 0.16 * q, (dx * 0.05 * (q - 0.5), dy * 0.03 * (q - 0.5)))
     a = arr(im)
     if gray:
         lum = a.mean(-1, keepdims=True)
@@ -331,7 +370,8 @@ def panel(base, name, box, t, t0, t1, z0=1.0, fx=0.5, fy=0.42, tilt=0):
     if a <= 0:
         return
     p = (t - t0) / max(0.5, t1 - t0)
-    im = cover(photo(name), w, h, z0 + 0.05 * p, fx, fy).convert("RGBA")
+    im = (frame(name, w, h, z0 + 0.08 * p, ty=0.4) if face_box(name) else
+          cover(photo(name), w, h, z0 + 0.08 * p, fx, fy)).convert("RGBA")
     d = ImageDraw.Draw(im)
     d.rectangle((0, 0, w - 1, h - 1), outline=Y + (255,), width=6)
     sh = Image.new("RGBA", (w + 80, h + 80), (0, 0, 0, 0))
@@ -437,7 +477,7 @@ def mugshot(t0, t1, num, title, name, cx, cy, w=380, h=470, accent=Y, show_q=Fal
         for i, yy in enumerate(range(40, h - 110, 34)):
             d.line((0, yy, w, yy), fill=(70, 72, 80, 255), width=2 if i % 2 else 1)
         if name:
-            ph = cover(photo(name), w - 30, h - 130, 1.0, 0.5, 0.35).convert("L").convert("RGB")
+            ph = frame(name, w - 30, h - 130, 1.0, ty=0.4).convert("L").convert("RGB")
             ph = img(arr(ph) * 0.9)
             card.paste(ph, (15, 15))
         else:
@@ -464,30 +504,157 @@ def mugshot(t0, t1, num, title, name, cx, cy, w=380, h=470, accent=Y, show_q=Fal
     return e
 
 
-def bars(t0, t1, data, cx, cy, maxv, label):
+def bars(t0, t1, data, cx, cy, maxv, label, bw=220, gap=160, hmax=520, vsize=110, step=0.9, panel_=False):
     """Animated bar chart; a tick per bar as it grows."""
     def draw(base, t):
         k = t - t0
         a = ease(k / 0.2) * (1 - ease((t - (t1 - 0.15)) / 0.15))
         lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         d = ImageDraw.Draw(lay)
-        bw, gap, hmax = 220, 160, 520
         n = len(data)
+        if panel_:
+            wd = n * bw + (n - 1) * gap + 200
+            d.rounded_rectangle((cx - wd / 2, cy - hmax / 2 - 150, cx + wd / 2, cy + hmax / 2 + 190), radius=24,
+                                fill=(12, 13, 16, 215))
         x0 = cx - (n * bw + (n - 1) * gap) / 2
         base_y = cy + hmax / 2
         d.line((x0 - 60, base_y, x0 + n * bw + (n - 1) * gap + 60, base_y), fill=GREY + (255,), width=4)
         for i, (yr, v, col) in enumerate(data):
-            g = ease((k - 0.3 - i * 0.9) / 0.8)
+            g = ease((k - 0.3 - i * step) / 0.8)
             hh = hmax * v / maxv * g
             x = x0 + i * (bw + gap)
             d.rectangle((x, base_y - hh, x + bw, base_y), fill=col + (255,))
             d.text((x + bw / 2, base_y + 50), yr, font=font(ANTON, 64), fill=WHITE, anchor="mm")
             if g > 0.05:
-                d.text((x + bw / 2, base_y - hh - 70), str(int(round(v * g))), font=font(ANTON, 110), fill=col,
+                d.text((x + bw / 2, base_y - hh - vsize * 0.62), f"{int(round(v * g)):,}", font=font(ANTON, vsize),
+                   fill=col,
                        anchor="mm")
         d.text((cx, base_y + 140), label, font=font(XB_F, 46), fill=GREY, anchor="mm")
         base.alpha_composite(fade(lay, a))
     return E(t0, t1, draw, None)
+
+
+GREEN = (60, 200, 110)
+
+
+def scorebug(t0, t1, cx, cy, tag, score, overs, note, status=None, status_col=Y, tag_col=Y):
+    """Broadcast-style score bar: tag | score (counts up) | overs | note, plus a status pill."""
+    runs = int(score.split("/")[0])
+    wk = score.split("/")[1] if "/" in score else None
+
+    def draw(base, t):
+        k = t - t0
+        a = ease(k / 0.25) * (1 - ease((t - (t1 - 0.15)) / 0.15))
+        if a <= 0:
+            return
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        w, h = 1500, 170
+        x0, y0 = cx - w / 2, cy - h / 2 + 50 * (1 - ease(k / 0.3))
+        d.rounded_rectangle((x0, y0, x0 + w, y0 + h), radius=18, fill=(16, 17, 22, 240), outline=(60, 62, 70, 255),
+                            width=3)
+        d.rounded_rectangle((x0, y0, x0 + 300, y0 + h), radius=18, fill=tag_col + (255,))
+        d.text((x0 + 150, y0 + h / 2), tag, font=font(ANTON, 64), fill=INK, anchor="mm")
+        r = int(runs * ease((k - 0.2) / 0.9))
+        d.text((x0 + 340, y0 + h / 2), f"{r}" + (f"/{wk}" if wk else ""), font=font(ANTON, 120), fill=WHITE,
+               anchor="lm")
+        d.text((x0 + 760, y0 + h / 2), overs, font=font(XB_F, 46), fill=GREY, anchor="lm")
+        d.line((x0 + 960, y0 + 30, x0 + 960, y0 + h - 30), fill=(70, 72, 80, 255), width=3)
+        d.text((x0 + 1230, y0 + h / 2), note, font=font(XB_F, 46), fill=WHITE, anchor="mm")
+        if status and k > 1.0:
+            g = ease((k - 1.0) / 0.2)
+            f = font(ANTON, 80)
+            tw = f.getlength(status)
+            sx, sy = cx - tw / 2 - 40, y0 + h + 40
+            d.rounded_rectangle((sx, sy, sx + tw + 80, sy + 120), radius=14, fill=status_col + (int(255 * g),))
+            d.text((cx, sy + 60), status, font=f, fill=INK if status_col in (Y, GREEN) else WHITE, anchor="mm")
+        base.alpha_composite(fade(lay, a))
+    return E(t0, t1, draw, "ticks")
+
+
+SCORES = ["201/4", "218/6", "224/3", "206/5", "231/2", "212/7", "243/4", "209/6", "227/5", "201/8", "236/3",
+          "215/4", "262/2", "204/6", "220/5"]
+
+
+def scorewall(t0, t1, label):
+    """200+ after 200+ after 200+: score tiles popping in one after another."""
+    def draw(base, t):
+        k = t - t0
+        a = 1 - ease((t - (t1 - 0.15)) / 0.15)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        for i, sc_ in enumerate(SCORES):
+            g = ease((k - 0.2 - 0.16 * i) / 0.2)
+            if g <= 0:
+                continue
+            r, c = divmod(i, 5)
+            x, y = W / 2 + (c - 2) * 350, 330 + r * 190
+            sz = 1 + 0.2 * (1 - g)
+            tw, th = 310 * sz, 150 * sz
+            d.rounded_rectangle((x - tw / 2, y - th / 2, x + tw / 2, y + th / 2), radius=14,
+                                fill=(22, 24, 30, int(240 * g)), outline=Y + (int(255 * g),), width=3)
+            d.text((x, y - 12), sc_, font=font(ANTON, int(84 * sz)), fill=Y + (int(255 * g),), anchor="mm")
+            d.text((x, y + 48), "20 OV", font=font(XB_F, 26), fill=GREY + (int(255 * g),), anchor="mm")
+        d.text((W / 2, 900), label, font=font(XB_F, 44), fill=GREY, anchor="mm")
+        base.alpha_composite(fade(lay, a))
+    return E(t0, t1, draw, "ticks")
+
+
+def money_gfx(t0, t1):
+    """IPL media rights: the counter runs up to Rs 48,390 crore while coins rain."""
+    rs = np.random.default_rng(7).uniform(0, 1, (26, 3))
+
+    def draw(base, t):
+        k = t - t0
+        a = ease(k / 0.2) * (1 - ease((t - (t1 - 0.15)) / 0.15))
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.rounded_rectangle((260, 230, W - 260, 760), radius=30, fill=(10, 11, 14, 200))
+        for x_, sp, ph in rs:   # falling coins
+            y = (ph * H + k * (260 + 300 * sp)) % (H + 200) - 100
+            x = 120 + x_ * (W - 240)
+            r = 26 + 14 * sp
+            d.ellipse((x - r, y - r, x + r, y + r), fill=(240, 196, 60, 230), outline=(160, 120, 20, 255), width=3)
+            d.text((x, y), "₹", font=font(BLACK_F, int(r * 1.1)), fill=(120, 84, 10), anchor="mm")
+        v = int(48390 * ease((k - 0.2) / 2.2))
+        pul = 1 + 0.04 * np.sin(k * 8) * (k > 2.4)
+        d.text((W / 2, 330), "IPL MEDIA RIGHTS · 2023–27", font=font(XB_F, 52), fill=GREY, anchor="mm")
+        big = font(BLACK_F, int(190 * pul))
+        d.text((W / 2, 520), f"₹{v:,} CR", font=big, fill=Y, anchor="mm")
+        d.text((W / 2, 690), "5 SEASONS", font=font(XB_F, 46), fill=WHITE, anchor="mm")
+        base.alpha_composite(fade(lay, a))
+    return E(t0, t1, draw, "ticks")
+
+
+CARD = [("OPENER", "64", "31"), ("NO. 3", "12", "9"), ("NO. 4", "45", "22"), ("NO. 5", "20", "14"),
+        ("NO. 6", "8", "5"), ("EXTRAS", "9", ""), ("TOTAL", "158/5", "20 OV")]
+
+
+def scorecard_gfx(t0, t1):
+    """All that's left of the story: a batting scorecard, rows typing in, then going cold and grey."""
+    def draw(base, t):
+        k = t - t0
+        a = ease(k / 0.2) * (1 - ease((t - (t1 - 0.15)) / 0.15))
+        cold = ease((k - 2.6) / 1.0)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        x0, y0, w = 510, 150, 900
+        d.rounded_rectangle((x0, y0, x0 + w, y0 + 110 + 82 * len(CARD)), radius=18, fill=(236, 232, 220, 245))
+        d.text((x0 + 40, y0 + 55), "SCORECARD", font=font(MONO, 44), fill=INK, anchor="lm")
+        d.text((x0 + 680, y0 + 55), "R", font=font(MONO, 36), fill=(90, 90, 90), anchor="mm")
+        d.text((x0 + 800, y0 + 55), "B", font=font(MONO, 36), fill=(90, 90, 90), anchor="mm")
+        for i, (who, r, b) in enumerate(CARD):
+            if k < 0.3 + 0.25 * i:
+                continue
+            y = y0 + 140 + 82 * i
+            hot = (who == "NO. 5")
+            col = tuple(int(c * (1 - cold) + 120 * cold) for c in (RED if hot else INK))
+            d.line((x0 + 30, y - 41, x0 + w - 30, y - 41), fill=(200, 196, 186), width=2)
+            d.text((x0 + 40, y), who, font=font(MONO, 40), fill=col, anchor="lm")
+            d.text((x0 + 680, y), r, font=font(MONO, 40), fill=col, anchor="mm")
+            d.text((x0 + 800, y), b, font=font(MONO, 40), fill=col, anchor="mm")
+        base.alpha_composite(fade(lay, a))
+    return E(t0, t1, draw, "type")
 
 
 def pitch_gfx(t0, t1, cx, cy):
@@ -626,9 +793,18 @@ def merge_gfx(t0, t1):
                 paste_center(base, card, x, 540, 1.0, a_cards)
         if k > 1.35:
             kk = k - 1.35
-            im = text_img((("SCOREBOARD", Y),), 230, ANTON)
-            paste_center(base, im, W / 2, 540, 1 + 0.35 * (1 - ease(kk / 0.15)), ease(kk / 0.06) *
-                         (1 - ease((t - (t1 - 0.15)) / 0.15)))
+            al = ease(kk / 0.1) * (1 - ease((t - (t1 - 0.15)) / 0.15))
+            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            d = ImageDraw.Draw(lay)
+            d.rounded_rectangle((460, 250, 1460, 830), radius=20, fill=(8, 8, 10, 255), outline=(70, 70, 76, 255),
+                                width=8)
+            for yy in range(270, 820, 14):     # LED dot rows
+                d.line((480, yy, 1440, yy), fill=(22, 20, 14, 255), width=2)
+            d.text((W / 2, 340), "RUNS", font=font(MONO, 64), fill=(255, 170, 40), anchor="mm")
+            v = int(160 + 60 * ease(kk / 1.4))
+            d.text((W / 2, 580), str(v), font=font(ANTON, 300), fill=(255, 190, 50), anchor="mm")
+            d.text((W / 2, 770), "20 OVERS", font=font(MONO, 44), fill=(200, 140, 40), anchor="mm")
+            paste_center(base, fade(lay, al), W / 2, 540, 1 + 0.2 * (1 - ease(kk / 0.2)), 1.0)
     return E(t0, t1, draw, None)
 
 
@@ -693,7 +869,8 @@ INSERT_BEATS = {
         ("empty", 0.4, 0.6, [T_([("TODAY?", WHITE)], 200)]),
         ("empty", 0.3, 0.8, [lambda a, b: phone_gfx(a, b, 1400, 560, PHONE_ROWS, "SECOND SCREEN"),
                              T_([("MATCH ON.", WHITE), ("MIND ELSEWHERE.", Y)], 120, "rise", cx=640, maxw=1000)])],
-    2: [(None, 1, 0, [T_([("NOT JUST A FEELING", WHITE)], 130, "rise")]),
+    2: [(None, 1, 0, [lambda a, b: scorewall(a, b, "IPL 2026: 61 TOTALS OF 200+"),
+                      T_([("NOT JUST A FEELING", WHITE)], 90, "rise", cy=150)]),
         ("clip:pollard", 0.45, 0, [T_([("200 EVERY OTHER GAME", WHITE), ("= NOT SPECIAL", Y)], 120)]),
         ("crowd", 0.3, 0.6, [T_([("WHAT HAPPENS DAILY", WHITE), ("ISN'T REMEMBERED", RED)], 120, "rise")])],
     3: [(None, 1, 0, [lambda a, b: case_header(a, b, "OPENING THE CASE…"),
@@ -705,7 +882,8 @@ INSERT_BEATS = {
         ("iplk", 0.3, 0, [T_([("MORE CHANCES.", WHITE), ("MORE STRATEGY.", Y)], 130, "rise")]),
         ("impact_signal", 0.35, 0, [T_([("SWAP 1 PLAYER", WHITE), ("AFTER THE TOSS", Y)], 130, cx=1300, maxw=1000)]),
         (None, 1, 0, [ST_("SMART ON PAPER", 540, Y, 120)])],
-    5: [("slump", 0.4, 0.5, [T_([("THEN: 6 DOWN", WHITE), ("= GAME OVER", RED)], 140)]),
+    5: [(None, 1, 0, [lambda a, b: scorebug(a, b, W / 2, 470, "THEN", "86/6", "12.3 OV", "6 WICKETS DOWN",
+                                            "GAME OVER", RED, GREY)]),
         (None, 1, 0, [T_([("NO. 7, 8:", WHITE), ("BOWLERS SWINGING", GREY)], 130, "rise")]),
         ("batup", 0.4, 0, [T_([("NOW: NO. 8", WHITE), ("IS A REAL BATTER", Y)], 130, cx=700, maxw=1100)]),
         ("srh_fist", 0.35, 0, [T_([("TOP ORDER:", WHITE), ("NO BRAKES", Y)], 150, cx=1250, maxw=1100)]),
@@ -723,18 +901,20 @@ INSERT_BEATS = {
     8: [("slump", 0.35, 0.5, [T_([("T20: HARD ENOUGH", WHITE), ("FOR BOWLERS", Y)], 130)]),
         (None, 1, 0, [C_(["4 OVERS", "FIELD RESTRICTIONS", "SHORT BOUNDARIES"], x=560, y0=330, size=70)]),
         ("pitch", 0.45, 0, [T_([("HIS LAST HOPE:", WHITE), ("THE PITCH", Y)], 150)]),
-        ("pant", 0.4, 0, [C_(["SWING", "TURN", "UNEVEN BOUNCE"], x=1100, y0=330, size=70)]),
+        ("narine", 0.4, 0, [C_(["SWING", "TURN", "UNEVEN BOUNCE"], x=1100, y0=330, size=70)]),
         ("pitch", 0.35, 0, [T_([("HIS ONLY WEAPON", Y)], 160)])],
-    9: [("pitch", 0.3, 0.6, [T_([("BOWLER =", WHITE), ("BOWLING MACHINE", Y)], 140)]),
-        (None, 1, 0, [T_([("SAME HEIGHT.", WHITE), ("SAME SPEED.", Y)], 160, "rise")]),
+    9: [("clip:liv_a", 0.3, 0.6, [T_([("BOWLER =", WHITE), ("BOWLING MACHINE", Y)], 140)]),
+        ("clip:liv_b", 1, 0, [T_([("SAME HEIGHT.", WHITE), ("SAME SPEED.", Y)], 160, "rise")]),
         ("clip:pollard", 0.45, 0, [T_([("JUST STAND & HIT", Y)], 150)]),
-        (None, 1, 0, [T_([("SKILL ↓   GUESSWORK ↑", Y)], 110, path=BLACK_F)])],
-    10: [("mi_celebrate", 0.4, 0, [T_([("WHEN 140", WHITE), ("WAS ENOUGH", Y)], 160)]),
-         ("crowd", 0.35, 0.3, [T_([("LOW-SCORING", WHITE), ("THRILLERS", Y)], 160, "rise")]),
-         ("pant", 0.3, 0.5, [T_([("EVERY RUN EARNED.", WHITE), ("EVERY WICKET MATTERED.", Y)], 110)])],
+        ("clip:liv_c", 1, 0, [T_([("SKILL ↓   GUESSWORK ↑", Y)], 110, path=BLACK_F)])],
+    10: [(None, 1, 0, [lambda a, b: scorebug(a, b, W / 2, 470, "TARGET", "141", "20 OV", "BOWLING SIDE: 140/8",
+                                             "DEFENDED", GREEN)]),
+         (None, 1, 0, [lambda a, b: scorebug(a, b, W / 2, 470, "CHASE", "136/9", "20 OV", "LAST BALL",
+                                             "WON BY 5 RUNS", Y, GREY)]),
+         ("clip:jstoinis", 0.3, 0.5, [T_([("EVERY RUN EARNED.", WHITE), ("EVERY WICKET MATTERED.", Y)], 110)])],
     11: [(None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "FANTASY"),
                        T_([("A NEW", WHITE), ("AUDIENCE", Y)], 150, "rise", cx=1300, maxw=900)]),
-         ("crowd", 0.3, 0.5, [T_([("NON-FANS", WHITE), ("NOW PICK TEAMS", Y)], 140)]),
+         ("clip:liv_fans", 0.3, 0.5, [T_([("NON-FANS", WHITE), ("NOW PICK TEAMS", Y)], 140)]),
          (None, 1, 0, [T_([("BUT IT CHANGED", WHITE), ("HOW WE WATCH", RED)], 140, "rise")])],
     12: [("gt_celebrate", 0.35, 0, [T_([("THEN:", WHITE), ("WILL MY TEAM WIN?", Y)], 130)]),
          (None, 1, 0, [lambda a, b: phone_gfx(a, b, 560, 560, PHONE_ROWS, "MY POINTS"),
@@ -742,7 +922,7 @@ INSERT_BEATS = {
          ("slump", 0.35, 0.4, [T_([("MAIDEN OVER", WHITE), ("= A FEW POINTS", GREY)], 140)]),
          ("ipl", 0.3, 0.5, [T_([("MATCH-WINNING 20", WHITE), ("= ZERO FANTASY VALUE", RED)], 120)])],
     13: [("rcb_huddle", 0.35, 0, [T_([("ONE OF THE BIGGEST", WHITE), ("LEAGUES IN THE WORLD", Y)], 120)]),
-         (None, 1, 0, [T_([("MEDIA RIGHTS:", WHITE), ("THOUSANDS OF CRORES", Y)], 130)]),
+         (None, 1, 0, [lambda a, b: money_gfx(a, b)]),
          ("ipl", 0.3, 0.5, [T_([("EVERY SECOND", WHITE), ("IS FOR SALE", RED)], 160, "rise")])],
     14: [("ceat_timeout", 0.3, 0, [C_(["STRATEGIC TIMEOUT", "INNINGS BREAK", "AD AFTER EVERY WICKET"], x=420, y0=320,
                                       size=72, bg=RED, fg=WHITE)]),
@@ -758,17 +938,17 @@ INSERT_BEATS = {
                              T_([("RUNS.", Y)], 230, cy=700)])],
     16: [(None, 1, 0, [P_("mccullum_2008b", (1080, 100, 720, 880), fy=0.3),
                        T_([("THE OLD IPL NIGHTS", Y)], 130, "rise", cx=560, maxw=900)]),
-         ("crowd", 0.35, 0, [T_([("LAST OVER.", WHITE), ("12 NEEDED.", Y)], 170)]),
-         ("slump", 0.3, 0.7, [T_([("YORKER. YORKER. YORKER.", Y)], 130)]),
+         ("clip:jsix", 0.35, 0, [T_([("LAST OVER.", WHITE), ("12 NEEDED.", Y)], 170)]),
+         ("clip:starc", 0.3, 0.7, [T_([("YORKER. YORKER. YORKER.", Y)], 130)]),
          ("clip:crowd", 0.9, 0, [T_([("THE STADIUM ROSE", WHITE)], 150, "rise")]),
-         (None, 1, 0, [T_([("DRAMA CAME FROM", WHITE), ("THE CONTEST, NOT RUNS", Y)], 120)])],
+         ("clip:jcelebrate", 1, 0, [T_([("DRAMA CAME FROM", WHITE), ("THE CONTEST, NOT RUNS", Y)], 120)])],
 }
 
 
 MISSING = []
 # photos you sent for specific empty spots: output time (m:ss) -> photo
 FILL = {"1:31": "toss", "1:43": "mi_pointing", "1:57": "rashid_celebrate", "2:03": "hardik_six", "2:05": "kuldeep_down",
-        "3:42": "chahar_chepauk", "3:57": "rabada_fist", "4:14": "rashid_six", "4:27": "narine", "5:27": "mi_bowler",
+        "3:42": "chahar_chepauk", "3:57": "rabada_fist", "4:14": "rashid_six", "5:27": "mi_bowler",
         "6:26": "six_crowd", "6:35": "dhoni_bowled"}
 
 
@@ -838,7 +1018,9 @@ def build():
     add(txt(0.1, L(0, 2.0), [("2022", WHITE)], W / 2, 380, 150, anim="slam"))
     add(txt(0.6, L(0, 2.0), [("200+ TOTALS: 18", Y)], W / 2, 600, 120, anim="rise"))
     scene(L(0, 2.0), L(1), None)
-    add(bars(L(0, 2.0), L(1), [("2022", 18, GREY), ("2026", 61, Y)], W / 2, 600, 61, "200+ TOTALS IN THE IPL"))
+    add(bars(L(0, 2.0), L(1), [("2022", 18, GREY), ("2023", 37, GREY), ("2024", 41, GREY), ("2025", 52, GREY),
+                               ("2026", 61, Y)], W / 2, 600, 61, "200+ TOTALS IN THE IPL", bw=200, gap=90, hmax=480,
+             vsize=90, step=0.35))
     add(txt(L(0, 3.4), L(1), [("18 → 61", RED)], W / 2, 150, 120, path=BLACK_F, anim="slam"))
     scene(L(1), L(1, 3.3), "srh_fist", 0.4)
     add(chip(L(1, 0.2), L(1, 3.3), "SIXES ↑", 140, 300, size=64))
@@ -856,8 +1038,8 @@ def build():
     # THE CRIME
     scene(L(5), L(8), "mi_celebrate", 0.25, 0.6)
     add(case_header(L(5), L(8)))
-    add(txt(L(5, 0.4), L(6), [("THEN: 160 DEFENDED", WHITE), ("LAST-OVER THRILLERS", Y)], W / 2, 560, 120))
-    add(txt(L(6), L(7), [("NOW: 220 ISN'T SAFE", WHITE), ("DECIDED BY THE 6TH OVER", Y)], W / 2, 560, 120))
+    add(scorebug(L(5, 0.4), L(6), W / 2, 520, "THEN", "160/8", "20 OV", "LAST OVER: 12 TO WIN", "DEFENDED", GREEN))
+    add(scorebug(L(6), L(7), W / 2, 520, "NOW", "224/4", "20 OV", "CHASE AFTER 6 OVERS: 92/0", "NOT SAFE", RED))
     add(txt(L(7), L(8), [("THE PROBLEM ISN'T RUNS.", WHITE)], W / 2, 430, 96))
     add(stamp(L(7, 2.0), L(8), "SUSPENSE: DEAD", W / 2, 640, size=120))
 
@@ -912,14 +1094,14 @@ def build():
     for i, w_ in enumerate(["NO SWING", "NO SEAM", "PREDICTABLE BOUNCE"]):
         add(chip(L(17, 0.6 + 1.1 * i), L(18), w_, 1040, 330 + i * 130, size=56))
     add(stamp(L(18), L(19), "NO MOVEMENT", 1350, 560, color=Y, size=100))
-    scene(L(19), L(20), "trophy", 0.3)
-    add(txt(L(19), L(20), [("CHEPAUK", Y)], W / 2, 250, 120))
-    add(txt(L(19, 1.4), L(19, 3.2), [("170 = SAFE", WHITE)], W / 2, 560, 170, anim="slam"))
-    add(txt(L(19, 3.2), L(20), [("200 = CHASED", RED)], W / 2, 560, 170, anim="slam"))
-    scene(L(20), L(21), "six", 0.35)
+    scene(L(19), L(20), None)
+    add(txt(L(19), L(20), [("CHEPAUK", Y)], W / 2, 230, 110))
+    add(scorebug(L(19, 0.6), L(19, 3.2), W / 2, 520, "THEN", "170/6", "20 OV", "BATTING FIRST", "SAFE", GREEN))
+    add(scorebug(L(19, 3.2), L(20), W / 2, 520, "NOW", "201/3", "19.2 OV", "CHASING 200", "CHASED", RED))
+    scene(L(20), L(21), "clip:jspin", 0.35)
     add(txt(L(20, 0.3), L(20, 3.4), [("THE BALL TURNED…", WHITE)], W / 2, 400, 110))
     add(txt(L(20, 3.4), L(21), [("DIFFICULT = DRAMA", Y)], W / 2, 560, 150, anim="slam"))
-    scene(L(21), L(23), None)
+    scene(L(21), L(23), "roller")
     add(txt(L(21), L(23), [("WHO MAKES THE PITCH?", WHITE)], W / 2, 330, 110))
     add(txt(L(21, 2.0), L(23), [("WHO BENEFITS?", Y)], W / 2, 520, 140, anim="slam"))
     add(chip(L(22), L(23), "REMEMBER THIS", 760, 720, bg=RED, fg=WHITE, size=56))
@@ -937,8 +1119,7 @@ def build():
     add(txt(L(26), L(27), [("THE RESULT?", WHITE), ("DOESN'T MATTER", RED)], 1330, 540, 100, anim="slam",
             maxw=900))
     scene(L(27), L(28), None)
-    add(txt(L(27, 0.3), L(28), [("THE STORY", GREY)], W / 2, 400, 140))
-    add(txt(L(27, 3.0), L(28), [("→ JUST A SCORECARD", Y)], W / 2, 620, 110, path=BLACK_F, anim="slam"))
+    add(scorecard_gfx(L(27, 0.2), L(28)))
     scene(L(28), L(29), "empty", 0.3, 0.9)
     add(txt(L(28, 0.3), L(29), [("THE DARK SIDE", GREY), ("SAVINGS LOST", WHITE)], W / 2, 540, 120))
 
@@ -955,7 +1136,8 @@ def build():
     add(chip(L(31, 1.6), L(33), "SPONSORED SIX", 120, 260, bg=Y, size=56))
     add(txt(L(32), L(33), [("BOUNDARY = INVENTORY", Y)], W / 2, 620, 140, anim="slam"))
     scene(L(33), L(34), None)
-    add(photo_panel(L(33), L(34), "super_sixes", (560, 470, 800, 506)))
+    add(bars(L(33), L(34), [("2022", 1062, GREY), ("2023", 1124, GREY), ("2024", 1260, GREY), ("2025", 1294, Y)],
+             W / 2, 400, 1294, "SIXES PER IPL SEASON", bw=230, gap=90, hmax=400, vsize=80, step=0.3, panel_=True))
     add(txt(L(33), L(34), [("MORE SIXES =", WHITE)], W / 2, 200, 120))
     add(txt(L(33, 1.8), L(34), [("“SIXES BROUGHT TO YOU BY…”", Y)], W / 2, 360, 100))
     scene(L(34), GAP_OUT + GAP, None)
@@ -984,7 +1166,7 @@ def build():
     add(txt(L(41, 2.4), L(42), [("BALANCE DIED.", Y)], W / 2, 600, 220, anim="slam"))
 
     # THE FIX + END
-    scene(L(42), L(43), "trophy", 0.3)
+    scene(L(42), L(43), "pitch_water", 0.3)
     for i, w_ in enumerate(["+ SOME GRASS", "LIMIT IMPACT PLAYER", "GIVE BOWLERS A WEAPON"]):
         add(chip(L(42, 1.0 + 1.2 * i), L(43), w_, 140, 300 + i * 140, size=60))
     add(txt(L(42, 5.0), L(43), [("180 = THRILLER", Y)], 1350, 540, 130, anim="slam", maxw=900))
