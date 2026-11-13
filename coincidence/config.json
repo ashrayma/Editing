@@ -1,0 +1,102 @@
+{
+ "fps": 30,
+ "music": true,
+ "facecam": null,
+ "output": "out/coincidences.mp4",
+ "theme": {
+  "accent": "#FEDE5C",
+  "bg_top": "#1C1C1F",
+  "bg_bottom": "#060607",
+  "logo": "assets/logo.png"
+ },
+ "voice": {
+  "tts_voice": "hm_omega",
+  "tts_speed": 1.15,
+  "recording_tempo": 1.06,
+  "tts_fallback": true
+ },
+ "hook": {
+  "duration": 4.0,
+  "lines": [
+   "3 COINCIDENCES",
+   "THAT LOOK",
+   "SCRIPTED"
+  ],
+  "badge": [
+   "TOP",
+   "3"
+  ],
+  "tease": "#1: three captains, one number",
+  "image": "assets/trio_183.jpg",
+  "caption": "Ye 3 coincidences dekh ke lagega cricket scripted hai. Number 1: teen captain, ek number.",
+  "vo_text": "ये तीन कोइंसिडेंसेस देख के लगेगा, क्रिकेट स्क्रिप्टेड है। नंबर वन: तीन कैप्टन, एक नंबर।"
+ },
+ "items": [
+  {
+   "rank": 3,
+   "title": "Same margin ×3",
+   "sub": "India's ODI double hundreds",
+   "stat": 153,
+   "stat_suffix": "",
+   "accent": "#FEDE5C",
+   "stat_label": "RUNS · WIN MARGIN · ALL 3 TIMES",
+   "chips": [
+    "Sachin 200* vs SA · 2010",
+    "Sehwag 219 vs WI · 2011",
+    "Rohit 264 vs SL · 2014"
+   ],
+   "image": "assets/trio_dbl.jpg",
+   "duration": 6.0,
+   "caption": "Number 3. Sachin ka 200, Sehwag ka 219, Rohit ka 264. Teeno match India jeeta... aur teeno baar 153 runs se.",
+   "vo_text": "नंबर थ्री। सचिन का दो सौ, सहवाग का दो सौ उन्नीस, रोहित का दो सौ चौंसठ। तीनों मैच इंडिया जीता... और तीनों बार, एक सौ तिरेपन रन से।"
+  },
+  {
+   "rank": 2,
+   "title": "Zaheer = Ishant",
+   "sub": "Two Test careers, one stat line",
+   "stat": 311,
+   "stat_suffix": "",
+   "accent": "#FEDE5C",
+   "stat_label": "TEST WICKETS · EACH",
+   "chips": [
+    "Zaheer: 92 Tests · 311 wkts",
+    "Ishant: 105 Tests · 311 wkts",
+    "Both: 11 five-fors · one 10-for"
+   ],
+   "image": "assets/zi.png",
+   "duration": 6.0,
+   "caption": "Number 2. Zaheer Khan, 311 Test wickets. Ishant Sharma, 311 Test wickets. Dono ke 11 five-fors, dono ka ek ten-for.",
+   "vo_text": "नंबर टू। ज़हीर ख़ान, तीन सौ ग्यारह टेस्ट विकेट। इशांत शर्मा, तीन सौ ग्यारह टेस्ट विकेट। दोनों के ग्यारह फाइव-फॉर, दोनों का एक टेन-फॉर।"
+  },
+  {
+   "rank": 1,
+   "title": "Lucky 183",
+   "sub": "Highest ODI score · all three",
+   "stat": 183,
+   "stat_suffix": "",
+   "accent": "#FEDE5C",
+   "stat_label": "GANGULY · DHONI* · KOHLI",
+   "chips": [
+    "Ganguly 183 vs SL · 1999 WC",
+    "Dhoni 183* vs SL · 2005",
+    "Kohli 183 vs Pak · 2012",
+    "All three became India captain"
+   ],
+   "image": "assets/trio_183.jpg",
+   "duration": 7.0,
+   "caption": "Aur number 1. Ganguly ka highest ODI score, 183. Dhoni ka, 183 not out. Kohli ka, 183. Aur teeno bane India ke captain.",
+   "vo_text": "और नंबर वन। गांगुली का हाईएस्ट वनडे स्कोर, एक सौ तिरासी। धोनी का, एक सौ तिरासी नॉट आउट। कोहली का, एक सौ तिरासी। और तीनों बने इंडिया के कैप्टन।"
+  }
+ ],
+ "outro": {
+  "duration": 3.6,
+  "lines": [
+   "183 YA",
+   "311?"
+  ],
+  "cta": "Comment · Part 2: the 11:11 Test",
+  "ghost": "?",
+  "caption": "183 ya 311? Comment karo. Part 2: 11/11/11 wala Test.",
+  "vo_text": "एक सौ तिरासी, या तीन सौ ग्यारह? कमेंट करो। पार्ट टू: इलेवन इलेवन इलेवन वाला टेस्ट।"
+ }
+}
