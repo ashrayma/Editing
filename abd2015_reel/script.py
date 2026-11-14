@@ -28,9 +28,9 @@ LINES = [
     ("q1", "That's why he's the toughest batter of this generation. Agree or disagree? Tell me in the comments, and follow for more stories like this.", None, 0.2),
 ]
 
-TAKES = {"A": "vo_raw/a_131532.m4a", "F": "vo_raw/f_placeholder_tts.wav"}  # F: placeholder until the recorded follow line arrives
+TAKES = {"A": "vo_raw/a_131532.m4a", "F": "vo_raw/f_172542.m4a"}  # F: the follow line, recorded separately
 PIECES = {
-    "h1": [("A", 2.6, 5.55)], "h2": [("A", 5.55, 7.45)], "h3": [("A", 7.45, 8.95)], "f1": [("F", 0.0, 99.0)],
+    "h1": [("A", 2.6, 5.55)], "h2": [("A", 5.55, 7.45)], "h3": [("A", 7.45, 8.95)], "f1": [("F", 0.6, 4.35)],
     "j1": [("A", 8.95, 10.85)], "j2": [("A", 10.85, 12.9)], "j3": [("A", 12.9, 14.6)], "j4": [("A", 14.6, 16.8)],
     "j5": [("A", 16.8, 18.8)], "j6": [("A", 18.8, 22.6)],
     "d1": [("A", 23.5, 25.9)], "d2": [("A", 25.9, 28.1)], "d3": [("A", 33.3, 37.95)],
