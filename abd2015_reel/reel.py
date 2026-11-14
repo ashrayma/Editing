@@ -958,8 +958,19 @@ def card(name, start, dur, w=780, y=360, x=None, rot=0.0, hmax=900):
     return i
 
 
+MAX_ZOOM = 2.0  # never blow a photo up more than this: low-res shots go full-width on their blurred fill instead
+
+
+def zoom_full(name):
+    with Image.open(os.path.join(HERE, "assets", "photos", name + ".jpg")) as im:
+        w, h = im.size
+    return 1920 / h if w / h >= 9 / 16 else 1080 / w
+
+
 def ph(name, start, dur, credit_txt="PHOTO: BCCI", **kw):
-    """Full-screen photo + its credit line."""
+    """Full-screen photo + its credit line (full-width band when the source is too small to fill the frame sharply)."""
+    if zoom_full(name) > MAX_ZOOM:
+        kw["band"] = True
     i = photo(name, start, dur, **kw)
     credit(start, dur, credit_txt)
     return i
@@ -1006,10 +1017,10 @@ def edit():
 
     # ---------------- HOOK: the question card, then the answer
     stage(*seg(0, s("h2", -0.03)), tone="#0b0b0c")
-    flicker(["ab_jbg_drive", "ab_delhi_block", "ab_scoop_kneel", "ab_test_defend", "ab_jbg_scoop", "ab_rcb"], *seg(0.05, 1.1))
+    flicker(["ab_jbg_drive", "ab_test_defend", "ab_rcb", "ab_jbg_drive", "ab_test_defend", "ab_rcb"], *seg(0.05, 1.1))
     stage(*seg(1.1, s("h2", -0.03)), tone="#0b0b0c")
     post_card("Who is the toughest batter of this generation to bowl to?", *seg(0.15, s("h2", -0.03)), y=1040)
-    hero("ab_jbg_roar", ["AB DE", "VILLIERS"], *seg(s("h2", -0.03), s("h3", -0.03)))
+    hero("ab_jbg_drive", ["AB DE", "VILLIERS"], *seg(s("h2", -0.03), s("h3", -0.03)))
     credit(*seg(s("h2", -0.03), s("h3", -0.03)), GETTY)
     flash(word("h2", 4), peak=0.5)
     cue(word("h2", 4), "boom", 1.0)
@@ -1034,7 +1045,7 @@ def edit():
     scorebar([(s("j1"), "de VILLIERS  0 (0)"), (word("j3", 0), "de VILLIERS  50 (16)"), (word("j4", 1), "de VILLIERS  100 (31)"),
               (word("j6", 3), "de VILLIERS  149 (44)")], *seg(s("j1"), s("d1", -0.05)))
     # ---------------- Delhi: same year, the other AB
-    glitch(s("d1", -0.03), 0.4, "ab_delhi_faf")
+    glitch(s("d1", -0.03), 0.4, "ab_test_defend")
     ph("ab_delhi_faf", *seg(s("d1", -0.03), s("d3", -0.03)), side=None, fx="grey", push=(1.0, 1.06))
     chip("Delhi · December 2015", *seg(word("d1", 4), s("d3", -0.03)), x=None, y=300)
     title(["FIGHTING TO", "SAVE A TEST"], *seg(s("d2"), s("d3", -0.03)), y=1080, size=110, accent=(1,))
@@ -1043,7 +1054,7 @@ def edit():
     odo("43", *seg(word("d3", 5) - 0.1, s("s1", -0.03)), x=700, y=250, size=190, label="RUNS")
     scorebar([(s("d3"), "de VILLIERS  0 (0)"), (word("d3", 5), "de VILLIERS  43 (297)")], *seg(s("d3"), s("s1", -0.05)))
     # ---------------- same man, same year
-    then_now(*seg(s("s1", -0.03), s("p1", -0.03)), "ab_jbg_roar", "ab_delhi_umesh", la="100 OFF 31", lb="43 OFF 297", grey=False)
+    then_now(*seg(s("s1", -0.03), s("p1", -0.03)), "ab_jbg_scoop", "ab_delhi_umesh", la="100 OFF 31", lb="43 OFF 297", grey=False)
     credit(*seg(s("s1", -0.03), s("p1", -0.03)), "PHOTOS: GETTY IMAGES · BCCI")
     stamp("SAME MAN. SAME YEAR.", *seg(s("s1"), s("s2")), y=890, size=82, rot=-3)
     # ---------------- the bowler's problem
