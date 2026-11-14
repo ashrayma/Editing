@@ -1,6 +1,7 @@
 """Thumbnail: "What Made India World Champions in 2011? (The Untold Stories)".
 
-Dhoni's 2011 final six (World Cup kit) and the trophy big, Sachin and Yuvraj smaller, a red '?' as the curiosity cue. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
+Dhoni's 2011 final six in front, Sachin and Yuvraj just behind at his eye line, one grade and one dark floor
+for all three, blurred Wankhede crowd from the final behind them. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
 
     python3 clean_logos.py && python3 cutouts.py && python3 trophy.py && python3 thumb.py [LINE1 LINE2]  ->  out/thumb_*.jpg / .png
 """
@@ -30,14 +31,20 @@ def fix_cuts():
     a = np.array(y)
     rgb = cv2.cvtColor(a[..., :3], cv2.COLOR_RGB2BGR)
     m = np.zeros(rgb.shape[:2], np.uint8)
-    m[2180:2470, 0:230] = 255
+    m[1640:1900, 0:250] = 255
     m &= (a[..., 3] > 40).astype(np.uint8) * 255
     rgb = cv2.inpaint(rgb, m, 15, cv2.INPAINT_TELEA)
     a[..., :3] = cv2.cvtColor(rgb, cv2.COLOR_BGR2RGB)
     s = np.array(cut("sachin"))
     h, w = s.shape[:2]
     s[: int(h * 0.42), int(w * 0.72):, 3] = 0  # flag cloth right of the hand
-    s[: int(h * 0.22), :, 3] = 0  # raised hand that would poke out beside Dhoni
+    yy = np.arange(h, dtype=np.float32)[:, None]
+    xx = np.arange(w, dtype=np.float32)[None, :]
+    mate = np.clip(((xx - 0.13 * w) / (0.05 * w)), 0, 1) + np.clip((0.80 * h - yy) / (0.04 * h), 0, 1)
+    s[..., 3] = (s[..., 3] * np.clip(mate, 0, 1)).astype(np.uint8)  # teammate's head bottom-left
+    s[..., 3] = (s[..., 3] * np.clip(xx / (0.16 * w), 0, 1) ** 0.8).astype(np.uint8)  # soft edge where the photo ended
+    fade = np.clip((yy - 0.20 * h) / (0.22 * h), 0, 1)  # raised arm fades out above his head
+    s[..., 3] = (s[..., 3] * np.where(np.arange(w)[None, :] > 0.52 * w, fade, yy >= 0.2 * h)).astype(np.uint8)
     return Image.fromarray(a), Image.fromarray(s)
 
 
@@ -141,45 +148,83 @@ def text(base, lines, x, y):
         y += int(size * 1.02)
 
 
-def question(bg, cx, cy, size, ang):
-    """Red curiosity '?' with a dark halo."""
-    f = ImageFont.truetype(ANTON, size)
-    lay = Image.new("RGBA", (size * 2, size * 2), (0, 0, 0, 0))
-    d = ImageDraw.Draw(lay)
-    d.text((size, size), "?", font=f, fill=(225, 30, 30), anchor="mm", stroke_width=10, stroke_fill=(255, 255, 255))
-    lay = lay.rotate(ang, Image.BICUBIC)
-    sh = Image.new("RGBA", lay.size, (0, 0, 0, 0))
-    sh.putalpha(lay.getchannel("A").filter(ImageFilter.GaussianBlur(16)).point(lambda v: v * 0.9))
-    bg.alpha_composite(sh, (int(cx - size + 8), int(cy - size + 8)))
-    bg.alpha_composite(lay, (int(cx - size), int(cy - size)))
+def stadium():
+    """Real Wankhede crowd from the final (above the boards), blurred and graded night-blue, plus floodlight bokeh."""
+    src = Image.open(os.path.join(HERE, "..", "dhoni_2007_2011", "bg_2011.jpg")).convert("RGB")
+    crowd = src.crop((0, 0, src.width, int(src.height * 0.27)))
+    k = W / crowd.width
+    crowd = crowd.resize((W, int(crowd.height * k)), Image.LANCZOS).resize((W, H), Image.LANCZOS)
+    crowd = crowd.filter(ImageFilter.GaussianBlur(9))
+    a = np.asarray(crowd, np.float32) / 255
+    lum = a.mean(2, keepdims=True)
+    tint = lum * np.array([0.35, 0.45, 0.85]) + a * 0.25  # night-blue, mostly mono
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    vign = np.clip(1 - (((xx - 1250) / 1250) ** 2 + ((yy - 380) / 820) ** 2), 0, 1)[..., None]
+    base = tint * (0.30 + 0.55 * vign)
+    # warm key light from behind the group + yellow brand glow
+    for cx, cy, r, col, kk in [(1250, 300, 820, (1.0, 0.78, 0.35), 0.55), (1250, 1080, 900, (1.0, 0.87, 0.35), 0.18)]:
+        d = np.clip(1 - np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / r, 0, 1) ** 2
+        base += np.array(col) * (d * kk)[..., None]
+    im = Image.fromarray((base.clip(0, 1) * 255).astype(np.uint8)).convert("RGBA")
+    # floodlight bokeh along the roof line
+    bk = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(bk)
+    for _ in range(70):
+        x, y = rnd.uniform(0, W), rnd.uniform(0, 330)
+        r = rnd.uniform(6, 26)
+        d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 235, 190, rnd.randint(25, 90)))
+    im = Image.alpha_composite(im, bk.filter(ImageFilter.GaussianBlur(4)))
+    return im
+
+
+def put(base, im, cx, top, height, dim=1.0):
+    """Place a cutout; `dim` < 1 pushes it back in depth (darker, cooler)."""
+    k = height / im.height
+    im = im.resize((int(im.width * k), int(height)), Image.LANCZOS)
+    if dim < 1:
+        a = np.array(im, np.float32)
+        a[..., :3] = a[..., :3] * dim + np.array([10, 18, 40]) * (1 - dim)
+        im = Image.fromarray(a.clip(0, 255).astype(np.uint8))
+    base.alpha_composite(im, (int(cx - im.width / 2), int(top)))
+
+
+def floor(base, start=0.5):
+    """Everyone fades into the same dark floor, so nobody looks pasted on."""
+    yy = np.arange(H, dtype=np.float32)
+    a = np.clip((yy / H - start) / (0.92 - start), 0, 1) ** 1.4 * 255
+    lay = Image.new("RGBA", (W, H), (4, 5, 12, 0))
+    lay.putalpha(Image.fromarray(np.repeat(a[:, None], W, 1).astype(np.uint8)))
+    base.alpha_composite(lay)
+
+
+def left_shade(base):
+    xx = np.arange(W, dtype=np.float32)
+    a = np.clip(1 - xx / 900, 0, 1) ** 1.5 * 200
+    lay = Image.new("RGBA", (W, H), (4, 5, 12, 0))
+    lay.putalpha(Image.fromarray(np.repeat(a[None, :], H, 0).astype(np.uint8)))
+    base.alpha_composite(lay)
 
 
 def build(line1, line2, name):
-    bg = background()
+    bg = stadium()
     yuv, sac = fix_cuts()
     six = Image.open(os.path.join(HERE, "..", "dhoni_2007_2011", "cut_2011.png")).convert("RGBA")
-    tro = cut("trophy")
+    look = lambda im, b=1.0: rim_light(grade(im, 1.08, 1.1, b), (255, 214, 140), 0.35)
 
-    # gold halo behind the trophy
-    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    halo = np.clip(1 - np.sqrt((xx - 1450) ** 2 + ((yy - 470) * 0.8) ** 2) / 520, 0, 1) ** 2
-    hl = Image.new("RGBA", (W, H), (255, 200, 80, 0))
-    hl.putalpha(Image.fromarray((halo * 150).astype(np.uint8)))
-    bg.alpha_composite(hl)
+    # back row at Dhoni's eye line, front: Dhoni's final six
+    put(bg, look(sac, 0.95), 880, -70, 1160, dim=0.84)
+    put(bg, look(yuv, 0.95), 1705, 165, 830, dim=0.84)
+    put(bg, look(six, 1.06), 1260, -150, 1880)
+    floor(bg)
+    left_shade(bg)
 
-    place(bg, rim_light(grade(yuv)), 1765, 500, 640)
-    place(bg, rim_light(grade(sac)), 330, 400, 760, bottom_fade=0.2)
-    place(bg, rim_light(grade(tro, 1.15, 1.1, 1.08), (255, 230, 160), 0.4), 1450, 150, 900)
-    place(bg, rim_light(grade(six, 1.12, 1.1, 1.04), strength=0.6), 1000, -30, 1500)
-    question(bg, 1318, 112, 215, -12)
-
-    # year tag + headline
     d = ImageDraw.Draw(bg)
     f = ImageFont.truetype(ANTON, 54)
-    d.rounded_rectangle((60, 60, 290, 140), 14, fill=YEL)
-    d.text((175, 100), "2011", font=f, fill=(12, 12, 14), anchor="mm")
+    d.rounded_rectangle((70, 150, 300, 230), 14, fill=YEL)
+    d.text((185, 190), "2011", font=f, fill=(12, 12, 14), anchor="mm")
     fit = lambda t, w: int(200 * w / ImageFont.truetype(ANTON, 200).getlength(t))
-    text(bg, [(line1, min(fit(line1, 640), 230), YEL), (line2, min(fit(line2, 640), 230), YEL)], 56, 150)
+    sz = min(fit(line1, 600), fit(line2, 600), 250)
+    text(bg, [(line1, sz, YEL), (line2, sz, YEL)], 66, 250)
 
     out = bg.convert("RGB")
     out = ImageEnhance.Sharpness(out).enhance(1.15)
