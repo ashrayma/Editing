@@ -26,7 +26,7 @@ def cut(name):
 
 
 def fix_cuts():
-    """Yuvraj's sleeve sponsor patch, and the scrap of flag beside Sachin's raised arm."""
+    """Yuvraj's sleeve sponsor patch; Sachin's raised arm, holding the tricolour."""
     y = cut("yuvraj")
     a = np.array(y)
     rgb = cv2.cvtColor(a[..., :3], cv2.COLOR_RGB2BGR)
@@ -42,9 +42,9 @@ def fix_cuts():
     mate = np.clip(((xx - 0.13 * w) / (0.05 * w)), 0, 1) + np.clip((0.80 * h - yy) / (0.04 * h), 0, 1)
     s[..., 3] = (s[..., 3] * np.clip(mate, 0, 1)).astype(np.uint8)  # teammate's head bottom-left
     s[..., 3] = (s[..., 3] * np.clip(xx / (0.16 * w), 0, 1) ** 0.8).astype(np.uint8)  # soft edge where the photo ended
-    # raised arm: the matte only half-kept it against the crowd, so rebuild it from skin colour; drop the flag
+    # raised arm: the matte only half-kept it against the crowd, so rebuild it from skin colour
     r, g, b = (s[..., c].astype(np.int32) for c in range(3))
-    skin = (r > 90) & (r > g + 8) & (g > b) & (r - b > 30) & ~((r - b > 120) & (r - g > 45))  # not the orange flag
+    skin = (r > 90) & (r > g + 8) & (g > b) & (r - b > 30)
     zone = (xx > 0.52 * w) & (xx < 0.72 * w) & (yy < 0.47 * h)
     arm = np.asarray(Image.fromarray((skin & zone).astype(np.uint8) * 255).filter(ImageFilter.MedianFilter(7))
                      .filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(1.5)), np.int32)
@@ -56,10 +56,46 @@ def fix_cuts():
     poly = Image.new("L", (w, h), 0)
     ImageDraw.Draw(poly).polygon([(782, 862), (953, 818), (967, 1050), (953, 1146), (829, 1160), (724, 953)], fill=255)
     s[..., 3] = np.maximum(s[..., 3], np.asarray(poly.filter(ImageFilter.GaussianBlur(2)))).astype(np.uint8)
-    s[: int(0.13 * h), int(0.635 * w):, 3] = 0  # flag stick above the hand
-    top = Image.fromarray(s[: int(0.22 * h), :, 3]).filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(9))
-    s[: int(0.22 * h), :, 3] = np.minimum(s[: int(0.22 * h), :, 3], np.asarray(top))  # thin stick lines gone
-    return Image.fromarray(a), Image.fromarray(s)
+    return Image.fromarray(a), with_flag(s)
+
+
+def with_flag(s):
+    """Widen Sachin's cutout to the right and add the tricolour he is gripping (cut out by its colours)."""
+    src = Image.open(os.path.join(HERE, "clean", "sachin.png")).convert("RGB")
+    e = Image.open(os.path.join(HERE, "up", "sachin.png")).convert("RGB")
+    k = e.width // src.width
+    o = src.resize(e.size, Image.LANCZOS)
+    full = Image.fromarray((np.asarray(e, np.float32) * 0.75 + np.asarray(o, np.float32) * 0.25).astype(np.uint8))
+    full = full.filter(ImageFilter.UnsharpMask(1.4, 35, 2)).crop((215 * k, 0, src.width * k, 470 * k))
+    f = np.asarray(full).astype(np.int32)
+    h, w = f.shape[:2]
+    r, g, b = f[..., 0], f[..., 1], f[..., 2]
+    mx, mn = f.max(2), f.min(2)
+    orange = (r > 160) & (r - b > 90) & (g > 60)
+    white = (mn > 170) & (mx - mn < 50)
+    green = (g > r + 15) & (g > b) & (g > 60)
+    yy, xx = np.mgrid[0:h, 0:w]
+    zone = (xx > 0.31 * w) & (yy < 0.60 * h)
+    m = ((orange | white | green) & zone).astype(np.uint8) * 255
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((31, 31), np.uint8))  # fill the chakra and folds
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((15, 15), np.uint8))
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(m)
+    if n > 1:
+        m = ((lab == 1 + np.argmax(stats[1:, cv2.CC_STAT_AREA])) * 255).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((71, 71), np.uint8))
+    cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    cv2.drawContours(m, cs, -1, 255, -1)  # no holes (chakra, folds)
+    m = cv2.GaussianBlur(m, (0, 0), 2)
+    m = (m * np.clip((w - xx) / (0.22 * w), 0, 1)).astype(np.uint8)  # photo ended here: fade, no hard edge
+    out = np.zeros((h, w, 4), np.uint8)
+    out[..., :3] = f
+    out[..., 3] = m
+    body = np.zeros_like(out)
+    body[:, : s.shape[1]] = s
+    al = body[..., 3:4].astype(np.float32) / 255
+    out[..., :3] = (body[..., :3] * al + out[..., :3] * (1 - al)).astype(np.uint8)
+    out[..., 3] = np.maximum(body[..., 3], out[..., 3])
+    return Image.fromarray(out)
 
 
 def background():
@@ -226,7 +262,8 @@ def build(line1, line2, name):
     look = lambda im, b=1.0: rim_light(grade(im, 1.08, 1.1, b), (255, 214, 140), 0.35)
 
     # back row at Dhoni's eye line, front: Dhoni's final six
-    put(bg, look(sac, 0.95), 880, -70, 1160, dim=0.84)
+    sw = 1120 * sac.width / sac.height
+    put(bg, look(sac, 0.95), 470 + sw / 2, -5, 1120, dim=0.84)
     put(bg, look(yuv, 0.95), 1705, 165, 830, dim=0.84)
     put(bg, look(six, 1.06), 1260, -150, 1880)
     floor(bg)
