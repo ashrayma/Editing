@@ -1011,6 +1011,23 @@ def two_cards(a, b, la, lb, start, dur):
     tag(lb, start + 0.55, dur - 0.55, x=600, y=1380, dark=True)
 
 
+def follow_card(start, dur, t_follow):
+    """'If you're a true cricket fan, follow this page': profile card pops in, a cursor taps FOLLOW, it flips to Following."""
+    i = nid("fw")
+    logo = media("assets/logo.png") if os.path.exists(os.path.join(HERE, "assets", "logo.png")) else "media/logo.png"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="fcard avoid" style="z-index:{z() + 100}">'
+        f'<div class="fav"><img src="{logo}"></div><div class="fname">theCricketLounge</div>'
+        f'<div class="fsub">Cricket stories, records & debates</div>'
+        f'<div class="fbtn" id="{i}b"><span id="{i}t">Follow</span></div><div class="fcur" id="{i}c"></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{i}c",{{x:260,y:260,opacity:0}},{{x:0,y:0,opacity:1,duration:0.6,ease:"power2.out"}},{t_follow - 0.6})')
+    anim(f'tl.to("#{i}c",{{scale:.75,duration:0.08,yoyo:true,repeat:1}},{t_follow})')
+    anim(f'tl.call(()=>{{document.getElementById("{i}t").textContent="Following ✓";document.getElementById("{i}b").classList.add("on")}},null,{t_follow + 0.08})')
+    anim(f'tl.fromTo("#{i}b",{{scale:1}},{{scale:1.12,duration:0.12,yoyo:true,repeat:1}},{t_follow + 0.08})')
+    cue(start, "pop", 1.0)
+    cue(t_follow + 0.05, "pop", 1.0)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
@@ -1027,6 +1044,10 @@ def edit():
     stage(*seg(s("h3", -0.03), s("j1", -0.03)), tone="#0d0d0f")
     title(["2 INNINGS"], *seg(s("h3"), s("j1", -0.03)), y=290, size=150, accent=(0,), sfx="impact")
     two_cards("ab_jbg_drive", "ab_delhi_block", "JO'BURG · ODI", "DELHI · TEST", *seg(s("h3", 0.05), s("j1", -0.03)))
+    # ---------------- follow ask
+    stage(*seg(s("f1", -0.03), s("j1", -0.03)), tone="#0b0b0c")
+    title(["TRUE CRICKET FAN?"], *seg(word("f1", 5), s("j1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
+    follow_card(*seg(s("f1", 0.05), s("j1", -0.03)), t_follow=word("f1", 11))
     # ---------------- Johannesburg
     leak(s("j1", -0.3), 0.8)
     ph("ab_jbg_drive", *seg(s("j1", -0.03), s("j2", -0.03)), GETTY, side="right", push=(1.0, 1.1))
@@ -1087,6 +1108,15 @@ def edit():
 
 
 EXTRA_CSS = f"""
+.fcard{{position:absolute;left:110px;right:110px;top:620px;background:#16161a;border:2px solid rgba(254,222,92,.4);border-radius:34px;padding:50px 40px 46px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.65)}}
+.fav{{width:200px;height:200px;margin:0 auto 26px;border-radius:50%;background:#0b0b0c;border:5px solid {Y};display:flex;align-items:center;justify-content:center;overflow:hidden}}
+.fav img{{width:170px}}
+.fname{{font:900 58px "IDisp";color:#fff}}
+.fsub{{font:600 30px "IDisp";color:#9a9aa2;margin-top:10px}}
+.fbtn{{margin:36px auto 0;width:420px;height:96px;border-radius:20px;background:{Y};display:flex;align-items:center;justify-content:center;font:900 44px "IDisp";color:#111}}
+.fbtn.on{{background:#2a2a30;color:#fff}}
+.fcur{{position:absolute;left:62%;top:78%;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 4px 20px rgba(0,0,0,.6)}}
+
 .post{{position:absolute;left:70px;right:70px;background:#16161a;border:2px solid rgba(255,255,255,.1);border-radius:26px;padding:30px 34px 26px;box-shadow:0 40px 90px rgba(0,0,0,.6)}}
 .phd{{display:flex;align-items:center;gap:18px;margin-bottom:18px}}
 .phd i{{width:58px;height:58px;border-radius:50%;background:{Y};display:block}}

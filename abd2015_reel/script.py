@@ -6,6 +6,7 @@ LINES = [
     ("h1", "Who's the toughest batter of this generation to bowl to?", None, 0.2),
     ("h2", "There's only one answer. AB de Villiers.", None, 0.1),
     ("h3", "And I'll prove it with two innings.", "And I'll prove it with 2 innings.", 0.3),
+    ("f1", "But before that, if you're a true cricket fan, you must follow this page.", None, 0.3),
     ("j1", "January twenty fifteen. Johannesburg.", "January 2015. Johannesburg.", 0.05),
     ("j2", "AB walks out against the West Indies.", None, 0.2),
     ("j3", "Fifty off sixteen balls.", "50 off 16 balls.", 0.05),
@@ -27,9 +28,9 @@ LINES = [
     ("q1", "That's why he's the toughest batter of this generation. Agree or disagree? Tell me in the comments, and follow for more stories like this.", None, 0.2),
 ]
 
-TAKES = {"A": "vo_raw/a_131532.m4a"}
+TAKES = {"A": "vo_raw/a_131532.m4a", "F": "vo_raw/f_placeholder_tts.wav"}  # F: placeholder until the recorded follow line arrives
 PIECES = {
-    "h1": [("A", 2.6, 5.55)], "h2": [("A", 5.55, 7.45)], "h3": [("A", 7.45, 8.95)],
+    "h1": [("A", 2.6, 5.55)], "h2": [("A", 5.55, 7.45)], "h3": [("A", 7.45, 8.95)], "f1": [("F", 0.0, 99.0)],
     "j1": [("A", 8.95, 10.85)], "j2": [("A", 10.85, 12.9)], "j3": [("A", 12.9, 14.6)], "j4": [("A", 14.6, 16.8)],
     "j5": [("A", 16.8, 18.8)], "j6": [("A", 18.8, 22.6)],
     "d1": [("A", 23.5, 25.9)], "d2": [("A", 25.9, 28.1)], "d3": [("A", 33.3, 37.95)],
