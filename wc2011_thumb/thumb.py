@@ -37,14 +37,28 @@ def fix_cuts():
     a[..., :3] = cv2.cvtColor(rgb, cv2.COLOR_BGR2RGB)
     s = np.array(cut("sachin"))
     h, w = s.shape[:2]
-    s[: int(h * 0.42), int(w * 0.72):, 3] = 0  # flag cloth right of the hand
     yy = np.arange(h, dtype=np.float32)[:, None]
     xx = np.arange(w, dtype=np.float32)[None, :]
     mate = np.clip(((xx - 0.13 * w) / (0.05 * w)), 0, 1) + np.clip((0.80 * h - yy) / (0.04 * h), 0, 1)
     s[..., 3] = (s[..., 3] * np.clip(mate, 0, 1)).astype(np.uint8)  # teammate's head bottom-left
     s[..., 3] = (s[..., 3] * np.clip(xx / (0.16 * w), 0, 1) ** 0.8).astype(np.uint8)  # soft edge where the photo ended
-    fade = np.clip((yy - 0.20 * h) / (0.22 * h), 0, 1)  # raised arm fades out above his head
-    s[..., 3] = (s[..., 3] * np.where(np.arange(w)[None, :] > 0.52 * w, fade, yy >= 0.2 * h)).astype(np.uint8)
+    # raised arm: the matte only half-kept it against the crowd, so rebuild it from skin colour; drop the flag
+    r, g, b = (s[..., c].astype(np.int32) for c in range(3))
+    skin = (r > 90) & (r > g + 8) & (g > b) & (r - b > 30) & ~((r - b > 120) & (r - g > 45))  # not the orange flag
+    zone = (xx > 0.52 * w) & (xx < 0.72 * w) & (yy < 0.47 * h)
+    arm = np.asarray(Image.fromarray((skin & zone).astype(np.uint8) * 255).filter(ImageFilter.MedianFilter(7))
+                     .filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(1.5)), np.int32)
+    s[..., 3] = np.where((xx > 0.52 * w) & (yy < 0.47 * h), arm, s[..., 3]).astype(np.uint8)
+    sleeve = (b > r + 25) & (xx > 0.55 * w) & (xx < 0.71 * w) & (yy > 0.42 * h) & (yy < 0.64 * h)
+    sl = np.asarray(Image.fromarray(sleeve.astype(np.uint8) * 255).filter(ImageFilter.MedianFilter(7))
+                    .filter(ImageFilter.GaussianBlur(1.5)), np.int32)
+    s[..., 3] = np.maximum(s[..., 3], sl).astype(np.uint8)
+    poly = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(poly).polygon([(782, 862), (953, 818), (967, 1050), (953, 1146), (829, 1160), (724, 953)], fill=255)
+    s[..., 3] = np.maximum(s[..., 3], np.asarray(poly.filter(ImageFilter.GaussianBlur(2)))).astype(np.uint8)
+    s[: int(0.13 * h), int(0.635 * w):, 3] = 0  # flag stick above the hand
+    top = Image.fromarray(s[: int(0.22 * h), :, 3]).filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(9))
+    s[: int(0.22 * h), :, 3] = np.minimum(s[: int(0.22 * h), :, 3], np.asarray(top))  # thin stick lines gone
     return Image.fromarray(a), Image.fromarray(s)
 
 
@@ -220,11 +234,10 @@ def build(line1, line2, name):
 
     d = ImageDraw.Draw(bg)
     f = ImageFont.truetype(ANTON, 54)
-    d.rounded_rectangle((70, 150, 300, 230), 14, fill=YEL)
-    d.text((185, 190), "2011", font=f, fill=(12, 12, 14), anchor="mm")
+    d.rounded_rectangle((70, 95, 300, 175), 14, fill=YEL)
+    d.text((185, 135), "2011", font=f, fill=(12, 12, 14), anchor="mm")
     fit = lambda t, w: int(200 * w / ImageFont.truetype(ANTON, 200).getlength(t))
-    sz = min(fit(line1, 600), fit(line2, 600), 250)
-    text(bg, [(line1, sz, YEL), (line2, sz, YEL)], 66, 250)
+    text(bg, [(line1, min(fit(line1, 560), 250), (255, 255, 255)), (line2, min(fit(line2, 560), 250), YEL)], 66, 200)
 
     out = bg.convert("RGB")
     out = ImageEnhance.Sharpness(out).enhance(1.15)
@@ -235,5 +248,5 @@ def build(line1, line2, name):
 
 
 if __name__ == "__main__":
-    a = sys.argv[1:] or ["5 UNTOLD", "STORIES"]
+    a = sys.argv[1:] or ["WORLD CUP UNTOLD", "STORIES"]
     build(a[0], a[1], "thumb_" + "_".join((a[0] + " " + a[1]).lower().replace("'", "").replace(".", "").split()))
