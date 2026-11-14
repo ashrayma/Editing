@@ -210,7 +210,7 @@ def stadium():
     tint = lum * np.array([0.35, 0.45, 0.85]) + a * 0.25  # night-blue, mostly mono
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     vign = np.clip(1 - (((xx - 1250) / 1250) ** 2 + ((yy - 380) / 820) ** 2), 0, 1)[..., None]
-    base = tint * (0.30 + 0.55 * vign)
+    base = tint * (0.48 + 0.85 * vign)
     # warm key light from behind the group + yellow brand glow
     for cx, cy, r, col, kk in [(1250, 300, 820, (1.0, 0.78, 0.35), 0.55), (1250, 1080, 900, (1.0, 0.87, 0.35), 0.18)]:
         d = np.clip(1 - np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / r, 0, 1) ** 2
@@ -224,7 +224,57 @@ def stadium():
         r = rnd.uniform(6, 26)
         d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 235, 190, rnd.randint(25, 90)))
     im = Image.alpha_composite(im, bk.filter(ImageFilter.GaussianBlur(4)))
+    im = Image.alpha_composite(im, beams())
+    im = Image.alpha_composite(im, fireworks(0.75))
+    im = Image.alpha_composite(im, confetti())
     return im
+
+
+def beams():
+    """Floodlight towers at the top corners, with soft light cones into the stadium."""
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for (lx, ly), targets in [((1880, 20), [(700, 1080), (1100, 1080), (1500, 1080)]),
+                              ((760, -10), [(1200, 1080), (1700, 1080)])]:
+        for tx, ty in targets:
+            d.polygon([(lx - 30, ly), (lx + 30, ly), (tx + 170, ty), (tx - 170, ty)], fill=(255, 240, 200, 48))
+    lay = lay.filter(ImageFilter.GaussianBlur(40))
+    d = ImageDraw.Draw(lay)
+    for lx, ly in [(1880, 20), (760, -10)]:  # the lamp banks themselves
+        for i in range(4):
+            for j in range(3):
+                x, y = lx - 70 + i * 40, ly + 12 + j * 26
+                d.rounded_rectangle((x, y, x + 32, y + 20), 5, fill=(255, 250, 230, 230))
+    glow = lay.filter(ImageFilter.GaussianBlur(18))
+    return Image.alpha_composite(Image.alpha_composite(glow, glow), lay)
+
+
+def fireworks(op):
+    fw = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(fw)
+    for cx, cy, r, col in [(1080, 170, 260, (255, 215, 120)), (1560, 120, 230, (255, 255, 235)),
+                           (1800, 380, 170, (255, 170, 70)), (640, 110, 190, (255, 200, 100))]:
+        for k in range(120):
+            ang = rnd.uniform(0, 2 * math.pi)
+            rr = r * rnd.uniform(0.55, 1.0)
+            x1, y1 = cx + rr * math.cos(ang), cy + rr * math.sin(ang) + rr * 0.12
+            x0, y0 = cx + rr * 0.5 * math.cos(ang), cy + rr * 0.5 * math.sin(ang)
+            d.line((x0, y0, x1, y1), fill=col + (int(rnd.randint(90, 190) * op),), width=2)
+            d.ellipse((x1 - 3, y1 - 3, x1 + 3, y1 + 3), fill=col + (int(220 * op),))
+    glow = fw.filter(ImageFilter.GaussianBlur(9))
+    return Image.alpha_composite(Image.alpha_composite(glow, glow), fw)
+
+
+def confetti():
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    cols = [YEL, (255, 153, 51), (255, 255, 255), (19, 136, 8), (255, 210, 120)]
+    for _ in range(170):
+        x, y = rnd.uniform(560, W), rnd.uniform(0, H * 0.7)
+        w_, h_ = rnd.uniform(8, 18), rnd.uniform(4, 9)
+        p = Image.new("RGBA", (int(w_) + 2, int(h_) + 2), rnd.choice(cols) + (rnd.randint(150, 235),))
+        p = p.rotate(rnd.uniform(0, 180), expand=True)
+        lay.alpha_composite(p, (int(x), int(y)))
+    return lay.filter(ImageFilter.GaussianBlur(0.7))
 
 
 def put(base, im, cx, top, height, dim=1.0):
@@ -249,7 +299,7 @@ def floor(base, start=0.5):
 
 def left_shade(base):
     xx = np.arange(W, dtype=np.float32)
-    a = np.clip(1 - xx / 900, 0, 1) ** 1.5 * 200
+    a = np.clip(1 - xx / 820, 0, 1) ** 1.6 * 170
     lay = Image.new("RGBA", (W, H), (4, 5, 12, 0))
     lay.putalpha(Image.fromarray(np.repeat(a[None, :], H, 0).astype(np.uint8)))
     base.alpha_composite(lay)
