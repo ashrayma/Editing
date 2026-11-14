@@ -1,0 +1,1044 @@
+{
+ "duration": 55.0,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Who's the toughest batter of this generation to bowl to?",
+   "caption": "Who's the toughest batter of this generation to bowl to?",
+   "start": 0.239,
+   "end": 2.842,
+   "words": [
+    [
+     "Who's",
+     0.287,
+     0.457
+    ],
+    [
+     "the",
+     0.457,
+     0.628
+    ],
+    [
+     "toughest",
+     0.628,
+     0.968
+    ],
+    [
+     "batter",
+     0.968,
+     1.309
+    ],
+    [
+     "of",
+     1.309,
+     1.479
+    ],
+    [
+     "this",
+     1.479,
+     1.65
+    ],
+    [
+     "generation",
+     1.65,
+     2.331
+    ],
+    [
+     "to",
+     2.331,
+     2.501
+    ],
+    [
+     "bowl",
+     2.501,
+     2.672
+    ],
+    [
+     "to?",
+     2.672,
+     2.842
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "There's only one answer. AB de Villiers.",
+   "caption": "There's only one answer. AB de Villiers.",
+   "start": 2.842,
+   "end": 4.66,
+   "words": [
+    [
+     "There's",
+     2.967,
+     3.239
+    ],
+    [
+     "only",
+     3.239,
+     3.512
+    ],
+    [
+     "one",
+     3.512,
+     3.785
+    ],
+    [
+     "answer.",
+     3.785,
+     4.057
+    ],
+    [
+     "AB",
+     4.057,
+     4.193
+    ],
+    [
+     "de",
+     4.193,
+     4.33
+    ],
+    [
+     "Villiers.",
+     4.33,
+     4.603
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "And I'll prove it with two innings.",
+   "caption": "And I'll prove it with 2 innings.",
+   "start": 4.66,
+   "end": 6.297,
+   "words": [
+    [
+     "And",
+     4.66,
+     4.828
+    ],
+    [
+     "I'll",
+     4.828,
+     4.994
+    ],
+    [
+     "prove",
+     4.994,
+     5.329
+    ],
+    [
+     "it",
+     5.329,
+     5.497
+    ],
+    [
+     "with",
+     5.497,
+     5.663
+    ],
+    [
+     "2",
+     5.663,
+     5.915
+    ],
+    [
+     "innings.",
+     5.915,
+     6.249
+    ]
+   ]
+  },
+  {
+   "id": "j1",
+   "text": "January twenty fifteen. Johannesburg.",
+   "caption": "January 2015. Johannesburg.",
+   "start": 6.426,
+   "end": 8.043,
+   "words": [
+    [
+     "January",
+     6.464,
+     6.829
+    ],
+    [
+     "2015.",
+     6.829,
+     7.557
+    ],
+    [
+     "Johannesburg.",
+     7.557,
+     8.043
+    ]
+   ]
+  },
+  {
+   "id": "j2",
+   "text": "AB walks out against the West Indies.",
+   "caption": "AB walks out against the West Indies.",
+   "start": 8.043,
+   "end": 9.9,
+   "words": [
+    [
+     "AB",
+     8.043,
+     8.244
+    ],
+    [
+     "walks",
+     8.244,
+     8.445
+    ],
+    [
+     "out",
+     8.445,
+     8.646
+    ],
+    [
+     "against",
+     8.646,
+     9.048
+    ],
+    [
+     "the",
+     9.048,
+     9.249
+    ],
+    [
+     "West",
+     9.249,
+     9.45
+    ],
+    [
+     "Indies.",
+     9.45,
+     9.852
+    ]
+   ]
+  },
+  {
+   "id": "j3",
+   "text": "Fifty off sixteen balls.",
+   "caption": "50 off 16 balls.",
+   "start": 9.986,
+   "end": 11.498,
+   "words": [
+    [
+     "50",
+     10.024,
+     10.577
+    ],
+    [
+     "off",
+     10.577,
+     10.761
+    ],
+    [
+     "16",
+     10.761,
+     11.314
+    ],
+    [
+     "balls.",
+     11.314,
+     11.498
+    ]
+   ]
+  },
+  {
+   "id": "j4",
+   "text": "A hundred off thirty one balls.",
+   "caption": "100 off 31 balls.",
+   "start": 11.498,
+   "end": 13.689,
+   "words": [
+    [
+     "100",
+     11.498,
+     12.508
+    ],
+    [
+     "off",
+     12.508,
+     12.733
+    ],
+    [
+     "31",
+     12.733,
+     13.407
+    ],
+    [
+     "balls.",
+     13.407,
+     13.632
+    ]
+   ]
+  },
+  {
+   "id": "j5",
+   "text": "Both still ODI world records.",
+   "caption": "Both still ODI world records.",
+   "start": 13.732,
+   "end": 15.464,
+   "words": [
+    [
+     "Both",
+     13.77,
+     14.012
+    ],
+    [
+     "still",
+     14.012,
+     14.255
+    ],
+    [
+     "ODI",
+     14.255,
+     14.738
+    ],
+    [
+     "world",
+     14.738,
+     14.98
+    ],
+    [
+     "records.",
+     14.98,
+     15.464
+    ]
+   ]
+  },
+  {
+   "id": "j6",
+   "text": "He finishes on one forty nine, off just forty four balls.",
+   "caption": "He finishes on 149, off just 44 balls.",
+   "start": 15.464,
+   "end": 19.148,
+   "words": [
+    [
+     "He",
+     15.464,
+     15.699
+    ],
+    [
+     "finishes",
+     15.699,
+     16.4
+    ],
+    [
+     "on",
+     16.4,
+     16.634
+    ],
+    [
+     "149,",
+     16.634,
+     17.687
+    ],
+    [
+     "off",
+     17.687,
+     17.921
+    ],
+    [
+     "just",
+     17.921,
+     18.155
+    ],
+    [
+     "44",
+     18.155,
+     18.857
+    ],
+    [
+     "balls.",
+     18.857,
+     19.091
+    ]
+   ]
+  },
+  {
+   "id": "d1",
+   "text": "Now December, the same year. Delhi.",
+   "caption": "Now December, the same year. Delhi.",
+   "start": 19.321,
+   "end": 21.091,
+   "words": [
+    [
+     "Now",
+     19.397,
+     19.551
+    ],
+    [
+     "December,",
+     19.551,
+     20.013
+    ],
+    [
+     "the",
+     20.013,
+     20.167
+    ],
+    [
+     "same",
+     20.167,
+     20.476
+    ],
+    [
+     "year.",
+     20.476,
+     20.63
+    ],
+    [
+     "Delhi.",
+     20.63,
+     20.938
+    ]
+   ]
+  },
+  {
+   "id": "d2",
+   "text": "South Africa are fighting to save a Test.",
+   "caption": "South Africa are fighting to save a Test.",
+   "start": 21.091,
+   "end": 23.177,
+   "words": [
+    [
+     "South",
+     21.091,
+     21.247
+    ],
+    [
+     "Africa",
+     21.247,
+     21.715
+    ],
+    [
+     "are",
+     21.715,
+     22.027
+    ],
+    [
+     "fighting",
+     22.027,
+     22.34
+    ],
+    [
+     "to",
+     22.34,
+     22.496
+    ],
+    [
+     "save",
+     22.496,
+     22.808
+    ],
+    [
+     "a",
+     22.808,
+     22.964
+    ],
+    [
+     "Test.",
+     22.964,
+     23.12
+    ]
+   ]
+  },
+  {
+   "id": "d3",
+   "text": "AB faces two hundred and ninety seven balls, for forty three runs.",
+   "caption": "AB faces 297 balls, for 43 runs.",
+   "start": 23.306,
+   "end": 27.383,
+   "words": [
+    [
+     "AB",
+     23.354,
+     23.648
+    ],
+    [
+     "faces",
+     23.648,
+     24.236
+    ],
+    [
+     "297",
+     24.236,
+     25.561
+    ],
+    [
+     "balls,",
+     25.561,
+     25.855
+    ],
+    [
+     "for",
+     25.855,
+     26.148
+    ],
+    [
+     "43",
+     26.148,
+     27.032
+    ],
+    [
+     "runs.",
+     27.032,
+     27.325
+    ]
+   ]
+  },
+  {
+   "id": "s1",
+   "text": "Same man. Same year.",
+   "caption": "Same man. Same year.",
+   "start": 27.598,
+   "end": 29.244,
+   "words": [
+    [
+     "Same",
+     27.646,
+     28.179
+    ],
+    [
+     "man.",
+     28.179,
+     28.445
+    ],
+    [
+     "Same",
+     28.445,
+     28.978
+    ],
+    [
+     "year.",
+     28.978,
+     29.244
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "The fastest hundred in ODI history, and one of the most stubborn Test innings you'll ever see.",
+   "caption": "The fastest hundred in ODI history, and one of the most stubborn Test innings you'll ever see.",
+   "start": 29.244,
+   "end": 34.124,
+   "words": [
+    [
+     "The",
+     29.244,
+     29.432
+    ],
+    [
+     "fastest",
+     29.432,
+     29.807
+    ],
+    [
+     "hundred",
+     29.807,
+     30.183
+    ],
+    [
+     "in",
+     30.183,
+     30.37
+    ],
+    [
+     "ODI",
+     30.37,
+     30.745
+    ],
+    [
+     "history,",
+     30.745,
+     31.309
+    ],
+    [
+     "and",
+     31.309,
+     31.497
+    ],
+    [
+     "one",
+     31.497,
+     31.872
+    ],
+    [
+     "of",
+     31.872,
+     32.059
+    ],
+    [
+     "the",
+     32.059,
+     32.247
+    ],
+    [
+     "most",
+     32.247,
+     32.435
+    ],
+    [
+     "stubborn",
+     32.435,
+     32.811
+    ],
+    [
+     "Test",
+     32.811,
+     32.998
+    ],
+    [
+     "innings",
+     32.998,
+     33.373
+    ],
+    [
+     "you'll",
+     33.373,
+     33.562
+    ],
+    [
+     "ever",
+     33.562,
+     33.937
+    ],
+    [
+     "see.",
+     33.937,
+     34.124
+    ]
+   ]
+  },
+  {
+   "id": "p1",
+   "text": "That's the problem for bowlers.",
+   "caption": "That's the problem for bowlers.",
+   "start": 34.124,
+   "end": 35.732,
+   "words": [
+    [
+     "That's",
+     34.124,
+     34.342
+    ],
+    [
+     "the",
+     34.342,
+     34.559
+    ],
+    [
+     "problem",
+     34.559,
+     34.994
+    ],
+    [
+     "for",
+     34.994,
+     35.211
+    ],
+    [
+     "bowlers.",
+     35.211,
+     35.646
+    ]
+   ]
+  },
+  {
+   "id": "p2",
+   "text": "You never knew which AB was walking out.",
+   "caption": "You never knew which AB was walking out.",
+   "start": 35.775,
+   "end": 38.215,
+   "words": [
+    [
+     "You",
+     35.823,
+     36.053
+    ],
+    [
+     "never",
+     36.053,
+     36.512
+    ],
+    [
+     "knew",
+     36.512,
+     36.742
+    ],
+    [
+     "which",
+     36.742,
+     36.971
+    ],
+    [
+     "AB",
+     36.971,
+     37.201
+    ],
+    [
+     "was",
+     37.201,
+     37.431
+    ],
+    [
+     "walking",
+     37.431,
+     37.89
+    ],
+    [
+     "out.",
+     37.89,
+     38.12
+    ]
+   ]
+  },
+  {
+   "id": "p3",
+   "text": "Bowl full, he drives you.",
+   "caption": "Bowl full, he drives you.",
+   "start": 38.301,
+   "end": 39.909,
+   "words": [
+    [
+     "Bowl",
+     38.359,
+     38.617
+    ],
+    [
+     "full,",
+     38.617,
+     38.876
+    ],
+    [
+     "he",
+     38.876,
+     39.134
+    ],
+    [
+     "drives",
+     39.134,
+     39.651
+    ],
+    [
+     "you.",
+     39.651,
+     39.909
+    ]
+   ]
+  },
+  {
+   "id": "p4",
+   "text": "Bowl short, he pulls you.",
+   "caption": "Bowl short, he pulls you.",
+   "start": 39.909,
+   "end": 41.057,
+   "words": [
+    [
+     "Bowl",
+     39.909,
+     40.139
+    ],
+    [
+     "short,",
+     40.139,
+     40.368
+    ],
+    [
+     "he",
+     40.368,
+     40.598
+    ],
+    [
+     "pulls",
+     40.598,
+     40.828
+    ],
+    [
+     "you.",
+     40.828,
+     41.057
+    ]
+   ]
+  },
+  {
+   "id": "p5",
+   "text": "Bowl wide, he walks across and scoops you over fine leg.",
+   "caption": "Bowl wide, he walks across and scoops you over fine leg.",
+   "start": 41.057,
+   "end": 44.579,
+   "words": [
+    [
+     "Bowl",
+     41.057,
+     41.289
+    ],
+    [
+     "wide,",
+     41.289,
+     41.752
+    ],
+    [
+     "he",
+     41.752,
+     41.984
+    ],
+    [
+     "walks",
+     41.984,
+     42.215
+    ],
+    [
+     "across",
+     42.215,
+     42.678
+    ],
+    [
+     "and",
+     42.678,
+     42.91
+    ],
+    [
+     "scoops",
+     42.91,
+     43.142
+    ],
+    [
+     "you",
+     43.142,
+     43.373
+    ],
+    [
+     "over",
+     43.373,
+     43.836
+    ],
+    [
+     "fine",
+     43.836,
+     44.3
+    ],
+    [
+     "leg.",
+     44.3,
+     44.531
+    ]
+   ]
+  },
+  {
+   "id": "p6",
+   "text": "Most batters can either attack you or outlast you.",
+   "caption": "Most batters can either attack you or outlast you.",
+   "start": 44.708,
+   "end": 47.531,
+   "words": [
+    [
+     "Most",
+     44.746,
+     44.957
+    ],
+    [
+     "batters",
+     44.957,
+     45.378
+    ],
+    [
+     "can",
+     45.378,
+     45.589
+    ],
+    [
+     "either",
+     45.589,
+     46.01
+    ],
+    [
+     "attack",
+     46.01,
+     46.431
+    ],
+    [
+     "you",
+     46.431,
+     46.641
+    ],
+    [
+     "or",
+     46.641,
+     46.852
+    ],
+    [
+     "outlast",
+     46.852,
+     47.273
+    ],
+    [
+     "you.",
+     47.273,
+     47.483
+    ]
+   ]
+  },
+  {
+   "id": "p7",
+   "text": "AB could do both.",
+   "caption": "AB could do both.",
+   "start": 47.574,
+   "end": 49.019,
+   "words": [
+    [
+     "AB",
+     47.651,
+     47.965
+    ],
+    [
+     "could",
+     47.965,
+     48.278
+    ],
+    [
+     "do",
+     48.278,
+     48.591
+    ],
+    [
+     "both.",
+     48.591,
+     48.904
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "That's why he's the toughest batter of this generation. Agree or disagree? Tell me in the comments, and follow for more stories like this.",
+   "caption": "That's why he's the toughest batter of this generation. Agree or disagree? Tell me in the comments, and follow for more stories like this.",
+   "start": 49.191,
+   "end": 54.914,
+   "words": [
+    [
+     "That's",
+     49.239,
+     49.391
+    ],
+    [
+     "why",
+     49.391,
+     49.544
+    ],
+    [
+     "he's",
+     49.544,
+     49.696
+    ],
+    [
+     "the",
+     49.696,
+     49.848
+    ],
+    [
+     "toughest",
+     49.848,
+     50.152
+    ],
+    [
+     "batter",
+     50.152,
+     50.456
+    ],
+    [
+     "of",
+     50.456,
+     50.608
+    ],
+    [
+     "this",
+     50.608,
+     50.76
+    ],
+    [
+     "generation.",
+     50.76,
+     51.368
+    ],
+    [
+     "Agree",
+     51.368,
+     51.673
+    ],
+    [
+     "or",
+     51.673,
+     51.825
+    ],
+    [
+     "disagree?",
+     51.825,
+     52.28
+    ],
+    [
+     "Tell",
+     52.28,
+     52.433
+    ],
+    [
+     "me",
+     52.433,
+     52.585
+    ],
+    [
+     "in",
+     52.585,
+     52.737
+    ],
+    [
+     "the",
+     52.737,
+     52.889
+    ],
+    [
+     "comments,",
+     52.889,
+     53.193
+    ],
+    [
+     "and",
+     53.193,
+     53.345
+    ],
+    [
+     "follow",
+     53.345,
+     53.65
+    ],
+    [
+     "for",
+     53.65,
+     53.802
+    ],
+    [
+     "more",
+     53.802,
+     54.105
+    ],
+    [
+     "stories",
+     54.105,
+     54.41
+    ],
+    [
+     "like",
+     54.41,
+     54.714
+    ],
+    [
+     "this.",
+     54.714,
+     54.866
+    ]
+   ]
+  }
+ ]
+}
