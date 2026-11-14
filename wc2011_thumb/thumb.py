@@ -1,8 +1,8 @@
 """Thumbnail: "What Made India World Champions in 2011? (The Untold Stories)".
 
-Dhoni with the trophy up front, Sachin and Yuvraj either side, Sehwag celebrating behind, headline top-left. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
+Dhoni's 2011 final six (World Cup kit) and the trophy big, Sachin and Yuvraj smaller, a red '?' as the curiosity cue. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
 
-    python3 clean_logos.py && python3 cutouts.py && python3 thumb.py [LINE1 LINE2]  ->  out/thumb_*.jpg / .png
+    python3 clean_logos.py && python3 cutouts.py && python3 trophy.py && python3 thumb.py [LINE1 LINE2]  ->  out/thumb_*.jpg / .png
 """
 import math
 import os
@@ -141,24 +141,45 @@ def text(base, lines, x, y):
         y += int(size * 1.02)
 
 
+def question(bg, cx, cy, size, ang):
+    """Red curiosity '?' with a dark halo."""
+    f = ImageFont.truetype(ANTON, size)
+    lay = Image.new("RGBA", (size * 2, size * 2), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.text((size, size), "?", font=f, fill=(225, 30, 30), anchor="mm", stroke_width=10, stroke_fill=(255, 255, 255))
+    lay = lay.rotate(ang, Image.BICUBIC)
+    sh = Image.new("RGBA", lay.size, (0, 0, 0, 0))
+    sh.putalpha(lay.getchannel("A").filter(ImageFilter.GaussianBlur(16)).point(lambda v: v * 0.9))
+    bg.alpha_composite(sh, (int(cx - size + 8), int(cy - size + 8)))
+    bg.alpha_composite(lay, (int(cx - size), int(cy - size)))
+
+
 def build(line1, line2, name):
     bg = background()
     yuv, sac = fix_cuts()
-    dho, seh = cut("dhoni"), cut("sehwag")
+    six = Image.open(os.path.join(HERE, "..", "dhoni_2007_2011", "cut_2011.png")).convert("RGBA")
+    tro = cut("trophy")
 
-    place(bg, rim_light(grade(seh, 1.1, 1.05, 0.8)), 1520, 10, 700, bottom_fade=0.35)
-    place(bg, rim_light(grade(yuv)), 1715, 270, 1020)
-    place(bg, rim_light(grade(sac)), 430, 290, 1100, bottom_fade=0.2)
-    place(bg, rim_light(grade(dho, 1.1, 1.12, 1.06), strength=0.65), 1120, 25, 1620)
+    # gold halo behind the trophy
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    halo = np.clip(1 - np.sqrt((xx - 1450) ** 2 + ((yy - 470) * 0.8) ** 2) / 520, 0, 1) ** 2
+    hl = Image.new("RGBA", (W, H), (255, 200, 80, 0))
+    hl.putalpha(Image.fromarray((halo * 150).astype(np.uint8)))
+    bg.alpha_composite(hl)
 
-    # brand + year tag
+    place(bg, rim_light(grade(yuv)), 1765, 500, 640)
+    place(bg, rim_light(grade(sac)), 330, 400, 760, bottom_fade=0.2)
+    place(bg, rim_light(grade(tro, 1.15, 1.1, 1.08), (255, 230, 160), 0.4), 1450, 150, 900)
+    place(bg, rim_light(grade(six, 1.12, 1.1, 1.04), strength=0.6), 1000, -30, 1500)
+    question(bg, 1318, 112, 215, -12)
+
+    # year tag + headline
     d = ImageDraw.Draw(bg)
     f = ImageFont.truetype(ANTON, 54)
     d.rounded_rectangle((60, 60, 290, 140), 14, fill=YEL)
     d.text((175, 100), "2011", font=f, fill=(12, 12, 14), anchor="mm")
     fit = lambda t, w: int(200 * w / ImageFont.truetype(ANTON, 200).getlength(t))
-    s2 = min(fit(line2, 700), 230)
-    text(bg, [(line1, min(fit(line1, 700), int(s2 * 1.15)), (255, 255, 255)), (line2, s2, YEL)], 56, 150)
+    text(bg, [(line1, min(fit(line1, 640), 230), YEL), (line2, min(fit(line2, 640), 230), YEL)], 56, 150)
 
     out = bg.convert("RGB")
     out = ImageEnhance.Sharpness(out).enhance(1.15)
@@ -169,5 +190,5 @@ def build(line1, line2, name):
 
 
 if __name__ == "__main__":
-    a = sys.argv[1:] or ["WORLD", "CHAMPIONS"]
+    a = sys.argv[1:] or ["5 UNTOLD", "STORIES"]
     build(a[0], a[1], "thumb_" + "_".join((a[0] + " " + a[1]).lower().replace("'", "").replace(".", "").split()))
