@@ -1,7 +1,6 @@
 """Thumbnail: "What Made India World Champions in 2011? (The Untold Stories)".
 
-Dhoni with the trophy up front, Sachin and Yuvraj either side, Sehwag celebrating behind, Muralitharan as a grey
-"rival" ghost behind the headline. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
+Dhoni with the trophy up front, Sachin and Yuvraj either side, Sehwag celebrating behind, headline top-left. Background (night sky, fireworks, floodlight glow, crowd) is drawn here.
 
     python3 clean_logos.py && python3 cutouts.py && python3 thumb.py [LINE1 LINE2]  ->  out/thumb_*.jpg / .png
 """
@@ -145,25 +144,21 @@ def text(base, lines, x, y):
 def build(line1, line2, name):
     bg = background()
     yuv, sac = fix_cuts()
-    dho, seh, mur = cut("dhoni"), cut("sehwag"), cut("murali")
+    dho, seh = cut("dhoni"), cut("sehwag")
 
-    # Murali: grey, darker "rival" ghost behind the headline
-    g = ImageOps.grayscale(mur.convert("RGB")).convert("RGBA")
-    g = ImageEnhance.Brightness(g).enhance(0.8)
-    g.putalpha(mur.getchannel("A").point(lambda v: v * 0.85))
-    place(bg, g, 250, 600, 620, shadow=False)
-
-    place(bg, rim_light(grade(seh, 1.1, 1.05, 0.8)), 1490, 40, 640, bottom_fade=0.35)
-    place(bg, rim_light(grade(sac)), 700, 300, 900, bottom_fade=0.32)
-    place(bg, rim_light(grade(yuv)), 1640, 300, 900)
-    place(bg, rim_light(grade(dho, 1.1, 1.12, 1.06), strength=0.65), 1090, 40, 1500)
+    place(bg, rim_light(grade(seh, 1.1, 1.05, 0.8)), 1520, 10, 700, bottom_fade=0.35)
+    place(bg, rim_light(grade(yuv)), 1715, 270, 1020)
+    place(bg, rim_light(grade(sac)), 430, 290, 1100, bottom_fade=0.2)
+    place(bg, rim_light(grade(dho, 1.1, 1.12, 1.06), strength=0.65), 1120, 25, 1620)
 
     # brand + year tag
     d = ImageDraw.Draw(bg)
     f = ImageFont.truetype(ANTON, 54)
     d.rounded_rectangle((60, 60, 290, 140), 14, fill=YEL)
     d.text((175, 100), "2011", font=f, fill=(12, 12, 14), anchor="mm")
-    text(bg, [(line1, 170, (255, 255, 255)), (line2, 205, YEL)], 56, 160)
+    fit = lambda t, w: int(200 * w / ImageFont.truetype(ANTON, 200).getlength(t))
+    s2 = min(fit(line2, 700), 230)
+    text(bg, [(line1, min(fit(line1, 700), int(s2 * 1.15)), (255, 255, 255)), (line2, s2, YEL)], 56, 150)
 
     out = bg.convert("RGB")
     out = ImageEnhance.Sharpness(out).enhance(1.15)
@@ -174,5 +169,5 @@ def build(line1, line2, name):
 
 
 if __name__ == "__main__":
-    a = sys.argv[1:] or ["IT WASN'T", "THE SIX"]
+    a = sys.argv[1:] or ["WORLD", "CHAMPIONS"]
     build(a[0], a[1], "thumb_" + "_".join((a[0] + " " + a[1]).lower().replace("'", "").replace(".", "").split()))
