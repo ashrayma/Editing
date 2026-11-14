@@ -225,8 +225,6 @@ def stadium():
         d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 235, 190, rnd.randint(25, 90)))
     im = Image.alpha_composite(im, bk.filter(ImageFilter.GaussianBlur(4)))
     im = Image.alpha_composite(im, beams())
-    im = Image.alpha_composite(im, fireworks(0.75))
-    im = Image.alpha_composite(im, confetti())
     return im
 
 
