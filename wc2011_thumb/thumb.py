@@ -319,10 +319,16 @@ def build(line1, line2, name):
 
     d = ImageDraw.Draw(bg)
     f = ImageFont.truetype(ANTON, 54)
-    d.rounded_rectangle((70, 95, 300, 175), 14, fill=YEL)
-    d.text((185, 135), "2011", font=f, fill=(12, 12, 14), anchor="mm")
+    d.rounded_rectangle((70, 290, 300, 370), 14, fill=YEL)
+    d.text((185, 330), "2011", font=f, fill=(12, 12, 14), anchor="mm")
     fit = lambda t, w: int(200 * w / ImageFont.truetype(ANTON, 200).getlength(t))
-    text(bg, [(line1, min(fit(line1, 560), 250), (255, 255, 255)), (line2, min(fit(line2, 560), 250), YEL)], 66, 200)
+    s1, s2 = min(fit(line1, 560), 250), min(fit(line2, 560), 250)
+    text(bg, [(line1, s1, (255, 255, 255)), (line2, s2, YEL)], 66, 395)
+    # sub-line: one more beat of curiosity under the headline
+    y = 395 + int(s1 * 1.02) + int(s2 * 1.02) + 40
+    d = ImageDraw.Draw(bg)
+    d.rectangle((70, y, 82, y + 66), fill=YEL)
+    d.text((104, y + 33), "28 YEARS. ONE NIGHT.", font=ImageFont.truetype(ANTON, 62), fill=(255, 255, 255), anchor="lm")
 
     out = bg.convert("RGB")
     out = ImageEnhance.Sharpness(out).enhance(1.15)
