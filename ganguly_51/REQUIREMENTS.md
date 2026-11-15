@@ -62,3 +62,21 @@ Changes and why:
 - Timeline card: 2003 final → 2005 email → dropped → Dec 2006
 - The five-bowler line-up card, the "DADA KHATAM?" stamp, the subscribe CTA (same as the IPL video), music and SFX
 - YouTube Short (~80 s) + Instagram cut 10–15% shorter (rule 11)
+
+## Photos received (assets/)
+| Script beat | Photo | Note |
+|---|---|---|
+| Opening face (first frame) | dada_odi_dejected_2003.jpg (1200 px), dada_odi_walking_cap.jpg | sharp face, 2003 era |
+| "51 not out" slam | dada_bat_raised_test.jpg | Test whites, bat + helmet up |
+| 2003 World Cup captain | dada_fistpump_wc2003.jpg | 2003 WC kit, LG stumps (South Africa) |
+| "Dada khatam" | dada_walking_off_test.jpg | head down, walking off |
+| Out of the team, the year away | dada_batting_bengal.jpg, dada_running_bengal.jpg, dada_bengal_partner.jpg, dada_bat_raised_bengal.gif | Bengal kit = domestic cricket while dropped |
+| SA pace attack | pollock_bowling, steyn_stump, ntini_bowling, nel_appeal, kallis_bowling | all five |
+| Sreesanth's 5 wickets | sreesanth.jpg | |
+| India's first Test win in SA | india_win_wanderers_2006.jpg | the actual match |
+| "Laxman ka 281" ending | kolkata_2001_laxman_dravid.jpg | Kolkata 2001 |
+| (not used) | dada_roar_ndtv_watermark.jpg | NDTV watermark: not cropped out, send a clean copy to use it |
+
+## Still missing
+1. **Greg Chappell** (ideally with Dada, 2005)
+2. **Dada batting for India at the Wanderers, Dec 2006** (India whites; the Bengal photos can't stand in for the actual innings)
