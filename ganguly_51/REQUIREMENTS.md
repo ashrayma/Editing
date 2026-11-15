@@ -66,10 +66,12 @@ Changes and why:
 ## Photos received (assets/)
 | Script beat | Photo | Note |
 |---|---|---|
-| Opening face (first frame) | dada_odi_dejected_2003.jpg (1200 px), dada_odi_walking_cap.jpg | sharp face, 2003 era |
+| Opening face (first frame) | dada_odi_walking_cap.jpg | sharp face, 2003 era |
 | "51 not out" slam | dada_bat_raised_test.jpg | Test whites, bat + helmet up |
 | 2003 World Cup captain | dada_fistpump_wc2003.jpg | 2003 WC kit, LG stumps (South Africa) |
-| "Dada khatam" | dada_walking_off_test.jpg | head down, walking off |
+| "Dada khatam" | dada_odi_dejected_2003.jpg | dejected, graded to black and white |
+| "Aur andar aaye… Sourav Ganguly" | dada_walking_off_test.jpg | India Test whites, helmet on, bat under the arm: reads as walking in to bat |
+| "101 balls. Har ball pe khatra." | dada_batting_bengal.jpg | tight crop on helmet + the ball flying past it (domestic photo, India helmet; shirt crest kept out of frame) |
 | Out of the team, the year away | dada_batting_bengal.jpg, dada_running_bengal.jpg, dada_bengal_partner.jpg, dada_bat_raised_bengal.gif | Bengal kit = domestic cricket while dropped |
 | SA pace attack | pollock_bowling, steyn_stump, ntini_bowling, nel_appeal, kallis_bowling | all five |
 | Sreesanth's 5 wickets | sreesanth.jpg | |
@@ -81,4 +83,4 @@ Changes and why:
 
 ## Still missing
 1. ~~Greg Chappell~~ received
-2. **Dada batting for India at the Wanderers, Dec 2006** (India whites; the Bengal photos can't stand in for the actual innings)
+2. ~~Dada batting at the Wanderers~~ creator's call: use the closest photos we have (see the two rows above)
