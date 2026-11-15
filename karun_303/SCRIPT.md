@@ -6,12 +6,13 @@ own words are kept wherever they were true.
 ---
 
 ## [0:00–0:40] HOOK
-*On screen: Dharamsala, last innings (or a falling-stumps shot) → black → **303\*** held 2 s → "3,006 DAYS".*
+*On screen: 303\* card → "SEHWAG 309 · 319" → black → "3 TESTS" → "3 MONTHS" → "8 YEARS".*
 
-धर्मशाला। मार्च 2017।
-करुण नायर ने अपनी आख़िरी टेस्ट पारी खेली। पांच रन।
-और जो करियर तीन महीने पहले दुनिया का सबसे चमकता हुआ करियर था — वहीं रुक गया।
-उस वक़्त किसी को पता नहीं चला। उन्हें भी नहीं।
+टेस्ट क्रिकेट में तीन सौ रन — भारत के लिए सिर्फ़ दो आदमियों ने बनाए हैं। एक, वीरेंद्र सहवाग। और दूसरा…
+उस दूसरे आदमी ने उसके बाद तीन टेस्ट खेले। बस तीन।
+जिसने 381 गेंदें खेलीं… जिसे इंग्लैंड ने तीन बार ज़िंदगी दी, और जिसने हर बार उन्हें सज़ा दी… जिसके लिए उस रात हर चैनल पर एक ही बात थी — "ये अगले दस साल टीम इंडिया का नंबर पांच है"…
+वो आदमी तीन महीने बाद अपना आख़िरी टेस्ट खेल रहा था — अगले आठ साल के लिए।
+और सबसे बुरी बात — उसे ख़ुद पता नहीं था।
 
 ये नंबर आपने सैकड़ों बार सुना है — **303**।
 और हर बार एक ही बात सुनाई गई है — "करुण नायर के साथ अन्याय हुआ।"
@@ -170,6 +171,7 @@ own words are kept wherever they were true.
 07:15 असली सच
 
 ## Sources
+- Dropped on 34 (Cook) and 217 (Root), survived a stumping chance off Moeen: Irish Times, Indian Sports News, Fox Sports
 - 303* off 381 balls, 5th Test, Chennai, Dec 2016; second Indian after Sehwag (309, 319): The Quint, India TV, Business Standard
 - Third to turn a maiden Test hundred into 300 (after Sobers, Simpson): Sport24 / Scroll
 - Benched for the Bangladesh Test, Hyderabad, 9 Feb 2017; second fit batsman dropped after a triple hundred; father: "fair to include Rahane"; Nair: "one game doesn't overshadow two years of hard work": The National, Deccan Chronicle, ft.lk

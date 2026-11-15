@@ -3,10 +3,11 @@
 Same fact-checked script as SCRIPT.md, in Roman Hinglish. On-screen notes and sources are in SCRIPT.md.
 
 ## [0:00] HOOK
-Dharamsala. March 2017.
-Karun Nair ne apni aakhri Test pari kheli. Paanch run.
-Aur jo career teen mahine pehle duniya ka sabse chamakta hua career tha — wahin ruk gaya.
-Us waqt kisi ko pata nahi chala. Unhe bhi nahi.
+Test cricket mein teen sau run — India ke liye sirf do aadmiyon ne banaye hain. Ek, Virender Sehwag. Aur doosra…
+Us doosre aadmi ne uske baad teen Test khele. Bas teen.
+Jisne 381 gendein kheli… jise England ne teen baar zindagi di, aur jisne har baar unhe saza di… jiske liye us raat har channel par ek hi baat thi — "ye agle das saal Team India ka number paanch hai"…
+Wo aadmi teen mahine baad apna aakhri Test khel raha tha — agle aath saal ke liye.
+Aur sabse buri baat — use khud pata nahi tha.
 
 Ye number aapne saikdon baar suna hai — 303.
 Aur har baar ek hi baat sunayi gayi hai — "Karun Nair ke saath anyaay hua."
