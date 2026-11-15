@@ -97,7 +97,7 @@ def read_frames(path, n):
 
 
 _yy, _xx = np.mgrid[0:H, 0:W].astype(np.float32)
-VIG = (1 - 0.72 * np.clip(((_xx - W / 2) / (W * 0.6)) ** 2 + ((_yy - H / 2) / (H * 0.62)) ** 2, 0, 1) ** 1.2)[..., None]
+VIG = (1 - 0.5 * np.clip(((_xx - W / 2) / (W * 0.6)) ** 2 + ((_yy - H / 2) / (H * 0.62)) ** 2, 0, 1) ** 1.2)[..., None]
 LOW = np.clip((_yy - H * 0.45) / (H * 0.55), 0, 1)[..., None] * np.clip(1 - _xx / (W * 0.55), 0, 1)[..., None]
 
 
@@ -111,10 +111,10 @@ def grade(fr, lt, dur, direction):
     a = np.asarray(im, np.float32) / 255
     lum = a.mean(-1, keepdims=True)
     a = lum + (a - lum) * 0.78
-    a = np.clip((a - 0.5) * 1.18 + 0.47, 0, 1) ** 1.12
-    a = a * (1 - 0.18 * (1 - lum)) + np.array([0.0, 0.025, 0.04]) * (1 - lum)    # teal in the shadows
-    a = a * 0.84 * VIG
-    a = a * (1 - 0.45 * LOW)                                                   # room for the caption
+    a = np.clip((a - 0.5) * 1.15 + 0.52, 0, 1) ** 0.98
+    a = a * (1 - 0.08 * (1 - lum)) + np.array([0.0, 0.025, 0.04]) * (1 - lum)    # teal in the shadows
+    a = a * 1.0 * VIG
+    a = a * (1 - 0.3 * LOW)                                                   # room for the caption
     return a * 255
 
 
