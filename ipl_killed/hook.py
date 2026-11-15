@@ -8,6 +8,7 @@ sentence case).
 
 VO (vo/hook_raw.mp3): "17 November, retention lists out. Crores ki deals, bade naam release... par ek sawal koi
 nahi pooch raha: kya IPL dheere dheere mar raha hai?"
+Bridge (vo/bridge_raw.mp3), over the IPL KO KISNE MAARA? title card: "Chalo, case kholte hain."
 
 Footage: only stretches of the clean IPL clips (logos and score bars cropped) the main video doesn't use.
 
@@ -49,7 +50,12 @@ SHOTS = [
     (9.75, 1.65, "jadeja_spin_clean", 5.85, 0.40, 1),    # Dhoni keeping, batter waiting
     (11.40, 2.60, "jadeja_spin_clean", 7.70, 0.30, 1),   # ball into the stumps, very slow
 ]
-DUR = SHOTS[-1][0] + SHOTS[-1][1]
+SHOTS_END = SHOTS[-1][0] + SHOTS[-1][1]
+# bridge: "Chalo, case kholte hain." (vo/bridge_raw.mp3) over the title card, then into the video
+TITLE_DUR = 3.4
+BRIDGE_AT = SHOTS_END + 0.2           # bridge VO start
+TITLE_HIT = SHOTS_END + 1.0           # title slams on "case"
+DUR = SHOTS_END + TITLE_DUR
 # (line 1 in, line 2 in, out, line 1, line 2)
 CAPS = [
     (0.40, 1.90, 3.70, "17 November.", "Retention lists out."),
@@ -170,18 +176,98 @@ def frames(only=None):
                 continue
             t, lt = t0 + i / FPS, i / FPS
             a = grade(fr, lt, dur, direction)
-            if k == len(SHOTS) - 1:                       # flash-dissolve into the video's first frame
-                f_out = ease((lt - (dur - 0.5)) / 0.5)
+            if k == len(SHOTS) - 1:                       # white flash out into the title card
+                f_out = ease((lt - (dur - 0.3)) / 0.3)
                 if f_out > 0:
-                    a = a * (1 - f_out) + film0 * f_out + 255 * np.sin(np.pi * f_out) * 0.35
+                    a = a + 255 * 0.55 * f_out
             base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
             caption(base, t)
             out = np.asarray(base.convert("RGB")).copy()
-            bar = BAR if k < len(SHOTS) - 1 else int(BAR * (1 - ease((lt - (dur - 0.5)) / 0.5)))
-            if bar:
-                out[:bar] = 0
-                out[H - bar:] = 0
+            out[:BAR] = 0
+            out[H - BAR:] = 0
             yield t, out
+    yield from title_frames(film0, only)
+
+
+TITLE_FONT = ImageFont.truetype("/usr/share/fonts/opentype/inter/InterDisplay-Black.otf", 150)
+KICK_FONT = ImageFont.truetype(BOLD, 40)
+
+
+def title_layer(lt):
+    """CASE FILE kicker, then IPL KO KISNE MAARA? slamming in (KISNE yellow)."""
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    k = ease((lt - 0.25) / 0.5)
+    if k > 0:
+        txt = "CASE FILE  ·  #IPL2026"
+        tr = 22 - 12 * k
+        w = sum(KICK_FONT.getlength(c) for c in txt) + tr * (len(txt) - 1)
+        x = (W - w) / 2
+        for c in txt:
+            d.text((x, 372), c, font=KICK_FONT, fill=(225, 225, 225, int(255 * k)))
+            x += KICK_FONT.getlength(c) + tr
+        d.rectangle((W / 2 - 60 * k, 440, W / 2 + 60 * k, 445), fill=Y + (int(255 * k),))
+    p = ease((lt - (TITLE_HIT - SHOTS_END - 0.12)) / 0.12)
+    if p > 0:
+        words = [("IPL KO ", (255, 255, 255)), ("KISNE ", Y), ("MAARA?", (255, 255, 255))]
+        tw = sum(TITLE_FONT.getlength(w) for w, _ in words)
+        t_im = Image.new("RGBA", (int(tw) + 40, 220), (0, 0, 0, 0))
+        td = ImageDraw.Draw(t_im)
+        x = 20
+        for w, col in words:
+            td.text((x, 20), w, font=TITLE_FONT, fill=col)
+            x += TITLE_FONT.getlength(w)
+        s = 1.35 - 0.35 * p
+        t_im = t_im.resize((int(t_im.width * s), int(t_im.height * s)), Image.BILINEAR)
+        t_im.putalpha(t_im.getchannel("A").point(lambda v: int(v * p)))
+        sh = Image.new("RGBA", t_im.size, (0, 0, 0, 0))
+        sh.putalpha(t_im.getchannel("A").filter(ImageFilter.GaussianBlur(16)).point(lambda v: int(v * 0.6)))
+        cx, cy = (W - t_im.width) // 2, 560 - t_im.height // 2
+        lay.alpha_composite(sh, (cx + 5, cy + 8))
+        lay.alpha_composite(t_im, (cx, cy))
+    return lay
+
+
+def title_frames(film0, only):
+    """Blurred dark freeze of the stumps shot, slowly pushing in, with the title; flash-dissolve into the video."""
+    k = len(SHOTS) - 1
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-sseof", "-0.1", "-i", shot_file(k), "-frames:v", "1",
+                          "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+    freeze = np.frombuffer(raw, np.uint8).reshape(H, W, 3)
+    freeze = np.asarray(Image.fromarray(freeze).filter(ImageFilter.GaussianBlur(14)), np.uint8)
+    rng = np.random.default_rng(11)
+    g0 = int(round(SHOTS_END * FPS))
+    for i in range(int(round(TITLE_DUR * FPS))):
+        if only is not None and g0 + i not in only:
+            continue
+        lt = i / FPS
+        t = SHOTS_END + lt
+        a = grade(freeze, lt, TITLE_DUR, 1) * 0.5
+        a = a + 255 * 0.55 * np.exp(-lt * 9)                      # flash carried over from the cut
+        hit = TITLE_HIT - SHOTS_END
+        if lt >= hit:
+            a = a + 255 * 0.22 * np.exp(-(lt - hit) * 14)
+        lay = title_layer(lt)
+        if 0 <= lt - hit < 0.3:                                   # punch + shake on the hit
+            kk = lt - hit
+            sc = 1 + 0.05 * np.exp(-kk * 18)
+            amp = 12 * (1 - kk / 0.3)
+            jx, jy = rng.uniform(-amp, amp, 2)
+            big = lay.resize((int(W * sc), int(H * sc)), Image.BILINEAR)
+            ox, oy = int((big.width - W) / 2 - jx), int((big.height - H) / 2 - jy)
+            lay = big.crop((ox, oy, ox + W, oy + H))
+        la = np.asarray(lay, np.float32)
+        al = la[..., 3:4] / 255
+        a = a * (1 - al) + la[..., :3] * al
+        f_out = ease((lt - (TITLE_DUR - 0.45)) / 0.45)
+        if f_out > 0:
+            a = a * (1 - f_out) + film0 * f_out + 255 * np.sin(np.pi * f_out) * 0.35
+        out = np.clip(a, 0, 255).astype(np.uint8)
+        bar = int(BAR * (1 - f_out))
+        if bar:
+            out[:bar] = 0
+            out[H - bar:] = 0
+        yield t, out
 
 
 # ----------------------------------------------------------------------------- sound
@@ -207,13 +293,19 @@ def soundtrack(path):
         at(fx, vh.braam(weight=w), t - 0.03, 0.35 + 0.3 * w)
     for tb, g in [(10.1, 0.5), (10.95, 0.4), (11.95, 0.3)]:      # slowing heartbeat under "dheere dheere"
         at(fx, sfx.heartbeat(), tb, g)
-    flat = beep(DUR - FLAT) * np.interp(np.linspace(0, 1, int((DUR - FLAT) * SR)), [0, 0.6, 1], [1, 1, 0])
+    at(fx, vh.braam(weight=1.3), TITLE_HIT - 0.03, 0.75)
+    at(fx, sfx.whoosh(0.4), SHOTS_END - 0.3, 0.25)
+    flat = beep(SHOTS_END - FLAT) * np.interp(np.linspace(0, 1, int((SHOTS_END - FLAT) * SR)), [0, 0.6, 1], [1, 1, 0])
     at(fx, flat, FLAT, 0.06)
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "vo", "hook_raw.mp3"), "-ac", "1",
                           "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     vo = np.frombuffer(raw, np.float32).astype(np.float64)
     voice = np.zeros(n)
     at(voice, vo / (np.abs(vo).max() + 1e-9) * 0.9, OFF, 1.0)
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "vo", "bridge_raw.mp3"), "-ac", "1",
+                          "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    br = np.frombuffer(raw, np.float32).astype(np.float64)
+    at(voice, br / (np.abs(vo).max() + 1e-9) * 0.9, BRIDGE_AT, 1.0)   # same gain as the hook VO
     duck = 1 - 0.45 * np.convolve(np.abs(voice) > 0.02, np.ones(int(0.15 * SR)) / int(0.15 * SR), "same")
     mix = voice + (bed + fx * 0.8) * duck
     tail = int(0.3 * SR)
@@ -230,7 +322,7 @@ def soundtrack(path):
 # ----------------------------------------------------------------------------- render + join
 
 def sheet():
-    ts = [0.9, 2.6, 3.3, 4.6, 6.2, 6.8, 7.7, 9.0, 10.5, 11.8, 12.9, 13.8]
+    ts = [0.9, 4.6, 6.2, 9.0, 11.8, 13.9, 14.3, 14.9, 15.1, 15.8, 16.8, 17.3]
     idx = {int(round(t * FPS)) for t in ts}
     got = {int(round(t * FPS)): Image.fromarray(f).resize((480, 270)) for t, f in frames(idx)}
     sh = Image.new("RGB", (1920, 810))
