@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Cinematic cold open for "IPL Ko Kisne Maara?" (~14 s), joined in front of the finished video.
 
-Same treatment as the Centurion documentary's Virat hook (doc_video/virat_hook.py): real footage behind every line,
-blurred, graded warm-dark and slowly pushing in; big Inter Black words rising in one by one; a braam hit with a
-white flash and a short shake when a line lands; whooshes on the cuts; the last shot flashes and dissolves into the
-video's first frame.
+Style taken from the channel's Virat 82* (MCG 2022) hook: sharp real footage in smooth slow motion (motion-
+interpolated, not frame-blended), hard cuts every 1.5-2 s, thin letterbox bars, a dark moody grade with a heavy
+vignette, and a small two-line caption bottom-left behind a thin yellow bar (line 1 white, line 2 yellow,
+sentence case).
 
 VO (vo/hook_raw.mp3): "17 November, retention lists out. Crores ki deals, bade naam release... par ek sawal koi
 nahi pooch raha: kya IPL dheere dheere mar raha hai?"
 
-Footage is only from stretches of the clean IPL clips the main video doesn't use (nothing repeats).
+Footage: only stretches of the clean IPL clips (logos and score bars cropped) the main video doesn't use.
 
     python3 hook.py          ->  out/hook.mp4, out/IPL_Ko_Kisne_Maara_hook.mp4 (+ _hook_upload.mp4, 5 Mbit/s)
     python3 hook.py --sheet  ->  out/chk/hook_sheet.jpg
@@ -27,33 +27,38 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "kohli_countdown"))
 sys.path.insert(0, os.path.join(ROOT, "doc_video"))
 import sfx  # noqa: E402
-import virat_hook as vh  # noqa: E402  (grade_bg, braam, drone)
+import virat_hook as vh  # noqa: E402  (braam, drone)
 
 W, H, FPS = 1920, 1080, 30
 Y = (255, 222, 89)
-BLACK = "/usr/share/fonts/opentype/inter/InterDisplay-Black.otf"
+BOLD = "/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf"
 SR = sfx.SR
 OUT = os.path.join(HERE, "out")
-A = lambda n: os.path.join(HERE, "assets", n + ".mp4")  # noqa: E731
-OFF = 0.35                                    # VO starts here; phrase times below are hook time
-STAGGER, RISE = 0.07, 0.38
+CACHE = os.path.join(OUT, "hookcache")
+OFF = 0.35                       # VO starts here; all times below are hook time
+BAR = 42                         # letterbox bar height
 
-# (start, dur, (clip, src_start, speed), [(line start, size, [(word, accent)])], hit weight, blur_in, final)
-SEGS = [
-    (0.00, 3.75, ("kkr_clean", 6.6, 0.6),
-     [(0.35, 150, [("17", 1), ("NOVEMBER.", 1)]), (1.86, 104, [("RETENTION", 0), ("LISTS", 0), ("OUT.", 0)])],
-     0.75, True, False),
-    (3.75, 1.60, ("jadeja_six_clean", 8.4, 0.7),
-     [(4.14, 150, [("CRORES", 1), ("IN", 0), ("DEALS.", 0)])], 0.8, False, False),
-    (5.35, 1.70, ("reel_shot", 0.0, 0.95),
-     [(5.44, 140, [("BIG", 0), ("NAMES", 0)]), (5.95, 160, [("RELEASED.", 1)])], 1.0, False, False),
-    (7.05, 2.70, ("kkr_clean", 5.0, 0.6),
-     [(7.40, 96, [("BUT", 0), ("NOBODY", 0), ("IS", 0), ("ASKING...", 0)])], 0.0, False, False),
-    (9.75, 4.25, ("jadeja_spin_clean", 6.55, 0.48),
-     [(9.97, 150, [("IS", 0), ("IPL", 0)]), (11.35, 170, [("SLOWLY", 1), ("DYING?", 1)])], 1.3, False, True),
+# (start, dur, clip, src start, speed, push-in direction)
+SHOTS = [
+    (0.00, 1.80, "kkr_clean", 5.45, 0.45, 1),            # Eden pavilion stands
+    (1.80, 1.95, "kkr_clean", 8.00, 0.45, -1),           # floodlight tower (camera cuts at 9.0)
+    (3.75, 1.60, "jadeja_six_clean", 10.95, 0.40, 1),    # CSK crowd erupting
+    (5.35, 1.70, "jadeja_spin_clean", 12.75, 0.45, -1),  # helmet close-ups, batter and Dhoni
+    (7.05, 1.35, "livingstone_clean", 3.62, 0.45, 1),    # stadium lights at night
+    (8.40, 1.35, "reel_six", 0.05, 0.45, -1),            # bowler running in
+    (9.75, 1.65, "jadeja_spin_clean", 5.85, 0.40, 1),    # Dhoni keeping, batter waiting
+    (11.40, 2.60, "jadeja_spin_clean", 7.70, 0.30, 1),   # ball into the stumps, very slow
 ]
-DUR = SEGS[-1][0] + SEGS[-1][1]
-FLAT = 12.95  # flat-line beep under the last hit
+DUR = SHOTS[-1][0] + SHOTS[-1][1]
+# (line 1 in, line 2 in, out, line 1, line 2)
+CAPS = [
+    (0.40, 1.90, 3.70, "17 November.", "Retention lists out."),
+    (4.15, 5.45, 7.00, "Crores in deals.", "Big names released."),
+    (7.35, 8.30, 9.70, "But one question", "nobody is asking."),
+    (10.00, 11.40, 13.55, "Is IPL", "slowly dying?"),
+]
+HITS = [(1.90, 0.55), (5.45, 0.9), (11.40, 1.2)]   # soft braam under the key lines
+FLAT = 12.95
 
 
 def ease(x):
@@ -61,72 +66,89 @@ def ease(x):
     return 1 - (1 - x) ** 3
 
 
-# ----------------------------------------------------------------------------- text
-
-def place_words(lines):
-    """Word images laid out centred, one row per line; returns [(img, x, y, start time)] and each line's landing."""
-    rows = []
-    for t0, size, words in lines:
-        f = ImageFont.truetype(BLACK, size)
-        sp = f.getlength(" ")
-        ims = []
-        for txt, acc in words:
-            l, tt, r, b = f.getbbox(txt)
-            im = Image.new("RGBA", (r - l + 40, size + 60), (0, 0, 0, 0))
-            ImageDraw.Draw(im).text((20 - l, 20), txt, font=f, fill=Y if acc else (255, 255, 255))
-            ims.append(im)
-        rows.append((t0, size, ims, sum(i.width - 40 for i in ims) + sp * (len(ims) - 1), sp))
-    total_h = sum(int(r[1] * 1.12) for r in rows)
-    y = (H - total_h) // 2 - 40
-    placed, lands = [], []
-    for t0, size, ims, width, sp in rows:
-        x = (W - width) / 2
-        for wi, im in enumerate(ims):
-            placed.append((im, int(x) - 20, y - 20, t0 + wi * STAGGER))
-            x += im.width - 40 + sp
-        lands.append(t0 + (len(ims) - 1) * STAGGER + RISE * 0.7)
-        y += int(size * 1.12)
-    return placed, lands
-
-
-def words_layer(placed, t, exit_k):
-    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    for im, x, y, s in placed:
-        p = (t - s) / RISE
-        if p <= 0:
-            continue
-        e = ease(p)
-        w = im
-        blur = 9 * (1 - e) + 10 * exit_k
-        if blur > 0.4:
-            w = im.filter(ImageFilter.GaussianBlur(blur))
-        a = e * (1 - exit_k)
-        if a < 1:
-            w = w.copy()
-            w.putalpha(w.getchannel("A").point(lambda v, a=a: int(v * a)))
-        sh = Image.new("RGBA", w.size, (0, 0, 0, 0))
-        sh.putalpha(w.getchannel("A").filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.6)))
-        layer.alpha_composite(sh, (x + 4, int(y + 46 * (1 - e)) + 8))
-        layer.alpha_composite(w, (x, int(y + 46 * (1 - e))))
-    return layer
-
-
 # ----------------------------------------------------------------------------- footage
 
-def bg_frames(clip, src, speed, dur):
-    n = int(round(dur * FPS)) + 2
-    vf = f"setpts={1 / speed}*PTS,fps={FPS},scale=960:540"
-    p = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", str(src), "-i", A(clip), "-vf", vf, "-frames:v", str(n),
-                          "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
+def shot_file(k):
+    """Pre-render one shot: cut, slow down with motion interpolation (smooth slow-mo), 1080p, cached."""
+    t0, dur, clip, src, speed, _ = SHOTS[k]
+    os.makedirs(CACHE, exist_ok=True)
+    path = os.path.join(CACHE, f"shot{k}_{clip}_{src}_{speed}.mp4")
+    if not os.path.exists(path):
+        need = dur * speed + 0.2
+        vf = (f"setpts={1 / speed:.4f}*PTS,minterpolate=fps={FPS}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,"
+              f"scale={W}:{H}:flags=lanczos")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(src), "-t", f"{need:.3f}",
+                        "-i", os.path.join(HERE, "assets", clip + ".mp4"), "-vf", vf, "-an",
+                        "-c:v", "libx264", "-preset", "fast", "-crf", "14", path], check=True)
+    return path
+
+
+def read_frames(path, n):
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", path, "-frames:v", str(n), "-f", "rawvideo",
+                          "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
     last = None
     for _ in range(n):
-        buf = p.stdout.read(960 * 540 * 3)
-        if len(buf) == 960 * 540 * 3:
-            last = np.frombuffer(buf, np.uint8).reshape(540, 960, 3)
+        buf = p.stdout.read(W * H * 3)
+        if len(buf) == W * H * 3:
+            last = np.frombuffer(buf, np.uint8).reshape(H, W, 3)
         yield last
     p.stdout.close()
     p.wait()
 
+
+_yy, _xx = np.mgrid[0:H, 0:W].astype(np.float32)
+VIG = (1 - 0.72 * np.clip(((_xx - W / 2) / (W * 0.6)) ** 2 + ((_yy - H / 2) / (H * 0.62)) ** 2, 0, 1) ** 1.2)[..., None]
+LOW = np.clip((_yy - H * 0.45) / (H * 0.55), 0, 1)[..., None] * np.clip(1 - _xx / (W * 0.55), 0, 1)[..., None]
+
+
+def grade(fr, lt, dur, direction):
+    """Slow push-in, then dark cinematic grade: lifted contrast, less colour, teal shadows, heavy vignette."""
+    z = 1.02 + 0.05 * (lt / dur)
+    im = Image.fromarray(fr)
+    cw, ch = W / z, H / z
+    cx = W / 2 + direction * 20 * (lt / dur)
+    im = im.crop((cx - cw / 2, (H - ch) / 2, cx + cw / 2, (H + ch) / 2)).resize((W, H), Image.BILINEAR)
+    a = np.asarray(im, np.float32) / 255
+    lum = a.mean(-1, keepdims=True)
+    a = lum + (a - lum) * 0.78
+    a = np.clip((a - 0.5) * 1.18 + 0.47, 0, 1) ** 1.12
+    a = a * (1 - 0.18 * (1 - lum)) + np.array([0.0, 0.025, 0.04]) * (1 - lum)    # teal in the shadows
+    a = a * 0.84 * VIG
+    a = a * (1 - 0.45 * LOW)                                                   # room for the caption
+    return a * 255
+
+
+# ----------------------------------------------------------------------------- caption
+
+FONT = ImageFont.truetype(BOLD, 74)
+
+
+def caption(base, t):
+    for l1_in, l2_in, out_t, l1, l2 in CAPS:
+        if not (l1_in - 0.05 <= t < out_t):
+            continue
+        x, y = 92, 700
+        fade_out = 1 - ease((t - (out_t - 0.25)) / 0.25)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        bar_h = 0
+        for k, (txt, col, t_in) in enumerate([(l1, (255, 255, 255), l1_in), (l2, Y, l2_in)]):
+            p = ease((t - t_in) / 0.35)
+            if p <= 0:
+                continue
+            a = int(255 * p * fade_out)
+            yy = y + k * 88 + int(18 * (1 - p))
+            d.text((x + 34, yy), txt, font=FONT, fill=col + (a,))
+            bar_h = max(bar_h, (k + 1) * 88 * p)
+        if bar_h:
+            d.rectangle((x, y + 8, x + 6, y + 8 + bar_h - 12), fill=Y + (int(255 * fade_out),))
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sh.putalpha(lay.getchannel("A").filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * 0.55)))
+        base.alpha_composite(sh, (3, 5))
+        base.alpha_composite(lay)
+
+
+# ----------------------------------------------------------------------------- frames
 
 def first_frame():
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(OUT, "IPL_Ko_Kisne_Maara.mp4"), "-frames:v", "1",
@@ -135,65 +157,31 @@ def first_frame():
 
 
 def frames(only=None):
-    """Yield (hook time, RGB uint8 frame). `only`: set of frame indices to actually draw (contact sheet)."""
     film0 = first_frame()
-    rng = np.random.default_rng(7)
-    prev_last = None
-    for si, (t0, dur, (clip, src, speed), lines, weight, blur_in, final) in enumerate(SEGS):
-        placed, lands = place_words(lines)
-        hit = lands[-1] if weight else None
-        src_frames = bg_frames(clip, src, speed, dur)
+    for k, (t0, dur, clip, src, speed, direction) in enumerate(SHOTS):
         n = int(round(dur * FPS))
+        g0 = int(round(t0 * FPS))
+        if only is not None and not any(g0 <= i < g0 + n for i in only):
+            continue
+        src_frames = read_frames(shot_file(k), n)
         for i in range(n):
-            small = next(src_frames)
-            gi = int(round(t0 * FPS)) + i
-            if only is not None and gi not in only:
+            fr = next(src_frames)
+            if only is not None and g0 + i not in only:
                 continue
-            t = t0 + i / FPS
-            lt = i / FPS
-            frame = vh.grade_bg(small, lt, dur, blur_in)
-            if si == 3:                                        # the quiet line: darker
-                frame = frame * 0.62
-            if prev_last is not None and lt < 0.16:
-                a = lt / 0.16
-                frame = prev_last * (1 - a) + frame * a
-            exit_k = ease((lt - (dur - 0.24)) / 0.24) if not final else 0.0
-            layer = words_layer(placed, t, exit_k)
-            sc, jx, jy = 1.0, 0, 0
-            if hit is not None and 0 <= t - hit < 0.3:
-                k = t - hit
-                sc = 1.0 + 0.05 * np.exp(-k * 18)
-                amp = 12 * (1 - k / 0.3) * weight
-                jx, jy = rng.uniform(-amp, amp, 2)
-            if exit_k > 0:
-                sc *= 1 + 0.07 * exit_k
-            if sc != 1.0 or jx or jy:
-                bw, bh = int(W * sc), int(H * sc)
-                big = layer.resize((bw, bh), Image.BILINEAR)
-                ox, oy = int((bw - W) / 2 - jx), int((bh - H) / 2 - jy)
-                layer = big.crop((ox, oy, ox + W, oy + H))
-            la = np.asarray(layer, np.float32)
-            al = la[..., 3:4] / 255
-            frame = frame * (1 - al) + la[..., :3] * al
-            if hit is not None and t >= hit:
-                frame = frame + 255 * 0.2 * weight * np.exp(-(t - hit) * 14)
-            if lt < 0.12 and si:
-                frame = frame + 255 * 0.22 * (1 - lt / 0.12)
-            if final:
+            t, lt = t0 + i / FPS, i / FPS
+            a = grade(fr, lt, dur, direction)
+            if k == len(SHOTS) - 1:                       # flash-dissolve into the video's first frame
                 f_out = ease((lt - (dur - 0.5)) / 0.5)
                 if f_out > 0:
-                    frame = frame * (1 - f_out) + film0 * f_out + 255 * np.sin(np.pi * f_out) * 0.45
-            frame = np.clip(frame, 0, 255)
-            prev_last = frame
-            yield t, frame.astype(np.uint8)
-
-
-def hits():
-    out = []
-    for t0, dur, _, lines, weight, _, final in SEGS:
-        if weight:
-            out.append((place_words(lines)[1][-1], weight))
-    return out
+                    a = a * (1 - f_out) + film0 * f_out + 255 * np.sin(np.pi * f_out) * 0.35
+            base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
+            caption(base, t)
+            out = np.asarray(base.convert("RGB")).copy()
+            bar = BAR if k < len(SHOTS) - 1 else int(BAR * (1 - ease((lt - (dur - 0.5)) / 0.5)))
+            if bar:
+                out[:bar] = 0
+                out[H - bar:] = 0
+            yield t, out
 
 
 # ----------------------------------------------------------------------------- sound
@@ -213,16 +201,14 @@ def beep(dur, f=1000.0):
 def soundtrack(path):
     n = int(DUR * SR)
     tt = np.arange(n) / SR
-    bed = vh.drone(DUR) * np.interp(tt, [0, 7.0, 7.5, 9.7, 10.2, DUR], [0.16, 0.18, 0.05, 0.06, 0.15, 0.1])
+    bed = vh.drone(DUR) * np.interp(tt, [0, 7.0, 7.5, 9.7, 10.2, DUR], [0.17, 0.19, 0.06, 0.07, 0.16, 0.1])
     fx = np.zeros(n)
-    for t, w in hits():
-        at(fx, vh.braam(weight=min(w, 1.3)), t, 0.55 + 0.35 * w / 1.3)
-    for t0, *_ in SEGS[1:]:
-        at(fx, sfx.whoosh(0.4), t0 - 0.22, 0.22)
+    for t, w in HITS:
+        at(fx, vh.braam(weight=w), t - 0.03, 0.35 + 0.3 * w)
     for tb, g in [(10.1, 0.5), (10.95, 0.4), (11.95, 0.3)]:      # slowing heartbeat under "dheere dheere"
         at(fx, sfx.heartbeat(), tb, g)
     flat = beep(DUR - FLAT) * np.interp(np.linspace(0, 1, int((DUR - FLAT) * SR)), [0, 0.6, 1], [1, 1, 0])
-    at(fx, flat, FLAT, 0.07)
+    at(fx, flat, FLAT, 0.06)
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "vo", "hook_raw.mp3"), "-ac", "1",
                           "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     vo = np.frombuffer(raw, np.float32).astype(np.float64)
@@ -244,7 +230,7 @@ def soundtrack(path):
 # ----------------------------------------------------------------------------- render + join
 
 def sheet():
-    ts = [0.9, 2.6, 3.4, 4.7, 5.8, 6.6, 8.2, 9.3, 10.6, 11.9, 12.8, 13.8]
+    ts = [0.9, 2.6, 3.3, 4.6, 6.2, 6.8, 7.7, 9.0, 10.5, 11.8, 12.9, 13.8]
     idx = {int(round(t * FPS)) for t in ts}
     got = {int(round(t * FPS)): Image.fromarray(f).resize((480, 270)) for t, f in frames(idx)}
     sh = Image.new("RGB", (1920, 810))
@@ -271,6 +257,8 @@ def main():
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-c:v", "copy",
                     "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
                     "-shortest", hook], check=True)
+    if "--hook-only" in sys.argv:
+        return print("HOOK_ONLY", hook)
     full = os.path.join(OUT, "IPL_Ko_Kisne_Maara_hook.mp4")
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", hook, "-i", os.path.join(OUT, "IPL_Ko_Kisne_Maara.mp4"),
                     "-filter_complex", "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]", "-map", "[v]", "-map", "[a]",
