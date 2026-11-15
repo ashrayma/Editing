@@ -36,7 +36,7 @@ END_VO = 96.6                     # end card runs to here (VO ends 92.5)
 # clean retake at 23.4, and the stray "Dada..." after the last line
 CUT0, CUT1 = 18.15, 23.40
 CUT = CUT1 - CUT0
-VO_END = 92.55
+VO_END = 92.0                     # "...Dada khatam" ends 91.98; the stray "Dada" starts 92.02
 DUR = END_VO - OFF - CUT
 
 
@@ -646,6 +646,8 @@ def soundtrack(path):
     tt = np.array([vo_t(x) for x in np.arange(n) / SR])  # VO time
     full = load_vo()
     full[int(VO_END * SR):] = 0
+    f = int(0.04 * SR)
+    full[int(VO_END * SR) - f:int(VO_END * SR)] *= np.linspace(1, 0, f)
     xf = int(0.03 * SR)                                # short crossfade over the cut
     a, b = full[int(OFF * SR):int(CUT0 * SR)], full[int(CUT1 * SR):]
     a[-xf:] *= np.linspace(1, 0, xf)
