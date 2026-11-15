@@ -75,6 +75,7 @@ Changes and why:
 | Sreesanth's 5 wickets | sreesanth.jpg | |
 | India's first Test win in SA | india_win_wanderers_2006.jpg | the actual match |
 | "Naya coach aata hai, Greg Chappell" | dada_chappell_2005.jpg | Dada in front, Chappell watching behind |
+| "Poora desh pyaar se Dada bulata tha" (career montage) | dada_lords_1996.jpg | Lord's 1996 debut (Cornhill stumps, cable-knit sweater) — NOT used for the Wanderers innings |
 | "Laxman ka 281" ending | kolkata_2001_laxman_dravid.jpg | Kolkata 2001 |
 | (not used) | dada_roar_ndtv_watermark.jpg | NDTV watermark: not cropped out, send a clean copy to use it |
 
