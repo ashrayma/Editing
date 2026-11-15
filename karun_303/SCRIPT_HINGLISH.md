@@ -22,7 +22,7 @@ Rahane chotil the, toh jagah mili ek 25 saal ke ladke ko.
 381 gendein. 303 run. Not out.
 Virender Sehwag ke baad Test mein triple century banane wale — sirf doosre Indian.
 Aur ye unka pehla hi shatak tha. Pehle shatak ko teen sau mein badalne wale — duniya mein sirf teesre batsman.
-Us raat har channel par ek hi baat thi — ye ladka agle das saal Team India ka number paanch hai.
+Teen Test ke baad unka Test average tha — 160.
 
 ## [1:15] CEILING
 Ek batsman ko kaise aanka jaata hai? Uske pichhle score se. Yahi cricket ka niyam hai.

@@ -24,14 +24,14 @@ own words are kept wherever they were true.
 ---
 
 ## [0:40–1:15] चेन्नई, 303* (context ≤ 35 s)
-*On screen: number card **303\*** · "381 BALLS" · "SECOND INDIAN AFTER SEHWAG".*
+*On screen: number card **303\*** · "381 BALLS" · "SECOND INDIAN AFTER SEHWAG" · "TEST AVERAGE 160".*
 
 दिसंबर 2016। चेन्नई। इंग्लैंड के खिलाफ़ पांचवां टेस्ट।
 रहाणे चोटिल थे, तो जगह मिली एक 25 साल के लड़के को।
 381 गेंदें। 303 रन। नॉट आउट।
 वीरेंद्र सहवाग के बाद टेस्ट में तिहरा शतक बनाने वाले — सिर्फ़ दूसरे भारतीय।
 और ये उनका पहला ही शतक था। पहले शतक को तीन सौ में बदलने वाले — दुनिया में सिर्फ़ तीसरे बल्लेबाज़।
-उस रात हर चैनल पर एक ही बात थी — ये लड़का अगले दस साल टीम इंडिया का नंबर पांच है।
+तीन टेस्ट के बाद उनका टेस्ट औसत था — 160।
 
 ---
 
@@ -174,6 +174,7 @@ own words are kept wherever they were true.
 
 ## Sources
 - Dropped on 34 (Cook) and 217 (Root), survived a stumping chance off Moeen: Irish Times, Indian Sports News, Fox Sports
+- Test average 160 after three Tests (4, 13, 303*): The National
 - 303* off 381 balls, 5th Test, Chennai, Dec 2016; second Indian after Sehwag (309, 319): The Quint, India TV, Business Standard
 - Third to turn a maiden Test hundred into 300 (after Sobers, Simpson): Sport24 / Scroll
 - Benched for the Bangladesh Test, Hyderabad, 9 Feb 2017; second fit batsman dropped after a triple hundred; father: "fair to include Rahane"; Nair: "one game doesn't overshadow two years of hard work": The National, Deccan Chronicle, ft.lk
