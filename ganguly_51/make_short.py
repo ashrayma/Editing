@@ -574,7 +574,7 @@ BEATS = [
     (64.6, 70.2, P("dada_batting_bengal", 1.45, 1.62, (0.64, 0.2)), ov_balls),
     (70.2, 73.1, P("dada_bat_raised_test", 1.05, 1.15, (0.45, 0.36)), ov_notout),
     (73.1, 75.7, PL(), ov_249),
-    (75.7, 81.4, P("sreesanth", 1.3, 1.42, (0.24, 0.3)), ov_sree),
+    (75.7, 81.4, P("sreesanth", 1.5, 1.62, (0.22, 0.3)), ov_sree),
     (81.4, 86.0, PN("india_win_wanderers_2006", 0.4, 780), ov_win),
     (86.0, 92.6, P("dada_bat_raised_test", 1.25, 1.05, (0.45, 0.32)), ov_answer),
     (92.6, END_VO, PN("kolkata_2001_laxman_dravid", 0.28, 660), ov_end),
