@@ -1,5 +1,6 @@
 # करुण नायर — "303 ने बचाया नहीं, खत्म किया" (long-form, ~8.5 min)
 
+Devanagari reading copy. **The master is SCRIPT_HINGLISH.md** (Hinglish voiceover + English on-screen text).
 Fact-checked version of the creator's draft. Every number below is sourced (see the end). Lines in the creator's
 own words are kept wherever they were true.
 
@@ -124,6 +125,8 @@ own words are kept wherever they were true.
 बुरा नहीं। लेकिन 303 जैसा भी नहीं।
 और फिर वही हुआ।
 वेस्ट इंडीज़ सीरीज़। टीम आई। नाम नहीं था।
+चीफ़ सेलेक्टर अजीत अगरकर ने कहा — "हमें इंग्लैंड में करुण से ज़्यादा की उम्मीद थी।"
+ज़्यादा की उम्मीद। सुना आपने?
 करुण ने कहा — "मैं एक सीरीज़ से ज़्यादा का हक़दार था।"
 शायद थे।
 लेकिन ध्यान दीजिए — आठ साल बाद भी, इंग्लैंड की उस हर पारी को किस चीज़ से नापा गया?
@@ -131,7 +134,10 @@ own words are kept wherever they were true.
 
 ---
 
-## [7:15–8:10] PAYOFF + CTA
+## [7:15–7:25] CTA (सच से ठीक पहले)
+और असली सच बताने से पहले… अगर आप सच्चे क्रिकेट फ़ैन हो, तो इस चैनल को सब्सक्राइब ज़रूर करना।
+
+## [7:25–8:15] PAYOFF
 तो असली सच क्या है?
 करुण नायर को किसी ने नहीं मारा। न रहाणे ने। न सेलेक्टर्स ने।
 उनका सबसे बड़ा मुक़ाबला उनकी अपनी सबसे बड़ी पारी से था।
@@ -183,3 +189,5 @@ own words are kept wherever they were true.
 - Moved to Vidarbha; VHT 2024-25: 779 runs, 5 hundreds, avg 389.50; Vidarbha won the Ranji Trophy: ESPNcricinfo, LatestLY, Asianet
 - Test return 20 June 2025 after 3,006 days; 2025 series 0, 20, 31, 26, 40, 14, 57, 17 = 205 in 8 innings, Oval fifty: Cricket.com, CricTracker, Wisden
 - Left out for the West Indies series; "deserved more than one series": Gulf News, Cricket.com
+- Agarkar: "We expected more from Karun Nair in England": Times of Sports, Gulf News
+- No Test recall reported after the West Indies snub (checked 15 Nov 2026); he moved back to Karnataka: Gulf News
