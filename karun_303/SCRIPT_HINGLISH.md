@@ -10,8 +10,10 @@ Wo aadmi teen mahine baad apna aakhri Test khel raha tha — agle aath saal ke l
 Aur sabse buri baat — use khud pata nahi tha.
 
 Ye number aapne saikdon baar suna hai — 303.
-Aur har baar ek hi baat sunayi gayi hai — "Karun Nair ke saath anyaay hua."
-Lekin wo 303 unka bachaav nahi tha. Wo unki saza thi.
+Aur har baar ek hi kahani sunayi gayi hai —
+Haan, drop kar diya gaya, bada anyaay hua.
+Nahi. Wo kahani nahi hai. Drop hona toh sirf pehla kadam tha.
+Wo 303 unka bachaav nahi tha. Wo unki saza thi.
 Aur aath saal baad, jab wo wapas aaye — toh 303 bhi unke saath wapas aaya.
 
 ## [0:40] CHENNAI, 303*
