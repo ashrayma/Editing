@@ -140,7 +140,7 @@ def caption(base, t):
             yy = y + k * 88 + int(18 * (1 - p))
             d.text((x + 34, yy), txt, font=FONT, fill=col + (a,))
             bar_h = max(bar_h, (k + 1) * 88 * p)
-        if bar_h:
+        if bar_h > 14:
             d.rectangle((x, y + 8, x + 6, y + 8 + bar_h - 12), fill=Y + (int(255 * fade_out),))
         sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         sh.putalpha(lay.getchannel("A").filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * 0.55)))
