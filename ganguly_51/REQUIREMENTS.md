@@ -74,9 +74,10 @@ Changes and why:
 | SA pace attack | pollock_bowling, steyn_stump, ntini_bowling, nel_appeal, kallis_bowling | all five |
 | Sreesanth's 5 wickets | sreesanth.jpg | |
 | India's first Test win in SA | india_win_wanderers_2006.jpg | the actual match |
+| "Naya coach aata hai, Greg Chappell" | dada_chappell_2005.jpg | Dada in front, Chappell watching behind |
 | "Laxman ka 281" ending | kolkata_2001_laxman_dravid.jpg | Kolkata 2001 |
 | (not used) | dada_roar_ndtv_watermark.jpg | NDTV watermark: not cropped out, send a clean copy to use it |
 
 ## Still missing
-1. **Greg Chappell** (ideally with Dada, 2005)
+1. ~~Greg Chappell~~ received
 2. **Dada batting for India at the Wanderers, Dec 2006** (India whites; the Bengal photos can't stand in for the actual innings)
