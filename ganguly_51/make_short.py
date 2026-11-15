@@ -4,7 +4,8 @@
     python3 make_short.py            ->  out/Dada_51_Short.mp4  (1080x1920, 30 fps, -14 LUFS)
     python3 make_short.py --sheet    ->  out/chk/sheet.jpg      (contact sheet, no encode)
 
-Voice: the creator's own recording (vo/vo_raw.m4a). Beat times below are voiceover seconds, read from a Whisper
+Voice: the creator's own recording (vo/vo_raw.m4a), with two fumbles cut out (a false start at 18.15-23.4 s and a
+stray word after the last line). Beat times below are voiceover seconds, read from a Whisper
 transcript of the recording (vo/words.json) and silence detection. Visuals: the supplied photos (assets/, the small
 ones AI-upscaled into up/), Ken Burns on every photo, and graphics drawn here (51*, scoreboards, the email leak,
 the bowler cards, a subscribe CTA, the end question). Music and SFX are synthesised.
@@ -31,7 +32,23 @@ SR = sfx.SR
 OUT = os.path.join(HERE, "out")
 OFF = 1.9                         # VO seconds trimmed from the head (speech starts at 2.06)
 END_VO = 96.6                     # end card runs to here (VO ends 92.5)
-DUR = END_VO - OFF
+# fumbles cut out of the recording (VO seconds): the false start "Sourav Ganguly ne 2003 mein..." before the
+# clean retake at 23.4, and the stray "Dada..." after the last line
+CUT0, CUT1 = 18.15, 23.40
+CUT = CUT1 - CUT0
+VO_END = 92.55
+DUR = END_VO - OFF - CUT
+
+
+def v_t(t):
+    """VO seconds -> video seconds."""
+    return t - OFF - (CUT if t >= CUT1 else 0)
+
+
+def vo_t(v):
+    """Video seconds -> VO seconds."""
+    t = OFF + v
+    return t + CUT if t >= CUT0 else t
 Y, RED, WHITE, GREEN, INK = (255, 222, 89), (232, 48, 48), (255, 255, 255), (70, 200, 110), (10, 10, 14)
 ANTON = os.path.join(ROOT, "doc_video", "thumb", "fonts", "Anton-Regular.woff")
 BLACK = "/usr/share/fonts/opentype/inter/InterDisplay-Black.otf"
@@ -309,7 +326,7 @@ def path_graphic(base, t, t0):
     """2003 World Cup run: stages light up, ending on FINAL."""
     steps = ["GROUP", "SUPER SIX", "SEMI-FINAL", "FINAL"]
     for k, s in enumerate(steps):
-        tk = t0 + 0.55 * k
+        tk = t0 + 0.38 * k
         if t < tk:
             continue
         y = 520 + k * 200
@@ -435,13 +452,13 @@ def ov_statement(b, t):
 
 
 def ov_wc(b, t):
-    chip(b, t, 19.6, "2003 WORLD CUP", TEXT_Y - 40)
-    rise(b, t, 20.4, [("CAPTAIN", WHITE), ("SOURAV GANGULY", Y)], 100, TEXT_Y + 150)
+    chip(b, t, 23.5, "2003 WORLD CUP", TEXT_Y - 40)
+    rise(b, t, 24.1, [("CAPTAIN", WHITE), ("SOURAV GANGULY", Y)], 100, TEXT_Y + 150)
 
 
 def ov_path(b, t):
-    rise(b, t, 21.6, [("INDIA, 2003", (200, 202, 210))], 70, 330, BLACK)
-    path_graphic(b, t, 22.6)
+    rise(b, t, 25.6, [("INDIA, 2003", (200, 202, 210))], 70, 330, BLACK)
+    path_graphic(b, t, 25.75)
 
 
 def ov_dada(b, t):
@@ -556,9 +573,9 @@ BEATS = [
     (5.58, 8.4, P("dada_odi_walking_cap", 1.32, 1.45, (0.5, 0.2)), ov_51),
     (8.4, 15.0, PL(), ov_laugh),
     (15.0, 16.95, PL((0.6, 0.6, 0.7)), ov_notjust),
-    (16.95, 18.4, PL(), ov_statement),
-    (18.4, 21.5, P("dada_fistpump_wc2003", 1.05, 1.16, (0.5, 0.26)), ov_wc),
-    (21.5, 27.5, PL(), ov_path),
+    (16.95, 23.4, PL(), ov_statement),          # 18.15-23.4 is cut out of the recording
+    (23.4, 25.6, P("dada_fistpump_wc2003", 1.05, 1.16, (0.5, 0.26)), ov_wc),
+    (25.6, 27.5, PL(), ov_path),
     (27.5, 29.8, PN("dada_lords_1996", 0.36, 820), ov_dada),
     (29.8, 32.0, P("dada_chappell_2005", 1.12, 1.22, (0.42, 0.2), (0.7, 0.12)), ov_chappell),
     (32.0, 33.7, PL((0.8, 0.8, 0.9)), ov_email),
@@ -590,7 +607,7 @@ def beat_at(t):
 
 
 def frame(i):
-    t = OFF + i / FPS                      # VO time
+    t = vo_t(i / FPS)                      # VO time
     t0, t1, bg, ov = beat_at(t)
     lt, dur = t - t0, t1 - t0
     a = bg(t, lt, dur)
@@ -626,14 +643,20 @@ def load_vo():
 
 def soundtrack(path):
     n = int(DUR * SR)
-    tt = np.arange(n) / SR + OFF                       # VO time
-    vo = load_vo()[int(OFF * SR):][:n]
+    tt = np.array([vo_t(x) for x in np.arange(n) / SR])  # VO time
+    full = load_vo()
+    full[int(VO_END * SR):] = 0
+    xf = int(0.03 * SR)                                # short crossfade over the cut
+    a, b = full[int(OFF * SR):int(CUT0 * SR)], full[int(CUT1 * SR):]
+    a[-xf:] *= np.linspace(1, 0, xf)
+    b[:xf] *= np.linspace(0, 1, xf)
+    vo = np.concatenate([a, b])[:n]
     voice = np.zeros(n)
     voice[:len(vo)] = vo
     # music: sad pad through the fall (Dm), warm + pulse from the recall, lift at the win
     sad = st.pad(st.D_MINOR, DUR, cutoff=1100)[:n]
     warm = st.pad(st.WARM, DUR, cutoff=1600)[:n]
-    pulse = st.pulse(DUR, 92, lambda x: min(1.0, max(0.0, (x + OFF - 45) / 20)))[:n]
+    pulse = st.pulse(DUR, 92, lambda x: min(1.0, max(0.0, (vo_t(x) - 45) / 20)))[:n]
     m_sad = np.interp(tt, [OFF, 18, 29, 33, 42, 45, 60, 64.6, 92, END_VO], [0.5, 0.6, 0.5, 0.75, 0.75, 0.3, 0.2, 0.0, 0, 0])
     m_warm = np.interp(tt, [OFF, 42, 45, 60, 61, 64.6, 81, 86, 92.6, END_VO], [0.0, 0.0, 0.35, 0.35, 0.1, 0.45, 0.6, 0.75, 0.6, 0.0])
     m_pulse = np.interp(tt, [OFF, 44, 46, 59.5, 60, 64.6, 92.6, END_VO], [0, 0, 0.5, 0.6, 0.1, 0.6, 0.5, 0])
@@ -641,16 +664,16 @@ def soundtrack(path):
     bed += drone(DUR)[:n] * np.interp(tt, [OFF, 30, 40, 50, 58, 60, END_VO], [0.05, 0.08, 0.12, 0.16, 0.2, 0.05, 0.03])
     fx = np.zeros(n)
     for h in SLAMS:
-        at(fx, braam(weight=1.0 if h in (56.0, 70.3, 84.3) else 0.75), h - OFF - 0.02, 0.5)
+        at(fx, braam(weight=1.0 if h in (56.0, 70.3, 84.3) else 0.75), v_t(h) - 0.02, 0.5)
     for t0, *_ in BEATS[1:]:
-        at(fx, sfx.whoosh(0.35), t0 - OFF - 0.18, 0.12)
-    at(fx, sfx.tick(), 63.6 - OFF, 0.8)
-    at(fx, sfx.ding(0.9, 1320), 63.68 - OFF, 0.3)
+        at(fx, sfx.whoosh(0.35), v_t(t0) - 0.18, 0.12)
+    at(fx, sfx.tick(), v_t(63.6), 0.8)
+    at(fx, sfx.ding(0.9, 1320), v_t(63.68), 0.3)
     t = 64.8
     while t < 67.9:                                    # counter ticks
-        at(fx, sfx.tick(), t - OFF, 0.25)
+        at(fx, sfx.tick(), v_t(t), 0.25)
         t += 0.08
-    at(fx, sfx.crowd(4.0), 81.4 - OFF, 0.35)            # the win
+    at(fx, sfx.crowd(4.0), v_t(81.4), 0.35)            # the win
     duck = 1 - 0.5 * np.convolve(np.abs(voice) > 0.03, np.ones(int(0.2 * SR)) / int(0.2 * SR), "same")
     mix = voice + (bed * 0.55 + fx * 0.7) * duck
     tail = int(1.0 * SR)
@@ -667,9 +690,9 @@ def soundtrack(path):
 # ----------------------------------------------------------------------------- render
 
 def sheet():
-    ts = [3.0, 7.6, 11.5, 13.6, 17.4, 20.8, 24.6, 28.3, 31.3, 33.2, 37.0, 41.5, 44.0, 46.3, 48.0, 50.8, 55.0, 56.6,
+    ts = [3.0, 7.6, 11.5, 13.6, 17.4, 24.4, 26.8, 28.3, 31.3, 33.2, 37.0, 41.5, 44.0, 46.3, 48.0, 50.8, 55.0, 56.6,
           58.8, 63.8, 66.5, 69.0, 71.9, 74.5, 80.0, 84.6, 91.9, 94.6]
-    ims = [frame(int(round((t - OFF) * FPS))).resize((270, 480)) for t in ts]
+    ims = [frame(int(round(v_t(t) * FPS))).resize((270, 480)) for t in ts]
     sh = Image.new("RGB", (270 * 7, 480 * 4))
     for k, im in enumerate(ims):
         sh.paste(im, ((k % 7) * 270, (k // 7) * 480))
