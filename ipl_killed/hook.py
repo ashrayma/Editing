@@ -331,7 +331,7 @@ def soundtrack(path):
 MAIN = os.path.join(OUT, "IPL_Ko_Kisne_Maara.mp4")
 # TheCricketLounge sting, picture only, from our Sachin video (yellow bar, name wipe, light sweep)
 STING_SRC = os.path.join(ROOT, "doc_video", "final", "Centurion2003_The98_ViratHook.mp4")
-STING_IN, STING_OUT = 71.30, 73.65
+STING_IN, STING_OUT = 71.45, 73.65   # starts after the Sachin video's "98" has fully faded
 # "true cricket fan" CTA, cut into the main video's 1.5 s silence before the reveal
 # ("Ruko. Notice kiya? Chaaron suspects..." | CTA | "Impact Player: zyada runs...")
 CTA_CUT = 413.40
