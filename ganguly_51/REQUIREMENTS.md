@@ -15,13 +15,13 @@
 
 ## Script, tightened to the playbook (~80 s)
 Changes and why:
-- **Open on the claim, not "Koi mujhse pooche…"** (rule 2: first line = boldest claim, nothing about the creator; personal intros hold 36% vs 48% for a debate claim).
+- **Hook kept as the creator wrote it ("Koi mujhse pooche…")** by choice. To make up for it: first frame = Dada's face close-up (rule 1), and a big "51*" slams on screen on "51 not out", inside the first 3 s (rule 3).
 - **~300 → ~190 words** (rule 6: stories 60–90 s on YouTube, 45–75 s on IG). Kept every story beat; trimmed the list of five qualities to one line.
 - **Mid CTA says "subscribe"** for YouTube (record a second take with "page ko follow" for Instagram).
 - **Ending = two-legend question** (rules 7 + 9): "Dada ka 51 ya Laxman ka 281?"
 
-> Sourav Ganguly ka 51 not out… kisi bhi double hundred se bada tha.
-> Log hasenge: "Bhai, log 200, 300 maar dete hain… aur tum 51 pe atke ho?"
+> Koi mujhse pooche, meri favourite Test innings kaunsi hai? Main bolunga: Sourav Ganguly, 51 not out.
+> Log hasenge. "Bhai, yahan log 200, 300 maar dete hain… aur tum 51 pe atke ho?"
 > Toh suno. Ye 51 runs nahi the. Ye ek statement tha.
 >
 > 2003 World Cup final tak team ko le gaye. Poora desh pyaar se Dada bulata tha.
