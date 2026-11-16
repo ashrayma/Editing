@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the comment card carries it
+NO_CAPTION = {"q1", "s4"}  # comment card; and the silence line plays with no captions
 
 
 def captions():
@@ -733,12 +733,12 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>AGREE</span><i>or</i><span style="color:{Y}">DISAGREE?</span></div>'
+        f'<div class="mot" id="{i}q"><span>GUESS</span><i>#2 &amp;</i><span style="color:{Y}">#1</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Part 2 coming. Follow 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "Agree. Mr 360 👑"
+    txt = "#1 has to be... 👀"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
@@ -1028,73 +1028,142 @@ def follow_card(start, dur, t_follow):
     cue(t_follow + 0.05, "pop", 1.0)
 
 
+def speedgun(start, dur, val=161.3, top=170, t_hit=None):
+    """Speed gun: the needle tears past 150 and lands on 161.3 KM/H."""
+    import math
+    i = nid("sg")
+    ang = -120 + 240 * val / top
+    ticks = "".join(f'<line x1="400" y1="70" x2="400" y2="{100 if k % 2 else 125}" stroke="{"#ff3b3b" if k * 10 >= 150 else (Y if k * 10 >= 100 else "#666")}" '
+                    f'stroke-width="{6 if k % 2 == 0 else 3}" transform="rotate({-120 + 240 * k * 10 / top} 400 400)"/>'
+                    for k in range(top // 10 + 1))
+    labs = "".join(f'<text x="400" y="170" fill="#aaa" font-size="32" font-family="IDisp" font-weight="800" text-anchor="middle" '
+                   f'transform="rotate({-120 + 240 * v / top} 400 400)">{v}</text>' for v in (0, 50, 100, 150))
+    x0, y0 = 400 + 330 * math.sin(math.radians(-120)), 400 - 330 * math.cos(math.radians(-120))
+    x1, y1 = 400 + 330 * math.sin(math.radians(120)), 400 - 330 * math.cos(math.radians(120))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="meter avoid" style="z-index:{z()}"><svg width="800" height="560" viewBox="0 0 800 560">'
+        f'<path d="M {x0:.1f} {y0:.1f} A 330 330 0 1 1 {x1:.1f} {y1:.1f}" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="26"/>'
+        f'{ticks}{labs}<g id="{i}n"><line x1="400" y1="400" x2="400" y2="110" stroke="#ff3b3b" stroke-width="12" stroke-linecap="round"/>'
+        f'<circle cx="400" cy="400" r="26" fill="#ff3b3b"/></g></svg>'
+        f'<div class="mval"><b id="{i}v" style="color:#fff">0.0</b><span>KM/H · FASTEST EVER</span></div></div>')
+    th = t_hit or start + 0.8
+    d = max(0.6, th - start)
+    anim(f'tl.fromTo("#{i}",{{scale:0.7,opacity:0}},{{scale:1,opacity:1,duration:0.45,ease:"back.out(1.7)"}},{start})')
+    anim(f'tl.fromTo("#{i}n",{{rotation:-120,svgOrigin:"400 400"}},{{rotation:{ang:.1f},svgOrigin:"400 400",duration:{d:.2f},ease:"power4.in"}},{start + 0.1})')
+    anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{val},duration:{d:.2f},ease:"power4.in",onUpdate:()=>{{document.getElementById("{i}v").textContent=o.v.toFixed(1)}}}},{start + 0.1})}})()')
+    anim(f'tl.to("#{i}v",{{color:"{Y}",duration:0.1}},{start + 0.1 + d})')
+    anim(f'tl.fromTo("#{i}n",{{rotation:{ang + 6:.1f},svgOrigin:"400 400"}},{{rotation:{ang:.1f},svgOrigin:"400 400",duration:0.5,ease:"elastic.out(1.2,0.3)",immediateRender:false}},{start + 0.1 + d})')
+    cue(start + 0.1, "riser", 0.9)
+    cue(start + 0.1 + d, "boom", 1.0)
+    shake(start + 0.1 + d, 26)
+    flash(start + 0.1 + d, color="#ff3b3b", peak=0.35)
+
+
+def stumps_shatter(t):
+    """Stump-shatter beat: a red flash, a hard shake, an impact and a glitch."""
+    flash(t, color="#ff3b3b", peak=0.55)
+    shake(t, 30, 0.45)
+    cue(t, "impact", 1.0)
+    cue(t, "boom", 0.8)
+
+
+def teaser(num, line, start, dur, x, rot):
+    """Silhouette teaser card for the next parts: a dark card, a big '?', the rank and one clue."""
+    i = nid("tz")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tz avoid" style="left:{x}px;z-index:{z()}">'
+        f'<div class="tzr">#{num}</div><div class="tzq">?</div><div class="tzl">{html.escape(line)}</div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,rotation:{rot * 3}}},{{y:0,opacity:1,rotation:{rot},duration:0.5,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{i} .tzq",{{scale:0.6}},{{scale:1.08,duration:0.5,yoyo:true,repeat:{max(1, int(dur / 0.5))},ease:"sine.inOut"}},{start + 0.3})')
+    cue(start, "whoosh", 0.8)
+    cue(start + 0.2, "pop", 0.8)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK: the question card, then the answer
+    # ---------------- HOOK: the question, the contenders, then the bowler
     stage(*seg(0, s("h2", -0.03)), tone="#0b0b0c")
-    flicker(["ab_jbg_drive", "ab_test_roar", "ab_jbg_sweep", "ab_test_pull_cpt", "ab_jbg_loft", "ab_rcb"], *seg(0.05, 1.1))
-    stage(*seg(1.1, s("h2", -0.03)), tone="#0b0b0c")
-    post_card("Who is the toughest batter of this generation to bowl to?", *seg(0.15, s("h2", -0.03)), y=1040)
-    hero("ab_test_roar", ["AB DE", "VILLIERS"], *seg(s("h2", -0.03), s("h3", -0.03)))
-    credit(*seg(s("h2", -0.03), s("h3", -0.03)), GETTY)
-    flash(word("h2", 4), peak=0.5)
-    cue(word("h2", 4), "boom", 1.0)
-    stage(*seg(s("h3", -0.03), s("j1", -0.03)), tone="#0d0d0f")
-    title(["2 INNINGS"], *seg(s("h3"), s("j1", -0.03)), y=290, size=150, accent=(0,), sfx="impact")
-    two_cards("ab_jbg_drive", "ab_delhi_block", "JO'BURG · ODI", "DELHI · TEST", *seg(s("h3", 0.05), s("j1", -0.03)))
-    # ---------------- follow ask
-    stage(*seg(s("f1", -0.03), s("j1", -0.03)), tone="#0b0b0c")
-    title(["TRUE CRICKET FAN?"], *seg(word("f1", 5), s("j1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
-    follow_card(*seg(s("f1", 0.05), s("j1", -0.03)), t_follow=word("f1", 11))
-    # ---------------- Johannesburg
-    leak(s("j1", -0.3), 0.8)
-    ph("ab_jbg_drive", *seg(s("j1", -0.03), s("j2", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    chip("Johannesburg · January 2015", *seg(s("j1", 0.05), s("j2", -0.03)), x=None, y=300)
-    ph("ab_jbg_loft", *seg(s("j2", -0.03), s("j3", -0.03)), GETTY, side="left", push=(1.0, 1.1))
-    title(["vs WEST INDIES"], *seg(word("j2", 3), s("j3", -0.03)), y=300, size=110, accent=(0,), sfx="impact")
-    ph("ab_jbg_sweep", *seg(s("j3", -0.03), s("j4", -0.03)), GETTY, side=None, push=(1.15, 1.04))
-    speed(*seg(s("j3"), s("j4", -0.03)))
-    odo("50", *seg(s("j3"), s("j4", -0.03)), x=None, y=980, size=300, label="OFF 16 BALLS")
-    ph("ab_jbg_scoop", *seg(s("j4", -0.03), s("j6", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    odo("100", *seg(s("j4"), s("j5")), x=None, y=980, size=300, label="OFF 31 BALLS")
-    stamp("WORLD RECORDS ×2", *seg(s("j5"), s("j6", -0.03)), y=1040, size=110, rot=-4)
-    flash(s("j6", -0.03), peak=0.6)
-    stage(*seg(s("j6", -0.03), s("d1", -0.03)), tone="#0b0b0c")
-    card("ab_jbg_roar", *seg(s("j6", -0.03), s("d1", -0.03)), w=760, y=880, rot=-2)
-    credit(*seg(s("j6", -0.03), s("d1", -0.03)), GETTY)
-    odo("149", *seg(word("j6", 3) - 0.1, s("d1", -0.03)), x=None, y=250, size=280, label="OFF 44 BALLS")
-    scorebar([(s("j1"), "de VILLIERS  0 (0)"), (word("j3", 0), "de VILLIERS  50 (16)"), (word("j4", 1), "de VILLIERS  100 (31)"),
-              (word("j6", 3), "de VILLIERS  149 (44)")], *seg(s("j1"), s("d1", -0.05)))
-    # ---------------- Delhi: same year, the other AB
-    glitch(s("d1", -0.03), 0.4, "ab_test_defend")
-    ph("ab_delhi_faf", *seg(s("d1", -0.03), s("d3", -0.03)), side=None, fx="grey", push=(1.0, 1.06))
-    chip("Delhi · December 2015", *seg(word("d1", 4), s("d3", -0.03)), x=None, y=300)
-    title(["FIGHTING TO", "SAVE A TEST"], *seg(s("d2"), s("d3", -0.03)), y=1080, size=110, accent=(1,))
-    ph("ab_delhi_block", *seg(s("d3", -0.03), s("s1", -0.03)), side=None, fx="grey", push=(1.08, 1.0))
-    odo("297", *seg(word("d3", 2) - 0.1, s("s1", -0.03)), x=60, y=250, size=190, label="BALLS", color="#fff")
-    odo("43", *seg(word("d3", 5) - 0.1, s("s1", -0.03)), x=700, y=250, size=190, label="RUNS")
-    scorebar([(s("d3"), "de VILLIERS  0 (0)"), (word("d3", 5), "de VILLIERS  43 (297)")], *seg(s("d3"), s("s1", -0.05)))
-    # ---------------- same man, same year
-    then_now(*seg(s("s1", -0.03), s("p1", -0.03)), "ab_jbg_scoop", "ab_delhi_umesh", la="100 OFF 31", lb="43 OFF 297", grey=False)
-    credit(*seg(s("s1", -0.03), s("p1", -0.03)), "PHOTOS: GETTY IMAGES · BCCI")
-    stamp("SAME MAN. SAME YEAR.", *seg(s("s1"), s("s2")), y=890, size=82, rot=-3)
-    # ---------------- the bowler's problem
-    ph("ab_test_roar", *seg(s("p1", -0.03), s("p3", -0.03)), GETTY, side="up", push=(1.0, 1.08))
-    title(["WHICH AB IS", "WALKING OUT?"], *seg(s("p2"), s("p3", -0.03)), y=1080, size=110, accent=(1,), sfx="impact")
-    ph("ab_test_drive_hq", *seg(s("p3", -0.03), s("p4", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    stamp("FULL → DRIVE", *seg(word("p3", 2), s("p4", -0.03)), y=300, size=120, rot=-4)
-    ph("ab_test_pull_cpt", *seg(s("p4", -0.03), s("p5", -0.03)), GETTY, side="left", push=(1.0, 1.1))
-    stamp("SHORT → PULL", *seg(word("p4", 2), s("p5", -0.03)), y=300, size=120, rot=4)
-    ph("ab_ramp_ball", *seg(s("p5", -0.03), s("p6", -0.03)), GETTY, side="up", push=(1.0, 1.12))
-    speed(*seg(word("p5", 3), s("p6", -0.03)))
-    stamp("WIDE → SCOOP", *seg(word("p5", 6), s("p6", -0.03)), y=300, size=120, rot=-4)
-    stage(*seg(s("p6", -0.03), s("p7", -0.03)), tone="#0d0d0f")
-    title(["ATTACK", "OR OUTLAST?"], *seg(s("p6"), s("p7", -0.03)), y=270, size=130, accent=(1,))
-    two_cards("ab_jbg_loft", "ab_test_defend", "ATTACK", "OUTLAST", *seg(s("p6", 0.1), s("p7", -0.03)))
-    hero("ab_test_defend", ["AB:", "BOTH ✓"], *seg(s("p7", -0.03), s("q1", -0.03)))
-    credit(*seg(s("p7", -0.03), s("q1", -0.03)), GETTY)
+    title(["WHO HAD THE", "SCARIEST PRIME", "IN CRICKET?"], *seg(0.1, s("h2", -0.03)), y=640, size=110, accent=(1,), sfx="impact")
+    stage(*seg(s("h2", -0.03), s("h3", -0.03)), tone="#0d0d0f")
+    title(["MANY CONTENDERS…"], *seg(s("h2"), s("h3", -0.03)), y=330, size=96)
+    for k, (nm, w_, x_, y_, r_) in enumerate((("c_sachin", 5, 40, 520, -4), ("sh_dravid_out", 7, 560, 560, 3),
+                                              ("c_kohli", 9, 40, 980, 3), ("c_viv", 11, 560, 1020, -3))):
+        card(nm, *seg(word("h2", w_), s("h3", -0.03)), w=480, y=y_, x=x_, rot=r_, hmax=420)
+    for k, (nm, w_, x_, y_) in enumerate((("SACHIN", 5, 60, 900), ("DRAVID", 7, 580, 940), ("KOHLI", 9, 60, 1360), ("VIV", 11, 580, 1400))):
+        tag(nm, *seg(word("h2", w_) + 0.2, s("h3", -0.03)), x=x_, y=y_)
+    credit(*seg(s("h2"), s("h3", -0.03)), "PHOTOS: BCCI · GETTY IMAGES")
+    video3d("num3", *seg(s("h3", -0.03), s("h4", -0.03)))
+    cue(s("h3"), "boom", 1.0)
+    title(["IT'S A BOWLER"], *seg(word("h3", 4), s("h4", -0.03)), y=1180, size=110, accent=(0,), sfx="impact")
+    ph("sh_dravid_out", *seg(s("h4", -0.03), s("h5", -0.03)), GETTY, side="right", push=(1.0, 1.08))
+    title(["BATTERS", "LOOKED HELPLESS"], *seg(word("h4", 5), s("h5", -0.03)), y=300, size=100, accent=(1,), sfx="impact")
+    hero("sh_roar_99", ["SHOAIB", "AKHTAR"], *seg(s("h5", -0.03), s("e1", -0.03)))
+    credit(*seg(s("h5", -0.03), s("e1", -0.03)), GETTY)
+    flash(s("h5"), peak=0.6)
+    cue(s("h5"), "boom", 1.0)
+    # ---------------- Eden Gardens 1999
+    stage(*seg(s("e1", -0.03), s("e3", -0.03)), tone="#0b0b0c")
+    card("eden_crowd", *seg(s("e1", -0.03), s("e3", -0.03)), w=540, y=410, rot=-2, hmax=720)
+    credit(*seg(s("e1", -0.03), s("e3", -0.03)), "PHOTO: ARCHIVE")
+    chip("EDEN GARDENS · 1999", *seg(s("e1", 0.05), s("e3", -0.03)), x=None, y=330)
+    odo("100,000", *seg(s("e2"), s("e3", -0.03)), x=None, y=1150, size=140, label="FANS IN THE STANDS")
+    cue(s("e2"), "crowd", 1.0)
+    ph("sh_runup", *seg(s("e3", -0.03), s("e4", -0.03)), GETTY, side=None, push=(1.0, 1.12))
+    speed(*seg(s("e3", 0.2), s("e5", -0.03)))
+    title(["THE RAWALPINDI", "EXPRESS"], *seg(word("e3", 1), s("e4", -0.03)), y=300, size=110, accent=(1,), sfx="impact")
+    ph("sh_run_2011", *seg(s("e4", -0.03), s("e5", -0.03)), GETTY, side="right", push=(1.0, 1.1))
+    stamp("A STORM", *seg(word("e4", 6) - 0.05, s("e5", -0.03)), y=300, size=170, rot=-5)
+    ph("sh_load", *seg(s("e5", -0.03), word("e5", 4)), GETTY, side=None, push=(1.15, 1.04))
+    title(["THUNDERBOLT"], *seg(word("e5", 2), word("e5", 4)), y=300, size=120, accent=(0,), sfx="impact")
+    ph("sh_dravid_out", *seg(word("e5", 4), s("s1", -0.03)), GETTY, side=None, push=(1.2, 1.05), origin="25% 30%")
+    stumps_shatter(word("e5", 7))
+    stamp("DRAVID: BOWLED", *seg(word("e5", 7), s("s1", -0.03)), y=1100, size=110, color="#fff", rot=-4)
+    # ---------------- Sachin, first ball
+    stage(*seg(s("s1", -0.03), s("s2", -0.03)), tone="#0b0b0c")
+    title(["THEN…", "SACHIN TENDULKAR"], *seg(word("s1", 2), s("s2", -0.03)), y=300, size=104, accent=(1,), sfx="impact")
+    card("sh_sachin_six", *seg(word("s1", 2), s("s2", -0.03)), w=900, y=620, rot=-2)
+    credit(*seg(s("s1", -0.03), s("s2", -0.03)), GETTY)
+    chip("THE GREATEST OF HIS GENERATION", *seg(word("s1", 7), s("s2", -0.03)), x=None, y=1260)
+    ph("sh_appeal_wide", *seg(s("s2", -0.03), s("s3", -0.03)), GETTY, side="right", push=(1.0, 1.1))
+    title(["LETHAL", "YORKER"], *seg(word("s2", 5), s("s3", -0.03)), y=300, size=150, accent=(1,), sfx="impact")
+    stage(*seg(s("s3", -0.03), s("s4", -0.03)), tone="#0d0d0f")
+    title(["FIRST BALL"], *seg(word("s3", 2), word("s3", 7)), y=640, size=150, accent=(0,))
+    stumps_shatter(word("s3", 7))
+    stamp("BOWLED", *seg(word("s3", 7), s("s4", -0.03)), y=900, size=220, color="#ff3b3b", rot=-5)
+    glitch(word("s3", 7) + 0.05, 0.4)
+    # silence: crowd card goes grey, nothing moves but the type
+    stage(*seg(s("s4", -0.03), s("p1", -0.03)), tone="#050506")
+    card("eden_crowd", *seg(s("s4", -0.03), s("p1", -0.03)), w=520, y=360, rot=0, hmax=660)
+    title(["100,000", "IN SILENCE"], *seg(word("s4", 4), s("p1", -0.03)), y=1100, size=110, accent=(1,), sfx="soft")
+    # ---------------- his prime
+    ph("sh_roar_99", *seg(s("p1", -0.03), word("p1", 7)), GETTY, side=None, push=(1.12, 1.03))
+    title(["SHOAIB IN", "HIS PRIME"], *seg(word("p1", 2), word("p1", 7)), y=300, size=120, accent=(1,), sfx="impact")
+    flicker(["sh_appeal_wide", "sh_roar_99", "sh_arms_2011", "sh_load", "sh_runup", "sh_dravid_out"], *seg(word("p1", 7), s("p2", -0.03)))
+    for k, (txt, w_) in enumerate((("RAW", 7), ("FEROCIOUS", 8), ("BRUTALLY FAST", 9), ("FEARLESS", 13))):
+        stamp(txt, *seg(word("p1", w_), (word("p1", w_ + 1) if w_ < 13 else s("p2", -0.03))), y=880, size=150, rot=(-4, 4)[k % 2])
+    ph("sh_arms_smile", *seg(s("p2", -0.03), s("r1", -0.03)), GETTY, side="up", push=(1.0, 1.08))
+    title(["NOT FACING HIM…"], *seg(s("p2"), s("p3")), y=300, size=100)
+    stamp("SURVIVING HIM", *seg(word("p3", 4) - 0.05, s("r1", -0.03)), y=300, size=130, color="#ff3b3b", rot=-4)
+    # ---------------- 161.3
+    ph("sh_arms_2011", *seg(s("r1", -0.03), s("r2", -0.03)), GETTY, side="right", push=(1.0, 1.1))
+    title(["SOMETHING NO", "HUMAN HAD DONE"], *seg(word("r1", 7), s("r2", -0.03)), y=300, size=100, accent=(1,), sfx="impact")
+    stage(*seg(s("r2", -0.03), s("r4", -0.03)), tone="#0b0b0c")
+    title(["FASTEST DELIVERY", "IN HISTORY"], *seg(s("r2", 0.05), s("r4", -0.03)), y=290, size=96, accent=(1,))
+    speedgun(*seg(s("r2", 0.3), s("r4", -0.03)), t_hit=word("r3", 2) + 0.1)
+    ph("sh_load", *seg(s("r4", -0.03), s("f1", -0.03)), GETTY, side="left", push=(1.0, 1.1))
+    stamp("20+ YEARS. UNBEATEN.", *seg(word("r4", 5), s("f1", -0.03)), y=1060, size=90, rot=-3)
+    # ---------------- follow
+    stage(*seg(s("f1", -0.03), s("t1", -0.03)), tone="#0b0b0c")
+    title(["TRUE CRICKET FAN?"], *seg(word("f1", 2), s("t1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
+    follow_card(*seg(s("f1", 0.05), s("t1", -0.03)), t_follow=word("f1", 8))
+    # ---------------- only number three
+    ph("sh_roar_99", *seg(s("t1", -0.03), s("t2", -0.03)), GETTY, side=None, fx="grey", push=(1.1, 1.0))
+    title(["THE SCARIEST PART…"], *seg(s("t1"), word("t1", 5)), y=300, size=96)
+    stamp("HE'S ONLY #3", *seg(word("t1", 5), s("t2", -0.03)), y=1060, size=150, color="#ff3b3b", rot=-4)
+    cue(word("t1", 7), "boom", 1.0)
+    stage(*seg(s("t2", -0.03), s("q1", -0.03)), tone="#0b0b0c")
+    teaser(2, "Swing at 150 km/h", *seg(s("t2"), s("q1", -0.03)), x=70, rot=-3)
+    teaser(1, "Never wore a helmet", *seg(s("t3"), s("q1", -0.03)), x=560, rot=3)
     # ---------------- CTA
     video3d("logo", s("q1", -0.03), TOTAL - s("q1", -0.03))
     comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
@@ -1108,6 +1177,11 @@ def edit():
 
 
 EXTRA_CSS = f"""
+.tz{{position:absolute;top:560px;width:450px;height:640px;border-radius:30px;background:linear-gradient(160deg,#1c1c22,#0c0c0f);border:2px solid rgba(254,222,92,.4);box-shadow:0 40px 90px rgba(0,0,0,.6);text-align:center}}
+.tzr{{margin-top:40px;font:900 80px "IDisp";font-style:italic;color:{Y}}}
+.tzq{{font:900 280px/1 "IDisp";color:#fff;opacity:.9;margin-top:10px}}
+.tzl{{margin:20px 30px 0;font:800 36px/1.2 "IDisp";color:#fff}}
+
 .fcard{{position:absolute;left:110px;right:110px;top:620px;background:#16161a;border:2px solid rgba(254,222,92,.4);border-radius:34px;padding:50px 40px 46px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.65)}}
 .fav{{width:200px;height:200px;margin:0 auto 26px;border-radius:50%;background:#0b0b0c;border:5px solid {Y};display:flex;align-items:center;justify-content:center;overflow:hidden}}
 .fav img{{width:170px}}
