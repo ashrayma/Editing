@@ -15,3 +15,5 @@ vo/repeat_scan.log
 ref/
 vo/final_words.log
 vo/editpts.log
+vo/final_scan.log
+vo/final_scan.json

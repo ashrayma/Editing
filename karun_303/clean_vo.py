@@ -36,10 +36,10 @@ CUTS = [                                   # raw seconds removed: false starts a
     (152.13, 158.66),   # "aur phir Adil Rashid ki gend par chauka… score hua 300" said twice
     (258.68, 261.56),   # "kabhi dohraya na…" restarted
     (289.02, 291.51),   # "Len Hutton aur…" restarted
-    (313.25, 314.82),   # false start "Karun ne…" before "Karun ke apne pita ne…"
+    (311.25, 314.85),   # "aur ye sirf main nahi keh raha, Karun ne…" stopped; whole line retaken
     (328.56, 333.70),   # "lekin asli baat ye thi, 303 banane wale aadmi ko" said twice
     (400.18, 406.12),   # "kyunki iske baad jo hua… zyada ajeeb tha" said twice
-    (484.12, 487.44),   # "303 ki chamak se nikal kar" said twice
+    (484.30, 487.50),   # "303 ki chamak se nikal kar" said twice
     (538.16, 542.00),   # "aur cricket ne pehle…" restarted
     (616.85, 620.21),   # "poore desh ne kaha, ab bas kahani poori hogi" said twice
 ]
@@ -48,7 +48,7 @@ REPLACE = [(167.55, 178.85, "vo/fix_759.m4a", 1.45, 6.55)]   # "569" said for 75
 # lines recorded separately, inserted at a raw time (best takes only)
 INSERTS = [
     (207.60, "vo/ins_a.m4a", [(2.15, 17.85)]),                                   # "Match ke baad… wahi 303"
-    (599.60, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
+    (599.85, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
     (774.60, "vo/ins_c.m4a", [(2.0, 8.5), (13.75, 17.10), (24.45, 27.15), (27.45, 30.30)]),  # "…wo humara ho gaya"
 ]
 SIL_DB = 13.0       # silence: within this many dB of the room floor
@@ -92,6 +92,10 @@ class Env:
             else:
                 i += 1
 
+    def quiet(self, t):
+        i = int(round(t / 0.01))
+        return bool(self.db[max(0, i - 1):i + 2].max() < self.floor + 30)
+
     def silent(self, t):
         i = int(round(t / 0.01))
         return bool(self.sil[max(0, i - 2):i + 3].all())
@@ -104,7 +108,13 @@ class Env:
                 if c > 0 and self.silent(c):
                     print(f"  snapped {what}: {t:.2f} -> {c:.2f}")
                     return round(float(c), 2)
-        sys.exit(f"no silence within {reach}s of {t:.2f} ({what}) - fix this edit point by ear")
+        # words run together here: cut at the quietest 10 ms between them (never louder than a breath)
+        i0, i1 = int((t - 0.25) / 0.01), int((t + 0.25) / 0.01)
+        k = i0 + int(np.argmin(self.db[i0:i1]))
+        if self.db[k] > self.floor + 30:
+            sys.exit(f"no gap near {t:.2f} ({what}) - fix this edit point by ear")
+        print(f"  tight gap {what}: {t:.2f} -> {k * 0.01:.2f} ({self.db[k] - self.floor:.0f} dB over floor)")
+        return round(k * 0.01, 2)
 
     def runs(self, a, b, min_len=0.1):
         i, j1, out = int(a / 0.01), int(b / 0.01), []
@@ -216,7 +226,7 @@ def main():
     bad = 0                                       # every join must sit in silence
     for p in vmap:
         for t in p.get("raw", []):
-            if START + 0.1 < t < END - 0.1 and not env.silent(t):
+            if START + 0.1 < t < END - 0.1 and not env.quiet(t):
                 bad += 1
                 print(f"  join not in silence at raw {t:.2f}")
     y = np.concatenate(out)
