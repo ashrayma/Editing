@@ -66,6 +66,20 @@ def rms_voiced(x):
     return np.sqrt(np.mean(x[e > np.percentile(e, 60)] ** 2))
 
 
+# third pass: repeated phrases / false starts found by a word-level re-transcription of the tightened voice
+# (seconds in the tightened file; the first attempt is removed, the clean retake kept)
+CUTS2 = [
+    (62.87, 68.20),    # "Aranmula ke mandir ki taraf… snake boat paani mein palat gayi" said twice
+    (120.98, 125.94),  # "aur phir Adil Rashid ki gend par chauka… score hua 300" said twice
+    (228.55, 230.08),  # "kabhi dohraya na…" restarted
+    (255.99, 258.00),  # "Len Hutton aur…" restarted
+    (274.58, 275.70),  # false start "Karun ne…" before "Karun ke apne pita ne…"
+    (289.00, 292.62),  # "lekin asli baat ye thi, 303 banane wale aadmi ko" said twice
+    (353.20, 357.60),  # "kyunki iske baad jo hua… zyada ajeeb tha" said twice
+    (408.38, 411.12),  # "303 ki chamak se nikal kar" said twice
+    (447.00, 448.95),  # "aur cricket ne pehle…" restarted
+    (546.36, 549.18),  # "poore desh ne kaha, ab bas kahani poori hogi" said twice
+]
 TIGHT = 0.40      # second pass: every pause, measured against the voice itself, becomes this
 TIGHT_BREAK = 0.75
 
@@ -79,6 +93,26 @@ def BREAK_CLEAN(vmap):
                 out.append(p["clean"] + max(0.0, bt - p["raw"][0]))
                 break
     return out
+
+
+def cut_ranges(y, cuts):
+    """Remove (t0, t1) ranges with short crossfades; returns audio + retime map [[a0, a1, new0], ...]."""
+    keep, cur = [], 0.0
+    for c0, c1 in sorted(cuts):
+        keep.append((cur, c0))
+        cur = c1
+    keep.append((cur, len(y) / SR))
+    fade = int(0.012 * SR)
+    out, rmap, pos = [], [], 0.0
+    for a0, a1 in keep:
+        x = y[int(a0 * SR):int(a1 * SR)].copy()
+        if len(x) > 2 * fade:
+            x[:fade] *= np.linspace(0, 1, fade)
+            x[-fade:] *= np.linspace(1, 0, fade)
+        out.append(x)
+        rmap.append([round(a0, 3), round(a1, 3), round(pos, 3)])
+        pos += len(x) / SR
+    return np.concatenate(out), rmap
 
 
 def tighten(y, keep_near):
@@ -191,6 +225,8 @@ def main():
     y = np.concatenate(out)
     y, retime = tighten(y, [p["clean"] for p in vmap if p.get("fix")] + [bt for bt in BREAK_CLEAN(vmap)])
     json.dump(retime, open(os.path.join(HERE, "vo", "retime.json"), "w"))
+    y, retime2 = cut_ranges(y, CUTS2)
+    json.dump(retime2, open(os.path.join(HERE, "vo", "retime2.json"), "w"))
     pos = len(y) / SR
     y = y / (np.abs(y).max() + 1e-9) * 0.92
     pcm = (y * 32767).astype(np.int16)

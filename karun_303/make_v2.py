@@ -70,6 +70,48 @@ def back(t):
     return t
 
 
+# ---- shot anchors: old shot-list seconds -> final voice seconds, as one strictly increasing curve.
+# Auto anchors follow fwd(); REANCHOR pins a stretch of the shot list to words found in the final transcript
+# (vo/final_words.json), so a shot lands on the take that was kept, not on a take that was cut.
+REANCHOR = {}          # (old_lo, old_hi) -> [(old, final), ...]
+
+
+def _anchors():
+    xs = np.arange(0.0, 800.0, 0.05)
+    pts = []
+    for x in xs:
+        if any(lo < x < hi for lo, hi in REANCHOR):
+            continue
+        pts.append((float(x), fwd(float(x))))
+    for (lo, hi), pairs in REANCHOR.items():
+        pts += [(float(a), float(b)) for a, b in pairs]
+    pts.sort()
+    out = []
+    for a, b in pts:                       # keep it strictly increasing both ways
+        if out and b <= out[-1][1] + 1e-4:
+            out[-1] = (a, out[-1][1]) if b <= out[-1][1] else out[-1]
+            continue
+        out.append((a, b))
+    return np.array([p[0] for p in out]), np.array([p[1] for p in out])
+
+
+_AX = None
+
+
+def fwdS(t):
+    global _AX
+    if _AX is None:
+        _AX = _anchors()
+    return float(np.interp(t, _AX[0], _AX[1]))
+
+
+def backS(t):
+    global _AX
+    if _AX is None:
+        _AX = _anchors()
+    return float(np.interp(t, _AX[1], _AX[0]))
+
+
 # ============================================================================ sources
 
 def P(name):
@@ -453,7 +495,7 @@ def setup():
     VO_LEN = w.getnframes() / w.getframerate()
     tl, out, vo = [], 0.0, 0.0
     for h in HOLDS:
-        at = VO_LEN if h[0] >= 9999 else fwd(h[0])
+        at = VO_LEN if h[0] >= 9999 else fwdS(h[0])
         if at > vo + 1e-3:
             tl.append((out, out + at - vo, "vo", vo))
             out += at - vo
@@ -476,7 +518,7 @@ def locate(t):
 
 
 def out_of_old(v_old):
-    v = fwd(v_old)
+    v = fwdS(v_old)
     for t0, t1, kind, p in TL:
         if kind == "vo" and p <= v < p + (t1 - t0):
             return t0 + (v - p)
@@ -499,12 +541,12 @@ def frame(i):
         base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
         sub[4](base, t, slt, sdur)
     else:
-        v_old = back(p + (t - t0))
+        v_old = backS(p + (t - t0))
         sh = next((s for s in SH if s[0] <= v_old < s[1]), SH[-1])
         # shot-relative time measured in FINAL seconds so motion stays smooth across tightened pauses
         s_start = out_of_old(sh[0])
         lt = max(0.0, t - s_start)
-        dur = max(0.5, out_of_old(min(sh[1], back(VO_LEN))) - s_start)
+        dur = max(0.5, out_of_old(min(sh[1], backS(VO_LEN))) - s_start)
         bgf = section_bg(v_old) if getattr(sh[2], "is_plate", False) else sh[2]
         a = bgf(lt, dur)
         a = fx.transition(a, sh[3], lt)
