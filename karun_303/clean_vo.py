@@ -30,7 +30,7 @@ CUTS = [                                   # raw seconds removed: false starts a
     (508.70, 521.38),   # "Aur sach ye bhi hai" x2 + a take with the wrong word
     (572.85, 579.90),   # Vijay Hazare line with wrong numbers (789 / 399); retake has 779 / 389
     (703.60, 715.60),   # "aath saal baad bhi England ki us har pari ko" stopped; retake follows
-    (733.20, 750.35),   # "Toh asli sach kya hai" - three false starts; the clean take is at 750.4
+    (733.20, 758.20),   # "Toh asli sach kya hai…" - false starts + two full takes; the last clean take starts at 758.3
     # found by a word-level re-transcription (first attempt removed, clean retake kept)
     (75.85, 87.21),     # "Aranmula ke mandir ki taraf… snake boat paani mein palat gayi" said twice
     (152.13, 158.66),   # "aur phir Adil Rashid ki gend par chauka… score hua 300" said twice
@@ -40,6 +40,7 @@ CUTS = [                                   # raw seconds removed: false starts a
     (328.56, 333.70),   # "lekin asli baat ye thi, 303 banane wale aadmi ko" said twice
     (400.18, 406.12),   # "kyunki iske baad jo hua… zyada ajeeb tha" said twice
     (484.30, 487.50),   # "303 ki chamak se nikal kar" said twice
+    (430.20, 434.30),   # "aur tour ke baad West Indies series ki…" said twice
     (538.16, 542.00),   # "aur cricket ne pehle…" restarted
     (616.85, 620.21),   # "poore desh ne kaha, ab bas kahani poori hogi" said twice
 ]
