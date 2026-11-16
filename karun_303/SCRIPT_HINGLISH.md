@@ -61,6 +61,10 @@ Virender Sehwag ne likha — "Welcome to the 300 club. Baarah saal aath mahine s
 Sehwag ke baad triple century banane wale — sirf doosre Indian.
 Aur ye unka pehla hi shatak tha. Pehle shatak ko teen sau mein badalne wale — duniya mein sirf teesre batsman. Garry Sobers aur Bob Simpson ke baad.
 Teen Test ke baad unka Test average tha — 160.
+Match ke baad Karun se poocha gaya — teen sau ke kareeb pahunchkar pressure nahi tha?
+Karun ne kaha — "Jo aadmi maut ko itne kareeb se dekh chuka ho, uske liye century ka kya pressure?"
+Nadi ne unhe darr se azaad kar diya tha.
+Lekin ab ek nayi cheez unke peechhe padne wali thi — wahi 303.
 
 ## [4:00] CEILING
 ON SCREEN: "BEFORE CHENNAI: A YOUNG BATTER" / "AFTER CHENNAI: THE 303 GUY" → two questions: "WHY NO RUNS?" · "WHY NO 300?" → "303 = BENCHMARK"
@@ -166,6 +170,16 @@ Vijay Hazare Trophy — 779 run. Paanch shatak. Average 389.
 Paanch shatak ek hi season mein — record ki barabari.
 Phir Ranji Trophy final. Kerala ke khilaaf. Pehli pari mein 86. Doosri mein 135.
 Vidarbha champion.
+
+ON SCREEN: "IPL 2025 · DELHI CAPITALS" → **1,077 DAYS** → "vs MUMBAI INDIANS" → **89 (40) · 12 FOURS · 5 SIXES** → "18 OFF ONE BUMRAH OVER" → "DC LOST BY 12" → KARUN: "NO VALUE IF MY TEAM CAN'T WIN."
+Aur phir ek aur darwaza khula.
+April 2025. IPL. Delhi Capitals.
+1,077 din baad Karun Nair IPL mein utre. Saamne Mumbai Indians. Aur gend Jasprit Bumrah ke haath mein.
+40 gendein. 89 run. 12 chauke, 5 chhakke.
+Bumrah ke ek over mein 18 run — IPL mein kisi bhi Indian batsman ne Bumrah ke ek over mein isse zyada run nahi banaye.
+Aur phir bhi Delhi 12 run se haar gayi.
+Match ke baad Karun ne kaha — "Agar team na jeete, toh individual runs ki koi value nahi."
+Sochiye. Wo aadmi, jise saalon tak ek individual score se naapa gaya — wo khud keh raha tha, individual score ki koi value nahi.
 Aur phir England mein, India A ke liye, England Lions ke khilaaf — 204.
 Is baar deewar toot gayi.
 
@@ -226,6 +240,11 @@ Karun Nair ka career kisi ne khatam nahi kiya. Na Rahane ne. Na selectors ne.
 Unka sabse bada muqabla unki apni sabse badi pari se tha.
 Ek nadi ne unhe nahi roka. Ek squad list ne nahi roka. Aath saal ne nahi roka.
 Unhe roka — ek number ne.
+Aur sabse ajeeb baat — Karun ne khud kabhi 303 ko bojh nahi maana.
+Saalon baad unhone kaha — "Ye bojh nahi hai."
+Aur ye bhi kaha — "Ye kuch aisa hai, jo mujhse kabhi door nahi jaayega."
+Shayad wo sahi the. 303 kabhi door nahi gaya.
+Bas wo unka nahi raha. Wo humara ho gaya.
 Aur sabse kadvi baat —
 humne unhe bachaane ki koshish mein unhe aur phansa diya.
 Kyunki jab aap saalon tak kisi ke liye ladte hain, toh aap uske liye ek kirdaar bana dete hain.
@@ -276,6 +295,9 @@ Record the CTA a second time as: "Aur asli sach batane se pehle… agar aap sach
 - Test return Headingley 20 June 2025 after 3,006 days; 4-ball duck (Ollie Pope catch) & 20; Edgbaston 31 & 26; Lord's 40 & 14; left out of the 4th Test; Oval 57 (lbw Tongue, review wasted) & 17; 205 runs at 25.62: Free Press Journal, CricTracker, Sportskeeda, cricket.com
 - Kohli confirmed Rahane's return before Hyderabad: The National; India won Bengaluru 2017 and the series 2-1
 - Dinesh Karthik "career is well and truly back" after the Oval fifty; Nair "It was not like I was trying to prove anything": CricTracker
+- After the 303: "What's pressure of a ton after cheating death?": Business Standard / Tribune (PTI, 19 Dec 2016)
+- IPL 2025: first IPL game in 1,077 days; 89 off 40 (12x4, 5x6) vs MI; 18 off one Bumrah over (most by an Indian batter in an IPL over off Bumrah); DC lost by 12; "no value of individual runs if team loses": Tribune, Outlook, Cricket.com, IPLT20.com
+- "It is definitely not a burden" (Times Now interview, 2020, as reported) and "It is something that is never going to go away from me": CricketAddictor
 - Agarkar "We expected more from Karun Nair in England"; "deserved more than one series"; back to Karnataka, back-to-back Ranji hundreds Nov 2025: Times of Sports, Gulf News, Cricket.com, Wisden
 
 ## Photos received (assets/)
