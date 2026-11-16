@@ -38,6 +38,8 @@ Aranmula ke mandir ki taraf ja rahi ek snake boat — paani mein palat gayi.
 Boat par lagbhag sau log the. Do log kabhi wapas nahi aaye.
 Aur us boat par ek 24 saal ka cricketer bhi tha — Karun Nair.
 Unhe bacha liya gaya.
+Unke pita ne bas itna kaha — "Karun theek hai."
+Us din, us parivaar ke liye, ye do shabd duniya ki sabse badi khabar the.
 Socho. Paanch mahine baad, wahi ladka Test cricket ki sabse badi pariyon mein se ek khelne wala tha.
 Kismat ne usse ek baar bachaaya tha. Aur Chennai mein, England ne usse teen baar bachaaya.
 
@@ -88,6 +90,7 @@ Aur phir aaya agla Test. Bangladesh. Hyderabad. February 2017.
 303 ke theek baad wala Test.
 Aur Karun Nair — playing eleven mein nahi the.
 Ajinkya Rahane fit hokar laut aaye the.
+Captain Virat Kohli ne match se pehle hi saaf kar diya tha — Rahane wapas aayenge.
 Isse pehle bhi kuch batsman triple century ke baad agla Test nahi khele the. Len Hutton. Inzamam-ul-Haq.
 Lekin wo chotil the.
 Karun bilkul fit the. Aur phir bhi bahar.
@@ -101,11 +104,13 @@ Lekin asli baat ye thi —
 Bas kisi ke paas wo cheez honi chahiye thi, jo Karun ke paas nahi thi — samay.
 
 ## [6:30] AUSTRALIA 2017
-ON SCREEN: "vs AUSTRALIA · MARCH 2017" → innings ticker 26 · 0 · 23 · 5 → **54 RUNS · 4 INNINGS** → "FORM?" crossed → "PROOF." → "DHARAMSALA · 25 MAR 2017 · LAST TEST"
+ON SCREEN: "vs AUSTRALIA · MARCH 2017" → innings ticker 26 · 0 · 23 · 5 → **54 RUNS · 4 INNINGS** → "INDIA WIN SERIES 2-1" → "FORM?" crossed → "PROOF." → "DHARAMSALA · 25 MAR 2017 · LAST TEST"
 
 Phir aaya Australia. March 2017. Karun ko mauka mila — teen Test.
 Bengaluru mein 26 aur 0. Phir 23. Phir 5.
 Chaar pariyaan. 54 run.
+Aur mazedaar baat — team jeet rahi thi. Bengaluru ka Test India ne jeeta. Series 2–1 se jeeti.
+Aur jab team jeet rahi ho, toh sabse pehle sawaal usi par uthta hai, jiske balle se run nahi aa rahe.
 Ab dhyaan dijiye. Main ye nahi keh raha ki wo fail nahi hue. Wo hue.
 Main ye keh raha hoon ki unki failure ko 303 se naapa gaya. 30 se nahi.
 Chaar pariyon mein run na banna — ye normal hai. Har batsman ke saath hota hai.
@@ -167,7 +172,7 @@ Aur phir England mein, India A ke liye, England Lions ke khilaaf — 204.
 Is baar deewar toot gayi.
 
 ## [11:30] 2025 — THE RETURN, TEST BY TEST
-ON SCREEN: "HEADINGLEY · 20 JUNE 2025" → **3,006 DAYS** → "4-BALL DUCK" → innings ticker 0 · 20 · 31 · 26 · 40 · 14 → "4TH TEST: LEFT OUT" → "THE OVAL: 57 — FIRST TEST FIFTY IN 9 YEARS" → 17 → **205 RUNS · 8 INNINGS · AVG 25.62**
+ON SCREEN: "HEADINGLEY · 20 JUNE 2025" → **3,006 DAYS** → "4-BALL DUCK" → innings ticker 0 · 20 · 31 · 26 · 40 · 14 → "4TH TEST: LEFT OUT" → "THE OVAL: 57 — FIRST TEST FIFTY IN 9 YEARS" → DK quote card: "HIS CAREER IS WELL AND TRULY BACK." → 17 → KARUN: "I WASN'T TRYING TO PROVE ANYTHING." → **205 RUNS · 8 INNINGS · AVG 25.62**
 
 June 2025. England. Headingley.
 3,006 din baad Karun Nair ne phir se India ki Test cap pehni.
@@ -180,16 +185,20 @@ Har pari mein shuruaat. Aur har pari mein wahi sawaal — bas itna hi?
 Chautha Test — Karun bahar.
 Phir paanchva Test. The Oval. Aur aakhir mein — 57.
 Lagbhag nau saal baad Test cricket mein pachaas.
+Commentary mein Dinesh Karthik ne kaha — "Karun ka career ab sach mein wapas aa gaya hai."
 Lekin wahan bhi — Josh Tongue ki gend par LBW. Review liya. Review bhi gaya.
 Doosri pari — 17.
 Aath pariyaan. 205 run. Average 25.
 Bura nahi. Lekin 303 jaisa bhi nahi.
+Series ke baad Karun ne kaha — "Main kuch saabit karne ki koshish nahi kar raha tha."
+Shayad wo nahi kar rahe the.
+Lekin unke aas-paas har koi, har pari mein, unse ek hi cheez saabit karwa raha tha — ki 303 ek din nahi tha.
 
 ## [13:00] THE VERDICT
 ON SCREEN: "WEST INDIES SQUAD: NOT PICKED" → quote cards: AGARKAR: "WE EXPECTED MORE FROM KARUN IN ENGLAND." · KARUN: "I DESERVED MORE THAN ONE SERIES." → "BACK TO KARNATAKA · BACK-TO-BACK RANJI HUNDREDS"
 
 Aur phir wahi hua.
-West Indies series. Team aayi. Naam nahi tha.
+Kuch hafte baad, West Indies series ki team aayi. Naam nahi tha.
 Chief selector Ajit Agarkar ne kaha — "Humein England mein Karun se zyada ki ummeed thi."
 Zyada ki ummeed. Suna aapne?
 Karun ne kaha — "Main ek series se zyada ka haqdaar tha."
@@ -198,6 +207,13 @@ Aur wo laut gaye — Karnataka. Aur aate hi lagatar do Ranji shatak.
 Wahi kahani. Wahi chakkar.
 Lekin dhyaan dijiye — aath saal baad bhi, England ki us har pari ko kis cheez se naapa gaya?
 303 se.
+
+## [13:50] RE-HOOK
+ON SCREEN: "RAHANE?" · "THE SELECTORS?" · "LUCK?" → all three crossed out
+
+Ab tak aapne is kahani mein teen villain dhoondh liye honge.
+Rahane. Selectors. Kismat.
+Teeno galat hain.
 
 ## [14:00] CTA (just before the truth)
 ON SCREEN: "BEFORE THE TRUTH..." → **TRUE CRICKET FAN?** → channel card: SUBSCRIBE → SUBSCRIBED + bell
@@ -260,4 +276,6 @@ Record the CTA a second time as: "Aur asli sach batane se pehle… agar aap sach
 - Vidarbha 2023-24: 690 runs, Ranji final lost to Mumbai; 2024-25 VHT 779 runs, 5 hundreds, avg 389.50 (record-equalling five hundreds); Ranji final vs Kerala 86 & 135, Vidarbha's third title: ESPNcricinfo, WION, Tribune, Gulf News
 - India A vs England Lions, Canterbury 2025: 204: Gulf News
 - Test return Headingley 20 June 2025 after 3,006 days; 4-ball duck (Ollie Pope catch) & 20; Edgbaston 31 & 26; Lord's 40 & 14; left out of the 4th Test; Oval 57 (lbw Tongue, review wasted) & 17; 205 runs at 25.62: Free Press Journal, CricTracker, Sportskeeda, cricket.com
+- Kohli confirmed Rahane's return before Hyderabad: The National; India won Bengaluru 2017 and the series 2-1
+- Dinesh Karthik "career is well and truly back" after the Oval fifty; Nair "It was not like I was trying to prove anything": CricTracker
 - Agarkar "We expected more from Karun Nair in England"; "deserved more than one series"; back to Karnataka, back-to-back Ranji hundreds Nov 2025: Times of Sports, Gulf News, Cricket.com, Wisden
