@@ -73,7 +73,11 @@ def back(t):
 # ---- shot anchors: old shot-list seconds -> final voice seconds, as one strictly increasing curve.
 # Auto anchors follow fwd(); REANCHOR pins a stretch of the shot list to words found in the final transcript
 # (vo/final_words.json), so a shot lands on the take that was kept, not on a take that was cut.
-REANCHOR = {}          # (old_lo, old_hi) -> [(old, final), ...]
+REANCHOR = {          # (old_lo, old_hi) -> [(old, final), ...]; finals are word starts in vo/final_words.json
+    (60.0, 80.0): [(65.0, 63.35), (71.0, 66.6), (75.2, 68.25), (78.9, 70.3)],    # snake boat / ~100 / 2 / Karun
+    (125.0, 135.55): [(125.9, 115.7), (133.0, 118.4), (135.5, 119.6)],           # chauka… 300 lands on "teen sau"
+    (219.0, 229.0): [(220.2, 201.3), (224.0, 203.1), (228.0, 205.4)],            # why no runs / why no 300 / 303
+}
 
 
 def _anchors():
@@ -311,7 +315,7 @@ S(135.6, 140.0, cut("karun_303_chennai_2016", "303*", Y, 600), "flash", BX(136.0
 S(140.0, 145.4, tv(C("hug300", 0.45), "INDIA 759/7 DEC"), "whip", FLIP(140.2, 145.3, "759/7", "INDIA'S HIGHEST TEST TOTAL (THEN)", 430))
 S(145.4, 151.0, full(C("kohli300", 0.4)), "zoom", STK(145.5, 150.9, [("WON BY AN INNINGS & 75", 110, WHITE), ("SERIES 4-0", 140, Y)]))
 S(151.0, 160.9, panel("sehwag_getty_credit", 820), "whip", Q(153.2, 160.8, "Virender Sehwag", "Welcome to the 300 club. It was lonely here for 12 years 8 months.", 520))
-S(160.9, 165.2, pl(), "flash", STK(161.0, 165.1, [("MAIDEN HUNDRED", 100, WHITE), ("→ TRIPLE HUNDRED", 100, Y)]))
+S(160.9, 165.2, pl(), "flash", STK(161.0, 165.1, [("MAIDEN HUNDRED", 100, WHITE), ("TO TRIPLE HUNDRED", 100, Y)]))
 S(165.2, 169.4, pl(), "glitch", ODO(165.3, 169.3, "3RD", "EVER · AFTER SOBERS & SIMPSON", 300, 440))
 S(169.4, 173.3, pl((0.9, 0.7, 0.3)), "flash", CNT(169.5, 173.2, 160, "TEST AVERAGE AFTER 3 TESTS", 320, 450), hit=169.5)
 S(173.3, 178.0, full(C("walk381", 0.4), dark=0.8), "zoom", BX(173.6, 177.9, "\"NO PRESSURE AT 300?\"", 900, 60, WHITE))
@@ -321,14 +325,14 @@ S(185.0, 189.9, full(C("closeB", 0.4), dark=0.75), "zoom", K(185.1, 189.8, "BUT 
 S(189.9, 197.9, pl(), "flash", K(190.0, 197.8, "HOW IS A BATTER JUDGED? *BY* *HIS* *LAST* *SCORE.*", 104, 500))
 S(197.9, 209.0, pl((0.8, 0.8, 0.9)), "whip", BARS(198.0, 208.9, [4, 13, 303], ["MOHALI", "MUMBAI", "CHENNAI"], 2, "NEXT INNINGS: COMPARED TO 30? OR 303?"))
 S(209.0, 214.5, split([C("closeA", 0.2), C("closeD", 0.3)], ["BEFORE: A YOUNG BATTER", "AFTER: THE 303 GUY"]), "zoom")
-S(214.5, 220.2, pl(), "glitch", STK(214.6, 220.1, [("YOUNG BATTER → SCORE RUNS", 84, WHITE), ("303 GUY → PROVE IT WASN'T ONE DAY", 84, Y)]))
+S(214.5, 220.2, pl(), "glitch", STK(214.6, 220.1, [("YOUNG BATTER: SCORE RUNS", 84, WHITE), ("303 GUY: PROVE IT WASN'T ONE DAY", 84, Y)]))
 S(220.2, 224.0, pl((0.9, 0.5, 0.4)), "flash", K(220.3, 223.9, "WHY *NO* RUNS?", 160, 500), hit=220.3)
 S(224.0, 228.0, pl((0.9, 0.5, 0.4)), "flash", K(224.1, 227.9, "WHY *NO* 300?", 160, 500), hit=224.1)
 S(228.0, 232.6, cut("karun_303_chennai_2016", "BENCHMARK", WHITE, 300), "zoom", BX(228.3, 232.5, "NOT A CROWN.", 140, 70, WHITE))
 S(232.6, 238.5, full(C("armclose", 0.4), dark=0.85), "whip", TYPE(232.8, 238.4, "Your best day, declared \"never to be repeated\"…", 64, 880))
 S(238.5, 244.9, pl((0.6, 0.6, 0.8)), "zoom", K(238.6, 244.8, "…HOW WOULD *TOMORROW* FEEL?", 120, 500))
 # ---- NEXT TEST
-S(244.9, 251.3, pl((0.7, 0.7, 0.85)), "flash", LT(245.2, 251.2, "HYDERABAD · 9 FEB 2017", "the very next Test"), K(245.0, 251.2, "303 → NEXT TEST", 140, 440))
+S(244.9, 251.3, pl((0.7, 0.7, 0.85)), "flash", LT(245.2, 251.2, "HYDERABAD · 9 FEB 2017", "the very next Test"), K(245.0, 251.2, "303. THEN: NEXT TEST", 140, 440))
 S(251.3, 255.5, pl((0.9, 0.5, 0.4)), "glitch", STP(251.4, 255.4, "BENCHED", size=190), hit=251.4)
 S(255.5, 262.4, card(P("kohli_presser_2017"), 0.35), "whip", BX(255.8, 262.3, "KOHLI: \"RAHANE WILL COME BACK\"", 960, 60))
 S(262.4, 268.5, split([P("sehwag_triple_bat_helmet"), P("karun_303_chennai_2016")], ["HUTTON · INZAMAM: INJURED", "KARUN: FIT"]), "zoom")
