@@ -10,3 +10,5 @@ vo/vo_clean.wav
 vo/Karun303_VO_clean.mp3
 vo/*.wav
 cut/
+prep_v2.log
+vo/repeat_scan.log
