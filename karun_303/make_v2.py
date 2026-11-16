@@ -30,53 +30,44 @@ OUT = L.OUT
 
 # ============================================================================ time maps (old clean s -> final s)
 
-def load_maps():
-    maps = []
-    for f in ("retime.json", "retime2.json"):
-        p = os.path.join(HERE, "vo", f)
-        if os.path.exists(p):
-            maps.append(json.load(open(p)))
-    return maps
-
-
-MAPS = load_maps()
+OLD_MAP = json.load(open(os.path.join(HERE, "vo", "vo_map_v1.json")))   # the coordinates the shot list was written in
+NEW_MAP = json.load(open(os.path.join(HERE, "vo", "vo_map.json")))      # the voice as cleaned now
+_OLD_FIX = [i for i, p in enumerate(OLD_MAP) if p.get("fix")]
+_NEW_FIX = {p["fix"]: p for p in NEW_MAP if "fix" in p}
 
 
 def fwd(t):
-    for m in MAPS:
-        best = None
-        for a0, a1, n0 in m:
-            if a0 <= t <= a1:
-                best = n0 + (t - a0)
-                break
-            if t < a0:
-                best = n0
-                break
-        t = best if best is not None else m[-1][2] + (m[-1][1] - m[-1][0])
-    return t
-
-
-def back(t):
-    for m in reversed(MAPS):
-        best = None
-        for a0, a1, n0 in m:
-            if n0 <= t <= n0 + (a1 - a0):
-                best = a0 + (t - n0)
-                break
-            if t < n0:
-                best = a0
-                break
-        t = best if best is not None else m[-1][1]
-    return t
+    """Shot-list seconds -> seconds in the current clean voice, via the raw recording."""
+    i = max([k for k, p in enumerate(OLD_MAP) if p["clean"] <= t] or [0])
+    p = OLD_MAP[i]
+    if p.get("fix"):
+        n = _OLD_FIX.index(i)
+        nxt = OLD_MAP[i + 1]["clean"] if i + 1 < len(OLD_MAP) else p["clean"] + 1
+        frac = min(1.0, max(0.0, (t - p["clean"]) / max(0.1, nxt - p["clean"] - 0.25)))
+        q = _NEW_FIX[n]
+        return q["clean"] + frac * q["len"]
+    r = min(p["raw"][1], p["raw"][0] + max(0.0, t - p["clean"]))
+    prev_end = 0.0
+    for q in NEW_MAP:
+        if "raw" not in q:
+            prev_end = q["clean"] + q["len"]
+            continue
+        r0, r1 = q["raw"]
+        if r0 <= r <= r1:
+            return q["clean"] + (r - r0)
+        if r < r0:
+            return q["clean"] if q["clean"] - prev_end < 1.0 else prev_end
+        prev_end = q["clean"] + (r1 - r0)
+    return prev_end
 
 
 # ---- shot anchors: old shot-list seconds -> final voice seconds, as one strictly increasing curve.
 # Auto anchors follow fwd(); REANCHOR pins a stretch of the shot list to words found in the final transcript
 # (vo/final_words.json), so a shot lands on the take that was kept, not on a take that was cut.
-REANCHOR = {          # (old_lo, old_hi) -> [(old, final), ...]; finals are word starts in vo/final_words.json
-    (60.0, 80.0): [(65.0, 63.35), (71.0, 66.6), (75.2, 68.25), (78.9, 70.3)],    # snake boat / ~100 / 2 / Karun
-    (125.0, 135.55): [(125.9, 115.7), (133.0, 118.4), (135.5, 119.6)],           # chauka… 300 lands on "teen sau"
-    (219.0, 229.0): [(220.2, 201.3), (224.0, 203.1), (228.0, 205.4)],            # why no runs / why no 300 / 303
+REANCHOR = {          # (old_lo, old_hi) -> [(old, where the word really is, in shot-list seconds of the kept take)]
+    (60.0, 80.0): [(65.0, 71.95), (71.0, 75.2), (75.2, 76.85), (78.9, 79.05)],   # snake boat / ~100 / 2 / Karun
+    (125.0, 135.55): [(125.9, 130.8), (133.0, 133.5), (135.5, 134.6)],          # chauka… 300 lands on "teen sau"
+    (219.0, 229.0): [(220.2, 218.89), (224.0, 220.69), (228.0, 223.89)],        # why no runs / why no 300 / 303
 }
 
 
@@ -88,7 +79,7 @@ def _anchors():
             continue
         pts.append((float(x), fwd(float(x))))
     for (lo, hi), pairs in REANCHOR.items():
-        pts += [(float(a), float(b)) for a, b in pairs]
+        pts += [(float(a), fwd(float(b))) for a, b in pairs]
     pts.sort()
     out = []
     for a, b in pts:                       # keep it strictly increasing both ways
@@ -596,24 +587,16 @@ def soundtrack(path):
             at(voice, vo[int(p * L.SR):int((p + t1 - t0) * L.SR)], t0, 1.0)
         else:
             snd = p[3]
-            if snd == "crowd":
-                at(fxa, L.sfx.crowd(min(p[1], 10)), t0 + 0.1, 0.55)
-                at(fxa, L.braam(weight=1.2), t0, 0.45)
+            if snd == "crowd":                       # the 300 moment: crowd footage on screen
+                at(fxa, L.sfx.crowd(min(p[1], 10)), t0 + 0.1, 0.16)
+                at(fxa, L.braam(weight=1.0), t0, 0.22)
             elif snd == "crowd_s":
-                at(fxa, L.sfx.crowd(p[1]), t0, 0.28)
-            elif snd in ("hit", "chapter", "title"):
-                at(fxa, L.sfx.whoosh(0.4), t0 - 0.2, 0.25)
-                at(fxa, L.braam(weight=0.9), t0 + 0.02, 0.38)
-            elif snd == "cold":
-                at(fxa, L.sfx.crowd(p[1]), t0 + 0.5, 0.45)
-            for sub in p[2][1:]:
-                at(fxa, L.sfx.whoosh(0.3), t0 + sub[0] - 0.15, 0.18)
-    for sh in SH:                       # a whoosh on every cut, a hit on marked moments
-        ts = out_of_old(sh[0])
-        if ts > 0:
-            at(fxa, L.sfx.whoosh(0.3), ts - 0.15, 0.12 if sh[3] != "glitch" else 0.18)
+                at(fxa, L.sfx.crowd(p[1]), t0, 0.08)
+            elif snd in ("chapter", "title"):
+                at(fxa, L.braam(weight=0.7), t0 + 0.02, 0.14)
+    for sh in SH:                       # a soft hit only on the marked story beats (no sound on ordinary cuts)
         if sh[5] is not None:
-            at(fxa, L.braam(weight=0.8), out_of_old(sh[5]), 0.32)
+            at(fxa, L.braam(weight=0.6), out_of_old(sh[5]), 0.10)
     tt = np.arange(n) / L.SR
     o = out_of_old
     sad = L.st.pad(L.st.D_MINOR, TOTAL, cutoff=1100)[:n]
@@ -625,9 +608,9 @@ def soundtrack(path):
                        [0.0, 0.1, 0.4, 0.3, 0.05, 0.15, 0.45, 0.35, 0.3, 0.05, 0.1])
     m_pulse = np.interp(tt, [0, o(8), o(58), o(92), o(189), o(244), o(366), o(490), o(569), o(680), o(750), TOTAL],
                         [0.2, 0.45, 0.2, 0.45, 0.3, 0.45, 0.25, 0.5, 0.45, 0.15, 0.1, 0.0])
-    bed = sad * m_sad + warm * m_warm + pulse * m_pulse * 0.7 + L.drone(TOTAL)[:n] * 0.05
+    bed = sad * m_sad + warm * m_warm + pulse * m_pulse * 0.6
     duck = 1 - 0.55 * np.convolve(np.abs(voice) > 0.02, np.ones(int(0.25 * L.SR)) / int(0.25 * L.SR), "same")
-    mix = voice + (bed * 0.5 + fxa * 0.7) * duck
+    mix = voice + (bed * 0.42 + fxa * 0.6) * duck
     mix[-int(2 * L.SR):] *= np.linspace(1, 0, int(2 * L.SR))
     mix = np.tanh(mix * 1.05) * 0.95
     pcm = (np.clip(mix, -1, 1) * 32767).astype(np.int16)
