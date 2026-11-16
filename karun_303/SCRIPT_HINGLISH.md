@@ -277,3 +277,25 @@ Record the CTA a second time as: "Aur asli sach batane se pehle… agar aap sach
 - Kohli confirmed Rahane's return before Hyderabad: The National; India won Bengaluru 2017 and the series 2-1
 - Dinesh Karthik "career is well and truly back" after the Oval fifty; Nair "It was not like I was trying to prove anything": CricTracker
 - Agarkar "We expected more from Karun Nair in England"; "deserved more than one series"; back to Karnataka, back-to-back Ranji hundreds Nov 2025: Times of Sports, Gulf News, Cricket.com, Wisden
+
+## Photos received (assets/)
+| Beat | Photo | Note |
+|---|---|---|
+| Hook / Chennai 303* | karun_303_chennai_2016.jpg | the actual innings (Star jersey) |
+| Hook (Sehwag 309·319) | sehwag_triple_bat_helmet.jpg | sehwag_getty_credit.jpg NOT used (Getty credit) |
+| River | pampa_river.jpg | Pampa ghat; no capsized-boat photo, so the river + text cards carry it |
+| Hyderabad: Kohli confirms Rahane | kohli_presser_2017.jpg | 2017 presser |
+| Australia 2017 | karun_bowled_bengaluru_2017.jpg | stumps flying, Bengaluru: on "26 aur 0" |
+| 2018 tour | msk_prasad_kohli.jpg | Prasad quote beat |
+| 2018 Vihari debut | vihari_batting_2021era.jpg | ⚠️ Byju's kit = 2021, not his 2018 debut: face-crop only, no date on screen |
+| Lost years | karun_karnataka_bat_raised.jpg, karun_karnataka_helmet_raised.jpg | Karnataka |
+| "Dear Cricket" | dear_cricket_post.gif | post screenshot |
+| 2025 return | karun_arrival_2025.jpg, karun_nets_2025.jpg | Headingley build-up |
+| 4-ball duck | karun_duck_headingley_2025.jpg | England celebrating behind |
+| Edgbaston/Lord's starts | karun_walkoff_lords_2025.jpg, karun_dejected_2025_close.jpg | |
+| Oval 57 | karun_oval_fifty_2025.jpg | |
+| DK quote | dk_getty_credit.jpg | ⚠️ Getty credit in corner: not cropped; quote card only unless a clean copy comes |
+| Agarkar | agarkar_presser.jpg | |
+| Payoff portrait | karun_2025_portrait_fence.jpg | |
+
+Still missing (graphics cover them if not found): KL Rahul 199 · Rahane 2017 · Northamptonshire · Vidarbha / Ranji final 135 · India A 204 · India squad England 2018 · a clean DK photo.
