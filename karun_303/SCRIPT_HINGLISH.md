@@ -294,8 +294,11 @@ Record the CTA a second time as: "Aur asli sach batane se pehle… agar aap sach
 | 4-ball duck | karun_duck_headingley_2025.jpg | England celebrating behind |
 | Edgbaston/Lord's starts | karun_walkoff_lords_2025.jpg, karun_dejected_2025_close.jpg | |
 | Oval 57 | karun_oval_fifty_2025.jpg | |
-| DK quote | dk_getty_credit.jpg | ⚠️ Getty credit in corner: not cropped; quote card only unless a clean copy comes |
+| DK quote | dk_getty_credit.jpg | shown whole in a framed panel, Getty credit left visible (not cropped) |
+| KL Rahul 199 | kl_rahul_199_reuters_credit.jpg | Rahul crouched after falling on 199; framed panel, Reuters credit left visible |
+| County | karun_northants_hundred.jpg | Northamptonshire hundred |
+| Vidarbha | karun_vidarbha_hundred.jpg | Vidarbha hundred, bat + helmet raised |
 | Agarkar | agarkar_presser.jpg | |
 | Payoff portrait | karun_2025_portrait_fence.jpg | |
 
-Still missing (graphics cover them if not found): KL Rahul 199 · Rahane 2017 · Northamptonshire · Vidarbha / Ranji final 135 · India A 204 · India squad England 2018 · a clean DK photo.
+Still missing (graphics cover them): Rahane 2017 · India A 204 · India squad England 2018.
