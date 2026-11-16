@@ -437,7 +437,7 @@ beat(244.9, 255.5, BG_PL((0.7, 0.7, 0.85)),
      multi(lines(245.0, 251.0, [("HYDERABAD · 9 FEB 2017", WHITE), ("THE VERY NEXT TEST", Y)], 110, 480), stamp(251.4, 255.4, "BENCHED", 560)))
 beat(255.5, 262.4, BG_P("kohli_presser_2017", 1.05, 1.15, (0.5, 0.35)), cap(255.6, 262.3, "Kohli, before the Test:", "Rahane is back"))
 beat(262.4, 275.5, BG_PL(),
-     multi(lines(262.6, 271.0, [("HUTTON · INZAMAM", WHITE), ("MISSED THE NEXT TEST: INJURED", GREY)], 110, 470),
+     multi(lines(262.6, 272.5, [("HUTTON · INZAMAM", WHITE), ("MISSED THE NEXT TEST: INJURED", GREY)], 110, 470),
            lines(272.6, 275.4, [("KARUN: FIT. STILL OUT.", Y)], 120, 560)))
 beat(275.5, 299.1, BG_PL((0.6, 0.7, 0.8)),
      multi(lines(275.6, 284.0, [("RAHANE DID NOTHING WRONG.", WHITE), ("THE TEAM CHOSE EXPERIENCE.", Y)], 100, 500),
@@ -452,7 +452,7 @@ beat(328.9, 341.4, BG_P("karun_bowled_bengaluru_2017", 1.14, 1.24, (0.55, 0.4), 
      cap(329.0, 341.3, "India won the series 2-1.", "The questions found him."))
 beat(341.4, 366.0, BG_PL(),
      multi(lines(341.5, 350.8, [("MEASURED AGAINST 303.", WHITE), ("NOT AGAINST 30.", Y)], 120, 500),
-           stamp(358.0, 362.6, "NOT FORM", 440, GREY, -6, 110), lines(359.4, 365.9, [("PROOF.", RED)], 170, 650)))
+           lines(350.9, 357.9, [("4 BAD INNINGS: NORMAL.", WHITE), ("FOR THE 303 GUY? NOT FORM.", Y)], 110, 500), stamp(358.0, 362.6, "NOT FORM", 440, GREY, -6, 110), lines(359.4, 365.9, [("PROOF.", RED)], 170, 650)))
 beat(366.0, 383.2, BG_P("karun_bowled_bengaluru_2017", 1.2, 1.3, (0.6, 0.45), gray=0.9, dark=0.75),
      multi(cap(366.1, 374.0, "Dharamsala · 25 Mar 2017", "His last Test"), lines(374.5, 383.1, [("THE STORY SHOULD HAVE ENDED HERE.", WHITE), ("IT DIDN'T.", Y)], 96, 500)))
 # 2018
@@ -467,7 +467,7 @@ beat(424.0, 438.8, BG_PL(),
            lines(430.4, 438.7, [("FROM 303...", WHITE), ("TO A NAME ON A SQUAD LIST", Y)], 110, 500)))
 # LOST YEARS
 beat(438.8, 454.3, BG_PL((0.75, 0.75, 0.8)),
-     multi(big(443.8, 449.0, "\"CONSISTENCY\"", None, WHITE, 180, 470),
+     multi(lines(439.0, 443.7, [("2018 · 2019 · 2020 · 2021 · 2022", WHITE), ("EVERY SELECTION. ONE ANSWER:", Y)], 100, 500), big(443.8, 449.0, "\"CONSISTENCY\"", None, WHITE, 180, 470),
            lines(449.1, 454.2, [("FITNESS? CONSISTENCY.", GREY), ("TECHNIQUE? CONSISTENCY.", GREY), ("COMBINATION? CONSISTENCY.", GREY)], 80, 520, 0.3)))
 beat(454.3, 470.8, BG_P("karun_karnataka_helmet_raised", 1.1, 1.22, (0.5, 0.25), gray=0.5, dark=0.8),
      multi(cap(454.4, 462.6, "Dec 2022: out of", "even Karnataka's side"), photo_card(462.7, 470.7, "dear_cricket_post", 1000, 470)))
@@ -512,7 +512,7 @@ beat(650.2, 666.3, BG_P("karun_karnataka_bat_raised", 1.05, 1.16, (0.5, 0.3), da
      multi(quote(650.3, 654.6, "Karun Nair", "I deserved more than one series.", 330),
            cap(654.7, 660.8, "Back to Karnataka.", "Back-to-back Ranji hundreds."), big(661.9, 666.2, "303", "still the measure", Y, 280, 420)))
 beat(666.3, 672.9, BG_PL(),
-     multi(lines(666.4, 672.8, [("RAHANE?", WHITE), ("THE SELECTORS?", WHITE), ("LUCK?", WHITE)], 120, 520, 0.6),
+     multi(lines(666.4, 671.3, [("RAHANE?", WHITE), ("THE SELECTORS?", WHITE), ("LUCK?", WHITE)], 120, 520, 0.6),
            stamp(671.4, 672.8, "ALL WRONG", 540, RED, -6, 140)))
 beat(672.9, 680.0, BG_PL(), NOOV)   # CTA is drawn by the CTA hold below
 # TRUTH
@@ -520,7 +520,7 @@ beat(680.0, 702.1, BG_P("karun_303_chennai_2016", 1.18, 1.05, (0.5, 0.3), dark=0
      multi(lines(680.1, 690.0, [("WHO ENDED KARUN NAIR'S CAREER?", WHITE), ("NOT RAHANE. NOT THE SELECTORS.", Y)], 92, 500),
            lines(694.0, 702.0, [("NOT A RIVER. NOT A SQUAD LIST. NOT 8 YEARS.", GREY), ("A NUMBER.", Y)], 84, 520)))
 beat(702.1, 719.1, BG_PL(),
-     multi(quote(704.5, 710.6, "Karun Nair", "It is definitely not a burden.", 420),
+     multi(lines(702.2, 704.4, [("KARUN NEVER CALLED 303", WHITE), ("A BURDEN", Y)], 120, 500), quote(704.5, 710.6, "Karun Nair", "It is definitely not a burden.", 420),
            quote(710.7, 715.0, "Karun Nair", "It is something that is never going to go away from me.", 420),
            lines(715.1, 719.0, [("IT NEVER WENT AWAY.", WHITE), ("IT JUST STOPPED BEING HIS.", Y)], 100, 520)))
 beat(719.1, 740.8, BG_P("karun_dejected_2025_close", 1.05, 1.18, (0.5, 0.25), gray=0.4, dark=0.8),
@@ -799,9 +799,7 @@ def main():
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-c:v", "copy",
                     "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
                     "-shortest", full], check=True)
-    up = os.path.join(OUT, "Karun_303_upload.mp4")
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", full, "-c:v", "libx264", "-preset", "medium", "-b:v", "5M",
-                    "-maxrate", "6M", "-bufsize", "10M", "-pix_fmt", "yuv420p", "-c:a", "copy", up], check=True)
+    up = full  # the CRF 18 master is ~280 MB, already under the 400 MB upload limit
     print("LONG_DONE", full, up)
 
 
