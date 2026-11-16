@@ -1,0 +1,1435 @@
+{
+ "duration": 81.366,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Who had the scariest prime in the history of cricket?",
+   "caption": "Who had the scariest prime in the history of cricket?",
+   "start": 0.236,
+   "end": 2.708,
+   "words": [
+    [
+     "Who",
+     0.274,
+     0.436
+    ],
+    [
+     "had",
+     0.436,
+     0.598
+    ],
+    [
+     "the",
+     0.598,
+     0.76
+    ],
+    [
+     "scariest",
+     0.76,
+     1.085
+    ],
+    [
+     "prime",
+     1.085,
+     1.409
+    ],
+    [
+     "in",
+     1.409,
+     1.572
+    ],
+    [
+     "the",
+     1.572,
+     1.734
+    ],
+    [
+     "history",
+     1.734,
+     2.221
+    ],
+    [
+     "of",
+     2.221,
+     2.383
+    ],
+    [
+     "cricket?",
+     2.383,
+     2.708
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "There are many contenders, like Sachin Tendulkar, Rahul Dravid, Virat Kohli, Sir Vivian Richards.",
+   "caption": "There are many contenders, like Sachin Tendulkar, Rahul Dravid, Virat Kohli, Sir Vivian Richards.",
+   "start": 2.708,
+   "end": 6.717,
+   "words": [
+    [
+     "There",
+     2.708,
+     2.984
+    ],
+    [
+     "are",
+     2.984,
+     3.26
+    ],
+    [
+     "many",
+     3.26,
+     3.537
+    ],
+    [
+     "contenders,",
+     3.537,
+     3.952
+    ],
+    [
+     "like",
+     3.952,
+     4.228
+    ],
+    [
+     "Sachin",
+     4.228,
+     4.505
+    ],
+    [
+     "Tendulkar,",
+     4.505,
+     4.92
+    ],
+    [
+     "Rahul",
+     4.92,
+     5.196
+    ],
+    [
+     "Dravid,",
+     5.196,
+     5.473
+    ],
+    [
+     "Virat",
+     5.473,
+     5.749
+    ],
+    [
+     "Kohli,",
+     5.749,
+     6.025
+    ],
+    [
+     "Sir",
+     6.025,
+     6.164
+    ],
+    [
+     "Vivian",
+     6.164,
+     6.441
+    ],
+    [
+     "Richards.",
+     6.441,
+     6.717
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "But at number three, it's a bowler.",
+   "caption": "But at No. 3, it's a bowler.",
+   "start": 6.717,
+   "end": 8.396,
+   "words": [
+    [
+     "But",
+     6.717,
+     6.909
+    ],
+    [
+     "at",
+     6.909,
+     7.101
+    ],
+    [
+     "No.",
+     7.101,
+     7.293
+    ],
+    [
+     "3,",
+     7.293,
+     7.581
+    ],
+    [
+     "it's",
+     7.581,
+     7.773
+    ],
+    [
+     "a",
+     7.773,
+     7.965
+    ],
+    [
+     "bowler.",
+     7.965,
+     8.349
+    ]
+   ]
+  },
+  {
+   "id": "h4",
+   "text": "A bowler who made the greatest batters on earth look helpless.",
+   "caption": "A bowler who made the greatest batters on earth look helpless.",
+   "start": 8.413,
+   "end": 11.611,
+   "words": [
+    [
+     "A",
+     8.451,
+     8.648
+    ],
+    [
+     "bowler",
+     8.648,
+     9.043
+    ],
+    [
+     "who",
+     9.043,
+     9.241
+    ],
+    [
+     "made",
+     9.241,
+     9.636
+    ],
+    [
+     "the",
+     9.636,
+     9.833
+    ],
+    [
+     "greatest",
+     9.833,
+     10.228
+    ],
+    [
+     "batters",
+     10.228,
+     10.624
+    ],
+    [
+     "on",
+     10.624,
+     10.821
+    ],
+    [
+     "earth",
+     10.821,
+     11.018
+    ],
+    [
+     "look",
+     11.018,
+     11.216
+    ],
+    [
+     "helpless.",
+     11.216,
+     11.611
+    ]
+   ]
+  },
+  {
+   "id": "h5",
+   "text": "Shoaib Akhtar.",
+   "caption": "Shoaib Akhtar.",
+   "start": 11.611,
+   "end": 12.319,
+   "words": [
+    [
+     "Shoaib",
+     11.611,
+     11.819
+    ],
+    [
+     "Akhtar.",
+     11.819,
+     12.234
+    ]
+   ]
+  },
+  {
+   "id": "e1",
+   "text": "Eden Gardens, in nineteen ninety nine.",
+   "caption": "Eden Gardens, in 1999.",
+   "start": 12.45,
+   "end": 14.441,
+   "words": [
+    [
+     "Eden",
+     12.498,
+     12.842
+    ],
+    [
+     "Gardens,",
+     12.842,
+     13.187
+    ],
+    [
+     "in",
+     13.187,
+     13.359
+    ],
+    [
+     "1999.",
+     13.359,
+     14.394
+    ]
+   ]
+  },
+  {
+   "id": "e2",
+   "text": "A hundred thousand roaring Indian fans pack the stands.",
+   "caption": "100,000 roaring Indian fans pack the stands.",
+   "start": 14.458,
+   "end": 17.439,
+   "words": [
+    [
+     "100,000",
+     14.495,
+     16.054
+    ],
+    [
+     "roaring",
+     16.054,
+     16.4
+    ],
+    [
+     "Indian",
+     16.4,
+     16.746
+    ],
+    [
+     "fans",
+     16.746,
+     16.919
+    ],
+    [
+     "pack",
+     16.919,
+     17.092
+    ],
+    [
+     "the",
+     17.092,
+     17.265
+    ],
+    [
+     "stands.",
+     17.265,
+     17.439
+    ]
+   ]
+  },
+  {
+   "id": "e3",
+   "text": "The Rawalpindi Express begins his long, menacing run-up,",
+   "caption": "The Rawalpindi Express begins his long, menacing run-up,",
+   "start": 17.439,
+   "end": 20.91,
+   "words": [
+    [
+     "The",
+     17.439,
+     17.652
+    ],
+    [
+     "Rawalpindi",
+     17.652,
+     18.506
+    ],
+    [
+     "Express",
+     18.506,
+     18.933
+    ],
+    [
+     "begins",
+     18.933,
+     19.359
+    ],
+    [
+     "his",
+     19.359,
+     19.574
+    ],
+    [
+     "long,",
+     19.574,
+     19.787
+    ],
+    [
+     "menacing",
+     19.787,
+     20.427
+    ],
+    [
+     "run-up,",
+     20.427,
+     20.854
+    ]
+   ]
+  },
+  {
+   "id": "e4",
+   "text": "hair flying, arms wide, like a storm charging straight at you.",
+   "caption": "hair flying, arms wide, like a storm charging straight at you.",
+   "start": 20.927,
+   "end": 24.456,
+   "words": [
+    [
+     "hair",
+     20.965,
+     21.21
+    ],
+    [
+     "flying,",
+     21.21,
+     21.457
+    ],
+    [
+     "arms",
+     21.457,
+     21.703
+    ],
+    [
+     "wide,",
+     21.703,
+     22.194
+    ],
+    [
+     "like",
+     22.194,
+     22.687
+    ],
+    [
+     "a",
+     22.687,
+     22.932
+    ],
+    [
+     "storm",
+     22.932,
+     23.178
+    ],
+    [
+     "charging",
+     23.178,
+     23.67
+    ],
+    [
+     "straight",
+     23.67,
+     23.916
+    ],
+    [
+     "at",
+     23.916,
+     24.162
+    ],
+    [
+     "you.",
+     24.162,
+     24.408
+    ]
+   ]
+  },
+  {
+   "id": "e5",
+   "text": "His first thunderbolt rips Rahul Dravid's leg stump clean out of the ground.",
+   "caption": "His first thunderbolt rips Rahul Dravid's leg stump clean out of the ground.",
+   "start": 24.489,
+   "end": 28.431,
+   "words": [
+    [
+     "His",
+     24.526,
+     24.753
+    ],
+    [
+     "first",
+     24.753,
+     24.98
+    ],
+    [
+     "thunderbolt",
+     24.98,
+     25.66
+    ],
+    [
+     "rips",
+     25.66,
+     25.888
+    ],
+    [
+     "Rahul",
+     25.888,
+     26.342
+    ],
+    [
+     "Dravid's",
+     26.342,
+     26.795
+    ],
+    [
+     "leg",
+     26.795,
+     27.023
+    ],
+    [
+     "stump",
+     27.023,
+     27.25
+    ],
+    [
+     "clean",
+     27.25,
+     27.476
+    ],
+    [
+     "out",
+     27.476,
+     27.704
+    ],
+    [
+     "of",
+     27.704,
+     27.93
+    ],
+    [
+     "the",
+     27.93,
+     28.158
+    ],
+    [
+     "ground.",
+     28.158,
+     28.385
+    ]
+   ]
+  },
+  {
+   "id": "s1",
+   "text": "And then Sachin Tendulkar walks out, the greatest batter of his generation.",
+   "caption": "And then Sachin Tendulkar walks out, the greatest batter of his generation.",
+   "start": 28.498,
+   "end": 31.923,
+   "words": [
+    [
+     "And",
+     28.545,
+     28.714
+    ],
+    [
+     "then",
+     28.714,
+     28.883
+    ],
+    [
+     "Sachin",
+     28.883,
+     29.221
+    ],
+    [
+     "Tendulkar",
+     29.221,
+     29.727
+    ],
+    [
+     "walks",
+     29.727,
+     29.896
+    ],
+    [
+     "out,",
+     29.896,
+     30.065
+    ],
+    [
+     "the",
+     30.065,
+     30.234
+    ],
+    [
+     "greatest",
+     30.234,
+     30.572
+    ],
+    [
+     "batter",
+     30.572,
+     30.909
+    ],
+    [
+     "of",
+     30.909,
+     31.078
+    ],
+    [
+     "his",
+     31.078,
+     31.247
+    ],
+    [
+     "generation.",
+     31.247,
+     31.923
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "Shoaib Akhtar fires in a blistering, lethal yorker,",
+   "caption": "Shoaib Akhtar fires in a blistering, lethal yorker,",
+   "start": 31.956,
+   "end": 34.654,
+   "words": [
+    [
+     "Shoaib",
+     32.003,
+     32.192
+    ],
+    [
+     "Akhtar",
+     32.192,
+     32.571
+    ],
+    [
+     "fires",
+     32.571,
+     32.949
+    ],
+    [
+     "in",
+     32.949,
+     33.139
+    ],
+    [
+     "a",
+     33.139,
+     33.328
+    ],
+    [
+     "blistering,",
+     33.328,
+     33.896
+    ],
+    [
+     "lethal",
+     33.896,
+     34.275
+    ],
+    [
+     "yorker,",
+     34.275,
+     34.654
+    ]
+   ]
+  },
+  {
+   "id": "s3",
+   "text": "and the very first ball Sachin faces smashes into his middle stump.",
+   "caption": "and the very first ball Sachin faces smashes into his middle stump.",
+   "start": 34.654,
+   "end": 38.588,
+   "words": [
+    [
+     "and",
+     34.654,
+     34.869
+    ],
+    [
+     "the",
+     34.869,
+     35.085
+    ],
+    [
+     "very",
+     35.085,
+     35.517
+    ],
+    [
+     "first",
+     35.517,
+     35.733
+    ],
+    [
+     "ball",
+     35.733,
+     35.949
+    ],
+    [
+     "Sachin",
+     35.949,
+     36.381
+    ],
+    [
+     "faces",
+     36.381,
+     36.812
+    ],
+    [
+     "smashes",
+     36.812,
+     37.244
+    ],
+    [
+     "into",
+     37.244,
+     37.676
+    ],
+    [
+     "his",
+     37.676,
+     37.892
+    ],
+    [
+     "middle",
+     37.892,
+     38.325
+    ],
+    [
+     "stump.",
+     38.325,
+     38.541
+    ]
+   ]
+  },
+  {
+   "id": "s4",
+   "text": "A hundred thousand people fall into stunned, deafening silence.",
+   "caption": "100,000 people fall into stunned, deafening silence.",
+   "start": 38.687,
+   "end": 42.611,
+   "words": [
+    [
+     "100,000",
+     38.725,
+     40.295
+    ],
+    [
+     "people",
+     40.295,
+     40.644
+    ],
+    [
+     "fall",
+     40.644,
+     40.819
+    ],
+    [
+     "into",
+     40.819,
+     41.168
+    ],
+    [
+     "stunned,",
+     41.168,
+     41.517
+    ],
+    [
+     "deafening",
+     41.517,
+     42.041
+    ],
+    [
+     "silence.",
+     42.041,
+     42.564
+    ]
+   ]
+  },
+  {
+   "id": "p1",
+   "text": "That was Shoaib Akhtar in his prime. Raw, ferocious, brutally fast and absolutely fearless.",
+   "caption": "That was Shoaib Akhtar in his prime. Raw, ferocious, brutally fast and absolutely fearless.",
+   "start": 42.776,
+   "end": 47.946,
+   "words": [
+    [
+     "That",
+     42.814,
+     43.017
+    ],
+    [
+     "was",
+     43.017,
+     43.221
+    ],
+    [
+     "Shoaib",
+     43.221,
+     43.424
+    ],
+    [
+     "Akhtar",
+     43.424,
+     43.831
+    ],
+    [
+     "in",
+     43.831,
+     44.034
+    ],
+    [
+     "his",
+     44.034,
+     44.238
+    ],
+    [
+     "prime.",
+     44.238,
+     44.644
+    ],
+    [
+     "Raw,",
+     44.644,
+     44.848
+    ],
+    [
+     "ferocious,",
+     44.848,
+     45.458
+    ],
+    [
+     "brutally",
+     45.458,
+     46.068
+    ],
+    [
+     "fast",
+     46.068,
+     46.272
+    ],
+    [
+     "and",
+     46.272,
+     46.475
+    ],
+    [
+     "absolutely",
+     46.475,
+     47.492
+    ],
+    [
+     "fearless.",
+     47.492,
+     47.899
+    ]
+   ]
+  },
+  {
+   "id": "p2",
+   "text": "Batters weren't just facing him.",
+   "caption": "Batters weren't just facing him.",
+   "start": 47.979,
+   "end": 49.743,
+   "words": [
+    [
+     "Batters",
+     48.017,
+     48.448
+    ],
+    [
+     "weren't",
+     48.448,
+     48.88
+    ],
+    [
+     "just",
+     48.88,
+     49.095
+    ],
+    [
+     "facing",
+     49.095,
+     49.527
+    ],
+    [
+     "him.",
+     49.527,
+     49.743
+    ]
+   ]
+  },
+  {
+   "id": "p3",
+   "text": "They were trying to survive him.",
+   "caption": "They were trying to survive him.",
+   "start": 49.743,
+   "end": 51.611,
+   "words": [
+    [
+     "They",
+     49.743,
+     49.942
+    ],
+    [
+     "were",
+     49.942,
+     50.338
+    ],
+    [
+     "trying",
+     50.338,
+     50.536
+    ],
+    [
+     "to",
+     50.536,
+     50.734
+    ],
+    [
+     "survive",
+     50.734,
+     51.328
+    ],
+    [
+     "him.",
+     51.328,
+     51.526
+    ]
+   ]
+  },
+  {
+   "id": "r1",
+   "text": "And a few years later, he did something no human had ever done before.",
+   "caption": "And a few years later, he did something no human had ever done before.",
+   "start": 51.71,
+   "end": 55.456,
+   "words": [
+    [
+     "And",
+     51.748,
+     51.914
+    ],
+    [
+     "a",
+     51.914,
+     52.08
+    ],
+    [
+     "few",
+     52.08,
+     52.247
+    ],
+    [
+     "years",
+     52.247,
+     52.413
+    ],
+    [
+     "later,",
+     52.413,
+     52.746
+    ],
+    [
+     "he",
+     52.746,
+     52.912
+    ],
+    [
+     "did",
+     52.912,
+     53.078
+    ],
+    [
+     "something",
+     53.078,
+     53.578
+    ],
+    [
+     "no",
+     53.578,
+     53.744
+    ],
+    [
+     "human",
+     53.744,
+     54.077
+    ],
+    [
+     "had",
+     54.077,
+     54.243
+    ],
+    [
+     "ever",
+     54.243,
+     54.576
+    ],
+    [
+     "done",
+     54.576,
+     54.908
+    ],
+    [
+     "before.",
+     54.908,
+     55.408
+    ]
+   ]
+  },
+  {
+   "id": "r2",
+   "text": "He bowled the fastest delivery in the history of cricket,",
+   "caption": "He bowled the fastest delivery in the history of cricket,",
+   "start": 55.456,
+   "end": 58.569,
+   "words": [
+    [
+     "He",
+     55.456,
+     55.627
+    ],
+    [
+     "bowled",
+     55.627,
+     55.973
+    ],
+    [
+     "the",
+     55.973,
+     56.145
+    ],
+    [
+     "fastest",
+     56.145,
+     56.49
+    ],
+    [
+     "delivery",
+     56.49,
+     57.179
+    ],
+    [
+     "in",
+     57.179,
+     57.352
+    ],
+    [
+     "the",
+     57.352,
+     57.525
+    ],
+    [
+     "history",
+     57.525,
+     58.042
+    ],
+    [
+     "of",
+     58.042,
+     58.214
+    ],
+    [
+     "cricket,",
+     58.214,
+     58.559
+    ]
+   ]
+  },
+  {
+   "id": "r3",
+   "text": "a jaw-dropping one hundred and sixty one point three kilometres an hour.",
+   "caption": "a jaw-dropping 161.3 km/h.",
+   "start": 58.569,
+   "end": 62.767,
+   "words": [
+    [
+     "a",
+     58.569,
+     58.933
+    ],
+    [
+     "jaw-dropping",
+     58.933,
+     60.026
+    ],
+    [
+     "161.3",
+     60.026,
+     62.213
+    ],
+    [
+     "km/h.",
+     62.213,
+     62.578
+    ]
+   ]
+  },
+  {
+   "id": "r4",
+   "text": "More than twenty years on, nobody has bowled faster.",
+   "caption": "More than 20 years on, nobody has bowled faster.",
+   "start": 62.8,
+   "end": 65.658,
+   "words": [
+    [
+     "More",
+     62.847,
+     63.192
+    ],
+    [
+     "than",
+     63.192,
+     63.365
+    ],
+    [
+     "20",
+     63.365,
+     63.883
+    ],
+    [
+     "years",
+     63.883,
+     64.056
+    ],
+    [
+     "on,",
+     64.056,
+     64.229
+    ],
+    [
+     "nobody",
+     64.229,
+     64.747
+    ],
+    [
+     "has",
+     64.747,
+     64.92
+    ],
+    [
+     "bowled",
+     64.92,
+     65.265
+    ],
+    [
+     "faster.",
+     65.265,
+     65.611
+    ]
+   ]
+  },
+  {
+   "id": "f1",
+   "text": "If you're a true cricket fan, you must follow this page.",
+   "caption": "If you're a true cricket fan, you must follow this page.",
+   "start": 65.758,
+   "end": 68.333,
+   "words": [
+    [
+     "If",
+     65.795,
+     65.961
+    ],
+    [
+     "you're",
+     65.961,
+     66.293
+    ],
+    [
+     "a",
+     66.293,
+     66.459
+    ],
+    [
+     "true",
+     66.459,
+     66.625
+    ],
+    [
+     "cricket",
+     66.625,
+     66.958
+    ],
+    [
+     "fan,",
+     66.958,
+     67.124
+    ],
+    [
+     "you",
+     67.124,
+     67.29
+    ],
+    [
+     "must",
+     67.29,
+     67.456
+    ],
+    [
+     "follow",
+     67.456,
+     67.788
+    ],
+    [
+     "this",
+     67.788,
+     67.954
+    ],
+    [
+     "page.",
+     67.954,
+     68.286
+    ]
+   ]
+  },
+  {
+   "id": "t1",
+   "text": "But here's the scariest part. He's only number three.",
+   "caption": "But here's the scariest part. He's only No. 3.",
+   "start": 68.399,
+   "end": 71.673,
+   "words": [
+    [
+     "But",
+     68.446,
+     68.7
+    ],
+    [
+     "here's",
+     68.7,
+     69.208
+    ],
+    [
+     "the",
+     69.208,
+     69.463
+    ],
+    [
+     "scariest",
+     69.463,
+     69.972
+    ],
+    [
+     "part.",
+     69.972,
+     70.226
+    ],
+    [
+     "He's",
+     70.226,
+     70.48
+    ],
+    [
+     "only",
+     70.48,
+     70.99
+    ],
+    [
+     "No.",
+     70.99,
+     71.243
+    ],
+    [
+     "3.",
+     71.243,
+     71.625
+    ]
+   ]
+  },
+  {
+   "id": "t2",
+   "text": "Number two could swing the ball at a hundred and fifty kilometres an hour.",
+   "caption": "No. 2 could swing the ball at 150 km/h.",
+   "start": 71.772,
+   "end": 75.413,
+   "words": [
+    [
+     "No.",
+     71.819,
+     72.094
+    ],
+    [
+     "2",
+     72.094,
+     72.508
+    ],
+    [
+     "could",
+     72.508,
+     72.784
+    ],
+    [
+     "swing",
+     72.784,
+     73.059
+    ],
+    [
+     "the",
+     73.059,
+     73.335
+    ],
+    [
+     "ball",
+     73.335,
+     73.611
+    ],
+    [
+     "at",
+     73.611,
+     73.887
+    ],
+    [
+     "150",
+     73.887,
+     75.127
+    ],
+    [
+     "km/h.",
+     75.127,
+     75.404
+    ]
+   ]
+  },
+  {
+   "id": "t3",
+   "text": "And number one never wore a helmet.",
+   "caption": "And No. 1 never wore a helmet.",
+   "start": 75.413,
+   "end": 77.725,
+   "words": [
+    [
+     "And",
+     75.413,
+     75.597
+    ],
+    [
+     "No.",
+     75.597,
+     75.781
+    ],
+    [
+     "1",
+     75.781,
+     76.058
+    ],
+    [
+     "never",
+     76.058,
+     76.425
+    ],
+    [
+     "wore",
+     76.425,
+     76.794
+    ],
+    [
+     "a",
+     76.794,
+     76.978
+    ],
+    [
+     "helmet.",
+     76.978,
+     77.347
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Guess who they are in the comments, and follow so you don't miss Part 2.",
+   "caption": "Guess who they are in the comments, and follow so you don't miss Part 2.",
+   "start": 77.791,
+   "end": 81.3,
+   "words": [
+    [
+     "Guess",
+     77.828,
+     78.013
+    ],
+    [
+     "who",
+     78.013,
+     78.198
+    ],
+    [
+     "they",
+     78.198,
+     78.383
+    ],
+    [
+     "are",
+     78.383,
+     78.754
+    ],
+    [
+     "in",
+     78.754,
+     78.939
+    ],
+    [
+     "the",
+     78.939,
+     79.124
+    ],
+    [
+     "comments,",
+     79.124,
+     79.493
+    ],
+    [
+     "and",
+     79.493,
+     79.679
+    ],
+    [
+     "follow",
+     79.679,
+     80.049
+    ],
+    [
+     "so",
+     80.049,
+     80.234
+    ],
+    [
+     "you",
+     80.234,
+     80.42
+    ],
+    [
+     "don't",
+     80.42,
+     80.605
+    ],
+    [
+     "miss",
+     80.605,
+     80.79
+    ],
+    [
+     "Part",
+     80.79,
+     80.975
+    ],
+    [
+     "2.",
+     80.975,
+     81.253
+    ]
+   ]
+  }
+ ]
+}
