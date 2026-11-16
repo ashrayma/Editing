@@ -28,6 +28,8 @@ CUTS = [                                   # (from, to) raw seconds removed, wit
     (703.60, 715.60),   # "aath saal baad bhi England ki us har pari ko" stopped; retake follows
     (733.20, 750.35),   # "Toh asli sach kya hai" — three false starts; the clean take is at 750.4
 ]
+# re-recorded lines spliced in place of the original (raw from, raw to, file, file from, file to)
+REPLACE = [(167.55, 178.85, "vo/fix_759.m4a", 1.45, 6.55)]   # creator said "569" (and a false start of the next line); the re-record says 759
 MAXP = 0.55                                # longest ordinary pause after cleaning
 BREAKS = {                                 # raw time of a section start -> pause kept before it
     68.9: 1.0, 118.0: 1.0, 208.0: 1.0, 253.5: 0.9, 267.0: 1.0, 346.6: 1.0, 405.0: 1.0, 414.0: 0.9,
@@ -43,16 +45,27 @@ def silences(path):
     return list(zip(st, en))
 
 
+CHAIN = ("highpass=f=80,afftdn=nf=-30:nr=10,equalizer=f=220:t=q:w=1.2:g=-2,"
+         "equalizer=f=3200:t=q:w=1.0:g=2.5,acompressor=threshold=-22dB:ratio=3:attack=5:release=120:makeup=3")
+
+
+def load(path):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-af", CHAIN, "-ac", "1", "-ar", str(SR), "-f", "f32le",
+                          "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.float32).astype(np.float64)
+
+
+def rms_voiced(x):
+    e = np.sqrt(np.convolve(x ** 2, np.ones(2400) / 2400, "same"))
+    return np.sqrt(np.mean(x[e > np.percentile(e, 60)] ** 2))
+
+
 def main():
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", RAW, "-af",
-                          "highpass=f=80,afftdn=nf=-30:nr=10,equalizer=f=220:t=q:w=1.2:g=-2,"
-                          "equalizer=f=3200:t=q:w=1.0:g=2.5,acompressor=threshold=-22dB:ratio=3:attack=5:release=120:makeup=3",
-                          "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
-    a = np.frombuffer(raw, np.float32).astype(np.float64)
+    a = load(RAW)
 
     # keep-ranges: START..END minus CUTS
     keep, t = [], START
-    for c0, c1 in sorted(CUTS):
+    for c0, c1 in sorted(CUTS + [(r[0], r[1]) for r in REPLACE]):
         keep.append((t, c0))
         t = c1
     keep.append((t, END))
@@ -77,9 +90,24 @@ def main():
                 cur = s1 - (want - 0.12)
         pieces.append((cur, k1))
 
+    ref = rms_voiced(a[int(150 * SR):int(200 * SR)])
+    fixes = {}
+    for r0, r1, f, f0, f1 in REPLACE:
+        b = load(os.path.join(HERE, f))[int(f0 * SR):int(f1 * SR)]
+        fixes[r1] = (r0, b * ref / rms_voiced(b))
+    pieces = sorted(pieces + [(k, None) for k in fixes], key=lambda p: (p[0], p[1] is not None))
     fade = int(0.012 * SR)
     out, vmap, pos = [], [], 0.0
     for r0, r1 in pieces:
+        if r1 is None:                      # spliced re-record; it sits where the original line was
+            fr0, seg = fixes[r0]
+            seg = seg.copy()
+            seg[:fade] *= np.linspace(0, 1, fade)
+            seg[-fade:] *= np.linspace(1, 0, fade)
+            out += [np.zeros(int(0.25 * SR)), seg, np.zeros(int(0.25 * SR))]
+            vmap.append({"raw": [fr0, r0], "clean": round(pos + 0.25, 3), "fix": True})
+            pos += len(seg) / SR + 0.5
+            continue
         seg = a[int(r0 * SR):int(r1 * SR)].copy()
         if len(seg) < 2 * fade:
             continue
@@ -98,7 +126,7 @@ def main():
         w.setframerate(SR)
         w.writeframes(pcm.tobytes())
     json.dump(vmap, open(os.path.join(HERE, "vo", "vo_map.json"), "w"), indent=0)
-    print(f"clean VO: {pos / 60:.0f}:{pos % 60:04.1f}  ({len(pieces)} pieces)")
+    print(f"clean VO: {int(pos // 60)}:{pos % 60:04.1f}  ({len(pieces)} pieces)")
 
 
 if __name__ == "__main__":
