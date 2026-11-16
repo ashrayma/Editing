@@ -38,8 +38,8 @@ Aranmula ke mandir ki taraf ja rahi ek snake boat — paani mein palat gayi.
 Boat par lagbhag sau log the. Do log kabhi wapas nahi aaye.
 Aur us boat par ek 24 saal ka cricketer bhi tha — Karun Nair.
 Unhe bacha liya gaya.
-Sochiye. Paanch mahine baad, wahi ladka Test cricket ki sabse badi pariyon mein se ek khelne wala tha.
-Kismat ne unhe ek baar nadi se bachaaya. Aur paanch mahine baad, Chennai mein, kismat ek baar phir unke saath khadi thi.
+Sochiye. Kismat ne unhe ek baar nadi se bachaaya.
+Aur paanch mahine baad, Chennai mein, kismat ek baar phir unke saath khadi thi.
 
 ## [2:00] CHENNAI, 303*
 ON SCREEN: "TEST DEBUT · MOHALI · NOV 2016" → scores 4 · 13 → "CHENNAI · DEC 2016 · 5TH TEST vs ENGLAND" → "DROPPED ON 34" → "100 OFF 185 BALLS" → "KL RAHUL 199" → **303\*** "381 BALLS · 32 FOURS · 4 SIXES" → "INDIA 759/7 DEC" → "WON BY AN INNINGS & 75 · SERIES 4-0" → Sehwag quote card → **TEST AVERAGE: 160**
