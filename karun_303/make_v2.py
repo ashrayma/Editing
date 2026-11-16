@@ -640,20 +640,36 @@ def main():
     setup()
     print(f"total {int(TOTAL // 60)}:{TOTAL % 60:04.1f}", flush=True)
     wav = os.path.join(OUT, "mix_v2.wav")
-    soundtrack(wav)
-    silent = os.path.join(OUT, "video_v2.mp4")
-    enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-                            "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
-                            "-pix_fmt", "yuv420p", silent], stdin=subprocess.PIPE)
+    if not os.path.exists(os.path.join(OUT, "parts")) or "--fresh-mix" in sys.argv or True:
+        soundtrack(wav)
+    # rendered in 60 s parts so a restarted machine resumes instead of starting over
+    parts_dir = os.path.join(OUT, "parts")
+    os.makedirs(parts_dir, exist_ok=True)
     nfr = int(TOTAL * FPS)
-    chunks = [(i, min(i + 15, nfr)) for i in range(0, nfr, 15)]
+    PART = 1800
+    names = []
     with Pool(os.cpu_count()) as pool:
-        for k, buf in enumerate(pool.imap(render_chunk, chunks)):
-            enc.stdin.write(buf)
-            if k % 200 == 0:
-                print(f"  {k * 15}/{nfr}", flush=True)
-    enc.stdin.close()
-    enc.wait()
+        for k, p0 in enumerate(range(0, nfr, PART)):
+            p1 = min(p0 + PART, nfr)
+            name = os.path.join(parts_dir, f"p{k:03d}_{p0}_{p1}.mp4")
+            names.append(name)
+            if os.path.exists(name):
+                continue
+            tmp = name + ".tmp.mp4"
+            enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+                                    "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
+                                    "-pix_fmt", "yuv420p", tmp], stdin=subprocess.PIPE)
+            for buf in pool.imap(render_chunk, [(i, min(i + 15, p1)) for i in range(p0, p1, 15)]):
+                enc.stdin.write(buf)
+            enc.stdin.close()
+            enc.wait()
+            os.replace(tmp, name)
+            print(f"  part {k} done ({p1}/{nfr})", flush=True)
+    lst = os.path.join(parts_dir, "list.txt")
+    with open(lst, "w") as f:
+        f.writelines(f"file '{n}'\n" for n in names)
+    silent = os.path.join(OUT, "video_v2.mp4")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", silent], check=True)
     full_ = os.path.join(OUT, "Karun_303_v2.mp4")
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-c:v", "copy",
                     "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
