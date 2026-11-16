@@ -13,7 +13,7 @@ number cards held 2+ s.
 ## [0:00–0:40] HOOK
 ON SCREEN: **303\*** → "SEHWAG: 309 · 319" → black → **3 TESTS** → **3 MONTHS** → **8 YEARS**
 
-Test cricket mein teen sau run — India ke liye sirf do aadmiyon ne banaye hain. Ek, Virender Sehwag. Aur doosra…
+Test cricket mein teen sau run — India ke liye sirf do aadmiyon ne banaye hain. Ek, Virender Sehwag. Aur doosra… ek aisa naam, jo shayad aapko yaad bhi nahi.
 Us doosre aadmi ne uske baad teen Test khele. Bas teen.
 Jisne 381 gendein kheli… jise England ne teen baar zindagi di, aur jisne har baar unhe saza di… jiske liye us raat har channel par ek hi baat thi — "ye agle das saal Team India ka number paanch hai"…
 Wo aadmi teen mahine baad apna aakhri Test khel raha tha — agle aath saal ke liye.
