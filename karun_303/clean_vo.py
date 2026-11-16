@@ -30,6 +30,12 @@ CUTS = [                                   # (from, to) raw seconds removed, wit
 ]
 # re-recorded lines spliced in place of the original (raw from, raw to, file, file from, file to)
 REPLACE = [(167.55, 178.85, "vo/fix_759.m4a", 1.45, 6.55)]   # creator said "569" (and a false start of the next line); the re-record says 759
+# new lines recorded separately, inserted at a raw time (best takes only; false starts left out)
+INSERTS = [
+    (207.60, "vo/ins_a.m4a", [(2.15, 17.85)]),                                   # "Match ke baad… wahi 303"
+    (599.60, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
+    (774.60, "vo/ins_c.m4a", [(2.0, 8.5), (13.75, 17.10), (24.45, 27.15), (27.45, 30.30)]),  # "…wo humara ho gaya"
+]
 MAXP = 0.55                                # longest ordinary pause after cleaning
 BREAKS = {                                 # raw time of a section start -> pause kept before it
     68.9: 1.0, 118.0: 1.0, 208.0: 1.0, 253.5: 0.9, 267.0: 1.0, 346.6: 1.0, 405.0: 1.0, 414.0: 0.9,
@@ -65,7 +71,7 @@ def main():
 
     # keep-ranges: START..END minus CUTS
     keep, t = [], START
-    for c0, c1 in sorted(CUTS + [(r[0], r[1]) for r in REPLACE]):
+    for c0, c1 in sorted(CUTS + [(r[0], r[1]) for r in REPLACE] + [(i[0], i[0]) for i in INSERTS]):
         keep.append((t, c0))
         t = c1
     keep.append((t, END))
@@ -95,6 +101,18 @@ def main():
     for r0, r1, f, f0, f1 in REPLACE:
         b = load(os.path.join(HERE, f))[int(f0 * SR):int(f1 * SR)]
         fixes[r1] = (r0, b * ref / rms_voiced(b))
+    gap = np.zeros(int(0.32 * SR))
+    for at, f, parts in INSERTS:
+        full = load(os.path.join(HERE, f))
+        segs = []
+        for p0, p1 in parts:
+            x = full[int(p0 * SR):int(p1 * SR)].copy()
+            fd = int(0.015 * SR)
+            x[:fd] *= np.linspace(0, 1, fd)
+            x[-fd:] *= np.linspace(1, 0, fd)
+            segs += [x, gap]
+        b = np.concatenate(segs[:-1])
+        fixes[at] = (at, b * ref / rms_voiced(b))
     pieces = sorted(pieces + [(k, None) for k in fixes], key=lambda p: (p[0], p[1] is not None))
     fade = int(0.012 * SR)
     out, vmap, pos = [], [], 0.0

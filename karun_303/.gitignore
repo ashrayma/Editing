@@ -8,3 +8,4 @@ up/
 clips_upscale.log
 vo/vo_clean.wav
 vo/Karun303_VO_clean.mp3
+vo/*.wav
