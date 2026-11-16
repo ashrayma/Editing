@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Clean the creator's take (vo/vo_raw.m4a, 13:40) into vo/vo_clean.wav.
+
+1. Drop the false starts / retakes (CUTS, raw seconds; the better take that follows is kept).
+2. Shorten every pause: anything over MAXP becomes MAXP (BREAKS keep a longer, deliberate beat).
+3. Light polish (high-pass, de-noise, presence EQ, gentle compression), then peak-normalise.
+Writes vo/vo_map.json: kept raw ranges and where each starts in the clean file, so the edit can be timed to raw
+transcript times.
+"""
+import json
+import os
+import re
+import subprocess
+
+import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SR = 48000
+RAW = os.path.join(HERE, "vo", "vo_raw.m4a")
+
+START, END = 10.45, 817.9
+CUTS = [                                   # (from, to) raw seconds removed, with what they were
+    (104.00, 113.85),   # "aur paanch mahine baad Chennai mein kismat…" stopped half-way; retake follows
+    (298.05, 302.40),   # "Lekin ek baat saaf samajh lijiye" said twice
+    (463.00, 477.80),   # "jis ladke ka Test average 62 tha…" first take trailed off
+    (508.70, 521.38),   # "Aur sach ye bhi hai" x2 + a take with the wrong word
+    (572.85, 579.90),   # Vijay Hazare line with wrong numbers (789 / 399); retake has 779 / 389
+    (703.60, 715.60),   # "aath saal baad bhi England ki us har pari ko" stopped; retake follows
+    (733.20, 750.35),   # "Toh asli sach kya hai" — three false starts; the clean take is at 750.4
+]
+MAXP = 0.55                                # longest ordinary pause after cleaning
+BREAKS = {                                 # raw time of a section start -> pause kept before it
+    68.9: 1.0, 118.0: 1.0, 208.0: 1.0, 253.5: 0.9, 267.0: 1.0, 346.6: 1.0, 405.0: 1.0, 414.0: 0.9,
+    493.0: 1.0, 557.3: 0.9, 608.2: 1.0, 680.5: 0.9, 721.0: 1.0, 727.7: 0.8, 750.35: 0.8, 806.2: 1.0,
+}
+
+
+def silences(path):
+    out = subprocess.run(["ffmpeg", "-i", path, "-af", "silencedetect=n=-36dB:d=0.25", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    st = [float(x) for x in re.findall(r"silence_start: ([0-9.]+)", out)]
+    en = [float(x) for x in re.findall(r"silence_end: ([0-9.]+)", out)]
+    return list(zip(st, en))
+
+
+def main():
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", RAW, "-af",
+                          "highpass=f=80,afftdn=nf=-30:nr=10,equalizer=f=220:t=q:w=1.2:g=-2,"
+                          "equalizer=f=3200:t=q:w=1.0:g=2.5,acompressor=threshold=-22dB:ratio=3:attack=5:release=120:makeup=3",
+                          "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    a = np.frombuffer(raw, np.float32).astype(np.float64)
+
+    # keep-ranges: START..END minus CUTS
+    keep, t = [], START
+    for c0, c1 in sorted(CUTS):
+        keep.append((t, c0))
+        t = c1
+    keep.append((t, END))
+
+    # inside each keep-range, shorten long silences
+    sil = silences(RAW)
+    pieces = []                            # (raw_from, raw_to)
+    for k0, k1 in keep:
+        cur = k0
+        for s0, s1 in sil:
+            if s1 <= k0 or s0 >= k1:
+                continue
+            s0, s1 = max(s0, k0), min(s1, k1)
+            nxt = s1
+            want = MAXP
+            for bt, bp in BREAKS.items():
+                if abs(bt - s1) < 2.5:
+                    want = bp
+            if s1 - s0 > want:
+                mid = s0 + 0.12           # keep the breath tail of the word
+                pieces.append((cur, mid))
+                cur = s1 - (want - 0.12)
+        pieces.append((cur, k1))
+
+    fade = int(0.012 * SR)
+    out, vmap, pos = [], [], 0.0
+    for r0, r1 in pieces:
+        seg = a[int(r0 * SR):int(r1 * SR)].copy()
+        if len(seg) < 2 * fade:
+            continue
+        seg[:fade] *= np.linspace(0, 1, fade)
+        seg[-fade:] *= np.linspace(1, 0, fade)
+        out.append(seg)
+        vmap.append({"raw": [round(r0, 3), round(r1, 3)], "clean": round(pos, 3)})
+        pos += len(seg) / SR
+    y = np.concatenate(out)
+    y = y / (np.abs(y).max() + 1e-9) * 0.92
+    pcm = (y * 32767).astype(np.int16)
+    import wave
+    with wave.open(os.path.join(HERE, "vo", "vo_clean.wav"), "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(pcm.tobytes())
+    json.dump(vmap, open(os.path.join(HERE, "vo", "vo_map.json"), "w"), indent=0)
+    print(f"clean VO: {pos / 60:.0f}:{pos % 60:04.1f}  ({len(pieces)} pieces)")
+
+
+if __name__ == "__main__":
+    main()
