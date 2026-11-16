@@ -66,6 +66,60 @@ def rms_voiced(x):
     return np.sqrt(np.mean(x[e > np.percentile(e, 60)] ** 2))
 
 
+TIGHT = 0.40      # second pass: every pause, measured against the voice itself, becomes this
+TIGHT_BREAK = 0.75
+
+
+def BREAK_CLEAN(vmap):
+    """Clean-file times of the section BREAKS (raw times mapped through the first-pass map)."""
+    out = []
+    for bt in BREAKS:
+        for p in vmap:
+            if not p.get("fix") and p["raw"][0] - 0.05 <= bt <= p["raw"][1] + 3.0:
+                out.append(p["clean"] + max(0.0, bt - p["raw"][0]))
+                break
+    return out
+
+
+def tighten(y, keep_near):
+    """Energy-relative pause finder (breaths and room tone count as pause); returns new audio + retime map."""
+    hop = int(0.01 * SR)
+    e = np.sqrt((y[:len(y) // hop * hop].reshape(-1, hop) ** 2).mean(1))
+    db = 20 * np.log10(e + 1e-9)
+    thr = np.percentile(db[db > -60], 90) - 24
+    quiet = db < thr
+    runs, i = [], 0
+    while i < len(quiet):
+        if quiet[i]:
+            j = i
+            while j < len(quiet) and quiet[j]:
+                j += 1
+            runs.append((i * 0.01, j * 0.01))
+            i = j
+        else:
+            i += 1
+    segs, cur, out = [], 0.0, []
+    for r0, r1 in runs:
+        want = TIGHT_BREAK if any(abs(k - r1) < 1.2 for k in keep_near) else TIGHT
+        if r1 - r0 > want + 0.05:
+            cut0 = r0 + 0.08                       # keep the word's tail
+            cut1 = r1 - (want - 0.08)
+            segs.append((cur, cut0))
+            cur = cut1
+    segs.append((cur, len(y) / SR))
+    fade = int(0.008 * SR)
+    pos, retime = 0.0, []
+    for a0, a1 in segs:
+        x = y[int(a0 * SR):int(a1 * SR)].copy()
+        if len(x) > 2 * fade:
+            x[:fade] *= np.linspace(0, 1, fade)
+            x[-fade:] *= np.linspace(1, 0, fade)
+        out.append(x)
+        retime.append([round(a0, 3), round(a1, 3), round(pos, 3)])
+        pos += len(x) / SR
+    return np.concatenate(out), retime
+
+
 def main():
     a = load(RAW)
 
@@ -135,6 +189,9 @@ def main():
         vmap.append({"raw": [round(r0, 3), round(r1, 3)], "clean": round(pos, 3)})
         pos += len(seg) / SR
     y = np.concatenate(out)
+    y, retime = tighten(y, [p["clean"] for p in vmap if p.get("fix")] + [bt for bt in BREAK_CLEAN(vmap)])
+    json.dump(retime, open(os.path.join(HERE, "vo", "retime.json"), "w"))
+    pos = len(y) / SR
     y = y / (np.abs(y).max() + 1e-9) * 0.92
     pcm = (y * 32767).astype(np.int16)
     import wave
