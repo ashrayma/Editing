@@ -115,7 +115,48 @@ def tv(src, tag="REPLAY", fy=0.4):
 
 
 def pl(tint=(1.0, 0.82, 0.35)):
-    return lambda lt, dur: L.plate(lt * 1.3 + 5, tint)
+    f = lambda lt, dur: L.plate(lt * 1.3 + 5, tint)  # noqa: E731
+    f.is_plate = True          # replaced at render time by the section's full-screen footage (SECTION_BG)
+    return f
+
+
+def dim(src, gray=0.3, dark=0.42, blur=2.0):
+    return lambda lt, dur: fx.fs_dim(src(lt), lt, dur, gray, dark, blur)
+
+
+# full-screen footage under every text graphic, per stretch of the story (old clean seconds)
+SECTION_BG = [
+    (0.0, 58.2, dim(C("crowd", 0.12), 0.4)),
+    (58.2, 92.9, dim(P("pampa_river"), 0.2, 0.5)),
+    (92.9, 130.0, dim(C("walk381", 0.12), 0.2)),
+    (130.0, 189.9, dim(C("dressing150", 0.1), 0.2)),
+    (189.9, 244.9, dim(C("closeB", 0.08), 0.8)),
+    (244.9, 262.4, dim(P("kohli_presser_2017"), 0.6)),
+    (262.4, 318.8, dim(C("closeC", 0.08), 0.7)),
+    (318.8, 383.2, dim(P("karun_bowled_bengaluru_2017"), 0.95, 0.4)),
+    (383.2, 412.0, dim(P("msk_prasad_kohli"), 0.6)),
+    (412.0, 438.8, dim(P("vihari_batting_2021era"), 0.7)),
+    (438.8, 462.6, dim(P("karun_karnataka_helmet_raised"), 1.0, 0.4)),
+    (462.6, 490.5, dim(P("karun_northants_hundred"), 0.4)),
+    (490.5, 522.3, dim(P("karun_vidarbha_hundred"), 0.2)),
+    (522.3, 569.7, dim(P("karun_nets_2025"), 0.2)),
+    (569.7, 600.0, dim(P("karun_arrival_2025"), 0.3)),
+    (600.0, 638.3, dim(P("karun_walkoff_lords_2025"), 0.5)),
+    (638.3, 666.3, dim(P("agarkar_presser"), 0.5)),
+    (666.3, 680.0, dim(P("karun_karnataka_bat_raised"), 0.8)),
+    (680.0, 719.1, dim(P("karun_dejected_2025_close"), 0.85, 0.38)),
+    (719.1, 9999, dim(P("karun_2025_portrait_fence"), 0.6)),
+]
+YEARS = [(0, 58.2, None), (58.2, 92.9, "2016"), (92.9, 244.9, "2016"), (244.9, 383.2, "2017"), (383.2, 438.8, "2018"),
+         (438.8, 490.5, "2019–23"), (490.5, 522.3, "2024"), (522.3, 680.0, "2025"), (680.0, 9999, None)]
+
+
+def section_bg(v):
+    return next((b for a, e, b in SECTION_BG if a <= v < e), SECTION_BG[-1][2])
+
+
+def year_at(v):
+    return next((y for a, e, y in YEARS if a <= v < e), None)
 
 
 def panel(name, w=1180):
@@ -223,7 +264,7 @@ S(106.5, 111.8, tv(C("drop34", 0.38), "DROPPED ON 34"), "glitch", BX(108.0, 111.
 S(111.8, 115.3, full(C("hundred", 0.45)), "flash", ODO(112.0, 115.2, "100", "MAIDEN HUNDRED · 185 BALLS", 260, 440), hit=112.0)
 S(115.3, 121.4, panel("kl_rahul_199_reuters_credit", 1180), "whip", BX(115.6, 121.3, "KL RAHUL · 199 · ONE RUN SHORT", 960, 58, RED, WHITE))
 S(121.4, 125.9, full(C("bat150", 0.45)), "zoom", K(121.5, 125.8, "DROPPED *AGAIN* ON 217", 120, 480))
-S(125.9, 135.6, full(C("shot300", 0.42)), "whip", CAP(126.0, 132.0, "A four off Adil Rashid…", None), CNT(132.2, 135.5, 300, None, 360, 470, Y, dur=1.4), hit=132.2)
+S(125.9, 135.6, full(C("shot300", 0.42)), "whip", CAP(126.0, 129.0, "A four off Adil Rashid…", None), lambda b, t: fx.chase(b, t, 126.2, 135.5, 217, 300, 300, "TRIPLE HUNDRED"), hit=133.0)
 S(135.6, 140.0, cut("karun_303_chennai_2016", "303*", Y, 600), "flash", BX(136.0, 139.9, "381 BALLS · 32 FOURS · 4 SIXES", 960, 58), hit=135.7)
 S(140.0, 145.4, tv(C("hug300", 0.45), "INDIA 759/7 DEC"), "whip", FLIP(140.2, 145.3, "759/7", "INDIA'S HIGHEST TEST TOTAL (THEN)", 430))
 S(145.4, 151.0, full(C("kohli300", 0.4)), "zoom", STK(145.5, 150.9, [("WON BY AN INNINGS & 75", 110, WHITE), ("SERIES 4-0", 140, Y)]))
@@ -275,7 +316,7 @@ S(412.0, 422.0, full(P("msk_prasad_kohli"), 1.05, 1.15, (0.25, 0.35)), "zoom", Q
 S(422.0, 430.2, pl(), "flash", CNT(422.2, 430.1, 62.33, "TEST AVERAGE · WATCHING FROM THE DRESSING ROOM", 260, 450, Y, fmt=2))
 S(430.2, 438.8, pl((0.8, 0.8, 0.85)), "whip", TYPE(430.3, 438.7, "From 303… to a name on a squad list.", 80))
 # ---- LOST YEARS
-S(438.8, 443.8, pl((0.75, 0.75, 0.8)), "flash", ODO(439.0, 443.7, "2018", "2019 · 2020 · 2021 · 2022", 260, 450, WHITE))
+S(438.8, 443.8, pl((0.75, 0.75, 0.8)), "flash", lambda b, t: fx.calendar(b, t, 439.0, 443.7, 2017, 2022, 2086, "DAYS WITHOUT A TEST · TO DEC 2022"))
 S(443.8, 449.0, pl((0.75, 0.75, 0.8)), "glitch", OUTL(443.9, 448.9, "CONSISTENCY", 200, 500, WHITE), hit=443.9)
 S(449.0, 454.3, pl(), "whip", STK(449.1, 454.2, [("FITNESS? CONSISTENCY.", 80, GREY), ("TECHNIQUE? CONSISTENCY.", 80, GREY), ("COMBINATION? CONSISTENCY.", 80, Y)]))
 S(454.3, 462.6, pol(P("karun_karnataka_helmet_raised"), 4, "KARNATAKA", 0.25), "zoom", BX(454.6, 462.5, "DEC 2022: OUT OF KARNATAKA'S SIDE", 960, 58, RED, WHITE))
@@ -292,7 +333,7 @@ S(511.8, 519.8, cut("karun_vidarbha_hundred", "135", Y, 560), "whip", BX(512.5, 
 S(519.8, 522.3, cut("karun_vidarbha_hundred", "CHAMPIONS", Y, 300), "flash", hit=519.9)
 # ---- IPL 2025 (insert)
 S(522.3, 526.0, pl((0.4, 0.55, 1.0)), "whip", LT(522.5, 525.9, "IPL 2025", "Delhi Capitals"), K(522.4, 525.9, "ANOTHER *DOOR* OPENED", 120, 440))
-S(526.0, 530.6, pl((0.4, 0.55, 1.0)), "flash", ODO(526.1, 530.5, "1,077", "DAYS SINCE HIS LAST IPL GAME", 280, 440), hit=526.1)
+S(526.0, 530.6, pl((0.4, 0.55, 1.0)), "flash", lambda b, t: fx.calendar(b, t, 526.1, 530.5, 2022, 2025, 1077, "DAYS SINCE HIS LAST IPL GAME"), hit=526.1)
 S(530.6, 535.2, pl((0.4, 0.55, 1.0)), "zoom", STK(530.7, 535.1, [("vs MUMBAI INDIANS", 110, WHITE), ("BALL IN BUMRAH'S HAND", 110, Y)]))
 S(535.2, 538.9, pl((0.4, 0.55, 1.0)), "glitch", FLIP(535.3, 538.8, "89(40)", "12 FOURS · 5 SIXES"), hit=535.3)
 S(538.9, 545.4, pl((0.4, 0.55, 1.0)), "flash", CNT(539.0, 545.3, 18, "OFF ONE BUMRAH OVER · MOST BY AN INDIAN IN THE IPL", 380, 440, Y), hit=539.0)
@@ -303,7 +344,7 @@ S(561.9, 566.5, pl(), "flash", ODO(562.0, 566.4, "204", "INDIA A vs ENGLAND LION
 S(566.5, 569.7, pl((0.9, 0.5, 0.4)), "glitch", K(566.6, 569.6, "THE WALL *BROKE.*", 160, 500), hit=566.6)
 # ---- 2025 RETURN
 S(569.7, 572.5, full(P("karun_arrival_2025"), 1.04, 1.14), "whip", LT(569.9, 572.4, "HEADINGLEY", "20 June 2025"))
-S(572.5, 575.9, pl(), "flash", ODO(572.6, 575.8, "3,006", "DAYS · BACK IN AN INDIA TEST CAP", 280, 440), hit=572.6)
+S(572.5, 575.9, pl(), "flash", lambda b, t: fx.calendar(b, t, 572.6, 575.8, 2017, 2025, 3006, "DAYS · BACK IN AN INDIA TEST CAP"), hit=572.6)
 S(575.9, 581.6, card(P("karun_nets_2025"), 0.3), "zoom", BX(576.2, 581.5, "\"NOW THE STORY WILL BE COMPLETE\"", 960, 58, WHITE))
 S(581.6, 586.0, tv(P("karun_duck_headingley_2025"), "4 BALLS · 0", 0.35), "glitch", hit=581.7)
 S(586.0, 594.5, pl(), "whip", BARS(586.1, 594.4, [0, 20, 31, 26, 40, 14], ["HDG", "HDG", "EDG", "EDG", "LORD'S", "LORD'S"], None, "A START. EVERY TIME. \"THAT'S IT?\"", 60))
@@ -464,13 +505,15 @@ def frame(i):
         s_start = out_of_old(sh[0])
         lt = max(0.0, t - s_start)
         dur = max(0.5, out_of_old(min(sh[1], back(VO_LEN))) - s_start)
-        a = sh[2](lt, dur)
+        bgf = section_bg(v_old) if getattr(sh[2], "is_plate", False) else sh[2]
+        a = bgf(lt, dur)
         a = fx.transition(a, sh[3], lt)
         if sh[5] is not None:
             a = fx.shake(a, t, out_of_old(sh[5]))
         base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
         for ov in sh[4]:
             ov(base, v_old)
+        fx.year_tag(base, year_at(v_old))
     cs = out_of_old(CTA_OLD)
     if cs <= t < cs + 11.0:
         sys.path.insert(0, os.path.join(L.ROOT, "ipl_killed"))

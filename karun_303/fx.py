@@ -560,3 +560,71 @@ def shake(base_arr, t, t_hit, amp=14):
     s = amp * (1 - k / 0.35)
     dx, dy = int(s * math.sin(k * 90)), int(s * math.cos(k * 70))
     return np.roll(np.roll(base_arr, dx, axis=1), dy, axis=0)
+
+
+# ============================================================================ v2.1 (reference-led): dim footage, year tag, chase bar, calendar
+
+def fs_dim(src, lt, dur, gray=0.3, dark=0.42, blur=2.0, z0=1.06, z1=1.16):
+    """Full-screen footage pushed back behind graphics (the reference keeps footage under every graphic)."""
+    im = _push(src, lt, dur, z0, z1)
+    if blur:
+        im = im.filter(ImageFilter.GaussianBlur(blur))
+    return L.grade(im, gray, dark)
+
+
+def year_tag(base, year, a=1.0):
+    if not year or a <= 0:
+        return
+    f = font(ANTON, 46)
+    w = int(f.getlength(year)) + 34
+    tag = Image.new("RGBA", (w, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(tag)
+    d.rectangle((0, 0, w - 1, 63), fill=Y + (int(255 * a),))
+    d.text((w / 2, 33), year, font=f, fill=INK + (int(255 * a),), anchor="mm")
+    base.alpha_composite(tag, (64, 64))
+
+
+def chase(base, t, t0, t1, frm, to, target, label=None, cy=880):
+    """Chase / milestone bar: score counts frm -> to against target, red bar filling to yellow."""
+    if t < t0 or t > t1:
+        return
+    p = ease((t - t0 - 0.2) / max(0.4, (t1 - t0) * 0.7))
+    v = int(frm + (to - frm) * p)
+    a = clamp((t - t0) / 0.25) * (1 - clamp((t - (t1 - 0.25)) / 0.25))
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    x0, x1 = 260, W - 260
+    d.rectangle((x0, cy, x1, cy + 16), fill=(255, 255, 255, int(70 * a)))
+    xf = x0 + (x1 - x0) * v / target
+    col = Y if v >= target else RED
+    d.rectangle((x0, cy, xf, cy + 16), fill=col + (int(255 * a),))
+    d.text((x0, cy - 20), f"{v}", font=font(ANTON, 96), fill=WHITE + (int(255 * a),), anchor="ls")
+    d.text((x0 + font(ANTON, 96).getlength(f"{v}") + 10, cy - 24), f"/ {target}", font=font(ANTON, 52), fill=GREY + (int(255 * a),), anchor="ls")
+    if label:
+        d.text((x1, cy - 24), label, font=font(BOLD, 38), fill=Y + (int(255 * a),), anchor="rs")
+    base.alpha_composite(lay)
+
+
+def calendar(base, t, t0, t1, y_from, y_to, days, sub="DAYS", cy=480):
+    """Calendar page flipping through the years + a day counter (the reference's '2022 · 979 DAYS')."""
+    if t < t0 or t > t1:
+        return
+    p = ease((t - t0 - 0.15) / max(0.5, (t1 - t0) * 0.6))
+    yr = int(y_from + (y_to - y_from) * p)
+    a = clamp((t - t0) / 0.25) * (1 - clamp((t - (t1 - 0.25)) / 0.25))
+    cal = Image.new("RGBA", (420, 470), (0, 0, 0, 0))
+    d = ImageDraw.Draw(cal)
+    d.rounded_rectangle((0, 30, 419, 469), 26, fill=(246, 244, 238, 255))
+    d.rounded_rectangle((0, 30, 419, 150), 26, fill=RED + (255,))
+    d.rectangle((0, 110, 419, 150), fill=RED + (255,))
+    for x in (110, 310):
+        d.rounded_rectangle((x - 14, 0, x + 14, 64), 10, fill=(60, 62, 70, 255))
+    d.text((210, 92), "YEAR", font=font(ANTON, 56), fill=WHITE, anchor="mm")
+    d.text((210, 320), str(yr), font=font(ANTON, 190), fill=INK, anchor="mm")
+    fl = (t * 6) % 1 if p < 1 else 0          # page-flip flicker while counting
+    cal = cal.rotate(-6 + 4 * fl, expand=True, resample=Image.BICUBIC)
+    cal.putalpha(cal.getchannel("A").point(lambda v: int(v * a)))
+    base.alpha_composite(shadowed(cal, 18, 0.7), (int(W * 0.30 - cal.width / 2), int(cy - cal.height / 2)))
+    dv = int(days * p)
+    place(base, shadowed(word_img(f"{dv:,}", 230, Y)), W * 0.66, cy - 30, t, t0, t1, "pop", "fade", 0.3)
+    place(base, shadowed(word_img(sub, 56, WHITE, BOLD)), W * 0.66, cy + 120, t, t0 + 0.3, t1, "rise", "fade")
