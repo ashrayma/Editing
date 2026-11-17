@@ -257,11 +257,10 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # explainer bed: ticks under the hook, the beat comes in on "Here's how the rating works"; drums out before
-    # each problem; thin under the elbow years; a beat of air before "the mountain range"
-    m = music(total, drop=L["w1"]["start"], breaks=[L["r1"]["start"], L["t1"]["start"], L["m2"]["start"]],
-              outro=L["q1"]["start"] + 0.3, thin=[(L["t2"]["start"], L["t3"]["start"])],
-              mute=[(L["m3"]["words"][6][1] - 0.35, L["m3"]["words"][6][1] - 0.02)], intro_warm=False)
+    # fast: the beat drops on "RCB"; drums out before the spin reveal and "no plan B"; dead air before "last chance"
+    m = music(total, drop=L["o3"]["start"], breaks=[L["c3"]["start"], L["n1"]["start"], L["a2"]["start"]],
+              outro=L["q2"]["start"] + 0.3, thin=[(L["n1"]["start"], L["n2"]["words"][7][1])],
+              mute=[(L["a1"]["end"] + 0.02, L["a2"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))

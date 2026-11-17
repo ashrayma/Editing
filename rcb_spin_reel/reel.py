@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the comment card carries it
+NO_CAPTION = {"q2"}  # the comment card carries it
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -718,12 +718,12 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>PEAK</span><i>or</i><span style="color:{Y}">LONGEVITY?</span></div>'
+        f'<div class="mot" id="{i}q"><span>ALL IN</span><i>or</i><span style="color:{Y}">TRUST?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
         f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "Longevity. Every time 🏔️"
+    txt = "Buy a spinner. Now. 🎯"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
@@ -1258,96 +1258,246 @@ def captions():
             anim(f'tl.fromTo("#{i} span",{{y:14,opacity:0}},{{y:0,opacity:1,duration:0.18,ease:"power3.out"}},{t0})')
 
 
+IPLC = "PHOTO: BCCI / IPL"
+TEAMS = [("CSK", "#f9cd05", "#111"), ("MI", "#004ba0", "#fff"), ("KKR", "#3a225d", "#f3c34a"), ("SRH", "#f26522", "#111"),
+         ("DC", "#17449b", "#fff"), ("RR", "#e73895", "#fff"), ("PBKS", "#d71920", "#fff"), ("GT", "#1b2133", "#c9a96e"),
+         ("LSG", "#0057e2", "#fff"), ("RCB", "#c8102e", "#fff")]
+
+
+def team_grid(start, dur, t_rcb):
+    """10 franchise tiles: 9 flicker TRADED, RCB stays still and gets a 0 MOVES stamp."""
+    i = nid("tg")
+    cells = []
+    for k, (n, bg, fg) in enumerate(TEAMS):
+        r, c = divmod(k, 3) if k < 9 else (3, 1)
+        x, y = 90 + c * 310, 360 + r * 250
+        tag_ = '' if n == "RCB" else f'<em id="{i}t{k}">TRADED ↔</em>'
+        cells.append(f'<div class="tcell" id="{i}c{k}" style="left:{x}px;top:{y}px;background:{bg};color:{fg}"><b>{n}</b>{tag_}</div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tgrid avoid" style="z-index:{z()}">{"".join(cells)}'
+        f'<div class="t0" id="{i}z">0 MOVES</div></div>')
+    for k in range(10):
+        anim(f'tl.fromTo("#{i}c{k}",{{scale:0.6,opacity:0}},{{scale:1,opacity:1,duration:0.35,ease:"back.out(1.8)"}},{start + 0.04 * k})')
+        if k < 9:
+            t = start + 0.35 + 0.11 * k
+            anim(f'tl.fromTo("#{i}t{k}",{{opacity:0,y:10}},{{opacity:1,y:0,duration:0.2}},{t})')
+            anim(f'tl.fromTo("#{i}c{k}",{{x:-10}},{{x:0,duration:0.25,ease:"elastic.out(1,0.4)"}},{t})')
+            cue(t, "tick", 0.6)
+    anim(f'tl.to("#{i} .tcell:not(#{i}c9)",{{opacity:.35,duration:0.3}},{t_rcb})')
+    anim(f'tl.fromTo("#{i}c9",{{scale:1}},{{scale:1.18,duration:0.35,ease:"back.out(2)"}},{t_rcb})')
+    anim(f'tl.fromTo("#{i}z",{{scale:2.2,opacity:0,rotation:-14}},{{scale:1,opacity:1,rotation:-8,duration:0.25,ease:"power4.in"}},{t_rcb + 0.25})')
+    cue(t_rcb + 0.5, "impact", 1.0)
+
+
+def trophy_card(name, year, start, dur, x, y, w, rot, side):
+    i = frame(name, start, dur, x=x, y=y, w=w, rot=rot, side=side, cap=f"IPL CHAMPIONS · {year}")
+    credit(start, dur, IPLC)
+    return i
+
+
+def health(start, dur, rows):
+    """Squad health check scanner. rows: [(label, ok, t)]"""
+    i = nid("hc")
+    html_rows = "".join(f'<div class="hrw" id="{i}r{k}"><span>{html.escape(lab)}</span><b class="{"ok" if ok else "bad"}" id="{i}m{k}">'
+                        f'{"✓" if ok else "⚠"}</b></div>' for k, (lab, ok, t) in enumerate(rows))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="hcard avoid" style="z-index:{z()}"><div class="hh">SQUAD HEALTH CHECK · RCB</div>'
+        f'{html_rows}<div class="hscan" id="{i}s"></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:80,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}s",{{top:"0%"}},{{top:"100%",duration:{max(0.6, dur - 0.3):.2f},ease:"none"}},{start})')
+    for k, (lab, ok, t) in enumerate(rows):
+        anim(f'tl.fromTo("#{i}r{k}",{{x:-60,opacity:0}},{{x:0,opacity:1,duration:0.35,ease:"expo.out"}},{t - 0.1})')
+        anim(f'tl.fromTo("#{i}m{k}",{{scale:0}},{{scale:1,duration:0.3,ease:"back.out(2.5)"}},{t + 0.25})')
+        cue(t + 0.25, "pop" if ok else "impact", 0.9)
+        if not ok:
+            anim(f'tl.to("#{i}r{k}",{{backgroundColor:"rgba(212,55,44,.22)",duration:0.2,yoyo:true,repeat:5}},{t + 0.3})')
+
+
+def ticket(lines, start, dur, x, y, rot, stamp_txt=None, t_stamp=None):
+    """Stat ticket: player name strip + rows of (year, value), optional stamp."""
+    i = nid("tk")
+    rows = "".join(f'<div class="tkr"><span>{html.escape(a)}</span><b id="{i}v{k}">{html.escape(b)}</b></div>' for k, (a, b) in enumerate(lines[1:]))
+    st = f'<div class="tks" id="{i}s">{html.escape(stamp_txt)}</div>' if stamp_txt else ""
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tick2" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div class="tkh">{html.escape(lines[0])}</div>{rows}{st}</div>')
+    anim(f'tl.fromTo("#{i}",{{x:700,rotation:{rot * 3}}},{{x:0,rotation:{rot},duration:0.55,ease:"expo.out"}},{start})')
+    cue(start, "swish", 0.8)
+    if stamp_txt:
+        anim(f'tl.fromTo("#{i}s",{{scale:2.4,opacity:0,rotation:-20}},{{scale:1,opacity:1,rotation:-10,duration:0.25,ease:"power4.in"}},{t_stamp})')
+        cue(t_stamp + 0.25, "impact", 0.9)
+    return i
+
+
+def overs(start, dur, t_light):
+    """Over strip 1-20; overs 7-15 light up as the middle overs."""
+    i = nid("ov")
+    cells = "".join(f'<i id="{i}o{k}">{k}</i>' for k in range(1, 21))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ovs avoid" style="z-index:{z()}"><div class="ovh">MIDDLE OVERS</div>'
+        f'<div class="ovr">{cells}</div></div>')
+    anim(f'tl.fromTo("#{i} .ovr i",{{y:30,opacity:0}},{{y:0,opacity:1,duration:0.25,stagger:0.025}},{start})')
+    for k in range(7, 16):
+        t = t_light + 0.05 * (k - 7)
+        anim(f'tl.to("#{i}o{k}",{{backgroundColor:"{Y}",color:"#111",scale:1.12,duration:0.18}},{t})')
+        cue(t, "tick", 0.5)
+    anim(f'tl.fromTo("#{i} .ovh",{{opacity:0}},{{opacity:1,duration:0.3}},{t_light})')
+
+
+def pitch(start, dur, t_turn):
+    """Top-down pitch: the ball pitches, grips and turns (dry surface)."""
+    i = nid("pt")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ptch avoid" style="z-index:{z()}"><div class="pts">'
+        f'<svg width="360" height="900" viewBox="0 0 360 900"><path id="{i}p" d="M180,40 L190,560 Q196,640 280,860" fill="none" '
+        f'stroke="#d4372c" stroke-width="7" stroke-linecap="round"/><circle id="{i}b" cx="190" cy="560" r="14" fill="#d4372c"/></svg></div>'
+        f'<div class="ptl">DRY · SLOW · TURNING</div></div>')
+    anim(f'tl.fromTo("#{i}",{{x:-500,opacity:0}},{{x:0,opacity:1,duration:0.55,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}p",{{strokeDasharray:1000,strokeDashoffset:1000}},{{strokeDashoffset:0,duration:1.1,ease:"power2.in"}},{t_turn})')
+    anim(f'tl.fromTo("#{i}b",{{scale:0,transformOrigin:"50% 50%"}},{{scale:1,duration:0.3,ease:"back.out(3)"}},{t_turn + 0.55})')
+    cue(t_turn + 0.55, "pop", 1.0)
+
+
+def slot(start, dur, x, y, t_q):
+    """Empty card slot with a pulsing '?': the missing plan B."""
+    i = nid("sl")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="slot" style="left:{x}px;top:{y}px;z-index:{z()}"><b>?</b><span>PLAN B</span></div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:0,scale:0.9}},{{opacity:1,scale:1,duration:0.4}},{t_q})')
+    anim(f'tl.fromTo("#{i} b",{{scale:0.8}},{{scale:1.1,duration:0.5,yoyo:true,repeat:{max(1, int(dur / 0.5))},ease:"sine.inOut"}},{t_q})')
+    cue(t_q, "pop", 0.9)
+
+
+def auction(start, dur, t_open):
+    """TRADE WINDOW: CLOSED panel that flips into an AUCTION ? ticket."""
+    i = nid("au")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="auc avoid" style="z-index:{z()}">'
+        f'<div class="auf" id="{i}a"><span>TRADE WINDOW</span><b>CLOSED</b></div>'
+        f'<div class="aub" id="{i}b"><span>IPL</span><b>AUCTION</b><i>?</i><em>LAST CHANCE</em></div></div>')
+    anim(f'tl.fromTo("#{i}a",{{rotationY:0}},{{rotationY:-90,duration:0.3,ease:"power2.in"}},{t_open})')
+    anim(f'tl.fromTo("#{i}b",{{rotationY:90}},{{rotationY:0,duration:0.4,ease:"back.out(1.6)"}},{t_open + 0.3})')
+    anim(f'tl.fromTo("#{i}",{{y:80,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    cue(t_open + 0.3, "impact", 1.0)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK
-    bgp(*seg(0, s("h2", -0.03)), "ink")
-    kick("DID YOU KNOW", *seg(0.1, s("h2", -0.03)))
-    cutout("st_raise_tall", *seg(0.05, s("h2", -0.03)), x=470, h=1150, grey=True)
-    head(["MOST TEST", "RUNS EVER"], *seg(0.2, s("h2", -0.03)), y=330, size=120, accent=(1,), align="left")
-    odo("15,921", *seg(word("h1", 3), s("h2", -0.03)), x=70, y=640, size=130, label="TEST RUNS")
-    credit(*seg(0, s("h2", -0.03)), GETTY)
-    bgp(*seg(s("h2", -0.03), s("h3", -0.03)), "paper")
-    kick("ACCORDING TO THE ICC", *seg(s("h2"), s("h3", -0.03)), "paper")
-    head(["30+ BATTERS", "HAD A BETTER PEAK"], *seg(word("h2", 5), s("h3", -0.03)), "paper", y=320, size=104, accent=(0,), sfx="impact")
-    frame("ponting", *seg(word("h2", 8), s("h3", -0.03)), x=70, y=700, w=440, rot=-3, side="left", cap="Ricky Ponting")
-    frame("kallis", *seg(word("h2", 10), s("h3", -0.03)), x=560, y=760, w=450, rot=3, side="right", cap="Jacques Kallis")
-    # ---------------- the numbers
-    bgp(*seg(s("h3", -0.03), s("h4", -0.03)), "ink")
-    kick("HIS PEAK RATING", *seg(s("h3"), s("h4", -0.03)))
-    cutout("st_nz_tall", *seg(s("h3", -0.03), s("h4", -0.03)), x=560, h=1100, grey=True)
-    odo("898", *seg(word("h3", 5) - 0.1, s("h4", -0.03)), x=70, y=420, size=280)
-    credit(*seg(s("h3", -0.03), s("h4", -0.03)), GETTY)
-    bgp(*seg(s("h4", -0.03), s("h6", -0.03)), "paper")
-    kick("PEAK TEST RATING", *seg(s("h4"), s("h6", -0.03)), "paper")
-    stems(*seg(s("h4", -0.03), s("h6", -0.03)), [("SACHIN", 898, "st_raise_tall", s("h4", 0.0)), ("KOHLI", 937, "kohli_test", word("h4", 4) - 0.1),
-                                                   ("GAVASKAR", 916, "gavaskar", word("h5", 5) - 0.1)])
-    # ---------------- the question (screen recording + screenshot)
-    bgp(*seg(s("h6", -0.03), s("f1", -0.03)), "ink")
-    head(["NOT EVEN IN", "THE TOP 30?"], *seg(s("h6"), s("f1", -0.03)), y=280, size=110, accent=(1,), sfx="impact")
-    screen("screen_peak", *seg(s("h6", -0.03), s("f1", -0.03)), side="left", focus="70% 60%", zoom=1.25, mstart=0.6)
-    screenshot("capture/out/shot_peak.png", *seg(word("h6", 12), s("f1", -0.03)), side="right", rot=4, top=1080)
+    # ---------------- HOOK: trade window, nine teams moved, one didn't
+    bgp(*seg(0, s("o4", -0.03)), "ink")
+    kick("IPL TRADE WINDOW", *seg(0.05, s("o4", -0.03)))
+    team_grid(*seg(0.05, s("o3", -0.03)), t_rcb=s("o2"))
+    head(["2× DEFENDING", "CHAMPIONS"], *seg(s("o3"), s("o4", -0.03)), y=300, size=120, accent=(0,), sfx="impact")
+    cutout("kohli_roar", *seg(s("o3", -0.03), s("o4", -0.03)), x=150, h=900)
+    credit(*seg(s("o3", -0.03), s("o4", -0.03)), IPLC)
+    bgp(*seg(s("o4", -0.03), s("o5", -0.03)), "ink")
+    head(["WHY WOULD THEY?"], *seg(s("o4"), word("o4", 5)), y=270, size=110, accent=(0,))
+    trophy_card("rcb_trophy_2025", 2025, *seg(word("o4", 9), s("o5", -0.03)), x=40, y=520, w=640, rot=-4, side="left")
+    trophy_card("rcb_trophy_2026", 2026, *seg(word("o4", 11), s("o5", -0.03)), x=380, y=900, w=660, rot=3, side="right")
+    bgp(*seg(s("o5", -0.03), s("f1", -0.03)), "paper")
+    head(["SILENCE ≠", "PERFECT"], *seg(word("o5", 1), s("o6", -0.03)), "paper", y=640, size=150, accent=(1,), sfx="impact")
+    head(["HEALTH CHECK"], *seg(s("o6"), s("f1", -0.03)), "paper", y=980, size=110, accent=(0,), sfx="impact")
     # ---------------- follow
-    bgp(*seg(s("f1", -0.03), s("w1", -0.03)), "ink")
-    head(["TRUE CRICKET FAN?"], *seg(word("f1", 7), s("w1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
-    follow_card(*seg(s("f1", 0.05), s("w1", -0.03)), t_follow=word("f1", 13))
-    # ---------------- how it works
-    bgp(*seg(s("w1", -0.03), s("w3", -0.03)), "paper")
-    kick("HOW IT WORKS", *seg(s("w1"), s("w3", -0.03)), "paper")
-    head(["ICC RATING"], *seg(s("w1", 0.05), s("w3", -0.03)), "paper", y=300, size=130)
-    head(["= MOVING AVERAGE"], *seg(word("w2", 7), s("w3", -0.03)), "paper", y=440, size=96, accent=(0,), sfx="impact")
-    window(*seg(word("w2", 5), s("w3", -0.03)), t_slide=word("w2", 11))
-    bgp(*seg(s("w3", -0.03), s("r1", -0.03)), "paper")
-    head(["1 RUN ≠ 1 RUN"], *seg(s("w3", 0.05), s("r1", -0.03)), "paper", y=300, size=140, accent=(0,), sfx="impact")
-    frame("st_90s_drive", *seg(s("w3", 0.2), s("r1", -0.03)), x=290, y=560, w=500, rot=-2, side="left", cap="Sachin · 1990s")
-    chip("vs STRONG TEAMS ↑", *seg(word("w4", 1), s("r1", -0.03)), x=None, y=1260)
-    chip("IN WINS ↑", *seg(word("w4", 6), s("r1", -0.03)), x=None, y=1360)
-    # ---------------- problem 1: hundreds in losses
-    bgp(*seg(s("r1", -0.03), s("t1", -0.03)), "ink")
-    kick("PROBLEM #1", *seg(s("r1"), s("t1", -0.03)))
-    head(["HIS 100s", "CAME IN LOSSES"], *seg(word("r1", 4), s("r2", -0.03)), y=320, size=112, accent=(1,), sfx="impact")
-    frame("st_walk_dejected", *seg(word("r1", 6), s("r2", -0.03)), x=270, y=640, w=540, rot=-2, side="right", cap="Walking back", grey=True)
-    clipping(["TENDULKAR  114"], "PERTH · 1992", *seg(s("r2", -0.03), s("t1", -0.03)), x=70, y=330, rot=-4, t_lost=word("r2", 2))
-    clipping(["TENDULKAR  169"], "CAPE TOWN · 1997", *seg(s("r3", -0.03), s("t1", -0.03)), x=560, y=420, rot=3, t_lost=word("r3", 3))
-    clipping(["TENDULKAR  136"], "CHENNAI · 1999", *seg(s("r4", -0.03), s("t1", -0.03)), x=90, y=640, rot=-2, t_lost=word("r4", 4))
-    aiimg(*seg(word("r4", 3), s("t1", -0.03)), x=580, y=640, w=400)
-    head(["INDIA LOST ALL 3"], *seg(word("r4", 5), s("t1", -0.03)), y=1290, size=100, accent=(0,), sfx="impact")
-    # ---------------- problem 2: the elbow, the ceiling
-    bgp(*seg(s("t1", -0.03), s("m1", -0.03)), "paper")
-    kick("PROBLEM #2", *seg(s("t1"), s("m1", -0.03)), "paper")
-    ratingline(*seg(s("t1", -0.03), s("m1", -0.03)), {"rise": word("t1", 4), "crash": word("t1", 9), "back": s("t3"), "ceiling": word("t4", 3)}, y=420)
-    frame("st_elbow", *seg(word("t1", 9), s("t3", -0.03)), x=560, y=1090, w=460, rot=3, side="right", cap="Tennis elbow · 2004")
-    frame("st_2010_sa", *seg(s("t3"), s("m1", -0.03)), x=60, y=1090, w=460, rot=-3, side="left", cap="No. 1 again · 2010")
-    # ---------------- the mountain range
-    bgp(*seg(s("m1", -0.03), s("m2", -0.03)), "ink")
-    head(["NO MONSTER", "PEAK?"], *seg(s("m1"), s("m2", -0.03)), y=640, size=140, accent=(1,), sfx="impact")
-    bgp(*seg(s("m2", -0.03), s("m3", -0.03)), "ink")
-    cutout("st_delhi_raise", *seg(s("m2", -0.03), s("m3", -0.03)), x=560, h=1150)
-    odo("24", *seg(word("m2", 1) - 0.1, s("m3", -0.03)), x=70, y=280, size=170, label="YEARS")
-    odo("200", *seg(word("m2", 3) - 0.1, s("m3", -0.03)), x=70, y=680, size=170, label="TESTS")
-    odo("15,921", *seg(word("m2", 6) - 0.1, s("m3", -0.03)), x=70, y=1080, size=130, label="RUNS")
-    credit(*seg(s("m2", -0.03), s("m3", -0.03)), GETTY)
-    bgp(*seg(s("m3", -0.03), s("q1", -0.03)), "ink")
-    head(["NOT THE PEAK…"], *seg(s("m3"), s("q1", -0.03)), y=330, size=110)
-    head(["THE MOUNTAIN RANGE"], *seg(word("m3", 7), s("q1", -0.03)), y=470, size=96, accent=(0,), sfx="impact")
-    mountain(*seg(s("m3", 0.1), s("q1", -0.03)), t_range=word("m3", 7))
-    frame("st_young_walk", *seg(s("m3", 0.1), s("q1", -0.03)), x=70, y=1080, w=300, rot=-4, side="left", cap="1990")
-    frame("st_nz_raise", *seg(word("m3", 7), s("q1", -0.03)), x=560, y=1100, w=450, rot=3, side="right", cap="2009")
+    bgp(*seg(s("f1", -0.03), s("c1", -0.03)), "ink")
+    head(["TRUE CRICKET FAN?"], *seg(word("f1", 5), s("c1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
+    follow_card(*seg(s("f1", 0.05), s("c1", -0.03)), t_follow=word("f1", 11))
+    # ---------------- the scan
+    bgp(*seg(s("c1", -0.03), s("k1", -0.03)), "ink")
+    frame("batters_graphic", *seg(s("c1"), s("c2", -0.03)), x=40, y=1050, w=1000, rot=-1, side="left", cap="Batting")
+    credit(*seg(s("c1"), s("c2", -0.03)), IPLC)
+    frame("bhuvi_hazlewood", *seg(s("c2"), s("c3", -0.03)), x=290, y=960, w=500, rot=2, side="right", cap="Pace")
+    credit(*seg(s("c2"), s("c3", -0.03)), IPLC)
+    health(*seg(s("c1", -0.03), s("k1", -0.03)), [("BATTING", True, s("c1")), ("PACE", True, s("c2")), ("SPIN", False, s("c3"))])
+    frame("pitch_dry", *seg(word("c3", 1), s("k1", -0.03)), x=180, y=1020, w=720, rot=-2, side="left", cap="Spin")
+    # ---------------- Krunal
+    bgp(*seg(s("k1", -0.03), s("s1", -0.03)), "ink")
+    kick("THEIR BEST SPINNER", *seg(s("k1"), s("s1", -0.03)))
+    cutout("krunal_fist", *seg(s("k1", -0.03), s("s1", -0.03)), x=480, h=1150)
+    credit(*seg(s("k1", -0.03), s("s1", -0.03)), IPLC)
+    head(["KRUNAL", "PANDYA"], *seg(word("k1", 3), s("s1", -0.03)), y=330, size=120, accent=(1,), align="left")
+    odo("36", *seg(word("k1", 6) - 0.1, s("s1", -0.03)), x=70, y=620, size=260, label="NEXT SEASON")
+    chip("EVERY SEASON = A BONUS", *seg(word("k2", 6), s("s1", -0.03)), x=60, y=1060)
+    # ---------------- Suyash
+    bgp(*seg(s("s1", -0.03), s("n1", -0.03)), "ink")
+    kick("THE LEG-SPINNER", *seg(s("s1"), s("n1", -0.03)))
+    cutout("suyash_appeal", *seg(s("s1", -0.03), s("n1", -0.03)), x=470, h=1100)
+    credit(*seg(s("s1", -0.03), s("n1", -0.03)), IPLC)
+    ticket(["SUYASH SHARMA · WICKETS", ("2025", "8"), ("2026", "9")], *seg(word("s1", 6), s("n1", -0.03)), x=60, y=380, rot=-3,
+           stamp_txt="HOLDING PATTERN", t_stamp=word("s2", 6))
+    head(["NOT A STRIKE", "WEAPON"], *seg(s("s2"), s("n1", -0.03)), y=1000, size=104, accent=(1,), align="left", sfx="impact")
+    # ---------------- no plan B
+    bgp(*seg(s("n1", -0.03), s("n3", -0.03)), "paper")
+    kick("NO PLAN B", *seg(s("n1"), s("n3", -0.03)), "paper")
+    frame("krunal_point", *seg(s("n1"), s("n3", -0.03)), x=70, y=380, w=420, rot=-3, side="left", cap="Krunal Pandya")
+    credit(*seg(s("n1"), s("n3", -0.03)), IPLC)
+    slot(*seg(s("n1"), s("n3", -0.03)), x=590, y=400, t_q=word("n1", 3))
+    head(["INJURED?", "OUT OF RHYTHM?"], *seg(word("n2", 2), word("n2", 7)), "paper", y=1000, size=100, accent=(1,), sfx="impact")
+    overs(*seg(word("n2", 7), s("n3", -0.03)), t_light=word("n2", 11))
+    # ---------------- dry pitches
+    bgp(*seg(s("n3", -0.03), s("a1", -0.03)), "ink")
+    pitch(*seg(s("n3", -0.03), s("a1", -0.03)), t_turn=word("n3", 2))
+    for k, (nm, w_) in enumerate((("CHENNAI", 5), ("LUCKNOW", 7))):
+        chip(nm, *seg(word("n3", w_), s("a1", -0.03)), x=560, y=520 + 110 * k)
+    head(["THE PHASE", "THAT DECIDES", "THE MATCH"], *seg(word("n3", 9), s("a1", -0.03)), y=860, size=96, accent=(2,), align="left", sfx="impact")
+    # ---------------- auction
+    bgp(*seg(s("a1", -0.03), s("q1", -0.03)), "ink")
+    auction(*seg(s("a1", -0.03), s("q1", -0.03)), t_open=s("a2"))
+    # ---------------- question
+    bgp(*seg(s("q1", -0.03), s("q2", -0.03)), "ink")
+    head(["ALL IN ON A", "WICKET-TAKER?"], *seg(s("q1"), word("q1", 9)), y=300, size=104, accent=(1,), sfx="impact")
+    head(["OR TRUST THE", "CHAMPIONS?"], *seg(word("q1", 9), s("q2", -0.03)), y=300, size=104, accent=(1,), sfx="impact")
+    frame("suyash_practice", *seg(s("q1", 0.1), s("q2", -0.03)), x=70, y=640, w=430, rot=-3, side="left", cap="Suyash Sharma")
+    frame("rcb_trophy_2026", *seg(word("q1", 9), s("q2", -0.03)), x=540, y=760, w=470, rot=3, side="right", cap="2 titles")
+    credit(*seg(s("q1"), s("q2", -0.03)), IPLC)
     # ---------------- CTA
-    video3d("logo", s("q1", -0.03), TOTAL - s("q1", -0.03))
-    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
+    video3d("logo", s("q2", -0.03), TOTAL - s("q2", -0.03))
+    comment_cta(s("q2", 0.05), TOTAL - s("q2", 0.05))
     for a, b in LAYOUT["brand_hide"]:
-        if a >= s("q1", -0.3):
+        if a >= s("q2", -0.3):
             continue
         anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
-        if b < s("q1", -0.3):
+        if b < s("q2", -0.3):
             anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.95,duration:0.25,immediateRender:false}},{b})')
-    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q1", -0.3)})')
+    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q2", -0.3)})')
 
 
 EXTRA_CSS = f"""
+.tcell{{position:absolute;width:280px;height:200px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}}
+.tcell b{{font-family:"Bebas";font-size:96px;line-height:1}}
+.tcell em{{font-style:normal;font:800 22px "IDisp";letter-spacing:.12em;margin-top:6px;opacity:.9}}
+.t0{{position:absolute;left:520px;top:1150px;border:6px solid {Y};color:{Y};font:900 54px "IDisp";padding:6px 22px;border-radius:12px;background:rgba(0,0,0,.6)}}
+.hcard{{position:absolute;left:70px;right:70px;top:300px;background:#16161a;border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 36px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
+.hh{{font:800 26px "IDisp";letter-spacing:.2em;color:#9a9aa2;margin-bottom:16px}}
+.hrw{{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:14px;margin-bottom:8px}}
+.hrw span{{font-family:"Bebas";font-size:96px;color:#fff;line-height:1}}
+.hrw b{{font:900 70px "IDisp"}}
+.hrw b.ok{{color:#3ddc84}}
+.hrw b.bad{{color:#ff5a4f}}
+.hscan{{position:absolute;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,{Y},transparent);box-shadow:0 0 30px {Y};opacity:.8}}
+.tick2{{position:absolute;width:460px;background:#f6f1e4;border-radius:18px;padding:20px 26px 26px;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#141416}}
+.tkh{{font:800 24px "IDisp";letter-spacing:.1em;color:#d4372c;border-bottom:2px dashed #c9bfa9;padding-bottom:10px;margin-bottom:6px}}
+.tkr{{display:flex;justify-content:space-between;align-items:baseline;font-family:"Bebas"}}
+.tkr span{{font-size:64px;color:#555}}
+.tkr b{{font-size:120px;color:#141416;font-weight:400}}
+.tks{{position:absolute;right:-30px;bottom:-30px;border:5px solid #d4372c;color:#d4372c;font:900 34px "IDisp";padding:4px 14px;border-radius:8px;background:rgba(246,241,228,.92);white-space:nowrap}}
+.slot{{position:absolute;width:420px;height:560px;border:5px dashed #d4372c;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#d4372c}}
+.slot b{{font:900 260px/1 "IDisp"}}
+.slot span{{font:900 40px "IDisp";letter-spacing:.14em}}
+.ovs{{position:absolute;left:40px;right:40px;top:1200px}}
+.ovh{{text-align:center;font:900 34px "IDisp";letter-spacing:.2em;color:#d4372c;margin-bottom:16px}}
+.ovr{{display:flex;gap:6px;justify-content:center}}
+.ovr i{{font-style:normal;width:44px;height:64px;border-radius:8px;background:#e1d9c8;color:#555;font:800 24px/64px "IDisp";text-align:center}}
+.ptch{{position:absolute;left:80px;top:280px}}
+.pts{{width:360px;height:900px;border-radius:20px;background:linear-gradient(180deg,#d9c49a,#c8ae7c);box-shadow:inset 0 0 60px rgba(0,0,0,.25),0 30px 70px rgba(0,0,0,.5);position:relative;overflow:hidden}}
+.pts:before{{content:"";position:absolute;left:0;right:0;top:120px;height:4px;background:#fff}}
+.pts:after{{content:"";position:absolute;left:0;right:0;bottom:120px;height:4px;background:#fff}}
+.ptl{{margin-top:20px;font:900 30px "IDisp";letter-spacing:.14em;color:{Y}}}
+.auc{{position:absolute;left:140px;right:140px;top:560px;height:640px;perspective:1600px}}
+.auf,.aub{{position:absolute;inset:0;border-radius:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden}}
+.auf{{background:#16161a;border:3px solid #444;color:#fff}}
+.auf span{{font:800 40px "IDisp";letter-spacing:.2em;color:#9a9aa2}}
+.auf b{{font-family:"Bebas";font-size:200px;color:#ff5a4f;line-height:1}}
+.aub{{background:#c8102e;color:#fff;transform:rotateY(90deg);box-shadow:0 40px 100px rgba(200,16,46,.45)}}
+.aub span{{font:900 40px "IDisp";letter-spacing:.3em}}
+.aub b{{font-family:"Bebas";font-size:180px;line-height:1}}
+.aub i{{font-style:normal;font:900 160px/1 "IDisp";color:{Y}}}
+.aub em{{font-style:normal;font:900 34px "IDisp";letter-spacing:.2em;color:{Y};margin-top:10px}}
+
 .ed .edtex{{position:absolute;inset:-120px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 18px)}}
 .ed.paper .edtex{{background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.04) 0 2px,transparent 2px 18px)}}
 .ed.paper .grain{{opacity:.35;mix-blend-mode:multiply}}
