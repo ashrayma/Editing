@@ -430,22 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1", "s4"}  # comment card; and the silence line plays with no captions
-
-
-def captions():
-    """One word at a time in the lower third: heavy white type with a soft shadow, numbers in yellow, a quick pop."""
-    for ln in TL["lines"]:
-        if ln["id"] in NO_CAPTION:
-            continue
-        words = ln["words"]
-        for k, (w, t0, t1) in enumerate(words):
-            t_next = words[k + 1][1] if k + 1 < len(words) else ln["end"] + 0.12
-            num = any(c.isdigit() for c in w)
-            i = nid("cap")
-            cy, _ = mv(i, 1420)
-            add(f'<div id="{i}" {clip_attrs(t0, t_next - t0)} class="cap1 avoid{" num" if num else ""}" style="top:{cy}px"><span>{html.escape(w.upper().strip(",.…"))}</span></div>')
-            anim(f'tl.fromTo("#{i} span",{{scale:0.7,y:10}},{{scale:1,y:0,duration:0.16,ease:"back.out(2.6)"}},{t0})')
+NO_CAPTION = {"q1"}  # the comment card carries it
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -733,12 +718,12 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>GUESS</span><i>#2 &amp;</i><span style="color:{Y}">#1</span></div>'
+        f'<div class="mot" id="{i}q"><span>PEAK</span><i>or</i><span style="color:{Y}">LONGEVITY?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Part 2 coming. Follow 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "#1 has to be... 👀"
+    txt = "Longevity. Every time 🏔️"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
@@ -1077,93 +1062,279 @@ def teaser(num, line, start, dur, x, rot):
     cue(start + 0.2, "pop", 0.8)
 
 
+INK, PAPER, RED = "#141416", "#efe9dd", "#d4372c"
+
+
+def bgp(start, dur, tone="ink"):
+    """Editorial background: dark ink or warm paper, a faint diagonal texture that drifts."""
+    i = nid("bg")
+    col = INK if tone == "ink" else PAPER
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full ed {tone}" style="position:absolute;inset:0;z-index:{z()};background:{col}">'
+        f'<div class="edtex" id="{i}t"></div><div class="grain"></div></div>')
+    anim(f'tl.fromTo("#{i}t",{{x:0,y:0}},{{x:-80,y:-40,duration:{max(0.5, dur)},ease:"none"}},{start})')
+    return i
+
+
+def kick(txt, start, dur, tone="ink", y=250):
+    i = nid("kk")
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="kick avoid {tone}" style="top:{y}px;z-index:{z() + 50}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:-16,opacity:0,letterSpacing:"0.5em"}},{{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"}},{start})')
+
+
+def head(lines, start, dur, tone="ink", y=300, size=118, accent=(), sfx="soft", align="center"):
+    """Condensed editorial headline: each line rises out of a mask, accent lines in yellow (ink) / red (paper)."""
+    i = nid("hd")
+    cue(start, sfx, 1.0)
+    acc = Y if tone == "ink" else RED
+    base = "#fff" if tone == "ink" else INK
+    rows = "".join(f'<div class="mask"><div id="{i}l{k}" style="color:{acc if k in accent else base}">{html.escape(t)}</div></div>'
+                   for k, t in enumerate(lines))
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="edh avoid" style="top:{y}px;font-size:{size}px;text-align:{align};z-index:{z() + 40}">{rows}</div>')
+    for k in range(len(lines)):
+        anim(f'tl.fromTo("#{i}l{k}",{{yPercent:110}},{{yPercent:0,duration:0.55,ease:"expo.out"}},{start + 0.08 * k})')
+    return i
+
+
+def frame(name, start, dur, x, y, w, rot=0.0, side="left", cap=None, hmax=900, grey=False):
+    """Photo in a white print frame with a tiny caption, sliding in from the left or right with a soft overshoot."""
+    i = nid("fr")
+    src = media(f"assets/hi/{name}.png")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        iw, ih = im.size
+    h = round(w * ih / iw)
+    if h > hmax:
+        w, h = round(hmax * iw / ih), hmax
+    capd = f'<div class="frc">{html.escape(cap)}</div>' if cap else ""
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="frm" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div style="position:relative;width:{w}px;height:{h}px;overflow:hidden"><img src="{src}" style="width:100%;height:100%;object-fit:cover;'
+        f'filter:{"grayscale(1)" if grey else "none"}">{face_marks("hi/" + name, 0, 0, w, h)}</div>{capd}</div>')
+    dx = -900 if side == "left" else 900
+    anim(f'tl.fromTo("#{i}",{{x:{dx},rotation:{rot * 4}}},{{x:0,rotation:{rot},duration:0.7,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}",{{y:-18,duration:{max(0.5, dur)},ease:"none"}},{start + 0.7})')
+    cue(start - 0.05, "swish", 0.7)
+    return i
+
+
+def cutout(name, start, dur, x, h, side="right", grey=False, bottom=0):
+    return sticker(name, start, dur, side=side, x=x, h=h, grey=grey, bottom=bottom)
+
+
+def stems(start, dur, items, y=420):
+    """Peak ratings as stems against a 900 line: each value rises to its height, photo card on top, number above."""
+    i = nid("stm")
+    base_y, top_v, low_v = 1260, 950, 860
+    def ypos(v):
+        return base_y - (v - low_v) / (top_v - low_v) * 700
+    line = ypos(900)
+    cols = []
+    for k, (lab, v, photo_, t) in enumerate(items):
+        x = 130 + k * 300
+        src = media(f"assets/hi/{photo_}.png")
+        cols.append(f'<div class="stc" id="{i}c{k}" style="left:{x}px">'
+                    f'<div class="sts" id="{i}s{k}" style="top:{ypos(v):.0f}px;height:{base_y - ypos(v):.0f}px"></div>'
+                    f'<div class="stv" id="{i}v{k}" style="top:{ypos(v) - 300:.0f}px">'
+                    f'<div class="stimg"><img src="{src}"></div><b>{v}</b><span>{html.escape(lab)}</span></div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="stems avoid" style="z-index:{z()}">'
+        f'<div class="stl" style="top:{line:.0f}px"><i>900</i></div>{"".join(cols)}</div>')
+    anim(f'tl.fromTo("#{i} .stl",{{scaleX:0}},{{scaleX:1,duration:0.6,ease:"expo.out"}},{start})')
+    for k, (lab, v, photo_, t) in enumerate(items):
+        anim(f'tl.fromTo("#{i}s{k}",{{scaleY:0}},{{scaleY:1,duration:0.6,ease:"expo.out"}},{t})')
+        anim(f'tl.fromTo("#{i}v{k}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"back.out(1.6)"}},{t + 0.15})')
+        cue(t, "rise", 0.7)
+        cue(t + 0.3, "pop", 0.8)
+
+
+def window(start, dur, t_slide):
+    """Moving-average window: 6 bars, the frame slides one match to the right and the newest bar counts most."""
+    i = nid("mw")
+    hs = [62, 80, 54, 92, 70, 48, 88, 76]
+    bars = "".join(f'<i style="left:{40 + k * 105}px;height:{h * 4}px;background:{Y if k in (5, 6) else "#3a3a40"}" id="{i}b{k}"></i>'
+                   for k, h in enumerate(hs))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="mwin avoid" style="z-index:{z()}"><div class="mwb">{bars}</div>'
+        f'<div class="mwf" id="{i}f"><span>RATING WINDOW</span></div><div class="mwl">OLDER ← MATCHES → NEWEST</div></div>')
+    anim(f'tl.fromTo("#{i} .mwb i",{{scaleY:0}},{{scaleY:1,duration:0.5,stagger:0.05,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}f",{{opacity:0}},{{opacity:1,duration:0.4}},{start + 0.4})')
+    anim(f'tl.to("#{i}f",{{x:210,duration:0.7,ease:"power3.inOut"}},{t_slide})')
+    cue(t_slide, "swish", 0.8)
+
+
+def clipping(lines, place, start, dur, x, y, rot, t_lost=None):
+    """Newspaper scorecard clipping (typewriter), with a red LOST stamp landing on it."""
+    i = nid("cl")
+    rows = "".join(f'<div>{html.escape(t)}</div>' for t in lines)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="clip2" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div class="clp">{html.escape(place)}</div><div class="clt">{rows}</div><div class="lost" id="{i}l">LOST</div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:-700,rotation:{rot * 3}}},{{y:0,rotation:{rot},duration:0.6,ease:"back.out(1.3)"}},{start})')
+    tl_ = t_lost or start + 0.5
+    anim(f'tl.fromTo("#{i}l",{{scale:2.4,opacity:0,rotation:-24}},{{scale:1,opacity:1,rotation:-12,duration:0.25,ease:"power4.in"}},{tl_})')
+    cue(start, "swish", 0.8)
+    cue(tl_ + 0.25, "impact", 0.8)
+
+
+def aiimg(start, dur, x, y, w):
+    """The AI-generated newspaper front page (Canva AI). Falls back to a typeset front page until the full-size file is in."""
+    i = nid("ai")
+    p = os.path.join(HERE, "assets", "photos", "ai_newspaper.jpg")
+    if os.path.exists(p) and os.path.exists(os.path.join(HERE, "assets", "hi", "ai_newspaper.png")):
+        inner = f'<img src="{media("assets/hi/ai_newspaper.png")}" style="width:100%;display:block">'
+    else:
+        inner = ('<div class="np"><div class="npm">THE CRICKET LOUNGE TIMES</div><div class="npd">CHENNAI · JANUARY 1999</div>'
+                 '<div class="nph">INDIA LOSE BY 12 RUNS</div><div class="nps">Tendulkar\'s 136 in vain</div><div class="npl"></div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="aiw" style="left:{x}px;top:{y}px;width:{w}px;z-index:{z()}">{inner}'
+        f'<div class="aitag">AI-GENERATED</div></div>')
+    anim(f'tl.fromTo("#{i}",{{x:900,rotation:12}},{{x:0,rotation:4,duration:0.7,ease:"expo.out"}},{start})')
+    cue(start, "shutter", 0.9)
+
+
+def ratingline(start, dur, beats, y=520):
+    """Sachin's rating story as a line: rise to the 2002 peak (898), crash in the elbow years, climb to No. 1 in 2010
+    but stay under the 898 ceiling. beats: dict of reveal times: rise, crash, back, ceiling. Shape is illustrative."""
+    i = nid("rl")
+    pts = [(60, 560), (200, 420), (330, 250), (420, 130), (500, 300), (580, 470), (660, 420), (760, 260), (850, 175), (960, 260)]
+    d = "M" + " L".join(f"{x},{yy}" for x, yy in pts)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="rline avoid" style="top:{y}px;z-index:{z()}">'
+        f'<svg width="1080" height="640" viewBox="0 0 1080 640">'
+        f'<rect id="{i}bad" x="430" y="0" width="200" height="600" fill="rgba(212,55,44,.12)"/>'
+        f'<line x1="40" y1="130" x2="1040" y2="130" stroke="{RED}" stroke-width="3" stroke-dasharray="14 10" id="{i}c"/>'
+        f'<path id="{i}p" d="{d}" fill="none" stroke="{INK}" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'<circle id="{i}pk" cx="420" cy="130" r="16" fill="{RED}"/><circle id="{i}no1" cx="850" cy="175" r="16" fill="{INK}"/></svg>'
+        f'<div class="rlb" id="{i}l1" style="left:330px;top:40px">2002 · <b>898</b></div>'
+        f'<div class="rlb" id="{i}l2" style="left:420px;top:600px">TENNIS ELBOW</div>'
+        f'<div class="rlb" id="{i}l3" style="left:740px;top:80px">No. 1 · 2010</div>'
+        f'<div class="rlb red" id="{i}l4" style="left:760px;top:-10px">CEILING: 898</div>'
+        f'<div class="rlax">1990 · · · · · · · · · · · · · · · · · · · 2013</div></div>')
+    L = 1400
+    seg = {"rise": 0.42, "crash": 0.62, "back": 0.86, "end": 1.0}
+    anim(f'tl.set("#{i}p",{{strokeDasharray:{L},strokeDashoffset:{L}}},{start})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["rise"])},duration:1.0,ease:"power2.out"}},{beats["rise"]})')
+    anim(f'tl.fromTo("#{i}pk,#{i}l1",{{scale:0,opacity:0,transformOrigin:"50% 50%"}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{beats["rise"] + 0.9})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["crash"])},duration:1.0,ease:"power2.in"}},{beats["crash"]})')
+    anim(f'tl.fromTo("#{i}bad,#{i}l2",{{opacity:0}},{{opacity:1,duration:0.5}},{beats["crash"]})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["back"])},duration:1.0,ease:"power2.out"}},{beats["back"]})')
+    anim(f'tl.fromTo("#{i}no1,#{i}l3",{{scale:0,opacity:0,transformOrigin:"50% 50%"}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{beats["back"] + 0.9})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:0,duration:0.8,ease:"power2.out"}},{beats["ceiling"]})')
+    anim(f'tl.fromTo("#{i}c,#{i}l4",{{opacity:0}},{{opacity:1,duration:0.4}},{beats["ceiling"]})')
+    for k in ("rise", "crash", "back", "ceiling"):
+        cue(beats[k], "rise" if k != "crash" else "whoosh_big", 0.7)
+
+
+def mountain(start, dur, t_range):
+    """'Not the peak, the mountain range': one spike, then a long ridge of peaks draws across."""
+    i = nid("mt")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="mtn avoid" style="z-index:{z()}"><svg width="1080" height="420" viewBox="0 0 1080 420">'
+        f'<path id="{i}a" d="M40,400 L300,400 L360,60 L420,400 L1040,400" fill="none" stroke="#666" stroke-width="7"/>'
+        f'<path id="{i}b" d="M40,400 L120,210 L190,280 L260,120 L330,230 L400,150 L470,250 L540,110 L610,220 L680,160 L750,260 L820,140 L890,240 L960,190 L1040,400" '
+        f'fill="rgba(254,222,92,.14)" stroke="{Y}" stroke-width="8" stroke-linejoin="round"/></svg></div>')
+    anim(f'tl.fromTo("#{i}a",{{strokeDasharray:1400,strokeDashoffset:1400}},{{strokeDashoffset:0,duration:0.9,ease:"power2.out"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{strokeDasharray:2600,strokeDashoffset:2600,fillOpacity:0}},{{strokeDashoffset:0,fillOpacity:1,duration:1.6,ease:"power2.inOut"}},{t_range})')
+    anim(f'tl.to("#{i}a",{{opacity:.25,duration:0.5}},{t_range})')
+    cue(t_range, "rise", 0.9)
+
+
+def captions():
+    """Reference-style phrase captions: 2-3 words in a black box with white uppercase type, numbers in yellow."""
+    for ln in TL["lines"]:
+        if ln["id"] in NO_CAPTION:
+            continue
+        words = ln["words"]
+        groups, cur = [], []
+        for w in words:
+            cur.append(w)
+            if len(cur) == 3 or w[0][-1] in ",.?!":
+                groups.append(cur)
+                cur = []
+        if cur:
+            groups.append(cur)
+        for k, g in enumerate(groups):
+            t0 = g[0][1]
+            t1 = groups[k + 1][0][1] if k + 1 < len(groups) else ln["end"] + 0.1
+            txt = " ".join(html.escape(w[0].upper().strip(",.…")) if not any(c.isdigit() for c in w[0])
+                           else f'<em>{html.escape(w[0].upper().strip(",.…"))}</em>' for w in g)
+            i = nid("cap")
+            cy, _ = mv(i, 1500)
+            add(f'<div id="{i}" {clip_attrs(t0, t1 - t0)} class="capb avoid" style="top:{cy}px"><span>{txt}</span></div>')
+            anim(f'tl.fromTo("#{i} span",{{y:14,opacity:0}},{{y:0,opacity:1,duration:0.18,ease:"power3.out"}},{t0})')
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK: the question, the contenders, then the bowler
-    stage(*seg(0, s("h2", -0.03)), tone="#0b0b0c")
-    title(["WHO HAD THE", "SCARIEST PRIME", "IN CRICKET?"], *seg(0.1, s("h2", -0.03)), y=640, size=110, accent=(1,), sfx="impact")
-    stage(*seg(s("h2", -0.03), s("h3", -0.03)), tone="#0d0d0f")
-    title(["MANY CONTENDERS…"], *seg(s("h2"), s("h3", -0.03)), y=330, size=96)
-    for k, (nm, w_, x_, y_, r_) in enumerate((("c_sachin", 5, 40, 520, -4), ("sh_dravid_out", 7, 560, 560, 3),
-                                              ("c_kohli", 9, 40, 980, 3), ("c_viv", 11, 560, 1020, -3))):
-        card(nm, *seg(word("h2", w_), s("h3", -0.03)), w=480, y=y_, x=x_, rot=r_, hmax=420)
-    for k, (nm, w_, x_, y_) in enumerate((("SACHIN", 5, 60, 900), ("DRAVID", 7, 580, 940), ("KOHLI", 9, 60, 1360), ("VIV", 11, 580, 1400))):
-        tag(nm, *seg(word("h2", w_) + 0.2, s("h3", -0.03)), x=x_, y=y_)
-    credit(*seg(s("h2"), s("h3", -0.03)), "PHOTOS: BCCI · GETTY IMAGES")
-    video3d("num3", *seg(s("h3", -0.03), s("h4", -0.03)))
-    cue(s("h3"), "boom", 1.0)
-    title(["IT'S A BOWLER"], *seg(word("h3", 4), s("h4", -0.03)), y=1180, size=110, accent=(0,), sfx="impact")
-    ph("sh_dravid_out", *seg(s("h4", -0.03), s("h5", -0.03)), GETTY, side="right", push=(1.0, 1.08))
-    title(["BATTERS", "LOOKED HELPLESS"], *seg(word("h4", 5), s("h5", -0.03)), y=300, size=100, accent=(1,), sfx="impact")
-    hero("sh_roar_99", ["SHOAIB", "AKHTAR"], *seg(s("h5", -0.03), s("e1", -0.03)))
-    credit(*seg(s("h5", -0.03), s("e1", -0.03)), GETTY)
-    flash(s("h5"), peak=0.6)
-    cue(s("h5"), "boom", 1.0)
-    # ---------------- Eden Gardens 1999
-    stage(*seg(s("e1", -0.03), s("e3", -0.03)), tone="#0b0b0c")
-    card("eden_crowd", *seg(s("e1", -0.03), s("e3", -0.03)), w=540, y=410, rot=-2, hmax=720)
-    credit(*seg(s("e1", -0.03), s("e3", -0.03)), "PHOTO: ARCHIVE")
-    chip("EDEN GARDENS · 1999", *seg(s("e1", 0.05), s("e3", -0.03)), x=None, y=330)
-    odo("100,000", *seg(s("e2"), s("e3", -0.03)), x=None, y=1150, size=140, label="FANS IN THE STANDS")
-    cue(s("e2"), "crowd", 1.0)
-    ph("sh_runup", *seg(s("e3", -0.03), s("e4", -0.03)), GETTY, side=None, push=(1.0, 1.12))
-    speed(*seg(s("e3", 0.2), s("e5", -0.03)))
-    title(["THE RAWALPINDI", "EXPRESS"], *seg(word("e3", 1), s("e4", -0.03)), y=300, size=110, accent=(1,), sfx="impact")
-    ph("sh_run_2011", *seg(s("e4", -0.03), s("e5", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    stamp("A STORM", *seg(word("e4", 6) - 0.05, s("e5", -0.03)), y=300, size=170, rot=-5)
-    ph("sh_load", *seg(s("e5", -0.03), word("e5", 4)), GETTY, side=None, push=(1.15, 1.04))
-    title(["THUNDERBOLT"], *seg(word("e5", 2), word("e5", 4)), y=300, size=120, accent=(0,), sfx="impact")
-    ph("sh_dravid_out", *seg(word("e5", 4), s("s1", -0.03)), GETTY, side=None, push=(1.2, 1.05), origin="25% 30%")
-    stumps_shatter(word("e5", 7))
-    stamp("DRAVID: BOWLED", *seg(word("e5", 7), s("s1", -0.03)), y=1100, size=110, color="#fff", rot=-4)
-    # ---------------- Sachin, first ball
-    stage(*seg(s("s1", -0.03), s("s2", -0.03)), tone="#0b0b0c")
-    title(["THEN…", "SACHIN TENDULKAR"], *seg(word("s1", 2), s("s2", -0.03)), y=300, size=104, accent=(1,), sfx="impact")
-    card("sh_sachin_six", *seg(word("s1", 2), s("s2", -0.03)), w=900, y=620, rot=-2)
-    credit(*seg(s("s1", -0.03), s("s2", -0.03)), GETTY)
-    chip("THE GREATEST OF HIS GENERATION", *seg(word("s1", 7), s("s2", -0.03)), x=None, y=1260)
-    ph("sh_appeal_wide", *seg(s("s2", -0.03), s("s3", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    title(["LETHAL", "YORKER"], *seg(word("s2", 5), s("s3", -0.03)), y=300, size=150, accent=(1,), sfx="impact")
-    stage(*seg(s("s3", -0.03), s("s4", -0.03)), tone="#0d0d0f")
-    title(["FIRST BALL"], *seg(word("s3", 2), word("s3", 7)), y=640, size=150, accent=(0,))
-    stumps_shatter(word("s3", 7))
-    stamp("BOWLED", *seg(word("s3", 7), s("s4", -0.03)), y=900, size=220, color="#ff3b3b", rot=-5)
-    glitch(word("s3", 7) + 0.05, 0.4)
-    # silence: crowd card goes grey, nothing moves but the type
-    stage(*seg(s("s4", -0.03), s("p1", -0.03)), tone="#050506")
-    card("eden_crowd", *seg(s("s4", -0.03), s("p1", -0.03)), w=520, y=360, rot=0, hmax=660)
-    title(["100,000", "IN SILENCE"], *seg(word("s4", 4), s("p1", -0.03)), y=1100, size=110, accent=(1,), sfx="soft")
-    # ---------------- his prime
-    ph("sh_roar_99", *seg(s("p1", -0.03), word("p1", 7)), GETTY, side=None, push=(1.12, 1.03))
-    title(["SHOAIB IN", "HIS PRIME"], *seg(word("p1", 2), word("p1", 7)), y=300, size=120, accent=(1,), sfx="impact")
-    flicker(["sh_appeal_wide", "sh_roar_99", "sh_arms_2011", "sh_load", "sh_runup", "sh_dravid_out"], *seg(word("p1", 7), s("p2", -0.03)))
-    for k, (txt, w_) in enumerate((("RAW", 7), ("FEROCIOUS", 8), ("BRUTALLY FAST", 9), ("FEARLESS", 13))):
-        stamp(txt, *seg(word("p1", w_), (word("p1", w_ + 1) if w_ < 13 else s("p2", -0.03))), y=880, size=150, rot=(-4, 4)[k % 2])
-    ph("sh_arms_smile", *seg(s("p2", -0.03), s("r1", -0.03)), GETTY, side="up", push=(1.0, 1.08))
-    title(["NOT FACING HIM…"], *seg(s("p2"), s("p3")), y=300, size=100)
-    stamp("SURVIVING HIM", *seg(word("p3", 4) - 0.05, s("r1", -0.03)), y=300, size=130, color="#ff3b3b", rot=-4)
-    # ---------------- 161.3
-    ph("sh_arms_2011", *seg(s("r1", -0.03), s("r2", -0.03)), GETTY, side="right", push=(1.0, 1.1))
-    title(["SOMETHING NO", "HUMAN HAD DONE"], *seg(word("r1", 7), s("r2", -0.03)), y=300, size=100, accent=(1,), sfx="impact")
-    stage(*seg(s("r2", -0.03), s("r4", -0.03)), tone="#0b0b0c")
-    title(["FASTEST DELIVERY", "IN HISTORY"], *seg(s("r2", 0.05), s("r4", -0.03)), y=290, size=96, accent=(1,))
-    speedgun(*seg(s("r2", 0.3), s("r4", -0.03)), t_hit=word("r3", 2) + 0.1)
-    ph("sh_load", *seg(s("r4", -0.03), s("f1", -0.03)), GETTY, side="left", push=(1.0, 1.1))
-    stamp("20+ YEARS. UNBEATEN.", *seg(word("r4", 5), s("f1", -0.03)), y=1060, size=90, rot=-3)
+    # ---------------- HOOK
+    bgp(*seg(0, s("h2", -0.03)), "ink")
+    kick("DID YOU KNOW", *seg(0.1, s("h2", -0.03)))
+    cutout("st_raise_tall", *seg(0.05, s("h2", -0.03)), x=470, h=1150, grey=True)
+    head(["MOST TEST", "RUNS EVER"], *seg(0.2, s("h2", -0.03)), y=330, size=120, accent=(1,), align="left")
+    odo("15,921", *seg(word("h1", 3), s("h2", -0.03)), x=70, y=640, size=130, label="TEST RUNS")
+    credit(*seg(0, s("h2", -0.03)), GETTY)
+    bgp(*seg(s("h2", -0.03), s("h3", -0.03)), "paper")
+    kick("ACCORDING TO THE ICC", *seg(s("h2"), s("h3", -0.03)), "paper")
+    head(["30+ BATTERS", "HAD A BETTER PEAK"], *seg(word("h2", 5), s("h3", -0.03)), "paper", y=320, size=104, accent=(0,), sfx="impact")
+    frame("ponting", *seg(word("h2", 8), s("h3", -0.03)), x=70, y=700, w=440, rot=-3, side="left", cap="Ricky Ponting")
+    frame("kallis", *seg(word("h2", 10), s("h3", -0.03)), x=560, y=760, w=450, rot=3, side="right", cap="Jacques Kallis")
+    # ---------------- the numbers
+    bgp(*seg(s("h3", -0.03), s("h4", -0.03)), "ink")
+    kick("HIS PEAK RATING", *seg(s("h3"), s("h4", -0.03)))
+    cutout("st_nz_tall", *seg(s("h3", -0.03), s("h4", -0.03)), x=560, h=1100, grey=True)
+    odo("898", *seg(word("h3", 5) - 0.1, s("h4", -0.03)), x=70, y=420, size=280)
+    credit(*seg(s("h3", -0.03), s("h4", -0.03)), GETTY)
+    bgp(*seg(s("h4", -0.03), s("h6", -0.03)), "paper")
+    kick("PEAK TEST RATING", *seg(s("h4"), s("h6", -0.03)), "paper")
+    stems(*seg(s("h4", -0.03), s("h6", -0.03)), [("SACHIN", 898, "st_raise_tall", s("h4", 0.0)), ("KOHLI", 937, "kohli_test", word("h4", 4) - 0.1),
+                                                   ("GAVASKAR", 916, "gavaskar", word("h5", 5) - 0.1)])
+    # ---------------- the question (screen recording + screenshot)
+    bgp(*seg(s("h6", -0.03), s("f1", -0.03)), "ink")
+    head(["NOT EVEN IN", "THE TOP 30?"], *seg(s("h6"), s("f1", -0.03)), y=280, size=110, accent=(1,), sfx="impact")
+    screen("screen_peak", *seg(s("h6", -0.03), s("f1", -0.03)), side="left", focus="70% 60%", zoom=1.25, mstart=0.6)
+    screenshot("capture/out/shot_peak.png", *seg(word("h6", 12), s("f1", -0.03)), side="right", rot=4, top=1080)
     # ---------------- follow
-    stage(*seg(s("f1", -0.03), s("t1", -0.03)), tone="#0b0b0c")
-    title(["TRUE CRICKET FAN?"], *seg(word("f1", 2), s("t1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
-    follow_card(*seg(s("f1", 0.05), s("t1", -0.03)), t_follow=word("f1", 8))
-    # ---------------- only number three
-    ph("sh_roar_99", *seg(s("t1", -0.03), s("t2", -0.03)), GETTY, side=None, fx="grey", push=(1.1, 1.0))
-    title(["THE SCARIEST PART…"], *seg(s("t1"), word("t1", 5)), y=300, size=96)
-    stamp("HE'S ONLY #3", *seg(word("t1", 5), s("t2", -0.03)), y=1060, size=150, color="#ff3b3b", rot=-4)
-    cue(word("t1", 7), "boom", 1.0)
-    stage(*seg(s("t2", -0.03), s("q1", -0.03)), tone="#0b0b0c")
-    teaser(2, "Swing at 150 km/h", *seg(s("t2"), s("q1", -0.03)), x=70, rot=-3)
-    teaser(1, "Never wore a helmet", *seg(s("t3"), s("q1", -0.03)), x=560, rot=3)
+    bgp(*seg(s("f1", -0.03), s("w1", -0.03)), "ink")
+    head(["TRUE CRICKET FAN?"], *seg(word("f1", 7), s("w1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
+    follow_card(*seg(s("f1", 0.05), s("w1", -0.03)), t_follow=word("f1", 13))
+    # ---------------- how it works
+    bgp(*seg(s("w1", -0.03), s("w3", -0.03)), "paper")
+    kick("HOW IT WORKS", *seg(s("w1"), s("w3", -0.03)), "paper")
+    head(["ICC RATING"], *seg(s("w1", 0.05), s("w3", -0.03)), "paper", y=300, size=130)
+    head(["= MOVING AVERAGE"], *seg(word("w2", 7), s("w3", -0.03)), "paper", y=440, size=96, accent=(0,), sfx="impact")
+    window(*seg(word("w2", 5), s("w3", -0.03)), t_slide=word("w2", 11))
+    bgp(*seg(s("w3", -0.03), s("r1", -0.03)), "paper")
+    head(["1 RUN ≠ 1 RUN"], *seg(s("w3", 0.05), s("r1", -0.03)), "paper", y=300, size=140, accent=(0,), sfx="impact")
+    frame("st_90s_drive", *seg(s("w3", 0.2), s("r1", -0.03)), x=290, y=560, w=500, rot=-2, side="left", cap="Sachin · 1990s")
+    chip("vs STRONG TEAMS ↑", *seg(word("w4", 1), s("r1", -0.03)), x=None, y=1260)
+    chip("IN WINS ↑", *seg(word("w4", 6), s("r1", -0.03)), x=None, y=1360)
+    # ---------------- problem 1: hundreds in losses
+    bgp(*seg(s("r1", -0.03), s("t1", -0.03)), "ink")
+    kick("PROBLEM #1", *seg(s("r1"), s("t1", -0.03)))
+    head(["HIS 100s", "CAME IN LOSSES"], *seg(word("r1", 4), s("r2", -0.03)), y=320, size=112, accent=(1,), sfx="impact")
+    frame("st_walk_dejected", *seg(word("r1", 6), s("r2", -0.03)), x=270, y=640, w=540, rot=-2, side="right", cap="Walking back", grey=True)
+    clipping(["TENDULKAR  114"], "PERTH · 1992", *seg(s("r2", -0.03), s("t1", -0.03)), x=70, y=330, rot=-4, t_lost=word("r2", 2))
+    clipping(["TENDULKAR  169"], "CAPE TOWN · 1997", *seg(s("r3", -0.03), s("t1", -0.03)), x=560, y=420, rot=3, t_lost=word("r3", 3))
+    clipping(["TENDULKAR  136"], "CHENNAI · 1999", *seg(s("r4", -0.03), s("t1", -0.03)), x=90, y=640, rot=-2, t_lost=word("r4", 4))
+    aiimg(*seg(word("r4", 3), s("t1", -0.03)), x=560, y=740, w=440)
+    head(["INDIA LOST", "ALL 3"], *seg(word("r4", 5), s("t1", -0.03)), y=1180, size=100, accent=(1,), sfx="impact")
+    # ---------------- problem 2: the elbow, the ceiling
+    bgp(*seg(s("t1", -0.03), s("m1", -0.03)), "paper")
+    kick("PROBLEM #2", *seg(s("t1"), s("m1", -0.03)), "paper")
+    ratingline(*seg(s("t1", -0.03), s("m1", -0.03)), {"rise": word("t1", 4), "crash": word("t1", 9), "back": s("t3"), "ceiling": word("t4", 3)}, y=420)
+    frame("st_elbow", *seg(word("t1", 9), s("t3", -0.03)), x=560, y=1090, w=460, rot=3, side="right", cap="Tennis elbow · 2004")
+    frame("st_2010_sa", *seg(s("t3"), s("m1", -0.03)), x=60, y=1090, w=460, rot=-3, side="left", cap="No. 1 again · 2010")
+    # ---------------- the mountain range
+    bgp(*seg(s("m1", -0.03), s("m2", -0.03)), "ink")
+    head(["NO MONSTER", "PEAK?"], *seg(s("m1"), s("m2", -0.03)), y=640, size=140, accent=(1,), sfx="impact")
+    bgp(*seg(s("m2", -0.03), s("m3", -0.03)), "ink")
+    cutout("st_delhi_raise", *seg(s("m2", -0.03), s("m3", -0.03)), x=560, h=1150)
+    odo("24", *seg(word("m2", 1) - 0.1, s("m3", -0.03)), x=70, y=300, size=200, label="YEARS")
+    odo("200", *seg(word("m2", 3) - 0.1, s("m3", -0.03)), x=70, y=640, size=200, label="TESTS")
+    odo("15,921", *seg(word("m2", 6) - 0.1, s("m3", -0.03)), x=70, y=980, size=150, label="RUNS")
+    credit(*seg(s("m2", -0.03), s("m3", -0.03)), GETTY)
+    bgp(*seg(s("m3", -0.03), s("q1", -0.03)), "ink")
+    head(["NOT THE PEAK…"], *seg(s("m3"), s("q1", -0.03)), y=330, size=110)
+    head(["THE MOUNTAIN RANGE"], *seg(word("m3", 7), s("q1", -0.03)), y=470, size=96, accent=(0,), sfx="impact")
+    mountain(*seg(s("m3", 0.1), s("q1", -0.03)), t_range=word("m3", 7))
+    frame("st_young_walk", *seg(s("m3", 0.1), s("q1", -0.03)), x=70, y=1080, w=300, rot=-4, side="left", cap="1990")
+    frame("st_nz_raise", *seg(word("m3", 7), s("q1", -0.03)), x=560, y=1100, w=450, rot=3, side="right", cap="2009")
     # ---------------- CTA
     video3d("logo", s("q1", -0.03), TOTAL - s("q1", -0.03))
     comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
@@ -1177,6 +1348,52 @@ def edit():
 
 
 EXTRA_CSS = f"""
+.ed .edtex{{position:absolute;inset:-120px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 18px)}}
+.ed.paper .edtex{{background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.04) 0 2px,transparent 2px 18px)}}
+.ed.paper .grain{{opacity:.35;mix-blend-mode:multiply}}
+.kick{{position:absolute;left:0;right:0;text-align:center;font:800 26px "IDisp";letter-spacing:.28em;color:{Y}}}
+.kick.paper{{color:#d4372c}}
+.edh{{position:absolute;left:60px;right:60px;font-family:"Bebas";line-height:.92;letter-spacing:.005em}}
+.edh .mask{{overflow:hidden}}
+.frm{{position:absolute;background:#fff;padding:14px 14px 0;box-shadow:0 30px 70px rgba(0,0,0,.45)}}
+.frc{{font:600 22px "IDisp";color:#555;padding:10px 2px 14px;font-style:italic}}
+.stems{{position:absolute;inset:0}}
+.stl{{position:absolute;left:60px;right:60px;height:3px;background:#d4372c;transform-origin:0 50%}}
+.stl i{{position:absolute;right:0;top:-34px;font:800 26px "IDisp";font-style:normal;color:#d4372c}}
+.stc{{position:absolute;width:260px}}
+.sts{{position:absolute;left:126px;width:8px;background:#141416;transform-origin:50% 100%}}
+.stv{{position:absolute;left:0;width:260px;text-align:center}}
+.stimg{{width:180px;height:180px;margin:0 auto 8px;border-radius:50%;overflow:hidden;border:6px solid #fff;box-shadow:0 14px 30px rgba(0,0,0,.3)}}
+.stimg img{{width:100%;height:100%;object-fit:cover;object-position:50% 15%}}
+.stv b{{display:block;font-family:"Bebas";font-size:96px;line-height:.9;color:#141416}}
+.stv span{{font:800 24px "IDisp";letter-spacing:.14em;color:#d4372c}}
+.mwin{{position:absolute;left:60px;right:60px;top:700px;height:520px}}
+.mwb i{{position:absolute;bottom:80px;width:80px;border-radius:8px 8px 0 0;transform-origin:50% 100%}}
+.mwf{{position:absolute;left:446px;bottom:60px;width:240px;height:440px;border:5px solid #d4372c;border-radius:16px}}
+.mwf span{{position:absolute;left:0;right:0;top:-44px;text-align:center;font:800 22px "IDisp";letter-spacing:.14em;color:#d4372c}}
+.mwl{{position:absolute;left:0;right:0;bottom:0;text-align:center;font:800 24px "IDisp";letter-spacing:.2em;color:#555}}
+.clip2{{position:absolute;width:420px;background:#f6f1e4;padding:22px 26px 26px;box-shadow:0 24px 50px rgba(0,0,0,.45);font-family:"Courier New",monospace;color:#1d1d1d}}
+.clp{{font-size:22px;letter-spacing:.12em;color:#7a6e5a;margin-bottom:8px}}
+.clt{{font-size:46px;font-weight:700}}
+.lost{{position:absolute;right:-20px;bottom:-24px;border:5px solid #d4372c;color:#d4372c;font:900 44px "IDisp";padding:2px 16px;border-radius:8px;background:rgba(246,241,228,.85)}}
+.aiw{{position:absolute;box-shadow:0 30px 70px rgba(0,0,0,.55);background:#fff;padding:12px}}
+.aitag{{position:absolute;left:12px;top:-30px;background:{Y};color:#111;font:900 20px "IDisp";letter-spacing:.12em;padding:4px 10px;border-radius:6px}}
+.np{{background:#f2ecdc;padding:20px 22px 30px;font-family:Georgia,serif;color:#1b1b1b;text-align:center}}
+.npm{{font-size:28px;font-weight:700;border-bottom:3px double #1b1b1b;padding-bottom:6px}}
+.npd{{font-size:16px;letter-spacing:.2em;margin:6px 0 14px}}
+.nph{{font-size:52px;font-weight:900;line-height:1}}
+.nps{{font-size:24px;font-style:italic;margin:10px 0}}
+.npl{{height:160px;background:repeating-linear-gradient(0deg,#cfc6b2 0 3px,transparent 3px 14px)}}
+.rline{{position:absolute;left:0;width:1080px;height:660px}}
+.rlb{{position:absolute;font:800 28px "IDisp";color:#141416;letter-spacing:.06em;white-space:nowrap}}
+.rlb b{{color:#d4372c}}
+.rlb.red{{color:#d4372c}}
+.rlax{{position:absolute;left:40px;right:40px;bottom:-56px;text-align:center;font:700 22px "IDisp";color:#777;letter-spacing:.1em}}
+.mtn{{position:absolute;left:0;top:640px;width:1080px;height:420px}}
+.capb{{position:absolute;left:0;right:0;text-align:center;z-index:900}}
+.capb span{{display:inline-block;background:#0b0b0c;color:#fff;font:900 46px "IDisp";letter-spacing:.02em;text-transform:uppercase;padding:10px 22px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4)}}
+.capb em{{font-style:normal;color:{Y}}}
+
 .tz{{position:absolute;top:560px;width:450px;height:640px;border-radius:30px;background:linear-gradient(160deg,#1c1c22,#0c0c0f);border:2px solid rgba(254,222,92,.4);box-shadow:0 40px 90px rgba(0,0,0,.6);text-align:center}}
 .tzr{{margin-top:40px;font:900 80px "IDisp";font-style:italic;color:{Y}}}
 .tzq{{font:900 280px/1 "IDisp";color:#fff;opacity:.9;margin-top:10px}}

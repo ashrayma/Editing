@@ -257,11 +257,11 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # ticks under the question; the beat drops on "Shoaib Akhtar"; drums out before the Sachin ball and the speed gun;
-    # dead silence for "a hundred thousand people fall into stunned, deafening silence"
-    m = music(total, drop=L["h5"]["start"], breaks=[L["s2"]["start"], L["r2"]["start"], L["t1"]["start"]],
-              outro=L["q1"]["start"] + 0.3, thin=[(L["t1"]["start"], L["q1"]["start"])],
-              mute=[(L["s3"]["end"] + 0.05, L["s4"]["end"] + 0.15)], intro_warm=False)
+    # explainer bed: ticks under the hook, the beat comes in on "Here's how the rating works"; drums out before
+    # each problem; thin under the elbow years; a beat of air before "the mountain range"
+    m = music(total, drop=L["w1"]["start"], breaks=[L["r1"]["start"], L["t1"]["start"], L["m2"]["start"]],
+              outro=L["q1"]["start"] + 0.3, thin=[(L["t2"]["start"], L["t3"]["start"])],
+              mute=[(L["m3"]["words"][6][1] - 0.35, L["m3"]["words"][6][1] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))
