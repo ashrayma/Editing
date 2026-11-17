@@ -39,3 +39,14 @@ today/out/*.log
 today/out/snap*/
 today/out/.*hf-transaction*/
 today/out/work-*/
+karun_303/vo_raw/
+karun_303/footage/
+karun_303/out/*.wav
+karun_303/out/tx/
+karun_303/out_*.log
+karun_303/hf/media/
+karun_303/hf/.hyperframes/
+karun_303/out/*.mp4
+karun_303/out/snap*/
+karun_303/__pycache__/
+karun_303/models/

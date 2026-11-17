@@ -1,0 +1,172 @@
+{{short description|Indian cricketer}}
+{{Use dmy dates|date=October 2025}}
+{{Use Indian English|date=October 2025}}
+{{Infobox cricketer
+| name = Karun Nair
+| image = Karun nair With Rashid Zirak.jpg
+| country = India
+| full_name = Karun Kaladharan Nair
+| birth_date = {{Birth date and age|1991|12|06|df=yes}}
+| birth_place = [[Jodhpur]], [[Rajasthan]], India
+| nickname = Kulla<ref>{{Cite web |title=KL Rahul reveals the funny nicknames of his Punjab teammates |url=https://www.redbull.com/in-en/kl-rahul-punjab-teammates-nicknames |access-date=2022-10-04 |website=Red Bull |language=en}}</ref>
+| batting = Right-handed
+| bowling = Right-arm [[off break]]
+| role = [[Batting order (cricket)#Top order|Top-order batter]]
+| relatives = 
+| international = true 
+| international_span = 2016–2025
+| test_debut_date = 26 November
+| test_debut_year = 2016
+| test_debut_against = England
+| test_cap = 287
+| last_test_date = 31 July
+| last_test_year = 2025
+| last_test_against = England 
+| odi_debut_date = 11 June
+| odi_debut_year = 2016
+| odi_debut_against = Zimbabwe
+| odi_cap = 212
+| last_odi_date = 13 June
+| last_odi_year = 2016
+| last_odi_against = Zimbabwe
+| odi_shirt_number = 69
+| club1 = [[Karnataka cricket team|Karnataka]]
+| year1 = 2012–2023, 2025–present
+| club2 = [[Royal Challengers Bangalore]]
+| year2 = 2013
+| club3 = [[Rajasthan Royals]]
+| year3 = 2014–2015, 2022
+| club4 = [[Delhi Capitals]]
+| year4 = 2016–2017, 2025–present
+| club5 = [[Kings XI Punjab]]
+| year5 = 2018–2020
+| club6 = [[Vidarbha cricket team|Vidarbha]]
+| year6 = 2023–2025
+| club7 = [[Northamptonshire County Cricket Club|Northamptonshire]]
+| year7 = 2023–2024
+| columns = 4
+| column1 = [[Test cricket|Test]]
+| matches1 = 10
+| runs1 = 579
+| bat_avg1 = 41.35
+| 100s_50s1 = 1/1
+| top_score1 = 303[[Not out|*]]
+| deliveries1 = 12
+| wickets1 = 0
+| bowl_avg1 = –
+| five_for1 = –
+| ten_for1 = –
+| best_bowling1 = –
+| catches_stumpings1 = 10/–
+| column2 = [[One Day International|ODI]]
+| matches2 = 2
+| runs2 = 46
+| bat_avg2 = 23.00
+| 100s_50s2 = 0/0
+| top_score2 = 39
+| deliveries2 = –
+| wickets2 = –
+| bowl_avg2 = –
+| five_for2 = –
+| ten_for2 = –
+| best_bowling2 = –
+| catches_stumpings2 = 0/–
+| column3 = [[First-class cricket|FC]]
+| matches3 = 125
+| runs3 = 9277
+| bat_avg3 = 50.41
+| 100s_50s3 = 26/39
+| top_score3 = 328
+| deliveries3 = 1,563
+| wickets3 = 16
+| bowl_avg3 = 53.06
+| five_for3 = 0
+| ten_for3 = 0
+| best_bowling3 = 2/10
+| catches_stumpings3 = 102/–
+| column4 = [[List A cricket|LA]]
+| matches4 = 107
+| runs4 = 3,128
+| bat_avg4 = 41.15
+| 100s_50s4 = 8/14
+| top_score4 = 163[[Not out|*]]
+| deliveries4 = 976
+| wickets4 = 16
+| bowl_avg4 = 52.00
+| five_for4 = 0
+| ten_for4 = 0
+| best_bowling4 = 2/16
+| catches_stumpings4 = 45/–
+| date = 8 October 
+| year = 2025
+| source = http://www.espncricinfo.com/india/content/player/398439.html ESPNcricinfo
+|height=1.70 m<ref>{{cite news |title=Karun Nair first batsman in 68 years to score triple century in Ranji final |url=https://www.thehindu.com/sport/cricket/karun-nair-first-batsman-in-68-years-to-score-a-triple-century-in-ranji-final/article6978797.ece |access-date=15 April 2025 |work=The Hindu |date=11 March 2015}}</ref>}}
+
+'''Karun Kaladharan Nair''' (born 6 December 1991) is an Indian international [[cricket]]er.<ref>{{cite news |title=England bat first; Rahul injured, Nair handed debut |url=http://www.espncricinfo.com/india-v-england-2016-17/content/story/1068875.html |access-date=26 November 2016 |publisher=ESPNcricinfo}}</ref> He is a right-handed [[Batting order (cricket)#Top Order|top order]] [[batting (cricket)|batter]] and occasional [[off break]] [[bowling (cricket)|bowler]].<ref>{{cite web|url=http://m.espncricinfo.com/india/content/player/398439.html|publisher=ESPNcricinfo|title=Karun Nair|access-date=3 March 2021|archive-date=29 September 2020|archive-url=https://web.archive.org/web/20200929071534/http://m.espncricinfo.com/india/content/player/398439.html|url-status=dead}}</ref> He is the  second{{efn|The first being [[Virender Sehwag]]}} Indian batter to score a triple century in [[Test cricket]].<ref>{{Cite web|date=19 December 2016|title=Karun Nair's record-shattering triple hundred: All the stats you need to know|url=https://www.indiatoday.in/sports/cricket/story/karun-nair-triple-hundred-india-ve-england-chennai-test-358405-2016-12-19|access-date=2021-09-03|website=India Today|language=en}}</ref> He plays for [[Karnataka cricket team|Karnataka]] in domestic cricket and [[Delhi Capitals]] in [[Indian Premier League]].
+
+==Early life==
+Karun was born on 6 December 1991 in [[Jodhpur]], Rajasthan.<ref>{{cite web|url=https://www.news18.com/cricketnext/news/karun-nair-quick-facts-about-indias-new-batting-star-1324911.html|title=Karun Nair: Quick Facts About India's New Batting Star|work=News 18|date=20 December 2016|access-date=3 May 2022}}</ref> His parents, Kaladharan Nair and Prema Nair, hail from [[Chengannur]] in the [[Alappuzha district]] of [[Kerala]].<ref>{{cite web|url=https://www.sportskeeda.com/cricket/cricket-was-in-his-blood-from-age-10-karun-nairs-parents|title=Cricket was in his blood from age 10: Karun Nair's parents|work=Sports Keeda|date=20 December 2016|access-date=3 May 2022}}</ref> Kaladharan, who is a mechanical engineer, lived in Jodhpur at the time of his son's birth and later moved with his family to Koramangala, [[Bangalore]] where he also worked on the sprinkler system at the [[M. Chinnaswamy Stadium]].<ref>{{cite web|last1=Monga|first1=Sidharth|title=Parental pride as Nair feels the hand of fortune at last|url=http://www.espncricinfo.com/india-v-england-2016-17/content/story/1073391.html|publisher=ESPNcricinfo|access-date=19 December 2016}}</ref> Nair's mother, Prema is a teacher at [[Chinmaya Vidyalayas|Chinmaya Vidyalaya]], Bangalore. Karun has an elder sister, Shruthi Nair.<ref name="Karun"/>
+
+Born as a premature baby, Karun's parents were advised by the doctors to introduce their son to sports as part of the treatment for his weak lungs.<ref>{{cite web|url=https://www.outlookindia.com/sports/karun-nairs-incredible-journey-to-become-a-star-cricketer-news-297516|title=Karun Nair's Incredible Journey To Become A Star Cricketer|work=outlookindia|date=20 December 2016 }}</ref> Nair joined Koramangala Cricket Academy on 28 March 2001, a year after his family moved to Bengaluru and was coached under Shivanand.<ref>{{cite web|url=https://www.crictracker.com/karun-nair-was-destined-for-great-things-feels-childhood-coach-shivanand/|title=Karun Nair was destined for great things; feels childhood coach Shivanand|work=crictracker|date=20 December 2016 |access-date=3 March 2021}}</ref> He studied at Chinmaya Vidyalaya, where his mother taught until fourth grade and switched to the [[The Frank Anthony Public School, Bangalore|Frank Anthony Public School]] for better cricketing opportunities.<ref>{{cite web|last1=Chatterjee|first1=Soumya|title=As Karun Nair joins elite 300 club, proud school in Bengaluru recalls his dedication|date=19 December 2016 |url=http://www.thenewsminute.com/article/karun-nair-joins-elite-300-club-proud-school-bengaluru-recalls-his-dedication-54502|publisher=The News Minute|access-date=19 December 2016}}</ref><ref>{{cite news |last1=Achal |first1=Ashwin |title=Since he was 12, Karun wanted to play for India |url=https://www.thehindu.com/news/cities/bangalore/%E2%80%98Since-he-was-12-Karun-wanted-to-play-for-India%E2%80%99/article16906516.ece |access-date=24 November 2020 |work=The Hindu |date=19 December 2016 |language=en-IN}}</ref> He studied [[Bachelor of Commerce]] at [[Jain University]] in Bangalore.<ref name="Karun">{{cite news |last1=Bhatia |first1=Neeru |title=Double-clicked! |url=https://www.theweek.in/theweek/sports/karun-nair-kl-rahul.html |access-date=24 November 2020 |work=The Week |date=1 January 2017}}</ref> He is fluent in several languages: [[English language|English]], [[Hindi language|Hindi]], [[Malayalam]], [[Kannada language|Kannada]] and [[Tamil language|Tamil]]. His mother tongue is Malayalam.<ref name="Language">{{cite web|url=https://www.google.com/cameos/L6E4XgJ6/pp1KeM?hl=en|work=Google Cameos|title=What languages does Karun Nair speak?}}</ref>
+
+==Domestic career==
+Nair made his first-class debut in the 2013–14 season in which [[Karnataka cricket team|Karnataka]] won the Ranji Trophy. He scored three consecutive centuries in their final league game and the first-two knockout matches. He went through a lean patch in the 2014–15 season with a string of low scores but bounced back smashing 328 runs in the final<ref name="In1">{{cite news|title=Karun Nair's long wait for maiden Test cap could come to an end next week|url=https://www.indiatoday.in/sports/cricket/story/karun-nair-india-test-squad-vs-england-349798-2016-11-02|access-date=2 November 2016|publisher=India Today}}</ref> helping Karnataka to win the title again.<ref>{{cite web |title=The Ranji Trophy |url=https://www.espncricinfo.com/story/the-ranji-trophy-261615 |publisher=ESPNcricinfo|access-date=7 January 2021 |language=en}}</ref> He also became the second player from Karnataka to score a triple century and the first batter to score a triple century in a Ranji final since 1946–47.<ref>{{cite web|title=Karun Nair first batsman in 68 years to score triple century in Ranji final|url=https://www.thehindu.com/sport/cricket/karun-nair-first-batsman-in-68-years-to-score-a-triple-century-in-ranji-final/article6978797.ece|work=The Hindu|date=10 March 2015 |access-date=19 December 2016}}</ref> It was also the highest total by a batter in the final of the Ranji Trophy.<ref name="OTD">{{cite web |url=http://www.espncricinfo.com/magazine/content/story/149428.html |title=The most exhilarating ODI of them all |access-date=14 March 2018 |publisher=ESPNcricinfo}}</ref> He scored 500 runs in the [[2015–16 Ranji Trophy]] including two centuries and two half-centuries.<ref>{{cite web|url=https://stats.espncricinfo.com/ci/engine/records/averages/batting_bowling_by_team.html?id=10281;team=1923;type=tournament|title= Records / Ranji Trophy, 2015/16 - Karnataka / Batting and bowling averages|publisher=ESPNcricinfo}}</ref> He continued his good run in the next season hitting one century and three half-centuries from his six appearances in the season.<ref>{{cite web|url=https://stats.espncricinfo.com/ci/engine/records/averages/batting_bowling_by_team.html?id=11519;team=1923;type=tournament|title= Records / Ranji Trophy, 2016/17 - Karnataka / Batting and bowling averages|publisher=ESPNcricinfo}}</ref>
+
+In October 2018, he was named in [[India A cricket team|India A]]'s squad for the [[2018–19 Deodhar Trophy]].<ref>{{cite web|url=http://www.espncricinfo.com/ci/content/story/1162570.html |title=Rahane, Ashwin and Karthik to play Deodhar Trophy |publisher=ESPNcricinfo|access-date=19 October 2018}}</ref> The following month, he was named as one of eight players to watch ahead of the [[2018–19 Ranji Trophy]].<ref>{{cite web|url=http://www.espncricinfo.com/story/_/id/25154895/eight-players-watch-ranji-trophy-2018-19 |title=Eight players to watch out for in Ranji Trophy 2018-19 |work=ESPNcricinfo |access-date=3 November 2018}}</ref> In August 2019, he was named in the India Red team's squad for the [[2019–20 Duleep Trophy]].<ref>{{cite news |url=https://www.espncricinfo.com/story/_/id/27331972/shubman-gill-priyank-panchal-faiz-fazal-lead-duleep-trophy-sides |title=Shubman Gill, Priyank Panchal and Faiz Fazal to lead Duleep Trophy sides |publisher=ESPNcricinfo|access-date=6 August 2019}}</ref><ref>{{cite news |url=https://www.cricketcountry.com/news/duleep-trophy-2019-shubman-gill-faiz-fazal-and-priyank-panchal-to-lead-duleep-trophy-2019-squad-fixtures-schedule-876560 |title=Duleep Trophy 2019: Shubman Gill, Faiz Fazal and Priyank Panchal to lead as Indian domestic cricket season opens |work=Cricket Country |access-date=6 August 2019}}</ref>
+
+In 2023, Nair played for Burbage & Easton Royal CC in the [[West of England Premier League]] - Prem 2 (Gloucs/Wilts).
+
+In January 2025, Nair scored 542 runs without getting out in the [[Vijay Hazare Trophy]], to create a new world record of scoring the most [[List A cricket|List A]] runs between dismissals. He remained unbeaten in five matches, and scored three consecutive centuries to create the record.<ref>{{cite web |title=Karun Nair sets new List A record for most runs without being dismissed |url=https://www.espncricinfo.com/story/vijay-hazare-trophy-karun-nair-sets-new-list-a-record-for-most-runs-without-being-dismissed-1467649 |website=ESPNcricinfo |access-date=17 January 2025 |date=3 January 2025}}</ref>
+
+==International career==
+Nair was named in the Indian ODI and T20I squads for their [[Indian cricket team in Zimbabwe in 2016|series against Zimbabwe]] in May 2016<ref name="IndSquad">{{cite web |url=http://www.espncricinfo.com/zimbabwe-v-india-2016/content/story/1018583.html |title=India pick Faiz Fazal for Zimbabwe tour |work=Cricinfo |access-date=23 May 2016 |publisher=ESPNcricinfo}}</ref> and made his [[One Day International]] (ODI) debut in the series at [[Harare Sports Club]] on 11 June 2016.<ref name="ODI">{{cite web |url=http://www.espncricinfo.com/ci/engine/match/1007649.html |title=India tour of Zimbabwe, 1st ODI: Zimbabwe v India at Harare, Jun 11, 2016 |access-date=11 June 2016 |publisher=ESPNcricinfo}}</ref>
+
+On 26 November 2016, he made his [[Test cricket|Test]] debut [[English cricket team in India in 2016–17|against England]] at [[Punjab Cricket Association IS Bindra Stadium|Mohali]].<ref>{{cite news | url=http://www.espncricinfo.com/india-v-england-2016-17/content/story/1068875.html | title=England bat first; Rahul injured, Nair handed debut | publisher=ESPNcricinfo| access-date=26 November 2016}}</ref> He scored his maiden Test [[century (cricket)|century]] in the final match of the series at the [[M. A. Chidambaram Stadium]], going on to finish 303 [[not out]].<ref>{{cite news| url=http://m.hindustantimes.com/cricket/karun-nair-smashes-sensational-triple-ton-to-put-india-on-top-in-chennai-test/story-Lm12e19XxnynH3r608yAJK.html| title=Karun Nair smashes sensational triple ton to put India on top in Chennai Test| work=Hindustan Times| access-date=19 December 2016}}{{Dead link|date=August 2025 |bot=InternetArchiveBot |fix-attempted=yes }}</ref><ref>{{Cite news|url=https://www.theguardian.com/sport/2016/dec/19/india-england-fifth-test-day-four-match-report-karun-nair|title=Karun Nair scores 303 in India's highest Test total as England's misery continues|last=Stadium|first=Vic Marks at the MA Chidambaram|date=2016-12-19|newspaper=The Guardian|language=en-GB|issn=0261-3077|access-date=2016-12-19}}</ref> He was only three innings old in international cricket then, thus becoming the quickest batsman to hit a maiden triple-hundred in Test cricket history in term of number of matches played. He was also India's second ever triple-centurion after [[Virender Sehwag]], and only the third man in the game's history to convert a maiden Test ton into a triple.<ref>{{Cite web|date=4 July 2021|title=Karun Nair had 1 or 2 average Test matches and he was sidelined," says former batting coach Sanjay Bangar|url=https://www.indiatoday.in/sports/cricket/story/sanjay-bangar-on-karun-nair-triple-centurion-against-england-sidelined-after-one-or-two-test-matches-1823749-2021-07-04|access-date=2021-09-03|website=India Today|language=en}}</ref> India won the match by an innings and 75 runs, and Nair was named as the player of the match.<ref>{{cite web |url= http://www.espncricinfo.com/india-v-england-2016-17/engine/match/1034817.html |title= England tour of India, 5th Test: India v England at Chennai, Dec 16–20, 2016}}</ref> However, he was dropped from the side to make way for the return of [[Ajinkya Rahane]], and did not play in India's next Test match.<ref>{{Cite web |last=Waris |first=Sarah |date=2018-10-01 |title=From Triple Century to Out in the Cold: What Went Wrong for Karun? |url=https://www.thequint.com/sports/cricket/karun-nair-dropped-india-team-chances-west-indies |access-date=2024-11-04 |website=TheQuint |language=en}}</ref>
+
+In May 2025, he was reselected, his comeback was propelled by consistent domestic performances, including a standout double century for India A against England Lions. In that match, he scored 204 runs, reinforcing his case for inclusion in the national team.<ref>{{Cite web |last=Team |first=CricOpinion |date=2025-05-31 |title=Karun Nair Century Powers India A Past England Lions in Opening Match |url=https://cricopinion.com/cricket-news/karun-nair-century-india-a-vs-england-lions-opening-match |access-date=2025-06-03 |website=CricOpinion |language=en}}</ref> Nair participated in the [[Indian cricket team in England in 2025#Test series|2025 Anderson-Tendulkar Trophy]], playing at 3.<ref>{{Cite web |title=Sai Sudharsan, Arshdeep and Karun Nair in India's Test squad for England tour |url=https://www.espncricinfo.com/story/sai-sudharsan-and-karun-nair-in-india-s-test-squad-for-england-tour-1487263 |archive-url=https://web.archive.org/web/20250608065402/https://www.espncricinfo.com/story/sai-sudharsan-and-karun-nair-in-india-s-test-squad-for-england-tour-1487263 |archive-date=8 June 2025 |access-date=2025-07-20 |website=ESPNcricinfo |language=en |url-status=live }}</ref> In September 2025, The squad for India vs West Indies tests was announced from where he was dropped.
+
+==Indian Premier League==
+Karun was a part of [[Royal Challengers Bangalore]] in the [[2012 Indian Premier League|2012]] and [[2013 Indian Premier League|2013]] seasons of [[Indian Premier League]].<ref>{{cite web|url=https://www.crictracker.com/ipl-5-players-who-played-for-rcb-you-never-know/3/|title=IPL: 5 Players who were part of RCB you never know|work=Crictracker|date=12 November 2019 |access-date=5 May 2022}}</ref> He got his breakthrough season with [[Rajasthan Royals]] in the [[2014 Indian Premier League|2014 IPL]] scoring 330 runs in the season at a strike rate of 142.24.<ref>{{cite web|url=https://www.newindianexpress.com/sport/cricket/2022/mar/22/whenever-i-scored-runs-theres-someone-else-who-scored-better-karun-nair-2432934.html|title=Whenever I scored runs, there's someone else who scored better: Karun Nair|work=The New Indian Express|date=22 March 2022 |access-date=5 May 2022}}</ref>
+
+In 2016, [[Delhi Daredevils]] signed Karun<ref>{{cite news|title=List of players sold and unsold at IPL auction 2016|url=http://www.espncricinfo.com/indian-premier-league-2016/content/story/969473.html|access-date=19 April 2016|publisher=ESPNcricinfo}}</ref> after Rajasthan was banned from the competition for two years after being found guilty in illegal betting and match-fixing probe.<ref name=":3">{{cite web|url=https://www.bbc.co.uk/news/world-asia-india-33517583|publisher=[[BBC News]]|title=IPL scandal: Chennai Super Kings and Rajasthan Royals suspended|date=14 May 2015 |access-date=18 July 2015}}</ref> He captained Delhi in 3 matches after an injury to [[Zaheer Khan]] in the [[2017 Indian Premier League|2017 season]].<ref>{{cite web|url=https://www.sportskeeda.com/cricket/cricketers-picked-captains-ahead-experienced-players-ipl-cricket|title=5 surprise captains in the history of IPL
+|work=Sports Keeda|date=8 April 2021
+|access-date=5 May 2022}}</ref>
+
+He was bought by [[Kings XI Punjab]] in the [[List of 2018 Indian Premier League personnel changes|2018 IPL auction]].<ref name="IPL2018">{{cite web |url=http://www.espncricinfo.com/story/_/id/22218394/ipl-2018-player-auction-list-sold-unsold-players |title=List of sold and unsold players |access-date=27 January 2018 |publisher=ESPNcricinfo}}</ref> In February 2021, Nair was bought by the [[Kolkata Knight Riders]] in the [[List of 2021 Indian Premier League personnel changes|IPL auction]] ahead of the [[2021 Indian Premier League]].<ref>{{cite web|url=https://www.espncricinfo.com/story/ipl-2021-auction-the-list-of-sold-and-unsold-players-1252152 |title=IPL 2021 auction: The list of sold and unsold players |publisher=ESPNcricinfo|access-date=18 February 2021}}</ref> In February 2022, he returned to Rajasthan Royals in the [[List of 2022 Indian Premier League personnel changes|auction]] for the [[2022 Indian Premier League]] tournament.<ref>{{cite web|url=https://www.espncricinfo.com/story/ipl-2022-auction-the-list-of-sold-and-unsold-players-1300689 |title=IPL 2022 auction: The list of sold and unsold players |publisher=ESPNcricinfo|access-date=13 February 2022}}</ref>
+
+Nair returned to the IPL 2025, playing for the Delhi Capitals. His first game was against the Mumbai Indians, where he scored 89 runs off 40 balls.
+
+==Personal life==
+In July 2016, Karun survived a boat accident in river Pampa in [[Kerala]] during a thanksgiving temple visit after making his ODI debut.<ref>{{cite web|url=https://www.hindustantimes.com/cricket/after-surviving-death-karun-nair-ends-turbulent-2016-with-a-loud-bang/story-FRUgDCAcgfgpFbbc7lH6IJ.html|title=How Karun Nair escaped death and went on to create cricket history for India|work=Hindustan Times|access-date=5 May 2022}}</ref>
+
+He announced his engagement with longtime girlfriend Sanaya Tankariwala, a media professional on 29 June 2019 through his social media handles.<ref>{{cite web|url= https://sports.ndtv.com/cricket/karun-nair-gets-engaged-to-long-time-girlfriend-2061776|language=en|title=Karun Nair gets engaged to long-time girlfriend|work=Sports NDTV|access-date=30 June 2020}}</ref> The couple got married in a private ceremony at [[Udaipur]], [[Rajasthan]] on 19 January 2020.<ref>{{cite web|url= https://sports.ndtv.com/cricket/karun-nair-marries-long-time-girlfriend-sanaya-tankariwala-shreyas-iyer-varun-aaron-post-pictures-2166281|title=Karun Nair marries long-time girlfriend Sanaya Tankariwala|work=Sports NDTV|date=17 January 2020 |language=en|access-date=19 January 2020}}</ref> Their son, Kayaan Nair was born in January 2022.<ref>{{cite web|url=https://www.rediff.com/cricket/report/ipl-2022-the-cutest-ipl-pic-you-will-see-today/20220419.htm|title=Finch Jr Meets Nair Jr|work=Rediff.com|access-date=5 May 2022|date=19 April 2022}}</ref>
+
+==Notes==
+{{notelist}}
+
+== References ==
+{{Reflist}}
+
+== External links ==
+* {{cricinfo|id=398439}}
+* [https://web.archive.org/web/20161221165036/http://www.wisdenindia.com/player/India/Karun-Nair/50957.html Karun Nair] at Wisden
+
+{{Authority control}}
+{{Delhi Capitals squad}}
+
+{{DEFAULTSORT:Nair, Karun}}
+[[Category:1991 births]]
+[[Category:Delhi Capitals cricketers]]
+[[Category:India One Day International cricketers]]
+[[Category:India Test cricketers]]
+[[Category:Indian cricketers]]
+[[Category:Living people]]
+[[Category:Cricketers from Kerala]]
+[[Category:Rajasthan Royals cricketers]]
+[[Category:Royal Challengers Bengaluru cricketers]]
+[[Category:India Green cricketers]]
+[[Category:Punjab Kings cricketers]]
+[[Category:21st-century Indian sportsmen]]
+[[Category:Northamptonshire cricketers]]
+[[Category:Indian expatriate cricketers in England]]
+[[Category:Indian A cricketers]]
