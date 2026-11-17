@@ -1,0 +1,1185 @@
+{
+ "duration": 57.561,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "o1",
+   "text": "9 teams were busy in the IPL trade window.",
+   "caption": "9 teams were busy in the IPL trade window.",
+   "start": 0.234,
+   "end": 2.29,
+   "words": [
+    [
+     "9",
+     0.28,
+     0.501
+    ],
+    [
+     "teams",
+     0.501,
+     0.648
+    ],
+    [
+     "were",
+     0.648,
+     0.941
+    ],
+    [
+     "busy",
+     0.941,
+     1.235
+    ],
+    [
+     "in",
+     1.235,
+     1.381
+    ],
+    [
+     "the",
+     1.381,
+     1.528
+    ],
+    [
+     "IPL",
+     1.528,
+     1.675
+    ],
+    [
+     "trade",
+     1.675,
+     1.968
+    ],
+    [
+     "window.",
+     1.968,
+     2.262
+    ]
+   ]
+  },
+  {
+   "id": "o2",
+   "text": "1 team didn't move at all.",
+   "caption": "1 team didn't move at all.",
+   "start": 2.29,
+   "end": 3.551,
+   "words": [
+    [
+     "1",
+     2.29,
+     2.542
+    ],
+    [
+     "team",
+     2.542,
+     2.71
+    ],
+    [
+     "didn't",
+     2.71,
+     2.879
+    ],
+    [
+     "move",
+     2.879,
+     3.215
+    ],
+    [
+     "at",
+     3.215,
+     3.383
+    ],
+    [
+     "all.",
+     3.383,
+     3.551
+    ]
+   ]
+  },
+  {
+   "id": "o3",
+   "text": "The 2-time defending champions, RCB.",
+   "caption": "The 2-time defending champions, RCB.",
+   "start": 3.551,
+   "end": 5.841,
+   "words": [
+    [
+     "The",
+     3.551,
+     3.8
+    ],
+    [
+     "2-time",
+     3.8,
+     4.296
+    ],
+    [
+     "defending",
+     4.296,
+     5.04
+    ],
+    [
+     "champions,",
+     5.04,
+     5.536
+    ],
+    [
+     "RCB.",
+     5.536,
+     5.785
+    ]
+   ]
+  },
+  {
+   "id": "o4",
+   "text": "And honestly, why would they? 2 titles in a row, 2025 and 2026.",
+   "caption": "And honestly, why would they? 2 titles in a row, 2025 and 2026.",
+   "start": 5.841,
+   "end": 9.093,
+   "words": [
+    [
+     "And",
+     5.869,
+     5.989
+    ],
+    [
+     "honestly,",
+     5.989,
+     6.348
+    ],
+    [
+     "why",
+     6.348,
+     6.467
+    ],
+    [
+     "would",
+     6.467,
+     6.587
+    ],
+    [
+     "they?",
+     6.587,
+     6.706
+    ],
+    [
+     "2",
+     6.706,
+     6.885
+    ],
+    [
+     "titles",
+     6.885,
+     7.124
+    ],
+    [
+     "in",
+     7.124,
+     7.244
+    ],
+    [
+     "a",
+     7.244,
+     7.364
+    ],
+    [
+     "row,",
+     7.364,
+     7.483
+    ],
+    [
+     "2025",
+     7.483,
+     8.201
+    ],
+    [
+     "and",
+     8.201,
+     8.32
+    ],
+    [
+     "2026.",
+     8.32,
+     9.037
+    ]
+   ]
+  },
+  {
+   "id": "o5",
+   "text": "But silence in the trade window doesn't mean the squad is perfect.",
+   "caption": "But silence in the trade window doesn't mean the squad is perfect.",
+   "start": 9.15,
+   "end": 12.308,
+   "words": [
+    [
+     "But",
+     9.29,
+     9.464
+    ],
+    [
+     "silence",
+     9.464,
+     9.989
+    ],
+    [
+     "in",
+     9.989,
+     10.164
+    ],
+    [
+     "the",
+     10.164,
+     10.338
+    ],
+    [
+     "trade",
+     10.338,
+     10.688
+    ],
+    [
+     "window",
+     10.688,
+     11.038
+    ],
+    [
+     "doesn't",
+     11.038,
+     11.213
+    ],
+    [
+     "mean",
+     11.213,
+     11.388
+    ],
+    [
+     "the",
+     11.388,
+     11.563
+    ],
+    [
+     "squad",
+     11.563,
+     11.737
+    ],
+    [
+     "is",
+     11.737,
+     11.912
+    ],
+    [
+     "perfect.",
+     11.912,
+     12.262
+    ]
+   ]
+  },
+  {
+   "id": "o6",
+   "text": "So let's do a health check.",
+   "caption": "So let's do a health check.",
+   "start": 12.322,
+   "end": 13.528,
+   "words": [
+    [
+     "So",
+     12.36,
+     12.547
+    ],
+    [
+     "let's",
+     12.547,
+     12.734
+    ],
+    [
+     "do",
+     12.734,
+     12.921
+    ],
+    [
+     "a",
+     12.921,
+     13.107
+    ],
+    [
+     "health",
+     13.107,
+     13.294
+    ],
+    [
+     "check.",
+     13.294,
+     13.481
+    ]
+   ]
+  },
+  {
+   "id": "f1",
+   "text": "But before that, if you're a true cricket fan, you must follow this page.",
+   "caption": "But before that, if you're a true cricket fan, you must follow this page.",
+   "start": 13.584,
+   "end": 17.033,
+   "words": [
+    [
+     "But",
+     13.621,
+     13.789
+    ],
+    [
+     "before",
+     13.789,
+     14.293
+    ],
+    [
+     "that,",
+     14.293,
+     14.46
+    ],
+    [
+     "if",
+     14.46,
+     14.628
+    ],
+    [
+     "you're",
+     14.628,
+     14.964
+    ],
+    [
+     "a",
+     14.964,
+     15.131
+    ],
+    [
+     "true",
+     15.131,
+     15.299
+    ],
+    [
+     "cricket",
+     15.299,
+     15.635
+    ],
+    [
+     "fan,",
+     15.635,
+     15.802
+    ],
+    [
+     "you",
+     15.802,
+     15.97
+    ],
+    [
+     "must",
+     15.97,
+     16.138
+    ],
+    [
+     "follow",
+     16.138,
+     16.473
+    ],
+    [
+     "this",
+     16.473,
+     16.641
+    ],
+    [
+     "page.",
+     16.641,
+     16.977
+    ]
+   ]
+  },
+  {
+   "id": "c1",
+   "text": "Batting? Loaded.",
+   "caption": "Batting? Loaded.",
+   "start": 17.089,
+   "end": 18.21,
+   "words": [
+    [
+     "Batting?",
+     17.201,
+     17.696
+    ],
+    [
+     "Loaded.",
+     17.696,
+     18.192
+    ]
+   ]
+  },
+  {
+   "id": "c2",
+   "text": "Pace? Sorted.",
+   "caption": "Pace? Sorted.",
+   "start": 18.21,
+   "end": 19.014,
+   "words": [
+    [
+     "Pace?",
+     18.285,
+     18.65
+    ],
+    [
+     "Sorted.",
+     18.65,
+     19.014
+    ]
+   ]
+  },
+  {
+   "id": "c3",
+   "text": "Spin? That's where it gets worrying.",
+   "caption": "Spin? That's where it gets worrying.",
+   "start": 19.014,
+   "end": 21.238,
+   "words": [
+    [
+     "Spin?",
+     19.014,
+     19.257
+    ],
+    [
+     "That's",
+     19.257,
+     19.5
+    ],
+    [
+     "where",
+     19.5,
+     19.986
+    ],
+    [
+     "it",
+     19.986,
+     20.229
+    ],
+    [
+     "gets",
+     20.229,
+     20.472
+    ],
+    [
+     "worrying.",
+     20.472,
+     20.958
+    ]
+   ]
+  },
+  {
+   "id": "k1",
+   "text": "Their best spinner, Krunal Pandya, turns 36 next season.",
+   "caption": "Their best spinner, Krunal Pandya, turns 36 next season.",
+   "start": 21.294,
+   "end": 24.659,
+   "words": [
+    [
+     "Their",
+     21.444,
+     21.658
+    ],
+    [
+     "best",
+     21.658,
+     21.873
+    ],
+    [
+     "spinner,",
+     21.873,
+     22.301
+    ],
+    [
+     "Krunal",
+     22.301,
+     22.73
+    ],
+    [
+     "Pandya,",
+     22.73,
+     23.159
+    ],
+    [
+     "turns",
+     23.159,
+     23.373
+    ],
+    [
+     "36",
+     23.373,
+     24.016
+    ],
+    [
+     "next",
+     24.016,
+     24.23
+    ],
+    [
+     "season.",
+     24.23,
+     24.659
+    ]
+   ]
+  },
+  {
+   "id": "k2",
+   "text": "He's brilliant, but every season from here is a bonus.",
+   "caption": "He's brilliant, but every season from here is a bonus.",
+   "start": 24.659,
+   "end": 27.416,
+   "words": [
+    [
+     "He's",
+     24.818,
+     24.976
+    ],
+    [
+     "brilliant,",
+     24.976,
+     25.293
+    ],
+    [
+     "but",
+     25.293,
+     25.45
+    ],
+    [
+     "every",
+     25.45,
+     25.926
+    ],
+    [
+     "season",
+     25.926,
+     26.242
+    ],
+    [
+     "from",
+     26.242,
+     26.401
+    ],
+    [
+     "here",
+     26.401,
+     26.718
+    ],
+    [
+     "is",
+     26.718,
+     26.876
+    ],
+    [
+     "a",
+     26.876,
+     27.034
+    ],
+    [
+     "bonus.",
+     27.034,
+     27.35
+    ]
+   ]
+  },
+  {
+   "id": "s1",
+   "text": "Their leg-spinner, Suyash Sharma, picked up just 8 wickets in 2025, and 9 in 2026.",
+   "caption": "Their leg-spinner, Suyash Sharma, picked up just 8 wickets in 2025, and 9 in 2026.",
+   "start": 27.416,
+   "end": 32.173,
+   "words": [
+    [
+     "Their",
+     27.537,
+     27.685
+    ],
+    [
+     "leg-spinner,",
+     27.685,
+     28.13
+    ],
+    [
+     "Suyash",
+     28.13,
+     28.278
+    ],
+    [
+     "Sharma,",
+     28.278,
+     28.574
+    ],
+    [
+     "picked",
+     28.574,
+     28.869
+    ],
+    [
+     "up",
+     28.869,
+     29.018
+    ],
+    [
+     "just",
+     29.018,
+     29.165
+    ],
+    [
+     "8",
+     29.165,
+     29.388
+    ],
+    [
+     "wickets",
+     29.388,
+     29.684
+    ],
+    [
+     "in",
+     29.684,
+     29.832
+    ],
+    [
+     "2025,",
+     29.832,
+     30.72
+    ],
+    [
+     "and",
+     30.72,
+     30.868
+    ],
+    [
+     "9",
+     30.868,
+     31.09
+    ],
+    [
+     "in",
+     31.09,
+     31.238
+    ],
+    [
+     "2026.",
+     31.238,
+     32.126
+    ]
+   ]
+  },
+  {
+   "id": "s2",
+   "text": "That's not a strike weapon. That's a holding pattern.",
+   "caption": "That's not a strike weapon. That's a holding pattern.",
+   "start": 32.187,
+   "end": 34.682,
+   "words": [
+    [
+     "That's",
+     32.234,
+     32.418
+    ],
+    [
+     "not",
+     32.418,
+     32.602
+    ],
+    [
+     "a",
+     32.602,
+     32.786
+    ],
+    [
+     "strike",
+     32.786,
+     33.154
+    ],
+    [
+     "weapon.",
+     33.154,
+     33.521
+    ],
+    [
+     "That's",
+     33.521,
+     33.706
+    ],
+    [
+     "a",
+     33.706,
+     33.89
+    ],
+    [
+     "holding",
+     33.89,
+     34.258
+    ],
+    [
+     "pattern.",
+     34.258,
+     34.626
+    ]
+   ]
+  },
+  {
+   "id": "n1",
+   "text": "And there's no plan B.",
+   "caption": "And there's no plan B.",
+   "start": 34.738,
+   "end": 35.869,
+   "words": [
+    [
+     "And",
+     34.776,
+     34.958
+    ],
+    [
+     "there's",
+     34.958,
+     35.322
+    ],
+    [
+     "no",
+     35.322,
+     35.505
+    ],
+    [
+     "plan",
+     35.505,
+     35.687
+    ],
+    [
+     "B.",
+     35.687,
+     35.869
+    ]
+   ]
+  },
+  {
+   "id": "n2",
+   "text": "If Krunal gets injured or loses rhythm, RCB walk into the middle overs with nobody to take wickets.",
+   "caption": "If Krunal gets injured or loses rhythm, RCB walk into the middle overs with nobody to take wickets.",
+   "start": 35.869,
+   "end": 40.841,
+   "words": [
+    [
+     "If",
+     35.869,
+     36.038
+    ],
+    [
+     "Krunal",
+     36.038,
+     36.378
+    ],
+    [
+     "gets",
+     36.378,
+     36.548
+    ],
+    [
+     "injured",
+     36.548,
+     37.056
+    ],
+    [
+     "or",
+     37.056,
+     37.225
+    ],
+    [
+     "loses",
+     37.225,
+     37.564
+    ],
+    [
+     "rhythm,",
+     37.564,
+     37.734
+    ],
+    [
+     "RCB",
+     37.734,
+     37.904
+    ],
+    [
+     "walk",
+     37.904,
+     38.073
+    ],
+    [
+     "into",
+     38.073,
+     38.412
+    ],
+    [
+     "the",
+     38.412,
+     38.581
+    ],
+    [
+     "middle",
+     38.581,
+     38.921
+    ],
+    [
+     "overs",
+     38.921,
+     39.26
+    ],
+    [
+     "with",
+     39.26,
+     39.429
+    ],
+    [
+     "nobody",
+     39.429,
+     39.937
+    ],
+    [
+     "to",
+     39.937,
+     40.107
+    ],
+    [
+     "take",
+     40.107,
+     40.446
+    ],
+    [
+     "wickets.",
+     40.446,
+     40.785
+    ]
+   ]
+  },
+  {
+   "id": "n3",
+   "text": "On the dry pitches of Chennai and Lucknow, that's the phase that decides the match.",
+   "caption": "On the dry pitches of Chennai and Lucknow, that's the phase that decides the match.",
+   "start": 40.869,
+   "end": 45.047,
+   "words": [
+    [
+     "On",
+     41.075,
+     41.26
+    ],
+    [
+     "the",
+     41.26,
+     41.445
+    ],
+    [
+     "dry",
+     41.445,
+     41.63
+    ],
+    [
+     "pitches",
+     41.63,
+     42.0
+    ],
+    [
+     "of",
+     42.0,
+     42.186
+    ],
+    [
+     "Chennai",
+     42.186,
+     42.556
+    ],
+    [
+     "and",
+     42.556,
+     42.741
+    ],
+    [
+     "Lucknow,",
+     42.741,
+     43.111
+    ],
+    [
+     "that's",
+     43.111,
+     43.296
+    ],
+    [
+     "the",
+     43.296,
+     43.481
+    ],
+    [
+     "phase",
+     43.481,
+     43.851
+    ],
+    [
+     "that",
+     43.851,
+     44.037
+    ],
+    [
+     "decides",
+     44.037,
+     44.593
+    ],
+    [
+     "the",
+     44.593,
+     44.778
+    ],
+    [
+     "match.",
+     44.778,
+     44.963
+    ]
+   ]
+  },
+  {
+   "id": "a1",
+   "text": "They didn't fix it in the trade window.",
+   "caption": "They didn't fix it in the trade window.",
+   "start": 45.103,
+   "end": 47.43,
+   "words": [
+    [
+     "They",
+     45.822,
+     45.977
+    ],
+    [
+     "didn't",
+     45.977,
+     46.131
+    ],
+    [
+     "fix",
+     46.131,
+     46.285
+    ],
+    [
+     "it",
+     46.285,
+     46.439
+    ],
+    [
+     "in",
+     46.439,
+     46.593
+    ],
+    [
+     "the",
+     46.593,
+     46.748
+    ],
+    [
+     "trade",
+     46.748,
+     47.056
+    ],
+    [
+     "window.",
+     47.056,
+     47.364
+    ]
+   ]
+  },
+  {
+   "id": "a2",
+   "text": "So the auction is their last chance.",
+   "caption": "So the auction is their last chance.",
+   "start": 47.43,
+   "end": 49.15,
+   "words": [
+    [
+     "So",
+     47.467,
+     47.642
+    ],
+    [
+     "the",
+     47.642,
+     47.816
+    ],
+    [
+     "auction",
+     47.816,
+     48.165
+    ],
+    [
+     "is",
+     48.165,
+     48.339
+    ],
+    [
+     "their",
+     48.339,
+     48.514
+    ],
+    [
+     "last",
+     48.514,
+     48.689
+    ],
+    [
+     "chance.",
+     48.689,
+     49.037
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Should RCB go all in for a wicket-taking spinner, or trust the squad that just won 2 titles?",
+   "caption": "Should RCB go all in for a wicket-taking spinner, or trust the squad that just won 2 titles?",
+   "start": 49.206,
+   "end": 55.121,
+   "words": [
+    [
+     "Should",
+     49.579,
+     49.811
+    ],
+    [
+     "RCB",
+     49.811,
+     50.043
+    ],
+    [
+     "go",
+     50.043,
+     50.275
+    ],
+    [
+     "all",
+     50.275,
+     50.507
+    ],
+    [
+     "in",
+     50.507,
+     50.738
+    ],
+    [
+     "for",
+     50.738,
+     50.971
+    ],
+    [
+     "a",
+     50.971,
+     51.203
+    ],
+    [
+     "wicket-taking",
+     51.203,
+     52.13
+    ],
+    [
+     "spinner,",
+     52.13,
+     52.593
+    ],
+    [
+     "or",
+     52.593,
+     52.825
+    ],
+    [
+     "trust",
+     52.825,
+     53.057
+    ],
+    [
+     "the",
+     53.057,
+     53.289
+    ],
+    [
+     "squad",
+     53.289,
+     53.521
+    ],
+    [
+     "that",
+     53.521,
+     53.753
+    ],
+    [
+     "just",
+     53.753,
+     53.985
+    ],
+    [
+     "won",
+     53.985,
+     54.217
+    ],
+    [
+     "2",
+     54.217,
+     54.564
+    ],
+    [
+     "titles?",
+     54.564,
+     55.028
+    ]
+   ]
+  },
+  {
+   "id": "q2",
+   "text": "Tell me in the comments, and follow for more.",
+   "caption": "Tell me in the comments, and follow for more.",
+   "start": 55.15,
+   "end": 57.505,
+   "words": [
+    [
+     "Tell",
+     55.187,
+     55.367
+    ],
+    [
+     "me",
+     55.367,
+     55.549
+    ],
+    [
+     "in",
+     55.549,
+     55.729
+    ],
+    [
+     "the",
+     55.729,
+     55.909
+    ],
+    [
+     "comments,",
+     55.909,
+     56.271
+    ],
+    [
+     "and",
+     56.271,
+     56.451
+    ],
+    [
+     "follow",
+     56.451,
+     56.813
+    ],
+    [
+     "for",
+     56.813,
+     56.993
+    ],
+    [
+     "more.",
+     56.993,
+     57.355
+    ]
+   ]
+  }
+ ]
+}
