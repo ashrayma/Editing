@@ -54,3 +54,4 @@ karun_303/out/.*hf-transaction*/
 karun_303/out/work-*/
 karun_303/node_modules/
 karun_303/out/*.log
+karun_303/final/*.mp4
