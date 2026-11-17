@@ -1,0 +1,1358 @@
+{
+ "duration": 71.163,
+ "source": "takes",
+ "lines": [
+  {
+   "id": "h1",
+   "text": "Sachin Tendulkar scored more Test runs than anyone in history.",
+   "caption": "Sachin Tendulkar scored more Test runs than anyone in history.",
+   "start": 0.236,
+   "end": 3.085,
+   "words": [
+    [
+     "Sachin",
+     0.292,
+     0.587
+    ],
+    [
+     "Tendulkar",
+     0.587,
+     1.027
+    ],
+    [
+     "scored",
+     1.027,
+     1.322
+    ],
+    [
+     "more",
+     1.322,
+     1.615
+    ],
+    [
+     "Test",
+     1.615,
+     1.762
+    ],
+    [
+     "runs",
+     1.762,
+     1.909
+    ],
+    [
+     "than",
+     1.909,
+     2.056
+    ],
+    [
+     "anyone",
+     2.056,
+     2.497
+    ],
+    [
+     "in",
+     2.497,
+     2.644
+    ],
+    [
+     "history.",
+     2.644,
+     3.085
+    ]
+   ]
+  },
+  {
+   "id": "h2",
+   "text": "But according to the ICC, at least 30 batters had a better peak than him.",
+   "caption": "But according to the ICC, at least 30 batters had a better peak than him.",
+   "start": 3.085,
+   "end": 6.953,
+   "words": [
+    [
+     "But",
+     3.085,
+     3.266
+    ],
+    [
+     "according",
+     3.266,
+     3.809
+    ],
+    [
+     "to",
+     3.809,
+     3.991
+    ],
+    [
+     "the",
+     3.991,
+     4.171
+    ],
+    [
+     "ICC,",
+     4.171,
+     4.352
+    ],
+    [
+     "at",
+     4.352,
+     4.533
+    ],
+    [
+     "least",
+     4.533,
+     4.714
+    ],
+    [
+     "30",
+     4.714,
+     5.258
+    ],
+    [
+     "batters",
+     5.258,
+     5.62
+    ],
+    [
+     "had",
+     5.62,
+     5.801
+    ],
+    [
+     "a",
+     5.801,
+     5.981
+    ],
+    [
+     "better",
+     5.981,
+     6.343
+    ],
+    [
+     "peak",
+     6.343,
+     6.525
+    ],
+    [
+     "than",
+     6.525,
+     6.706
+    ],
+    [
+     "him.",
+     6.706,
+     6.887
+    ]
+   ]
+  },
+  {
+   "id": "h3",
+   "text": "His highest ever Test rating? 898.",
+   "caption": "His highest ever Test rating? 898.",
+   "start": 7.052,
+   "end": 9.344,
+   "words": [
+    [
+     "His",
+     7.09,
+     7.27
+    ],
+    [
+     "highest",
+     7.27,
+     7.631
+    ],
+    [
+     "ever",
+     7.631,
+     7.992
+    ],
+    [
+     "Test",
+     7.992,
+     8.172
+    ],
+    [
+     "rating?",
+     8.172,
+     8.533
+    ],
+    [
+     "898.",
+     8.533,
+     9.344
+    ]
+   ]
+  },
+  {
+   "id": "h4",
+   "text": "Virat Kohli peaked at 937.",
+   "caption": "Virat Kohli peaked at 937.",
+   "start": 9.344,
+   "end": 11.231,
+   "words": [
+    [
+     "Virat",
+     9.344,
+     9.673
+    ],
+    [
+     "Kohli",
+     9.673,
+     10.001
+    ],
+    [
+     "peaked",
+     10.001,
+     10.328
+    ],
+    [
+     "at",
+     10.328,
+     10.492
+    ],
+    [
+     "937.",
+     10.492,
+     11.231
+    ]
+   ]
+  },
+  {
+   "id": "h5",
+   "text": "Even Sunil Gavaskar went past 900.",
+   "caption": "Even Sunil Gavaskar went past 900.",
+   "start": 11.231,
+   "end": 13.307,
+   "words": [
+    [
+     "Even",
+     11.231,
+     11.525
+    ],
+    [
+     "Sunil",
+     11.525,
+     11.818
+    ],
+    [
+     "Gavaskar",
+     11.818,
+     12.258
+    ],
+    [
+     "went",
+     12.258,
+     12.405
+    ],
+    [
+     "past",
+     12.405,
+     12.552
+    ],
+    [
+     "900.",
+     12.552,
+     13.212
+    ]
+   ]
+  },
+  {
+   "id": "h6",
+   "text": "So how is the greatest run-scorer of all time not even in the top 30?",
+   "caption": "So how is the greatest run-scorer of all time not even in the top 30?",
+   "start": 13.406,
+   "end": 17.491,
+   "words": [
+    [
+     "So",
+     13.472,
+     13.655
+    ],
+    [
+     "how",
+     13.655,
+     13.837
+    ],
+    [
+     "is",
+     13.837,
+     14.02
+    ],
+    [
+     "the",
+     14.02,
+     14.203
+    ],
+    [
+     "greatest",
+     14.203,
+     14.568
+    ],
+    [
+     "run-scorer",
+     14.568,
+     15.116
+    ],
+    [
+     "of",
+     15.116,
+     15.298
+    ],
+    [
+     "all",
+     15.298,
+     15.481
+    ],
+    [
+     "time",
+     15.481,
+     15.846
+    ],
+    [
+     "not",
+     15.846,
+     16.029
+    ],
+    [
+     "even",
+     16.029,
+     16.394
+    ],
+    [
+     "in",
+     16.394,
+     16.577
+    ],
+    [
+     "the",
+     16.577,
+     16.759
+    ],
+    [
+     "top",
+     16.759,
+     16.942
+    ],
+    [
+     "30?",
+     16.942,
+     17.491
+    ]
+   ]
+  },
+  {
+   "id": "f1",
+   "text": "But before we understand why, if you're a true cricket fan, you must follow this page.",
+   "caption": "But before we understand why, if you're a true cricket fan, you must follow this page.",
+   "start": 17.491,
+   "end": 21.434,
+   "words": [
+    [
+     "But",
+     17.491,
+     17.652
+    ],
+    [
+     "before",
+     17.652,
+     18.137
+    ],
+    [
+     "we",
+     18.137,
+     18.298
+    ],
+    [
+     "understand",
+     18.298,
+     18.783
+    ],
+    [
+     "why,",
+     18.783,
+     18.944
+    ],
+    [
+     "if",
+     18.944,
+     19.106
+    ],
+    [
+     "you're",
+     19.106,
+     19.429
+    ],
+    [
+     "a",
+     19.429,
+     19.591
+    ],
+    [
+     "true",
+     19.591,
+     19.753
+    ],
+    [
+     "cricket",
+     19.753,
+     20.075
+    ],
+    [
+     "fan,",
+     20.075,
+     20.237
+    ],
+    [
+     "you",
+     20.237,
+     20.399
+    ],
+    [
+     "must",
+     20.399,
+     20.56
+    ],
+    [
+     "follow",
+     20.56,
+     20.883
+    ],
+    [
+     "this",
+     20.883,
+     21.045
+    ],
+    [
+     "page.",
+     21.045,
+     21.368
+    ]
+   ]
+  },
+  {
+   "id": "w1",
+   "text": "Here's how the rating works.",
+   "caption": "Here's how the rating works.",
+   "start": 21.533,
+   "end": 22.882,
+   "words": [
+    [
+     "Here's",
+     21.58,
+     21.917
+    ],
+    [
+     "how",
+     21.917,
+     22.086
+    ],
+    [
+     "the",
+     22.086,
+     22.254
+    ],
+    [
+     "rating",
+     22.254,
+     22.591
+    ],
+    [
+     "works.",
+     22.591,
+     22.759
+    ]
+   ]
+  },
+  {
+   "id": "w2",
+   "text": "It's not a career score. It's a moving average, and your recent matches count the most.",
+   "caption": "It's not a career score. It's a moving average, and your recent matches count the most.",
+   "start": 22.899,
+   "end": 27.484,
+   "words": [
+    [
+     "It's",
+     22.946,
+     23.13
+    ],
+    [
+     "not",
+     23.13,
+     23.314
+    ],
+    [
+     "a",
+     23.314,
+     23.499
+    ],
+    [
+     "career",
+     23.499,
+     23.868
+    ],
+    [
+     "score.",
+     23.868,
+     24.236
+    ],
+    [
+     "It's",
+     24.236,
+     24.421
+    ],
+    [
+     "a",
+     24.421,
+     24.605
+    ],
+    [
+     "moving",
+     24.605,
+     24.974
+    ],
+    [
+     "average,",
+     24.974,
+     25.711
+    ],
+    [
+     "and",
+     25.711,
+     25.895
+    ],
+    [
+     "your",
+     25.895,
+     26.08
+    ],
+    [
+     "recent",
+     26.08,
+     26.448
+    ],
+    [
+     "matches",
+     26.448,
+     26.817
+    ],
+    [
+     "count",
+     26.817,
+     27.002
+    ],
+    [
+     "the",
+     27.002,
+     27.186
+    ],
+    [
+     "most.",
+     27.186,
+     27.371
+    ]
+   ]
+  },
+  {
+   "id": "w3",
+   "text": "And it doesn't treat every run the same.",
+   "caption": "And it doesn't treat every run the same.",
+   "start": 27.55,
+   "end": 30.012,
+   "words": [
+    [
+     "And",
+     27.701,
+     27.9
+    ],
+    [
+     "it",
+     27.9,
+     28.1
+    ],
+    [
+     "doesn't",
+     28.1,
+     28.3
+    ],
+    [
+     "treat",
+     28.3,
+     28.5
+    ],
+    [
+     "every",
+     28.5,
+     29.099
+    ],
+    [
+     "run",
+     29.099,
+     29.299
+    ],
+    [
+     "the",
+     29.299,
+     29.499
+    ],
+    [
+     "same.",
+     29.499,
+     29.899
+    ]
+   ]
+  },
+  {
+   "id": "w4",
+   "text": "Runs against strong teams, and runs that win matches, earn more.",
+   "caption": "Runs against strong teams, and runs that win matches, earn more.",
+   "start": 30.028,
+   "end": 33.264,
+   "words": [
+    [
+     "Runs",
+     30.075,
+     30.299
+    ],
+    [
+     "against",
+     30.299,
+     30.746
+    ],
+    [
+     "strong",
+     30.746,
+     30.971
+    ],
+    [
+     "teams,",
+     30.971,
+     31.194
+    ],
+    [
+     "and",
+     31.194,
+     31.418
+    ],
+    [
+     "runs",
+     31.418,
+     31.642
+    ],
+    [
+     "that",
+     31.642,
+     31.865
+    ],
+    [
+     "win",
+     31.865,
+     32.089
+    ],
+    [
+     "matches,",
+     32.089,
+     32.537
+    ],
+    [
+     "earn",
+     32.537,
+     32.76
+    ],
+    [
+     "more.",
+     32.76,
+     33.208
+    ]
+   ]
+  },
+  {
+   "id": "r1",
+   "text": "That's problem number 1. Some of Sachin's greatest Test hundreds came in losses.",
+   "caption": "That's problem number 1. Some of Sachin's greatest Test hundreds came in losses.",
+   "start": 33.363,
+   "end": 37.825,
+   "words": [
+    [
+     "That's",
+     33.401,
+     33.607
+    ],
+    [
+     "problem",
+     33.607,
+     34.018
+    ],
+    [
+     "number",
+     34.018,
+     34.43
+    ],
+    [
+     "1.",
+     34.43,
+     34.739
+    ],
+    [
+     "Some",
+     34.739,
+     35.15
+    ],
+    [
+     "of",
+     35.15,
+     35.356
+    ],
+    [
+     "Sachin's",
+     35.356,
+     35.768
+    ],
+    [
+     "greatest",
+     35.768,
+     36.179
+    ],
+    [
+     "Test",
+     36.179,
+     36.385
+    ],
+    [
+     "hundreds",
+     36.385,
+     36.796
+    ],
+    [
+     "came",
+     36.796,
+     37.208
+    ],
+    [
+     "in",
+     37.208,
+     37.414
+    ],
+    [
+     "losses.",
+     37.414,
+     37.825
+    ]
+   ]
+  },
+  {
+   "id": "r2",
+   "text": "114 in Perth.",
+   "caption": "114 in Perth.",
+   "start": 37.825,
+   "end": 39.278,
+   "words": [
+    [
+     "114",
+     37.825,
+     38.792
+    ],
+    [
+     "in",
+     38.792,
+     39.007
+    ],
+    [
+     "Perth.",
+     39.007,
+     39.222
+    ]
+   ]
+  },
+  {
+   "id": "r3",
+   "text": "169 in Cape Town.",
+   "caption": "169 in Cape Town.",
+   "start": 39.295,
+   "end": 40.418,
+   "words": [
+    [
+     "169",
+     39.342,
+     39.911
+    ],
+    [
+     "in",
+     39.911,
+     40.038
+    ],
+    [
+     "Cape",
+     40.038,
+     40.291
+    ],
+    [
+     "Town.",
+     40.291,
+     40.418
+    ]
+   ]
+  },
+  {
+   "id": "r4",
+   "text": "136 in Chennai, against Pakistan. India lost all of them.",
+   "caption": "136 in Chennai, against Pakistan. India lost all of them.",
+   "start": 40.418,
+   "end": 43.956,
+   "words": [
+    [
+     "136",
+     40.418,
+     41.258
+    ],
+    [
+     "in",
+     41.258,
+     41.444
+    ],
+    [
+     "Chennai,",
+     41.444,
+     41.817
+    ],
+    [
+     "against",
+     41.817,
+     42.191
+    ],
+    [
+     "Pakistan.",
+     42.191,
+     42.75
+    ],
+    [
+     "India",
+     42.75,
+     43.124
+    ],
+    [
+     "lost",
+     43.124,
+     43.31
+    ],
+    [
+     "all",
+     43.31,
+     43.497
+    ],
+    [
+     "of",
+     43.497,
+     43.684
+    ],
+    [
+     "them.",
+     43.684,
+     43.871
+    ]
+   ]
+  },
+  {
+   "id": "t1",
+   "text": "Problem number 2. Right after his peak in 2002, tennis elbow hit him.",
+   "caption": "Problem number 2. Right after his peak in 2002, tennis elbow hit him.",
+   "start": 44.055,
+   "end": 47.668,
+   "words": [
+    [
+     "Problem",
+     44.187,
+     44.483
+    ],
+    [
+     "number",
+     44.483,
+     44.779
+    ],
+    [
+     "2.",
+     44.779,
+     45.001
+    ],
+    [
+     "Right",
+     45.001,
+     45.149
+    ],
+    [
+     "after",
+     45.149,
+     45.445
+    ],
+    [
+     "his",
+     45.445,
+     45.593
+    ],
+    [
+     "peak",
+     45.593,
+     45.742
+    ],
+    [
+     "in",
+     45.742,
+     45.89
+    ],
+    [
+     "2002,",
+     45.89,
+     46.778
+    ],
+    [
+     "tennis",
+     46.778,
+     47.075
+    ],
+    [
+     "elbow",
+     47.075,
+     47.371
+    ],
+    [
+     "hit",
+     47.371,
+     47.519
+    ],
+    [
+     "him.",
+     47.519,
+     47.668
+    ]
+   ]
+  },
+  {
+   "id": "t2",
+   "text": "The bad matches dragged the average down, and it never recovered to that height.",
+   "caption": "The bad matches dragged the average down, and it never recovered to that height.",
+   "start": 47.668,
+   "end": 51.621,
+   "words": [
+    [
+     "The",
+     47.668,
+     47.834
+    ],
+    [
+     "bad",
+     47.834,
+     48.001
+    ],
+    [
+     "matches",
+     48.001,
+     48.335
+    ],
+    [
+     "dragged",
+     48.335,
+     48.669
+    ],
+    [
+     "the",
+     48.669,
+     48.836
+    ],
+    [
+     "average",
+     48.836,
+     49.504
+    ],
+    [
+     "down,",
+     49.504,
+     49.671
+    ],
+    [
+     "and",
+     49.671,
+     49.838
+    ],
+    [
+     "it",
+     49.838,
+     50.005
+    ],
+    [
+     "never",
+     50.005,
+     50.339
+    ],
+    [
+     "recovered",
+     50.339,
+     51.007
+    ],
+    [
+     "to",
+     51.007,
+     51.174
+    ],
+    [
+     "that",
+     51.174,
+     51.341
+    ],
+    [
+     "height.",
+     51.341,
+     51.508
+    ]
+   ]
+  },
+  {
+   "id": "t3",
+   "text": "He became number 1 again in 2010.",
+   "caption": "He became number 1 again in 2010.",
+   "start": 51.72,
+   "end": 53.569,
+   "words": [
+    [
+     "He",
+     51.767,
+     51.875
+    ],
+    [
+     "became",
+     51.875,
+     52.204
+    ],
+    [
+     "number",
+     52.204,
+     52.422
+    ],
+    [
+     "1",
+     52.422,
+     52.586
+    ],
+    [
+     "again",
+     52.586,
+     52.804
+    ],
+    [
+     "in",
+     52.804,
+     52.913
+    ],
+    [
+     "2010.",
+     52.913,
+     53.569
+    ]
+   ]
+  },
+  {
+   "id": "t4",
+   "text": "But even then, 898 stayed his ceiling.",
+   "caption": "But even then, 898 stayed his ceiling.",
+   "start": 53.569,
+   "end": 56.945,
+   "words": [
+    [
+     "But",
+     53.569,
+     53.835
+    ],
+    [
+     "even",
+     53.835,
+     54.368
+    ],
+    [
+     "then,",
+     54.368,
+     54.634
+    ],
+    [
+     "898",
+     54.634,
+     55.833
+    ],
+    [
+     "stayed",
+     55.833,
+     56.099
+    ],
+    [
+     "his",
+     56.099,
+     56.366
+    ],
+    [
+     "ceiling.",
+     56.366,
+     56.899
+    ]
+   ]
+  },
+  {
+   "id": "m1",
+   "text": "So the rating says Sachin never had a monster peak.",
+   "caption": "So the rating says Sachin never had a monster peak.",
+   "start": 57.044,
+   "end": 59.525,
+   "words": [
+    [
+     "So",
+     57.101,
+     57.275
+    ],
+    [
+     "the",
+     57.275,
+     57.448
+    ],
+    [
+     "rating",
+     57.448,
+     57.794
+    ],
+    [
+     "says",
+     57.794,
+     57.967
+    ],
+    [
+     "Sachin",
+     57.967,
+     58.313
+    ],
+    [
+     "never",
+     58.313,
+     58.66
+    ],
+    [
+     "had",
+     58.66,
+     58.833
+    ],
+    [
+     "a",
+     58.833,
+     59.007
+    ],
+    [
+     "monster",
+     59.007,
+     59.353
+    ],
+    [
+     "peak.",
+     59.353,
+     59.525
+    ]
+   ]
+  },
+  {
+   "id": "m2",
+   "text": "But 24 years, 200 Tests and 15,921 runs.",
+   "caption": "But 24 years, 200 Tests and 15,921 runs.",
+   "start": 59.525,
+   "end": 63.676,
+   "words": [
+    [
+     "But",
+     59.525,
+     59.733
+    ],
+    [
+     "24",
+     59.733,
+     60.354
+    ],
+    [
+     "years,",
+     60.354,
+     60.561
+    ],
+    [
+     "200",
+     60.561,
+     61.493
+    ],
+    [
+     "Tests",
+     61.493,
+     61.7
+    ],
+    [
+     "and",
+     61.7,
+     61.908
+    ],
+    [
+     "15,921",
+     61.908,
+     63.46
+    ],
+    [
+     "runs.",
+     63.46,
+     63.667
+    ]
+   ]
+  },
+  {
+   "id": "m3",
+   "text": "Maybe his greatness was never the peak. It was the mountain range.",
+   "caption": "Maybe his greatness was never the peak. It was the mountain range.",
+   "start": 63.742,
+   "end": 67.658,
+   "words": [
+    [
+     "Maybe",
+     63.79,
+     64.24
+    ],
+    [
+     "his",
+     64.24,
+     64.464
+    ],
+    [
+     "greatness",
+     64.464,
+     64.914
+    ],
+    [
+     "was",
+     64.914,
+     65.139
+    ],
+    [
+     "never",
+     65.139,
+     65.588
+    ],
+    [
+     "the",
+     65.588,
+     65.813
+    ],
+    [
+     "peak.",
+     65.813,
+     66.038
+    ],
+    [
+     "It",
+     66.038,
+     66.262
+    ],
+    [
+     "was",
+     66.262,
+     66.487
+    ],
+    [
+     "the",
+     66.487,
+     66.712
+    ],
+    [
+     "mountain",
+     66.712,
+     67.161
+    ],
+    [
+     "range.",
+     67.161,
+     67.61
+    ]
+   ]
+  },
+  {
+   "id": "q1",
+   "text": "Peak or longevity, what matters most? Tell me in the comments, and follow for more.",
+   "caption": "Peak or longevity, what matters most? Tell me in the comments, and follow for more.",
+   "start": 67.757,
+   "end": 71.096,
+   "words": [
+    [
+     "Peak",
+     67.794,
+     67.942
+    ],
+    [
+     "or",
+     67.942,
+     68.09
+    ],
+    [
+     "longevity,",
+     68.09,
+     68.68
+    ],
+    [
+     "what",
+     68.68,
+     68.827
+    ],
+    [
+     "matters",
+     68.827,
+     69.123
+    ],
+    [
+     "most?",
+     69.123,
+     69.27
+    ],
+    [
+     "Tell",
+     69.27,
+     69.417
+    ],
+    [
+     "me",
+     69.417,
+     69.565
+    ],
+    [
+     "in",
+     69.565,
+     69.712
+    ],
+    [
+     "the",
+     69.712,
+     69.86
+    ],
+    [
+     "comments,",
+     69.86,
+     70.155
+    ],
+    [
+     "and",
+     70.155,
+     70.303
+    ],
+    [
+     "follow",
+     70.303,
+     70.597
+    ],
+    [
+     "for",
+     70.597,
+     70.745
+    ],
+    [
+     "more.",
+     70.745,
+     71.04
+    ]
+   ]
+  }
+ ]
+}
