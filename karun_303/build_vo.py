@@ -21,7 +21,7 @@ TAKES = {
     "L": "take_261116_120557", "P1": "take_261116_142215", "P2": "take_261116_145200",
     "P3": "take_261116_145224", "P4": "take_261116_145313",
 }
-S, M, PARA = 0.06, 0.16, 0.42   # pause after: same sentence, next sentence, new paragraph (fast pace)
+S, M, PARA = 0.04, 0.10, 0.30   # pause after: same sentence, next sentence, new paragraph (fast pace)
 G = "gap"
 
 EDL = [
@@ -39,7 +39,7 @@ EDL = [
     # --- the river
     ("river", "L", 69.00, 75.20, M),
     ("boat", "L", 87.30, 94.20, M),
-    ("on_boat", "L", 94.60, 99.90, M),
+    ("on_boat", "L", 94.60, 98.68, M),          # stop before the false start "Unhe bacha liya…"
     ("saved", "L", 100.40, 104.10, S),
     ("chennai_fate", "L", 113.70, 117.50, PARA),
     # --- debut + 303
@@ -95,18 +95,18 @@ EDL = [
     ("attention", "L", 370.60, 374.00, M),
     ("measured", "L", 374.50, 379.20, M),
     ("four_inn", "L", 379.90, 384.78, S),
-    ("form", "L", 384.65, 387.92, S),
+    ("form", "L", 384.78, 387.92, S),
     ("saboot", "L", 390.04, 391.30, M),
     ("dharamsala", "L", 391.30, 397.20, PARA),
-    ("not_end", "L", 397.30, 402.40, S),
-    ("stranger", "L", 406.20, 410.90, PARA),
+    ("not_end", "L", 397.30, 400.15, S),        # stop before the abandoned "Kyunki iske baad…"
+    ("stranger", "L", 406.10, 409.15, PARA),     # the retake, minus the false start "2018 England ka"
     # --- 2018 England tour
     ("eng2018", "L", 413.50, 417.90, M),
     ("whole_tour", "L", 418.70, 422.80, M),
     ("vihari", "L", 423.00, 429.60, M),
-    ("wi_squad", "L", 430.10, 438.90, M),
+    ("wi_squad", "L", (G, 434.0, 434.6), 438.90, M),  # retake only
     ("no_talk", "L", 439.00, 441.80, S),
-    ("no_answer", "L", 441.90, (G, 444.0, 446.6), M),
+    ("no_answer", "L", 441.90, 444.50, M),       # cut before the abandoned "Chief selector MSK"
     ("msk", "L", 455.11, 459.60, M),
     ("truth_who", "L", 459.81, 462.80, M),
     ("avg62", "L", 477.42, (G, 484.0, 486.2), S),
@@ -156,7 +156,7 @@ EDL = [
     ("zyada", "L", 690.10, 692.10, M),
     ("haqdaar", "L", 692.30, 696.60, M),
     ("back_karnataka", "L", 696.90, 701.39, M),
-    ("same_cycle", "L", 702.12, 704.97, S),
+    ("same_cycle", "L", 702.12, 703.30, S),      # "Lekin dhyaan dijiye" comes from the retake that follows
     ("measured_303", "L", 715.59, 720.93, PARA),
     # --- the truth
     ("villains", "L", 721.60, 726.50, M),
@@ -199,6 +199,42 @@ def quietest(a, t0, t1, win=0.03):
     return bt
 
 
+def squeeze(seg, max_gap=0.40, keep=0.26):
+    """Shorten any pause inside a piece longer than max_gap to `keep` seconds (crossfaded), so lines flow."""
+    hop = SR // 100
+    n = len(seg) // hop
+    if n < 10:
+        return seg
+    db = 20 * np.log10(np.sqrt(np.mean(seg[: n * hop].reshape(n, hop) ** 2, axis=1)) + 1e-9)
+    quiet = db < max(np.percentile(db, 10) + 12, np.percentile(db, 70) - 26)
+    out, i, last = [], 0, 0
+    while i < n:
+        if quiet[i]:
+            j = i
+            while j < n and quiet[j]:
+                j += 1
+            if (j - i) / 100 > max_gap and i > 0 and j < n:      # interior pause only
+                cut0 = (i * hop) + int(keep / 2 * SR)
+                cut1 = (j * hop) - int(keep / 2 * SR)
+                out.append(seg[last:cut0])
+                last = cut1
+            i = j
+        else:
+            i += 1
+    out.append(seg[last:])
+    if len(out) == 1:
+        return seg
+    f = int(0.01 * SR)
+    res = out[0]
+    for p in out[1:]:
+        if len(res) > f and len(p) > f:
+            x = np.linspace(0, 1, f, dtype=np.float32)
+            res = np.concatenate([res[:-f], res[-f:] * (1 - x) + p[:f] * x, p[f:]])
+        else:
+            res = np.concatenate([res, p])
+    return res
+
+
 def resolve(a, t):
     return quietest(a, t[1], t[2]) if isinstance(t, tuple) else t
 
@@ -211,7 +247,7 @@ def main():
     for bid, take, s, e, pause in EDL:
         a = audio[take]
         s2, e2 = resolve(a, s), resolve(a, e)
-        seg = a[int(s2 * SR): int(e2 * SR)].copy()
+        seg = squeeze(a[int(s2 * SR): int(e2 * SR)].copy())
         ramp = np.linspace(0, 1, fade, dtype=np.float32)
         seg[:fade] *= ramp
         seg[-fade:] *= ramp[::-1]

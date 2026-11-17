@@ -820,8 +820,8 @@ head(["PROOF THAT", "303 WAS ONE DAY"], b("dharamsala"), 1.5, "center", 100, acc
 C_("dharamsala", "Dharamsala, 25 March 2017: the *last* Test")
 
 full(A + "ai_storm.jpg", b("not_end"), until("stranger") + blen("stranger"), dim=0.35, ai=True)
-head(["THE STORY SHOULD", "HAVE ENDED HERE."], b("not_end"), 2.6, "left", 110)
-head(["IT DIDN'T."], b("not_end", 2.6), until("not_end", 2.6), "left", 170, accent=(0,))
+head(["THE STORY SHOULD", "HAVE ENDED HERE."], b("not_end"), 1.75, "left", 110)
+head(["IT DIDN'T."], b("not_end", 1.75), until("not_end", 1.75), "left", 170, accent=(0,))
 head(["WHAT CAME NEXT", "WAS STRANGER"], b("stranger"), until("stranger"), "left", 110, accent=(1,))
 C_("not_end", "The story should have ended here. It *didn't*.")
 C_("stranger", "What came next was *stranger* than being dropped")
