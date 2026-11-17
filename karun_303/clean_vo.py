@@ -41,6 +41,7 @@ CUTS = [                                   # raw seconds removed: false starts a
     (400.18, 406.12),   # "kyunki iske baad jo hua… zyada ajeeb tha" said twice
     (484.30, 487.50),   # "303 ki chamak se nikal kar" said twice
     (408.95, 413.55),   # "2018 England ka…" false start before "2018, India ka England tour"
+    (444.51, 454.85),   # "Chief selector MSK Prasad ne kaha baat" said twice (7 s pause between)
     (430.20, 434.30),   # "aur tour ke baad West Indies series ki…" said twice
     (538.16, 542.00),   # "aur cricket ne pehle…" restarted
     (616.85, 620.21),   # "poore desh ne kaha, ab bas kahani poori hogi" said twice
@@ -50,17 +51,18 @@ REPLACE = [(167.55, 178.85, "vo/fix_759.m4a", 1.45, 6.55)]   # "569" said for 75
 # lines recorded separately, inserted at a raw time (best takes only)
 INSERTS = [
     (207.60, "vo/ins_a.m4a", [(2.15, 17.85)]),                                   # "Match ke baad… wahi 303"
-    (599.85, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
+    (599.75, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
     (774.60, "vo/ins_c.m4a", [(2.0, 8.5), (13.75, 17.10), (24.45, 27.15), (27.45, 30.30)]),  # "…wo humara ho gaya"
 ]
 # where the words run together, the cut goes in the gap between these two words (raw seconds), never elsewhere
 WORD_GAPS = {            # read off the 10 ms loudness curve of the raw take (word end -> next word onset)
-    104.00: (104.26, 104.31),   # "...nadi se bachaya" fades out by 104.30 | "aur paanch mahine..." (false start)
+    104.00: (103.98, 104.02),   # "...nadi se bachaya" | "aur paanch mahine..." (false start); checked both sides
     328.56: (328.58, 328.64),   # "...koi khalnayak nahi" runs into "lekin" (first take) at 328.62
-    484.30: (484.56, 484.65),   # "...sirf dekh raha tha" ends 484.62 | "303 ki chamak..." (first take)
-    599.85: (599.97, 600.04),   # "...Vidarbha champion" ends 600.03 | "aur phir England mein..."
+    484.30: (484.10, 484.17),   # "...sirf dekh raha tha" | "303 ki chamak..." (first take) starts 484.15
+    599.75: (599.73, 599.77),   # "...Vidarbha champion" | "aur phir England mein..." (checked by transcribing each side)
+    444.51: (444.48, 444.55),   # "...koi jawab nahi" | "Chief selector MSK Prasad ne kaha baat" (first take)
     703.60: (703.32, 703.39),   # "...wahi kahani, wahi chakkar" ends 703.36 | "lekin dhyan dijiye..." (stopped take)
-    408.95: (408.86, 408.92),   # "...zyada ajeeb tha" ends 408.90 | "2018 England ka" (false start)
+    408.95: (409.06, 409.10),   # "...zyada ajeeb tha" | "2018 England ka" (false start); checked both sides
 }
 SIL_DB = 13.0       # silence: within this many dB of the room floor
 PAUSE = 0.42        # an ordinary pause becomes this long
