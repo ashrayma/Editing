@@ -33,7 +33,7 @@ ORDER = [b["id"] for b in TL["beats"]]
 TOTAL = round(TL["duration"] + LEAD + TAIL, 2)
 
 os.makedirs(MEDIA, exist_ok=True)
-els, js, EVENTS, USED, NAT = [], [], [], set(), []
+els, js, EVENTS, USED, NAT, COVER = [], [], [], set(), [], []
 _n = [0]
 
 
@@ -120,6 +120,7 @@ E = lambda s: html.escape(s)  # noqa: E731
 def card(src, start, dur, side="right", label=None, sub=None, maxw=1000, maxh=640, media_start=0.0, ai=False,
          tilt=0, z=20, focus="50% 40%"):
     """Media card that glides in from its side (slight 3D turn), slow push-in, exits the same way."""
+    COVER.append((start, start + dur))
     i = nid("cd")
     video = src.endswith((".mp4", ".webm"))
     w, h = size(src)
@@ -153,6 +154,7 @@ def card(src, start, dur, side="right", label=None, sub=None, maxw=1000, maxh=64
 
 def polaroid(src, start, dur, side="right", caption="", tilt=-3, maxw=760, maxh=580, z=22, ai=False):
     """The Sachin-reel paper photo: white border, handwritten-ish caption, drops in with a tilt."""
+    COVER.append((start, start + dur))
     i = nid("po")
     w, h = size(src)
     cw, ch = fit(w, h, maxw, maxh)
@@ -168,14 +170,16 @@ def polaroid(src, start, dur, side="right", caption="", tilt=-3, maxw=760, maxh=
     return i
 
 
-def full(src, start, dur, media_start=0.0, dim=0.0, ai=False, push=(1.08, 1.0), z=8, focus="50% 40%"):
+def full(src, start, dur, media_start=0.0, dim=0.0, ai=False, push=(1.08, 1.0), z=8, focus="50% 40%", quiet=False):
     """Full-frame clip or still (stills/AI push in slowly). Only the caption band ever sits on top."""
+    COVER.append((start, start + dur))
     i = nid("fu")
     video = src.endswith((".mp4", ".webm"))
     rel = use(src)
     if video:
         check_len(src, media_start, dur)
-    EVENTS.append((start, "cut" if video else "whoosh"))
+    if not quiet:
+        EVENTS.append((start, "cut" if video else "whoosh"))
     if video:
         inner = (f'<video id="{i}m" src="{rel}" muted playsinline data-start="{start}" data-duration="{dur}" '
                  f'data-media-start="{media_start}" class="cover" style="object-position:{focus}"></video>')
@@ -194,6 +198,7 @@ def full(src, start, dur, media_start=0.0, dim=0.0, ai=False, push=(1.08, 1.0), 
 
 def browser(src, start, dur, side="right", url="en.wikipedia.org", maxw=1060, maxh=640, z=22, media_start=0.0, box=False):
     """Screen recording / screenshot inside a clean dark browser window."""
+    COVER.append((start, start + dur))
     i = nid("br")
     video = src.endswith((".mp4", ".webm"))
     w, h = size(src)
@@ -344,6 +349,7 @@ def quote(text, who, start, dur, side="center", size=60, z=34, mark=True, maxw=1
 
 def paper(start, dur, z=5):
     """Warm-paper stage (the reel's light scenes) behind graphics."""
+    COVER.append((start, start + dur))
     i = nid("pp")
     add(f'<div id="{i}" class="paper clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}"></div>', start, dur, z)
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.25}},{start})')
@@ -352,6 +358,7 @@ def paper(start, dur, z=5):
 
 def big303(start, dur, z=40, color="gold", label=None):
     """Hero 303: extruded gold digits rising in perspective with a reflection and an underline."""
+    COVER.append((start, start + dur))
     i = nid("bg")
     EVENTS.append((start, "boom"))
     depth = ",".join(f"0 {k}px 0 #6b4c0c" for k in range(1, 16)) + ",0 40px 60px rgba(0,0,0,.7)"
@@ -389,6 +396,7 @@ def datecard(l1, l2, start, dur, sub=None, z=36):
 
 def chapter(numtxt, title, start, dur=2.4, z=70):
     """Full-frame chapter sting: number, rule, title (Apple keynote style)."""
+    COVER.append((start, start + dur))
     i = nid("ch")
     EVENTS.append((start, "swell"))
     add(f'<div id="{i}" class="chap clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">'
@@ -503,6 +511,7 @@ def strike(target_id, t):
 
 def wall_break(start, dur, z=40):
     """Grid of bricks that blows apart from the centre (the wall breaks)."""
+    COVER.append((start, start + dur))
     i = nid("wb")
     EVENTS.append((start + 0.9, "boom"))
     cols, rows_ = 12, 8
@@ -521,6 +530,7 @@ def wall_break(start, dur, z=40):
 
 
 def endcard(start, dur, z=80):
+    COVER.append((start, start + dur))
     i = nid("en")
     EVENTS.append((start, "swell"))
     add(f'<div id="{i}" class="stage clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">'
@@ -600,8 +610,7 @@ C_("came_back", "When he came back, *303* came back too")
 
 # ---------------------------------------------------------------- 01 THE RIVER
 chapter("01", "The River", b("river"), 2.1)
-full(C + "chepauk_aerial.mp4", b("river", 2.0), 1.6)
-full(A + "ai_ghats.jpg", b("river", 3.7), until("river", 3.7), dim=0.3, ai=True)
+full(A + "ai_ghats.jpg", b("river", 2.0), until("river", 2.0), dim=0.3, ai=True)
 datecard("JULY 2016", "PAMPA RIVER", b("river", 3.9), until("river", 3.9), sub="Aranmula, Kerala")
 C_("river", "It begins with a *river*")
 
@@ -1030,6 +1039,52 @@ head(["WOULD HE BE", "IN TEAM INDIA", "TODAY?"], b("comment", 0.1), until("comme
 C_("comment", "…would he be in Team India today? *Comment.*")
 endcard(round(BEAT["comment"][1] + 0.2, 2), round(TOTAL - BEAT["comment"][1] - 0.2, 2))
 
+
+# ---------------------------------------------------------------- match footage behind the text
+# Wide shots from the 303 innings (never shown elsewhere) go behind text-only moments, but ONLY on lines that are
+# about Chennai / the 303 / "the 303 man", so the picture always matches the words.
+BG_OK = ["open_300", "open_3tests", "open_381", "open_last", "anyaay", "not_whole", "saza",
+         "december", "fifth_test", "rahul", "stats_303", "declare", "won", "sehwag", "second", "sobers", "avg160",
+         "pressure_q", "maut", "judged", "before_after", "young_expect", "prove_expect", "two_q", "benchmark", "touch",
+         "measured", "form", "prove", "one_day", "measured_303", "truth", "own_innings", "number", "bojh", "never_far",
+         "kadvi", "trapped", "character", "one_thing", "no_score"]
+# reviewed by eye: close-ups of faces (6, 8, 36, 39) and a repeat of the 150* graphic (21) are excluded
+SKIP = {"bg_006", "bg_008", "bg_021", "bg_036", "bg_039"}
+POOL = [p for p in json.load(open(os.path.join(HERE, "out", "bg_pool.json"))) if os.path.basename(p["file"])[:6] not in SKIP]
+
+
+def gaps_in(t0, t1):
+    pieces = [(t0, t1)]
+    for c0, c1 in COVER:
+        nxt = []
+        for p0, p1 in pieces:
+            if c1 <= p0 or c0 >= p1:
+                nxt.append((p0, p1))
+                continue
+            if c0 > p0:
+                nxt.append((p0, c0))
+            if c1 < p1:
+                nxt.append((c1, p1))
+        pieces = nxt
+    return [(round(a, 2), round(e, 2)) for a, e in pieces if e - a >= 0.9]
+
+
+_pk = [0]
+for beat in BG_OK:
+    k = ORDER.index(beat)
+    t1 = BEAT[ORDER[k + 1]][0] if k + 1 < len(ORDER) else TOTAL
+    for g0, g1 in gaps_in(BEAT[beat][0], t1):
+        t = g0
+        while g1 - t >= 0.9 and _pk[0] < len(POOL):
+            shot = POOL[_pk[0]]
+            _pk[0] += 1
+            d = round(min(shot["dur"], g1 - t, 3.0), 2)
+            if g1 - (t + d) < 0.9:      # don't leave a sliver: stretch to the end of the gap if the shot allows
+                d = round(min(shot["dur"], g1 - t), 2)
+            full(shot["file"], round(t, 2), d, dim=0.58, z=3, quiet=True, push=(1.06, 1.0))
+            t += d
+print(f"background shots used: {_pk[0]} of {len(POOL)}")
+
 # ============================================================================ page
 
 FONT = "../node_modules/@fontsource"
@@ -1195,7 +1250,7 @@ window.__timelines["root"] = tl;
     with open(os.path.join(HERE, "out", "events.json"), "w") as f:
         json.dump({"total": TOTAL, "lead": LEAD, "beats": BEAT, "events": sorted(EVENTS), "nat": NAT}, f)
     # report what's unused, so nothing the user sent gets forgotten
-    pool = [os.path.join(d, f) for d in (P, C, A, BR) for f in sorted(os.listdir(os.path.join(HERE, d)))]
+    pool = [os.path.join(d, f) for d in (P, C, A, BR) for f in sorted(os.listdir(os.path.join(HERE, d)))]  # bg shots are optional
     unused = [p for p in pool if p not in USED and not p.endswith(".gif")]
     print(f"{len(els)} elements, {len(js)} animation steps, {TOTAL:.1f}s, {len(USED)} assets used once each")
     if unused:
