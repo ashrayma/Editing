@@ -1273,7 +1273,7 @@ def team_grid(start, dur, t_rcb):
         x, y = 90 + c * 310, 360 + r * 250
         tag_ = '' if n == "RCB" else f'<em id="{i}t{k}">TRADED ↔</em>'
         cells.append(f'<div class="tcell" id="{i}c{k}" style="left:{x}px;top:{y}px;background:{bg};color:{fg}"><b>{n}</b>{tag_}</div>')
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tgrid avoid" style="z-index:{z()}">{"".join(cells)}'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tgrid avoid" style="position:absolute;inset:0;z-index:{z()}">{"".join(cells)}'
         f'<div class="t0" id="{i}z">0 MOVES</div></div>')
     for k in range(10):
         anim(f'tl.fromTo("#{i}c{k}",{{scale:0.6,opacity:0}},{{scale:1,opacity:1,duration:0.35,ease:"back.out(1.8)"}},{start + 0.04 * k})')
@@ -1460,7 +1460,7 @@ EXTRA_CSS = f"""
 .tcell{{position:absolute;width:280px;height:200px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}}
 .tcell b{{font-family:"Bebas";font-size:96px;line-height:1}}
 .tcell em{{font-style:normal;font:800 22px "IDisp";letter-spacing:.12em;margin-top:6px;opacity:.9}}
-.t0{{position:absolute;left:520px;top:1150px;border:6px solid {Y};color:{Y};font:900 54px "IDisp";padding:6px 22px;border-radius:12px;background:rgba(0,0,0,.6)}}
+.t0{{position:absolute;left:395px;top:1340px;border:6px solid {Y};color:{Y};font:900 54px "IDisp";padding:6px 22px;border-radius:12px;background:rgba(0,0,0,.6)}}
 .hcard{{position:absolute;left:70px;right:70px;top:300px;background:#16161a;border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 36px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
 .hh{{font:800 26px "IDisp";letter-spacing:.2em;color:#9a9aa2;margin-bottom:16px}}
 .hrw{{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:14px;margin-bottom:8px}}
