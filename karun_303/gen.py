@@ -23,6 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "hf")
 MEDIA = os.path.join(OUT, "media")
 W, H, FPS = 1920, 1080, 30
+CARD_SCALE = 1.14  # cards, screen recordings: a little bigger than the first cut
 LEAD = 0.4          # picture starts this long before the voice
 TAIL = 6.0          # end card after the last word
 Y, RED, PAPER, INK = "#FEDE5C", "#E5484D", "#D9D5CE", "#121214"
@@ -124,9 +125,10 @@ def card(src, start, dur, side="right", label=None, sub=None, maxw=1000, maxh=64
     i = nid("cd")
     video = src.endswith((".mp4", ".webm"))
     w, h = size(src)
+    maxw, maxh = min(round(maxw * CARD_SCALE), 1180), min(round(maxh * CARD_SCALE), 700)
     cw, ch = fit(w, h, maxw, maxh)
-    cx = {"right": W * 0.70, "left": W * 0.30, "center": W / 2}[side]
-    left, top = round(cx - cw / 2), round(H * 0.44 - ch / 2)
+    cx = {"right": W * 0.685, "left": W * 0.315, "center": W / 2}[side]
+    left, top = round(cx - cw / 2), round(H * 0.425 - ch / 2)
     rel = use(src)
     EVENTS.append((start, "whoosh"))
     if video:
@@ -152,7 +154,7 @@ def card(src, start, dur, side="right", label=None, sub=None, maxw=1000, maxh=64
     return i
 
 
-def polaroid(src, start, dur, side="right", caption="", tilt=-3, maxw=760, maxh=580, z=22, ai=False):
+def polaroid(src, start, dur, side="right", caption="", tilt=-3, maxw=860, maxh=640, z=22, ai=False):
     """The Sachin-reel paper photo: white border, handwritten-ish caption, drops in with a tilt."""
     COVER.append((start, start + dur))
     i = nid("po")
@@ -197,6 +199,7 @@ def full(src, start, dur, media_start=0.0, dim=0.0, ai=False, push=(1.08, 1.0), 
 
 
 def browser(src, start, dur, side="right", url="en.wikipedia.org", maxw=1060, maxh=640, z=22, media_start=0.0, box=False):
+    maxw, maxh = min(round(maxw * CARD_SCALE), 1560), min(round(maxh * CARD_SCALE), 720)
     """Screen recording / screenshot inside a clean dark browser window."""
     COVER.append((start, start + dur))
     i = nid("br")
@@ -478,7 +481,7 @@ def subscribe_card(start, dur, z=60):
     EVENTS.append((tap, "click"))
     EVENTS.append((tap + 0.8, "ding"))
     add(f'<div id="{i}" class="subcard clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">'
-        f'<div class="ring"><img src="media/logo.png"></div><div class="sname">TheCricketLounge</div>'
+        f'<div class="ring"><img src="media/logo.png" width="104" height="24" style="width:104px;height:24px;display:block"></div><div class="sname">TheCricketLounge</div>'
         f'<div class="sdesc">Cricket stories, records &amp; debates</div>'
         f'<div class="sbtn" id="{i}b"><span id="{i}x">Subscribe</span><span id="{i}y" class="sdone">Subscribed ✓</span></div>'
         f'<div class="bell" id="{i}bell">🔔</div><div class="cursor" id="{i}c"></div></div>', start, dur, z)
@@ -537,7 +540,7 @@ def endcard(start, dur, z=80):
         f'<div class="eq" id="{i}q">Team India mein hote?</div>'
         f'<div class="eopts"><span id="{i}a">HAAN</span><i>ya</i><span id="{i}b">NAHI</span></div>'
         f'<div class="ecom" id="{i}c"><span class="eav"></span><span class="etype" id="{i}t">Comment mein likhiye…</span></div>'
-        f'<img class="elogo" id="{i}l" src="media/logo.png"><div class="efoot" id="{i}f">Next: the innings that should have changed everything</div></div>',
+        f'<div class="elogo" id="{i}l"><img src="media/logo.png" width="520" height="122" style="width:520px;height:122px;display:block"></div><div class="efoot" id="{i}f">Next: the innings that should have changed everything</div></div>',
         start, dur, z)
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.4}},{start})')
     anim(f'tl.fromTo("#{i}q",{{y:30,opacity:0}},{{y:0,opacity:1,duration:0.7,ease:"expo.out"}},{start + 0.1})')
@@ -565,8 +568,8 @@ def C_(beat, text, off=0.0, end=None):
 full(C + "walk_off.mp4", 0.0, b("open_300", 3.1), focus="50% 30%")
 C_("open_300", "*300* in Test cricket", 0.0, end=("open_300", 3.1))
 head(["ONLY TWO INDIANS"], b("open_300", 3.1), 1.6, "left", 110, kicker="TEST TRIPLE HUNDREDS")
-chips(["1 · VIRENDER SEHWAG", ("2 · ???????", "yellow")], b("open_300", 3.4), 1.7, "left", y=620)
-browser(BR + "rec_triple_list.webm", b("open_300", 4.9), until("open_300", 4.9) + 0.2, "center", maxw=1500, maxh=760, media_start=4.5)
+chips(["1 · VIRENDER SEHWAG", ("2 · ???????", "yellow")], b("open_300", 3.4), 1.5, "left", y=620)
+browser(BR + "rec_triple_list.webm", b("open_300", 4.9), until("open_300", 4.9) + 0.2, "center", maxw=1260, maxh=640, media_start=4.5)
 C_("open_300", "A name you might not even *remember*", 5.0)
 
 num("3", b("open_3tests"), until("open_3tests"), "center", 380, label="TESTS AFTER THAT. JUST THREE.")
@@ -605,7 +608,7 @@ vs('<s class="sk">DEFENCE</s>', "SENTENCE", b("saza"), until("saza"), ltag="303 
 C_("saza", "303 wasn't his defence. It was his *sentence*.")
 
 card(P + "karun_arrival_2025.jpg", b("came_back"), until("came_back"), "right", label="2025", sub="8 years later", focus="60% 30%")
-head(["8 YEARS LATER,", "303 CAME BACK", "WITH HIM"], b("came_back", 0.3), until("came_back", 0.3), "left", 96, accent=(1,))
+head(["8 YEARS LATER,", "303 CAME BACK", "WITH HIM"], b("came_back", 0.3), until("came_back", 0.3), "left", 86, accent=(1,))
 C_("came_back", "When he came back, *303* came back too")
 
 # ---------------------------------------------------------------- 01 THE RIVER
@@ -842,8 +845,8 @@ chat([("me", "Why didn't I play?", b("no_talk", 0.4)), ("me", "Why was I dropped
 head(["NOBODY", "TALKED", "TO HIM"], b("no_talk", 0.2), until("no_talk", 0.2) + blen("no_answer") + 0.2, "left", 140, accent=(2,))
 C_("no_talk", "Karun: nobody even *talked* to me")
 C_("no_answer", "Why not picked? Why dropped? *No answer.*")
-card(P + "msk_kohli.jpg", b("msk"), until("msk"), "left", label="MSK PRASAD", sub="chief selector", focus="25% 30%", maxw=820)
-quote("Baat ki gayi thi. Karun abhi bhi plans mein hain.", "MSK PRASAD", b("msk", 0.3), until("msk", 0.3), "right", 54, maxw=760)
+card(P + "msk_kohli.jpg", b("msk"), until("msk"), "left", label="MSK PRASAD", sub="chief selector", focus="25% 30%", maxw=740)
+quote("Baat ki gayi thi. Karun abhi bhi plans mein hain.", "MSK PRASAD", b("msk", 0.3), until("msk", 0.3), "right", 52, maxw=700)
 C_("msk", "Selector: “We spoke. He's still in *plans*.”")
 head(["WHOSE TRUTH?"], b("truth_who"), until("truth_who"), "center", 170, accent=(0,))
 C_("truth_who", "Whose truth was it? Maybe *both* know.")
@@ -950,8 +953,8 @@ num("57", b("oval57", 2.0), until("oval57", 2.0), "left", 360, label="AT LAST", 
 C_("oval57", "Dropped for the 4th Test. Then the Oval: *57*")
 head(["FIRST TEST FIFTY", "IN ~9 YEARS"], b("nine_years"), until("nine_years"), "center", 130, accent=(1,))
 C_("nine_years", "A Test fifty after nearly *9 years*")
-card(P + "karthik.jpg", b("dk"), until("dk"), "left", label="DINESH KARTHIK", sub="on commentary", focus="40% 30%", maxw=820)
-quote("Karun ka career ab sach mein wapas aa gaya hai.", "DINESH KARTHIK", b("dk", 0.3), until("dk", 0.3), "right", 54, maxw=760)
+card(P + "karthik.jpg", b("dk"), until("dk"), "left", label="DINESH KARTHIK", sub="on commentary", focus="40% 30%", maxw=740)
+quote("Karun ka career ab sach mein wapas aa gaya hai.", "DINESH KARTHIK", b("dk", 0.3), until("dk", 0.3), "right", 52, maxw=700)
 C_("dk", "DK: “His career is *truly back*”")
 card(P + "walk_off_2025.jpg", b("lbw"), until("lbw"), "right", maxw=600, maxh=700, focus="50% 25%")
 tickets([("THE OVAL · 1ST INN.", "LBW · TONGUE"), ("THE OVAL · 2ND INN.", "NAIR 17")], b("lbw", 0.2), until("lbw", 0.2), "left", gap=2.4,
@@ -970,8 +973,8 @@ C_("one_day", "…that 303 *wasn't one day*")
 paper(b("wi_2025"), until("wi_2025"))
 tickets([("WEST INDIES SERIES · 2025", "KARUN NAIR")], b("wi_2025", 0.5), until("wi_2025", 0.5), "center", y=430, stamps=["NOT PICKED"])
 C_("wi_2025", "Weeks later: West Indies squad. Name *missing*.")
-card(P + "agarkar.jpg", b("agarkar"), until("agarkar") + blen("zyada"), "left", label="AJIT AGARKAR", sub="chief selector", focus="50% 30%", maxw=820)
-quote("Humein England mein Karun se zyada ki ummeed thi.", "AJIT AGARKAR", b("agarkar", 0.2), until("agarkar", 0.2), "right", 54, maxw=760)
+card(P + "agarkar.jpg", b("agarkar"), until("agarkar") + blen("zyada"), "left", label="AJIT AGARKAR", sub="chief selector", focus="50% 30%", maxw=740)
+quote("Humein England mein Karun se zyada ki ummeed thi.", "AJIT AGARKAR", b("agarkar", 0.2), until("agarkar", 0.2), "right", 52, maxw=700)
 head(["“ZYADA”", "KI UMMEED."], b("zyada"), until("zyada"), "right", 120, accent={0: RED})
 C_("agarkar", "“We expected *more* from Karun in England”")
 C_("zyada", "*More*. Did you hear that?")
@@ -1013,7 +1016,7 @@ C_("never_far", "“It will never leave me”")
 full(C + "shot_d.mp4", b("sahi"), until("sahi"))
 C_("sahi", "Maybe he was right. 303 never *left*.")
 card(C + "crowd_200.mp4", b("humara"), until("humara"), "right", maxw=980)
-head(["IT WASN'T HIS", "ANYMORE.", "IT BECAME OURS."], b("humara", 0.2), until("humara", 0.2), "left", 110, accent=(2,))
+head(["IT WASN'T HIS", "ANYMORE.", "IT BECAME OURS."], b("humara", 0.2), until("humara", 0.2), "left", 86, accent=(2,))
 C_("humara", "It just wasn't *his* anymore. It became *ours*.")
 head(["THE BITTEREST PART"], b("kadvi"), until("kadvi"), "center", 120, kcolor=RED)
 C_("kadvi", "And the *bitterest* part…")
@@ -1032,10 +1035,10 @@ head(['<s class="sk">303 WALA AADMI</s>'.replace("<", "&lt;") if False else "NOT
      b("no_score", 5.4), until("no_score", 5.4), "center", 120, accent=(2,))
 C_("no_score", "He just wanted to be *Karun Nair*")
 card(C + "shot_f.mp4", b("aap_bataiye"), until("aap_bataiye"), "right", maxw=980)
-head(["IF HE'D MADE 30", "THAT DAY", "IN CHENNAI…"], b("aap_bataiye", 1.0), until("aap_bataiye", 1.0), "left", 110, accent=(0,))
+head(["IF HE'D MADE 30", "THAT DAY", "IN CHENNAI…"], b("aap_bataiye", 1.0), until("aap_bataiye", 1.0), "left", 86, accent=(0,))
 C_("aap_bataiye", "If he'd been out for *30* that day…")
 card(C + "hundred_shot.mp4", b("comment"), until("comment") - TAIL + 0.6, "left", maxw=980)
-head(["WOULD HE BE", "IN TEAM INDIA", "TODAY?"], b("comment", 0.1), until("comment", 0.1) - TAIL + 0.5, "right", 110, accent=(1, 2))
+head(["WOULD HE BE", "IN TEAM INDIA", "TODAY?"], b("comment", 0.1), until("comment", 0.1) - TAIL + 0.5, "right", 86, accent=(1, 2))
 C_("comment", "…would he be in Team India today? *Comment.*")
 endcard(round(BEAT["comment"][1] + 0.2, 2), round(TOTAL - BEAT["comment"][1] - 0.2, 2))
 
@@ -1189,7 +1192,7 @@ s.sk{{text-decoration:line-through;text-decoration-color:{RED};text-decoration-t
 .subcard{{position:absolute;left:560px;top:300px;width:800px;height:430px;border-radius:36px;background:rgba(22,22,24,.96);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 50px 120px rgba(0,0,0,.6);
   display:flex;flex-direction:column;align-items:center;justify-content:center}}
 .ring{{width:120px;height:120px;border-radius:50%;border:4px solid {Y};display:flex;align-items:center;justify-content:center;background:#0b0b0c;overflow:hidden}}
-.ring img{{width:104px}}
+.ring img{{width:104px;height:24px}}
 .sname{{font-size:44px;font-weight:800;color:#fff;margin-top:22px}}
 .sdesc{{font-size:24px;color:rgba(255,255,255,.6);margin-top:8px}}
 .sbtn{{position:relative;margin-top:30px;width:300px;height:68px;border-radius:999px;background:{Y};color:#111;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center}}
@@ -1200,7 +1203,7 @@ s.sk{{text-decoration:line-through;text-decoration-color:{RED};text-decoration-t
 .capb{{padding:12px 26px;border-radius:14px;background:rgba(12,12,14,.86);color:#fff;font-size:34px;font-weight:800;letter-spacing:.3px;
   box-shadow:0 0 0 1px rgba(255,255,255,.08);max-width:1500px;text-align:center}}
 .brick{{position:absolute;background:#2a2a2d;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}}
-.logo{{position:absolute;left:46px;top:40px;height:46px;z-index:86;opacity:.9}}
+.logo{{position:absolute;left:46px;top:40px;width:196px;height:46px;overflow:hidden;z-index:86;opacity:.9}}
 .eq{{position:absolute;left:0;right:0;top:200px;text-align:center;font-family:Anton;font-size:130px;color:#fff;text-transform:uppercase}}
 .eopts{{position:absolute;left:0;right:0;top:400px;display:flex;justify-content:center;align-items:center;gap:40px}}
 .eopts span{{font-family:Anton;font-size:120px;color:#111;background:{Y};padding:6px 40px;border-radius:24px}}
@@ -1209,7 +1212,7 @@ s.sk{{text-decoration:line-through;text-decoration-color:{RED};text-decoration-t
 .ecom{{position:absolute;left:660px;top:640px;width:600px;height:76px;border-radius:999px;background:#1e1e21;display:flex;align-items:center;gap:20px;padding:0 24px;box-sizing:border-box}}
 .eav{{width:44px;height:44px;border-radius:50%;background:{Y}}}
 .etype{{color:rgba(255,255,255,.75);font-size:28px;font-weight:600}}
-.elogo{{position:absolute;left:50%;top:800px;width:520px;margin-left:-260px}}
+.elogo{{position:absolute;left:50%;top:800px;width:520px;height:122px;overflow:hidden;margin-left:-260px}}
 .efoot{{position:absolute;left:0;right:0;top:960px;text-align:center;color:rgba(255,255,255,.6);font-size:24px;font-weight:600;letter-spacing:2px}}
 """
 
@@ -1229,7 +1232,9 @@ def build():
     body = ['<div class="bg"></div><div class="glow" id="glow"></div>']
     for start, dur, z, h in sorted(els, key=lambda e: e[0]):
         body.append(h)
-    body.append(f'<img class="logo clip" id="logo" src="media/logo.png" data-start="0" data-duration="{round(TOTAL - TAIL, 2)}">')
+    # logo in a fixed-size box: a bare <img> with only a height was occasionally drawn stretched across the frame
+    body.append(f'<div class="logo clip" id="logo" data-start="0" data-duration="{round(TOTAL - TAIL, 2)}">'
+                f'<img src="media/logo.png" width="196" height="46" style="width:196px;height:46px;display:block"></div>')
     body.append('<div class="grain"></div><div class="vig"></div>')
     page = f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="root" data-width="{W}" data-height="{H}" data-fps="{FPS}" data-duration="{TOTAL}">
