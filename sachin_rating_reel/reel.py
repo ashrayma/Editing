@@ -1312,8 +1312,8 @@ def edit():
     clipping(["TENDULKAR  114"], "PERTH · 1992", *seg(s("r2", -0.03), s("t1", -0.03)), x=70, y=330, rot=-4, t_lost=word("r2", 2))
     clipping(["TENDULKAR  169"], "CAPE TOWN · 1997", *seg(s("r3", -0.03), s("t1", -0.03)), x=560, y=420, rot=3, t_lost=word("r3", 3))
     clipping(["TENDULKAR  136"], "CHENNAI · 1999", *seg(s("r4", -0.03), s("t1", -0.03)), x=90, y=640, rot=-2, t_lost=word("r4", 4))
-    aiimg(*seg(word("r4", 3), s("t1", -0.03)), x=560, y=740, w=440)
-    head(["INDIA LOST", "ALL 3"], *seg(word("r4", 5), s("t1", -0.03)), y=1180, size=100, accent=(1,), sfx="impact")
+    aiimg(*seg(word("r4", 3), s("t1", -0.03)), x=580, y=640, w=400)
+    head(["INDIA LOST ALL 3"], *seg(word("r4", 5), s("t1", -0.03)), y=1290, size=100, accent=(0,), sfx="impact")
     # ---------------- problem 2: the elbow, the ceiling
     bgp(*seg(s("t1", -0.03), s("m1", -0.03)), "paper")
     kick("PROBLEM #2", *seg(s("t1"), s("m1", -0.03)), "paper")
@@ -1325,9 +1325,9 @@ def edit():
     head(["NO MONSTER", "PEAK?"], *seg(s("m1"), s("m2", -0.03)), y=640, size=140, accent=(1,), sfx="impact")
     bgp(*seg(s("m2", -0.03), s("m3", -0.03)), "ink")
     cutout("st_delhi_raise", *seg(s("m2", -0.03), s("m3", -0.03)), x=560, h=1150)
-    odo("24", *seg(word("m2", 1) - 0.1, s("m3", -0.03)), x=70, y=300, size=200, label="YEARS")
-    odo("200", *seg(word("m2", 3) - 0.1, s("m3", -0.03)), x=70, y=640, size=200, label="TESTS")
-    odo("15,921", *seg(word("m2", 6) - 0.1, s("m3", -0.03)), x=70, y=980, size=150, label="RUNS")
+    odo("24", *seg(word("m2", 1) - 0.1, s("m3", -0.03)), x=70, y=280, size=170, label="YEARS")
+    odo("200", *seg(word("m2", 3) - 0.1, s("m3", -0.03)), x=70, y=680, size=170, label="TESTS")
+    odo("15,921", *seg(word("m2", 6) - 0.1, s("m3", -0.03)), x=70, y=1080, size=130, label="RUNS")
     credit(*seg(s("m2", -0.03), s("m3", -0.03)), GETTY)
     bgp(*seg(s("m3", -0.03), s("q1", -0.03)), "ink")
     head(["NOT THE PEAK…"], *seg(s("m3"), s("q1", -0.03)), y=330, size=110)
@@ -1645,7 +1645,7 @@ html,body{{margin:0;background:#000}}
 .who{{font-size:30px;font-weight:700;color:rgba(255,255,255,.6)}}
 .what{{font-size:46px;font-weight:800;color:#fff;min-height:56px}}
 .cta2{{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:40px;font-weight:700;color:rgba(255,255,255,.75)}}
-.brand{{position:absolute;right:56px;top:300px;text-align:right;z-index:950;opacity:.95}}
+.brand{{position:absolute;right:56px;top:185px;text-align:right;z-index:950;opacity:.95}}
 .brand img{{width:250px}}
 """
 
