@@ -78,28 +78,30 @@ def tape(length, thick, text, angle):
     return t.rotate(angle, expand=True, resample=Image.BICUBIC)
 
 
+def _shadow_text(base, xy, text, font):
+    sh = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).text((xy[0], xy[1] + 6), text, font=font, fill=(0, 0, 0, 210))
+    base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(6)))
+    ImageDraw.Draw(base).text(xy, text, font=font, fill=(255, 255, 255))
+
+
 def text_block(base):
+    """WHO KILLED / [IPL?] - the IPL word is the biggest thing on the thumbnail."""
     d = ImageDraw.Draw(base)
-    f1 = ImageFont.truetype(ANTON, 132)
-    # line 1 "WHO" white, line 2 "KILLED IT?" with KILLED in a yellow box
-    x0, y0 = 600, 26
-    sh = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    ds = ImageDraw.Draw(sh)
-    for dx, dy in [(0, 6)]:
-        ds.text((x0 + dx, y0 + dy), "WHO", font=f1, fill=(0, 0, 0, 200))
-    base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(6)))
-    d.text((x0, y0), "WHO", font=f1, fill=(255, 255, 255))
-    wk = d.textlength("KILLED", font=f1)
-    y1 = y0 + 150
-    pad = 16
-    box = Image.new("RGBA", (int(wk + 2 * pad), 160), Y + (255,))
-    base.alpha_composite(shadow(box, 10, (0, 8), 0.55), (x0 - pad, y1 + 4))
-    base.alpha_composite(box, (x0 - pad, y1 + 4))
-    d.text((x0, y1 - 6), "KILLED", font=f1, fill=INK)
-    sh = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    ImageDraw.Draw(sh).text((x0 + wk + 34, y1 - 6 + 6), "IT?", font=f1, fill=(0, 0, 0, 200))
-    base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(6)))
-    d.text((x0 + wk + 34, y1 - 6), "IT?", font=f1, fill=(255, 255, 255))
+    f1 = ImageFont.truetype(ANTON, 118)
+    f2 = ImageFont.truetype(ANTON, 196)
+    x0, y0 = 560, 18
+    _shadow_text(base, (x0, y0), "WHO KILLED", f1)
+    w1 = d.textlength("WHO KILLED", font=f1)
+    l, t, r, b = d.textbbox((0, 0), "IPL?", font=f2)      # real ink box of the glyphs
+    padx, pady = 26, 18
+    bw, bh = int(r - l + 2 * padx), int(b - t + 2 * pady)
+    bx = int(x0 + w1 / 2 - bw / 2)                        # centred under line 1
+    by = y0 + 152
+    box = Image.new("RGBA", (bw, bh), Y + (255,))
+    base.alpha_composite(shadow(box, 12, (0, 10), 0.6), (bx, by))
+    base.alpha_composite(box, (bx, by))
+    d.text((bx + padx - l, by + pady - t), "IPL?", font=f2, fill=INK)
 
 
 def main():
@@ -134,7 +136,7 @@ def main():
     base.alpha_composite(rim, (kx, ky))
 
     # police tape across the scene, in front of the trophy
-    t1 = tape(1100, 56, "CRIME SCENE  •  DO NOT CROSS", 9)
+    t1 = tape(1100, 56, "IPL CRIME SCENE  •  DO NOT CROSS", 9)
     base.alpha_composite(shadow(t1, 8, (0, 6), 0.5), (520, 520))
     base.alpha_composite(t1, (520, 520))
 
