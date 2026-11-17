@@ -485,13 +485,65 @@ CTA_OLD = 672.6
 TL, VO_LEN, TOTAL = None, None, None
 
 
+def _pauses():
+    """Silent runs (>= 0.2 s) in the clean voice: the only places a hold may stop the voice."""
+    w = wave.open(os.path.join(HERE, "vo", "vo_clean.wav"))
+    sr = w.getframerate()
+    y = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float64) / 32768
+    hop = sr // 100
+    n = len(y) // hop
+    db = 20 * np.log10(np.sqrt((y[:n * hop].reshape(n, hop) ** 2).mean(1)) + 1e-9)
+    quiet = db < np.percentile(db[db > -100], 10) + 13
+    out, i = [], 0
+    while i < n:
+        if quiet[i]:
+            j = i
+            while j < n and quiet[j]:
+                j += 1
+            if j - i >= 12:
+                out.append((i / 100, j / 100))
+            i = j
+        else:
+            i += 1
+    return out
+
+
+def snap_hold(t, pauses):
+    """Move a hold to the middle of the best nearby pause (prefer longer pauses = sentence ends)."""
+    if t < 0.05:
+        return t
+    best = min((p for p in pauses if abs((p[0] + p[1]) / 2 - t) < 4.0),
+               key=lambda p: abs((p[0] + p[1]) / 2 - t) - 1.5 * (p[1] - p[0]), default=None)
+    if best is None:
+        raise SystemExit(f"no pause near voice {t:.2f}s for a hold")
+    return round((best[0] + best[1]) / 2, 2)
+
+
+# holds pinned to a word boundary in the raw take (the nearest pause would split a phrase)
+HOLD_RAW = {490.499: 559.71,    # chapter VIDARBHA: "...sab badal gaya." | "Karun ne state badla"
+            623.6: 659.45}      # "205" card: "...17 run." | "8 pariyan, 205 run"
+
+
+def raw_to_final(r):
+    for q in NEW_MAP:
+        if "raw" in q and q["raw"][0] <= r <= q["raw"][1]:
+            return q["clean"] + (r - q["raw"][0])
+    raise SystemExit(f"raw {r} is not in the kept voice")
+
+
 def setup():
     global TL, VO_LEN, TOTAL
     w = wave.open(os.path.join(HERE, "vo", "vo_clean.wav"))
     VO_LEN = w.getnframes() / w.getframerate()
+    pauses = _pauses()
     tl, out, vo = [], 0.0, 0.0
     for h in HOLDS:
-        at = VO_LEN if h[0] >= 9999 else fwdS(h[0])
+        if h[0] >= 9999:
+            at = VO_LEN
+        elif round(h[0], 3) in HOLD_RAW:
+            at = raw_to_final(HOLD_RAW[round(h[0], 3)])
+        else:
+            at = snap_hold(fwdS(h[0]), pauses)
         if at > vo + 1e-3:
             tl.append((out, out + at - vo, "vo", vo))
             out += at - vo

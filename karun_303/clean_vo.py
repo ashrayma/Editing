@@ -40,6 +40,7 @@ CUTS = [                                   # raw seconds removed: false starts a
     (328.56, 333.70),   # "lekin asli baat ye thi, 303 banane wale aadmi ko" said twice
     (400.18, 406.12),   # "kyunki iske baad jo hua… zyada ajeeb tha" said twice
     (484.30, 487.50),   # "303 ki chamak se nikal kar" said twice
+    (408.95, 413.55),   # "2018 England ka…" false start before "2018, India ka England tour"
     (430.20, 434.30),   # "aur tour ke baad West Indies series ki…" said twice
     (538.16, 542.00),   # "aur cricket ne pehle…" restarted
     (616.85, 620.21),   # "poore desh ne kaha, ab bas kahani poori hogi" said twice
@@ -52,6 +53,15 @@ INSERTS = [
     (599.85, "vo/ins_b.m4a", [(0.85, 13.40), (18.55, 44.75)]),                  # IPL 2025 (2nd "40 balls" take)
     (774.60, "vo/ins_c.m4a", [(2.0, 8.5), (13.75, 17.10), (24.45, 27.15), (27.45, 30.30)]),  # "…wo humara ho gaya"
 ]
+# where the words run together, the cut goes in the gap between these two words (raw seconds), never elsewhere
+WORD_GAPS = {            # read off the 10 ms loudness curve of the raw take (word end -> next word onset)
+    104.00: (104.26, 104.31),   # "...nadi se bachaya" fades out by 104.30 | "aur paanch mahine..." (false start)
+    328.56: (328.58, 328.64),   # "...koi khalnayak nahi" runs into "lekin" (first take) at 328.62
+    484.30: (484.56, 484.65),   # "...sirf dekh raha tha" ends 484.62 | "303 ki chamak..." (first take)
+    599.85: (599.97, 600.04),   # "...Vidarbha champion" ends 600.03 | "aur phir England mein..."
+    703.60: (703.32, 703.39),   # "...wahi kahani, wahi chakkar" ends 703.36 | "lekin dhyan dijiye..." (stopped take)
+    408.95: (408.86, 408.92),   # "...zyada ajeeb tha" ends 408.90 | "2018 England ka" (false start)
+}
 SIL_DB = 13.0       # silence: within this many dB of the room floor
 PAUSE = 0.42        # an ordinary pause becomes this long
 TAIL = 0.20         # silence kept after a word before a cut (lets the word ring out)
@@ -102,6 +112,12 @@ class Env:
         return bool(self.sil[max(0, i - 2):i + 3].all())
 
     def snap(self, t, what, reach=0.8):
+        if t in WORD_GAPS:
+            lo, hi = WORD_GAPS[t]
+            i0, i1 = int(lo / 0.01), int(hi / 0.01) + 1
+            k = i0 + int(np.argmin(self.db[i0:i1]))
+            print(f"  word gap {what}: {k * 0.01:.2f} ({self.db[k] - self.floor:.0f} dB over floor)")
+            return round(k * 0.01, 2)
         if self.silent(t):
             return t
         for d in np.arange(0.01, reach, 0.01):
@@ -147,7 +163,7 @@ def shorten(env, a, b, breaks=()):
     return pieces
 
 
-def fade(x, ms=10):
+def fade(x, ms=20):
     f = int(ms / 1000 * SR)
     if len(x) > 2 * f:
         x = x.copy()
