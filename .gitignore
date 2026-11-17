@@ -50,3 +50,7 @@ karun_303/out/*.mp4
 karun_303/out/snap*/
 karun_303/__pycache__/
 karun_303/models/
+karun_303/out/.*hf-transaction*/
+karun_303/out/work-*/
+karun_303/node_modules/
+karun_303/out/*.log
