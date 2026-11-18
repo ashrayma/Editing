@@ -91,6 +91,29 @@ def ipl_badge(base, cx=560, cy=405, d=152):
     base.alpha_composite(disc, (cx - d // 2 - 20, cy - d // 2 - 20))
 
 
+def down_tag(base, x, y, label, num=None):
+    """Dark pill: LABEL + optional number + a big red down arrow."""
+    f = ImageFont.truetype(ANTON, 58)
+    txt = label if num is None else f"{label} {num}"
+    d0 = ImageDraw.Draw(base)
+    tw = d0.textlength(txt, font=f)
+    w, h = int(tw + 30 + 70 + 28), 92
+    pill = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    dp = ImageDraw.Draw(pill)
+    dp.rounded_rectangle((0, 0, w - 1, h - 1), 18, fill=(14, 14, 18, 235), outline=(229, 52, 52, 255), width=4)
+    dp.text((26, h / 2 + 2), txt, font=f, fill=(255, 255, 255, 255), anchor="lm")
+    ax, ay = 26 + tw + 18 + 26, 14                             # red arrow pointing down
+    k = 1.0
+    arrow = [(ax - 13 * k, ay), (ax + 13 * k, ay), (ax + 13 * k, ay + 34), (ax + 30, ay + 34), (ax, ay + 66),
+             (ax - 30, ay + 34), (ax - 13 * k, ay + 34)]
+    dp.polygon(arrow, fill=(229, 52, 52, 255))
+    m = Image.new("L", base.size, 0)
+    m.paste(pill.split()[3], (x, y))
+    base.alpha_composite(soft_shadow(m, (6, 8), 10, 0.6))
+    base.alpha_composite(pill, (x, y))
+    return w
+
+
 def finish(base, name):
     logo = Image.open(LOGO).convert("RGBA")
     logo = logo.resize((140, round(logo.height * 140 / logo.width)), Image.LANCZOS)
@@ -110,6 +133,8 @@ def thumb_c():
     kohli(base)
     headline(base)
     ipl_badge(base)
+    w1 = down_tag(base, 468, 592, "VIEWERS")
+    down_tag(base, 468 + w1 + 20, 592, "TRP")
     finish(base, "IPL_is_dying_thumbnail_C_graph.jpg")
 
 
@@ -128,6 +153,8 @@ def thumb_d():
     kohli(base)
     headline(base)
     ipl_badge(base)
+    w1 = down_tag(base, 468, 592, "VIEWERS")
+    down_tag(base, 468 + w1 + 20, 592, "TRP")
     finish(base, "IPL_is_dying_thumbnail_D_flatline.jpg")
 
 
