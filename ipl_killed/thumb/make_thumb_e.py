@@ -79,13 +79,13 @@ def fan(base):
 def kohli(base):
     k = Image.open(os.path.join(HERE, "cut", "kohli.png"))
     k = k.crop(k.getbbox())
-    kh = 800
+    kh = 880
     k = k.resize((round(k.width * kh / k.height), kh), Image.LANCZOS)
     a = k.split()[3]
     rgb = ImageEnhance.Contrast(k.convert("RGB")).enhance(1.12).filter(ImageFilter.UnsharpMask(radius=2, percent=70, threshold=2))
     k = rgb.convert("RGBA")
     k.putalpha(a)
-    x, y = W - k.width + 70, H - kh + 40
+    x, y = W - k.width - 30, H - kh + 135
     full = Image.new("L", base.size, 0)
     full.paste(a, (x, y))
     base.alpha_composite(soft_shadow(full, (-20, 6), 22, 0.75))
@@ -121,13 +121,13 @@ def graph_bg(base):
     st = cover(Image.open(os.path.join(HERE, "up", "empty_seats.png")).convert("L"), W, H, 0.5, 0.4)
     st = np.asarray(st.filter(ImageFilter.GaussianBlur(3)), np.float32)[..., None] * np.array([0.20, 0.20, 0.24])
     a = np.asarray(base, np.float32)[..., :3] * 0.6 + st
-    xs = np.linspace(-20, 1000, 11)
+    xs = np.linspace(-20, 900, 11)
     ys = np.array([0.24, 0.17, 0.28, 0.22, 0.36, 0.32, 0.47, 0.43, 0.58, 0.64, 0.74]) * H
     curve = np.interp(np.arange(W), xs, ys)
     yy = np.arange(H)[:, None]
     fill = (yy > curve[None, :]).astype(np.float32)
     fade = np.clip((yy - curve[None, :]) / 230, 0, 1)                # strongest just under the line, gone by the text
-    alpha = fill * 0.40 * (1 - fade) * (np.arange(W)[None, :] < 1000)
+    alpha = fill * 0.40 * (1 - fade) * (np.arange(W)[None, :] < 900)
     a = a * (1 - alpha[..., None]) + np.array(RED) * alpha[..., None]
     a[::4] *= 0.86                                                     # faint scanlines
     band = np.clip((yy - 470) / 140, 0, 1)[..., None] if False else np.clip((np.arange(H)[:, None] - 470) / 140, 0, 1)[..., None]
@@ -156,7 +156,7 @@ def main():
     w1 = down_tag(base, 216, 84, "VIEWERS")
     down_tag(base, 216 + w1 + 20, 84, "TRP")
     kohli(base)
-    f = ImageFont.truetype(ANTON, 150)
+    f = ImageFont.truetype(ANTON, 138)
     l, t, r, b = gradient_text(base, (34, 690), "WHO KILLED", f, (255, 255, 255), (150, 150, 158))
     gradient_text(base, (r + 26, 690), "IPL?", f, (255, 70, 60), (170, 10, 14))
     logo = Image.open(LOGO).convert("RGBA")
