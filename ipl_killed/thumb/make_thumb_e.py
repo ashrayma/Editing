@@ -116,13 +116,45 @@ def gradient_text(base, xy, txt, font, top, bot, stroke=6):
     return m.getbbox()
 
 
+def graph_bg(base):
+    """Full-frame background: faint empty stands, a translucent red area chart crashing to the right, glowing line."""
+    st = cover(Image.open(os.path.join(HERE, "up", "empty_seats.png")).convert("L"), W, H, 0.5, 0.4)
+    st = np.asarray(st.filter(ImageFilter.GaussianBlur(3)), np.float32)[..., None] * np.array([0.20, 0.20, 0.24])
+    a = np.asarray(base, np.float32)[..., :3] * 0.6 + st
+    xs = np.linspace(-20, 1000, 11)
+    ys = np.array([0.24, 0.17, 0.28, 0.22, 0.36, 0.32, 0.47, 0.43, 0.58, 0.64, 0.74]) * H
+    curve = np.interp(np.arange(W), xs, ys)
+    yy = np.arange(H)[:, None]
+    fill = (yy > curve[None, :]).astype(np.float32)
+    fade = np.clip((yy - curve[None, :]) / 230, 0, 1)                # strongest just under the line, gone by the text
+    alpha = fill * 0.40 * (1 - fade) * (np.arange(W)[None, :] < 1000)
+    a = a * (1 - alpha[..., None]) + np.array(RED) * alpha[..., None]
+    a[::4] *= 0.86                                                     # faint scanlines
+    band = np.clip((yy - 470) / 140, 0, 1)[..., None] if False else np.clip((np.arange(H)[:, None] - 470) / 140, 0, 1)[..., None]
+    a *= 1 - 0.55 * band                                               # dark band under the headline
+    out = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    pts = list(zip(xs, ys))
+    d.line(pts, fill=(255, 70, 70, 255), width=11, joint="curve")
+    for p in pts[2:9:2]:
+        d.ellipse((p[0] - 10, p[1] - 10, p[0] + 10, p[1] + 10), fill=(255, 230, 230, 255), outline=(255, 70, 70, 255), width=5)
+    (ax, ay), (bx, by) = pts[-2], pts[-1]
+    v = np.array([bx - ax, by - ay]); v /= np.linalg.norm(v)
+    nrm = np.array([-v[1], v[0]]); tip = np.array([bx, by])
+    d.polygon([tuple(tip + v * 10), tuple(tip - v * 54 + nrm * 36), tuple(tip - v * 54 - nrm * 36)], fill=(255, 70, 70, 255))
+    halo = lay.filter(ImageFilter.GaussianBlur(20))
+    out.alpha_composite(halo)
+    out.alpha_composite(halo)
+    out.alpha_composite(lay)
+    return out
+
+
 def main():
-    base = room()
-    screen(base, (300, 60, 960, 470))
-    ipl_badge(base, cx=545, cy=140, d=124)
-    w1 = down_tag(base, 640, 92, "VIEWERS")
-    down_tag(base, 640 + w1 - 210, 196, "TRP")
-    fan(base)
+    base = graph_bg(room())
+    ipl_badge(base, cx=110, cy=120, d=150)
+    w1 = down_tag(base, 216, 84, "VIEWERS")
+    down_tag(base, 216 + w1 + 20, 84, "TRP")
     kohli(base)
     f = ImageFont.truetype(ANTON, 150)
     l, t, r, b = gradient_text(base, (34, 690), "WHO KILLED", f, (255, 255, 255), (150, 150, 158))
