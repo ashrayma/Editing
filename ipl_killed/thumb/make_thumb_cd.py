@@ -75,10 +75,26 @@ def headline(base, cx=900):
     big_number(base, "IPL?", cx, 395, 300)
 
 
+def ipl_badge(base, cx=560, cy=405, d=152):
+    """The IPL batsman mark on a white disc with a thin yellow ring (the mark is dark blue, so it needs light)."""
+    mark = Image.open(os.path.join(HERE, "src", "ipl_mark.png")).convert("RGBA")
+    mark = mark.crop(mark.getbbox())
+    s = int(d * 0.74)
+    mark = mark.resize((round(mark.width * s / max(mark.size)), round(mark.height * s / max(mark.size))), Image.LANCZOS)
+    disc = Image.new("RGBA", (d + 40, d + 40), (0, 0, 0, 0))
+    dd = ImageDraw.Draw(disc)
+    dd.ellipse((20, 20, 20 + d, 20 + d), fill=(255, 255, 255, 255), outline=Y + (255,), width=7)
+    disc.alpha_composite(mark, (20 + (d - mark.width) // 2, 20 + (d - mark.height) // 2))
+    m = Image.new("L", base.size, 0)
+    m.paste(disc.split()[3], (cx - d // 2 - 20, cy - d // 2 - 20))
+    base.alpha_composite(soft_shadow(m, (8, 10), 12, 0.6))
+    base.alpha_composite(disc, (cx - d // 2 - 20, cy - d // 2 - 20))
+
+
 def finish(base, name):
     logo = Image.open(LOGO).convert("RGBA")
     logo = logo.resize((140, round(logo.height * 140 / logo.width)), Image.LANCZOS)
-    base.alpha_composite(logo, (W - 140 - 24, 22))
+    base.alpha_composite(logo, (W - 140 - 24, H - logo.height - 22))
     out = os.path.join(HERE, "out", name)
     base.convert("RGB").save(out, quality=93)
     base.convert("RGB").resize((168, 94), Image.LANCZOS).save(out.replace(".jpg", "_tiny.png"))
@@ -89,10 +105,11 @@ def thumb_c():
     base = background()
     # falling graph: rises a little, peaks, then crashes to the bottom right
     pts = [(-20, 300), (150, 250), (300, 180), (420, 230), (560, 200), (700, 330), (820, 300), (960, 470), (1090, 560),
-           (1215, 650)]
+           (1185, 622)]
     glow_line(base, pts, dots=pts[2:9:2], arrow=True)
     kohli(base)
     headline(base)
+    ipl_badge(base)
     finish(base, "IPL_is_dying_thumbnail_C_graph.jpg")
 
 
@@ -110,6 +127,7 @@ def thumb_d():
     glow_line(base, pts, width=11)
     kohli(base)
     headline(base)
+    ipl_badge(base)
     finish(base, "IPL_is_dying_thumbnail_D_flatline.jpg")
 
 
