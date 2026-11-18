@@ -43,3 +43,6 @@ ipl_origin/vo/*.log
 ipl_origin/vo/*.wav
 ipl_origin/out/
 ipl_origin/src/
+ipl_origin/node_modules/
+ipl_origin/reel/media/
+ipl_origin/up/
