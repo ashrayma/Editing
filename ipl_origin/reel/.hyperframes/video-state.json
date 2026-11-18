@@ -642,5 +642,18 @@
         "attribution": "unversioned"
       }
     ]
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "06936316-5f67-465c-a626-2506de66c8fa",
+      "completedAt": 1794991044124,
+      "output": "/home/user/Editing/ipl_origin/out/silent.mp4",
+      "status": "completed",
+      "revision": "cc4dc445-e76d-45e0-8753-e0e0275275bf"
+    },
+    "retainedRevisions": [
+      "cc4dc445-e76d-45e0-8753-e0e0275275bf"
+    ]
+  },
+  "pendingArtifactCleanup": []
 }
