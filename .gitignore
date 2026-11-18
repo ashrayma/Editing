@@ -38,3 +38,8 @@ ipl_killed/thumb/cut/chk_*
 ipl_killed/thumb/out/bg_chk.jpg
 ipl_killed/thumb/out/zoom.jpg
 ipl_killed/thumb/__pycache__/
+ipl_origin/vo/*.m4a
+ipl_origin/vo/*.log
+ipl_origin/vo/*.wav
+ipl_origin/out/
+ipl_origin/src/
