@@ -19,32 +19,21 @@ RAW, OUT = os.path.join(HERE, "assets", "photos_raw"), os.path.join(HERE, "asset
 os.makedirs(OUT, exist_ok=True)
 
 # (x0, y0, x1, y1) as fractions of the raw image
-CROP = {
-    "batters_graphic": (0.0, 0.02, 1.0, 0.30),   # RCB row only, no team graphic banner
-    "bhuvi_hazlewood": (0.125, 0.0, 0.875, 1.0),  # drop the white side margins
-    "suyash_practice": (0.0, 0.09, 1.0, 1.0),     # drop the #PLAYBOLD tag and the corner badge
-}
-# crests / badges with no readable text, as fractions of the cropped image
+CROP = {}
+# crests / badges with no readable text, as fractions of the image
 BOXES = {
-    "batters_graphic": [(0.0, 0.74, 1.0, 1.0)],  # chest sponsors along the bottom edge
-    "krunal_squat": [(0.38, 0.38, 0.66, 0.56), (0.66, 0.12, 1.0, 0.55), (0.0, 0.25, 0.40, 0.55)],
-    "krunal_fist": [(0.36, 0.30, 0.60, 0.50), (0.38, 0.68, 0.60, 0.80)],
-    "krunal_point": [(0.36, 0.22, 0.66, 0.38), (0.42, 0.46, 0.68, 0.58)],
-    "bhuvi_hazlewood": [(0.42, 0.25, 0.49, 0.32), (0.78, 0.29, 0.85, 0.36), (0.0, 0.62, 0.48, 0.90), (0.52, 0.66, 1.0, 0.95),
-                        (0.18, 0.28, 0.36, 0.40), (0.60, 0.30, 0.74, 0.42)],
-    "suyash_appeal": [(0.29, 0.19, 0.40, 0.27), (0.33, 0.29, 0.64, 0.36), (0.62, 0.42, 1.0, 0.80), (0.0, 0.52, 0.26, 0.80), (0.28, 0.50, 0.50, 0.58)],
-    "rcb_trophy_2025": [(0.0, 0.62, 1.0, 1.0)],
-    "rcb_trophy_2026": [(0.0, 0.88, 1.0, 1.0)],
-    "kohli_roar": [(0.47, 0.35, 0.59, 0.47), (0.33, 0.38, 0.62, 0.62)],
-    "suyash_practice": [(0.52, 0.30, 0.66, 0.42)],
+    "kp_walk_tall": [(0.60, 0.33, 0.73, 0.43), (0.34, 0.83, 0.47, 0.93), (0.27, 0.32, 0.47, 0.38)],
+    "kp_skunk": [(0.52, 0.80, 0.61, 0.95), (0.76, 0.68, 0.86, 0.80), (0.24, 0.42, 0.30, 0.52)],
+    "kp_skunk_wave": [(0.50, 0.55, 0.58, 0.68), (0.37, 0.52, 0.47, 0.66)],
+    "strauss_2005": [(0.32, 0.72, 0.42, 0.85), (0.53, 0.76, 0.62, 0.89), (0.82, 0.72, 0.92, 0.80)],
+    "kp_mumbai": [(0.38, 0.56, 0.48, 0.62), (0.31, 0.71, 0.48, 0.80), (0.48, 0.71, 0.58, 0.80)],
+    "kp_headingley": [(0.18, 0.50, 0.38, 0.62)],
+    "kp_raise": [(0.53, 0.30, 0.66, 0.38), (0.63, 0.31, 0.72, 0.45)],
+    "kp_flower": [(0.56, 0.45, 0.83, 0.72)],
+    "kp_bell": [(0.18, 0.40, 0.42, 0.75), (0.60, 0.28, 0.92, 0.65)],
+    "strauss_captain": [(0.30, 0.42, 0.56, 0.65)],
 }
-
-
-FACES = {  # faces the detector can miss (fractions): never blurred
-    "krunal_squat": [(0.46, 0.04, 0.63, 0.38)],
-    "suyash_appeal": [(0.43, 0.10, 0.64, 0.28)],
-    "krunal_fist": [(0.45, 0.06, 0.58, 0.29)],
-}
+FACES = {}
 
 
 def faces(img):

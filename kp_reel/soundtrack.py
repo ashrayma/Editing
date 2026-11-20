@@ -257,10 +257,11 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # fast: the beat drops on "RCB"; drums out before the spin reveal and "no plan B"; dead air before "last chance"
-    m = music(total, drop=L["o3"]["start"], breaks=[L["c3"]["start"], L["n1"]["start"], L["a2"]["start"]],
-              outro=L["q2"]["start"] + 0.3, thin=[(L["n1"]["start"], L["n2"]["words"][7][1])],
-              mute=[(L["a1"]["end"] + 0.02, L["a2"]["start"] - 0.02)], intro_warm=False)
+    # thriller: ticking cold open, the beat drops on Strike 1; drums out before every strike and the reveal;
+    # thin under the texts; dead air before "Usse out kiya, uske ego ne"
+    m = music(total, drop=L["s1"]["start"], breaks=[L["s2"]["start"], L["s3"]["start"], L["s4"]["start"], L["e5"]["start"]],
+              outro=L["q1"]["start"] + 0.3, thin=[(L["t1"]["start"], L["d1"]["start"])],
+              mute=[(L["x2"]["start"] + 1.3, L["x2"]["start"] + 1.85)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))

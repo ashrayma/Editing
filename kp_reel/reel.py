@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q2"}  # the comment card carries it
+NO_CAPTION = set(LINE)  # Hinglish thriller: headlines carry the story, no running word captions
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -718,12 +718,12 @@ def rank_card(num_shot, name, lid, nxt, word_name):
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>ALL IN</span><i>or</i><span style="color:{Y}">TRUST?</span></div>'
+        f'<div class="mot" id="{i}q"><span>VILLAIN</span><i>or</i><span style="color:{Y}">VICTIM?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
         f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
-    txt = "Buy a spinner. Now. 🎯"
+    txt = "Villain. Ego > team 🔥"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
     cue(start, "pop", 1.0)
 
@@ -1374,89 +1374,177 @@ def auction(start, dur, t_open):
     cue(t_open + 0.3, "impact", 1.0)
 
 
+GETTY = "PHOTO: GETTY IMAGES"
+
+
+def strikes(n, start, dur):
+    """Strike counter pinned top-left: n of 4 filled red."""
+    i = nid("sk")
+    dots = "".join(f'<i class="{"on" if k < n else ""}" id="{i}d{k}"></i>' for k in range(4))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="strk" style="z-index:{z() + 300}"><span>STRIKE {n}</span>{dots}</div>')
+    anim(f'tl.fromTo("#{i}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}d{n - 1}",{{scale:2.4}},{{scale:1,duration:0.35,ease:"back.out(3)"}},{start + 0.15})')
+    flash(start + 0.05, color="#d4372c", peak=0.35)
+    cue(start + 0.15, "impact", 1.0)
+
+
+def phone(start, dur, msgs, readable=True, y=470):
+    """Phone screen with message bubbles typing in; unreadable (blurred) for the cold open."""
+    i = nid("ph")
+    bubbles = "".join(f'<div class="pmb" id="{i}m{k}"{" style=\'filter:blur(7px)\'" if not readable else ""}>{html.escape(m)}</div>'
+                      for k, (m, _) in enumerate(msgs))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="phn avoid" style="top:{y}px;z-index:{z()}"><div class="pnt">To: South Africa ●</div>{bubbles}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,rotation:-6}},{{y:0,opacity:1,rotation:-2,duration:0.55,ease:"expo.out"}},{start})')
+    for k, (_, t) in enumerate(msgs):
+        anim(f'tl.fromTo("#{i}m{k}",{{scale:0.6,opacity:0,transformOrigin:"100% 100%"}},{{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"}},{t})')
+        cue(t, "pop", 0.9)
+
+
+def rewind(start, dur, a=2012, b=2000):
+    i = nid("rw")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="rwd avoid" style="z-index:{z()}"><span>⏪ REWIND</span><b id="{i}y">{a}</b></div>')
+    anim(f'(()=>{{const o={{v:{a}}};tl.to(o,{{v:{b},duration:{min(1.4, dur * 0.6):.2f},ease:"power2.inOut",onUpdate:()=>{{document.getElementById("{i}y").textContent=Math.round(o.v)}}}},{start + 0.2})}})()')
+    anim(f'tl.fromTo("#{i}",{{scale:1.15,opacity:0}},{{scale:1,opacity:1,duration:0.35}},{start})')
+    for k in range(10):
+        cue(start + 0.2 + k * 0.12, "tick", 0.6)
+    glitch(start, 0.5)
+
+
+def snap_bar(start, dur, t_snap):
+    """'CAPTAIN · 5 MONTHS' bar that cracks in two."""
+    i = nid("sb")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="snp avoid" style="z-index:{z()}"><div class="snl"><b>CAPTAIN</b><span>AUG 2008</span></div>'
+        f'<div class="snbar"><i id="{i}a"></i><i id="{i}b"></i></div><div class="snr"><b>5 MONTHS</b><span>JAN 2009</span></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i} .snbar i",{{scaleX:0}},{{scaleX:1,duration:0.6,ease:"expo.out"}},{start + 0.2})')
+    anim(f'tl.to("#{i}a",{{rotation:-14,y:40,x:-30,duration:0.4,ease:"power3.in"}},{t_snap})')
+    anim(f'tl.to("#{i}b",{{rotation:16,y:60,x:30,duration:0.4,ease:"power3.in"}},{t_snap})')
+    cue(t_snap, "impact", 1.0)
+    shake(t_snap + 0.3, 18)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK: trade window, nine teams moved, one didn't
-    bgp(*seg(0, s("o4", -0.03)), "ink")
-    kick("IPL TRADE WINDOW", *seg(0.05, s("o4", -0.03)))
-    team_grid(*seg(0.05, s("o3", -0.03)), t_rcb=s("o2"))
-    head(["2× DEFENDING", "CHAMPIONS"], *seg(s("o3"), s("o4", -0.03)), y=300, size=120, accent=(0,), sfx="impact")
-    cutout("kohli_roar", *seg(s("o3", -0.03), s("o4", -0.03)), x=150, h=900)
-    credit(*seg(s("o3", -0.03), s("o4", -0.03)), IPLC)
-    bgp(*seg(s("o4", -0.03), s("o5", -0.03)), "ink")
-    head(["WHY WOULD THEY?"], *seg(s("o4"), word("o4", 5)), y=270, size=110, accent=(0,))
-    trophy_card("rcb_trophy_2025", 2025, *seg(word("o4", 9), s("o5", -0.03)), x=40, y=520, w=640, rot=-4, side="left")
-    trophy_card("rcb_trophy_2026", 2026, *seg(word("o4", 11), s("o5", -0.03)), x=380, y=900, w=660, rot=3, side="right")
-    bgp(*seg(s("o5", -0.03), s("f1", -0.03)), "paper")
-    head(["SILENCE ≠", "PERFECT"], *seg(word("o5", 1), s("o6", -0.03)), "paper", y=640, size=150, accent=(1,), sfx="impact")
-    head(["HEALTH CHECK"], *seg(s("o6"), s("f1", -0.03)), "paper", y=980, size=110, accent=(0,), sfx="impact")
+    # ---------------- COLD OPEN: who is he?
+    bgp(*seg(0, s("o2", -0.03)), "ink")
+    cutout("kp_tattoo", *seg(0.1, s("o2", -0.03)), x=180, h=1300, grey=True)
+    head(["CRICKET KA", "ASLI BAD BOY"], *seg(0.2, s("o2", -0.03)), y=270, size=120, accent=(1,), sfx="impact")
+    stamp("EGO > CAREER", *seg(s("o1", 2.6), s("o2", -0.03)), y=1160, size=130, color="#ff3b3b", rot=-4)
+    credit(*seg(0.1, s("o2", -0.03)), GETTY)
+    bgp(*seg(s("o2", -0.03), s("o3", -0.03)), "ink")
+    kick("CASE FILE · AUGUST 2012 · HEADINGLEY", *seg(s("o2"), s("o3", -0.03)))
+    frame("kp_headingley", *seg(s("o2"), s("o3", -0.03)), x=40, y=330, w=1000, rot=-2, side="left", cap="Headingley · 149")
+    odo("149", *seg(s("o2", 1.4), s("o3", -0.03)), x=70, y=930, size=200, label="RUNS")
+    head(["…NO APPLAUSE"], *seg(s("o2", 3.4), s("o3", -0.03)), y=1260, size=104, accent=(0,), align="left")
+    credit(*seg(s("o2"), s("o3", -0.03)), GETTY)
+    bgp(*seg(s("o3", -0.03), s("o4", -0.03)), "ink")
+    phone(*seg(s("o3", -0.03), s("o4", -0.03)), [("… ……… ……", s("o3", 0.4)), ("…… …… …… ………", s("o3", 1.2)), ("……… ……", s("o3", 1.9))], readable=False)
+    head(["SOMETHING ON", "HIS PHONE…"], *seg(s("o3", 0.2), s("o4", -0.03)), y=270, size=104, accent=(1,))
+    bgp(*seg(s("o4", -0.03), s("s1", -0.03)), "ink")
+    rewind(*seg(s("o4", 1.2), s("s1", -0.03)))
+    head(["SHURU SE…"], *seg(s("o4", 0.05), s("s1", -0.03)), y=300, size=110)
+    # ---------------- STRIKE 1: left South Africa
+    bgp(*seg(s("s1", -0.03), s("s2", -0.03)), "ink")
+    strikes(1, *seg(s("s1"), s("s2", -0.03)))
+    frame("kp_young", *seg(s("s1", 0.2), s("s2", -0.03)), x=310, y=300, w=460, rot=-4, side="left", cap="Saal 2000 · age 20")
+    head(["SOUTH AFRICA", "→ ENGLAND"], *seg(s("s1", 1.0), s("s2", -0.03)), y=1100, size=96, accent=(1,), sfx="impact")
+    credit(*seg(s("s1", 0.2), s("s2", -0.03)), GETTY)
+    stamp("LEFT AT 20", *seg(s("s1", 2.4), s("s2", -0.03)), y=1330, size=110, color="#ff3b3b", rot=-3)
+    # ---------------- STRIKE 2: the captaincy war -> Strauss
+    bgp(*seg(s("s2", -0.03), s("f1", -0.03)), "ink")
+    strikes(2, *seg(s("s2"), s("f1", -0.03)))
+    frame("kp_press", *seg(s("s2", 0.2), s("s2", 4.2)), x=60, y=330, w=960, rot=-2, side="right", cap="England captain · 2008")
+    snap_bar(*seg(s("s2", 1.2), s("s2", 4.2)), t_snap=s("s2", 3.0))
+    head(["COACH SE JUNG"], *seg(s("s2", 2.4), s("s2", 4.2)), y=1330, size=96, accent=(0,), sfx="impact")
+    frame("strauss_captain", *seg(s("s2", 4.2), s("f1", -0.03)), x=290, y=380, w=500, rot=3, side="right", cap="Andrew Strauss")
+    head(["NEW CAPTAIN:", "ANDREW STRAUSS"], *seg(s("s2", 4.4), s("f1", -0.03)), y=1060, size=100, accent=(1,), sfx="impact")
+    credit(*seg(s("s2", 0.2), s("f1", -0.03)), GETTY)
     # ---------------- follow
-    bgp(*seg(s("f1", -0.03), s("c1", -0.03)), "ink")
-    head(["TRUE CRICKET FAN?"], *seg(word("f1", 5), s("c1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
-    follow_card(*seg(s("f1", 0.05), s("c1", -0.03)), t_follow=word("f1", 11))
-    # ---------------- the scan
-    bgp(*seg(s("c1", -0.03), s("k1", -0.03)), "ink")
-    frame("batters_graphic", *seg(s("c1"), s("c2", -0.03)), x=40, y=1050, w=1000, rot=-1, side="left", cap="Batting")
-    credit(*seg(s("c1"), s("c2", -0.03)), IPLC)
-    frame("bhuvi_hazlewood", *seg(s("c2"), s("c3", -0.03)), x=290, y=960, w=500, rot=2, side="right", cap="Pace")
-    credit(*seg(s("c2"), s("c3", -0.03)), IPLC)
-    health(*seg(s("c1", -0.03), s("k1", -0.03)), [("BATTING", True, s("c1")), ("PACE", True, s("c2")), ("SPIN", False, s("c3"))])
-    frame("pitch_dry", *seg(word("c3", 1), s("k1", -0.03)), x=180, y=1020, w=720, rot=-2, side="left", cap="Spin")
-    # ---------------- Krunal
-    bgp(*seg(s("k1", -0.03), s("s1", -0.03)), "ink")
-    kick("THEIR BEST SPINNER", *seg(s("k1"), s("s1", -0.03)))
-    cutout("krunal_fist", *seg(s("k1", -0.03), s("s1", -0.03)), x=480, h=1150)
-    credit(*seg(s("k1", -0.03), s("s1", -0.03)), IPLC)
-    head(["KRUNAL", "PANDYA"], *seg(word("k1", 3), s("s1", -0.03)), y=330, size=120, accent=(1,), align="left")
-    odo("36", *seg(word("k1", 6) - 0.1, s("s1", -0.03)), x=70, y=620, size=260, label="NEXT SEASON")
-    chip("EVERY SEASON = A BONUS", *seg(word("k2", 6), s("s1", -0.03)), x=60, y=1060)
-    # ---------------- Suyash
-    bgp(*seg(s("s1", -0.03), s("n1", -0.03)), "ink")
-    kick("THE LEG-SPINNER", *seg(s("s1"), s("n1", -0.03)))
-    cutout("suyash_appeal", *seg(s("s1", -0.03), s("n1", -0.03)), x=470, h=1100)
-    credit(*seg(s("s1", -0.03), s("n1", -0.03)), IPLC)
-    ticket(["SUYASH SHARMA · WICKETS", ("2025", "8"), ("2026", "9")], *seg(word("s1", 6), s("n1", -0.03)), x=60, y=380, rot=-3,
-           stamp_txt="HOLDING PATTERN", t_stamp=word("s2", 6))
-    head(["NOT A STRIKE", "WEAPON"], *seg(s("s2"), s("n1", -0.03)), y=1000, size=104, accent=(1,), align="left", sfx="impact")
-    # ---------------- no plan B
-    bgp(*seg(s("n1", -0.03), s("n3", -0.03)), "paper")
-    kick("NO PLAN B", *seg(s("n1"), s("n3", -0.03)), "paper")
-    frame("krunal_point", *seg(s("n1"), s("n3", -0.03)), x=70, y=380, w=420, rot=-3, side="left", cap="Krunal Pandya")
-    credit(*seg(s("n1"), s("n3", -0.03)), IPLC)
-    slot(*seg(s("n1"), s("n3", -0.03)), x=590, y=400, t_q=word("n1", 3))
-    head(["INJURED?", "OUT OF RHYTHM?"], *seg(word("n2", 2), word("n2", 7)), "paper", y=1000, size=100, accent=(1,), sfx="impact")
-    overs(*seg(word("n2", 7), s("n3", -0.03)), t_light=word("n2", 11))
-    # ---------------- dry pitches
-    bgp(*seg(s("n3", -0.03), s("a1", -0.03)), "ink")
-    pitch(*seg(s("n3", -0.03), s("a1", -0.03)), t_turn=word("n3", 2))
-    for k, (nm, w_) in enumerate((("CHENNAI", 5), ("LUCKNOW", 7))):
-        chip(nm, *seg(word("n3", w_), s("a1", -0.03)), x=560, y=520 + 110 * k)
-    head(["THE PHASE", "THAT DECIDES", "THE MATCH"], *seg(word("n3", 9), s("a1", -0.03)), y=860, size=96, accent=(2,), align="left", sfx="impact")
-    # ---------------- auction
-    bgp(*seg(s("a1", -0.03), s("q1", -0.03)), "ink")
-    auction(*seg(s("a1", -0.03), s("q1", -0.03)), t_open=s("a2"))
-    # ---------------- question
-    bgp(*seg(s("q1", -0.03), s("q2", -0.03)), "ink")
-    head(["ALL IN ON A", "WICKET-TAKER?"], *seg(s("q1"), word("q1", 9)), y=300, size=104, accent=(1,), sfx="impact")
-    head(["OR TRUST THE", "CHAMPIONS?"], *seg(word("q1", 9), s("q2", -0.03)), y=300, size=104, accent=(1,), sfx="impact")
-    frame("suyash_practice", *seg(s("q1", 0.1), s("q2", -0.03)), x=70, y=640, w=430, rot=-3, side="left", cap="Suyash Sharma")
-    frame("rcb_trophy_2026", *seg(word("q1", 9), s("q2", -0.03)), x=540, y=760, w=470, rot=3, side="right", cap="2 titles")
-    credit(*seg(s("q1"), s("q2", -0.03)), IPLC)
+    bgp(*seg(s("f1", -0.03), s("s3", -0.03)), "ink")
+    head(["TRUE CRICKET FAN?"], *seg(s("f1", 0.4), s("s3", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
+    follow_card(*seg(s("f1", 0.05), s("s3", -0.03)), t_follow=s("f1", 2.4))
+    # ---------------- STRIKE 3: the split dressing room
+    bgp(*seg(s("s3", -0.03), s("s4", -0.03)), "ink")
+    strikes(3, *seg(s("s3"), s("s4", -0.03)))
+    frame("kp_flower", *seg(s("s3", 0.2), s("s4", -0.03)), x=40, y=340, w=1000, rot=-2, side="left", cap="KP · England nets")
+    head(["JUNIOR CAPTAIN?", "NOT FOR KP"], *seg(s("s3", 1.2), s("s3", 4.4)), y=1000, size=96, accent=(1,), sfx="impact")
+    frame("kp_bell", *seg(s("s3", 4.4), s("s4", -0.03)), x=40, y=880, w=1000, rot=2, side="right", cap="The dressing room")
+    stamp("SPLIT IN TWO", *seg(s("s3", 5.4), s("s4", -0.03)), y=640, size=120, color="#ff3b3b", rot=-4)
+    credit(*seg(s("s3", 0.2), s("s4", -0.03)), GETTY)
+    # ---------------- STRIKE 4: 2012, the line, the texts
+    bgp(*seg(s("s4", -0.03), s("t1", -0.03)), "ink")
+    strikes(4, *seg(s("s4"), s("t1", -0.03)))
+    frame("kp_raise", *seg(s("s4", 0.2), s("s4", 3.6)), x=110, y=360, w=860, rot=-2, side="right", cap="vs South Africa · 2012")
+    odo("149", *seg(s("s4", 1.4), s("s4", 3.6)), x=None, y=1080, size=220, label="RUNS")
+    quote_card(*seg(s("s4", 3.6), s("t1", -0.03)), "Is dressing room mein mera hona bahut mushkil hai.", "Kevin Pietersen, 2012")
+    credit(*seg(s("s4", 0.2), s("t1", -0.03)), GETTY)
+    bgp(*seg(s("t1", -0.03), s("d1", -0.03)), "ink")
+    phone(*seg(s("t1", -0.03), s("d1", -0.03)), [("Hey 👋", s("t1", 1.0)), ("About our captain…", s("t1", 2.4)), ("re: Andrew Strauss", s("t1", 4.6)),
+                                                  ("his weakness? 🤫", s("t2", 0.4))], readable=True)
+    stamp("THE TEXTS", *seg(s("t1", 3.0), s("t2", -0.03)), y=270, size=130, color="#ff3b3b", rot=-4)
+    chip("ALLEGED", *seg(s("t2", 0.3), s("d1", -0.03)), x=None, y=300)
+    # ---------------- dropped, never bent, sacked
+    ph("kp_walk_helmet", *seg(s("d1", -0.03), s("e1", -0.03)), GETTY, side=None, fx="grey", push=(1.1, 1.0))
+    stamp("DROPPED", *seg(s("d1", 0.1), s("e1", -0.03)), y=1100, size=200, color="#ff3b3b", rot=-5)
+    ph("kp_tattoo", *seg(s("e1", -0.03), s("e2", -0.03)), GETTY, side="up", push=(1.0, 1.08))
+    head(["JHUKTA?"], *seg(s("e1", 0.2), s("e1", 2.4)), y=1080, size=150, accent=(0,))
+    stamp("NEVER.", *seg(s("e1", 2.4), s("e2", -0.03)), y=1080, size=200, color="#ff3b3b", rot=-4)
+    bgp(*seg(s("e2", -0.03), s("e3", -0.03)), "ink")
+    frame("kp_walk_tall", *seg(s("e2", -0.03), s("e3", -0.03)), x=170, y=260, w=740, rot=-2, side="left", cap="Walking away", grey=True)
+    credit(*seg(s("e2", -0.03), s("e3", -0.03)), GETTY)
+    glitch(s("e2", 1.0), 0.5, "kp_walk_tall")
+    head(["EGO LE DOOBA"], *seg(s("e2", 0.5), s("e3", -0.03)), y=1420, size=120, accent=(0,), sfx="impact")
+    bgp(*seg(s("e3", -0.03), s("e5", -0.03)), "ink")
+    stamp("2014 · SACKED", *seg(s("e3", 0.3), s("e5", -0.03)), y=560, size=140, color="#ff3b3b", rot=-4)
+    head(["WAPSI KA DARWAZA", "KISNE BAND KIYA?"], *seg(s("e4"), s("e5", -0.03)), y=960, size=92, accent=(1,), sfx="impact")
+    bgp(*seg(s("e5", -0.03), s("x1", -0.03)), "ink")
+    frame("strauss_director", *seg(s("e5", -0.03), s("x1", -0.03)), x=60, y=380, w=960, rot=-2, side="right", cap="Director of cricket · 2015")
+    head(["DIRECTOR:", "ANDREW STRAUSS"], *seg(s("e5", 1.2), s("x1", -0.03)), y=1100, size=110, accent=(1,), sfx="impact")
+    flash(s("e5", 1.2), peak=0.5)
+    cue(s("e5", 1.2), "boom", 1.0)
+    credit(*seg(s("e5", -0.03), s("x1", -0.03)), GETTY)
+    # ---------------- the case file numbers, the twist
+    ph("kp_mumbai", *seg(s("x1", -0.03), s("x2", -0.03)), GETTY, side="up", push=(1.0, 1.06))
+    odo("104", *seg(s("x1", 0.1), s("x2", -0.03)), x=60, y=330, size=150, label="TESTS")
+    odo("8,181", *seg(s("x1", 1.0), s("x2", -0.03)), x=None, y=1040, size=150, label="RUNS")
+    odo("23", *seg(s("x1", 2.2), s("x2", -0.03)), x=760, y=330, size=150, label="100s")
+    stamp("ONLY 33", *seg(s("x1", 3.6), s("x2", -0.03)), y=1330, size=110, rot=-4)
+    ph("kp_skunk", *seg(s("x2", -0.03), s("q1", -0.03)), GETTY, side=None, push=(1.12, 1.02))
+    head(["OUT:"], *seg(s("x2", 1.4), s("q1", -0.03)), y=1060, size=110)
+    stamp("EGO", *seg(s("x2", 1.9), s("q1", -0.03)), y=1180, size=240, color="#ff3b3b", rot=-5)
     # ---------------- CTA
-    video3d("logo", s("q2", -0.03), TOTAL - s("q2", -0.03))
-    comment_cta(s("q2", 0.05), TOTAL - s("q2", 0.05))
+    video3d("logo", s("q1", -0.03), TOTAL - s("q1", -0.03))
+    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
     for a, b in LAYOUT["brand_hide"]:
-        if a >= s("q2", -0.3):
+        if a >= s("q1", -0.3):
             continue
         anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
-        if b < s("q2", -0.3):
+        if b < s("q1", -0.3):
             anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.95,duration:0.25,immediateRender:false}},{b})')
-    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q2", -0.3)})')
+    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q1", -0.3)})')
 
 
 EXTRA_CSS = f"""
+.strk{{position:absolute;left:60px;top:190px;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.6);border:2px solid rgba(212,55,44,.6);border-radius:999px;padding:10px 20px}}
+.strk span{{font:900 26px "IDisp";letter-spacing:.16em;color:#ff5a4f;margin-right:6px}}
+.strk i{{width:24px;height:24px;border-radius:50%;border:3px solid #ff5a4f;display:block}}
+.strk i.on{{background:#ff3b3b}}
+.phn{{position:absolute;left:240px;width:600px;min-height:620px;background:#0f0f12;border:10px solid #2a2a30;border-radius:60px;padding:70px 34px 40px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 80px rgba(80,140,255,.15)}}
+.pnt{{position:absolute;left:0;right:0;top:24px;text-align:center;font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.06em}}
+.pmb{{margin:16px 0 0 auto;width:fit-content;max-width:440px;background:#1f7aff;color:#fff;font:700 40px "IDisp";padding:16px 24px;border-radius:30px 30px 8px 30px}}
+.rwd{{position:absolute;left:0;right:0;top:640px;text-align:center}}
+.rwd span{{display:block;font:900 40px "IDisp";letter-spacing:.3em;color:#ff5a4f}}
+.rwd b{{display:block;font-family:"Bebas";font-size:300px;line-height:1;color:#fff}}
+.snp{{position:absolute;left:60px;right:60px;top:1150px;display:flex;align-items:center;gap:20px}}
+.snl b,.snr b{{display:block;font-family:"Bebas";font-size:64px;color:#fff;line-height:1}}
+.snl span,.snr span{{font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.1em}}
+.snr b{{color:#ff5a4f}}
+.snbar{{flex:1;height:26px;display:flex}}
+.snbar i{{flex:1;background:{Y};transform-origin:0 50%}}
+.snbar i:last-child{{transform-origin:100% 50%}}
+
 .tcell{{position:absolute;width:280px;height:200px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}}
 .tcell b{{font-family:"Bebas";font-size:96px;line-height:1}}
 .tcell em{{font-style:normal;font:800 22px "IDisp";letter-spacing:.12em;margin-top:6px;opacity:.9}}
