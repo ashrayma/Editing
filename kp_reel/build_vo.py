@@ -174,8 +174,8 @@ def edit_groups():
     return groups
 
 
-MAX_PAUSE = 0.08  # long breaths inside a group are shortened to this (tightens the read without cutting words)
-GAP_SCALE = 0.3  # the scripted pause after each line is scaled by this
+MAX_PAUSE = 0.16  # long breaths inside a group are shortened to this (tightens the read without cutting words)
+GAP_SCALE = 0.35  # the scripted pause after each line is scaled by this
 TEMPO = 1.1  # gentle speed-up of the whole read (pitch kept)
 
 
