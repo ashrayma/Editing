@@ -257,11 +257,11 @@ def main():
     L = {ln["id"]: ln for ln in tl["lines"]}
     total = ev["total"]
     n = int(SR * total)
-    # thriller: ticking cold open, the beat drops on Strike 1; drums out before every strike and the reveal;
-    # thin under the texts; dead air before "Usse out kiya, uske ego ne"
-    m = music(total, drop=L["s1"]["start"], breaks=[L["s2"]["start"], L["s3"]["start"], L["s4"]["start"], L["e5"]["start"]],
-              outro=L["q1"]["start"] + 0.3, thin=[(L["t1"]["start"], L["d1"]["start"])],
-              mute=[(L["x2"]["start"] + 1.3, L["x2"]["start"] + 1.85)], intro_warm=False)
+    # tribute: ticks under the question, the beat drops on "2016" (end of the hook); drums out before each format and
+    # the IPL; the cruel twist strips to the pad; a beat of air before "He was unstoppable"
+    m = music(total, drop=L["h2"]["words"][14][1], breaks=[L["t1"]["start"], L["o1"]["start"], L["w1"]["start"], L["i1"]["start"]],
+              outro=L["q1"]["start"] + 0.3, thin=[(L["x1"]["start"], L["x4"]["start"])],
+              mute=[(L["x4"]["end"] + 0.02, L["x5"]["start"] - 0.02)], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))
