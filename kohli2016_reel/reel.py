@@ -1445,7 +1445,7 @@ def badges(start, dur, lit, y=1500):
 def ground(name, venue, score, start, dur, x, y, rot, side):
     """Double-hundred card: framed photo + venue + score tag."""
     frame(name, start, dur, x=x, y=y, w=430, rot=rot, side=side, cap=venue, hmax=420)
-    tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y + 380)
+    tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y - 50)
 
 
 def edit():
@@ -1483,11 +1483,11 @@ def edit():
     odo("75", *seg(word("t1", 14) - 0.1, s("t2", -0.03)), x=700, y=1150, size=150, label="AVERAGE")
     credit(*seg(s("t1"), s("t2", -0.03)), BCCI)
     bgp(*seg(s("t2", -0.03), s("o1", -0.03)), "paper")
-    head(["3 DOUBLE HUNDREDS", "BACK-TO-BACK SERIES"], *seg(word("t2", 5), s("o1", -0.03)), "paper", y=250, size=96, accent=(0,), sfx="impact")
+    head(["3 DOUBLE HUNDREDS", "BACK-TO-BACK SERIES"], *seg(word("t2", 5), s("t3")), "paper", y=250, size=96, accent=(0,), sfx="impact")
     ground("k_test_perth", "Antigua", "200", *seg(word("t2", 6), s("o1", -0.03)), x=40, y=520, rot=-4, side="left")
     ground("k_test_sydney", "Indore", "211", *seg(word("t2", 8), s("o1", -0.03)), x=560, y=640, rot=3, side="right")
     ground("k_test_raise", "Mumbai", "235", *seg(word("t2", 9), s("o1", -0.03)), x=290, y=1010, rot=-1, side="left")
-    head(["MAJESTIC. MERCILESS.", "MAGNIFICENT."], *seg(s("t3"), s("o1", -0.03)), "paper", y=1470, size=70, accent=(1,), sfx="impact")
+    head(["MAJESTIC. MERCILESS.", "MAGNIFICENT."], *seg(s("t3"), s("o1", -0.03)), "paper", y=250, size=84, accent=(1,), sfx="impact")
     badges(*seg(s("t1"), s("o1", -0.03)), [s("t1", 0.3), None, None], y=1600)
     # ---------------- ODIs, T20Is
     bgp(*seg(s("o1", -0.03), s("o2", -0.03)), "ink")
@@ -1529,9 +1529,9 @@ def edit():
     # ---------------- the year in one number
     bgp(*seg(s("a1", -0.03), s("x1", -0.03)), "paper")
     kick("2016 · ALL INTERNATIONAL CRICKET", *seg(s("a1"), s("x1", -0.03)), "paper")
-    odo("2,595", *seg(s("a1"), s("x1", -0.03)), x=None, y=360, size=200, label="RUNS")
-    odo("86", *seg(word("a1", 7) - 0.15, s("x1", -0.03)), x=None, y=760, size=260, label="AVERAGE")
-    head(["2,000-RUN YEARS:", "NOBODY HIGHER"], *seg(word("a1", 18), s("x1", -0.03)), "paper", y=1150, size=96, accent=(1,), sfx="impact")
+    odo("2,595", *seg(s("a1"), s("x1", -0.03)), x=None, y=330, size=170, label="RUNS")
+    odo("86", *seg(word("a1", 7) - 0.15, s("x1", -0.03)), x=None, y=680, size=200, label="AVERAGE")
+    head(["2,000-RUN YEARS:", "NOBODY HIGHER"], *seg(word("a1", 18), s("x1", -0.03)), "paper", y=1170, size=96, accent=(1,), sfx="impact")
     # ---------------- the cruel twist
     bgp(*seg(s("x1", -0.03), s("x4", -0.03)), "ink")
     head(["THE CRUEL TWIST"], *seg(word("x1", 5), s("x2", -0.03)), y=640, size=130, accent=(0,), sfx="impact")
@@ -1544,8 +1544,8 @@ def edit():
     bgp(*seg(s("x4", -0.03), s("q1", -0.03)), "ink")
     frame("k_test_sky", *seg(s("x4"), s("q1", -0.03)), x=190, y=290, w=700, rot=-2, side="up" if False else "right", cap="The King", hmax=860)
     head(["12 GLORIOUS MONTHS"], *seg(word("x4", 2), s("x5", -0.03)), y=1230, size=96, accent=(0,))
-    head(["UNSTOPPABLE"], *seg(s("x5", 0.2), s("q1", -0.03)), y=1230, size=150, accent=(0,), sfx="impact")
-    badges(*seg(s("x5"), s("q1", -0.03)), [word("x5", 3), word("x5", 4), word("x5", 4) + 0.2], y=1450)
+    head(["UNSTOPPABLE"], *seg(s("x5", 0.2), s("q1", -0.03)), y=1180, size=150, accent=(0,), sfx="impact")
+    badges(*seg(s("x5"), s("q1", -0.03)), [word("x5", 3), word("x5", 4), word("x5", 4) + 0.2], y=1360)
     flash(s("x5", 0.2), color=Y, peak=0.3)
     credit(*seg(s("x4"), s("q1", -0.03)), BCCI)
     # ---------------- CTA
