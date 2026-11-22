@@ -69,6 +69,28 @@ def inset(base, cx, cy, d, label="2016"):
     dd.text((tx + 10 - l, ty + 5 - t), label, font=f, fill=INK)
 
 
+def memory(base, cx, bottom, h, opacity=0.78):
+    """The 2016 300-celebration (arms up), warm sepia and slightly faded: the 'then' behind the number."""
+    cel = Image.open(os.path.join(V.HERE, "cut", "celebrate_303.png"))
+    cel = cel.crop((470, 0, 1300, 992))
+    cel = cel.resize((round(cel.width * h / cel.height), h), Image.LANCZOS)
+    cel = V.tone(cel, (1.18, 0.95, 0.66), 0.25, 1.1, sharpen=0)
+    a = np.asarray(cel.split()[3], np.float32) / 255
+    yy = np.linspace(0, 1, cel.height)[:, None]
+    a = a * np.clip((1 - yy) / 0.45, 0, 1) ** 0.8 * opacity          # fades out toward the bottom
+    xx = np.linspace(0, 1, cel.width)[None, :]
+    a = a * np.clip((1 - xx) / 0.16, 0, 1) * np.clip(xx / 0.05, 0, 1)  # soften the cropped frame edges
+    cel.putalpha(Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)))
+    x, y = cx - cel.width // 2, bottom - h
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gm = Image.new("L", (W, H), 0)
+    gm.paste(cel.split()[3], (x, y))
+    g = Image.new("RGBA", (W, H), (255, 170, 60, 0))
+    g.putalpha(gm.filter(ImageFilter.GaussianBlur(30)).point(lambda v: int(v * 0.55)))
+    base.alpha_composite(g)
+    base.alpha_composite(cel, (x, y))
+
+
 def main():
     base = background()
     # the frowning 2025 close-up, right half, nothing overlapping it
@@ -76,17 +98,24 @@ def main():
     nh = 1060
     now = now.resize((round(now.width * nh / now.height), nh), Image.LANCZOS)
     now = V.tone(now, (0.78, 0.94, 1.04), 0.45, 1.18, sharpen=60)
+    import sys
+    if "--memory" in sys.argv:
+        memory(base, 285, 560, 560, opacity=0.95)
     V.place_person(base, now, 525, -60, (170, 215, 255), (60, 140, 255), (-18, 8))
 
-    l, t, r, b = huge_number(base, "303*", 44, 370, 290)
-    fb = V.tilted_box("FORGOTTEN", 92, RED, (255, 255, 255), -3, distress=True)
-    V.drop(base, fb, (52, b + 40), off=(7, 9))
+    if "--memory" in sys.argv:
+        l, t, r, b = huge_number(base, "303*", 44, 545, 250)
+    else:
+        l, t, r, b = huge_number(base, "303*", 44, 370, 290)
+    fb = V.tilted_box("FORGOTTEN", 92 if "--memory" not in sys.argv else 78, RED, (255, 255, 255), -3, distress=True)
+    V.drop(base, fb, (52, b + (40 if "--memory" not in sys.argv else 22)), off=(7, 9))
     V.badge(base, "UNTOLD STORIES #5", W - 24, H - 22)
-    import sys
     name = "Karun_303_thumbnail_v3.jpg"
     if "--inset" in sys.argv:
         inset(base, 560, b + 40 + fb.height // 2, 138)
         name = "Karun_303_thumbnail_v3_inset.jpg"
+    if "--memory" in sys.argv:
+        name = "Karun_303_thumbnail_v3_memory.jpg"
 
     out = os.path.join(V.HERE, "out", name)
     base.convert("RGB").save(out, quality=93)
