@@ -1554,9 +1554,9 @@ def edit():
     frame("p_t20wc", *seg(a, b), x=180, y=400, w=720, rot=2, side="right", cap="T20 World Cup 2024", hmax=880)
     a, b = b, s("e1", -0.03)
     frame("p_chennai_ton", *seg(a, b), x=40, y=480, w=1000, rot=-2, side="left", cap="Chennai · Test cricket · 2024")
-    stamp("CENTURY", *seg(word("r2", 19), word("r2", 22) - 0.05), y=1120, size=150, rot=-4)
-    head(["AS IF NOTHING", "EVER HAPPENED."], *seg(word("r2", 22) - 0.05, b), y=1110, size=100, accent=(1,))
-    badges(*seg(r2a, b), [word("r2", 4), word("r2", 9), word("r2", 19)], y=280, labels=("IPL", "T20 WC", "TEST 100"))
+    stamp("CENTURY", *seg(word("r2", 20), word("r2", 23) - 0.05), y=1120, size=150, rot=-4)
+    head(["AS IF NOTHING", "EVER HAPPENED."], *seg(word("r2", 23) - 0.05, b), y=1110, size=100, accent=(1,))
+    badges(*seg(r2a, b), [word("r2", 4), word("r2", 9), word("r2", 20)], y=280, labels=("IPL", "T20 WC", "TEST 100"))
     credit(*seg(r2a, b), BCCI)
     # ---------------- ENGLAND 2025
     a, b = b, word("e1", 4) - 0.05
@@ -1572,14 +1572,14 @@ def edit():
     a, b = b, s("f1", -0.03)
     bgp(*seg(a, b), "ink")
     frame("p_stairs", *seg(a, b), x=190, y=280, w=675, rot=2, side="right", cap="Manchester · 2025")
-    stamp("FRACTURED FOOT", *seg(word("e1", 27), b), y=1310, size=110, color="#ff5a4f", rot=-4)
+    stamp("FRACTURED FOOT", *seg(word("e1", 26), b), y=1310, size=110, color="#ff5a4f", rot=-4)
     credit(*seg(a, b), BCCI)
     # ---------------- follow
     a, b = b, s("w1", -0.03)
     bgp(*seg(a, b), "ink")
     head(["WELLINGTON", "RECORDS?"], *seg(a + 0.03, word("f1", 13) - 0.05), y=420, size=140, accent=(1,), sfx="impact")
     head(["TRUE CRICKET FAN?"], *seg(word("f1", 13) - 0.05, b), y=430, size=110, accent=(0,), sfx="impact")
-    follow_card(*seg(word("f1", 9), b), t_follow=word("f1", 21))
+    follow_card(*seg(word("f1", 8), b), t_follow=word("f1", 21))
     # ---------------- WELLINGTON
     a, b = b, s("w2", -0.03)
     ph("p_wellington_six", *seg(a, b), BCCI, side="up", push=(1.0, 1.08))
@@ -1605,9 +1605,9 @@ def edit():
     a, b = b, s("s2", -0.03)
     bgp(*seg(a, b), "ink")
     head(["6 MONSTROUS", "SIXES"], *seg(a + 0.03, word("s1", 5) - 0.1), y=560, size=170, accent=(0,), sfx="impact")
-    frame("mccullum", *seg(word("s1", 5) - 0.15, word("s1", 25) - 0.1), x=300, y=290, w=480, rot=-2, side="left", cap="Brendon McCullum", hmax=620)
-    frame("stokes", *seg(word("s1", 25) - 0.1, b), x=300, y=330, w=480, rot=2, side="right", cap="Ben Stokes", hmax=620)
-    ladder(*seg(word("s1", 5) - 0.1, b), t_pass=word("s1", 6), t_top=word("s1", 25))
+    frame("mccullum", *seg(word("s1", 5) - 0.15, word("s1", 27) - 0.1), x=300, y=290, w=480, rot=-2, side="left", cap="Brendon McCullum", hmax=620)
+    frame("stokes", *seg(word("s1", 27) - 0.1, b), x=300, y=330, w=480, rot=2, side="right", cap="Ben Stokes", hmax=620)
+    ladder(*seg(word("s1", 5) - 0.1, b), t_pass=word("s1", 6), t_top=word("s1", 27))
     credit(*seg(word("s1", 5) - 0.15, b), GETTY)
     # ---------------- SENA
     a, b = b, s("g1", -0.03)

@@ -1,5 +1,5 @@
 {
- "duration": 92.412,
+ "duration": 92.288,
  "source": "takes",
  "lines": [
   {
@@ -7,116 +7,116 @@
    "text": "They said he might never play cricket again.",
    "caption": "They said he might never play cricket again.",
    "start": 0.238,
-   "end": 2.286,
+   "end": 2.248,
    "words": [
     [
      "They",
-     0.276,
-     0.459
+     0.324,
+     0.499
     ],
     [
      "said",
-     0.459,
-     0.642
+     0.499,
+     0.673
     ],
     [
      "he",
-     0.642,
-     0.824
+     0.673,
+     0.849
     ],
     [
      "might",
-     0.824,
-     1.007
+     0.849,
+     1.024
     ],
     [
      "never",
-     1.007,
-     1.372
+     1.024,
+     1.373
     ],
     [
      "play",
-     1.372,
-     1.555
+     1.373,
+     1.548
     ],
     [
      "cricket",
-     1.555,
-     1.92
+     1.548,
+     1.898
     ],
     [
      "again.",
-     1.92,
-     2.286
+     1.898,
+     2.248
     ]
    ]
   },
   {
    "id": "h2",
-   "text": "Today, he passed Brendon McCullum and Adam Gilchrist in a single innings.",
-   "caption": "Today, he passed Brendon McCullum and Adam Gilchrist in a single innings.",
-   "start": 2.286,
-   "end": 5.838,
+   "text": "Today he passed Brendon McCullum and Adam Gilchrist in a single innings.",
+   "caption": "Today he passed Brendon McCullum and Adam Gilchrist in a single innings.",
+   "start": 2.248,
+   "end": 5.39,
    "words": [
     [
-     "Today,",
-     2.286,
-     2.634
+     "Today",
+     2.248,
+     2.542
     ],
     [
      "he",
-     2.634,
-     2.809
+     2.542,
+     2.689
     ],
     [
      "passed",
-     2.809,
-     3.157
+     2.689,
+     2.983
     ],
     [
      "Brendon",
-     3.157,
-     3.506
+     2.983,
+     3.277
     ],
     [
      "McCullum",
-     3.506,
-     3.854
+     3.277,
+     3.571
     ],
     [
      "and",
-     3.854,
-     4.029
+     3.571,
+     3.719
     ],
     [
      "Adam",
-     4.029,
-     4.377
+     3.719,
+     4.013
     ],
     [
      "Gilchrist",
-     4.377,
-     4.726
+     4.013,
+     4.308
     ],
     [
      "in",
-     4.726,
-     4.9
+     4.308,
+     4.454
     ],
     [
      "a",
-     4.9,
-     5.074
+     4.454,
+     4.602
     ],
     [
      "single",
-     5.074,
-     5.423
+     4.602,
+     4.896
     ],
     [
      "innings.",
-     5.423,
-     5.771
+     4.896,
+     5.19
     ]
    ]
   },
@@ -124,43 +124,43 @@
    "id": "h3",
    "text": "This is the story of Rishabh Pant.",
    "caption": "This is the story of Rishabh Pant.",
-   "start": 5.938,
-   "end": 7.29,
+   "start": 5.49,
+   "end": 7.757,
    "words": [
     [
      "This",
-     5.986,
-     6.122
+     5.529,
+     5.77
     ],
     [
      "is",
-     6.122,
-     6.259
+     5.77,
+     6.011
     ],
     [
      "the",
-     6.259,
-     6.395
+     6.011,
+     6.252
     ],
     [
      "story",
-     6.395,
-     6.669
+     6.252,
+     6.735
     ],
     [
      "of",
-     6.669,
-     6.805
+     6.735,
+     6.976
     ],
     [
      "Rishabh",
-     6.805,
-     7.078
+     6.976,
+     7.459
     ],
     [
      "Pant.",
-     7.078,
-     7.214
+     7.459,
+     7.7
     ]
    ]
   },
@@ -168,118 +168,118 @@
    "id": "c1",
    "text": "30th December 2022. A dark morning on the Delhi\u2013Dehradun highway. A car engulfed in flames, and trapped inside, India's most fearless cricketer.",
    "caption": "30th December 2022. A dark morning on the Delhi\u2013Dehradun highway. A car engulfed in flames, and trapped inside, India's most fearless cricketer.",
-   "start": 7.457,
-   "end": 14.581,
+   "start": 7.924,
+   "end": 15.152,
    "words": [
     [
      "30th",
-     7.505,
-     7.66
+     7.981,
+     8.137
     ],
     [
      "December",
-     7.66,
-     8.126
+     8.137,
+     8.607
     ],
     [
      "2022.",
-     8.126,
-     9.058
+     8.607,
+     9.545
     ],
     [
      "A",
-     9.058,
-     9.213
+     9.545,
+     9.701
     ],
     [
      "dark",
-     9.213,
-     9.369
+     9.701,
+     9.858
     ],
     [
      "morning",
-     9.369,
-     9.68
+     9.858,
+     10.17
     ],
     [
      "on",
-     9.68,
-     9.835
+     10.17,
+     10.327
     ],
     [
      "the",
-     9.835,
-     9.99
+     10.327,
+     10.484
     ],
     [
      "Delhi\u2013Dehradun",
-     9.99,
-     10.767
+     10.484,
+     11.266
     ],
     [
      "highway.",
-     10.767,
-     11.078
+     11.266,
+     11.578
     ],
     [
      "A",
-     11.078,
-     11.233
+     11.578,
+     11.734
     ],
     [
      "car",
-     11.233,
-     11.389
+     11.734,
+     11.891
     ],
     [
      "engulfed",
-     11.389,
-     11.854
+     11.891,
+     12.36
     ],
     [
      "in",
-     11.854,
-     12.01
+     12.36,
+     12.516
     ],
     [
      "flames,",
-     12.01,
-     12.32
+     12.516,
+     12.83
     ],
     [
      "and",
-     12.32,
-     12.476
+     12.83,
+     12.986
     ],
     [
      "trapped",
-     12.476,
-     12.787
+     12.986,
+     13.299
     ],
     [
      "inside,",
-     12.787,
-     13.252
+     13.299,
+     13.768
     ],
     [
      "India's",
-     13.252,
-     13.563
+     13.768,
+     14.081
     ],
     [
      "most",
-     13.563,
-     13.718
+     14.081,
+     14.237
     ],
     [
      "fearless",
-     13.718,
-     14.03
+     14.237,
+     14.55
     ],
     [
      "cricketer.",
-     14.03,
-     14.495
+     14.55,
+     15.019
     ]
    ]
   },
@@ -287,128 +287,128 @@
    "id": "c2",
    "text": "Torn knee ligaments. A battered body. Hospital beds. Silent doctors. And 1 question across the entire nation: will Pant ever hold a bat again?",
    "caption": "Torn knee ligaments. A battered body. Hospital beds. Silent doctors. And 1 question across the entire nation: will Pant ever hold a bat again?",
-   "start": 14.681,
-   "end": 22.51,
+   "start": 15.252,
+   "end": 22.681,
    "words": [
     [
      "Torn",
-     14.738,
-     14.927
+     15.3,
+     15.479
     ],
     [
      "knee",
-     14.927,
-     15.116
+     15.479,
+     15.658
     ],
     [
      "ligaments.",
-     15.116,
-     15.682
+     15.658,
+     16.195
     ],
     [
      "A",
-     15.682,
-     15.871
+     16.195,
+     16.373
     ],
     [
      "battered",
-     15.871,
-     16.437
+     16.373,
+     16.91
     ],
     [
      "body.",
-     16.437,
-     16.815
+     16.91,
+     17.269
     ],
     [
      "Hospital",
-     16.815,
-     17.382
+     17.269,
+     17.806
     ],
     [
      "beds.",
-     17.382,
-     17.57
+     17.806,
+     17.985
     ],
     [
      "Silent",
-     17.57,
-     17.949
+     17.985,
+     18.342
     ],
     [
      "doctors.",
-     17.949,
-     18.326
+     18.342,
+     18.7
     ],
     [
      "And",
-     18.326,
-     18.514
+     18.7,
+     18.879
     ],
     [
      "1",
-     18.514,
-     18.798
+     18.879,
+     19.148
     ],
     [
      "question",
-     18.798,
-     19.175
+     19.148,
+     19.506
     ],
     [
      "across",
-     19.175,
-     19.553
+     19.506,
+     19.863
     ],
     [
      "the",
-     19.553,
-     19.742
+     19.863,
+     20.042
     ],
     [
      "entire",
-     19.742,
-     20.309
+     20.042,
+     20.579
     ],
     [
      "nation:",
-     20.309,
-     20.687
+     20.579,
+     20.937
     ],
     [
      "will",
-     20.687,
-     20.875
+     20.937,
+     21.116
     ],
     [
      "Pant",
-     20.875,
-     21.064
+     21.116,
+     21.295
     ],
     [
      "ever",
-     21.064,
-     21.442
+     21.295,
+     21.652
     ],
     [
      "hold",
-     21.442,
-     21.63
+     21.652,
+     21.831
     ],
     [
      "a",
-     21.63,
-     21.819
+     21.831,
+     22.01
     ],
     [
      "bat",
-     21.819,
-     22.008
+     22.01,
+     22.19
     ],
     [
      "again?",
-     22.008,
-     22.386
+     22.19,
+     22.548
     ]
    ]
   },
@@ -416,600 +416,600 @@
    "id": "r1",
    "text": "Every single step was a battle. Every day was pain. But the man who broke Australia's pride at the Gabba was never going to surrender.",
    "caption": "Every single step was a battle. Every day was pain. But the man who broke Australia's pride at the Gabba was never going to surrender.",
-   "start": 22.71,
-   "end": 29.652,
+   "start": 22.881,
+   "end": 29.614,
    "words": [
     [
      "Every",
-     22.748,
-     23.27
+     23.043,
+     23.538
     ],
     [
      "single",
-     23.27,
-     23.619
+     23.538,
+     23.869
     ],
     [
      "step",
-     23.619,
-     23.793
+     23.869,
+     24.033
     ],
     [
      "was",
-     23.793,
-     23.969
+     24.033,
+     24.198
     ],
     [
      "a",
-     23.969,
-     24.143
+     24.198,
+     24.364
     ],
     [
      "battle.",
-     24.143,
-     24.491
+     24.364,
+     24.693
     ],
     [
      "Every",
-     24.491,
-     25.014
-    ],
-    [
-     "day",
-     25.014,
+     24.693,
      25.189
     ],
     [
-     "was",
+     "day",
      25.189,
-     25.363
+     25.354
+    ],
+    [
+     "was",
+     25.354,
+     25.519
     ],
     [
      "pain.",
-     25.363,
-     25.537
+     25.519,
+     25.684
     ],
     [
      "But",
-     25.537,
-     25.711
+     25.684,
+     25.85
     ],
     [
      "the",
-     25.711,
-     25.886
+     25.85,
+     26.014
     ],
     [
      "man",
-     25.886,
-     26.06
+     26.014,
+     26.179
     ],
     [
      "who",
-     26.06,
-     26.235
+     26.179,
+     26.345
     ],
     [
      "broke",
-     26.235,
-     26.584
+     26.345,
+     26.674
     ],
     [
      "Australia's",
-     26.584,
-     27.107
+     26.674,
+     27.17
     ],
     [
      "pride",
-     27.107,
-     27.455
+     27.17,
+     27.5
     ],
     [
      "at",
-     27.455,
-     27.63
+     27.5,
+     27.665
     ],
     [
      "the",
-     27.63,
-     27.804
+     27.665,
+     27.83
     ],
     [
      "Gabba",
-     27.804,
-     28.152
+     27.83,
+     28.16
     ],
     [
      "was",
-     28.152,
-     28.327
+     28.16,
+     28.326
     ],
     [
      "never",
-     28.327,
-     28.676
+     28.326,
+     28.655
     ],
     [
      "going",
-     28.676,
-     28.85
+     28.655,
+     28.821
     ],
     [
      "to",
-     28.85,
-     29.025
+     28.821,
+     28.986
     ],
     [
      "surrender.",
-     29.025,
-     29.548
+     28.986,
+     29.481
     ]
    ]
   },
   {
    "id": "r2",
-   "text": "In 2024, a spectacular IPL return. A T20 World Cup triumph. And when he walked into Test cricket, a century in Chennai. As if nothing had ever happened.",
-   "caption": "In 2024, a spectacular IPL return. A T20 World Cup triumph. And when he walked into Test cricket, a century in Chennai. As if nothing had ever happened.",
-   "start": 29.752,
-   "end": 38.952,
+   "text": "In 2024, a spectacular IPL return. A T20 World Cup dream. And when he walked back into Test cricket, a century in Chennai. As if nothing had ever happened.",
+   "caption": "In 2024, a spectacular IPL return. A T20 World Cup dream. And when he walked back into Test cricket, a century in Chennai. As if nothing had ever happened.",
+   "start": 29.714,
+   "end": 38.905,
    "words": [
     [
      "In",
-     29.905,
-     30.096
+     29.752,
+     29.942
     ],
     [
      "2024,",
-     30.096,
-     31.244
+     29.942,
+     31.079
     ],
     [
      "a",
-     31.244,
-     31.435
+     31.079,
+     31.269
     ],
     [
      "spectacular",
-     31.435,
-     32.2
+     31.269,
+     32.027
     ],
     [
      "IPL",
-     32.2,
-     32.391
+     32.027,
+     32.215
     ],
     [
      "return.",
-     32.391,
-     32.774
+     32.215,
+     32.594
     ],
     [
      "A",
-     32.774,
-     32.966
+     32.594,
+     32.784
     ],
     [
      "T20",
-     32.966,
-     33.156
+     32.784,
+     32.973
     ],
     [
      "World",
-     33.156,
-     33.348
+     32.973,
+     33.163
     ],
     [
      "Cup",
-     33.348,
-     33.539
+     33.163,
+     33.352
     ],
     [
-     "triumph.",
-     33.539,
-     33.73
+     "dream.",
+     33.352,
+     33.542
     ],
     [
      "And",
-     33.73,
-     33.922
+     33.542,
+     33.731
     ],
     [
      "when",
-     33.922,
-     34.113
+     33.731,
+     33.921
     ],
     [
      "he",
-     34.113,
-     34.305
+     33.921,
+     34.11
     ],
     [
      "walked",
-     34.305,
-     34.687
+     34.11,
+     34.49
+    ],
+    [
+     "back",
+     34.49,
+     34.679
     ],
     [
      "into",
-     34.687,
-     35.07
+     34.679,
+     35.058
     ],
     [
      "Test",
-     35.07,
-     35.261
+     35.058,
+     35.248
     ],
     [
      "cricket,",
-     35.261,
-     35.644
+     35.248,
+     35.627
     ],
     [
      "a",
-     35.644,
-     35.834
+     35.627,
+     35.816
     ],
     [
      "century",
-     35.834,
-     36.409
+     35.816,
+     36.385
     ],
     [
      "in",
-     36.409,
-     36.6
+     36.385,
+     36.573
     ],
     [
      "Chennai.",
-     36.6,
-     36.983
+     36.573,
+     36.952
     ],
     [
      "As",
-     36.983,
-     37.173
+     36.952,
+     37.142
     ],
     [
      "if",
-     37.173,
-     37.365
+     37.142,
+     37.331
     ],
     [
      "nothing",
-     37.365,
-     37.748
+     37.331,
+     37.71
     ],
     [
      "had",
-     37.748,
-     37.939
+     37.71,
+     37.9
     ],
     [
      "ever",
-     37.939,
-     38.321
+     37.9,
+     38.279
     ],
     [
      "happened.",
-     38.321,
-     38.895
+     38.279,
+     38.848
     ]
    ]
   },
   {
    "id": "e1",
-   "text": "Then came England. Headingley. 2 centuries in a single Test, only the 2nd wicketkeeper in the history of cricket to do it. And in Manchester, with a fractured foot, limping, he walked out to bat again.",
-   "caption": "Then came England. Headingley. 2 centuries in a single Test, only the 2nd wicketkeeper in the history of cricket to do it. And in Manchester, with a fractured foot, limping, he walked out to bat again.",
-   "start": 39.052,
-   "end": 49.71,
+   "text": "Then came England. Headingley. 2 centuries in a single Test, and the 2nd wicketkeeper in the history of cricket to do it. In Manchester, with a fractured foot, limping, he walked out to bat again.",
+   "caption": "Then came England. Headingley. 2 centuries in a single Test, and the 2nd wicketkeeper in the history of cricket to do it. In Manchester, with a fractured foot, limping, he walked out to bat again.",
+   "start": 39.005,
+   "end": 48.538,
    "words": [
     [
      "Then",
-     39.1,
-     39.284
+     39.157,
+     39.326
     ],
     [
      "came",
-     39.284,
-     39.651
+     39.326,
+     39.662
     ],
     [
      "England.",
-     39.651,
-     40.018
+     39.662,
+     39.998
     ],
     [
      "Headingley.",
-     40.018,
-     40.57
+     39.998,
+     40.503
     ],
     [
      "2",
-     40.57,
-     40.845
+     40.503,
+     40.754
     ],
     [
      "centuries",
-     40.845,
-     41.396
+     40.754,
+     41.259
     ],
     [
      "in",
-     41.396,
-     41.58
+     41.259,
+     41.428
     ],
     [
      "a",
-     41.58,
-     41.764
+     41.428,
+     41.595
     ],
     [
      "single",
-     41.764,
-     42.13
+     41.595,
+     41.932
     ],
     [
      "Test,",
-     42.13,
-     42.314
+     41.932,
+     42.1
     ],
     [
-     "only",
-     42.314,
-     42.682
+     "and",
+     42.1,
+     42.269
     ],
     [
      "the",
-     42.682,
-     42.866
+     42.269,
+     42.436
     ],
     [
      "2nd",
-     42.866,
-     43.05
+     42.436,
+     42.605
     ],
     [
      "wicketkeeper",
-     43.05,
-     43.784
+     42.605,
+     43.277
     ],
     [
      "in",
-     43.784,
-     43.968
+     43.277,
+     43.446
     ],
     [
      "the",
-     43.968,
-     44.151
+     43.446,
+     43.613
     ],
     [
      "history",
-     44.151,
-     44.703
+     43.613,
+     44.118
     ],
     [
      "of",
-     44.703,
-     44.886
+     44.118,
+     44.287
     ],
     [
      "cricket",
-     44.886,
-     45.253
+     44.287,
+     44.623
     ],
     [
      "to",
-     45.253,
-     45.437
+     44.623,
+     44.79
     ],
     [
      "do",
-     45.437,
-     45.621
+     44.79,
+     44.959
     ],
     [
      "it.",
-     45.621,
-     45.805
+     44.959,
+     45.127
     ],
     [
-     "And",
-     45.805,
-     45.989
-    ],
-    [
-     "in",
-     45.989,
-     46.171
+     "In",
+     45.127,
+     45.295
     ],
     [
      "Manchester,",
-     46.171,
-     46.723
+     45.295,
+     45.8
     ],
     [
      "with",
-     46.723,
-     46.907
+     45.8,
+     45.968
     ],
     [
      "a",
-     46.907,
-     47.09
+     45.968,
+     46.136
     ],
     [
      "fractured",
-     47.09,
-     47.641
+     46.136,
+     46.641
     ],
     [
      "foot,",
-     47.641,
-     47.825
+     46.641,
+     46.809
     ],
     [
      "limping,",
-     47.825,
-     48.192
+     46.809,
+     47.145
     ],
     [
      "he",
-     48.192,
-     48.376
+     47.145,
+     47.313
     ],
     [
      "walked",
-     48.376,
-     48.744
+     47.313,
+     47.65
     ],
     [
      "out",
-     48.744,
-     48.928
+     47.65,
+     47.818
     ],
     [
      "to",
-     48.928,
-     49.11
+     47.818,
+     47.986
     ],
     [
      "bat",
-     49.11,
-     49.294
+     47.986,
+     48.154
     ],
     [
      "again.",
-     49.294,
-     49.662
+     48.154,
+     48.49
     ]
    ]
   },
   {
    "id": "f1",
-   "text": "And what records he has broken today in Wellington\u2026 before you find out, if you're a true cricket fan, you must follow this page.",
-   "caption": "And what records he has broken today in Wellington\u2026 before you find out, if you're a true cricket fan, you must follow this page.",
-   "start": 49.876,
-   "end": 55.495,
+   "text": "And what records he broke today in Wellington\u2026 before you find it out, if you're a true cricket fan, you must follow this page.",
+   "caption": "And what records he broke today in Wellington\u2026 before you find it out, if you're a true cricket fan, you must follow this page.",
+   "start": 48.705,
+   "end": 54.438,
    "words": [
     [
      "And",
-     49.914,
-     50.072
+     48.743,
+     48.903
     ],
     [
      "what",
-     50.072,
-     50.23
+     48.903,
+     49.062
     ],
     [
      "records",
-     50.23,
-     50.546
+     49.062,
+     49.382
     ],
     [
      "he",
-     50.546,
-     50.704
+     49.382,
+     49.542
     ],
     [
-     "has",
-     50.704,
-     50.861
-    ],
-    [
-     "broken",
-     50.861,
-     51.177
+     "broke",
+     49.542,
+     49.861
     ],
     [
      "today",
-     51.177,
-     51.492
+     49.861,
+     50.18
     ],
     [
      "in",
-     51.492,
-     51.65
+     50.18,
+     50.34
     ],
     [
      "Wellington\u2026",
-     51.65,
-     52.124
+     50.34,
+     50.819
     ],
     [
      "before",
-     52.124,
-     52.597
+     50.819,
+     51.298
     ],
     [
      "you",
-     52.597,
-     52.755
+     51.298,
+     51.458
     ],
     [
      "find",
-     52.755,
-     52.913
+     51.458,
+     51.618
+    ],
+    [
+     "it",
+     51.618,
+     51.778
     ],
     [
      "out,",
-     52.913,
-     53.07
+     51.778,
+     51.937
     ],
     [
      "if",
-     53.07,
-     53.229
+     51.937,
+     52.097
     ],
     [
      "you're",
-     53.229,
-     53.544
+     52.097,
+     52.416
     ],
     [
      "a",
-     53.544,
-     53.702
+     52.416,
+     52.576
     ],
     [
      "true",
-     53.702,
-     53.86
+     52.576,
+     52.736
     ],
     [
      "cricket",
-     53.86,
-     54.175
+     52.736,
+     53.055
     ],
     [
      "fan,",
-     54.175,
-     54.333
+     53.055,
+     53.215
     ],
     [
      "you",
-     54.333,
-     54.491
+     53.215,
+     53.375
     ],
     [
      "must",
-     54.491,
-     54.649
+     53.375,
+     53.534
     ],
     [
      "follow",
-     54.649,
-     54.965
+     53.534,
+     53.854
     ],
     [
      "this",
-     54.965,
-     55.123
+     53.854,
+     54.014
     ],
     [
      "page.",
-     55.123,
-     55.438
+     54.014,
+     54.333
     ]
    ]
   },
@@ -1017,162 +1017,167 @@
    "id": "w1",
    "text": "Basin Reserve. A fast, hostile New Zealand pitch. 153 balls. 128 runs. 10 fours. 6 sky-scraping sixes.",
    "caption": "Basin Reserve. A fast, hostile New Zealand pitch. 153 balls. 128 runs. 10 fours. 6 sky-scraping sixes.",
-   "start": 55.512,
-   "end": 62.55,
+   "start": 54.454,
+   "end": 61.76,
    "words": [
     [
      "Basin",
-     55.56,
-     55.95
+     54.492,
+     54.9
     ],
     [
      "Reserve.",
-     55.95,
-     56.537
+     54.9,
+     55.51
     ],
     [
      "A",
-     56.537,
-     56.733
+     55.51,
+     55.713
     ],
     [
      "fast,",
-     56.733,
-     56.929
+     55.713,
+     55.916
     ],
     [
      "hostile",
-     56.929,
-     57.515
+     55.916,
+     56.527
     ],
     [
      "New",
-     57.515,
-     57.71
+     56.527,
+     56.73
     ],
     [
      "Zealand",
-     57.71,
-     58.102
+     56.73,
+     57.136
     ],
     [
      "pitch.",
-     58.102,
-     58.297
+     57.136,
+     57.34
     ],
     [
      "153",
-     58.297,
-     59.178
+     57.34,
+     58.255
     ],
     [
      "balls.",
-     59.178,
-     59.373
+     58.255,
+     58.458
     ],
     [
      "128",
-     59.373,
-     60.253
+     58.458,
+     59.373
     ],
     [
      "runs.",
-     60.253,
-     60.449
+     59.373,
+     59.577
     ],
     [
      "10",
-     60.449,
-     61.035
+     59.577,
+     60.187
     ],
     [
      "fours.",
-     61.035,
-     61.231
+     60.187,
+     60.39
     ],
     [
      "6",
-     61.231,
-     61.525
+     60.39,
+     60.695
     ],
     [
      "sky-scraping",
-     61.525,
-     62.111
+     60.695,
+     61.305
     ],
     [
      "sixes.",
-     62.111,
-     62.503
+     61.305,
+     61.712
     ]
    ]
   },
   {
    "id": "w2",
-   "text": "His 9th Test century, and his 1st ever on New Zealand soil.",
-   "caption": "His 9th Test century, and his 1st ever on New Zealand soil.",
-   "start": 62.617,
-   "end": 65.922,
+   "text": "His 9th Test century, and his 1st ever on the New Zealand soil.",
+   "caption": "His 9th Test century, and his 1st ever on the New Zealand soil.",
+   "start": 61.827,
+   "end": 64.988,
    "words": [
     [
      "His",
-     62.655,
-     62.856
+     61.874,
+     62.048
     ],
     [
      "9th",
-     62.856,
-     63.057
+     62.048,
+     62.221
     ],
     [
      "Test",
-     63.057,
-     63.258
+     62.221,
+     62.395
     ],
     [
      "century,",
-     63.258,
-     63.862
+     62.395,
+     62.916
     ],
     [
      "and",
-     63.862,
-     64.063
+     62.916,
+     63.09
     ],
     [
      "his",
-     64.063,
-     64.265
+     63.09,
+     63.263
     ],
     [
      "1st",
-     64.265,
-     64.466
+     63.263,
+     63.437
     ],
     [
      "ever",
-     64.466,
-     64.868
+     63.437,
+     63.784
     ],
     [
      "on",
-     64.868,
-     65.07
+     63.784,
+     63.958
+    ],
+    [
+     "the",
+     63.958,
+     64.131
     ],
     [
      "New",
-     65.07,
-     65.27
+     64.131,
+     64.305
     ],
     [
      "Zealand",
-     65.27,
-     65.672
+     64.305,
+     64.652
     ],
     [
      "soil.",
-     65.672,
-     65.874
+     64.652,
+     64.827
     ]
    ]
   },
@@ -1180,192 +1185,202 @@
    "id": "w3",
    "text": "And with that 1 innings, history bowed down.",
    "caption": "And with that 1 innings, history bowed down.",
-   "start": 65.989,
-   "end": 68.312,
+   "start": 65.055,
+   "end": 67.455,
    "words": [
     [
      "And",
-     66.027,
-     66.194
+     65.103,
+     65.29
     ],
     [
      "with",
-     66.194,
-     66.363
+     65.29,
+     65.479
     ],
     [
      "that",
-     66.363,
-     66.531
+     65.479,
+     65.667
     ],
     [
      "1",
-     66.531,
-     66.784
+     65.667,
+     65.95
     ],
     [
      "innings,",
-     66.784,
-     67.121
+     65.95,
+     66.326
     ],
     [
      "history",
-     67.121,
-     67.626
+     66.326,
+     66.89
     ],
     [
      "bowed",
-     67.626,
-     67.963
+     66.89,
+     67.267
     ],
     [
      "down.",
-     67.963,
-     68.131
+     67.267,
+     67.455
     ]
    ]
   },
   {
    "id": "s1",
-   "text": "6 monstrous sixes took him past Brendon McCullum. Now only 1 man in the history of Test cricket has hit more sixes than Rishabh Pant. Ben Stokes.",
-   "caption": "6 monstrous sixes took him past Brendon McCullum. Now only 1 man in the history of Test cricket has hit more sixes than Rishabh Pant. Ben Stokes.",
-   "start": 68.446,
-   "end": 76.855,
+   "text": "6 monstrous sixes took him past Brendon McCullum. Now only 1 man in the history of Test cricket has hit more sixes than Rishabh Pant. That is Ben Stokes.",
+   "caption": "6 monstrous sixes took him past Brendon McCullum. Now only 1 man in the history of Test cricket has hit more sixes than Rishabh Pant. That is Ben Stokes.",
+   "start": 67.455,
+   "end": 75.674,
    "words": [
     [
      "6",
-     68.493,
-     68.8
+     67.455,
+     67.745
     ],
     [
      "monstrous",
-     68.8,
-     69.21
+     67.745,
+     68.131
     ],
     [
      "sixes",
-     69.21,
-     69.619
+     68.131,
+     68.517
     ],
     [
      "took",
-     69.619,
-     69.824
+     68.517,
+     68.71
     ],
     [
      "him",
-     69.824,
-     70.029
+     68.71,
+     68.904
     ],
     [
      "past",
-     70.029,
-     70.233
+     68.904,
+     69.097
     ],
     [
      "Brendon",
-     70.233,
-     70.643
+     69.097,
+     69.484
     ],
     [
      "McCullum.",
-     70.643,
-     71.052
+     69.484,
+     69.87
     ],
     [
      "Now",
-     71.052,
-     71.257
+     69.87,
+     70.063
     ],
     [
      "only",
-     71.257,
-     71.667
+     70.063,
+     70.45
     ],
     [
      "1",
-     71.667,
-     71.974
+     70.45,
+     70.739
     ],
     [
      "man",
-     71.974,
-     72.179
+     70.739,
+     70.932
     ],
     [
      "in",
-     72.179,
-     72.384
+     70.932,
+     71.126
     ],
     [
      "the",
-     72.384,
-     72.589
+     71.126,
+     71.319
     ],
     [
      "history",
-     72.589,
-     73.203
+     71.319,
+     71.898
     ],
     [
      "of",
-     73.203,
-     73.408
+     71.898,
+     72.091
     ],
     [
      "Test",
-     73.408,
-     73.612
+     72.091,
+     72.285
     ],
     [
      "cricket",
-     73.612,
-     74.022
+     72.285,
+     72.671
     ],
     [
      "has",
-     74.022,
-     74.227
+     72.671,
+     72.865
     ],
     [
      "hit",
-     74.227,
-     74.431
+     72.865,
+     73.057
     ],
     [
      "more",
-     74.431,
-     74.841
+     73.057,
+     73.444
     ],
     [
      "sixes",
-     74.841,
-     75.25
+     73.444,
+     73.83
     ],
     [
      "than",
-     75.25,
-     75.455
+     73.83,
+     74.024
     ],
     [
      "Rishabh",
-     75.455,
-     75.865
+     74.024,
+     74.41
     ],
     [
      "Pant.",
-     75.865,
-     76.07
+     74.41,
+     74.603
+    ],
+    [
+     "That",
+     74.603,
+     74.796
+    ],
+    [
+     "is",
+     74.796,
+     74.99
     ],
     [
      "Ben",
-     76.07,
-     76.274
+     74.99,
+     75.183
     ],
     [
      "Stokes.",
-     76.274,
-     76.684
+     75.183,
+     75.57
     ]
    ]
   },
@@ -1373,113 +1388,113 @@
    "id": "s2",
    "text": "A century in England, in South Africa, in Australia, and now in New Zealand. A Test hundred in every SENA country.",
    "caption": "A century in England, in South Africa, in Australia, and now in New Zealand. A Test hundred in every SENA country.",
-   "start": 76.955,
-   "end": 82.07,
+   "start": 75.773,
+   "end": 81.47,
    "words": [
     [
      "A",
-     77.003,
-     77.151
+     75.83,
+     75.992
     ],
     [
      "century",
-     77.151,
-     77.598
+     75.992,
+     76.475
     ],
     [
      "in",
-     77.598,
-     77.748
+     76.475,
+     76.636
     ],
     [
      "England,",
-     77.748,
-     78.046
+     76.636,
+     76.958
     ],
     [
      "in",
-     78.046,
-     78.194
+     76.958,
+     77.119
     ],
     [
      "South",
-     78.194,
-     78.344
+     77.119,
+     77.281
     ],
     [
      "Africa,",
-     78.344,
-     78.79
+     77.281,
+     77.764
     ],
     [
      "in",
-     78.79,
-     78.94
+     77.764,
+     77.925
     ],
     [
      "Australia,",
-     78.94,
-     79.387
+     77.925,
+     78.408
     ],
     [
      "and",
-     79.387,
-     79.536
+     78.408,
+     78.57
     ],
     [
      "now",
-     79.536,
-     79.685
+     78.57,
+     78.73
     ],
     [
      "in",
-     79.685,
-     79.833
+     78.73,
+     78.891
     ],
     [
      "New",
-     79.833,
-     79.983
+     78.891,
+     79.052
     ],
     [
      "Zealand.",
-     79.983,
-     80.281
+     79.052,
+     79.374
     ],
     [
      "A",
-     80.281,
-     80.43
+     79.374,
+     79.535
     ],
     [
      "Test",
-     80.43,
-     80.579
+     79.535,
+     79.696
     ],
     [
      "hundred",
-     80.579,
-     80.877
+     79.696,
+     80.019
     ],
     [
      "in",
-     80.877,
-     81.026
+     80.019,
+     80.18
     ],
     [
      "every",
-     81.026,
-     81.473
+     80.18,
+     80.663
     ],
     [
      "SENA",
-     81.473,
-     81.771
+     80.663,
+     80.985
     ],
     [
      "country.",
-     81.771,
-     82.07
+     80.985,
+     81.307
     ]
    ]
   },
@@ -1487,167 +1502,172 @@
    "id": "g1",
    "text": "And those 128 runs took him past Adam Gilchrist himself. The most away Test runs by any wicketkeeper. Ever.",
    "caption": "And those 128 runs took him past Adam Gilchrist himself. The most away Test runs by any wicketkeeper. Ever.",
-   "start": 82.17,
-   "end": 88.57,
+   "start": 81.57,
+   "end": 88.284,
    "words": [
     [
      "And",
-     82.208,
-     82.4
+     81.608,
+     81.811
     ],
     [
      "those",
-     82.4,
-     82.787
+     81.811,
+     82.219
     ],
     [
      "128",
-     82.787,
-     83.655
+     82.219,
+     83.137
     ],
     [
      "runs",
-     83.655,
-     83.849
+     83.137,
+     83.341
     ],
     [
      "took",
-     83.849,
-     84.042
+     83.341,
+     83.545
     ],
     [
      "him",
-     84.042,
-     84.235
+     83.545,
+     83.749
     ],
     [
      "past",
-     84.235,
-     84.428
+     83.749,
+     83.952
     ],
     [
      "Adam",
-     84.428,
-     84.814
+     83.952,
+     84.361
     ],
     [
      "Gilchrist",
-     84.814,
-     85.2
+     84.361,
+     84.769
     ],
     [
      "himself.",
-     85.2,
-     85.587
+     84.769,
+     85.176
     ],
     [
      "The",
-     85.587,
-     85.78
+     85.176,
+     85.38
     ],
     [
      "most",
-     85.78,
-     85.973
+     85.38,
+     85.585
     ],
     [
      "away",
-     85.973,
-     86.359
+     85.585,
+     85.992
     ],
     [
      "Test",
-     86.359,
-     86.552
+     85.992,
+     86.196
     ],
     [
      "runs",
-     86.552,
-     86.746
+     86.196,
+     86.4
     ],
     [
      "by",
-     86.746,
-     86.938
+     86.4,
+     86.604
     ],
     [
      "any",
-     86.938,
-     87.325
+     86.604,
+     87.012
     ],
     [
      "wicketkeeper.",
-     87.325,
-     88.097
+     87.012,
+     87.828
     ],
     [
      "Ever.",
-     88.097,
-     88.484
+     87.828,
+     88.236
     ]
    ]
   },
   {
    "id": "q1",
-   "text": "They said he might never play again. Today, he's rewriting history.",
-   "caption": "They said he might never play again. Today, he's rewriting history.",
-   "start": 88.77,
-   "end": 92.312,
+   "text": "They said he might never play again. Today, he's rewriting the history.",
+   "caption": "They said he might never play again. Today, he's rewriting the history.",
+   "start": 88.484,
+   "end": 92.189,
    "words": [
     [
      "They",
-     88.808,
-     88.993
+     88.522,
+     88.71
     ],
     [
      "said",
-     88.993,
-     89.18
+     88.71,
+     88.899
     ],
     [
      "he",
-     89.18,
-     89.366
+     88.899,
+     89.089
     ],
     [
      "might",
-     89.366,
-     89.552
+     89.089,
+     89.277
     ],
     [
      "never",
-     89.552,
-     89.925
+     89.277,
+     89.655
     ],
     [
      "play",
-     89.925,
-     90.11
+     89.655,
+     89.844
     ],
     [
      "again.",
-     90.11,
-     90.484
+     89.844,
+     90.222
     ],
     [
      "Today,",
-     90.484,
-     90.856
+     90.222,
+     90.6
     ],
     [
      "he's",
-     90.856,
-     91.042
+     90.6,
+     90.79
     ],
     [
      "rewriting",
-     91.042,
-     91.601
+     90.79,
+     91.356
+    ],
+    [
+     "the",
+     91.356,
+     91.545
     ],
     [
      "history.",
-     91.601,
-     92.16
+     91.545,
+     92.112
     ]
    ]
   }
