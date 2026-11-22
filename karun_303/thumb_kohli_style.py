@@ -72,8 +72,51 @@ def clean_grade(im):
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
+def main_final():
+    """Text bottom-left (as in the original); sharp colour celebration above it; big sharp B&W face right."""
+    g.CHAKRA = (835, 470, 90)
+    base = g.flag_background()
+
+    # RIGHT - Karun now: big, sharp black-and-white cut-out on the flag
+    now = Image.open(os.path.join(HERE, "cut", "karun_now_face.png")).convert("RGBA")
+    now = now.crop((0, 0, 1700, int(now.height * 0.72)))
+    s = 1120 / now.height
+    now = now.resize((int(now.width * s), 1120), Image.LANCZOS)
+    now = regrade(now, color=0.0, contrast=1.22, bright=1.04, sharpen=(2, 120, 2))
+    now = fade_bottom(now, 820, 1100)
+    nx = W - now.width + 30
+    k.edge_glow(base, now, nx, -20, (255, 235, 205), spread=40, k=0.4)
+    place(base, now, nx, -20, wrap=0.35, rim_color=(255, 205, 150), rim_side=-1, rim_k=0.45, shadow=0.7)
+
+    # LEFT - Karun 2016: helmet raised, sharp, full colour, above the text
+    cel = Image.open(os.path.join(HERE, "cut", "helmet_raised_2016.png")).convert("RGBA")
+    cel = cel.crop((0, 0, cel.width, 1240))
+    s = 600 / cel.height
+    cel = cel.resize((int(cel.width * s), 600), Image.LANCZOS)
+    cel = regrade(cel, color=1.08, contrast=1.14, bright=1.05, sharpen=(2, 120, 2))
+    cel = k.flag_light(cel)
+    cel = fade_bottom(cel, 470, 595)
+    cx, cy = 330 - cel.width // 2, 10
+    k.edge_glow(base, cel, cx, cy, (255, 170, 80), spread=34, k=0.45)
+    place(base, cel, cx, cy, wrap=0.5, rim_color=(255, 190, 110), rim_side=1, rim_k=0.5, shadow=0.85)
+
+    # text block, bottom-left (same place as the original)
+    g.grunge_text(base, "FORGOTTEN", 60, 575, 150)
+    g.brush_box(base, (60, 775, 640, 1040))
+    g.grunge_text(base, "303*", 110, 765, 245, shadow=False)
+    badge_left(base, "UNTOLD STORIES #5", 640, 40)
+
+    light_dust(base)
+    base = k.bloom(base, k=0.12)
+    tw.grade_and_grain = clean_grade
+    base = k.unify(base)
+    finish(base, "Karun_303_thumb_kohli_style_final")
+
+
 def main():
     import sys as _s
+    if "--final" in _s.argv:
+        return main_final()
     swapped = "--swap" in _s.argv
     g.CHAKRA = (1060, 470, 95) if swapped else (905, 455, 95)
     base = g.flag_background()
