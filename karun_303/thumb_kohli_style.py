@@ -54,6 +54,24 @@ def badge_left(base, text, left, top):
     base.alpha_composite(lay)
 
 
+def light_dust(base, n=40):
+    rng = np.random.default_rng(303)
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    for _ in range(n):
+        x, y, r = rng.uniform(0, W), rng.uniform(0, H * 0.8), rng.uniform(0.8, 1.8)
+        d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 215, 160, int(rng.uniform(40, 110))))
+    base.alpha_composite(layer)
+
+
+def clean_grade(im):
+    a = np.asarray(im.convert("RGB"), np.float32)
+    a = 255 * (0.5 + 0.5 * np.tanh((a / 255 - 0.5) * 1.5) / np.tanh(0.75))
+    a = a * 0.97 + np.array([3, 5, 10], np.float32)
+    a += np.random.default_rng(1).normal(0, 2.0, (H, W, 1)).astype(np.float32)
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 def main():
     import sys as _s
     swapped = "--swap" in _s.argv
@@ -65,17 +83,24 @@ def main():
     now = now.crop((0, 0, 1500, int(now.height * 0.62)))
     s = 760 / now.height
     now = now.resize((int(now.width * s), 760), Image.LANCZOS)
-    now = regrade(now, color=0.0, contrast=1.3, bright=1.05, sharpen=(1.0, 60, 1))
-    now = g.edge_fade(fade_bottom(now, 470, 740), left=40, right=30)
     nx = min(W - now.width, 1520 - now.width // 2) if swapped else max(0, 420 - now.width // 2)
-    base = k.double_exposure(base, now, nx, 20, strength=0.9)
+    if swapped:
+        # a sharp black-and-white cut-out sitting on the flag (not printed into it)
+        now = regrade(now, color=0.0, contrast=1.22, bright=1.04, sharpen=(2, 120, 2))
+        now = fade_bottom(now, 520, 740)
+        k.edge_glow(base, now, nx, -10, (255, 235, 205), spread=34, k=0.38)
+        place(base, now, nx, -10, wrap=0.35, rim_color=(255, 205, 150), rim_side=-1, rim_k=0.45, shadow=0.7)
+    else:
+        now = regrade(now, color=0.0, contrast=1.3, bright=1.05, sharpen=(1.0, 60, 1))
+        now = g.edge_fade(fade_bottom(now, 470, 740), left=40, right=30)
+        base = k.double_exposure(base, now, nx, 20, strength=0.9)
 
     # Karun 2016: helmet raised after the 303*, big, full colour, lit by the flag
     cel = Image.open(os.path.join(HERE, "cut", "helmet_raised_2016.png")).convert("RGBA")
     cel = cel.crop((0, 0, cel.width, int(cel.height * 0.74)))
     s = 1420 / cel.height
     cel = cel.resize((int(cel.width * s), 1420), Image.LANCZOS)
-    cel = regrade(cel, color=1.08, contrast=1.12, bright=1.05, sharpen=(1.0, 60, 1))
+    cel = regrade(cel, color=1.08, contrast=1.14, bright=1.05, sharpen=(2, 120, 2) if swapped else (1.0, 60, 1))
     cel = k.flag_light(cel)
     cel = fade_bottom(cel, 880, 1000)
     cx, cy = ((500 if swapped else 1450) - cel.width // 2), 125
@@ -96,8 +121,13 @@ def main():
         badge(base, "UNTOLD STORIES #5", W - 40, 40)
         name = "Karun_303_thumb_kohli_style"
 
-    k.dust(base)
-    base = k.bloom(base)
+    if swapped:
+        light_dust(base)                                   # far fewer, fainter specks
+        base = k.bloom(base, k=0.12)
+        tw.grade_and_grain = clean_grade                   # less grain, keeps the faces crisp
+    else:
+        k.dust(base)
+        base = k.bloom(base)
     base = k.unify(base)
     finish(base, name)
 
