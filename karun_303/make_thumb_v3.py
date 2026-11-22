@@ -71,15 +71,15 @@ def inset(base, cx, cy, d, label="2016"):
 
 def memory(base, cx, bottom, h, opacity=0.78):
     """The 2016 300-celebration (arms up), warm sepia and slightly faded: the 'then' behind the number."""
-    cel = Image.open(os.path.join(V.HERE, "cut", "celebrate_303.png"))
-    cel = cel.crop((470, 0, 1300, 992))
+    cel = Image.open(os.path.join(V.HERE, "cut", "helmet_raised_2016.png"))
+    cel = cel.crop((0, 0, cel.width, int(cel.height * 0.60)))        # helmet raised high, down to the waist
     cel = cel.resize((round(cel.width * h / cel.height), h), Image.LANCZOS)
-    cel = V.tone(cel, (1.18, 0.95, 0.66), 0.25, 1.1, sharpen=0)
+    cel = V.tone(cel, (1.12, 0.98, 0.78), 0.6, 1.1, sharpen=40)
     a = np.asarray(cel.split()[3], np.float32) / 255
     yy = np.linspace(0, 1, cel.height)[:, None]
     a = a * np.clip((1 - yy) / 0.45, 0, 1) ** 0.8 * opacity          # fades out toward the bottom
     xx = np.linspace(0, 1, cel.width)[None, :]
-    a = a * np.clip((1 - xx) / 0.16, 0, 1) * np.clip(xx / 0.05, 0, 1)  # soften the cropped frame edges
+
     cel.putalpha(Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)))
     x, y = cx - cel.width // 2, bottom - h
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -100,15 +100,15 @@ def main():
     now = V.tone(now, (0.78, 0.94, 1.04), 0.45, 1.18, sharpen=60)
     import sys
     if "--memory" in sys.argv:
-        memory(base, 285, 560, 560, opacity=0.95)
+        memory(base, 300, 520, 530, opacity=1.0)
     V.place_person(base, now, 525, -60, (170, 215, 255), (60, 140, 255), (-18, 8))
 
     if "--memory" in sys.argv:
-        l, t, r, b = huge_number(base, "303*", 44, 545, 250)
+        l, t, r, b = huge_number(base, "303*", 44, 585, 240)
     else:
         l, t, r, b = huge_number(base, "303*", 44, 370, 290)
-    fb = V.tilted_box("FORGOTTEN", 92 if "--memory" not in sys.argv else 78, RED, (255, 255, 255), -3, distress=True)
-    V.drop(base, fb, (52, b + (40 if "--memory" not in sys.argv else 22)), off=(7, 9))
+    fb = V.tilted_box("FORGOTTEN", 92 if "--memory" not in sys.argv else 72, RED, (255, 255, 255), -3, distress=True)
+    V.drop(base, fb, (52, b + (40 if "--memory" not in sys.argv else 14)), off=(7, 9))
     V.badge(base, "UNTOLD STORIES #5", W - 24, H - 22)
     name = "Karun_303_thumbnail_v3.jpg"
     if "--inset" in sys.argv:
