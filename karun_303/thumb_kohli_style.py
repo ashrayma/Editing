@@ -74,19 +74,20 @@ def clean_grade(im):
 
 def main_final():
     """Text bottom-left (as in the original); sharp colour celebration above it; big sharp B&W face right."""
-    g.CHAKRA = (835, 470, 90)
+    g.CHAKRA = (735, 470, 80)
     base = g.flag_background()
 
-    # RIGHT - Karun now: big, sharp black-and-white cut-out on the flag
+    # RIGHT - Karun now: colour, centred in the right half, face level with the flag's middle band,
+    # lit by the flag itself (no white border)
     now = Image.open(os.path.join(HERE, "cut", "karun_now_face.png")).convert("RGBA")
     now = now.crop((0, 0, 1700, int(now.height * 0.72)))
-    s = 1120 / now.height
-    now = now.resize((int(now.width * s), 1120), Image.LANCZOS)
-    now = regrade(now, color=0.0, contrast=1.22, bright=1.04, sharpen=(2, 120, 2))
-    now = fade_bottom(now, 820, 1100)
-    nx = W - now.width + 30
-    k.edge_glow(base, now, nx, -20, (255, 235, 205), spread=40, k=0.4)
-    place(base, now, nx, -20, wrap=0.35, rim_color=(255, 205, 150), rim_side=-1, rim_k=0.45, shadow=0.7)
+    s = 900 / now.height
+    now = now.resize((int(now.width * s), 900), Image.LANCZOS)
+    now = regrade(now, color=0.95, contrast=1.15, bright=1.02, sharpen=(2, 110, 2))
+    now = k.flag_light(now)
+    now = fade_bottom(now, 700, 900)
+    nx, ny = 1350 - now.width // 2, 40
+    place(base, now, nx, ny, wrap=0.55, rim_color=(255, 175, 90), rim_side=-1, rim_k=0.22, shadow=0.6)
 
     # LEFT - Karun 2016: helmet raised, sharp, full colour, above the text
     cel = Image.open(os.path.join(HERE, "cut", "helmet_raised_2016.png")).convert("RGBA")
