@@ -74,19 +74,19 @@ def clean_grade(im):
 
 def main_final():
     """Text bottom-left (as in the original); sharp colour celebration above it; big sharp B&W face right."""
-    g.CHAKRA = (735, 470, 80)
+    g.CHAKRA = (960, 540, 88)                       # dead centre of the frame, on the white band
     base = g.flag_background()
 
     # RIGHT - Karun now: colour, centred in the right half, face level with the flag's middle band,
     # lit by the flag itself (no white border)
     now = Image.open(os.path.join(HERE, "cut", "karun_now_face.png")).convert("RGBA")
     now = now.crop((0, 0, 1700, int(now.height * 0.72)))
-    s = 900 / now.height
-    now = now.resize((int(now.width * s), 900), Image.LANCZOS)
+    s = 840 / now.height
+    now = now.resize((int(now.width * s), 840), Image.LANCZOS)
     now = regrade(now, color=0.95, contrast=1.15, bright=1.02, sharpen=(2, 110, 2))
     now = k.flag_light(now)
-    now = fade_bottom(now, 700, 900)
-    nx, ny = 1350 - now.width // 2, 40
+    now = fade_bottom(now, 650, 840)
+    nx, ny = W - now.width + 10, 70                  # to the right of the chakra
     place(base, now, nx, ny, wrap=0.55, rim_color=(255, 175, 90), rim_side=-1, rim_k=0.22, shadow=0.6)
 
     # LEFT - Karun 2016: helmet raised, sharp, full colour, above the text
@@ -105,7 +105,7 @@ def main_final():
     g.grunge_text(base, "FORGOTTEN", 60, 575, 150)
     g.brush_box(base, (60, 775, 640, 1040))
     g.grunge_text(base, "303*", 110, 765, 245, shadow=False)
-    badge_left(base, "UNTOLD STORIES #5", 640, 40)
+    badge_left(base, "UNTOLD STORIES #5", 770, 40)
 
     light_dust(base)
     base = k.bloom(base, k=0.12)
