@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""""Rohit Sharma is not from this planet" — the five biggest six-hitters. 9:16 reel, HyperFrames composition.
+"""Rishabh Pant: "They said he was finished". 9:16 reel, HyperFrames composition.
 
     python3 reel.py   ->  hf/index.html (+ hf/media/) and out/events.json (SFX cue list for soundtrack.py)
 
@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the comment card carries it
+NO_CAPTION = {"q1"}  # the ending headline carries it
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -1427,10 +1427,10 @@ GETTY = "PHOTO: GETTY IMAGES"
 BCCI = "PHOTO: BCCI"
 
 
-def badges(start, dur, lit, y=1500):
+def badges(start, dur, lit, y=1500, labels=("TEST", "ODI", "T20I")):
     """TEST / ODI / T20I pills along the bottom; each lights gold with a tick at its time. lit: [t_test, t_odi, t_t20]"""
     i = nid("fb")
-    pills = "".join(f'<div class="fbp" id="{i}p{k}"><b>{n}</b><i id="{i}t{k}">✓</i></div>' for k, n in enumerate(("TEST", "ODI", "T20I")))
+    pills = "".join(f'<div class="fbp" id="{i}p{k}"><b>{n}</b><i id="{i}t{k}">✓</i></div>' for k, n in enumerate(labels))
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="fbadge avoid" style="top:{y}px;z-index:{z() + 200}">{pills}</div>')
     anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
     for k, t in enumerate(lit):
@@ -1448,120 +1448,212 @@ def ground(name, venue, score, start, dur, x, y, rot, side):
     tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y - 50)
 
 
+SOC = "PHOTO: VIA SOCIAL MEDIA"
+
+
+def shadebot(start, dur):
+    """Dark gradient over the lower half of a bright photo so the type on it reads."""
+    i = nid("sh")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:0;right:0;top:760px;bottom:0;z-index:{z()};'
+        f'background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.72) 35%,rgba(0,0,0,.8))"></div>')
+
+
+def ladder(start, dur, t_pass, t_top, y=1060):
+    """Most Test sixes: Stokes, McCullum, Pant. Pant's row climbs past McCullum at t_pass; Stokes glows at t_top."""
+    i = nid("ld")
+    rows = [("BEN STOKES", "", 0), ("BRENDON McCULLUM", "", 1), ("RISHABH PANT", " me", 2)]
+    rk = "".join(f'<div class="rk" style="top:{k * 130}px">{k + 1}</div>' for k in range(3))
+    rw = "".join(f'<div class="lr{c}" id="{i}r{k}" style="top:{k * 130}px">{n}</div>' for n, c, k in rows)
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ldr avoid" style="top:{y}px;z-index:{z() + 60}"><div class="lh">MOST TEST SIXES · ALL TIME</div>{rk}{rw}</div>')
+    anim(f'tl.fromTo("#{i} .lr",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,stagger:0.08,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}r2",{{top:130,duration:0.55,ease:"back.out(1.6)"}},{t_pass})')
+    anim(f'tl.to("#{i}r1",{{top:260,opacity:.55,duration:0.55,ease:"power3.out"}},{t_pass})')
+    anim(f'tl.fromTo("#{i}r2",{{scale:1}},{{scale:1.06,duration:0.18,yoyo:true,repeat:1}},{t_pass + 0.45})')
+    anim(f'tl.to("#{i}r0",{{borderColor:"#fff",boxShadow:"0 0 40px rgba(255,255,255,.35)",duration:0.3}},{t_top})')
+    cue(t_pass, "rise", 0.9)
+    cue(t_pass + 0.5, "pop", 1.0)
+    cue(t_top, "impact", 0.8)
+
+
+def comment_cta(start, dur):
+    i = nid("cm")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
+        f'<div class="mot" id="{i}q"><span>COMEBACK</span><i>of the</i><span style="color:{Y}">CENTURY?</span></div>'
+        f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
+    anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.5})')
+    txt = "Pant is built different 🔥"
+    anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 0.9})}})()')
+    cue(start, "pop", 1.0)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
     # ---------------- HOOK
-    bgp(*seg(0, s("h2", -0.03)), "ink")
-    frame("k_test_raise", *seg(0.05, s("h2", -0.03)), x=40, y=760, w=1000, rot=-2, side="left", cap="Virat Kohli")
-    head(["GREATEST PEAK", "EVER?"], *seg(0.1, s("h2", -0.03)), y=300, size=140, accent=(1,), sfx="impact")
-    credit(*seg(0.05, s("h2", -0.03)), BCCI)
-    bgp(*seg(s("h2", -0.03), s("c1", -0.03)), "ink")
-    for k, (wd, wi) in enumerate((("RUTHLESS.", 6), ("RELENTLESS.", 8), ("RIDICULOUS.", 11))):
-        head([wd], *seg(word("h2", wi) - 0.05, s("c1", -0.03)), y=330 + 170 * k, size=150, accent=(0,) if k == 2 else (), sfx="impact")
-    head(["2016"], *seg(word("h2", 14), s("c1", -0.03)), y=900, size=360, accent=(0,), sfx="impact")
-    flash(word("h2", 14), color=Y, peak=0.3)
-    # ---------------- the contenders: one format each
-    ph("viv", *seg(s("c1", -0.03), word("c1", 14)), GETTY, side="left", push=(1.0, 1.08))
-    tag("VIV RICHARDS · TESTS · 1976", *seg(word("c1", 7), word("c1", 14)), y=1300)
-    chip("1 FORMAT", *seg(word("c1", 9), word("c1", 14)), x=None, y=300)
-    ph("ab_odi", *seg(word("c1", 14), s("c2", -0.03)), GETTY, side="right", push=(1.0, 1.08))
-    tag("AB DE VILLIERS · ODIs · 2015", *seg(word("c1", 14) + 0.1, s("c2", -0.03)), y=1300)
-    chip("1 FORMAT", *seg(word("c1", 17), s("c2", -0.03)), x=None, y=300)
-    bgp(*seg(s("c2", -0.03), s("t1", -0.03)), "ink")
-    head(["SINGLE FORMAT", "PEAKS…"], *seg(s("c2"), word("c2", 8)), y=330, size=110)
-    cutout("k_test_kiss", *seg(word("c2", 8), s("t1", -0.03)), x=220, h=1000)
-    head(["ALL 3. SAME YEAR."], *seg(word("c2", 14), s("t1", -0.03)), y=300, size=110, accent=(0,), sfx="impact")
-    credit(*seg(word("c2", 8), s("t1", -0.03)), BCCI)
-    badges(*seg(word("c2", 12), s("t1", -0.03)), [word("c2", 14), word("c2", 15), word("c2", 16)])
-    # ---------------- TESTS
-    bgp(*seg(s("t1", -0.03), s("t2", -0.03)), "ink")
-    kick("TEST CRICKET · 2016", *seg(s("t1"), s("t2", -0.03)))
-    frame("k_test_helmet", *seg(s("t1"), s("t2", -0.03)), x=40, y=330, w=1000, rot=-2, side="left", cap="Test cricket · 2016")
-    odo("1,215", *seg(word("t1", 7) - 0.1, s("t2", -0.03)), x=60, y=1150, size=150, label="RUNS")
-    odo("75", *seg(word("t1", 14) - 0.1, s("t2", -0.03)), x=700, y=1150, size=150, label="AVERAGE")
-    credit(*seg(s("t1"), s("t2", -0.03)), BCCI)
-    bgp(*seg(s("t2", -0.03), s("o1", -0.03)), "paper")
-    head(["3 DOUBLE HUNDREDS", "BACK-TO-BACK SERIES"], *seg(word("t2", 5), s("t3")), "paper", y=250, size=96, accent=(0,), sfx="impact")
-    ground("k_test_perth", "Antigua", "200", *seg(word("t2", 6), s("o1", -0.03)), x=40, y=520, rot=-4, side="left")
-    ground("k_test_sydney", "Indore", "211", *seg(word("t2", 8), s("o1", -0.03)), x=560, y=640, rot=3, side="right")
-    ground("k_test_raise", "Mumbai", "235", *seg(word("t2", 9), s("o1", -0.03)), x=290, y=1010, rot=-1, side="left")
-    head(["MAJESTIC. MERCILESS.", "MAGNIFICENT."], *seg(s("t3"), s("o1", -0.03)), "paper", y=250, size=84, accent=(1,), sfx="impact")
-    badges(*seg(s("t1"), s("o1", -0.03)), [s("t1", 0.3), None, None], y=1600)
-    # ---------------- ODIs, T20Is
-    bgp(*seg(s("o1", -0.03), s("o2", -0.03)), "ink")
-    frame("k_odi_drive", *seg(s("o1"), s("o2", -0.03)), x=40, y=330, w=1000, rot=2, side="right", cap="ODIs · 2016")
-    odo("92", *seg(word("o1", 10) - 0.15, s("o2", -0.03)), x=None, y=1100, size=260, label="ODI AVERAGE")
-    credit(*seg(s("o1"), s("o2", -0.03)), BCCI)
-    bgp(*seg(s("o2", -0.03), s("w1", -0.03)), "ink")
-    frame("k_t20_fist", *seg(s("o2"), s("w1", -0.03)), x=140, y=330, w=800, rot=-2, side="left", cap="T20Is")
-    odo("106", *seg(word("o2", 4) - 0.15, s("w1", -0.03)), x=None, y=1100, size=260, label="T20I AVERAGE")
-    credit(*seg(s("o2"), s("w1", -0.03)), BCCI)
-    badges(*seg(s("o1", -0.03), s("w1", -0.03)), [s("o1", -0.03), word("o1", 10), word("o2", 4)], y=1600)
-    # ---------------- T20 World Cup
-    bgp(*seg(s("w1", -0.03), s("f1", -0.03)), "ink")
-    kick("T20 WORLD CUP 2016", *seg(s("w1"), s("f1", -0.03)))
-    frame("k_t20_mcg", *seg(s("w1"), s("f1", -0.03)), x=40, y=330, w=1000, rot=-2, side="right", cap="Kohli in the T20 World Cup")
-    head(["UNPLAYABLE"], *seg(word("w1", 8), word("w1", 9)), y=1060, size=150, accent=(0,), sfx="impact")
-    chip("PLAYER OF THE TOURNAMENT", *seg(word("w1", 9), s("f1", -0.03)), x=None, y=1040)
-    odo("136", *seg(word("w1", 14) - 0.15, s("w2", -0.03)), x=None, y=1150, size=220, label="AVERAGE")
-    stamp("82* vs AUSTRALIA", *seg(word("w2", 3), s("f1", -0.03)), y=1160, size=120, rot=-4)
-    credit(*seg(s("w1"), s("f1", -0.03)), BCCI)
+    a, b = 0, s("h2", -0.03)
+    ph("p_portrait", *seg(a, b), BCCI, side=None, fx="grey", push=(1.04, 1.14))
+    shadebot(*seg(a, b))
+    head(["NEVER PLAY", "AGAIN?"], *seg(word("h1", 3), b), y=1120, size=170, accent=(1,), sfx="impact")
+    a, b = b, s("h3", -0.03)
+    bgp(*seg(a, b), "ink")
+    kick("IN A SINGLE INNINGS", *seg(a, b))
+    frame("mccullum", *seg(word("h2", 3) - 0.15, b), x=40, y=330, w=480, rot=-3, side="left", cap="Brendon McCullum", hmax=640)
+    frame("gilchrist", *seg(word("h2", 6) - 0.15, b), x=560, y=390, w=480, rot=3, side="right", cap="Adam Gilchrist", hmax=640)
+    stamp("PASSED ✓", *seg(word("h2", 10), b), y=1130, size=150, rot=-5)
+    credit(*seg(word("h2", 3) - 0.15, b), GETTY)
+    a, b = b, s("c1", -0.03)
+    ph("p_wave", *seg(a, b), BCCI, side="right")
+    head(["RISHABH", "PANT"], *seg(word("h3", 5) - 0.1, b), y=1170, size=190, accent=(1,), sfx="impact")
+    # ---------------- THE CRASH
+    a, b = b, word("c1", 10) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["30 DEC", "2022"], *seg(a + 0.03, b), y=560, size=260, accent=(1,), sfx="impact")
+    chip("DELHI–DEHRADUN HIGHWAY", *seg(word("c1", 4), b), x=None, y=1120)
+    a, b = b, s("c2", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("crash_car", *seg(a, b), x=140, y=300, w=800, rot=-2, side="right", cap="30 Dec 2022 · Delhi–Dehradun highway", hmax=880)
+    flash(word("c1", 14), color="#ff5a1f", peak=0.45)
+    shake(word("c1", 14), 18)
+    head(["INDIA'S MOST", "FEARLESS"], *seg(word("c1", 18), b), y=1270, size=100, accent=(1,))
+    credit(*seg(a, b), SOC)
+    a, b = b, word("c2", 10) - 0.05
+    bgp(*seg(a, b), "ink")
+    frame("crash_bed", *seg(a, b), x=270, y=270, w=520, rot=-3, side="left", hmax=600, grey=True)
+    for k, (txt, wi) in enumerate((("TORN KNEE LIGAMENTS", 0), ("A BATTERED BODY", 3), ("HOSPITAL BEDS", 6), ("SILENT DOCTORS", 8))):
+        head([txt], *seg(word("c2", wi) - 0.05, b), y=960 + 115 * k, size=104, accent=(0,) if k == 3 else ())
+    credit(*seg(a, b), SOC)
+    a, b = b, s("r1", -0.03)
+    bgp(*seg(a, b), "ink")
+    kick("1 QUESTION. 1 NATION.", *seg(a, b), y=520)
+    head(["WILL HE EVER", "HOLD A BAT", "AGAIN?"], *seg(word("c2", 17) - 0.1, b), y=640, size=160, accent=(2,), sfx="impact")
+    # ---------------- THE FIGHT BACK
+    a, b = b, word("r1", 10) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["EVERY STEP:", "A BATTLE."], *seg(a + 0.03, b), y=480, size=150, accent=(1,))
+    head(["EVERY DAY:", "PAIN."], *seg(word("r1", 6) - 0.05, b), y=880, size=150, accent=(1,))
+    a, b = b, s("r2", -0.03)
+    bgp(*seg(a, b), "ink")
+    kick("THE GABBA · 2021", *seg(a, b))
+    frame("p_gabba", *seg(a, b), x=273, y=300, w=506, rot=-2, side="left", cap="Breaking Australia's pride", hmax=900)
+    stamp("NEVER SURRENDER", *seg(word("r1", 21), b), y=1250, size=110, rot=-4)
+    credit(*seg(a, b), GETTY)
+    # ---------------- 2024: THE RETURN
+    a, b = b, word("r2", 2) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["2024"], *seg(word("r2", 1) - 0.05, b), y=640, size=380, accent=(0,), sfx="impact")
+    flash(word("r2", 1), color=Y, peak=0.3)
+    r2a = b
+    a, b = b, word("r2", 6) - 0.05
+    bgp(*seg(a, s("e1", -0.03)), "ink")
+    frame("p_ipl", *seg(a, b), x=40, y=500, w=1000, rot=-2, side="left", cap="IPL 2024 · Delhi Capitals")
+    a, b = b, word("r2", 11) - 0.05
+    frame("p_t20wc", *seg(a, b), x=180, y=400, w=720, rot=2, side="right", cap="T20 World Cup 2024", hmax=880)
+    a, b = b, s("e1", -0.03)
+    frame("p_chennai_ton", *seg(a, b), x=40, y=480, w=1000, rot=-2, side="left", cap="Chennai · Test cricket · 2024")
+    stamp("CENTURY", *seg(word("r2", 19), word("r2", 22) - 0.05), y=1120, size=150, rot=-4)
+    head(["AS IF NOTHING", "EVER HAPPENED."], *seg(word("r2", 22) - 0.05, b), y=1110, size=100, accent=(1,))
+    badges(*seg(r2a, b), [word("r2", 4), word("r2", 9), word("r2", 19)], y=280, labels=("IPL", "T20 WC", "TEST 100"))
+    credit(*seg(r2a, b), BCCI)
+    # ---------------- ENGLAND 2025
+    a, b = b, word("e1", 4) - 0.05
+    ph("p_headingley_kiss", *seg(a, b), BCCI, side="right")
+    kick("ENGLAND · 2025", *seg(a, b))
+    head(["HEADINGLEY"], *seg(word("e1", 3) - 0.05, b), y=1200, size=170, accent=(0,), sfx="impact")
+    a, b = b, word("e1", 22) - 0.05
+    bgp(*seg(a, b), "ink")
+    frame("p_somersault", *seg(a, b), x=40, y=330, w=1000, rot=-2, side="left", cap="Headingley · 2025")
+    head(["2 CENTURIES.", "1 TEST."], *seg(a + 0.03, b), y=1080, size=140, accent=(0,), sfx="impact")
+    chip("ONLY THE 2nd WICKETKEEPER EVER", *seg(word("e1", 12), b), x=None, y=1380)
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("f1", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("p_stairs", *seg(a, b), x=190, y=280, w=675, rot=2, side="right", cap="Manchester · 2025")
+    stamp("FRACTURED FOOT", *seg(word("e1", 27), b), y=1310, size=110, color="#ff5a4f", rot=-4)
+    credit(*seg(a, b), BCCI)
     # ---------------- follow
-    bgp(*seg(s("f1", -0.03), s("i1", -0.03)), "ink")
-    head(["TRUE CRICKET FAN?"], *seg(word("f1", 11), s("i1", -0.03)), y=430, size=96, accent=(0,), sfx="impact")
-    follow_card(*seg(s("f1", 0.05), s("i1", -0.03)), t_follow=word("f1", 18))
-    # ---------------- IPL
-    bgp(*seg(s("i1", -0.03), s("i2", -0.03)), "ink")
-    kick("IPL 2016", *seg(s("i1"), s("i2", -0.03)))
-    frame("k_rcb_salute", *seg(s("i1"), s("i2", -0.03)), x=90, y=330, w=900, rot=-2, side="left", cap="RCB · IPL 2016")
-    odo("973", *seg(word("i1", 4) - 0.15, s("i2", -0.03)), x=60, y=1200, size=180, label="RUNS")
-    odo("4", *seg(word("i1", 6) - 0.15, s("i2", -0.03)), x=760, y=1200, size=180, label="HUNDREDS")
-    stamp("STILL THE RECORD", *seg(word("i1", 13), s("i2", -0.03)), y=1040, size=100, rot=-3)
-    credit(*seg(s("i1"), s("i2", -0.03)), BCCI)
-    # ---------------- captain
-    bgp(*seg(s("i2", -0.03), s("a1", -0.03)), "ink")
-    frame("k_mace", *seg(s("i2"), s("a1", -0.03)), x=90, y=300, w=560, rot=-3, side="left", cap="Test No. 1 · captain", hmax=760)
-    odo("12", *seg(word("i2", 5) - 0.15, s("a1", -0.03)), x=700, y=380, size=200, label="TESTS")
-    odo("0", *seg(word("i2", 10), s("a1", -0.03)), x=700, y=760, size=200, label="LOST", color="#ff5a4f")
-    credit(*seg(s("i2"), s("a1", -0.03)), BCCI)
-    # ---------------- the year in one number
-    bgp(*seg(s("a1", -0.03), s("x1", -0.03)), "paper")
-    kick("2016 · ALL INTERNATIONAL CRICKET", *seg(s("a1"), s("x1", -0.03)), "paper")
-    odo("2,595", *seg(s("a1"), s("x1", -0.03)), x=None, y=330, size=170, label="RUNS")
-    odo("86", *seg(word("a1", 7) - 0.15, s("x1", -0.03)), x=None, y=680, size=200, label="AVERAGE")
-    head(["2,000-RUN YEARS:", "NOBODY HIGHER"], *seg(word("a1", 18), s("x1", -0.03)), "paper", y=1170, size=96, accent=(1,), sfx="impact")
-    # ---------------- the cruel twist
-    bgp(*seg(s("x1", -0.03), s("x4", -0.03)), "ink")
-    head(["THE CRUEL TWIST"], *seg(word("x1", 5), s("x2", -0.03)), y=640, size=130, accent=(0,), sfx="impact")
-    frame("k_rcb_point", *seg(s("x2"), s("x4", -0.03)), x=70, y=330, w=460, rot=-3, side="left", cap="2016", grey=True)
-    chip("WORLD CUP SEMI-FINAL ✗", *seg(s("x2", 0.2), s("x4", -0.03)), x=560, y=420)
-    chip("IPL FINAL ✗ · BY 8 RUNS", *seg(word("x3", 3), s("x4", -0.03)), x=560, y=540)
-    stamp("0 TROPHIES", *seg(word("x3", 19), s("x4", -0.03)), y=1180, size=160, color="#ff3b3b", rot=-4)
-    credit(*seg(s("x2"), s("x4", -0.03)), BCCI)
-    # ---------------- unstoppable
-    bgp(*seg(s("x4", -0.03), s("q1", -0.03)), "ink")
-    frame("k_test_sky", *seg(s("x4"), s("q1", -0.03)), x=190, y=290, w=700, rot=-2, side="up" if False else "right", cap="The King", hmax=860)
-    head(["12 GLORIOUS MONTHS"], *seg(word("x4", 2), s("x5", -0.03)), y=1230, size=96, accent=(0,))
-    head(["UNSTOPPABLE"], *seg(s("x5", 0.2), s("q1", -0.03)), y=1180, size=150, accent=(0,), sfx="impact")
-    badges(*seg(s("x5"), s("q1", -0.03)), [word("x5", 3), word("x5", 4), word("x5", 4) + 0.2], y=1360)
-    flash(s("x5", 0.2), color=Y, peak=0.3)
-    credit(*seg(s("x4"), s("q1", -0.03)), BCCI)
+    a, b = b, s("w1", -0.03)
+    bgp(*seg(a, b), "ink")
+    head(["WELLINGTON", "RECORDS?"], *seg(a + 0.03, word("f1", 13) - 0.05), y=420, size=140, accent=(1,), sfx="impact")
+    head(["TRUE CRICKET FAN?"], *seg(word("f1", 13) - 0.05, b), y=430, size=110, accent=(0,), sfx="impact")
+    follow_card(*seg(word("f1", 9), b), t_follow=word("f1", 21))
+    # ---------------- WELLINGTON
+    a, b = b, s("w2", -0.03)
+    ph("p_wellington_six", *seg(a, b), BCCI, side="up", push=(1.0, 1.08))
+    shadebot(*seg(a, b))
+    kick("BASIN RESERVE · WELLINGTON", *seg(a, b))
+    odo("153", *seg(word("w1", 8) - 0.1, b), x=600, y=820, size=170, label="BALLS", color="#fff")
+    odo("128", *seg(word("w1", 10) - 0.1, b), x=70, y=820, size=170, label="RUNS")
+    odo("10", *seg(word("w1", 12) - 0.1, b), x=70, y=1200, size=120, label="FOURS", color="#fff")
+    odo("6", *seg(word("w1", 14) - 0.1, b), x=600, y=1200, size=120, label="SIXES")
+    a, b = b, s("w3", -0.03)
+    bgp(*seg(a, b), "ink")
+    head(["TEST HUNDRED", "No. 9"], *seg(a + 0.03, b), y=300, size=140, accent=(1,), sfx="impact")
+    frame("p_ramp", *seg(a, b), x=40, y=640, w=1000, rot=2, side="left")
+    chip("1st EVER IN NEW ZEALAND", *seg(word("w2", 6), b), x=None, y=1290)
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("s1", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("p_fall", *seg(a, b), x=40, y=640, w=1000, rot=-2, side="right")
+    head(["HISTORY", "BOWED DOWN."], *seg(word("w3", 5) - 0.05, b), y=290, size=150, accent=(1,), sfx="impact")
+    flash(word("w3", 6), color=Y, peak=0.3)
+    credit(*seg(a, b), BCCI)
+    # ---------------- RECORDS: sixes
+    a, b = b, s("s2", -0.03)
+    bgp(*seg(a, b), "ink")
+    head(["6 MONSTROUS", "SIXES"], *seg(a + 0.03, word("s1", 5) - 0.1), y=560, size=170, accent=(0,), sfx="impact")
+    frame("mccullum", *seg(word("s1", 5) - 0.15, word("s1", 25) - 0.1), x=300, y=290, w=480, rot=-2, side="left", cap="Brendon McCullum", hmax=620)
+    frame("stokes", *seg(word("s1", 25) - 0.1, b), x=300, y=330, w=480, rot=2, side="right", cap="Ben Stokes", hmax=620)
+    ladder(*seg(word("s1", 5) - 0.1, b), t_pass=word("s1", 6), t_top=word("s1", 25))
+    credit(*seg(word("s1", 5) - 0.15, b), GETTY)
+    # ---------------- SENA
+    a, b = b, s("g1", -0.03)
+    bgp(*seg(a, b), "ink")
+    kick("TEST HUNDREDS IN SENA", *seg(a, b))
+    cutout("p_wave", *seg(a, b), x=None, h=1050, side="right")
+    badges(*seg(a, b), [word("s2", 3), word("s2", 6), word("s2", 8), word("s2", 13)], y=330,
+           labels=("ENGLAND", "SOUTH AFRICA", "AUSTRALIA", "NEW ZEALAND"))
+    head(["EVERY SENA", "COUNTRY ✓"], *seg(word("s2", 14) - 0.05, b), y=1180, size=130, accent=(1,), sfx="impact")
+    credit(*seg(a, b), BCCI)
+    # ---------------- Gilchrist
+    a, b = b, s("q1", -0.03)
+    bgp(*seg(a, b), "ink")
+    odo("128", *seg(a + 0.03, word("g1", 6) - 0.1), x=None, y=560, size=300, label="RUNS")
+    frame("gilchrist", *seg(word("g1", 6) - 0.15, b), x=50, y=300, w=470, rot=-3, side="left", cap="Adam Gilchrist", hmax=640)
+    frame("p_keeper", *seg(word("g1", 6), b), x=560, y=470, w=470, rot=3, side="right", cap="Rishabh Pant")
+    stamp("PASSED ✓", *seg(word("g1", 9), word("g1", 10) - 0.05), y=1080, size=140, rot=-5)
+    head(["MOST AWAY TEST RUNS", "BY A WICKETKEEPER"], *seg(word("g1", 10) - 0.05, b), y=1040, size=92, accent=(0,))
+    stamp("EVER.", *seg(word("g1", 18), b), y=1290, size=180, rot=-4)
+    credit(*seg(word("g1", 6) - 0.15, b), "PHOTOS: GETTY IMAGES / BCCI")
+    # ---------------- ending
+    a, b = b, e("q1", 0.1)
+    ph("p_portrait", *seg(a, b), BCCI, side=None, push=(1.04, 1.12))
+    shadebot(*seg(a, b))
+    head(["THEY SAID", "HE WAS FINISHED."], *seg(a + 0.03, word("q1", 7) - 0.05), y=1120, size=130, accent=(1,))
+    head(["TODAY, HE'S", "REWRITING HISTORY."], *seg(word("q1", 7) - 0.05, b), y=1120, size=130, accent=(1,), sfx="impact")
+    flash(word("q1", 9), color=Y, peak=0.3)
     # ---------------- CTA
-    video3d("logo", s("q1", -0.03), TOTAL - s("q1", -0.03))
-    comment_cta(s("q1", 0.05), TOTAL - s("q1", 0.05))
-    for a, b in LAYOUT["brand_hide"]:
-        if a >= s("q1", -0.3):
+    video3d("logo", b, TOTAL - b)
+    comment_cta(b + 0.05, TOTAL - b - 0.05)
+    for a2, b2 in LAYOUT["brand_hide"]:
+        if a2 >= b - 0.3:
             continue
-        anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{a})')
-        if b < s("q1", -0.3):
-            anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.95,duration:0.25,immediateRender:false}},{b})')
-    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{s("q1", -0.3)})')
+        anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{a2})')
+        if b2 < b - 0.3:
+            anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.95,duration:0.25,immediateRender:false}},{b2})')
+    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{b - 0.3})')
 
 
 EXTRA_CSS = f"""
-.fbadge{{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:22px}}
+.fbadge{{position:absolute;left:0;right:0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 22px;padding:0 50px}}
+.ldr{{position:absolute;left:80px;right:80px;height:370px}}
+.ldr .lh{{position:absolute;top:-56px;left:0;font:800 26px "IDisp";letter-spacing:.2em;color:{Y}}}
+.ldr .rk{{position:absolute;left:0;width:90px;height:110px;display:flex;align-items:center;justify-content:center;font-family:"Bebas";font-size:84px;color:#9a9aa2}}
+.ldr .lr{{position:absolute;left:110px;right:0;height:110px;border-radius:20px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;padding:0 30px;font-family:"Bebas";font-size:76px;color:#fff}}
+.ldr .lr.me{{background:{Y};color:#111;border-color:{Y};z-index:2}}
 .fbp{{display:flex;align-items:center;gap:10px;padding:10px 24px;border-radius:999px;border:3px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff}}
 .fbp b{{font-family:"Bebas";font-size:54px;font-weight:400;line-height:1}}
 .fbp i{{font-style:normal;font:900 36px "IDisp";opacity:0}}
