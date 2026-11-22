@@ -48,6 +48,27 @@ def huge_number(base, txt, x, y_base, size):
     return m.getbbox()
 
 
+def inset(base, cx, cy, d, label="2016"):
+    """Circular 'then' photo: Karun with the bat in Chennai 2016, thin yellow ring, tiny year tag."""
+    im = Image.open(os.path.join(V.HERE, "up", "karun_303_chennai_2016.png")).convert("RGB")
+    # square crop on his face and the raised bat
+    im = im.crop((820, 120, 820 + 1080, 1200)).resize((d, d), Image.LANCZOS)
+    im = V.tone(im.convert("RGBA"), (1.06, 1.0, 0.9), 1.05, 1.08, sharpen=50)
+    m = Image.new("L", (d, d), 0)
+    ImageDraw.Draw(m).ellipse((0, 0, d - 1, d - 1), fill=255)
+    disc = Image.new("RGBA", (d + 16, d + 16), (0, 0, 0, 0))
+    ImageDraw.Draw(disc).ellipse((0, 0, d + 15, d + 15), fill=Y + (255,))
+    disc.paste(im, (8, 8), m)
+    V.drop(base, disc, (cx - disc.width // 2, cy - disc.height // 2), off=(6, 8), blur=8, alpha=0.7)
+    f = ImageFont.truetype(V.ANTON, 30)
+    dd = ImageDraw.Draw(base)
+    l, t, r, b = dd.textbbox((0, 0), label, font=f)
+    tw, th = r - l + 20, b - t + 10
+    tx, ty = cx + d // 2 - tw + 14, cy + d // 2 - th + 6
+    dd.rounded_rectangle((tx, ty, tx + tw, ty + th), 6, fill=Y + (255,))
+    dd.text((tx + 10 - l, ty + 5 - t), label, font=f, fill=INK)
+
+
 def main():
     base = background()
     # the frowning 2025 close-up, right half, nothing overlapping it
@@ -61,10 +82,15 @@ def main():
     fb = V.tilted_box("FORGOTTEN", 92, RED, (255, 255, 255), -3, distress=True)
     V.drop(base, fb, (52, b + 40), off=(7, 9))
     V.badge(base, "UNTOLD STORIES #5", W - 24, H - 22)
+    import sys
+    name = "Karun_303_thumbnail_v3.jpg"
+    if "--inset" in sys.argv:
+        inset(base, 560, b + 40 + fb.height // 2, 138)
+        name = "Karun_303_thumbnail_v3_inset.jpg"
 
-    out = os.path.join(V.HERE, "out", "Karun_303_thumbnail_v3.jpg")
+    out = os.path.join(V.HERE, "out", name)
     base.convert("RGB").save(out, quality=93)
-    base.convert("RGB").resize((168, 94), Image.LANCZOS).save(os.path.join(V.HERE, "out", "thumb_v3_tiny.png"))
+    base.convert("RGB").resize((168, 94), Image.LANCZOS).save(out.replace(".jpg", "_tiny.png"))
     print(out, os.path.getsize(out) // 1024, "KB", "303* box", (l, t, r, b))
 
 
