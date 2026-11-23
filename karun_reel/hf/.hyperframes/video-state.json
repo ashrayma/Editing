@@ -1,7 +1,7 @@
 {
   "version": 1,
   "historyId": "8509fac6-edbf-44c9-afa9-7449abb94235",
-  "currentRevision": "478aefeb-20c2-4b7c-b05c-5b9529bac1ea",
+  "currentRevision": "363d804d-b3e4-4def-a61b-1c06b249cf82",
   "pendingChanges": false,
   "files": {
     "gsap.min.js": {
@@ -9,8 +9,8 @@
       "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/92/92bb9a96476f983d212a2bc4f54c889039c1696dd4461d40a736860938570fbb"
     },
     "index.html": {
-      "hash": "d7f3e48344442666b1984f25c9d7dc27e56a6b167f94dba0de30eb52f6b32f9f",
-      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/d7/d7f3e48344442666b1984f25c9d7dc27e56a6b167f94dba0de30eb52f6b32f9f"
+      "hash": "6f663cb7f6f7c3a28bb4fe781f77c07d25bfcedde088fd229803346de38b9388",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/6f/6f663cb7f6f7c3a28bb4fe781f77c07d25bfcedde088fd229803346de38b9388"
     },
     "media/InterDisplay-Black.otf": {
       "hash": "c0ebb676933a45d73d16fea70c875f9f2b711b585c69b15962b7f2a890b5f8e8",
@@ -179,6 +179,82 @@
     "media/assets_hi_shreyas.png": {
       "hash": "7be7335401a9b30237f3fb6a7b9e8d87bf9acd768399adf63b99db21be05041c",
       "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7b/7be7335401a9b30237f3fb6a7b9e8d87bf9acd768399adf63b99db21be05041c"
+    },
+    "media/assets_fill_k_walkoff_eng.jpg": {
+      "hash": "0306286da8025aa5cc30dcc2804e1609bc319445e5425d09dfeb0a445779c6aa",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/03/0306286da8025aa5cc30dcc2804e1609bc319445e5425d09dfeb0a445779c6aa"
+    },
+    "media/assets_fill_sanju.jpg": {
+      "hash": "2c5a50e4688f8b3207be69879f550cdff2b1dc1f000e8921fa1d4eabd36eb4f4",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/2c/2c5a50e4688f8b3207be69879f550cdff2b1dc1f000e8921fa1d4eabd36eb4f4"
+    },
+    "media/assets_fill_shreyas.jpg": {
+      "hash": "3e6b5772d1e3d906e1079ecfe7716ab01da4e3e8d0e58d3a5970f07ac792ec08",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/3e/3e6b5772d1e3d906e1079ecfe7716ab01da4e3e8d0e58d3a5970f07ac792ec08"
+    },
+    "media/assets_fill_k_helmet_sad.jpg": {
+      "hash": "26f41f6fa9e027581612033e7c33160e8703fcb18488e033f4db940d07d15125",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/26/26f41f6fa9e027581612033e7c33160e8703fcb18488e033f4db940d07d15125"
+    },
+    "media/assets_fill_k_303_b.jpg": {
+      "hash": "ba7595ae681c73a6cd2884f50881e77f8e6779dedc82dc5c7f1c4b43e634891c",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/ba/ba7595ae681c73a6cd2884f50881e77f8e6779dedc82dc5c7f1c4b43e634891c"
+    },
+    "media/assets_fill_sehwag.jpg": {
+      "hash": "c407536b27c98c1c26ce00cd4099216fb0e26a1cff357700e35817583240389e",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/c4/c407536b27c98c1c26ce00cd4099216fb0e26a1cff357700e35817583240389e"
+    },
+    "media/assets_fill_k_lords_walk.jpg": {
+      "hash": "06727d9804cbb444ff65c6a6dacc34717e585146093890a2605b2564f2ebe6d3",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/06/06727d9804cbb444ff65c6a6dacc34717e585146093890a2605b2564f2ebe6d3"
+    },
+    "media/assets_hi_kohli_presser.png": {
+      "hash": "02fb3f543f1a71a015e075c5138feb858001eecf4157b752b7bf8fb4bfbcfb16",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/02/02fb3f543f1a71a015e075c5138feb858001eecf4157b752b7bf8fb4bfbcfb16"
+    },
+    "media/assets_fill_kohli_presser.jpg": {
+      "hash": "5b79aea788ae9bf79899b5d8063c700f1d5a29bb2b2504a337ccec7ce0cdda1a",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/5b/5b79aea788ae9bf79899b5d8063c700f1d5a29bb2b2504a337ccec7ce0cdda1a"
+    },
+    "media/assets_fill_selectors.jpg": {
+      "hash": "3022d03f96a5bbdb50e9d4be113174d7b099362a0f21a1a4e18ed761a53fb643",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/30/3022d03f96a5bbdb50e9d4be113174d7b099362a0f21a1a4e18ed761a53fb643"
+    },
+    "media/assets_hi_ishan2.png": {
+      "hash": "7b283b4c93a383789990e92ae2478b6181b7b36002a3d2b723df285b700cb4f2",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7b/7b283b4c93a383789990e92ae2478b6181b7b36002a3d2b723df285b700cb4f2"
+    },
+    "media/assets_fill_ishan2.jpg": {
+      "hash": "b1d7a2f401ca90e8fa827f629925746a574ca6680e0cf0f1f7fa7c3dc4343e8b",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/b1/b1d7a2f401ca90e8fa827f629925746a574ca6680e0cf0f1f7fa7c3dc4343e8b"
+    },
+    "media/assets_fill_ishan.jpg": {
+      "hash": "9bf05a458297ebcb77f3577d530436175510c2f5a9a0056d94ab63bb5f51965d",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/9b/9bf05a458297ebcb77f3577d530436175510c2f5a9a0056d94ab63bb5f51965d"
+    },
+    "media/assets_fill_tweet.jpg": {
+      "hash": "829e2ee8ee174fa0c885770dbc35e7e47d3f719956d9b42f959784482189fc91",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/82/829e2ee8ee174fa0c885770dbc35e7e47d3f719956d9b42f959784482189fc91"
+    },
+    "media/assets_hi_k_oval_fist.png": {
+      "hash": "7fdd8cbdfe5d9b57d396637cd2c30a1ec67f2ea59050d95b4db4fc0841ee99da",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7f/7fdd8cbdfe5d9b57d396637cd2c30a1ec67f2ea59050d95b4db4fc0841ee99da"
+    },
+    "media/assets_fill_k_oval_fist.jpg": {
+      "hash": "9f8754c26ed81b557978449f58fecd04792ee4bea658308c9b850dcaf2a1ba95",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/9f/9f8754c26ed81b557978449f58fecd04792ee4bea658308c9b850dcaf2a1ba95"
+    },
+    "media/assets_fill_k_northants.jpg": {
+      "hash": "07bd46a1d10c453d96bbd5873d32236d4d50ea8e29ac08aca0f534773ef685bb",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/07/07bd46a1d10c453d96bbd5873d32236d4d50ea8e29ac08aca0f534773ef685bb"
+    },
+    "media/assets_fill_k_india_travel.jpg": {
+      "hash": "c1a579a5215b65a0dd5caac1a829f535181f779248e2f1b3343cd20ee11b7a3f",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/c1/c1a579a5215b65a0dd5caac1a829f535181f779248e2f1b3343cd20ee11b7a3f"
+    },
+    "media/assets_fill_k_nets.jpg": {
+      "hash": "99f0ae876041188e30d1f08fd34dc7c0d48520cd41f77c3e8a31bbffbffac65f",
+      "content": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/99/99f0ae876041188e30d1f08fd34dc7c0d48520cd41f77c3e8a31bbffbffac65f"
     }
   },
   "revisions": {
@@ -204,6 +280,97 @@
           "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7b/7be7335401a9b30237f3fb6a7b9e8d87bf9acd768399adf63b99db21be05041c"
         }
       }
+    },
+    "363d804d-b3e4-4def-a61b-1c06b249cf82": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1795460508397,
+      "endedAt": 1795460508513,
+      "files": {
+        "index.html": {
+          "before": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/d7/d7f3e48344442666b1984f25c9d7dc27e56a6b167f94dba0de30eb52f6b32f9f",
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/6f/6f663cb7f6f7c3a28bb4fe781f77c07d25bfcedde088fd229803346de38b9388"
+        },
+        "media/assets_fill_ishan.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/9b/9bf05a458297ebcb77f3577d530436175510c2f5a9a0056d94ab63bb5f51965d"
+        },
+        "media/assets_fill_ishan2.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/b1/b1d7a2f401ca90e8fa827f629925746a574ca6680e0cf0f1f7fa7c3dc4343e8b"
+        },
+        "media/assets_fill_k_303_b.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/ba/ba7595ae681c73a6cd2884f50881e77f8e6779dedc82dc5c7f1c4b43e634891c"
+        },
+        "media/assets_fill_k_helmet_sad.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/26/26f41f6fa9e027581612033e7c33160e8703fcb18488e033f4db940d07d15125"
+        },
+        "media/assets_fill_k_india_travel.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/c1/c1a579a5215b65a0dd5caac1a829f535181f779248e2f1b3343cd20ee11b7a3f"
+        },
+        "media/assets_fill_k_lords_walk.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/06/06727d9804cbb444ff65c6a6dacc34717e585146093890a2605b2564f2ebe6d3"
+        },
+        "media/assets_fill_k_nets.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/99/99f0ae876041188e30d1f08fd34dc7c0d48520cd41f77c3e8a31bbffbffac65f"
+        },
+        "media/assets_fill_k_northants.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/07/07bd46a1d10c453d96bbd5873d32236d4d50ea8e29ac08aca0f534773ef685bb"
+        },
+        "media/assets_fill_k_oval_fist.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/9f/9f8754c26ed81b557978449f58fecd04792ee4bea658308c9b850dcaf2a1ba95"
+        },
+        "media/assets_fill_k_walkoff_eng.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/03/0306286da8025aa5cc30dcc2804e1609bc319445e5425d09dfeb0a445779c6aa"
+        },
+        "media/assets_fill_kohli_presser.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/5b/5b79aea788ae9bf79899b5d8063c700f1d5a29bb2b2504a337ccec7ce0cdda1a"
+        },
+        "media/assets_fill_sanju.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/2c/2c5a50e4688f8b3207be69879f550cdff2b1dc1f000e8921fa1d4eabd36eb4f4"
+        },
+        "media/assets_fill_sehwag.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/c4/c407536b27c98c1c26ce00cd4099216fb0e26a1cff357700e35817583240389e"
+        },
+        "media/assets_fill_selectors.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/30/3022d03f96a5bbdb50e9d4be113174d7b099362a0f21a1a4e18ed761a53fb643"
+        },
+        "media/assets_fill_shreyas.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/3e/3e6b5772d1e3d906e1079ecfe7716ab01da4e3e8d0e58d3a5970f07ac792ec08"
+        },
+        "media/assets_fill_tweet.jpg": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/82/829e2ee8ee174fa0c885770dbc35e7e47d3f719956d9b42f959784482189fc91"
+        },
+        "media/assets_hi_ishan2.png": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7b/7b283b4c93a383789990e92ae2478b6181b7b36002a3d2b723df285b700cb4f2"
+        },
+        "media/assets_hi_k_oval_fist.png": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/7f/7fdd8cbdfe5d9b57d396637cd2c30a1ec67f2ea59050d95b4db4fc0841ee99da"
+        },
+        "media/assets_hi_kohli_presser.png": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/8509fac6-edbf-44c9-afa9-7449abb94235/blobs/02/02fb3f543f1a71a015e075c5138feb858001eecf4157b752b7bf8fb4bfbcfb16"
+        }
+      }
     }
   },
   "checks": {
@@ -218,13 +385,14 @@
   },
   "renders": {
     "latest": {
-      "id": "038d7f3a-8862-4cb2-81a7-5bdc0aa49679",
-      "completedAt": 1795459617058,
+      "id": "6fc41601-0203-4d97-9b36-bce3d04ec5a6",
+      "completedAt": 1795460891446,
       "output": "/home/user/Editing/karun_reel/out/video_silent.mp4",
       "status": "completed",
-      "revision": "478aefeb-20c2-4b7c-b05c-5b9529bac1ea"
+      "revision": "363d804d-b3e4-4def-a61b-1c06b249cf82"
     },
     "retainedRevisions": [
+      "363d804d-b3e4-4def-a61b-1c06b249cf82",
       "478aefeb-20c2-4b7c-b05c-5b9529bac1ea"
     ]
   },
