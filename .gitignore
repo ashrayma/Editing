@@ -53,3 +53,7 @@ rahul_f1/vo/*.log
 rahul_f1/src/
 rahul_f1/out/
 rahul_f1/up/
+rahul_f1/assets/*.mp4
+rahul_f1/assets/*.wav
+rahul_f1/reel/media/
+rahul_f1/node_modules/
