@@ -506,5 +506,18 @@
         "attribution": "unversioned"
       }
     ]
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "898c0a5d-1e1b-451c-aaab-7eb61968eafe",
+      "completedAt": 1795426985788,
+      "output": "/home/user/Editing/rahul_f1/out/silent.mp4",
+      "status": "completed",
+      "revision": "7f477d3a-db4d-4068-862f-ab83d10517ea"
+    },
+    "retainedRevisions": [
+      "7f477d3a-db4d-4068-862f-ab83d10517ea"
+    ]
+  },
+  "pendingArtifactCleanup": []
 }
