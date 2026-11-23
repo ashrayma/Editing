@@ -566,3 +566,6 @@ pant_reel/out/make.log
 pant_reel/out/make.log
 pant_reel/out/make.log
 pant_reel/out/make.log
+karun_reel/out/*.mp4
+karun_reel/out/*.wav
+karun_reel/make.log

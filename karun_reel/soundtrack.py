@@ -259,10 +259,10 @@ def main():
     n = int(SR * total)
     # tribute: ticks under the question, the beat drops on "2016" (end of the hook); drums out before each format and
     # the IPL; the cruel twist strips to the pad; a beat of air before "He was unstoppable"
-    # Pant: a ticking, low-passed pulse under the hook and the crash; the beat drops on "But the man who broke
-    # Australia's pride"; drums out before England, Wellington and the records; warm outro on the last line
-    m = music(total, drop=L["r1"]["words"][10][1], breaks=[L["e1"]["start"], L["w1"]["start"], L["s1"]["start"]],
-              outro=L["q1"]["start"] + 0.3, mute=[(L["c2"]["end"] + 0.02, L["r1"]["start"] - 0.02)], intro_warm=False)
+    # Karun: ticking pulse under the hook, the beat drops on "Karun Nair"; drums out for the cold years (dropped ->
+    # Karnataka), back in on Vidarbha; warm outro on the comment ask
+    m = music(total, drop=L["h2"]["words"][8][1], breaks=[L["t1"]["start"], L["t2"]["start"], L["k1"]["start"]],
+              outro=L["c1"]["start"], thin=[(L["d1"]["start"], L["v1"]["start"])], intro_warm=False)
     fx = build_sfx(total, ev["events"])
     vo = np.zeros(n, np.float32)
     v = read_wav(os.path.join(HERE, "out", "vo.wav"))

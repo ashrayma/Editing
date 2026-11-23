@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rishabh Pant: "They said he was finished". 9:16 reel, HyperFrames composition.
+"""Karun Nair: the cruellest injustice in Indian cricket. 9:16 reel, HyperFrames composition.
 
     python3 reel.py   ->  hf/index.html (+ hf/media/) and out/events.json (SFX cue list for soundtrack.py)
 
@@ -430,7 +430,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the ending headline carries it
+NO_CAPTION = {"c1"}  # the comment card carries it
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -1448,7 +1448,8 @@ def ground(name, venue, score, start, dur, x, y, rot, side):
     tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y - 50)
 
 
-SOC = "PHOTO: VIA SOCIAL MEDIA"
+SOC = "PHOTO: VIA X / @karun126"
+REDC = "#ff5a4f"
 
 
 def shadebot(start, dur):
@@ -1458,33 +1459,15 @@ def shadebot(start, dur):
         f'background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.72) 35%,rgba(0,0,0,.8))"></div>')
 
 
-def ladder(start, dur, t_pass, t_top, y=1060):
-    """Most Test sixes: Stokes, McCullum, Pant. Pant's row climbs past McCullum at t_pass; Stokes glows at t_top."""
-    i = nid("ld")
-    rows = [("BEN STOKES", "", 0), ("BRENDON McCULLUM", "", 1), ("RISHABH PANT", " me", 2)]
-    rk = "".join(f'<div class="rk" style="top:{k * 130}px">{k + 1}</div>' for k in range(3))
-    rw = "".join(f'<div class="lr{c}" id="{i}r{k}" style="top:{k * 130}px">{n}</div>' for n, c, k in rows)
-    y, _ = mv(i, y)
-    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ldr avoid" style="top:{y}px;z-index:{z() + 60}"><div class="lh">MOST TEST SIXES · ALL TIME</div>{rk}{rw}</div>')
-    anim(f'tl.fromTo("#{i} .lr",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,stagger:0.08,ease:"expo.out"}},{start})')
-    anim(f'tl.to("#{i}r2",{{top:130,duration:0.55,ease:"back.out(1.6)"}},{t_pass})')
-    anim(f'tl.to("#{i}r1",{{top:260,opacity:.55,duration:0.55,ease:"power3.out"}},{t_pass})')
-    anim(f'tl.fromTo("#{i}r2",{{scale:1}},{{scale:1.06,duration:0.18,yoyo:true,repeat:1}},{t_pass + 0.45})')
-    anim(f'tl.to("#{i}r0",{{borderColor:"#fff",boxShadow:"0 0 40px rgba(255,255,255,.35)",duration:0.3}},{t_top})')
-    cue(t_pass, "rise", 0.9)
-    cue(t_pass + 0.5, "pop", 1.0)
-    cue(t_top, "impact", 0.8)
-
-
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>COMEBACK</span><i>of the</i><span style="color:{Y}">CENTURY?</span></div>'
+        f'<div class="mot" id="{i}q"><span>CRUELLEST</span><i>injustice</i><span style="color:{Y}">EVER?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Drop your answer in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.5})')
-    txt = "Pant is built different 🔥"
+    txt = "Karun Nair. No doubt 💔"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 0.9})}})()')
     cue(start, "pop", 1.0)
 
@@ -1493,151 +1476,179 @@ def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
 
-    # ---------------- HOOK
-    a, b = 0, s("h2", -0.03)
-    ph("p_portrait", *seg(a, b), BCCI, side=None, fx="grey", push=(1.04, 1.14))
-    shadebot(*seg(a, b))
-    head(["NEVER PLAY", "AGAIN?"], *seg(word("h1", 3), b), y=1120, size=170, accent=(1,), sfx="impact")
-    a, b = b, s("h3", -0.03)
+    # ---------------- HOOK: not Sanju, not Shreyas
+    a, b = 0, word("h1", 6) - 0.05
     bgp(*seg(a, b), "ink")
-    kick("IN A SINGLE INNINGS", *seg(a, b))
-    frame("mccullum", *seg(word("h2", 3) - 0.15, b), x=40, y=330, w=480, rot=-3, side="left", cap="Brendon McCullum", hmax=640)
-    frame("gilchrist", *seg(word("h2", 6) - 0.15, b), x=560, y=390, w=480, rot=3, side="right", cap="Adam Gilchrist", hmax=640)
-    stamp("PASSED ✓", *seg(word("h2", 10), b), y=1130, size=150, rot=-5)
-    credit(*seg(word("h2", 3) - 0.15, b), GETTY)
-    a, b = b, s("c1", -0.03)
-    ph("p_wave", *seg(a, b), BCCI, side="right")
-    head(["RISHABH", "PANT"], *seg(word("h3", 5) - 0.1, b), y=1170, size=190, accent=(1,), sfx="impact")
-    # ---------------- THE CRASH
-    a, b = b, word("c1", 10) - 0.05
+    head(["THE BIGGEST", "INJUSTICE", "IN INDIAN CRICKET?"], *seg(a + 0.05, b), y=600, size=140, accent=(1,), sfx="impact")
+    a, b = b, word("h1", 18) - 0.05
     bgp(*seg(a, b), "ink")
-    head(["30 DEC", "2022"], *seg(a + 0.03, b), y=560, size=260, accent=(1,), sfx="impact")
-    chip("DELHI–DEHRADUN HIGHWAY", *seg(word("c1", 4), b), x=None, y=1120)
-    a, b = b, s("c2", -0.03)
+    kick("IT WASN'T…", *seg(a, b), y=520)
+    head(["SANJU SAMSON"], *seg(a + 0.05, b), y=600, size=170, accent=(0,), sfx="impact")
+    chip("IN & OUT OF THE TEAM FOR YEARS", *seg(word("h1", 10), b), x=None, y=820)
+    stamp("NOT HIM", *seg(word("h1", 16), b), y=1000, size=150, color=REDC, rot=-6)
+    a, b = b, s("h2", -0.03)
     bgp(*seg(a, b), "ink")
-    frame("crash_car", *seg(a, b), x=140, y=300, w=800, rot=-2, side="right", cap="30 Dec 2022 · Delhi–Dehradun highway", hmax=880)
-    flash(word("c1", 14), color="#ff5a1f", peak=0.45)
-    shake(word("c1", 14), 18)
-    head(["INDIA'S MOST", "FEARLESS"], *seg(word("c1", 18), b), y=1270, size=100, accent=(1,))
-    credit(*seg(a, b), SOC)
-    a, b = b, word("c2", 10) - 0.05
+    kick("IT WASN'T…", *seg(a, b), y=520)
+    head(["SHREYAS IYER"], *seg(a + 0.05, b), y=600, size=170, accent=(0,), sfx="impact")
+    chip("IGNORED FOR THE ASIA CUP", *seg(word("h1", 22), b), x=None, y=820)
+    chip("AFTER LEADING PUNJAB TO THE IPL FINAL", *seg(word("h1", 28), b), x=None, y=920)
+    stamp("NOT HIM", *seg(word("h1", 34), b), y=1080, size=150, color=REDC, rot=-6)
+    # ---------------- the forgotten man
+    a, b = b, word("h2", 8) - 0.05
     bgp(*seg(a, b), "ink")
-    frame("crash_bed", *seg(a, b), x=270, y=270, w=520, rot=-3, side="left", hmax=600, grey=True)
-    for k, (txt, wi) in enumerate((("TORN KNEE LIGAMENTS", 0), ("A BATTERED BODY", 3), ("HOSPITAL BEDS", 6), ("SILENT DOCTORS", 8))):
-        head([txt], *seg(word("c2", wi) - 0.05, b), y=960 + 115 * k, size=104, accent=(0,) if k == 3 else ())
-    credit(*seg(a, b), SOC)
-    a, b = b, s("r1", -0.03)
-    bgp(*seg(a, b), "ink")
-    kick("1 QUESTION. 1 NATION.", *seg(a, b), y=520)
-    head(["WILL HE EVER", "HOLD A BAT", "AGAIN?"], *seg(word("c2", 17) - 0.1, b), y=640, size=160, accent=(2,), sfx="impact")
-    # ---------------- THE FIGHT BACK
-    a, b = b, word("r1", 10) - 0.05
-    bgp(*seg(a, b), "ink")
-    head(["EVERY STEP:", "A BATTLE."], *seg(a + 0.03, b), y=480, size=150, accent=(1,))
-    head(["EVERY DAY:", "PAIN."], *seg(word("r1", 6) - 0.05, b), y=880, size=150, accent=(1,))
-    a, b = b, s("r2", -0.03)
-    bgp(*seg(a, b), "ink")
-    kick("THE GABBA · 2021", *seg(a, b))
-    frame("p_gabba", *seg(a, b), x=273, y=300, w=506, rot=-2, side="left", cap="Breaking Australia's pride", hmax=900)
-    stamp("NEVER SURRENDER", *seg(word("r1", 21), b), y=1250, size=110, rot=-4)
-    credit(*seg(a, b), GETTY)
-    # ---------------- 2024: THE RETURN
-    a, b = b, word("r2", 2) - 0.05
-    bgp(*seg(a, b), "ink")
-    head(["2024"], *seg(word("r2", 1) - 0.05, b), y=640, size=380, accent=(0,), sfx="impact")
-    flash(word("r2", 1), color=Y, peak=0.3)
-    r2a = b
-    a, b = b, word("r2", 6) - 0.05
-    bgp(*seg(a, s("e1", -0.03)), "ink")
-    frame("p_ipl", *seg(a, b), x=40, y=500, w=1000, rot=-2, side="left", cap="IPL 2024 · Delhi Capitals")
-    a, b = b, word("r2", 11) - 0.05
-    frame("p_t20wc", *seg(a, b), x=180, y=400, w=720, rot=2, side="right", cap="T20 World Cup 2024", hmax=880)
-    a, b = b, s("e1", -0.03)
-    frame("p_chennai_ton", *seg(a, b), x=40, y=480, w=1000, rot=-2, side="left", cap="Chennai · Test cricket · 2024")
-    stamp("CENTURY", *seg(word("r2", 20), word("r2", 23) - 0.05), y=1120, size=150, rot=-4)
-    head(["AS IF NOTHING", "EVER HAPPENED."], *seg(word("r2", 23) - 0.05, b), y=1110, size=100, accent=(1,))
-    badges(*seg(r2a, b), [word("r2", 4), word("r2", 9), word("r2", 20)], y=280, labels=("IPL", "T20 WC", "TEST 100"))
-    credit(*seg(r2a, b), BCCI)
-    # ---------------- ENGLAND 2025
-    a, b = b, word("e1", 4) - 0.05
-    ph("p_headingley_kiss", *seg(a, b), BCCI, side="right")
-    kick("ENGLAND · 2025", *seg(a, b))
-    head(["HEADINGLEY"], *seg(word("e1", 3) - 0.05, b), y=1200, size=170, accent=(0,), sfx="impact")
-    a, b = b, word("e1", 22) - 0.05
-    bgp(*seg(a, b), "ink")
-    frame("p_somersault", *seg(a, b), x=40, y=330, w=1000, rot=-2, side="left", cap="Headingley · 2025")
-    head(["2 CENTURIES.", "1 TEST."], *seg(a + 0.03, b), y=1080, size=140, accent=(0,), sfx="impact")
-    chip("ONLY THE 2nd WICKETKEEPER EVER", *seg(word("e1", 12), b), x=None, y=1380)
+    frame("k_helmet_sad", *seg(a, b), x=290, y=300, w=500, rot=-2, side="left", hmax=640, grey=True)
+    head(["A MAN YOU'VE", "FORGOTTEN"], *seg(word("h2", 3), b), y=1080, size=130, accent=(1,))
     credit(*seg(a, b), BCCI)
+    a, b = b, word("h2", 10) - 0.05
+    ph("k_kar_helmet", *seg(a, b), BCCI, side="right")
+    head(["KARUN", "NAIR"], *seg(a + 0.03, b), y=960, size=210, accent=(1,), sfx="impact")
+    flash(a + 0.03, color=Y, peak=0.3)
+    # ---------------- Chennai 2016
+    a, b = b, word("h2", 20) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["DECEMBER", "2016"], *seg(a + 0.03, b), y=560, size=230, accent=(1,), sfx="impact")
+    chip("CHENNAI", *seg(word("h2", 12), b), x=None, y=1080)
+    chip("vs A MIGHTY ENGLAND", *seg(word("h2", 13), b), x=None, y=1180)
+    a, b = b, s("t1", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("k_303_b", *seg(a, b), x=40, y=330, w=1000, rot=-2, side="left", cap="Karun Nair · 25 years old")
+    chip("ONLY HIS 3rd TEST", *seg(word("h2", 24), b), x=None, y=1120)
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("t2", -0.03)
+    ph("k_303_a", *seg(a, b), BCCI, side="up")
+    kick("CHENNAI · DEC 2016", *seg(a, b))
+    odo("100", *seg(word("t1", 1) - 0.1, word("t1", 9) - 0.05), x=None, y=1080, size=300)
+    odo("200", *seg(word("t1", 9) - 0.05, word("t1", 18) - 0.05), x=None, y=1080, size=300)
+    odo("300", *seg(word("t1", 18) - 0.05, b), x=None, y=1080, size=300)
+    flash(word("t1", 6), color="#fff", peak=0.35)
+    shake(word("t1", 14), 16)
+    a, b = b, word("t2", 3) - 0.05
+    bgp(*seg(a, b), "ink")
+    odo("303*", *seg(a + 0.03, b), x=None, y=560, size=360, label="NOT OUT")
+    flash(a + 0.05, color=Y, peak=0.35)
+    shake(a + 0.6, 24)
+    a, b = b, s("t3", -0.03)
+    bgp(*seg(a, b), "ink")
+    head(["TEST TRIPLE HUNDREDS", "BY INDIANS"], *seg(a + 0.03, b), y=260, size=96, accent=(0,))
+    frame("sehwag", *seg(word("t2", 14) - 0.15, b), x=300, y=500, w=480, rot=-2, side="right", cap="Virender Sehwag", hmax=620)
+    chip("1 · VIRENDER SEHWAG", *seg(word("t2", 14), b), x=None, y=1180)
+    chip("2 · KARUN NAIR", *seg(word("t2", 5), b), x=None, y=1290)
+    credit(*seg(word("t2", 14) - 0.15, b), GETTY)
+    a, b = b, s("d1", -0.03)
+    bgp(*seg(a, b), "ink")
+    kick("THAT MAGICAL NIGHT", *seg(a, b))
+    cutout("k_303_a", *seg(a, b), x=None, h=1100, side="right")
+    head(["INDIA'S NEXT", "SUPERSTAR"], *seg(word("t3", 10) - 0.05, b), y=330, size=140, accent=(1,), sfx="impact")
+    credit(*seg(a, b), BCCI)
+    # ---------------- the cold script
+    a, b = b, word("d1", 8) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["A COLD,", "HEARTLESS SCRIPT"], *seg(word("d1", 4), b), y=640, size=140, accent=(1,), sfx="impact")
+    a, b = b, word("d1", 16) - 0.05
+    ph("k_bowled", *seg(a, b), BCCI, side="left", fx="grey")
+    chip("WITHIN MONTHS", *seg(a + 0.1, b), x=None, y=1080)
+    stamp("DROPPED", *seg(word("d1", 12), b), y=1180, size=150, color=REDC, rot=-5)
+    a, b = b, word("d1", 22) - 0.05
+    bgp(*seg(a, b), "ink")
+    for k, wi in enumerate((16, 18, 20)):
+        head([("NO CALLS.", "NO CHANCE.", "NO EXPLANATION.")[k]], *seg(word("d1", wi) - 0.05, b), y=560 + 170 * k, size=150,
+             accent=(0,) if k == 2 else (), sfx="impact")
+    a, b = b, s("k1", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("selectors", *seg(a, b), x=40, y=330, w=1000, rot=-2, side="right", cap="Long, painful years", grey=True)
+    head(["SELECTORS FORGOT.", "FANS FORGOT."], *seg(word("d1", 26) - 0.05, b), y=1180, size=110, accent=(1,))
+    credit(*seg(a, b), BCCI)
+    # ---------------- 10 Dec 2022
+    a, b = b, word("k1", 3) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["10 DEC", "2022"], *seg(a + 0.03, b), y=600, size=240, accent=(1,), sfx="impact")
+    a, b = b, word("k1", 14) - 0.05
+    bgp(*seg(a, b), "ink")
+    kick("THE WHOLE OF INDIA CELEBRATES", *seg(a, b), y=320)
+    frame("ishan", *seg(word("k1", 8) - 0.1, b), x=40, y=420, w=1000, rot=-2, side="right", cap="Ishan Kishan · 210 vs Bangladesh")
+    odo("210", *seg(word("k1", 11) - 0.1, b), x=None, y=1050, size=200, label="DOUBLE HUNDRED")
+    credit(*seg(word("k1", 8) - 0.1, b), BCCI)
+    a, b = b, word("k1", 23) - 0.05
+    bgp(*seg(a, b), "ink")
+    kick("THE SAME DAY", *seg(a, b))
+    frame("k_helmet_sad", *seg(a, b), x=290, y=330, w=500, rot=2, side="right", hmax=640, grey=True)
+    head(["BROKEN.", "DESPERATE."], *seg(word("k1", 20) - 0.05, b), y=1100, size=140, accent=(1,))
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("k2", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("tweet", *seg(a, b), x=40, y=480, w=1000, rot=-1, side="left")
+    kick("KARUN NAIR · 10 DEC 2022", *seg(a, b), y=380)
+    credit(*seg(a, b), SOC)
+    # ---------------- dropped by Karnataka
     a, b = b, s("f1", -0.03)
-    bgp(*seg(a, b), "ink")
-    frame("p_stairs", *seg(a, b), x=190, y=280, w=675, rot=2, side="right", cap="Manchester · 2025")
-    stamp("FRACTURED FOOT", *seg(word("e1", 26), b), y=1310, size=110, color="#ff5a4f", rot=-4)
-    credit(*seg(a, b), BCCI)
+    ph("k_kar_100", *seg(a, b), BCCI, side="right", fx="grey")
+    kick("THAT SAME WEEK · KARNATAKA", *seg(a, b))
+    head(["HIS OWN STATE"], *seg(word("k2", 3) - 0.05, b), y=300, size=140, accent=(0,))
+    stamp("DROPPED", *seg(word("k2", 8), b), y=470, size=150, color=REDC, rot=-5)
     # ---------------- follow
-    a, b = b, s("w1", -0.03)
+    a, b = b, s("v1", -0.03)
     bgp(*seg(a, b), "ink")
-    head(["WELLINGTON", "RECORDS?"], *seg(a + 0.03, word("f1", 13) - 0.05), y=420, size=140, accent=(1,), sfx="impact")
-    head(["TRUE CRICKET FAN?"], *seg(word("f1", 13) - 0.05, b), y=430, size=110, accent=(0,), sfx="impact")
-    follow_card(*seg(word("f1", 8), b), t_follow=word("f1", 21))
-    # ---------------- WELLINGTON
-    a, b = b, s("w2", -0.03)
-    ph("p_wellington_six", *seg(a, b), BCCI, side="up", push=(1.0, 1.08))
-    shadebot(*seg(a, b))
-    kick("BASIN RESERVE · WELLINGTON", *seg(a, b))
-    odo("153", *seg(word("w1", 8) - 0.1, b), x=600, y=820, size=170, label="BALLS", color="#fff")
-    odo("128", *seg(word("w1", 10) - 0.1, b), x=70, y=820, size=170, label="RUNS")
-    odo("10", *seg(word("w1", 12) - 0.1, b), x=70, y=1200, size=120, label="FOURS", color="#fff")
-    odo("6", *seg(word("w1", 14) - 0.1, b), x=600, y=1200, size=120, label="SIXES")
-    a, b = b, s("w3", -0.03)
+    head(["WHAT HAPPENED", "NEXT?"], *seg(a + 0.03, word("f1", 9) - 0.05), y=420, size=140, accent=(1,), sfx="impact")
+    head(["TRUE CRICKET FAN?"], *seg(word("f1", 9) - 0.05, b), y=430, size=110, accent=(0,), sfx="impact")
+    follow_card(*seg(word("f1", 4), b), t_follow=word("f1", 18))
+    # ---------------- Vidarbha: the storm
+    a, b = b, word("v1", 8) - 0.05
+    ph("k_vidarbha", *seg(a, b), BCCI, side="up")
+    kick("A NEW STATE · VIDARBHA", *seg(a, b))
+    head(["KARUN DIDN'T", "BREAK."], *seg(a + 0.03, b), y=1200, size=140, accent=(1,), sfx="impact")
+    a, b = b, s("v2", -0.03)
     bgp(*seg(a, b), "ink")
-    head(["TEST HUNDRED", "No. 9"], *seg(a + 0.03, b), y=300, size=140, accent=(1,), sfx="impact")
-    frame("p_ramp", *seg(a, b), x=40, y=640, w=1000, rot=2, side="left")
-    chip("1st EVER IN NEW ZEALAND", *seg(word("w2", 6), b), x=None, y=1290)
+    head(["A STORM OF RUNS"], *seg(a + 0.03, b), y=260, size=110, accent=(0,), sfx="impact")
+    odo("779", *seg(word("v1", 11), b), x=None, y=370, size=220, label="RUNS · VIJAY HAZARE 2024-25")
+    frame("k_northants", *seg(word("v1", 12), b), x=140, y=900, w=800, rot=-2, side="right", cap="And in county cricket · Northamptonshire")
+    credit(*seg(word("v1", 12), b), GETTY)
+    # ---------------- 8 years later: called back
+    a, b = b, word("v2", 10) - 0.05
+    bgp(*seg(a, b), "ink")
+    head(["8 YEARS", "LATER"], *seg(word("v2", 1) - 0.05, b), y=600, size=240, accent=(0,), sfx="impact")
+    a, b = b, word("v2", 16) - 0.05
+    bgp(*seg(a, b), "ink")
+    frame("k_india_travel", *seg(a, b), x=40, y=360, w=1000, rot=-2, side="left", cap="Back with India · 2025")
+    stamp("CALLED BACK", *seg(word("v2", 13), b), y=1060, size=150, rot=-5)
     credit(*seg(a, b), BCCI)
-    a, b = b, s("s1", -0.03)
+    a, b = b, s("x1", -0.03)
     bgp(*seg(a, b), "ink")
-    frame("p_fall", *seg(a, b), x=40, y=640, w=1000, rot=-2, side="right")
-    head(["HISTORY", "BOWED DOWN."], *seg(word("w3", 5) - 0.05, b), y=290, size=150, accent=(1,), sfx="impact")
-    flash(word("w3", 6), color=Y, peak=0.3)
+    head(["NOW THINK", "ABOUT IT."], *seg(a + 0.03, b), y=640, size=170, accent=(1,), sfx="impact")
+    # ---------------- the case
+    a, b = b, s("x2", -0.03)
+    bgp(*seg(a, b), "ink")
+    cutout("k_helmet_sad", *seg(a, b), x=None, h=820, side="right", grey=True)
+    rows = (("303* · ONLY THE 2nd INDIAN", 0, Y), ("DROPPED WITHIN MONTHS", 12, "#fff"), ("ABANDONED BY HIS OWN STATE", 16, "#fff"),
+            ("AN 8-YEAR WAIT", 21, REDC))
+    for k, (txt, wi, col) in enumerate(rows):
+        i = head([txt], *seg(word("x1", wi) - 0.05, b), y=300 + 150 * k, size=96, accent=(0,) if col != "#fff" else (), sfx="impact")
     credit(*seg(a, b), BCCI)
-    # ---------------- RECORDS: sixes
-    a, b = b, s("s2", -0.03)
+    a, b = b, word("x2", 6) - 0.05
     bgp(*seg(a, b), "ink")
-    head(["6 MONSTROUS", "SIXES"], *seg(a + 0.03, word("s1", 5) - 0.1), y=560, size=170, accent=(0,), sfx="impact")
-    frame("mccullum", *seg(word("s1", 5) - 0.15, word("s1", 27) - 0.1), x=300, y=290, w=480, rot=-2, side="left", cap="Brendon McCullum", hmax=620)
-    frame("stokes", *seg(word("s1", 27) - 0.1, b), x=300, y=330, w=480, rot=2, side="right", cap="Ben Stokes", hmax=620)
-    ladder(*seg(word("s1", 5) - 0.1, b), t_pass=word("s1", 6), t_top=word("s1", 27))
-    credit(*seg(word("s1", 5) - 0.15, b), GETTY)
-    # ---------------- SENA
-    a, b = b, s("g1", -0.03)
-    bgp(*seg(a, b), "ink")
-    kick("TEST HUNDREDS IN SENA", *seg(a, b))
-    cutout("p_wave", *seg(a, b), x=None, h=1050, side="right")
-    badges(*seg(a, b), [word("s2", 3), word("s2", 6), word("s2", 8), word("s2", 13)], y=330,
-           labels=("ENGLAND", "SOUTH AFRICA", "AUSTRALIA", "NEW ZEALAND"))
-    head(["EVERY SENA", "COUNTRY ✓"], *seg(word("s2", 14) - 0.05, b), y=1180, size=130, accent=(1,), sfx="impact")
-    credit(*seg(a, b), BCCI)
-    # ---------------- Gilchrist
+    head(["SANJU GOT", "CHANCES."], *seg(a + 0.03, b), y=420, size=150)
+    head(["SHREYAS", "CAME BACK."], *seg(word("x2", 3) - 0.05, b), y=840, size=150)
     a, b = b, s("q1", -0.03)
     bgp(*seg(a, b), "ink")
-    odo("128", *seg(a + 0.03, word("g1", 6) - 0.1), x=None, y=560, size=300, label="RUNS")
-    frame("gilchrist", *seg(word("g1", 6) - 0.15, b), x=50, y=300, w=470, rot=-3, side="left", cap="Adam Gilchrist", hmax=640)
-    frame("p_keeper", *seg(word("g1", 6), b), x=560, y=470, w=470, rot=3, side="right", cap="Rishabh Pant")
-    stamp("PASSED ✓", *seg(word("g1", 9), word("g1", 10) - 0.05), y=1080, size=140, rot=-5)
-    head(["MOST AWAY TEST RUNS", "BY A WICKETKEEPER"], *seg(word("g1", 10) - 0.05, b), y=1040, size=92, accent=(0,))
-    stamp("EVER.", *seg(word("g1", 18), b), y=1290, size=180, rot=-4)
-    credit(*seg(word("g1", 6) - 0.15, b), "PHOTOS: GETTY IMAGES / BCCI")
-    # ---------------- ending
-    a, b = b, e("q1", 0.1)
-    ph("p_portrait", *seg(a, b), BCCI, side=None, push=(1.04, 1.12))
-    shadebot(*seg(a, b))
-    head(["THEY SAID", "HE WAS FINISHED."], *seg(a + 0.03, word("q1", 7) - 0.05), y=1120, size=130, accent=(1,))
-    head(["TODAY, HE'S", "REWRITING HISTORY."], *seg(word("q1", 7) - 0.05, b), y=1120, size=130, accent=(1,), sfx="impact")
-    flash(word("q1", 9), color=Y, peak=0.3)
+    frame("k_lords_walk", *seg(a, b), x=40, y=330, w=1000, rot=-2, side="left", cap="Karun Nair")
+    head(["KARUN WAITED", "8 YEARS"], *seg(a + 0.03, b), y=1130, size=140, accent=(1,), sfx="impact")
+    chip("FOR JUST 1 MORE CHANCE", *seg(word("x2", 10), b), x=None, y=1400)
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("c1", -0.03)
+    bgp(*seg(a, b), "ink")
+    frame("k_walkoff_eng", *seg(a, b), x=40, y=330, w=1000, rot=2, side="right")
+    head(["A CRUELLER", "INJUSTICE?"], *seg(a + 0.03, b), y=1080, size=150, accent=(1,), sfx="impact")
+    credit(*seg(a, b), BCCI)
     # ---------------- CTA
+    a, b = b, s("c2", -0.03)
+    bgp(*seg(a, b), "ink")
+    comment_cta(*seg(a + 0.03, b))
+    a, b = b, e("c2", 0.1)
+    bgp(*seg(a, b), "ink")
+    head(["THE FULL", "UNTOLD STORY"], *seg(a + 0.03, b), y=330, size=150, accent=(1,), sfx="impact")
+    frame("k_nets", *seg(a, b), x=40, y=700, w=1000, rot=-2, side="left")
+    chip("👇 LINKED BELOW", *seg(word("c2", 8), b), x=None, y=1310)
+    credit(*seg(a, b), BCCI)
     video3d("logo", b, TOTAL - b)
-    comment_cta(b + 0.05, TOTAL - b - 0.05)
     for a2, b2 in LAYOUT["brand_hide"]:
         if a2 >= b - 0.3:
             continue

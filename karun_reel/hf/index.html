@@ -1,0 +1,988 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:"IDisp";font-weight:400;font-style:normal;src:url(media/InterDisplay-Regular.otf)}@font-face{font-family:"IDisp";font-weight:400;font-style:italic;src:url(media/InterDisplay-RegularItalic.otf)}@font-face{font-family:"IDisp";font-weight:600;font-style:normal;src:url(media/InterDisplay-SemiBold.otf)}@font-face{font-family:"IDisp";font-weight:600;font-style:italic;src:url(media/InterDisplay-SemiBoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:700;font-style:normal;src:url(media/InterDisplay-Bold.otf)}@font-face{font-family:"IDisp";font-weight:700;font-style:italic;src:url(media/InterDisplay-BoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:800;font-style:normal;src:url(media/InterDisplay-ExtraBold.otf)}@font-face{font-family:"IDisp";font-weight:800;font-style:italic;src:url(media/InterDisplay-ExtraBoldItalic.otf)}@font-face{font-family:"IDisp";font-weight:900;font-style:normal;src:url(media/InterDisplay-Black.otf)}@font-face{font-family:"IDisp";font-weight:900;font-style:italic;src:url(media/InterDisplay-BlackItalic.otf)}
+.fbadge{position:absolute;left:0;right:0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 22px;padding:0 50px}
+.ldr{position:absolute;left:80px;right:80px;height:370px}
+.ldr .lh{position:absolute;top:-56px;left:0;font:800 26px "IDisp";letter-spacing:.2em;color:#FEDE5C}
+.ldr .rk{position:absolute;left:0;width:90px;height:110px;display:flex;align-items:center;justify-content:center;font-family:"Bebas";font-size:84px;color:#9a9aa2}
+.ldr .lr{position:absolute;left:110px;right:0;height:110px;border-radius:20px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;padding:0 30px;font-family:"Bebas";font-size:76px;color:#fff}
+.ldr .lr.me{background:#FEDE5C;color:#111;border-color:#FEDE5C;z-index:2}
+.fbp{display:flex;align-items:center;gap:10px;padding:10px 24px;border-radius:999px;border:3px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff}
+.fbp b{font-family:"Bebas";font-size:54px;font-weight:400;line-height:1}
+.fbp i{font-style:normal;font:900 36px "IDisp";opacity:0}
+
+.strk{position:absolute;left:60px;top:190px;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.6);border:2px solid rgba(212,55,44,.6);border-radius:999px;padding:10px 20px}
+.strk span{font:900 26px "IDisp";letter-spacing:.16em;color:#ff5a4f;margin-right:6px}
+.strk i{width:24px;height:24px;border-radius:50%;border:3px solid #ff5a4f;display:block}
+.strk i.on{background:#ff3b3b}
+.phn{position:absolute;left:240px;width:600px;min-height:620px;background:#0f0f12;border:10px solid #2a2a30;border-radius:60px;padding:70px 34px 40px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 80px rgba(80,140,255,.15)}
+.pnt{position:absolute;left:0;right:0;top:24px;text-align:center;font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.06em}
+.pmb{margin:16px 0 0 auto;width:fit-content;max-width:440px;background:#1f7aff;color:#fff;font:700 40px "IDisp";padding:16px 24px;border-radius:30px 30px 8px 30px}
+.rwd{position:absolute;left:0;right:0;top:640px;text-align:center}
+.rwd span{display:block;font:900 40px "IDisp";letter-spacing:.3em;color:#ff5a4f}
+.rwd b{display:block;font-family:"Bebas";font-size:300px;line-height:1;color:#fff}
+.snp{position:absolute;left:60px;right:60px;top:1150px;display:flex;align-items:center;gap:20px}
+.snl b,.snr b{display:block;font-family:"Bebas";font-size:64px;color:#fff;line-height:1}
+.snl span,.snr span{font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.1em}
+.snr b{color:#ff5a4f}
+.snbar{flex:1;height:26px;display:flex}
+.snbar i{flex:1;background:#FEDE5C;transform-origin:0 50%}
+.snbar i:last-child{transform-origin:100% 50%}
+
+.tcell{position:absolute;width:280px;height:200px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.tcell b{font-family:"Bebas";font-size:96px;line-height:1}
+.tcell em{font-style:normal;font:800 22px "IDisp";letter-spacing:.12em;margin-top:6px;opacity:.9}
+.t0{position:absolute;left:395px;top:1340px;border:6px solid #FEDE5C;color:#FEDE5C;font:900 54px "IDisp";padding:6px 22px;border-radius:12px;background:rgba(0,0,0,.6)}
+.hcard{position:absolute;left:70px;right:70px;top:300px;background:#16161a;border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 36px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.hh{font:800 26px "IDisp";letter-spacing:.2em;color:#9a9aa2;margin-bottom:16px}
+.hrw{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:14px;margin-bottom:8px}
+.hrw span{font-family:"Bebas";font-size:96px;color:#fff;line-height:1}
+.hrw b{font:900 70px "IDisp"}
+.hrw b.ok{color:#3ddc84}
+.hrw b.bad{color:#ff5a4f}
+.hscan{position:absolute;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,#FEDE5C,transparent);box-shadow:0 0 30px #FEDE5C;opacity:.8}
+.tick2{position:absolute;width:460px;background:#f6f1e4;border-radius:18px;padding:20px 26px 26px;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#141416}
+.tkh{font:800 24px "IDisp";letter-spacing:.1em;color:#d4372c;border-bottom:2px dashed #c9bfa9;padding-bottom:10px;margin-bottom:6px}
+.tkr{display:flex;justify-content:space-between;align-items:baseline;font-family:"Bebas"}
+.tkr span{font-size:64px;color:#555}
+.tkr b{font-size:120px;color:#141416;font-weight:400}
+.tks{position:absolute;right:-30px;bottom:-30px;border:5px solid #d4372c;color:#d4372c;font:900 34px "IDisp";padding:4px 14px;border-radius:8px;background:rgba(246,241,228,.92);white-space:nowrap}
+.slot{position:absolute;width:420px;height:560px;border:5px dashed #d4372c;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#d4372c}
+.slot b{font:900 260px/1 "IDisp"}
+.slot span{font:900 40px "IDisp";letter-spacing:.14em}
+.ovs{position:absolute;left:40px;right:40px;top:1200px}
+.ovh{text-align:center;font:900 34px "IDisp";letter-spacing:.2em;color:#d4372c;margin-bottom:16px}
+.ovr{display:flex;gap:6px;justify-content:center}
+.ovr i{font-style:normal;width:44px;height:64px;border-radius:8px;background:#e1d9c8;color:#555;font:800 24px/64px "IDisp";text-align:center}
+.ptch{position:absolute;left:80px;top:280px}
+.pts{width:360px;height:900px;border-radius:20px;background:linear-gradient(180deg,#d9c49a,#c8ae7c);box-shadow:inset 0 0 60px rgba(0,0,0,.25),0 30px 70px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.pts:before{content:"";position:absolute;left:0;right:0;top:120px;height:4px;background:#fff}
+.pts:after{content:"";position:absolute;left:0;right:0;bottom:120px;height:4px;background:#fff}
+.ptl{margin-top:20px;font:900 30px "IDisp";letter-spacing:.14em;color:#FEDE5C}
+.auc{position:absolute;left:140px;right:140px;top:560px;height:640px;perspective:1600px}
+.auf,.aub{position:absolute;inset:0;border-radius:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden}
+.auf{background:#16161a;border:3px solid #444;color:#fff}
+.auf span{font:800 40px "IDisp";letter-spacing:.2em;color:#9a9aa2}
+.auf b{font-family:"Bebas";font-size:200px;color:#ff5a4f;line-height:1}
+.aub{background:#c8102e;color:#fff;transform:rotateY(90deg);box-shadow:0 40px 100px rgba(200,16,46,.45)}
+.aub span{font:900 40px "IDisp";letter-spacing:.3em}
+.aub b{font-family:"Bebas";font-size:180px;line-height:1}
+.aub i{font-style:normal;font:900 160px/1 "IDisp";color:#FEDE5C}
+.aub em{font-style:normal;font:900 34px "IDisp";letter-spacing:.2em;color:#FEDE5C;margin-top:10px}
+
+.ed .edtex{position:absolute;inset:-120px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 18px)}
+.ed.paper .edtex{background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.04) 0 2px,transparent 2px 18px)}
+.ed.paper .grain{opacity:.35;mix-blend-mode:multiply}
+.kick{position:absolute;left:0;right:0;text-align:center;font:800 26px "IDisp";letter-spacing:.28em;color:#FEDE5C}
+.kick.paper{color:#d4372c}
+.edh{position:absolute;left:60px;right:60px;font-family:"Bebas";line-height:.92;letter-spacing:.005em}
+.edh .mask{overflow:hidden}
+.frm{position:absolute;background:#fff;padding:14px 14px 0;box-shadow:0 30px 70px rgba(0,0,0,.45)}
+.frc{font:600 22px "IDisp";color:#555;padding:10px 2px 14px;font-style:italic}
+.stems{position:absolute;inset:0}
+.stl{position:absolute;left:60px;right:60px;height:3px;background:#d4372c;transform-origin:0 50%}
+.stl i{position:absolute;right:0;top:-34px;font:800 26px "IDisp";font-style:normal;color:#d4372c}
+.stc{position:absolute;width:260px}
+.sts{position:absolute;left:126px;width:8px;background:#141416;transform-origin:50% 100%}
+.stv{position:absolute;left:0;width:260px;text-align:center}
+.stimg{width:180px;height:180px;margin:0 auto 8px;border-radius:50%;overflow:hidden;border:6px solid #fff;box-shadow:0 14px 30px rgba(0,0,0,.3)}
+.stimg img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.stv b{display:block;font-family:"Bebas";font-size:96px;line-height:.9;color:#141416}
+.stv span{font:800 24px "IDisp";letter-spacing:.14em;color:#d4372c}
+.mwin{position:absolute;left:60px;right:60px;top:700px;height:520px}
+.mwb i{position:absolute;bottom:80px;width:80px;border-radius:8px 8px 0 0;transform-origin:50% 100%}
+.mwf{position:absolute;left:446px;bottom:60px;width:240px;height:440px;border:5px solid #d4372c;border-radius:16px}
+.mwf span{position:absolute;left:0;right:0;top:-44px;text-align:center;font:800 22px "IDisp";letter-spacing:.14em;color:#d4372c}
+.mwl{position:absolute;left:0;right:0;bottom:0;text-align:center;font:800 24px "IDisp";letter-spacing:.2em;color:#555}
+.clip2{position:absolute;width:420px;background:#f6f1e4;padding:22px 26px 26px;box-shadow:0 24px 50px rgba(0,0,0,.45);font-family:"Courier New",monospace;color:#1d1d1d}
+.clp{font-size:22px;letter-spacing:.12em;color:#7a6e5a;margin-bottom:8px}
+.clt{font-size:46px;font-weight:700}
+.lost{position:absolute;right:-20px;bottom:-24px;border:5px solid #d4372c;color:#d4372c;font:900 44px "IDisp";padding:2px 16px;border-radius:8px;background:rgba(246,241,228,.85)}
+.aiw{position:absolute;box-shadow:0 30px 70px rgba(0,0,0,.55);background:#fff;padding:12px}
+.aitag{position:absolute;left:12px;top:-30px;background:#FEDE5C;color:#111;font:900 20px "IDisp";letter-spacing:.12em;padding:4px 10px;border-radius:6px}
+.np{background:#f2ecdc;padding:20px 22px 30px;font-family:Georgia,serif;color:#1b1b1b;text-align:center}
+.npm{font-size:28px;font-weight:700;border-bottom:3px double #1b1b1b;padding-bottom:6px}
+.npd{font-size:16px;letter-spacing:.2em;margin:6px 0 14px}
+.nph{font-size:52px;font-weight:900;line-height:1}
+.nps{font-size:24px;font-style:italic;margin:10px 0}
+.npl{height:160px;background:repeating-linear-gradient(0deg,#cfc6b2 0 3px,transparent 3px 14px)}
+.rline{position:absolute;left:0;width:1080px;height:660px}
+.rlb{position:absolute;font:800 28px "IDisp";color:#141416;letter-spacing:.06em;white-space:nowrap}
+.rlb b{color:#d4372c}
+.rlb.red{color:#d4372c}
+.rlax{position:absolute;left:40px;right:40px;bottom:-56px;text-align:center;font:700 22px "IDisp";color:#777;letter-spacing:.1em}
+.mtn{position:absolute;left:0;top:640px;width:1080px;height:420px}
+.capb{position:absolute;left:0;right:0;text-align:center;z-index:900}
+.capb span{display:inline-block;background:#0b0b0c;color:#fff;font:900 46px "IDisp";letter-spacing:.02em;text-transform:uppercase;padding:10px 22px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.capb em{font-style:normal;color:#FEDE5C}
+
+.tz{position:absolute;top:560px;width:450px;height:640px;border-radius:30px;background:linear-gradient(160deg,#1c1c22,#0c0c0f);border:2px solid rgba(254,222,92,.4);box-shadow:0 40px 90px rgba(0,0,0,.6);text-align:center}
+.tzr{margin-top:40px;font:900 80px "IDisp";font-style:italic;color:#FEDE5C}
+.tzq{font:900 280px/1 "IDisp";color:#fff;opacity:.9;margin-top:10px}
+.tzl{margin:20px 30px 0;font:800 36px/1.2 "IDisp";color:#fff}
+
+.fcard{position:absolute;left:110px;right:110px;top:620px;background:#16161a;border:2px solid rgba(254,222,92,.4);border-radius:34px;padding:50px 40px 46px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.65)}
+.fav{width:200px;height:200px;margin:0 auto 26px;border-radius:50%;background:#0b0b0c;border:5px solid #FEDE5C;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fav img{width:170px}
+.fname{font:900 58px "IDisp";color:#fff}
+.fsub{font:600 30px "IDisp";color:#9a9aa2;margin-top:10px}
+.fbtn{margin:36px auto 0;width:420px;height:96px;border-radius:20px;background:#FEDE5C;display:flex;align-items:center;justify-content:center;font:900 44px "IDisp";color:#111}
+.fbtn.on{background:#2a2a30;color:#fff}
+.fcur{position:absolute;left:62%;top:78%;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 4px 20px rgba(0,0,0,.6)}
+
+.post{position:absolute;left:70px;right:70px;background:#16161a;border:2px solid rgba(255,255,255,.1);border-radius:26px;padding:30px 34px 26px;box-shadow:0 40px 90px rgba(0,0,0,.6)}
+.phd{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.phd i{width:58px;height:58px;border-radius:50%;background:#FEDE5C;display:block}
+.phd b{display:block;font:800 30px "IDisp";color:#fff}
+.phd span{font:600 24px "IDisp";color:#8a8a92}
+.ptx{font:800 50px/1.15 "IDisp";color:#fff}
+.ppill{display:inline-block;margin-top:18px;background:#FEDE5C;color:#111;font:800 24px "IDisp";padding:6px 16px;border-radius:999px}
+.pft{display:flex;gap:30px;margin-top:20px;font:700 26px "IDisp";color:#8a8a92}
+.sbar{position:absolute;left:40px;right:40px;top:1560px;height:70px;display:flex;align-items:center;gap:20px;background:#0e0e10;border:2px solid rgba(254,222,92,.5);border-radius:14px;padding:0 22px;font-family:"Osw"}
+.sbar b{background:#FEDE5C;color:#111;font-size:30px;padding:2px 12px;border-radius:6px}
+.sbar span{flex:1;color:#fff;font-size:40px;letter-spacing:.04em}
+.sbar em{font-style:normal;color:#ff3b3b;font-size:26px;letter-spacing:.14em}
+#root .cap1 span{font-family:"Osw";font-weight:700;text-transform:uppercase;letter-spacing:.01em;font-size:84px}
+
+.seamb{position:absolute;left:240px;width:600px;height:600px}
+
+.speed{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background-image:repeating-linear-gradient(176deg,rgba(255,255,255,0) 0 46px,rgba(255,255,255,.22) 47px 49px,rgba(255,255,255,0) 50px 140px),repeating-linear-gradient(178deg,rgba(254,222,92,0) 0 90px,rgba(254,222,92,.25) 91px 94px,rgba(254,222,92,0) 95px 260px)}
+.meter{position:absolute;left:140px;top:520px;width:800px}
+.mval{position:absolute;left:0;right:0;top:330px;text-align:center}
+.mval b{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:190px;line-height:1;color:#FEDE5C;text-shadow:0 4px 0 #b8941e,0 0 40px rgba(254,222,92,.35)}
+.mval span{display:block;font:800 34px "IDisp";letter-spacing:.16em;color:#fff;margin-top:8px}
+
+.tfade{position:absolute;left:0;right:0;top:960px;height:320px;background:linear-gradient(180deg,rgba(11,11,12,0),#0b0b0c)}
+.ngrade{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.05) 30%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.92) 100%)}
+.credit{position:absolute;left:0;right:0;top:1560px;text-align:center;font:600 20px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55)}
+.credit2{text-align:center;font:600 18px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55);margin-top:12px}
+.ntag{position:absolute;left:70px;top:330px;color:#fff;font:800 24px "IDisp";letter-spacing:.1em;padding:9px 18px;border-radius:999px}
+.nbig{position:absolute;left:30px;right:30px;text-align:center;font-family:"IDisp";font-weight:900;font-style:italic;letter-spacing:-.03em;line-height:.92;text-transform:uppercase;text-shadow:0 0 50px rgba(0,0,0,.6),0 8px 30px rgba(0,0,0,.6)}
+.nsub{font:700 38px "IDisp";font-style:normal;letter-spacing:.3em;color:#fff;margin-top:22px;text-shadow:none}
+.sbox{position:absolute;left:80px;right:80px;text-align:center;background:rgba(14,14,16,.86);border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 20px 34px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.sbox b{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:170px;line-height:1;color:#FEDE5C;text-shadow:0 4px 0 #b8941e,0 0 40px rgba(254,222,92,.35)}
+.sbox span{display:block;font:800 40px "IDisp";letter-spacing:.14em;color:#fff;margin-top:10px}
+.sbox span.gsub{font-style:italic;font-size:84px;letter-spacing:-.01em;color:#FEDE5C;font-weight:900}
+.spill{position:absolute;left:50%;top:-30px;transform:translateX(-50%);background:#FEDE5C;color:#111;font:900 26px "IDisp";font-style:italic;letter-spacing:.06em;padding:8px 22px;border-radius:999px;white-space:nowrap}
+.vh{position:absolute;left:0;right:0;height:960px;overflow:hidden}
+.vh img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vsh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75))}
+.vstack{position:absolute;left:60px;right:60px}
+.vpill{display:table;margin:0 auto -18px;position:relative;z-index:2;background:#FEDE5C;color:#111;font:900 24px "IDisp";letter-spacing:.06em;padding:8px 20px;border-radius:999px}
+.vbox{display:flex;background:rgba(14,14,16,.88);border:2px solid rgba(254,222,92,.35);border-radius:24px;padding:34px 30px 22px}
+.vc{flex:0 0 30%;text-align:left}.vc:nth-child(2){flex-basis:40%}
+.vc i{display:block;font:700 22px "IDisp";font-style:normal;letter-spacing:.14em;color:#aab}
+.vc b{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:90px;line-height:1.05;color:#FEDE5C;text-shadow:0 3px 0 #b8941e}
+.vsb{position:absolute;left:50%;top:960px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:#111;border:4px solid #FEDE5C;color:#FEDE5C;font:900 48px "IDisp";font-style:italic;display:flex;align-items:center;justify-content:center;z-index:5}
+.ranks{position:absolute;left:70px;right:70px;top:420px}
+.rh{font-family:"IDisp";font-weight:900;font-style:italic;font-size:68px;color:#FEDE5C;line-height:1;margin-bottom:40px}
+.rr{margin-bottom:34px}
+.rl{display:flex;justify-content:space-between;font:800 30px "IDisp";letter-spacing:.06em;color:#dfe3ea;margin-bottom:10px}
+.rr.rtop .rl{color:#FEDE5C}
+.rt{height:20px;background:rgba(255,255,255,.08);border-radius:6px}
+.rf{height:100%;background:linear-gradient(90deg,#55555c,#c9c9cf);border-radius:6px;transform-origin:0 50%}
+.rr.rtop .rf{background:linear-gradient(90deg,#e0a800,#FEDE5C)}
+.rfoot{margin-top:60px;font-family:"IDisp";font-weight:900;font-style:italic;font-size:78px;color:#FEDE5C;text-align:center}
+
+@font-face{font-family:"Bebas";src:url(media/assets_fonts_BebasNeue.woff2)}
+@font-face{font-family:"Osw";font-weight:700;src:url(media/assets_fonts_Oswald-700.woff2)}
+.glow{position:absolute;left:-200px;right:-200px;top:180px;height:1400px;pointer-events:none}
+.hlw{position:absolute;left:70px;right:70px;font-family:"Bebas";line-height:.92;letter-spacing:.01em;text-shadow:0 6px 30px rgba(0,0,0,.6)}
+.hln{display:block}
+.needs{position:absolute;left:70px;font-family:"Bebas";font-size:84px;color:#FEDE5C;border:5px solid #FEDE5C;border-radius:10px;padding:2px 22px 0;background:rgba(0,0,0,.55);transform-origin:0 50%}
+.ctr{position:absolute;left:70px;right:70px;top:1500px;font-family:"Osw"}
+.ctop{display:flex;justify-content:space-between;align-items:flex-end;color:#cfd3da;font-size:30px;letter-spacing:.14em}
+.ctop b{font-family:"Bebas";font-size:120px;line-height:.8;color:#FEDE5C;letter-spacing:0;font-weight:400}
+.cbar{position:relative;height:22px;margin-top:14px;background:rgba(255,255,255,.12);border-radius:6px}
+.cfill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2f6bff,#4f8bff);border-radius:6px;box-shadow:0 0 24px rgba(79,139,255,.6)}
+.cmark{position:absolute;top:-14px;bottom:-14px;width:4px;background:#fff}
+.cmark i{position:absolute;right:10px;top:46px;font-style:normal;font-size:22px;color:#fff;letter-spacing:.1em;white-space:nowrap}
+.chl{position:absolute;font-family:"Bebas";font-size:84px;color:#FEDE5C}
+.dgrid{position:absolute;left:110px;top:620px;width:860px;display:grid;grid-template-columns:repeat(10,1fr);gap:22px}
+.dgrid i{display:block;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18)}
+.yrow{position:absolute;left:60px;right:60px;top:720px;display:flex;justify-content:space-between}
+.yc{display:flex;flex-direction:column;align-items:center;gap:10px}
+.yc b{font-family:"Bebas";font-size:96px;color:#fff;font-weight:400}
+.yc span{font-family:"Osw";font-size:28px;color:#FEDE5C;letter-spacing:.08em}
+.yc:last-child b{color:#ff3b3b}
+.vbars{position:absolute;left:70px;right:70px;top:660px}
+.vbh{font-family:"Osw";font-size:30px;letter-spacing:.16em;color:#cfd3da;margin-bottom:30px}
+.vbr{display:flex;align-items:center;gap:24px;margin-bottom:56px}
+.vbn{width:230px;font-family:"Bebas";font-size:84px;color:#fff;line-height:.9}
+.vbn span{display:block;font-family:"Osw";font-size:24px;color:#9aa0a6;letter-spacing:.06em}
+.vbt{flex:1;height:64px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden}
+.vbf{height:100%;border-radius:8px;transform-origin:0 50%}
+.vbv{width:150px;text-align:right;font-family:"Bebas";font-size:100px}
+
+.pcard{position:absolute;border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 2px rgba(255,255,255,.08)}
+.pcard img{width:100%;height:100%;object-fit:cover;display:block}
+.rainl{position:absolute;left:0;right:0;top:-600px;bottom:-600px;background-image:linear-gradient(100deg,transparent 48%,rgba(220,230,255,.55) 49%,transparent 51%);background-size:90px 200px;transform:rotate(8deg)}
+.odo .digits{position:relative;transform-origin:50% 60%}
+.odo.gold{font-style:italic}
+.odo.gold .dstrip span,.odo.gold .digits>span:not(.dcol):not(.oshine){color:#FFE14D;
+  text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #C29008,0 8px 0 #A67A05,0 22px 34px rgba(0,0,0,.55),0 0 46px rgba(254,222,92,.45)}
+.oshine{position:absolute;top:-10%;bottom:-10%;left:0;width:22%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));
+  transform:skewX(-20deg) translateX(-160%);mix-blend-mode:overlay;pointer-events:none}
+.olabw{margin-top:14px}
+.odo .olab{display:inline-flex;align-items:center;gap:14px;padding:10px 22px 10px 16px;border-radius:999px;background:rgba(10,10,12,.55);
+  backdrop-filter:blur(12px);box-shadow:inset 0 0 0 2.5px rgba(254,222,92,.75);font-size:42px;font-weight:800;font-style:normal;letter-spacing:.22em;color:#fff}
+.odo .olab i{width:14px;height:14px;border-radius:50%;background:#FEDE5C;box-shadow:0 0 14px #FEDE5C}
+.lbtop .lbv,.bcol:first-child .bnum{font-style:italic;color:#FFE14D;
+  text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #B98806,0 0 30px rgba(254,222,92,.55)}
+
+.lboard{position:absolute;left:50px;right:50px}
+.slowt{position:absolute;left:-200px;right:-200px;top:1150px;text-align:center;font-size:96px;font-weight:900;font-style:italic;color:#FEDE5C;
+  white-space:nowrap;text-shadow:0 6px 30px rgba(0,0,0,.7)}
+.dnum{position:absolute;left:0;right:0;top:260px;text-align:center}
+.dnum div{font-size:560px;font-weight:900;font-style:italic;letter-spacing:-0.06em;line-height:.9;color:#FFE14D;
+  text-shadow:0 4px 0 #F2C21E,0 8px 0 #DDA90F,0 12px 0 #B98806,0 40px 60px rgba(0,0,0,.5),0 0 60px rgba(254,222,92,.5)}
+.dnum span{display:inline-block;margin-top:10px;font-size:44px;font-weight:900;letter-spacing:.3em;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
+.band{position:absolute;left:0;right:60px;display:flex;align-items:baseline;gap:26px;padding:22px 50px 26px 70px;background:#FEDE5C;
+  border-radius:0 26px 26px 0;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.band b{font-size:150px;font-weight:900;font-style:italic;color:#0b0b0c;letter-spacing:-0.05em;line-height:.9;display:inline-block}
+.band span{font-size:38px;font-weight:900;color:#0b0b0c;letter-spacing:.12em}
+.cap1{position:absolute;left:0;right:0;text-align:center;z-index:900}
+.cap1 span{display:inline-block;font-size:78px;font-weight:900;color:#fff;letter-spacing:-0.01em;
+  text-shadow:0 4px 0 rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.75)}
+.cap1.num span{color:#FFE14D;text-shadow:0 3px 0 #C29008,0 10px 30px rgba(0,0,0,.75)}
+.badge{position:absolute;left:46px;top:236px;width:118px;height:118px;border-radius:50%;background:#FEDE5C;color:#0b0b0c;display:flex;
+  align-items:center;justify-content:center;font-size:76px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 6px rgba(254,222,92,.25)}
+.hero{position:absolute;inset:0}
+.hero .circ{position:absolute;left:50%;top:640px;width:820px;height:820px;margin-left:-410px;border-radius:50%;background:#FEDE5C;
+  box-shadow:0 0 120px rgba(254,222,92,.45)}
+.hero .big{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:170px;font-weight:900;color:#fff;letter-spacing:-0.045em;line-height:.9;
+  text-shadow:0 6px 0 #c8c8c8,0 12px 0 #8d8d8d,0 30px 50px rgba(0,0,0,.6)}
+.pip{position:absolute;width:290px;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 4px #fff}
+.pip img{width:100%;height:370px;object-fit:cover;object-position:50% 25%;display:block}
+.pip b{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);color:#fff;font-size:26px;font-weight:800}
+.slist{position:absolute;left:70px;right:70px}
+.slr{position:relative;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.02em;line-height:1.25;white-space:nowrap}
+.sll{position:absolute;left:-10px;right:-10px;top:52%;height:9px;border-radius:5px;background:#FEDE5C;transform-origin:left;box-shadow:0 0 18px #FEDE5C}
+.lbr{display:flex;align-items:center;gap:22px;height:150px;margin-bottom:18px;padding:0 26px;border-radius:24px;
+  background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.1)}
+.lbr.lbtop{background:rgba(254,222,92,.12);box-shadow:inset 0 0 0 2.5px #FEDE5C}
+.lbk{width:70px;font-size:76px;font-weight:900;color:rgba(255,255,255,.35);letter-spacing:-0.04em}
+.lbtop .lbk{color:#FEDE5C}
+.lbm{flex:1}
+.lbn{font-size:36px;font-weight:900;color:#fff;letter-spacing:.02em;margin-bottom:12px}
+.lbbar{height:16px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;width:560px}
+.lbf{height:100%;border-radius:8px;background:linear-gradient(90deg,#9a9aa2,#d8d8de);transform-origin:left}
+.lbtop .lbf{background:linear-gradient(90deg,#d9b93c,#FEDE5C);box-shadow:0 0 20px #FEDE5C}
+.lbv{width:200px;text-align:right;font-size:70px;font-weight:900;color:#fff;letter-spacing:-0.03em}
+.lbtop .lbv{color:#FEDE5C}
+.mot{position:absolute;left:0;right:0;top:330px;text-align:center;font-size:120px;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1}
+.mot span,.mot i{display:block}
+.mot i{font-size:54px;font-style:italic;font-weight:700;color:rgba(255,255,255,.6);margin:10px 0}
+.lgnum{position:absolute;right:50px;top:330px;font-size:300px;font-weight:900;color:rgba(254,222,92,.08);letter-spacing:-0.05em;line-height:1}
+.nwall{position:absolute;left:60px;right:60px;display:grid;grid-template-columns:1fr 1fr;gap:18px;perspective:1200px}
+.nwc{height:150px;border-radius:22px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center}
+.nwc span{font-size:46px;font-weight:900;color:#fff;letter-spacing:.02em}
+.nwc:last-child{grid-column:span 2;background:rgba(254,222,92,.14);box-shadow:inset 0 0 0 2px #FEDE5C}
+.nwc:last-child span{color:#FEDE5C}
+.quote{position:absolute;left:70px;right:70px;top:640px;text-align:left}
+.qm{font-size:340px;line-height:.7;font-weight:900;color:#FEDE5C;height:200px;transform-origin:left top}
+.qt{font-size:108px;font-weight:800;font-style:italic;color:#fff;letter-spacing:-0.03em;line-height:1.02}
+.qt .ch{display:inline-block}
+.qt .wd{white-space:nowrap}
+.qw{margin-top:34px;font-size:40px;font-weight:600;color:rgba(255,255,255,.6)}
+.receipt{position:absolute;right:50px;top:232px;display:flex;align-items:baseline;gap:8px;padding:12px 20px;border-radius:14px;
+  background:rgba(10,10,12,.6);backdrop-filter:blur(14px);box-shadow:inset 0 0 0 1.5px rgba(254,222,92,.5);overflow:hidden}
+.receipt .rl{font-size:22px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.7);margin-right:6px}
+.receipt .rn{display:inline-block;font-size:44px;font-weight:900;color:#FEDE5C}
+.receipt .rt{font-size:28px;font-weight:800;color:rgba(255,255,255,.6)}
+.half{position:absolute;left:0;width:1080px;height:960px;overflow:hidden}
+.half img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.hl{position:absolute;left:60px;bottom:50px;font-size:150px;font-weight:900;color:#fff;letter-spacing:-0.04em;text-shadow:0 10px 50px rgba(0,0,0,.6)}
+.hdiv{position:absolute;left:0;right:0;top:955px;height:10px;background:#FEDE5C;box-shadow:0 0 30px #FEDE5C;transform-origin:left}
+.recap .rrow{font-size:64px;margin-bottom:16px;gap:20px}
+.recap .tick{width:64px;height:64px;font-size:42px}
+
+html,body{margin:0;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0b0b0c;font-family:"IDisp","Inter Display",system-ui,sans-serif}
+#cam{position:absolute;inset:-30px;transform-origin:50% 50%}
+#world{position:absolute;inset:30px}
+.gridbg{position:absolute;inset:-120px;background-image:linear-gradient(rgba(255,255,255,.045) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.045) 2px,transparent 2px);
+  background-size:120px 120px}
+.clip{}
+.grain{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.09;mix-blend-mode:overlay}
+#grainTop{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.05;z-index:880;pointer-events:none;mix-blend-mode:overlay}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,.15) 34%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%);pointer-events:none}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.title{font-weight:900;letter-spacing:-0.035em;line-height:.98;color:#fff;text-shadow:0 8px 40px rgba(0,0,0,.55)}
+.title .mask{overflow:hidden;padding:0 .04em .06em}
+.title .ln{display:block}
+.typed{font-weight:800;letter-spacing:-0.01em;line-height:1.1}
+.thead{font-size:34px;font-weight:600;font-style:italic;color:rgba(255,255,255,.8);margin-bottom:16px}
+.tline{white-space:nowrap;text-shadow:0 4px 24px rgba(0,0,0,.6)}
+.odo{position:absolute;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 10px 50px rgba(0,0,0,.5)}
+.digits{display:inline-flex}
+.dcol{display:inline-block;height:1em;line-height:1em;overflow:hidden}
+.dstrip{display:flex;flex-direction:column}
+.dstrip span{display:block;height:1em;line-height:1em}
+.olab{font-size:40px;font-weight:800;letter-spacing:.18em;color:#fff;margin-top:6px}
+.tag{position:absolute;padding:14px 26px;border-radius:14px;background:#FEDE5C;color:#0b0b0c;font-size:44px;font-weight:900;letter-spacing:.02em;transform-origin:left;white-space:nowrap}
+.tag.dark{background:#fff}
+.chip{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 28px;border-radius:999px;background:rgba(20,20,22,.6);
+  backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18);color:#fff;font-size:36px;font-weight:700;white-space:nowrap}
+.chip .dot{width:14px;height:14px;border-radius:50%;background:#FEDE5C;box-shadow:0 0 14px #FEDE5C}
+.face{position:absolute;pointer-events:none}
+.cap{position:absolute;left:0;right:0;top:1420px;text-align:center;z-index:900}
+.cap span{display:inline-block;padding:10px 22px;border-radius:12px;background:#fff;color:#0b0b0c;font-size:58px;font-weight:900;letter-spacing:-0.01em;
+  box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.cap.num span{background:#FEDE5C}
+.win{width:1000px;border-radius:22px;overflow:hidden;background:#111;box-shadow:0 60px 140px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12)}
+.win .bar{height:50px;display:flex;align-items:center;gap:10px;padding:0 20px;background:#1c1c20;color:#8d8d94;font-size:20px;font-weight:600}
+.win .bar i{width:14px;height:14px;border-radius:50%;background:#ff5f57}
+.win .bar i:nth-child(2){background:#febc2e}.win .bar i:nth-child(3){background:#28c840}
+.win .bar span{margin-left:16px}
+.bcol{position:absolute;width:300px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bnum{font-size:120px;font-weight:900;color:#fff;letter-spacing:-0.04em;margin-bottom:18px}
+.bbody{position:relative;width:240px;border-radius:6px 6px 0 0;box-shadow:30px 0 0 rgba(0,0,0,.25)}
+.btop{position:absolute;left:0;right:0;top:-18px;height:18px;transform:skewX(-45deg);transform-origin:bottom}
+.blab{margin-top:22px;font-size:42px;font-weight:900;letter-spacing:.12em;color:#fff}
+.stamp{position:absolute;left:0;right:0;text-align:center;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 20px 80px rgba(0,0,0,.6)}
+.leak{position:absolute;inset:-200px;background:radial-gradient(40% 55% at 50% 50%,rgba(255,170,40,.95),rgba(254,222,92,.5) 45%,rgba(0,0,0,0) 75%);mix-blend-mode:screen;pointer-events:none}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slice{position:absolute;left:-200px;right:-200px;background:rgba(254,222,92,.18);mix-blend-mode:difference;border-top:2px solid rgba(255,40,60,.7)}
+.ylab{position:absolute;top:640px;font-size:110px;font-weight:900;color:#fff;letter-spacing:-0.03em}
+.yline{position:absolute;left:90px;right:90px;top:820px;height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden}
+.yfill{position:absolute;inset:0;background:#FEDE5C;transform-origin:left;box-shadow:0 0 24px #FEDE5C}
+.ybig{position:absolute;left:0;right:0;top:930px;text-align:center;font-size:150px;font-weight:900;color:#FEDE5C;letter-spacing:-0.04em}
+.recap{position:absolute;left:70px;top:330px}
+.rrow{display:flex;align-items:center;gap:22px;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:26px;white-space:nowrap}
+.rnum{color:#FEDE5C;width:90px}
+.tick{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:50%;background:#FEDE5C;color:#0b0b0c;font-size:56px}
+.cta{position:absolute;inset:0}
+.bubble{position:absolute;left:110px;right:110px;top:1080px;display:flex;gap:22px;align-items:center;padding:28px 32px;border-radius:30px;
+  background:rgba(30,30,34,.85);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12),0 30px 80px rgba(0,0,0,.6)}
+.av{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#FEDE5C,#f39c12);flex:none}
+.who{font-size:30px;font-weight:700;color:rgba(255,255,255,.6)}
+.what{font-size:46px;font-weight:800;color:#fff;min-height:56px}
+.cta2{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:40px;font-weight:700;color:rgba(255,255,255,.75)}
+.brand{position:absolute;right:56px;top:185px;text-align:right;z-index:950;opacity:.95}
+.brand img{width:250px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><filter id="red"><feColorMatrix type="matrix"
+values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter><filter id="cyan"><feColorMatrix type="matrix"
+values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter></svg>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-fps="30" data-duration="110.59">
+<div id="cam"><div id="world">
+<div id="bg1" data-start="0" data-duration="2.445" style="position:absolute;inset:0;z-index:11;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg1t"></div><div class="grain"></div></div>
+<div id="hd2" data-start="0.05" data-duration="2.395" style="top:600px;font-size:140px;text-align:center;z-index:52" class="clip edh avoid"><div class="mask"><div id="hd2l0" style="color:#fff">THE BIGGEST</div></div><div class="mask"><div id="hd2l1" style="color:#FEDE5C">INJUSTICE</div></div><div class="mask"><div id="hd2l2" style="color:#fff">IN INDIAN CRICKET?</div></div></div>
+<div id="bg3" data-start="2.445" data-duration="2.578" style="position:absolute;inset:0;z-index:13;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg3t"></div><div class="grain"></div></div>
+<div id="kk4" data-start="2.445" data-duration="2.578" style="top:520px;z-index:64" class="clip kick avoid ink">IT WASN&#x27;T…</div>
+<div id="hd5" data-start="2.495" data-duration="2.528" style="top:600px;font-size:170px;text-align:center;z-index:55" class="clip edh avoid"><div class="mask"><div id="hd5l0" style="color:#FEDE5C">SANJU SAMSON</div></div></div>
+<div id="cp6" data-start="3.6" data-duration="1.423" style="left:0;right:0;margin:0 auto;width:fit-content;top:820px;z-index:16" class="clip chip avoid"><span class="dot"></span>IN &amp; OUT OF THE TEAM FOR YEARS</div>
+<div id="sm7" data-start="4.705" data-duration="0.318" style="top:1000px;font-size:150px;color:#ff5a4f;z-index:17" class="clip stamp avoid">NOT HIM</div>
+<div id="bg8" data-start="5.023" data-duration="5.366" style="position:absolute;inset:0;z-index:18;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg8t"></div><div class="grain"></div></div>
+<div id="kk9" data-start="5.023" data-duration="5.366" style="top:520px;z-index:69" class="clip kick avoid ink">IT WASN&#x27;T…</div>
+<div id="hd10" data-start="5.073" data-duration="5.316" style="top:600px;font-size:170px;text-align:center;z-index:60" class="clip edh avoid"><div class="mask"><div id="hd10l0" style="color:#FEDE5C">SHREYAS IYER</div></div></div>
+<div id="cp11" data-start="5.81" data-duration="4.579" style="left:0;right:0;margin:0 auto;width:fit-content;top:820px;z-index:21" class="clip chip avoid"><span class="dot"></span>IGNORED FOR THE ASIA CUP</div>
+<div id="cp12" data-start="7.835" data-duration="2.554" style="left:0;right:0;margin:0 auto;width:fit-content;top:920px;z-index:22" class="clip chip avoid"><span class="dot"></span>AFTER LEADING PUNJAB TO THE IPL FINAL</div>
+<div id="sm13" data-start="9.676" data-duration="0.713" style="top:1080px;font-size:150px;color:#ff5a4f;z-index:23" class="clip stamp avoid">NOT HIM</div>
+<div id="bg14" data-start="10.389" data-duration="2.395" style="position:absolute;inset:0;z-index:24;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg14t"></div><div class="grain"></div></div>
+<div id="fr15" data-start="10.389" data-duration="2.395" style="left:290px;top:300px;z-index:25" class="clip frm"><div style="position:relative;width:500px;height:625px;overflow:hidden"><img src="media/assets_hi_k_helmet_sad.png" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1)"><div class="face" style="left:128px;top:91px;width:152px;height:187px"></div></div></div>
+<div id="hd16" data-start="11.013" data-duration="1.771" style="top:1080px;font-size:130px;text-align:center;z-index:66" class="clip edh avoid"><div class="mask"><div id="hd16l0" style="color:#fff">A MAN YOU&#x27;VE</div></div><div class="mask"><div id="hd16l1" style="color:#FEDE5C">FORGOTTEN</div></div></div>
+<div id="cr17" data-start="10.389" data-duration="2.395" style="z-index:177" class="clip credit">PHOTO: BCCI</div>
+<div id="ph18" data-start="12.784" data-duration="0.546" style="position:absolute;inset:0;z-index:28;overflow:hidden;background:#000" class="clip layer full"><div id="ph18m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_k_kar_helmet.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:94.5% 30%;filter:none"><div class="face" style="left:424px;top:588px;width:233px;height:284px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cr19" data-start="12.784" data-duration="0.546" style="z-index:179" class="clip credit">PHOTO: BCCI</div>
+<div id="hd20" data-start="12.814" data-duration="0.516" style="top:960px;font-size:210px;text-align:center;z-index:70" class="clip edh avoid"><div class="mask"><div id="hd20l0" style="color:#fff">KARUN</div></div><div class="mask"><div id="hd20l1" style="color:#FEDE5C">NAIR</div></div></div>
+<div id="fl21" class="clip" data-start="12.794" data-duration="0.4" style="position:absolute;inset:0;background:#FEDE5C;z-index:431;pointer-events:none"></div>
+<div id="bg22" data-start="13.33" data-duration="4.007" style="position:absolute;inset:0;z-index:32;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg22t"></div><div class="grain"></div></div>
+<div id="hd23" data-start="13.36" data-duration="3.977" style="top:560px;font-size:230px;text-align:center;z-index:73" class="clip edh avoid"><div class="mask"><div id="hd23l0" style="color:#fff">DECEMBER</div></div><div class="mask"><div id="hd23l1" style="color:#FEDE5C">2016</div></div></div>
+<div id="cp24" data-start="15.019" data-duration="2.318" style="left:0;right:0;margin:0 auto;width:fit-content;top:1080px;z-index:34" class="clip chip avoid"><span class="dot"></span>CHENNAI</div>
+<div id="cp25" data-start="15.383" data-duration="1.954" style="left:0;right:0;margin:0 auto;width:fit-content;top:1180px;z-index:35" class="clip chip avoid"><span class="dot"></span>vs A MIGHTY ENGLAND</div>
+<div id="bg26" data-start="17.337" data-duration="2.362" style="position:absolute;inset:0;z-index:36;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg26t"></div><div class="grain"></div></div>
+<div id="fr27" data-start="17.337" data-duration="2.362" style="left:40px;top:330px;z-index:37" class="clip frm"><div style="position:relative;width:1000px;height:667px;overflow:hidden"><img src="media/assets_hi_k_303_b.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:308px;top:130px;width:126px;height:157px"></div></div><div class="frc">Karun Nair · 25 years old</div></div>
+<div id="cp28" data-start="18.479" data-duration="1.22" style="left:0;right:0;margin:0 auto;width:fit-content;top:1120px;z-index:38" class="clip chip avoid"><span class="dot"></span>ONLY HIS 3rd TEST</div>
+<div id="cr29" data-start="17.337" data-duration="2.362" style="z-index:189" class="clip credit">PHOTO: BCCI</div>
+<div id="ph30" data-start="19.699" data-duration="7.657" style="position:absolute;inset:0;z-index:40;overflow:hidden;background:#000" class="clip layer full"><img src="media/assets_fill_k_303_a.jpg" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover"><div id="ph30m" style="position:absolute;left:0;top:502px;width:100%;height:608px;transform-origin:50% 40%"><img src="media/assets_hi_k_303_a.png" style="width:100%;height:100%;object-fit:cover;filter:none;box-shadow:0 40px 120px rgba(0,0,0,.75)"><div class="face" style="left:327px;top:62px;width:119px;height:190px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cr31" data-start="19.699" data-duration="7.657" style="z-index:191" class="clip credit">PHOTO: BCCI</div>
+<div id="kk32" data-start="19.699" data-duration="7.657" style="top:250px;z-index:92" class="clip kick avoid ink">CHENNAI · DEC 2016</div>
+<div id="od33" data-start="19.852" data-duration="2.096" style="left:0;right:0;text-align:center;top:1080px;font-size:300px;color:#FEDE5C;z-index:43" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od33d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od33d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od33d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="oshine"></span></div></div>
+<div id="od34" data-start="21.948" data-duration="3.254" style="left:0;right:0;text-align:center;top:1080px;font-size:300px;color:#FEDE5C;z-index:44" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od34d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od34d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od34d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="oshine"></span></div></div>
+<div id="od35" data-start="25.202" data-duration="2.154" style="left:0;right:0;text-align:center;top:1080px;font-size:300px;color:#FEDE5C;z-index:45" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od35d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od35d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od35d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="oshine"></span></div></div>
+<div id="fl36" class="clip" data-start="21.234" data-duration="0.4" style="position:absolute;inset:0;background:#fff;z-index:446;pointer-events:none"></div>
+<div id="bg37" data-start="27.356" data-duration="1.186" style="position:absolute;inset:0;z-index:47;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg37t"></div><div class="grain"></div></div>
+<div id="od38" data-start="27.386" data-duration="1.156" style="left:0;right:0;text-align:center;top:560px;font-size:360px;color:#FEDE5C;z-index:48" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od38d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od38d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od38d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span>*</span><span class="oshine"></span></div><div class="olabw"><span class="olab"><i></i>NOT OUT</span></div></div>
+<div id="fl39" class="clip" data-start="27.386" data-duration="0.4" style="position:absolute;inset:0;background:#FEDE5C;z-index:449;pointer-events:none"></div>
+<div id="bg40" data-start="28.542" data-duration="5.028" style="position:absolute;inset:0;z-index:50;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg40t"></div><div class="grain"></div></div>
+<div id="hd41" data-start="28.572" data-duration="4.998" style="top:260px;font-size:96px;text-align:center;z-index:91" class="clip edh avoid"><div class="mask"><div id="hd41l0" style="color:#FEDE5C">TEST TRIPLE HUNDREDS</div></div><div class="mask"><div id="hd41l1" style="color:#fff">BY INDIANS</div></div></div>
+<div id="fr42" data-start="31.575" data-duration="1.995" style="left:300px;top:500px;z-index:52" class="clip frm"><div style="position:relative;width:467px;height:620px;overflow:hidden"><img src="media/assets_hi_sehwag.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:151px;top:265px;width:68px;height:87px"></div></div><div class="frc">Virender Sehwag</div></div>
+<div id="cp43" data-start="31.725" data-duration="1.845" style="left:0;right:0;margin:0 auto;width:fit-content;top:1180px;z-index:53" class="clip chip avoid"><span class="dot"></span>1 · VIRENDER SEHWAG</div>
+<div id="cp44" data-start="29.115" data-duration="4.455" style="left:0;right:0;margin:0 auto;width:fit-content;top:1290px;z-index:54" class="clip chip avoid"><span class="dot"></span>2 · KARUN NAIR</div>
+<div id="cr45" data-start="31.575" data-duration="1.995" style="z-index:205" class="clip credit">PHOTO: GETTY IMAGES</div>
+<div id="bg46" data-start="33.57" data-duration="5.305" style="position:absolute;inset:0;z-index:56;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg46t"></div><div class="grain"></div></div>
+<div id="kk47" data-start="33.57" data-duration="5.305" style="top:250px;z-index:107" class="clip kick avoid ink">THAT MAGICAL NIGHT</div>
+<div id="ct48" data-start="33.57" data-duration="5.305" style="position:absolute;left:387px;bottom:0px;width:673px;height:1100px;z-index:58" class="clip layer"><img id="ct48m" src="media/assets_cut_k_303_a.png" style="width:100%;height:100%;filter:none drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:322px;top:123px;width:204px;height:307px"></div></div>
+<div id="hd49" data-start="36.626" data-duration="2.249" style="top:330px;font-size:140px;text-align:center;z-index:99" class="clip edh avoid"><div class="mask"><div id="hd49l0" style="color:#fff">INDIA&#x27;S NEXT</div></div><div class="mask"><div id="hd49l1" style="color:#FEDE5C">SUPERSTAR</div></div></div>
+<div id="cr50" data-start="33.57" data-duration="5.305" style="z-index:210" class="clip credit">PHOTO: BCCI</div>
+<div id="bg51" data-start="38.875" data-duration="2.47" style="position:absolute;inset:0;z-index:61;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg51t"></div><div class="grain"></div></div>
+<div id="hd52" data-start="40.281" data-duration="1.064" style="top:640px;font-size:140px;text-align:center;z-index:102" class="clip edh avoid"><div class="mask"><div id="hd52l0" style="color:#fff">A COLD,</div></div><div class="mask"><div id="hd52l1" style="color:#FEDE5C">HEARTLESS SCRIPT</div></div></div>
+<div id="ph53" data-start="41.345" data-duration="2.007" style="position:absolute;inset:0;z-index:63;overflow:hidden;background:#000" class="clip layer full"><img src="media/assets_fill_k_bowled.jpg" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover"><div id="ph53m" style="position:absolute;left:0;top:502px;width:100%;height:608px;transform-origin:50% 40%"><img src="media/assets_hi_k_bowled.png" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1) brightness(.85);box-shadow:0 40px 120px rgba(0,0,0,.75)"><div class="face" style="left:412px;top:48px;width:57px;height:73px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cr54" data-start="41.345" data-duration="2.007" style="z-index:214" class="clip credit">PHOTO: BCCI</div>
+<div id="cp55" data-start="41.445" data-duration="1.907" style="left:0;right:0;margin:0 auto;width:fit-content;top:1080px;z-index:65" class="clip chip avoid"><span class="dot"></span>WITHIN MONTHS</div>
+<div id="sm56" data-start="42.51" data-duration="0.842" style="top:1180px;font-size:150px;color:#ff5a4f;z-index:66" class="clip stamp avoid">DROPPED</div>
+<div id="bg57" data-start="43.352" data-duration="2.229" style="position:absolute;inset:0;z-index:67;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg57t"></div><div class="grain"></div></div>
+<div id="hd58" data-start="43.352" data-duration="2.229" style="top:560px;font-size:150px;text-align:center;z-index:108" class="clip edh avoid"><div class="mask"><div id="hd58l0" style="color:#fff">NO CALLS.</div></div></div>
+<div id="hd59" data-start="43.798" data-duration="1.783" style="top:730px;font-size:150px;text-align:center;z-index:109" class="clip edh avoid"><div class="mask"><div id="hd59l0" style="color:#fff">NO CHANCE.</div></div></div>
+<div id="hd60" data-start="44.466" data-duration="1.115" style="top:900px;font-size:150px;text-align:center;z-index:110" class="clip edh avoid"><div class="mask"><div id="hd60l0" style="color:#FEDE5C">NO EXPLANATION.</div></div></div>
+<div id="bg61" data-start="45.581" data-duration="3.413" style="position:absolute;inset:0;z-index:71;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg61t"></div><div class="grain"></div></div>
+<div id="fr62" data-start="45.581" data-duration="3.413" style="left:40px;top:330px;z-index:72" class="clip frm"><div style="position:relative;width:1000px;height:750px;overflow:hidden"><img src="media/assets_hi_selectors.png" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1)"><div class="face" style="left:728px;top:136px;width:154px;height:215px"></div><div class="face" style="left:232px;top:99px;width:126px;height:177px"></div></div><div class="frc">Long, painful years</div></div>
+<div id="hd63" data-start="46.919" data-duration="2.075" style="top:1180px;font-size:110px;text-align:center;z-index:113" class="clip edh avoid"><div class="mask"><div id="hd63l0" style="color:#fff">SELECTORS FORGOT.</div></div><div class="mask"><div id="hd63l1" style="color:#FEDE5C">FANS FORGOT.</div></div></div>
+<div id="cr64" data-start="45.581" data-duration="3.413" style="z-index:224" class="clip credit">PHOTO: BCCI</div>
+<div id="bg65" data-start="48.994" data-duration="2.028" style="position:absolute;inset:0;z-index:75;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg65t"></div><div class="grain"></div></div>
+<div id="hd66" data-start="49.024" data-duration="1.998" style="top:600px;font-size:240px;text-align:center;z-index:116" class="clip edh avoid"><div class="mask"><div id="hd66l0" style="color:#fff">10 DEC</div></div><div class="mask"><div id="hd66l1" style="color:#FEDE5C">2022</div></div></div>
+<div id="bg67" data-start="51.022" data-duration="3.853" style="position:absolute;inset:0;z-index:77;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg67t"></div><div class="grain"></div></div>
+<div id="kk68" data-start="51.022" data-duration="3.853" style="top:320px;z-index:128" class="clip kick avoid ink">THE WHOLE OF INDIA CELEBRATES</div>
+<div id="fr69" data-start="52.145" data-duration="2.73" style="left:40px;top:420px;z-index:79" class="clip frm"><div style="position:relative;width:1000px;height:562px;overflow:hidden"><img src="media/assets_hi_ishan.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:443px;top:30px;width:43px;height:61px"></div></div><div class="frc">Ishan Kishan · 210 vs Bangladesh</div></div>
+<div id="od70" data-start="53.485" data-duration="1.39" style="left:0;right:0;text-align:center;top:1050px;font-size:200px;color:#FEDE5C;z-index:80" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od70d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od70d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od70d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="oshine"></span></div><div class="olabw"><span class="olab"><i></i>DOUBLE HUNDRED</span></div></div>
+<div id="cr71" data-start="52.145" data-duration="2.73" style="z-index:231" class="clip credit">PHOTO: BCCI</div>
+<div id="bg72" data-start="54.875" data-duration="2.512" style="position:absolute;inset:0;z-index:82;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg72t"></div><div class="grain"></div></div>
+<div id="kk73" data-start="54.875" data-duration="2.512" style="top:250px;z-index:133" class="clip kick avoid ink">THE SAME DAY</div>
+<div id="fr74" data-start="54.875" data-duration="2.512" style="left:290px;top:330px;z-index:84" class="clip frm"><div style="position:relative;width:500px;height:625px;overflow:hidden"><img src="media/assets_hi_k_helmet_sad.png" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1)"><div class="face" style="left:128px;top:91px;width:152px;height:187px"></div></div></div>
+<div id="hd75" data-start="56.047" data-duration="1.34" style="top:1100px;font-size:140px;text-align:center;z-index:125" class="clip edh avoid"><div class="mask"><div id="hd75l0" style="color:#fff">BROKEN.</div></div><div class="mask"><div id="hd75l1" style="color:#FEDE5C">DESPERATE.</div></div></div>
+<div id="cr76" data-start="54.875" data-duration="2.512" style="z-index:236" class="clip credit">PHOTO: BCCI</div>
+<div id="bg77" data-start="57.387" data-duration="2.95" style="position:absolute;inset:0;z-index:87;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg77t"></div><div class="grain"></div></div>
+<div id="fr78" data-start="57.387" data-duration="2.95" style="left:40px;top:480px;z-index:88" class="clip frm"><div style="position:relative;width:1000px;height:667px;overflow:hidden"><img src="media/assets_hi_tweet.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:477px;top:166px;width:89px;height:116px"></div></div></div>
+<div id="kk79" data-start="57.387" data-duration="2.95" style="top:380px;z-index:139" class="clip kick avoid ink">KARUN NAIR · 10 DEC 2022</div>
+<div id="cr80" data-start="57.387" data-duration="2.95" style="z-index:240" class="clip credit">PHOTO: VIA X / @karun126</div>
+<div id="ph81" data-start="60.337" data-duration="5.181" style="position:absolute;inset:0;z-index:91;overflow:hidden;background:#000" class="clip layer full"><div id="ph81m" style="position:absolute;inset:0;transform-origin:50% 40%"><img src="media/assets_hi_k_kar_100.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:25.3% 30%;filter:grayscale(1) contrast(1.1) brightness(.85)"><div class="face" style="left:440px;top:937px;width:199px;height:273px"></div><div class="face" style="left:1418px;top:1391px;width:132px;height:154px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cr82" data-start="60.337" data-duration="5.181" style="z-index:242" class="clip credit">PHOTO: BCCI</div>
+<div id="kk83" data-start="60.337" data-duration="5.181" style="top:250px;z-index:143" class="clip kick avoid ink">THAT SAME WEEK · KARNATAKA</div>
+<div id="hd84" data-start="61.249" data-duration="4.269" style="top:300px;font-size:140px;text-align:center;z-index:134" class="clip edh avoid"><div class="mask"><div id="hd84l0" style="color:#FEDE5C">HIS OWN STATE</div></div></div>
+<div id="sm85" data-start="63.535" data-duration="1.983" style="top:470px;font-size:150px;color:#ff5a4f;z-index:95" class="clip stamp avoid">DROPPED</div>
+<div id="bg86" data-start="65.518" data-duration="5.295" style="position:absolute;inset:0;z-index:96;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg86t"></div><div class="grain"></div></div>
+<div id="hd87" data-start="65.548" data-duration="2.106" style="top:420px;font-size:140px;text-align:center;z-index:137" class="clip edh avoid"><div class="mask"><div id="hd87l0" style="color:#fff">WHAT HAPPENED</div></div><div class="mask"><div id="hd87l1" style="color:#FEDE5C">NEXT?</div></div></div>
+<div id="hd88" data-start="67.654" data-duration="3.159" style="top:430px;font-size:110px;text-align:center;z-index:138" class="clip edh avoid"><div class="mask"><div id="hd88l0" style="color:#FEDE5C">TRUE CRICKET FAN?</div></div></div>
+<div id="fw89" data-start="66.543" data-duration="4.27" style="z-index:199" class="clip fcard avoid"><div class="fav"><img src="media/assets_logo.png"></div><div class="fname">theCricketLounge</div><div class="fsub">Cricket stories, records & debates</div><div class="fbtn" id="fw89b"><span id="fw89t">Follow</span></div><div class="fcur" id="fw89c"></div></div>
+<div id="ph90" data-start="70.813" data-duration="2.77" style="position:absolute;inset:0;z-index:100;overflow:hidden;background:#000" class="clip layer full"><img src="media/assets_fill_k_vidarbha.jpg" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover"><div id="ph90m" style="position:absolute;left:0;top:408px;width:100%;height:796px;transform-origin:50% 40%"><img src="media/assets_hi_k_vidarbha.png" style="width:100%;height:100%;object-fit:cover;filter:none;box-shadow:0 40px 120px rgba(0,0,0,.75)"><div class="face" style="left:450px;top:141px;width:103px;height:128px"></div></div><div class="shade"></div><div class="vig"></div></div>
+<div id="cr91" data-start="70.813" data-duration="2.77" style="z-index:251" class="clip credit">PHOTO: BCCI</div>
+<div id="kk92" data-start="70.813" data-duration="2.77" style="top:250px;z-index:152" class="clip kick avoid ink">A NEW STATE · VIDARBHA</div>
+<div id="hd93" data-start="70.843" data-duration="2.74" style="top:1200px;font-size:140px;text-align:center;z-index:143" class="clip edh avoid"><div class="mask"><div id="hd93l0" style="color:#fff">KARUN DIDN&#x27;T</div></div><div class="mask"><div id="hd93l1" style="color:#FEDE5C">BREAK.</div></div></div>
+<div id="bg94" data-start="73.583" data-duration="3.035" style="position:absolute;inset:0;z-index:104;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg94t"></div><div class="grain"></div></div>
+<div id="hd95" data-start="73.613" data-duration="3.005" style="top:260px;font-size:110px;text-align:center;z-index:145" class="clip edh avoid"><div class="mask"><div id="hd95l0" style="color:#FEDE5C">A STORM OF RUNS</div></div></div>
+<div id="od96" data-start="74.292" data-duration="2.326" style="left:0;right:0;text-align:center;top:370px;font-size:220px;color:#FEDE5C;z-index:106" class="clip odo avoid gold"><div class="digits"><span class="dcol"><span class="dstrip" id="od96d0"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od96d1"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="dcol"><span class="dstrip" id="od96d2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span><span class="oshine"></span></div><div class="olabw"><span class="olab"><i></i>RUNS · VIJAY HAZARE 2024-25</span></div></div>
+<div id="fr97" data-start="74.951" data-duration="1.667" style="left:140px;top:900px;z-index:107" class="clip frm"><div style="position:relative;width:800px;height:449px;overflow:hidden"><img src="media/assets_hi_k_northants.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:345px;top:41px;width:66px;height:87px"></div></div><div class="frc">And in county cricket · Northamptonshire</div></div>
+<div id="cr98" data-start="74.951" data-duration="1.667" style="z-index:258" class="clip credit">PHOTO: GETTY IMAGES</div>
+<div id="bg99" data-start="76.618" data-duration="2.9" style="position:absolute;inset:0;z-index:109;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg99t"></div><div class="grain"></div></div>
+<div id="hd100" data-start="76.835" data-duration="2.683" style="top:600px;font-size:240px;text-align:center;z-index:150" class="clip edh avoid"><div class="mask"><div id="hd100l0" style="color:#FEDE5C">8 YEARS</div></div><div class="mask"><div id="hd100l1" style="color:#fff">LATER</div></div></div>
+<div id="bg101" data-start="79.518" data-duration="1.391" style="position:absolute;inset:0;z-index:111;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg101t"></div><div class="grain"></div></div>
+<div id="fr102" data-start="79.518" data-duration="1.391" style="left:40px;top:360px;z-index:112" class="clip frm"><div style="position:relative;width:1000px;height:561px;overflow:hidden"><img src="media/assets_hi_k_india_travel.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:463px;top:152px;width:106px;height:136px"></div><div class="face" style="left:311px;top:140px;width:93px;height:112px"></div></div><div class="frc">Back with India · 2025</div></div>
+<div id="sm103" data-start="80.363" data-duration="0.546" style="top:1060px;font-size:150px;color:#FEDE5C;z-index:113" class="clip stamp avoid">CALLED BACK</div>
+<div id="cr104" data-start="79.518" data-duration="1.391" style="z-index:264" class="clip credit">PHOTO: BCCI</div>
+<div id="bg105" data-start="80.909" data-duration="1.28" style="position:absolute;inset:0;z-index:115;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg105t"></div><div class="grain"></div></div>
+<div id="hd106" data-start="80.939" data-duration="1.25" style="top:640px;font-size:170px;text-align:center;z-index:156" class="clip edh avoid"><div class="mask"><div id="hd106l0" style="color:#fff">NOW THINK</div></div><div class="mask"><div id="hd106l1" style="color:#FEDE5C">ABOUT IT.</div></div></div>
+<div id="bg107" data-start="82.189" data-duration="9.852" style="position:absolute;inset:0;z-index:117;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg107t"></div><div class="grain"></div></div>
+<div id="ct108" data-start="82.189" data-duration="9.852" style="position:absolute;left:395px;bottom:0px;width:665px;height:820px;z-index:118" class="clip layer"><img id="ct108m" src="media/assets_cut_k_helmet_sad.png" style="width:100%;height:100%;filter:grayscale(1) brightness(.9) drop-shadow(0 30px 40px rgba(0,0,0,.6));transform:none"><div class="face" style="left:156px;top:93px;width:209px;height:248px"></div></div>
+<div id="hd109" data-start="82.207" data-duration="9.834" style="top:300px;font-size:96px;text-align:center;z-index:159" class="clip edh avoid"><div class="mask"><div id="hd109l0" style="color:#FEDE5C">303* · ONLY THE 2nd INDIAN</div></div></div>
+<div id="hd110" data-start="86.066" data-duration="5.975" style="top:450px;font-size:96px;text-align:center;z-index:160" class="clip edh avoid"><div class="mask"><div id="hd110l0" style="color:#fff">DROPPED WITHIN MONTHS</div></div></div>
+<div id="hd111" data-start="87.61" data-duration="4.431" style="top:600px;font-size:96px;text-align:center;z-index:161" class="clip edh avoid"><div class="mask"><div id="hd111l0" style="color:#fff">ABANDONED BY HIS OWN STATE</div></div></div>
+<div id="hd112" data-start="89.346" data-duration="2.695" style="top:750px;font-size:96px;text-align:center;z-index:162" class="clip edh avoid"><div class="mask"><div id="hd112l0" style="color:#FEDE5C">AN 8-YEAR WAIT</div></div></div>
+<div id="cr113" data-start="82.189" data-duration="9.852" style="z-index:273" class="clip credit">PHOTO: BCCI</div>
+<div id="bg114" data-start="92.041" data-duration="1.871" style="position:absolute;inset:0;z-index:124;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg114t"></div><div class="grain"></div></div>
+<div id="hd115" data-start="92.071" data-duration="1.841" style="top:420px;font-size:150px;text-align:center;z-index:165" class="clip edh avoid"><div class="mask"><div id="hd115l0" style="color:#fff">SANJU GOT</div></div><div class="mask"><div id="hd115l1" style="color:#fff">CHANCES.</div></div></div>
+<div id="hd116" data-start="93.088" data-duration="0.824" style="top:840px;font-size:150px;text-align:center;z-index:166" class="clip edh avoid"><div class="mask"><div id="hd116l0" style="color:#fff">SHREYAS</div></div><div class="mask"><div id="hd116l1" style="color:#fff">CAME BACK.</div></div></div>
+<div id="bg117" data-start="93.912" data-duration="3.001" style="position:absolute;inset:0;z-index:127;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg117t"></div><div class="grain"></div></div>
+<div id="fr118" data-start="93.912" data-duration="3.001" style="left:40px;top:330px;z-index:128" class="clip frm"><div style="position:relative;width:1000px;height:698px;overflow:hidden"><img src="media/assets_hi_k_lords_walk.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:457px;top:132px;width:110px;height:133px"></div></div><div class="frc">Karun Nair</div></div>
+<div id="hd119" data-start="93.942" data-duration="2.971" style="top:1130px;font-size:140px;text-align:center;z-index:169" class="clip edh avoid"><div class="mask"><div id="hd119l0" style="color:#fff">KARUN WAITED</div></div><div class="mask"><div id="hd119l1" style="color:#FEDE5C">8 YEARS</div></div></div>
+<div id="cp120" data-start="95.299" data-duration="1.614" style="left:0;right:0;margin:0 auto;width:fit-content;top:1400px;z-index:130" class="clip chip avoid"><span class="dot"></span>FOR JUST 1 MORE CHANCE</div>
+<div id="cr121" data-start="93.912" data-duration="3.001" style="z-index:281" class="clip credit">PHOTO: BCCI</div>
+<div id="bg122" data-start="96.913" data-duration="3.243" style="position:absolute;inset:0;z-index:132;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg122t"></div><div class="grain"></div></div>
+<div id="fr123" data-start="96.913" data-duration="3.243" style="left:40px;top:330px;z-index:133" class="clip frm"><div style="position:relative;width:1000px;height:667px;overflow:hidden"><img src="media/assets_hi_k_walkoff_eng.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:392px;top:132px;width:45px;height:52px"></div><div class="face" style="left:160px;top:105px;width:38px;height:43px"></div><div class="face" style="left:796px;top:40px;width:34px;height:40px"></div></div></div>
+<div id="hd124" data-start="96.943" data-duration="3.213" style="top:1080px;font-size:150px;text-align:center;z-index:174" class="clip edh avoid"><div class="mask"><div id="hd124l0" style="color:#fff">A CRUELLER</div></div><div class="mask"><div id="hd124l1" style="color:#FEDE5C">INJUSTICE?</div></div></div>
+<div id="cr125" data-start="96.913" data-duration="3.243" style="z-index:285" class="clip credit">PHOTO: BCCI</div>
+<div id="bg126" data-start="100.156" data-duration="4.185" style="position:absolute;inset:0;z-index:136;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg126t"></div><div class="grain"></div></div>
+<div id="cm127" data-start="100.186" data-duration="4.155" style="z-index:137" class="clip cta"><div class="mot" id="cm127q"><span>CRUELLEST</span><i>injustice</i><span style="color:#FEDE5C">EVER?</span></div><div class="bubble" id="cm127b"><div class="av"></div><div><div class="who">you</div><div class="what" id="cm127w"></div></div></div><div class="cta2">Drop your answer in the comments 👇</div></div>
+<div id="bg128" data-start="104.341" data-duration="3.845" style="position:absolute;inset:0;z-index:138;background:#141416" class="clip layer full ed ink"><div class="edtex" id="bg128t"></div><div class="grain"></div></div>
+<div id="hd129" data-start="104.371" data-duration="3.815" style="top:330px;font-size:150px;text-align:center;z-index:179" class="clip edh avoid"><div class="mask"><div id="hd129l0" style="color:#fff">THE FULL</div></div><div class="mask"><div id="hd129l1" style="color:#FEDE5C">UNTOLD STORY</div></div></div>
+<div id="fr130" data-start="104.341" data-duration="3.845" style="left:40px;top:700px;z-index:140" class="clip frm"><div style="position:relative;width:1000px;height:561px;overflow:hidden"><img src="media/assets_hi_k_nets.png" style="width:100%;height:100%;object-fit:cover;filter:none"><div class="face" style="left:485px;top:66px;width:122px;height:152px"></div></div></div>
+<div id="cp131" data-start="106.567" data-duration="1.619" style="left:0;right:0;margin:0 auto;width:fit-content;top:1310px;z-index:141" class="clip chip avoid"><span class="dot"></span>👇 LINKED BELOW</div>
+<div id="cr132" data-start="104.341" data-duration="3.845" style="z-index:292" class="clip credit">PHOTO: BCCI</div>
+<div id="v3133" data-start="108.186" data-duration="2.404" style="position:absolute;inset:0;z-index:143;background:#030304" class="clip layer full"><img src="media/blender_renders_logo_last.png" style="position:absolute;inset:0;width:100%;height:100%"><video id="v3133v" class="clip" src="media/blender_renders_logo.mp4" muted playsinline data-start="108.186" data-duration="1.8" data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>
+<div id="cap134" data-start="0.286" data-duration="1.288" style="top:1500px" class="clip capb avoid"><span>THE BIGGEST INJUSTICE</span></div>
+<div id="cap135" data-start="1.574" data-duration="0.921" style="top:1500px" class="clip capb avoid"><span>IN INDIAN CRICKET?</span></div>
+<div id="cap136" data-start="2.495" data-duration="0.736" style="top:1500px" class="clip capb avoid"><span>IT WASN&#x27;T SANJU</span></div>
+<div id="cap137" data-start="3.231" data-duration="0.369" style="top:1500px" class="clip capb avoid"><span>SAMSON</span></div>
+<div id="cap138" data-start="3.6" data-duration="0.552" style="top:1500px" class="clip capb avoid"><span>IN AND OUT</span></div>
+<div id="cap139" data-start="4.152" data-duration="0.553" style="top:1500px" class="clip capb avoid"><span>OF THE TEAM</span></div>
+<div id="cap140" data-start="4.705" data-duration="0.368" style="top:1500px" class="clip capb avoid"><span>FOR YEARS</span></div>
+<div id="cap141" data-start="5.073" data-duration="0.553" style="top:1500px" class="clip capb avoid"><span>IT WASN&#x27;T SHREYAS</span></div>
+<div id="cap142" data-start="5.626" data-duration="0.184" style="top:1500px" class="clip capb avoid"><span>IYER</span></div>
+<div id="cap143" data-start="5.81" data-duration="1.288" style="top:1500px" class="clip capb avoid"><span>BRUTALLY IGNORED FOR</span></div>
+<div id="cap144" data-start="7.098" data-duration="0.737" style="top:1500px" class="clip capb avoid"><span>THE ASIA CUP</span></div>
+<div id="cap145" data-start="7.835" data-duration="1.105" style="top:1500px" class="clip capb avoid"><span>AFTER LEADING PUNJAB</span></div>
+<div id="cap146" data-start="8.94" data-duration="0.736" style="top:1500px" class="clip capb avoid"><span>TO A THRILLING</span></div>
+<div id="cap147" data-start="9.676" data-duration="0.71" style="top:1500px" class="clip capb avoid"><span>IPL FINAL</span></div>
+<div id="cap148" data-start="10.467" data-duration="0.546" style="top:1500px" class="clip capb avoid"><span>IT IS A</span></div>
+<div id="cap149" data-start="11.013" data-duration="0.728" style="top:1500px" class="clip capb avoid"><span>MAN YOU HAVE</span></div>
+<div id="cap150" data-start="11.741" data-duration="1.093" style="top:1500px" class="clip capb avoid"><span>ALREADY FORGOTTEN</span></div>
+<div id="cap151" data-start="12.834" data-duration="0.546" style="top:1500px" class="clip capb avoid"><span>KARUN NAIR</span></div>
+<div id="cap152" data-start="13.38" data-duration="1.639" style="top:1500px" class="clip capb avoid"><span>DECEMBER <em>2016</em></span></div>
+<div id="cap153" data-start="15.019" data-duration="0.364" style="top:1500px" class="clip capb avoid"><span>CHENNAI</span></div>
+<div id="cap154" data-start="15.383" data-duration="0.91" style="top:1500px" class="clip capb avoid"><span>A MIGHTY ENGLAND</span></div>
+<div id="cap155" data-start="16.293" data-duration="0.729" style="top:1500px" class="clip capb avoid"><span>ON THE OTHER</span></div>
+<div id="cap156" data-start="17.022" data-duration="0.365" style="top:1500px" class="clip capb avoid"><span>SIDE</span></div>
+<div id="cap157" data-start="17.387" data-duration="0.363" style="top:1500px" class="clip capb avoid"><span>A QUIET</span></div>
+<div id="cap158" data-start="17.75" data-duration="0.729" style="top:1500px" class="clip capb avoid"><span>FEARLESS <em>25-YEAR-OLD</em></span></div>
+<div id="cap159" data-start="18.479" data-duration="0.729" style="top:1500px" class="clip capb avoid"><span>PLAYING ONLY HIS</span></div>
+<div id="cap160" data-start="19.208" data-duration="0.521" style="top:1500px" class="clip capb avoid"><span><em>3RD</em> TEST</span></div>
+<div id="cap161" data-start="19.767" data-duration="0.743" style="top:1500px" class="clip capb avoid"><span>THE <em>1ST</em> HUNDRED</span></div>
+<div id="cap162" data-start="20.51" data-duration="0.373" style="top:1500px" class="clip capb avoid"><span>COMES</span></div>
+<div id="cap163" data-start="20.883" data-duration="0.744" style="top:1500px" class="clip capb avoid"><span>THE CROWD ERUPTS</span></div>
+<div id="cap164" data-start="21.627" data-duration="0.743" style="top:1500px" class="clip capb avoid"><span>THEN A GLORIOUS</span></div>
+<div id="cap165" data-start="22.37" data-duration="0.837" style="top:1500px" class="clip capb avoid"><span><em>200</em></span></div>
+<div id="cap166" data-start="23.207" data-duration="1.116" style="top:1500px" class="clip capb avoid"><span>THE ENTIRE STADIUM</span></div>
+<div id="cap167" data-start="24.323" data-duration="0.371" style="top:1500px" class="clip capb avoid"><span>RISES</span></div>
+<div id="cap168" data-start="24.694" data-duration="0.373" style="top:1500px" class="clip capb avoid"><span>AND THEN</span></div>
+<div id="cap169" data-start="25.067" data-duration="0.743" style="top:1500px" class="clip capb avoid"><span>A BREATHTAKING</span></div>
+<div id="cap170" data-start="25.81" data-duration="1.542" style="top:1500px" class="clip capb avoid"><span>HISTORIC <em>300</em></span></div>
+<div id="cap171" data-start="27.462" data-duration="1.13" style="top:1500px" class="clip capb avoid"><span><em>303</em> NOT OUT</span></div>
+<div id="cap172" data-start="28.592" data-duration="0.697" style="top:1500px" class="clip capb avoid"><span>ONLY THE <em>2ND</em></span></div>
+<div id="cap173" data-start="29.289" data-duration="0.87" style="top:1500px" class="clip capb avoid"><span>INDIAN EVER TO</span></div>
+<div id="cap174" data-start="30.159" data-duration="0.695" style="top:1500px" class="clip capb avoid"><span>SCORE A TEST</span></div>
+<div id="cap175" data-start="30.854" data-duration="0.871" style="top:1500px" class="clip capb avoid"><span>TRIPLE CENTURY</span></div>
+<div id="cap176" data-start="31.725" data-duration="1.218" style="top:1500px" class="clip capb avoid"><span>AFTER THE LEGENDARY</span></div>
+<div id="cap177" data-start="32.943" data-duration="0.657" style="top:1500px" class="clip capb avoid"><span>SEHWAG</span></div>
+<div id="cap178" data-start="33.638" data-duration="1.085" style="top:1500px" class="clip capb avoid"><span>THAT MAGICAL NIGHT</span></div>
+<div id="cap179" data-start="34.723" data-duration="0.867" style="top:1500px" class="clip capb avoid"><span>A PROUD NATION</span></div>
+<div id="cap180" data-start="35.59" data-duration="0.869" style="top:1500px" class="clip capb avoid"><span>SAID THE SAME</span></div>
+<div id="cap181" data-start="36.459" data-duration="0.868" style="top:1500px" class="clip capb avoid"><span>THING: INDIA HAS</span></div>
+<div id="cap182" data-start="37.327" data-duration="0.651" style="top:1500px" class="clip capb avoid"><span>FOUND ITS NEXT</span></div>
+<div id="cap183" data-start="37.978" data-duration="0.827" style="top:1500px" class="clip capb avoid"><span>SUPERSTAR</span></div>
+<div id="cap184" data-start="38.943" data-duration="0.891" style="top:1500px" class="clip capb avoid"><span>BUT CRICKET HAD</span></div>
+<div id="cap185" data-start="39.834" data-duration="0.893" style="top:1500px" class="clip capb avoid"><span>WRITTEN A COLD</span></div>
+<div id="cap186" data-start="40.727" data-duration="0.668" style="top:1500px" class="clip capb avoid"><span>HEARTLESS SCRIPT</span></div>
+<div id="cap187" data-start="41.395" data-duration="0.669" style="top:1500px" class="clip capb avoid"><span>WITHIN MONTHS</span></div>
+<div id="cap188" data-start="42.064" data-duration="0.669" style="top:1500px" class="clip capb avoid"><span>HE WAS OUT</span></div>
+<div id="cap189" data-start="42.733" data-duration="0.669" style="top:1500px" class="clip capb avoid"><span>OF THE TEAM</span></div>
+<div id="cap190" data-start="43.402" data-duration="0.446" style="top:1500px" class="clip capb avoid"><span>NO CALLS</span></div>
+<div id="cap191" data-start="43.848" data-duration="0.668" style="top:1500px" class="clip capb avoid"><span>NO CHANCE</span></div>
+<div id="cap192" data-start="44.516" data-duration="1.115" style="top:1500px" class="clip capb avoid"><span>NO EXPLANATIONS</span></div>
+<div id="cap193" data-start="45.631" data-duration="0.223" style="top:1500px" class="clip capb avoid"><span>LONG</span></div>
+<div id="cap194" data-start="45.854" data-duration="1.115" style="top:1500px" class="clip capb avoid"><span>PAINFUL YEARS PASSED</span></div>
+<div id="cap195" data-start="46.969" data-duration="1.115" style="top:1500px" class="clip capb avoid"><span>SELECTORS FORGOT</span></div>
+<div id="cap196" data-start="48.084" data-duration="0.873" style="top:1500px" class="clip capb avoid"><span>FANS FORGOT</span></div>
+<div id="cap197" data-start="49.062" data-duration="2.01" style="top:1500px" class="clip capb avoid"><span><em>10</em> DECEMBER <em>2022</em></span></div>
+<div id="cap198" data-start="51.072" data-duration="0.67" style="top:1500px" class="clip capb avoid"><span>THE WHOLE OF</span></div>
+<div id="cap199" data-start="51.742" data-duration="1.172" style="top:1500px" class="clip capb avoid"><span>INDIA WAS CELEBRATING</span></div>
+<div id="cap200" data-start="52.914" data-duration="1.34" style="top:1500px" class="clip capb avoid"><span>ISHAN KISHAN&#x27;S EXPLOSIVE</span></div>
+<div id="cap201" data-start="54.254" data-duration="0.671" style="top:1500px" class="clip capb avoid"><span>DOUBLE HUNDRED</span></div>
+<div id="cap202" data-start="54.925" data-duration="0.502" style="top:1500px" class="clip capb avoid"><span>AND ON THE</span></div>
+<div id="cap203" data-start="55.427" data-duration="0.503" style="top:1500px" class="clip capb avoid"><span>SAME DAY</span></div>
+<div id="cap204" data-start="55.93" data-duration="0.502" style="top:1500px" class="clip capb avoid"><span>A BROKEN</span></div>
+<div id="cap205" data-start="56.432" data-duration="1.34" style="top:1500px" class="clip capb avoid"><span>DESPERATE KARUN QUIETLY</span></div>
+<div id="cap206" data-start="57.772" data-duration="0.838" style="top:1500px" class="clip capb avoid"><span>TYPED: DEAR CRICKET</span></div>
+<div id="cap207" data-start="58.61" data-duration="0.753" style="top:1500px" class="clip capb avoid"><span>GIVE ME <em>1</em></span></div>
+<div id="cap208" data-start="59.363" data-duration="0.904" style="top:1500px" class="clip capb avoid"><span>MORE CHANCE</span></div>
+<div id="cap209" data-start="60.405" data-duration="0.894" style="top:1500px" class="clip capb avoid"><span>THAT SAME WEEK</span></div>
+<div id="cap210" data-start="61.299" data-duration="0.894" style="top:1500px" class="clip capb avoid"><span>HIS OWN STATE</span></div>
+<div id="cap211" data-start="62.193" data-duration="0.895" style="top:1500px" class="clip capb avoid"><span>KARNATAKA</span></div>
+<div id="cap212" data-start="63.088" data-duration="1.118" style="top:1500px" class="clip capb avoid"><span>COLDLY DROPPED HIM</span></div>
+<div id="cap213" data-start="64.206" data-duration="0.894" style="top:1500px" class="clip capb avoid"><span>FROM THEIR RANJI</span></div>
+<div id="cap214" data-start="65.1" data-duration="0.548" style="top:1500px" class="clip capb avoid"><span>TEAM TOO</span></div>
+<div id="cap215" data-start="65.548" data-duration="0.829" style="top:1500px" class="clip capb avoid"><span>AND WHAT HAPPENED</span></div>
+<div id="cap216" data-start="66.377" data-duration="0.166" style="top:1500px" class="clip capb avoid"><span>NEXT</span></div>
+<div id="cap217" data-start="66.543" data-duration="0.829" style="top:1500px" class="clip capb avoid"><span>BEFORE YOU FIND</span></div>
+<div id="cap218" data-start="67.372" data-duration="0.332" style="top:1500px" class="clip capb avoid"><span>IT OUT</span></div>
+<div id="cap219" data-start="67.704" data-duration="0.664" style="top:1500px" class="clip capb avoid"><span>IF YOU&#x27;RE A</span></div>
+<div id="cap220" data-start="68.368" data-duration="0.663" style="top:1500px" class="clip capb avoid"><span>TRUE CRICKET FAN</span></div>
+<div id="cap221" data-start="69.031" data-duration="0.83" style="top:1500px" class="clip capb avoid"><span>MAKE SURE YOU</span></div>
+<div id="cap222" data-start="69.861" data-duration="1.015" style="top:1500px" class="clip capb avoid"><span>FOLLOW THIS PAGE</span></div>
+<div id="cap223" data-start="70.995" data-duration="0.879" style="top:1500px" class="clip capb avoid"><span>BUT KARUN DIDN&#x27;T</span></div>
+<div id="cap224" data-start="71.874" data-duration="0.22" style="top:1500px" class="clip capb avoid"><span>BREAK</span></div>
+<div id="cap225" data-start="72.094" data-duration="0.879" style="top:1500px" class="clip capb avoid"><span>A NEW STATE</span></div>
+<div id="cap226" data-start="72.973" data-duration="0.66" style="top:1500px" class="clip capb avoid"><span>VIDARBHA</span></div>
+<div id="cap227" data-start="73.633" data-duration="0.439" style="top:1500px" class="clip capb avoid"><span>AND THEN</span></div>
+<div id="cap228" data-start="74.072" data-duration="0.879" style="top:1500px" class="clip capb avoid"><span>A RELENTLESS</span></div>
+<div id="cap229" data-start="74.951" data-duration="1.319" style="top:1500px" class="clip capb avoid"><span>UNSTOPPABLE STORM OF</span></div>
+<div id="cap230" data-start="76.27" data-duration="0.378" style="top:1500px" class="clip capb avoid"><span>RUNS</span></div>
+<div id="cap231" data-start="76.686" data-duration="0.695" style="top:1500px" class="clip capb avoid"><span>AND <em>8</em> YEARS</span></div>
+<div id="cap232" data-start="77.381" data-duration="0.398" style="top:1500px" class="clip capb avoid"><span>LATER</span></div>
+<div id="cap233" data-start="77.779" data-duration="0.993" style="top:1500px" class="clip capb avoid"><span>THE SAME INDIA</span></div>
+<div id="cap234" data-start="78.772" data-duration="0.796" style="top:1500px" class="clip capb avoid"><span>THAT FORGOT HIM</span></div>
+<div id="cap235" data-start="79.568" data-duration="0.795" style="top:1500px" class="clip capb avoid"><span>WAS FORCED TO</span></div>
+<div id="cap236" data-start="80.363" data-duration="0.596" style="top:1500px" class="clip capb avoid"><span>CALL HIM BACK</span></div>
+<div id="cap237" data-start="80.959" data-duration="0.794" style="top:1500px" class="clip capb avoid"><span>NOW THINK ABOUT</span></div>
+<div id="cap238" data-start="81.753" data-duration="0.433" style="top:1500px" class="clip capb avoid"><span>IT</span></div>
+<div id="cap239" data-start="82.257" data-duration="0.772" style="top:1500px" class="clip capb avoid"><span>ONLY THE <em>2ND</em></span></div>
+<div id="cap240" data-start="83.029" data-duration="0.964" style="top:1500px" class="clip capb avoid"><span>INDIAN EVER TO</span></div>
+<div id="cap241" data-start="83.993" data-duration="1.158" style="top:1500px" class="clip capb avoid"><span>SCORE A HISTORIC</span></div>
+<div id="cap242" data-start="85.151" data-duration="0.965" style="top:1500px" class="clip capb avoid"><span>TEST TRIPLE HUNDRED</span></div>
+<div id="cap243" data-start="86.116" data-duration="1.351" style="top:1500px" class="clip capb avoid"><span>RUTHLESSLY DROPPED WITHIN</span></div>
+<div id="cap244" data-start="87.467" data-duration="0.193" style="top:1500px" class="clip capb avoid"><span>MONTHS</span></div>
+<div id="cap245" data-start="87.66" data-duration="1.157" style="top:1500px" class="clip capb avoid"><span>ABANDONED BY HIS</span></div>
+<div id="cap246" data-start="88.817" data-duration="0.579" style="top:1500px" class="clip capb avoid"><span>OWN STATE</span></div>
+<div id="cap247" data-start="89.396" data-duration="0.773" style="top:1500px" class="clip capb avoid"><span>AND A PAINFUL</span></div>
+<div id="cap248" data-start="90.169" data-duration="0.964" style="top:1500px" class="clip capb avoid"><span>LONELY <em>8-YEAR</em> WAIT</span></div>
+<div id="cap249" data-start="91.133" data-duration="0.938" style="top:1500px" class="clip capb avoid"><span>TO COME BACK</span></div>
+<div id="cap250" data-start="92.11" data-duration="1.028" style="top:1500px" class="clip capb avoid"><span>SANJU GOT CHANCES</span></div>
+<div id="cap251" data-start="93.138" data-duration="0.824" style="top:1500px" class="clip capb avoid"><span>SHREYAS CAME BACK</span></div>
+<div id="cap252" data-start="93.962" data-duration="1.131" style="top:1500px" class="clip capb avoid"><span>KARUN WAITED <em>8</em></span></div>
+<div id="cap253" data-start="95.093" data-duration="0.617" style="top:1500px" class="clip capb avoid"><span>YEARS FOR JUST</span></div>
+<div id="cap254" data-start="95.71" data-duration="1.233" style="top:1500px" class="clip capb avoid"><span><em>1</em> MORE CHANCE</span></div>
+<div id="cap255" data-start="96.981" data-duration="0.495" style="top:1500px" class="clip capb avoid"><span>SO TELL ME</span></div>
+<div id="cap256" data-start="97.476" data-duration="0.66" style="top:1500px" class="clip capb avoid"><span>HAS THE INDIAN</span></div>
+<div id="cap257" data-start="98.136" data-duration="0.826" style="top:1500px" class="clip capb avoid"><span>CRICKET FACED AN</span></div>
+<div id="cap258" data-start="98.962" data-duration="1.157" style="top:1500px" class="clip capb avoid"><span>INJUSTICE THAN THIS?</span></div>
+<div id="cap259" data-start="104.419" data-duration="0.781" style="top:1500px" class="clip capb avoid"><span>THE FULL UNTOLD</span></div>
+<div id="cap260" data-start="105.2" data-duration="0.976" style="top:1500px" class="clip capb avoid"><span>STORY OF KARUN</span></div>
+<div id="cap261" data-start="106.176" data-duration="0.781" style="top:1500px" class="clip capb avoid"><span>NAIR IS LINKED</span></div>
+<div id="cap262" data-start="106.957" data-duration="1.229" style="top:1500px" class="clip capb avoid"><span>BELOW THIS VIDEO</span></div>
+</div></div>
+<div id="grainTop"></div>
+<div class="brand" id="brand"><img src="media/logo.png"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const tl = gsap.timeline({paused:true});
+tl.fromTo("#bg1t",{x:0,y:0},{x:-80,y:-40,duration:2.445,ease:"none"},0);
+tl.fromTo("#hd2l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},0.05);
+tl.fromTo("#hd2l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},0.13);
+tl.fromTo("#hd2l2",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},0.21000000000000002);
+tl.fromTo("#bg3t",{x:0,y:0},{x:-80,y:-40,duration:2.578,ease:"none"},2.445);
+tl.fromTo("#kk4",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},2.445);
+tl.fromTo("#hd5l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},2.495);
+tl.fromTo("#cp6",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},3.6);
+tl.fromTo("#sm7",{scale:2.6,opacity:0,rotation:-12},{scale:1,opacity:1,rotation:-6,duration:0.32,ease:"power4.in"},4.705);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},5.005);
+tl.fromTo("#bg8t",{x:0,y:0},{x:-80,y:-40,duration:5.366,ease:"none"},5.023);
+tl.fromTo("#kk9",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},5.023);
+tl.fromTo("#hd10l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},5.073);
+tl.fromTo("#cp11",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},5.81);
+tl.fromTo("#cp12",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},7.835);
+tl.fromTo("#sm13",{scale:2.6,opacity:0,rotation:-12},{scale:1,opacity:1,rotation:-6,duration:0.32,ease:"power4.in"},9.676);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},9.976);
+tl.fromTo("#bg14t",{x:0,y:0},{x:-80,y:-40,duration:2.395,ease:"none"},10.389);
+tl.fromTo("#fr15",{x:-900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},10.389);
+tl.to("#fr15",{y:-18,duration:2.395,ease:"none"},11.088999999999999);
+tl.fromTo("#hd16l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},11.013);
+tl.fromTo("#hd16l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},11.093);
+tl.fromTo("#ph18",{xPercent:100},{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"},12.784);
+tl.fromTo("#ph18m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},12.784);
+tl.fromTo("#ph18m",{scale:1.0},{scale:1.1,duration:0.546,ease:"none"},12.784);
+tl.fromTo("#hd20l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},12.814);
+tl.fromTo("#hd20l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},12.894);
+tl.fromTo("#fl21",{opacity:0.3},{opacity:0,duration:0.32,ease:"power2.out"},12.813999999999998);
+tl.fromTo("#bg22t",{x:0,y:0},{x:-80,y:-40,duration:4.007,ease:"none"},13.33);
+tl.fromTo("#hd23l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},13.36);
+tl.fromTo("#hd23l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},13.44);
+tl.fromTo("#cp24",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},15.019);
+tl.fromTo("#cp25",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},15.383);
+tl.fromTo("#bg26t",{x:0,y:0},{x:-80,y:-40,duration:2.362,ease:"none"},17.337);
+tl.fromTo("#fr27",{x:-900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},17.337);
+tl.to("#fr27",{y:-18,duration:2.362,ease:"none"},18.037);
+tl.fromTo("#cp28",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},18.479);
+tl.fromTo("#ph30",{yPercent:100},{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"},19.699);
+tl.fromTo("#ph30m",{skewX:0},{skewX:0,duration:0.45,ease:"expo.out"},19.699);
+tl.fromTo("#ph30m",{scale:1.0},{scale:1.1,duration:7.657,ease:"none"},19.699);
+tl.fromTo("#kk32",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},19.699);
+tl.fromTo("#od33d0",{yPercent:0},{yPercent:-10,duration:0.9,ease:"expo.out"},19.902);
+tl.fromTo("#od33d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},19.902);
+tl.fromTo("#od33d2",{yPercent:0},{yPercent:0,duration:1.2,ease:"expo.out"},19.902);
+tl.fromTo("#od33",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},19.852);
+tl.fromTo("#od33 .digits",{scale:1.1},{scale:1,duration:0.35,ease:"back.out(3)"},21.252);
+tl.fromTo("#od33 .oshine",{xPercent:-160},{xPercent:260,duration:0.7,ease:"power2.inOut"},21.252);
+tl.fromTo("#od33",{y:0},{y:-18,duration:2.096,ease:"none"},19.852);
+tl.fromTo("#od34d0",{yPercent:0},{yPercent:-20,duration:0.9,ease:"expo.out"},21.998);
+tl.fromTo("#od34d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},21.998);
+tl.fromTo("#od34d2",{yPercent:0},{yPercent:0,duration:1.2,ease:"expo.out"},21.998);
+tl.fromTo("#od34",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},21.948);
+tl.fromTo("#od34 .digits",{scale:1.1},{scale:1,duration:0.35,ease:"back.out(3)"},23.348);
+tl.fromTo("#od34 .oshine",{xPercent:-160},{xPercent:260,duration:0.7,ease:"power2.inOut"},23.348);
+tl.fromTo("#od34",{y:0},{y:-18,duration:3.254,ease:"none"},21.948);
+tl.fromTo("#od35d0",{yPercent:0},{yPercent:-30,duration:0.9,ease:"expo.out"},25.252000000000002);
+tl.fromTo("#od35d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},25.252000000000002);
+tl.fromTo("#od35d2",{yPercent:0},{yPercent:0,duration:1.2,ease:"expo.out"},25.252000000000002);
+tl.fromTo("#od35",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},25.202);
+tl.fromTo("#od35 .digits",{scale:1.1},{scale:1,duration:0.35,ease:"back.out(3)"},26.602);
+tl.fromTo("#od35 .oshine",{xPercent:-160},{xPercent:260,duration:0.7,ease:"power2.inOut"},26.602);
+tl.fromTo("#od35",{y:0},{y:-18,duration:2.154,ease:"none"},25.202);
+tl.fromTo("#fl36",{opacity:0.35},{opacity:0,duration:0.32,ease:"power2.out"},21.254);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:16,y:-8},{x:-16,y:8},{x:8,y:5},{x:0,y:0}],duration:0.35,ease:"none"},24.323);
+tl.fromTo("#bg37t",{x:0,y:0},{x:-80,y:-40,duration:1.186,ease:"none"},27.356);
+tl.fromTo("#od38d0",{yPercent:0},{yPercent:-30,duration:0.9,ease:"expo.out"},27.436);
+tl.fromTo("#od38d1",{yPercent:0},{yPercent:0,duration:1.05,ease:"expo.out"},27.436);
+tl.fromTo("#od38d2",{yPercent:0},{yPercent:-30,duration:1.2,ease:"expo.out"},27.436);
+tl.fromTo("#od38",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},27.386);
+tl.fromTo("#od38",{y:0},{y:-18,duration:1.156,ease:"none"},27.386);
+tl.fromTo("#od38 .olab",{y:20,opacity:0},{y:0,opacity:1,duration:0.4,ease:"expo.out"},27.736);
+tl.fromTo("#fl39",{opacity:0.35},{opacity:0,duration:0.32,ease:"power2.out"},27.406000000000002);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:24,y:-12},{x:-24,y:12},{x:12,y:8},{x:0,y:0}],duration:0.35,ease:"none"},27.956000000000003);
+tl.fromTo("#bg40t",{x:0,y:0},{x:-80,y:-40,duration:5.028,ease:"none"},28.542);
+tl.fromTo("#hd41l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},28.572);
+tl.fromTo("#hd41l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},28.651999999999997);
+tl.fromTo("#fr42",{x:900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},31.575);
+tl.to("#fr42",{y:-18,duration:1.995,ease:"none"},32.275);
+tl.fromTo("#cp43",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},31.725);
+tl.fromTo("#cp44",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},29.115);
+tl.fromTo("#bg46t",{x:0,y:0},{x:-80,y:-40,duration:5.305,ease:"none"},33.57);
+tl.fromTo("#kk47",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},33.57);
+tl.fromTo("#ct48",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},33.57);
+tl.fromTo("#ct48",{y:0},{y:-18,duration:5.305,ease:"sine.inOut"},33.57);
+tl.fromTo("#hd49l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},36.626);
+tl.fromTo("#hd49l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},36.705999999999996);
+tl.fromTo("#bg51t",{x:0,y:0},{x:-80,y:-40,duration:2.47,ease:"none"},38.875);
+tl.fromTo("#hd52l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},40.281);
+tl.fromTo("#hd52l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},40.361);
+tl.fromTo("#ph53",{xPercent:-100},{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"},41.345);
+tl.fromTo("#ph53m",{skewX:6},{skewX:0,duration:0.45,ease:"expo.out"},41.345);
+tl.fromTo("#ph53m",{scale:1.0},{scale:1.1,duration:2.007,ease:"none"},41.345);
+tl.fromTo("#cp55",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},41.445);
+tl.fromTo("#sm56",{scale:2.6,opacity:0,rotation:-10},{scale:1,opacity:1,rotation:-5,duration:0.32,ease:"power4.in"},42.51);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},42.809999999999995);
+tl.fromTo("#bg57t",{x:0,y:0},{x:-80,y:-40,duration:2.229,ease:"none"},43.352);
+tl.fromTo("#hd58l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},43.352);
+tl.fromTo("#hd59l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},43.798);
+tl.fromTo("#hd60l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},44.466);
+tl.fromTo("#bg61t",{x:0,y:0},{x:-80,y:-40,duration:3.413,ease:"none"},45.581);
+tl.fromTo("#fr62",{x:900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},45.581);
+tl.to("#fr62",{y:-18,duration:3.413,ease:"none"},46.281000000000006);
+tl.fromTo("#hd63l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},46.919);
+tl.fromTo("#hd63l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},46.998999999999995);
+tl.fromTo("#bg65t",{x:0,y:0},{x:-80,y:-40,duration:2.028,ease:"none"},48.994);
+tl.fromTo("#hd66l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},49.024);
+tl.fromTo("#hd66l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},49.104);
+tl.fromTo("#bg67t",{x:0,y:0},{x:-80,y:-40,duration:3.853,ease:"none"},51.022);
+tl.fromTo("#kk68",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},51.022);
+tl.fromTo("#fr69",{x:900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},52.145);
+tl.to("#fr69",{y:-18,duration:2.73,ease:"none"},52.845000000000006);
+tl.fromTo("#od70d0",{yPercent:0},{yPercent:-20,duration:0.9,ease:"expo.out"},53.535);
+tl.fromTo("#od70d1",{yPercent:0},{yPercent:-10,duration:1.05,ease:"expo.out"},53.535);
+tl.fromTo("#od70d2",{yPercent:0},{yPercent:0,duration:1.2,ease:"expo.out"},53.535);
+tl.fromTo("#od70",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},53.485);
+tl.fromTo("#od70",{y:0},{y:-18,duration:1.39,ease:"none"},53.485);
+tl.fromTo("#od70 .olab",{y:20,opacity:0},{y:0,opacity:1,duration:0.4,ease:"expo.out"},53.835);
+tl.fromTo("#bg72t",{x:0,y:0},{x:-80,y:-40,duration:2.512,ease:"none"},54.875);
+tl.fromTo("#kk73",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},54.875);
+tl.fromTo("#fr74",{x:900,rotation:8},{x:0,rotation:2,duration:0.7,ease:"expo.out"},54.875);
+tl.to("#fr74",{y:-18,duration:2.512,ease:"none"},55.575);
+tl.fromTo("#hd75l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},56.047);
+tl.fromTo("#hd75l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},56.126999999999995);
+tl.fromTo("#bg77t",{x:0,y:0},{x:-80,y:-40,duration:2.95,ease:"none"},57.387);
+tl.fromTo("#fr78",{x:-900,rotation:-4},{x:0,rotation:-1,duration:0.7,ease:"expo.out"},57.387);
+tl.to("#fr78",{y:-18,duration:2.95,ease:"none"},58.087);
+tl.fromTo("#kk79",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},57.387);
+tl.fromTo("#ph81",{xPercent:100},{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"},60.337);
+tl.fromTo("#ph81m",{skewX:-6},{skewX:0,duration:0.45,ease:"expo.out"},60.337);
+tl.fromTo("#ph81m",{scale:1.0},{scale:1.1,duration:5.181,ease:"none"},60.337);
+tl.fromTo("#kk83",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},60.337);
+tl.fromTo("#hd84l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},61.249);
+tl.fromTo("#sm85",{scale:2.6,opacity:0,rotation:-10},{scale:1,opacity:1,rotation:-5,duration:0.32,ease:"power4.in"},63.535);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},63.834999999999994);
+tl.fromTo("#bg86t",{x:0,y:0},{x:-80,y:-40,duration:5.295,ease:"none"},65.518);
+tl.fromTo("#hd87l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},65.548);
+tl.fromTo("#hd87l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},65.628);
+tl.fromTo("#hd88l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},67.654);
+tl.fromTo("#fw89",{y:120,opacity:0,scale:.9},{y:0,opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"},66.543);
+tl.fromTo("#fw89c",{x:260,y:260,opacity:0},{x:0,y:0,opacity:1,duration:0.6,ease:"power2.out"},69.26100000000001);
+tl.to("#fw89c",{scale:.75,duration:0.08,yoyo:true,repeat:1},69.861);
+tl.call(()=>{document.getElementById("fw89t").textContent="Following ✓";document.getElementById("fw89b").classList.add("on")},null,69.941);
+tl.fromTo("#fw89b",{scale:1},{scale:1.12,duration:0.12,yoyo:true,repeat:1},69.941);
+tl.fromTo("#ph90",{yPercent:100},{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"},70.813);
+tl.fromTo("#ph90m",{skewX:0},{skewX:0,duration:0.45,ease:"expo.out"},70.813);
+tl.fromTo("#ph90m",{scale:1.0},{scale:1.1,duration:2.77,ease:"none"},70.813);
+tl.fromTo("#kk92",{y:-16,opacity:0,letterSpacing:"0.5em"},{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"},70.813);
+tl.fromTo("#hd93l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},70.843);
+tl.fromTo("#hd93l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},70.923);
+tl.fromTo("#bg94t",{x:0,y:0},{x:-80,y:-40,duration:3.035,ease:"none"},73.583);
+tl.fromTo("#hd95l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},73.613);
+tl.fromTo("#od96d0",{yPercent:0},{yPercent:-70,duration:0.9,ease:"expo.out"},74.342);
+tl.fromTo("#od96d1",{yPercent:0},{yPercent:-70,duration:1.05,ease:"expo.out"},74.342);
+tl.fromTo("#od96d2",{yPercent:0},{yPercent:-90,duration:1.2,ease:"expo.out"},74.342);
+tl.fromTo("#od96",{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"},74.292);
+tl.fromTo("#od96 .digits",{scale:1.1},{scale:1,duration:0.35,ease:"back.out(3)"},75.69200000000001);
+tl.fromTo("#od96 .oshine",{xPercent:-160},{xPercent:260,duration:0.7,ease:"power2.inOut"},75.69200000000001);
+tl.fromTo("#od96",{y:0},{y:-18,duration:2.326,ease:"none"},74.292);
+tl.fromTo("#od96 .olab",{y:20,opacity:0},{y:0,opacity:1,duration:0.4,ease:"expo.out"},74.642);
+tl.fromTo("#fr97",{x:900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},74.951);
+tl.to("#fr97",{y:-18,duration:1.667,ease:"none"},75.651);
+tl.fromTo("#bg99t",{x:0,y:0},{x:-80,y:-40,duration:2.9,ease:"none"},76.618);
+tl.fromTo("#hd100l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},76.835);
+tl.fromTo("#hd100l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},76.91499999999999);
+tl.fromTo("#bg101t",{x:0,y:0},{x:-80,y:-40,duration:1.391,ease:"none"},79.518);
+tl.fromTo("#fr102",{x:-900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},79.518);
+tl.to("#fr102",{y:-18,duration:1.391,ease:"none"},80.218);
+tl.fromTo("#sm103",{scale:2.6,opacity:0,rotation:-10},{scale:1,opacity:1,rotation:-5,duration:0.32,ease:"power4.in"},80.363);
+tl.fromTo("#world",{x:0,y:0},{keyframes:[{x:22,y:-11},{x:-22,y:11},{x:11,y:7},{x:0,y:0}],duration:0.35,ease:"none"},80.663);
+tl.fromTo("#bg105t",{x:0,y:0},{x:-80,y:-40,duration:1.28,ease:"none"},80.909);
+tl.fromTo("#hd106l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},80.939);
+tl.fromTo("#hd106l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},81.01899999999999);
+tl.fromTo("#bg107t",{x:0,y:0},{x:-80,y:-40,duration:9.852,ease:"none"},82.189);
+tl.fromTo("#ct108",{x:700,opacity:0},{x:0,opacity:1,duration:0.6,ease:"expo.out"},82.189);
+tl.fromTo("#ct108",{y:0},{y:-18,duration:9.852,ease:"sine.inOut"},82.189);
+tl.fromTo("#hd109l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},82.207);
+tl.fromTo("#hd110l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},86.066);
+tl.fromTo("#hd111l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},87.61);
+tl.fromTo("#hd112l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},89.346);
+tl.fromTo("#bg114t",{x:0,y:0},{x:-80,y:-40,duration:1.871,ease:"none"},92.041);
+tl.fromTo("#hd115l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},92.071);
+tl.fromTo("#hd115l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},92.151);
+tl.fromTo("#hd116l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},93.088);
+tl.fromTo("#hd116l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},93.16799999999999);
+tl.fromTo("#bg117t",{x:0,y:0},{x:-80,y:-40,duration:3.001,ease:"none"},93.912);
+tl.fromTo("#fr118",{x:-900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},93.912);
+tl.to("#fr118",{y:-18,duration:3.001,ease:"none"},94.61200000000001);
+tl.fromTo("#hd119l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},93.942);
+tl.fromTo("#hd119l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},94.02199999999999);
+tl.fromTo("#cp120",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},95.299);
+tl.fromTo("#bg122t",{x:0,y:0},{x:-80,y:-40,duration:3.243,ease:"none"},96.913);
+tl.fromTo("#fr123",{x:900,rotation:8},{x:0,rotation:2,duration:0.7,ease:"expo.out"},96.913);
+tl.to("#fr123",{y:-18,duration:3.243,ease:"none"},97.613);
+tl.fromTo("#hd124l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},96.943);
+tl.fromTo("#hd124l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},97.023);
+tl.fromTo("#bg126t",{x:0,y:0},{x:-80,y:-40,duration:4.185,ease:"none"},100.156);
+tl.fromTo("#cm127q span,#cm127q i",{y:40,opacity:0},{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"},100.186);
+tl.fromTo("#cm127b",{y:60,opacity:0,scale:.9},{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"},100.686);
+(()=>{const o={n:0};const s="Karun Nair. No doubt 💔";tl.to(o,{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{document.getElementById("cm127w").textContent=[...s].slice(0,Math.round(o.n)).join("")}},101.08600000000001)})();
+tl.fromTo("#bg128t",{x:0,y:0},{x:-80,y:-40,duration:3.845,ease:"none"},104.341);
+tl.fromTo("#hd129l0",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},104.371);
+tl.fromTo("#hd129l1",{yPercent:110},{yPercent:0,duration:0.55,ease:"expo.out"},104.451);
+tl.fromTo("#fr130",{x:-900,rotation:-8},{x:0,rotation:-2,duration:0.7,ease:"expo.out"},104.341);
+tl.to("#fr130",{y:-18,duration:3.845,ease:"none"},105.041);
+tl.fromTo("#cp131",{y:24,opacity:0},{y:0,opacity:1,duration:0.5,ease:"expo.out"},106.567);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},28.55);
+tl.fromTo("#brand",{opacity:0},{opacity:.95,duration:0.25,immediateRender:false},36.45);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},60.25);
+tl.fromTo("#brand",{opacity:0},{opacity:.95,duration:0.25,immediateRender:false},65.75);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},70.75);
+tl.fromTo("#brand",{opacity:0},{opacity:.95,duration:0.25,immediateRender:false},76.85);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},84.85);
+tl.fromTo("#brand",{opacity:0},{opacity:.95,duration:0.25,immediateRender:false},88.05);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},91.25);
+tl.fromTo("#brand",{opacity:0},{opacity:.95,duration:0.25,immediateRender:false},92.25);
+tl.fromTo("#brand",{opacity:.95},{opacity:0,duration:0.2,immediateRender:false},107.88600000000001);
+tl.fromTo("#cap134 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},0.286);
+tl.fromTo("#cap135 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},1.574);
+tl.fromTo("#cap136 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},2.495);
+tl.fromTo("#cap137 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},3.231);
+tl.fromTo("#cap138 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},3.6);
+tl.fromTo("#cap139 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},4.152);
+tl.fromTo("#cap140 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},4.705);
+tl.fromTo("#cap141 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},5.073);
+tl.fromTo("#cap142 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},5.626);
+tl.fromTo("#cap143 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},5.81);
+tl.fromTo("#cap144 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},7.098);
+tl.fromTo("#cap145 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},7.835);
+tl.fromTo("#cap146 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},8.94);
+tl.fromTo("#cap147 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},9.676);
+tl.fromTo("#cap148 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},10.467);
+tl.fromTo("#cap149 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},11.013);
+tl.fromTo("#cap150 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},11.741);
+tl.fromTo("#cap151 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},12.834);
+tl.fromTo("#cap152 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},13.38);
+tl.fromTo("#cap153 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},15.019);
+tl.fromTo("#cap154 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},15.383);
+tl.fromTo("#cap155 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},16.293);
+tl.fromTo("#cap156 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},17.022);
+tl.fromTo("#cap157 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},17.387);
+tl.fromTo("#cap158 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},17.75);
+tl.fromTo("#cap159 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},18.479);
+tl.fromTo("#cap160 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},19.208);
+tl.fromTo("#cap161 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},19.767);
+tl.fromTo("#cap162 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},20.51);
+tl.fromTo("#cap163 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},20.883);
+tl.fromTo("#cap164 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},21.627);
+tl.fromTo("#cap165 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},22.37);
+tl.fromTo("#cap166 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},23.207);
+tl.fromTo("#cap167 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},24.323);
+tl.fromTo("#cap168 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},24.694);
+tl.fromTo("#cap169 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},25.067);
+tl.fromTo("#cap170 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},25.81);
+tl.fromTo("#cap171 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},27.462);
+tl.fromTo("#cap172 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},28.592);
+tl.fromTo("#cap173 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},29.289);
+tl.fromTo("#cap174 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},30.159);
+tl.fromTo("#cap175 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},30.854);
+tl.fromTo("#cap176 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},31.725);
+tl.fromTo("#cap177 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},32.943);
+tl.fromTo("#cap178 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},33.638);
+tl.fromTo("#cap179 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},34.723);
+tl.fromTo("#cap180 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},35.59);
+tl.fromTo("#cap181 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},36.459);
+tl.fromTo("#cap182 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},37.327);
+tl.fromTo("#cap183 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},37.978);
+tl.fromTo("#cap184 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},38.943);
+tl.fromTo("#cap185 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},39.834);
+tl.fromTo("#cap186 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},40.727);
+tl.fromTo("#cap187 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},41.395);
+tl.fromTo("#cap188 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},42.064);
+tl.fromTo("#cap189 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},42.733);
+tl.fromTo("#cap190 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},43.402);
+tl.fromTo("#cap191 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},43.848);
+tl.fromTo("#cap192 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},44.516);
+tl.fromTo("#cap193 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},45.631);
+tl.fromTo("#cap194 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},45.854);
+tl.fromTo("#cap195 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},46.969);
+tl.fromTo("#cap196 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},48.084);
+tl.fromTo("#cap197 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},49.062);
+tl.fromTo("#cap198 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},51.072);
+tl.fromTo("#cap199 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},51.742);
+tl.fromTo("#cap200 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},52.914);
+tl.fromTo("#cap201 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},54.254);
+tl.fromTo("#cap202 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},54.925);
+tl.fromTo("#cap203 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},55.427);
+tl.fromTo("#cap204 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},55.93);
+tl.fromTo("#cap205 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},56.432);
+tl.fromTo("#cap206 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},57.772);
+tl.fromTo("#cap207 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},58.61);
+tl.fromTo("#cap208 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},59.363);
+tl.fromTo("#cap209 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},60.405);
+tl.fromTo("#cap210 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},61.299);
+tl.fromTo("#cap211 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},62.193);
+tl.fromTo("#cap212 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},63.088);
+tl.fromTo("#cap213 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},64.206);
+tl.fromTo("#cap214 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},65.1);
+tl.fromTo("#cap215 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},65.548);
+tl.fromTo("#cap216 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},66.377);
+tl.fromTo("#cap217 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},66.543);
+tl.fromTo("#cap218 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},67.372);
+tl.fromTo("#cap219 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},67.704);
+tl.fromTo("#cap220 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},68.368);
+tl.fromTo("#cap221 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},69.031);
+tl.fromTo("#cap222 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},69.861);
+tl.fromTo("#cap223 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},70.995);
+tl.fromTo("#cap224 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},71.874);
+tl.fromTo("#cap225 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},72.094);
+tl.fromTo("#cap226 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},72.973);
+tl.fromTo("#cap227 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},73.633);
+tl.fromTo("#cap228 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},74.072);
+tl.fromTo("#cap229 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},74.951);
+tl.fromTo("#cap230 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},76.27);
+tl.fromTo("#cap231 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},76.686);
+tl.fromTo("#cap232 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},77.381);
+tl.fromTo("#cap233 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},77.779);
+tl.fromTo("#cap234 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},78.772);
+tl.fromTo("#cap235 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},79.568);
+tl.fromTo("#cap236 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},80.363);
+tl.fromTo("#cap237 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},80.959);
+tl.fromTo("#cap238 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},81.753);
+tl.fromTo("#cap239 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},82.257);
+tl.fromTo("#cap240 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},83.029);
+tl.fromTo("#cap241 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},83.993);
+tl.fromTo("#cap242 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},85.151);
+tl.fromTo("#cap243 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},86.116);
+tl.fromTo("#cap244 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},87.467);
+tl.fromTo("#cap245 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},87.66);
+tl.fromTo("#cap246 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},88.817);
+tl.fromTo("#cap247 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},89.396);
+tl.fromTo("#cap248 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},90.169);
+tl.fromTo("#cap249 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},91.133);
+tl.fromTo("#cap250 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},92.11);
+tl.fromTo("#cap251 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},93.138);
+tl.fromTo("#cap252 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},93.962);
+tl.fromTo("#cap253 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},95.093);
+tl.fromTo("#cap254 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},95.71);
+tl.fromTo("#cap255 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},96.981);
+tl.fromTo("#cap256 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},97.476);
+tl.fromTo("#cap257 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},98.136);
+tl.fromTo("#cap258 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},98.962);
+tl.fromTo("#cap259 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},104.419);
+tl.fromTo("#cap260 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},105.2);
+tl.fromTo("#cap261 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},106.176);
+tl.fromTo("#cap262 span",{y:14,opacity:0},{y:0,opacity:1,duration:0.18,ease:"power3.out"},106.957);
+tl.fromTo("#cam",{scale:1.025,rotation:-0.35,x:-6},{scale:1.055,rotation:0.35,x:6,duration:3.2,ease:"sine.inOut",repeat:35,yoyo:true},0);
+tl.fromTo("#grainTop",{x:0,y:0},{x:-48,y:-36,duration:110.59,ease:"steps(1327)"},0);
+tl.set({},{},110.59);
+window.__timelines = window.__timelines || {};
+window.__timelines["root"] = tl;
+</script></body></html>
