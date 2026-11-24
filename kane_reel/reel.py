@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Karun Nair: the cruellest injustice in Indian cricket. 9:16 reel, HyperFrames composition.
+"""Kane Williamson: the quiet genius (vintage poster style). 9:16 reel, HyperFrames composition.
 
     python3 reel.py   ->  hf/index.html (+ hf/media/) and out/events.json (SFX cue list for soundtrack.py)
 
@@ -438,7 +438,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"c1"}  # the comment card carries it
+NO_CAPTION = {"q1"}  # the comment card carries it
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -1456,211 +1456,356 @@ def ground(name, venue, score, start, dur, x, y, rot, side):
     tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y - 50)
 
 
-SOC = "PHOTO: VIA X / @karun126"
-REDC = "#ff5a4f"
+REDC = "#d4372c"
+PC = {"rust": "#b5523a", "blue": "#2d4b63", "char": "#2a2c30"}
+
+
+def poster(start, dur, col="rust"):
+    """Vintage poster ground: flat colour, slowly turning sunburst rays, paper grid; never still."""
+    i = nid("po")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:{PC[col]};overflow:hidden">'
+        f'<div class="rays" id="{i}r"></div><div class="pgrid"></div><div class="pvig"></div></div>')
+    anim(f'tl.fromTo("#{i}r",{{rotation:0}},{{rotation:{12 + dur * 2.5:.1f},duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.12}},{start})')
+    return i
+
+
+def pcut(name, start, dur, x=None, h=1350, side="right", bottom=0, flip=False):
+    """Black-and-white 'printed' cut-out: slides in, then keeps breathing (slow scale + drift)."""
+    i = sticker(name, start, dur, side=side, x=x, h=h, bottom=bottom, flip=flip)
+    add(f'<style>#{i} img{{filter:grayscale(1) contrast(1.35) brightness(1.04) sepia(.18) drop-shadow(0 30px 40px rgba(0,0,0,.55)) !important}}</style>')
+    anim(f'tl.fromTo("#{i}m",{{scale:1,transformOrigin:"50% 100%"}},{{scale:1.07,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    return i
+
+
+def pphoto(name, start, dur, tint="blue", colour=False, side="right", push=(1.0, 1.15), credit_txt="PHOTO: GETTY IMAGES"):
+    """Full-screen photo in print style (B&W with a colour wash) or in colour for the big moment; always moving."""
+    i = ph(name, start, dur, credit_txt, side=side, fx=None if colour else "grey", push=push)
+    if not colour:
+        t = nid("tn")
+        add(f'<div id="{t}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};background:{PC[tint]};mix-blend-mode:multiply;opacity:.55"></div>')
+    anim(f'tl.fromTo("#{i}m",{{x:-30}},{{x:30,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    shadebot(start, dur)
+    return i
 
 
 def shadebot(start, dur):
-    """Dark gradient over the lower half of a bright photo so the type on it reads."""
     i = nid("sh")
-    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:0;right:0;top:760px;bottom:0;z-index:{z()};'
-        f'background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.45) 40%,rgba(0,0,0,.55))"></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:0;right:0;top:900px;bottom:0;z-index:{z()};'
+        f'background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.45) 45%,rgba(0,0,0,.55))"></div>')
+
+
+def ltag(txt, start, dur, y=300, x=None, gold=False):
+    """Small black label box with white caps (the reference's tags)."""
+    i = nid("lt")
+    y, x = mv(i, y, x)
+    pos = f"left:{x}px" if x is not None else "left:0;right:0;margin:0 auto;width:fit-content"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ltag avoid{" gold" if gold else ""}" style="{pos};top:{y}px;z-index:{z() + 80}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scaleX:0,transformOrigin:"0% 50%"}},{{scaleX:1,duration:0.3,ease:"expo.out"}},{start})')
+    cue(start, "pop", 0.6)
+    return i
+
+
+def serif(txt, start, dur, y=400, size=200, color=Y, x=None, sfx="impact"):
+    """Gold italic serif word/number, rising in with a slight tilt."""
+    i = nid("sf")
+    y, x = mv(i, y, x)
+    pos = f"left:{x}px" if x is not None else "left:0;right:0;text-align:center"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="serif avoid" style="{pos};top:{y}px;font-size:{size}px;color:{color};z-index:{z() + 80}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0,rotation:-4}},{{y:0,opacity:1,rotation:-2,duration:0.45,ease:"back.out(1.8)"}},{start})')
+    anim(f'tl.to("#{i}",{{scale:1.06,duration:{max(0.5, dur):.2f},ease:"none"}},{start + 0.45})')
+    cue(start, sfx, 0.9)
+    return i
+
+
+def rstamp(txt, start, dur, y=1100, color="#111", rot=-5, size=86, x=None):
+    """Rubber stamp: outlined box, slams in."""
+    i = nid("rs")
+    y, x = mv(i, y, x)
+    pos = f"left:{x}px" if x is not None else "left:0;right:0;margin:0 auto;width:fit-content"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="rstamp avoid" style="{pos};top:{y}px;font-size:{size}px;color:{color};border-color:{color};z-index:{z() + 90}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:2.2,opacity:0,rotation:{rot * 2}}},{{scale:1,opacity:1,rotation:{rot},duration:0.28,ease:"power4.in"}},{start})')
+    shake(start + 0.26, 12)
+    cue(start + 0.26, "impact", 0.9)
+    return i
+
+
+def tiles(start, dur, t_cross, y=620):
+    """Five Test tiles; at t_cross Tests 3-5 get a red X."""
+    i = nid("ti")
+    cells = "".join(f'<div class="tile" id="{i}c{k}"><span>TEST</span><b>{k + 1}</b>'
+                    f'{"<svg viewBox=\'0 0 100 100\'><path id=\'%sx%d\' d=\'M12 12 L88 88 M88 12 L12 88\'/></svg>" % (i, k) if k >= 2 else ""}</div>'
+                    for k in range(5))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tiles avoid" style="top:{y}px;z-index:{z() + 60}">{cells}</div>')
+    anim(f'tl.fromTo("#{i} .tile",{{y:80,opacity:0,rotation:-8}},{{y:0,opacity:1,rotation:0,duration:0.4,stagger:0.08,ease:"back.out(2)"}},{start})')
+    for k in range(5):
+        cue(start + 0.08 * k, "tick", 0.7)
+    for k in range(2, 5):
+        anim(f'tl.fromTo("#{i}x{k}",{{strokeDasharray:240,strokeDashoffset:240}},{{strokeDashoffset:0,duration:0.25,ease:"power2.out"}},{t_cross + 0.12 * (k - 2)})')
+        anim(f'tl.to("#{i}c{k}",{{opacity:.55,duration:0.2}},{t_cross + 0.12 * (k - 2) + 0.2})')
+        cue(t_cross + 0.12 * (k - 2), "swish", 0.7)
+
+
+def xmarks(start, dur, t2, y=520):
+    """Two big hand-drawn X's: 1st innings, 2nd innings."""
+    i = nid("xm")
+    cell = lambda k, lab: (f'<div class="xm" id="{i}m{k}"><svg viewBox="0 0 200 200"><path id="{i}p{k}" d="M30 30 L170 170 M170 30 L30 170"/></svg>'
+                           f'<div class="ltag">{lab}</div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="xms avoid" style="top:{y}px;z-index:{z() + 60}">{cell(0, "1st INNINGS")}{cell(1, "2nd INNINGS")}</div>')
+    for k, t in enumerate((start + 0.05, t2)):
+        anim(f'tl.fromTo("#{i}m{k}",{{opacity:0}},{{opacity:1,duration:0.05}},{t})')
+        anim(f'tl.fromTo("#{i}p{k}",{{strokeDasharray:420,strokeDashoffset:420}},{{strokeDashoffset:0,duration:0.35,ease:"power2.out"}},{t})')
+        cue(t, "swish", 0.9)
+
+
+def stopwatch(start, dur, y=900, x=380):
+    i = nid("sw")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="swatch avoid" style="left:{x}px;top:{y}px;z-index:{z() + 60}"><svg viewBox="0 0 320 380" width="320" height="380">'
+        f'<rect x="140" y="0" width="40" height="34" rx="6" fill="#ddd"/><circle cx="160" cy="210" r="150" fill="#efe9dd" stroke="#bbb" stroke-width="14"/>'
+        + "".join(f'<line x1="160" y1="72" x2="160" y2="{92 if k % 5 else 104}" stroke="#333" stroke-width="{6 if k % 5 == 0 else 3}" transform="rotate({k * 6} 160 210)"/>' for k in range(60))
+        + f'<g id="{i}h"><line x1="160" y1="210" x2="160" y2="88" stroke="{REDC}" stroke-width="8" stroke-linecap="round"/></g><circle cx="160" cy="210" r="12" fill="#222"/></svg></div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0.6,opacity:0}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{start})')
+    anim(f'tl.fromTo("#{i}h",{{rotation:0,svgOrigin:"160 210"}},{{rotation:720,svgOrigin:"160 210",duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    for k in range(int(dur / 0.25)):
+        cue(start + 0.25 * k, "tick", 0.45)
+
+
+def split(start, dur, left, right, ltxt, rtxt, lnum, rnum, t_flip=None):
+    """Reference split screen: left pane (rust) a giant with his number, right pane (blue) Kane with a '?' that may flip."""
+    i = nid("sp")
+    def pane(k, name, col, lab, num):
+        src = media(f"assets/cut/{name}.png")
+        with Image.open(os.path.join(HERE, "assets", "cut", name + ".png")) as im:
+            w = round(1250 * im.width / im.height)
+        if w > 900:
+            w = 900
+        hh = round(w * im.height / im.width) if w == 900 else 1250
+        return (f'<div class="spp" id="{i}p{k}" style="left:{k * 540}px;background:{PC[col]}"><div class="rays"></div>'
+                f'<div class="spi" id="{i}i{k}" style="left:{270 - w / 2:.0f}px;width:{w}px;height:{hh}px"><img src="{src}">{face_marks("cut/" + name, 0, 0, w, hh)}</div>'
+                f'<div class="ltag" style="position:absolute;top:300px;left:0;right:0;margin:0 auto;width:fit-content">{html.escape(lab)}</div>'
+                f'<div class="serif spn" id="{i}n{k}">{html.escape(num)}</div>'
+                f'<div class="ltag" style="position:absolute;top:610px;left:0;right:0;margin:0 auto;width:fit-content">TESTS</div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()}">'
+        f'{pane(0, left, "rust", ltxt, lnum)}{pane(1, right, "blue", rtxt, rnum if t_flip is None else "?")}</div>')
+    anim(f'tl.fromTo("#{i}p0",{{yPercent:-100}},{{yPercent:0,duration:0.4,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}p1",{{yPercent:100}},{{yPercent:0,duration:0.4,ease:"expo.out"}},{start})')
+    for k in (0, 1):
+        anim(f'tl.fromTo("#{i}i{k}",{{scale:1}},{{scale:1.08,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    anim(f'tl.fromTo("#{i}n0",{{scale:0.5,opacity:0}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{start + 0.2})')
+    anim(f'tl.fromTo("#{i}n1",{{rotationY:0}},{{rotationY:360,duration:1.2,ease:"none",repeat:{int(dur / 1.2)}}},{start + 0.2})')
+    if t_flip:
+        anim(f'tl.call(()=>{{document.getElementById("{i}n1").textContent={json.dumps(rnum)}}},null,{t_flip})')
+        anim(f'tl.fromTo("#{i}n1",{{scale:1.6}},{{scale:1,duration:0.35,ease:"back.out(2)",immediateRender:false}},{t_flip})')
+        cue(t_flip, "impact", 1.0)
+    cue(start, "whoosh", 0.9)
+    cue(start + 0.2, "pop", 0.9)
+
+
+def hbars(start, dur, rows, y=620, unit=""):
+    """Horizontal bar chart (gold for Kane, pale for the rest); values count up."""
+    i = nid("hb")
+    mx = max(v for _, v, _ in rows)
+    body = "".join(f'<div class="hbr"><span>{html.escape(n)}</span><div class="hbt"><i id="{i}b{k}" style="background:{Y if g else "#d9d3c4"}"></i></div>'
+                   f'<b id="{i}v{k}">0</b></div>' for k, (n, v, g) in enumerate(rows))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="hbars avoid" style="top:{y}px;z-index:{z() + 60}">{body}</div>')
+    for k, (n, v, g) in enumerate(rows):
+        t0 = start + 0.15 + 0.2 * k
+        anim(f'tl.fromTo("#{i}b{k}",{{width:"0%"}},{{width:"{100 * v / mx:.0f}%",duration:0.8,ease:"expo.out"}},{t0})')
+        anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{v},duration:0.8,ease:"expo.out",onUpdate:()=>{{document.getElementById("{i}v{k}").textContent=Math.round(o.v)+"{unit}"}}}},{t0})}})()')
+        cue(t0, "rise", 0.7)
 
 
 def comment_cta(start, dur):
     i = nid("cm")
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
-        f'<div class="mot" id="{i}q"><span>CRUELLEST</span><i>injustice</i><span style="color:{Y}">EVER?</span></div>'
+        f'<div class="mot" id="{i}q"><span>GREATEST</span><i>of the</i><span style="color:{Y}">FAB 4?</span></div>'
         f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
-        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Drop your answer in the comments 👇</div></div>')
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Drop it in the comments 👇</div></div>')
     anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
     anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.5})')
-    txt = "Karun Nair. No doubt 💔"
+    txt = "Kane. Quietly the best 🤍"
     anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 0.9})}})()')
     cue(start, "pop", 1.0)
-
-
-_pan = [0]
-
-
-def sc(name, t0, t1, credit_txt=BCCI, grey=False, side="right", dim=False, push=None):
-    """One beat: a full-screen photo that never sits still (push in or out + a slow pan), a lower shade for the type."""
-    _pan[0] += 1
-    k = _pan[0]
-    pu = push or ((1.0, 1.16) if k % 2 else (1.16, 1.02))
-    i = ph(name, round(t0, 3), round(t1 - t0, 3), credit_txt, side=side, fx="grey" if grey else ("dim" if dim else None), push=pu,
-           origin=("35% 40%", "65% 40%", "50% 30%")[k % 3])
-    dx = 36 if k % 2 else -36
-    anim(f'tl.fromTo("#{i}m",{{x:{-dx}}},{{x:{dx},duration:{max(0.5, t1 - t0):.2f},ease:"none"}},{t0})')
-    shadebot(round(t0, 3), round(t1 - t0, 3))
-    return i
 
 
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
-
     W_ = word
-    # ---------------- HOOK
+    G = GETTY
+    # ---------------- HOOK: the loud superstars
     a, b = 0, W_("h1", 6) - 0.05
-    sc("k_walkoff_eng", a, b, side=None)
-    head(["THE BIGGEST", "INJUSTICE", "IN INDIAN CRICKET?"], *seg(a + 0.05, b), y=1080, size=120, accent=(1,), sfx="impact")
-    a, b = b, W_("h1", 18) - 0.05
-    sc("sanju", a, b, side="left")
-    kick("IT WASN'T…", *seg(a, b), y=240)
-    head(["SANJU SAMSON"], *seg(a + 0.05, b), y=1150, size=150, accent=(0,), sfx="impact")
-    chip("IN & OUT OF THE TEAM FOR YEARS", *seg(W_("h1", 10), b), x=None, y=1330)
-    stamp("NOT HIM", *seg(W_("h1", 16), b), y=980, size=130, color=REDC, rot=-6)
-    a, b = b, W_("h1", 28) - 0.05
-    sc("shreyas", a, b, side="right")
-    head(["SHREYAS IYER"], *seg(a + 0.05, b), y=1150, size=150, accent=(0,), sfx="impact")
-    chip("IGNORED FOR THE ASIA CUP", *seg(W_("h1", 22), b), x=None, y=1330)
-    a, b = b, s("h2", -0.03)
-    sc("shreyas", a, b, side=None, push=(1.25, 1.1))
-    chip("AFTER LEADING PUNJAB TO THE IPL FINAL", *seg(a + 0.05, b), x=None, y=1200)
-    stamp("NOT HIM", *seg(W_("h1", 34), b), y=1340, size=130, color=REDC, rot=-6)
-    # ---------------- the forgotten man
-    a, b = b, W_("h2", 8) - 0.05
-    sc("k_helmet_sad", a, b, grey=True, side="up")
-    head(["A MAN YOU'VE", "FORGOTTEN"], *seg(W_("h2", 3), b), y=1120, size=130, accent=(1,))
-    a, b = b, W_("h2", 12) - 0.05
-    sc("k_kar_helmet", a, b, side="right")
-    head(["KARUN NAIR"], *seg(a + 0.03, b), y=1170, size=170, accent=(1,), sfx="impact")
-    chip("DECEMBER 2016", *seg(W_("h2", 10), b), x=None, y=1330)
-    flash(a + 0.03, color=Y, peak=0.3)
-    # ---------------- Chennai 2016
-    a, b = b, W_("h2", 20) - 0.05
-    sc("k_303_b", a, b, side="left")
-    kick("CHENNAI · DECEMBER 2016", *seg(a, b), y=240)
-    head(["vs A MIGHTY", "ENGLAND"], *seg(W_("h2", 13) - 0.05, b), y=1150, size=130, accent=(1,), sfx="impact")
-    a, b = b, s("t1", -0.03)
-    sc("k_303_a", a, b, side="right")
-    head(["QUIET. FEARLESS.", "25 YEARS OLD."], *seg(a + 0.03, b), y=1120, size=110, accent=(1,))
-    chip("ONLY HIS 3rd TEST", *seg(W_("h2", 25), b), x=None, y=1350)
-    a, b = b, W_("t1", 7) - 0.05
-    sc("k_303_b", a, b, side="up", push=(1.2, 1.05))
-    odo("100", *seg(W_("t1", 1) - 0.1, b), x=None, y=1080, size=280)
-    flash(W_("t1", 6), color="#fff", peak=0.35)
-    a, b = b, W_("t1", 15) - 0.05
-    sc("k_303_a", a, b, side="left", push=(1.0, 1.25))
-    odo("200", *seg(a + 0.05, b), x=None, y=1080, size=280)
-    shake(W_("t1", 14), 16)
-    a, b = b, s("t2", -0.03)
-    sc("k_kar_helmet", a, b, side="right", push=(1.25, 1.05))
-    odo("300", *seg(W_("t1", 18) - 0.05, b), x=None, y=1080, size=300)
-    a, b = b, W_("t2", 3) - 0.05
-    sc("k_303_b", a, b, side=None, push=(1.0, 1.3))
-    odo("303*", *seg(a + 0.03, b), x=None, y=1050, size=300, label="NOT OUT")
-    flash(a + 0.05, color=Y, peak=0.35)
-    shake(a + 0.6, 24)
-    a, b = b, W_("t2", 14) - 0.05
-    sc("k_303_a", a, b, side="left", push=(1.3, 1.1))
-    head(["ONLY THE 2nd INDIAN", "TEST TRIPLE HUNDRED"], *seg(a + 0.03, b), y=1120, size=104, accent=(0,), sfx="impact")
-    a, b = b, s("t3", -0.03)
-    sc("sehwag", a, b, GETTY, side="right")
-    head(["1st: VIRENDER SEHWAG"], *seg(a + 0.03, b), y=1350, size=100, accent=(0,))
-    a, b = b, W_("t3", 10) - 0.05
-    sc("tweet_bg" if False else "k_303_b", a, b, side="up", push=(1.1, 1.3))
-    kick("THAT MAGICAL NIGHT", *seg(a, b), y=240)
-    head(["A PROUD NATION", "SAID…"], *seg(W_("t3", 3), b), y=1130, size=120, accent=(1,))
-    a, b = b, s("d1", -0.03)
-    sc("k_kar_helmet", a, b, side="left", push=(1.05, 1.25))
-    head(["INDIA'S NEXT", "SUPERSTAR"], *seg(a + 0.03, b), y=1120, size=150, accent=(1,), sfx="impact")
-    # ---------------- the cold years
-    a, b = b, W_("d1", 8) - 0.05
-    sc("k_lords_walk", a, b, grey=True, side="right")
-    head(["A COLD,", "HEARTLESS SCRIPT"], *seg(W_("d1", 4), b), y=1120, size=130, accent=(1,), sfx="impact")
-    a, b = b, W_("d1", 16) - 0.05
-    sc("k_bowled", a, b, grey=True, side="left")
-    chip("WITHIN MONTHS", *seg(a + 0.1, b), x=None, y=300)
-    stamp("DROPPED", *seg(W_("d1", 12), b), y=1150, size=150, color=REDC, rot=-5)
-    a, b = b, W_("d1", 22) - 0.05
-    sc("kohli_presser", a, b, grey=True, side="right")
-    for k, wi in enumerate((16, 18, 20)):
-        head([("NO CALLS.", "NO CHANCE.", "NO EXPLANATION.")[k]], *seg(W_("d1", wi) - 0.05, b), y=980 + 120 * k, size=100,
-             accent=(0,) if k == 2 else (), sfx="impact")
-    a, b = b, s("k1", -0.03)
-    sc("selectors", a, b, grey=True, side="up")
-    head(["LONG, PAINFUL YEARS"], *seg(a + 0.03, b), y=1020, size=90)
-    head(["SELECTORS FORGOT.", "FANS FORGOT."], *seg(W_("d1", 26) - 0.05, b), y=1140, size=120, accent=(1,))
-    # ---------------- 10 Dec 2022
-    a, b = b, W_("k1", 9) - 0.05
-    sc("ishan2", a, b, side="right")
-    head(["10 DEC 2022"], *seg(a + 0.03, b), y=1080, size=150, accent=(0,), sfx="impact")
-    kick("THE WHOLE OF INDIA CELEBRATES", *seg(W_("k1", 3), b), y=1260)
-    a, b = b, W_("k1", 14) - 0.05
-    sc("ishan", a, b, side="left", push=(1.0, 1.2))
-    odo("210", *seg(a + 0.03, b), x=None, y=960, size=230, label="ISHAN KISHAN · DOUBLE HUNDRED")
-    a, b = b, W_("k1", 23) - 0.05
-    sc("k_helmet_sad", a, b, grey=True, side="right", push=(1.2, 1.0))
-    kick("THE SAME DAY", *seg(a, b), y=240)
-    head(["BROKEN.", "DESPERATE."], *seg(W_("k1", 20) - 0.05, b), y=1120, size=140, accent=(1,))
-    a, b = b, s("k2", -0.03)
-    sc("tweet", a, b, SOC, side="up", push=(1.0, 1.12))
-    kick("KARUN NAIR · 10 DEC 2022", *seg(a, b), y=240)
-    # ---------------- Karnataka
-    a, b = b, W_("k2", 8) - 0.05
-    sc("k_kar_100", a, b, grey=True, side="right")
-    kick("THAT SAME WEEK · KARNATAKA", *seg(a, b), y=240)
-    head(["HIS OWN STATE"], *seg(W_("k2", 3) - 0.05, b), y=1150, size=140, accent=(0,))
+    poster(*seg(a, b), "char")
+    ltag("EVERY ERA HAS ITS", *seg(a + 0.05, b), y=640)
+    serif("loud", *seg(a + 0.15, b), y=720, size=220)
+    pcut("smith", *seg(a, b), x=-80, h=700, side="left")
+    pcut("root", *seg(a + 0.1, b), x=560, h=700, side="right")
+    serif("superstars.", *seg(a + 0.5, b), y=960, size=170, color="#fff")
+    for k, (nm, lab, word_, wi0, wi1, col) in enumerate((("kohli", "VIRAT KOHLI", "fire.", 6, 11, "rust"),
+                                                      ("root", "JOE ROOT", "volume.", 11, 16, "blue"),
+                                                      ("smith", "STEVE SMITH", "madness.", 16, 21, "char"))):
+        a, b = W_("h1", wi0) - 0.05, W_("h1", wi1) - 0.05
+        poster(*seg(a, b), col)
+        pcut(nm, *seg(a, b), x=None, h=1300, side=("right", "left", "right")[k])
+        ltag(lab, *seg(a + 0.05, b), y=290)
+        serif(word_, *seg(W_("h1", wi1 - 1) - 0.05, b), y=360, size=190)
+        credit(*seg(a, b), G if nm != "kohli" else BCCI)
+    a, b = W_("h1", 21) - 0.05, s("h2", -0.03)
+    poster(*seg(a, b), "rust")
+    for k, nm in enumerate(("kohli", "root", "smith")):
+        pcut(nm, *seg(a + 0.08 * k, b), x=-140 + 380 * k, h=820, side="left")
+    ltag("THE FAB 4", *seg(a + 0.05, b), y=290)
+    serif("most underrated?", *seg(W_("h1", 23) - 0.05, b), y=370, size=120, color="#fff")
+    # ---------------- Kane
+    a, b = b, s("n1", -0.03)
+    poster(*seg(a, b), "rust")
+    pcut("k_full", *seg(a, b), x=330, h=1250, side="right")
+    serif("never needed", *seg(a + 0.05, W_("h2", 6) - 0.05), y=330, size=110, color="#fff")
+    serif("Kane", *seg(W_("h2", 6) - 0.05, b), y=230, size=170, color="#fff", x=50)
+    serif("Williamson", *seg(W_("h2", 7) - 0.05, b), y=400, size=125, color="#fff", x=50)
+    ltag("NEW ZEALAND", *seg(W_("h2", 7), b), y=560, x=60, gold=True)
+    credit(*seg(a, b), G)
+    a, b = b, s("n2", -0.03)
+    pphoto("k_presser", *seg(a, b), "blue", side="up")
+    ltag("THE CATCH", *seg(a + 0.05, b), y=1080)
+    serif("nobody talks about", *seg(W_("n1", 4) - 0.05, b), y=1150, size=100, color="#fff")
+    # ---------------- Tests played: split screens
+    a, b = b, W_("n2", 5) - 0.05
+    split(*seg(a, b), "root", "k_full", "JOE ROOT", "KANE WILLIAMSON", "169", "?")
+    credit(*seg(a, b), G)
+    a, b = b, s("n3", -0.03)
+    split(*seg(a, b), "smith", "k_100", "STEVE SMITH", "KANE WILLIAMSON", "127", "?")
+    credit(*seg(a, b), G)
+    a, b = b, s("n4", -0.03)
+    split(*seg(a, b), "kohli", "k_bat_small", "VIRAT KOHLI", "KANE WILLIAMSON", "123", "?")
+    credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
+    a, b = b, s("n5", -0.03)
+    poster(*seg(a, b), "blue")
+    pcut("k_100", *seg(a, b), x=None, h=1250, side="up" if False else "right")
+    ltag("KANE WILLIAMSON", *seg(a + 0.05, b), y=290, gold=True)
+    serif("110", *seg(W_("n4", 2) - 0.1, b), y=340, size=300)
+    ltag("TESTS", *seg(W_("n4", 2), b), y=680)
+    credit(*seg(a, b), G)
+    # ---------------- the schedule
+    a, b = b, W_("n5", 8) - 0.05
+    poster(*seg(a, b), "char")
+    ltag("THE BIG 3 GET", *seg(a + 0.05, b), y=420)
+    tiles(*seg(a + 0.1, W_("n5", 12) - 0.05), t_cross=W_("n5", 10))
+    rstamp("5-TEST BLOCKBUSTERS", *seg(W_("n5", 6), b), y=960, color=Y, size=80)
+    a, b = b, W_("n5", 12) - 0.05
+    poster(*seg(a, b), "blue")
+    ltag("NEW ZEALAND GETS", *seg(a + 0.05, b), y=420)
+    rstamp("2-TEST SPRINTS", *seg(W_("n5", 10), b), y=960, color=Y, size=90)
+    stopwatch(*seg(a + 0.1, b), y=1100)
+    a, b = b, s("y1", -0.03)
+    poster(*seg(a, b), "rust")
+    ltag("FAIL TWICE…", *seg(a + 0.05, b), y=300)
+    xmarks(*seg(a + 0.05, b), t2=W_("n5", 13) - 0.05, y=420)
+    rstamp("TOUR GONE", *seg(W_("n5", 16), b), y=1050, color="#111", size=110)
+    # ---------------- and yet: 33
+    a, b = b, W_("y1", 5) - 0.05
+    poster(*seg(a, b), "blue")
+    pcut("kt_50", *seg(a, b), x=None, h=1120, side="right")
+    ltag("AND YET…", *seg(a + 0.05, b), y=290)
+    serif("33", *seg(W_("y1", 2) - 0.1, b), y=300, size=300)
+    ltag("TEST HUNDREDS", *seg(W_("y1", 3), b), y=640, gold=True)
+    credit(*seg(a, b), G)
+    a, b = b, W_("y1", 9) - 0.05
+    poster(*seg(a, b), "char")
+    ltag("TEST HUNDREDS", *seg(a + 0.05, b), y=420)
+    hbars(*seg(a + 0.05, b), [("WILLIAMSON", 33, True), ("KOHLI", 30, False)], y=560)
+    a, b = b, s("y2", -0.03)
+    poster(*seg(a, b), "rust")
+    pcut("k_bat_small", *seg(a, b), x=420, h=1200, side="right")
+    ltag("1 HUNDRED EVERY", *seg(a + 0.05, b), y=300, x=60)
+    serif("3.3", *seg(W_("y1", 12) - 0.1, b), y=360, size=280, x=50)
+    ltag("TESTS", *seg(W_("y1", 13), b), y=700, x=90)
+    credit(*seg(a, b), G)
+    # ---------------- 5 million
+    a, b = b, W_("y2", 11) - 0.05
+    pphoto("wtc_mace", *seg(a, b), "blue", side="left", push=(1.15, 1.0))
+    ltag("A COUNTRY OF", *seg(a + 0.05, b), y=1000)
+    serif("5 million", *seg(W_("y2", 9) - 0.05, b), y=1070, size=170)
     a, b = b, s("f1", -0.03)
-    sc("k_kar_helmet", a, b, grey=True, side=None, push=(1.3, 1.1))
-    stamp("DROPPED", *seg(a + 0.03, b), y=1150, size=150, color=REDC, rot=-5)
-    chip("FROM THEIR RANJI TEAM", *seg(W_("k2", 11), b), x=None, y=1350)
+    poster(*seg(a, b), "rust")
+    for k, nm in enumerate(("kohli", "root", "smith")):
+        pcut(nm, *seg(a + 0.07 * k, b), x=-60 + 330 * k, h=950, side="right")
+    ltag("OUTSCORING", *seg(a + 0.05, b), y=290)
+    serif("the giants?", *seg(W_("y2", 12) - 0.05, b), y=360, size=170)
     # ---------------- follow
-    a, b = b, s("v1", -0.03)
-    sc("k_303_a", a, b, side="left", dim=True)
-    head(["WHAT HAPPENED NEXT?"], *seg(a + 0.03, W_("f1", 9) - 0.05), y=1130, size=110, accent=(1,), sfx="impact")
-    head(["TRUE CRICKET FAN?"], *seg(W_("f1", 9) - 0.05, b), y=300, size=110, accent=(0,), sfx="impact")
-    follow_card(*seg(W_("f1", 4), b), t_follow=W_("f1", 18))
-    # ---------------- Vidarbha
-    a, b = b, W_("v1", 8) - 0.05
-    sc("k_vidarbha", a, b, side="up")
-    kick("A NEW STATE · VIDARBHA", *seg(a, b), y=240)
-    head(["KARUN DIDN'T", "BREAK."], *seg(a + 0.03, b), y=1150, size=140, accent=(1,), sfx="impact")
-    a, b = b, s("v2", -0.03)
-    sc("k_northants", a, b, GETTY, side="right")
-    head(["A STORM OF RUNS"], *seg(a + 0.03, b), y=260, size=110, accent=(0,), sfx="impact")
-    odo("779", *seg(W_("v1", 11), b), x=None, y=960, size=220, label="RUNS · VIJAY HAZARE 2024-25")
-    a, b = b, W_("v2", 10) - 0.05
-    sc("k_india_travel", a, b, side="left")
-    head(["8 YEARS", "LATER"], *seg(W_("v2", 1) - 0.05, b), y=1100, size=170, accent=(0,), sfx="impact")
-    a, b = b, W_("v2", 16) - 0.05
-    sc("k_oval_fist", a, b, side="right", push=(1.25, 1.05))
-    stamp("CALLED BACK", *seg(W_("v2", 13), b), y=1150, size=140, rot=-5)
-    a, b = b, s("x1", -0.03)
-    sc("k_nets", a, b, side="up")
-    head(["NOW THINK", "ABOUT IT."], *seg(a + 0.03, b), y=1120, size=150, accent=(1,), sfx="impact")
-    # ---------------- the case
-    for (nm, wi0, wi1, txt, col, gr) in (("k_303_b", 0, 12, "303* · ONLY THE 2nd INDIAN", Y, False),
-                                       ("k_bowled", 12, 16, "DROPPED WITHIN MONTHS", "#fff", True),
-                                       ("k_kar_100", 16, 21, "ABANDONED BY HIS OWN STATE", "#fff", True),
-                                       ("k_helmet_sad", 21, None, "AN 8-YEAR WAIT", REDC, True)):
-        a = s("x1", -0.03) if wi0 == 0 else W_("x1", wi0) - 0.05
-        b = W_("x1", wi1) - 0.05 if wi1 else s("x2", -0.03)
-        sc(nm, a, b, grey=gr, side=("left", "right")[wi0 % 2], push=(1.1, 1.3) if wi0 % 2 else (1.3, 1.1))
-        head([txt], *seg(a + 0.03, b), y=1150, size=100, accent=(0,) if col != "#fff" else (), sfx="impact")
-    a, b = s("x2", -0.03), W_("x2", 3) - 0.05
-    sc("sanju", a, b, side="left")
-    head(["SANJU GOT", "CHANCES."], *seg(a + 0.03, b), y=1120, size=140, accent=(1,), sfx="impact")
-    a, b = b, W_("x2", 6) - 0.05
-    sc("shreyas", a, b, side="right")
-    head(["SHREYAS", "CAME BACK."], *seg(a + 0.03, b), y=1120, size=140, accent=(1,), sfx="impact")
+    a, b = b, s("p1", -0.03)
+    poster(*seg(a, b), "char")
+    serif("True cricket fan?", *seg(W_("f1", 6) - 0.05, b), y=330, size=110)
+    follow_card(*seg(a + 0.05, b), t_follow=W_("f1", 12))
+    # ---------------- the method
+    a, b = b, W_("p1", 8) - 0.05
+    poster(*seg(a, b), "blue")
+    pcut("k_full", *seg(a, b), x=200, h=1350, side="left")
+    ltag("A METHOD BUILT ON", *seg(a + 0.05, b), y=290)
+    serif("playing it late", *seg(W_("p1", 3) - 0.05, b), y=360, size=120)
+    a, b = b, s("p2", -0.03)
+    poster(*seg(a, b), "rust")
+    pcut("k_100", *seg(a, b), x=None, h=1200, side="right")
+    for k, (txt, wi) in enumerate((("SOFT HANDS", 8), ("NO SLOG", 10), ("NO EGO", 12))):
+        rstamp(txt, *seg(W_("p1", wi) - 0.05, b), y=300 + 140 * k, color=("#fff", "#fff", Y)[k], size=80, rot=(-5, 4, -3)[k])
+    credit(*seg(a, b), G)
+    # ---------------- 2019
+    a, b = b, W_("p2", 4) - 0.05
+    poster(*seg(a, b), "char")
+    serif("2019", *seg(a + 0.05, b), y=560, size=300)
+    ltag("WORLD CUP FINAL · LORD'S", *seg(W_("p2", 1), b), y=920)
+    a, b = b, W_("p2", 10) - 0.05
+    pphoto("k_presser", *seg(a, b), "rust", side="right", push=(1.0, 1.2))
+    serif("578", *seg(a + 0.05, b), y=1250, size=200)
+    ltag("RUNS · PLAYER OF THE TOURNAMENT", *seg(W_("p2", 6), b), y=300, gold=True)
+    a, b = b, W_("p2", 18) - 0.05
+    poster(*seg(a, b), "blue")
+    ltag("LOST ON A", *seg(a + 0.05, b), y=420)
+    rstamp("BOUNDARY COUNT", *seg(W_("p2", 16), b), y=500, color=Y, size=96)
+    hbars(*seg(W_("p2", 16) + 0.2, b), [("ENGLAND", 26, False), ("NEW ZEALAND", 17, True)], y=760)
+    ltag("BOUNDARIES HIT", *seg(W_("p2", 16) + 0.2, b), y=1060)
+    a, b = b, s("p3", -0.03)
+    pphoto("k_smile_cap", *seg(a, b), "blue", side="up", push=(1.0, 1.18))
+    serif("still smiling.", *seg(W_("p2", 19) - 0.05, b), y=1200, size=130, color="#fff")
+    # ---------------- Southampton
+    a, b = b, W_("p3", 9) - 0.05
+    pphoto("kt_walk", *seg(a, b), "blue", side="right")
+    ltag("2 YEARS LATER · SOUTHAMPTON", *seg(a + 0.05, b), y=1080)
+    serif("his answer.", *seg(W_("p3", 5) - 0.05, b), y=1150, size=130)
+    a, b = b, W_("p3", 12) - 0.05
+    pphoto("kt_50", *seg(a, b), "rust", side="left", push=(1.0, 1.2))
+    serif("52*", *seg(a + 0.03, b), y=1020, size=280)
+    ltag("WTC FINAL 2021", *seg(a + 0.1, b), y=1330, gold=True)
+    a, b = b, s("r1", -0.03)
+    pphoto("wtc_mace", *seg(a, b), colour=True, side="up", push=(1.0, 1.22))
+    rstamp("WORLD TEST CHAMPIONS", *seg(a + 0.05, b), y=1330, color=Y, size=80)
+    serif("NZ's greatest day", *seg(W_("p3", 15) - 0.05, b), y=1160, size=110, color="#fff")
+    flash(a + 0.05, color=Y, peak=0.35)
+    # ---------------- respect
+    a, b = b, s("r2", -0.03)
+    poster(*seg(a, b), "char")
+    pcut("kt_walk", *seg(a, b), x=None, h=1250, side="right")
+    for k, (txt, wi) in enumerate((("NO TANTRUMS", 0), ("NO HEADLINES", 2))):
+        rstamp(txt, *seg(W_("r1", wi) - 0.05, b), y=290 + 140 * k, color=("#fff", Y)[k], size=80, rot=(-4, 3)[k])
+    serif("just respect.", *seg(W_("r1", 4) - 0.05, b), y=580, size=120)
+    credit(*seg(a, b), G)
+    # ---------------- the line-up
+    a, b = b, W_("r2", 13) - 0.05
+    poster(*seg(a, b), "rust")
+    for k, (nm, lab, wi) in enumerate((("kohli", "FIRE", 0), ("root", "VOLUME", 4), ("smith", "MADNESS", 9))):
+        pcut(nm, *seg(W_("r2", wi) - 0.1, b), x=-60 + 330 * k, h=1000, side=("left", "up" if False else "right", "right")[k])
+        ltag(lab, *seg(W_("r2", wi), b), y=720 + 60 * (k % 2), x=60 + 330 * k, gold=True)
+    credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
     a, b = b, s("q1", -0.03)
-    sc("k_lords_walk", a, b, side="up")
-    head(["KARUN WAITED", "8 YEARS"], *seg(a + 0.03, b), y=1100, size=140, accent=(1,), sfx="impact")
-    chip("FOR JUST 1 MORE CHANCE", *seg(W_("x2", 10), b), x=None, y=1360)
-    a, b = b, s("c1", -0.03)
-    sc("k_walkoff_eng", a, b, side="left", push=(1.3, 1.05))
-    head(["A CRUELLER", "INJUSTICE?"], *seg(a + 0.03, b), y=1100, size=150, accent=(1,), sfx="impact")
+    poster(*seg(a, b), "blue")
+    pcut("k_full", *seg(a, b), x=None, h=1450, side="up" if False else "right")
+    ltag("KANE HAD SOMETHING RARER", *seg(a + 0.05, b), y=300)
+    serif("calm.", *seg(W_("r2", 17) - 0.05, b), y=370, size=260)
+    credit(*seg(a, b), G)
     # ---------------- CTA
-    a, b = b, s("c2", -0.03)
-    sc("k_vidarbha", a, b, side="right", dim=True, push=(1.2, 1.0))
+    a, b = b, e("q1", 0.1)
+    poster(*seg(a, b), "char")
     comment_cta(*seg(a + 0.03, b))
-    a, b = b, e("c2", 0.1)
-    sc("k_nets", a, b, side="left", push=(1.0, 1.25))
-    head(["THE FULL", "UNTOLD STORY"], *seg(a + 0.03, b), y=1080, size=150, accent=(1,), sfx="impact")
-    chip("👇 LINKED BELOW", *seg(W_("c2", 8), b), x=None, y=1360)
     video3d("logo", b, TOTAL - b)
     for a2, b2 in LAYOUT["brand_hide"]:
         if a2 >= b - 0.3:
@@ -1672,6 +1817,36 @@ def edit():
 
 
 EXTRA_CSS = f"""
+.rays{{position:absolute;left:50%;top:55%;width:3200px;height:3200px;margin:-1600px 0 0 -1600px;background:repeating-conic-gradient(rgba(255,255,255,.07) 0deg 6deg,rgba(0,0,0,0) 6deg 15deg)}}
+.pgrid{{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);background-size:60px 60px}}
+.pvig{{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 45%,rgba(0,0,0,.45) 100%)}}
+.ltag{{position:absolute;background:#111;color:#fff;font:800 30px "IDisp";letter-spacing:.06em;padding:10px 18px;border:2px solid rgba(255,255,255,.85);white-space:nowrap;text-transform:uppercase}}
+.ltag.gold{{background:{Y};color:#111;border-color:#111}}
+.serif{{position:absolute;font-family:"PFD";font-style:italic;font-weight:900;line-height:1;letter-spacing:-.01em;text-shadow:0 8px 0 rgba(0,0,0,.25),0 20px 60px rgba(0,0,0,.45)}}
+.rstamp{{position:absolute;font-family:"Bebas";line-height:1;padding:8px 26px 4px;border:7px solid;border-radius:10px;letter-spacing:.03em;background:rgba(0,0,0,.08)}}
+.tiles{{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:22px}}
+.tile{{position:relative;width:170px;height:220px;background:#f3efe4;border-radius:10px;box-shadow:0 16px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#111}}
+.tile span{{font:800 22px "IDisp";letter-spacing:.14em}}
+.tile b{{font-family:"PFD";font-style:italic;font-weight:900;font-size:120px;line-height:1}}
+.tile svg{{position:absolute;inset:-10px;width:190px;height:240px}}
+.tile path{{stroke:{REDC};stroke-width:12;stroke-linecap:round;fill:none}}
+.xms{{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:80px}}
+.xm{{position:relative;width:380px;display:flex;flex-direction:column;align-items:center}}
+.xm svg{{width:380px;height:380px}}
+.xm path{{stroke:#111;stroke-width:26;stroke-linecap:round;fill:none}}
+.xm .ltag{{position:relative}}
+.swatch{{position:absolute}}
+.spp{{position:absolute;top:0;width:540px;height:1920px;overflow:hidden}}
+.spp .rays{{opacity:.8}}
+.spi{{position:absolute;bottom:0}}
+.spi img{{width:100%;height:100%;filter:grayscale(1) contrast(1.35) brightness(1.04) sepia(.18) drop-shadow(0 30px 40px rgba(0,0,0,.55))}}
+.spn{{position:absolute;top:380px;left:0;right:0;text-align:center;font-size:200px;color:{Y}}}
+.hbars{{position:absolute;left:90px;right:90px}}
+.hbr{{display:flex;align-items:center;gap:20px;margin-bottom:34px}}
+.hbr span{{width:280px;font:800 34px "IDisp";color:#fff;letter-spacing:.04em;text-align:right}}
+.hbt{{flex:1;height:70px;background:rgba(255,255,255,.08)}}
+.hbt i{{display:block;height:100%}}
+.hbr b{{width:110px;font-family:"PFD";font-style:italic;font-weight:900;font-size:72px;color:#fff}}
 .fbadge{{position:absolute;left:0;right:0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 22px;padding:0 50px}}
 .ldr{{position:absolute;left:80px;right:80px;height:370px}}
 .ldr .lh{{position:absolute;top:-56px;left:0;font:800 26px "IDisp";letter-spacing:.2em;color:{Y}}}
@@ -1856,6 +2031,7 @@ EXTRA_CSS = f"""
 .rfoot{{margin-top:60px;font-family:"IDisp";font-weight:900;font-style:italic;font-size:78px;color:{Y};text-align:center}}
 
 @font-face{{font-family:"Bebas";src:url({media("assets/fonts/BebasNeue.woff2")})}}
+@font-face{{font-family:"PFD";font-style:italic;font-weight:900;src:url({media("assets/fonts/PlayfairBI.woff2")})}}
 @font-face{{font-family:"Osw";font-weight:700;src:url({media("assets/fonts/Oswald-700.woff2")})}}
 .glow{{position:absolute;left:-200px;right:-200px;top:180px;height:1400px;pointer-events:none}}
 .hlw{{position:absolute;left:70px;right:70px;font-family:"Bebas";line-height:.92;letter-spacing:.01em;text-shadow:0 6px 30px rgba(0,0,0,.6)}}
