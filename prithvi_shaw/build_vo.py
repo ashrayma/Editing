@@ -67,10 +67,10 @@ EDL = [
     ("c3_direction", "A", 256.41, 259.70, CH),    # retake of "Woh match jisne…"
     # --- CH4 ADELAIDE
     ("c4_adelaide", "A", 260.78, 265.05, M),
-    ("c4_xi", "A", 265.59, 267.36, S),
-    ("c4_confidence", "A", 274.17, 280.75, M),      # retake of the confidence line
+    ("c4_xi", "A", 265.59, (G, 267.30, 267.47), S),
+    ("c4_confidence", "A", 275.45, 280.75, M),      # retake of the confidence line (mumble before it cut)
     ("c4_scores", "A", 280.95, 283.46, M),
-    ("c4_36", "A", 284.35, 293.55, M),
+    ("c4_36", "A", (G, 285.49, 285.69), 293.55, M),   # second "Dono innings…" only
     ("c4_lowest", "A", 294.44, 297.07, M),
     ("c4_changes", "A", 297.13, 299.90, S),
     ("c4_never", "A", 304.80, 308.60, M),
@@ -78,7 +78,8 @@ EDL = [
     ("c4_134", "A", 318.52, 324.06, S),
     ("c4_career", "A", 324.18, 325.64, S),
     ("c4_stopped", "A", 326.27, 328.50, M),
-    ("c4_notover", "A", 329.00, 336.44, CH),
+    ("c4_notover", "A", 329.00, 336.44, PARA),
+    ("mid_sub", "B", 242.80, (G, 247.5, 247.8), CH),  # CTA moved here from the end (cliffhanger)
     # --- CH5 THE COMEBACKS
     ("c5_vht", "A", 337.23, 342.76, M),
     ("c5_827", "A", 343.00, 344.86, M),
@@ -87,11 +88,11 @@ EDL = [
     ("c5_notfinished", "A", 360.28, 361.84, M),
     ("c5_northants", "A", 377.14, 385.73, M),
     ("c5_remember", "A", 385.99, 388.38, M),
-    ("c5_unstoppable", "A", 399.21, 406.14, S),     # 4th and clean "Whenever Shaw got going…"
+    ("c5_unstoppable", "A", 399.21, 405.485, S),    # 4th clean take, minus the false start "Lekin wo ek…"
     ("c5_convert", "A", 407.15, 412.07, M),
     ("c5_controversy", "A", 412.91, 416.62, CH),
     # --- CH6 THE CONTROVERSY
-    ("c6_feb2023", "A", 416.88, 422.38, S),
+    ("c6_feb2023", "A", 416.88, 421.105, S),        # stop before "Wahaan kuch log" (retaken next)
     ("c6_selfies", "A", 423.45, 426.52, M),
     ("c6_refused", "A", 426.65, 432.99, M),
     ("c6_argument", "A", 433.13, 436.87, M),
@@ -99,7 +100,7 @@ EDL = [
     ("c6_attack", "A", 448.76, 459.60, M),          # the clean retake of the police-complaint line
     ("c6_arrest", "A", 463.58, 470.32, M),
     ("c6_june", "A", 470.67, 476.50, M),
-    ("c6_cctv", "A", 476.85, 488.99, M),
+    ("c6_cctv", "A", (G, 479.6, 479.85), 488.99, M),   # retake of the CCTV line only
     ("c6_sayno", "B", 2.40, 7.50, M),               # session 2 restarts on "He had every right to say no"
     ("c6_struggle", "B", 14.93, 19.12, S),
     ("c6_distraction", "B", 19.39, 27.65, CH),
@@ -138,8 +139,9 @@ EDL = [
     ("f_sawaal", "B", 217.70, 223.26, S),
     ("f_history", "B", (G, 226.9, 227.3), 231.47, S),
     ("f_superstar", "B", 231.53, 235.68, PARA),
-    ("f_think", "B", 235.94, 240.86, M),
-    ("f_comment", "B", 241.12, 251.13, 0.0),
+    ("f_think", "B", (G, 237.52, 237.62), 240.86, M),  # second take only
+    ("f_comment", "B", 241.12, 242.555, M),
+    ("f_story", "B", (G, 247.5, 247.8), 251.13, 0.0),
 ]
 
 def load(take):

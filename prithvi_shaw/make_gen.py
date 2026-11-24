@@ -49,7 +49,7 @@ page = rep(page, '"""\n\n\ndef build():', '''
 .cwgrain{{position:absolute;inset:0;background-image:url(media/grain.png);opacity:.12;mix-blend-mode:overlay}}
 .cwword{{position:absolute;left:-200px;right:-200px;top:120px;text-align:center;font-family:Anton;line-height:1;letter-spacing:6px;
   text-transform:uppercase;text-shadow:0 0 60px rgba(0,0,0,.35)}}
-.cwimg{{position:absolute;bottom:0;object-fit:contain;object-position:bottom;filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}}
+.cwl{{position:absolute;object-fit:cover;transform-origin:50% 60%}}\n.cwbase{{filter:brightness(.62) saturate(.9)}}\n.cwtop{{filter:drop-shadow(0 20px 40px rgba(0,0,0,.45))}}
 .cwsub{{position:absolute;left:0;right:0;top:56px;text-align:center;color:#fff;font-size:30px;font-weight:800;letter-spacing:8px;
   text-shadow:0 2px 20px rgba(0,0,0,.8)}}
 .rmsvg{{position:absolute;inset:0;width:100%;height:100%}}

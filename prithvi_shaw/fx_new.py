@@ -39,37 +39,42 @@ def glow(text, start, dur, side="center", size=300, label=None, y=None, z=34):
     return i
 
 
-def cutword(png, word, start, dur, side="center", tone="navy", wcolor=None, sub=None, z=40, h=960):
-    """Shehzad-doc shot: textured stage, a giant word BEHIND the cut-out player, the player rising in front."""
+def cutword(png, word, start, dur, side="center", tone="navy", wcolor=None, sub=None, z=40, h=None, wside=None):
+    """Shehzad-doc shot, layered so nothing can go missing: the REAL photo full-height (dimmed, fading into the stage),
+    a giant word BEHIND the player, then the cut-out of the same photo on top in the exact same place. The cut-out
+    only decides where the word is hidden; hands, helmet and bat always come from the original photo."""
     i = nid("cw")
     COVER.append((start, start + dur))
     EVENTS.append((start, "boom"))
-    w0, h0 = size(png)
-    ph = h
+    photo = png.replace("assets/cutouts/", "assets/photos/").replace(".png", ".jpg")
+    w0, h0 = size(photo)
+    ph = H
     pw = round(w0 * ph / h0)
-    if pw > 1500:
-        pw = 1500
-        ph = round(h0 * pw / w0)
-    cx = {"center": W / 2, "left": W * 0.30, "right": W * 0.70}[side]
+    left = {"center": (W - pw) / 2, "left": 0, "right": W - pw}[side]
+    if pw >= W * 0.95:
+        fade = "radial-gradient(120% 120% at 50% 45%,#000 55%,transparent 100%)"
+    else:
+        fade = {"right": "linear-gradient(to right,transparent 0%,#000 24%)", "left": "linear-gradient(to left,transparent 0%,#000 24%)",
+                "center": "linear-gradient(to right,transparent 0%,#000 18%,#000 82%,transparent 100%)"}[side]
     bg = {"navy": "radial-gradient(110% 90% at 50% 30%,#26262a 0%,#111113 50%,#050506 100%)",
           "red": "radial-gradient(110% 90% at 50% 30%,#7a1a1f 0%,#3a0a0e 55%,#0d0203 100%)",
           "gold": "radial-gradient(110% 90% at 50% 30%,#6b5214 0%,#2b2006 55%,#0b0802 100%)"}[tone]
     wc = wcolor or {"navy": CYAN, "red": "#ff5a5f", "gold": Y}[tone]
     fs = 430 if len(word) <= 5 else (300 if len(word) <= 9 else 210)
-    # with the player off to one side, the word sits on the other side so it reads in full
-    walign = {"right": "left:110px;right:auto;text-align:left", "left": "left:auto;right:110px;text-align:right",
-              "center": ""}[side]
+    ws = wside or {"right": "left", "left": "right", "center": "center"}[side]
+    walign = {"left": "left:110px;right:auto;text-align:left", "right": "left:auto;right:110px;text-align:right", "center": ""}[ws]
+    box = f"left:{left:.0f}px;top:0;width:{pw}px;height:{ph}px"
     subh = f'<div class="cwsub" id="{i}s">{E(sub)}</div>' if sub else ""
     add(f'<div id="{i}" class="cwstage clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};background:{bg}">'
+        f'<img class="cwl cwbase" src="{use(photo)}" style="{box};-webkit-mask-image:{fade};mask-image:{fade}">'
         f'<div class="cwgrain"></div>'
         f'<div class="cwword" id="{i}w" style="font-size:{fs}px;color:{wc};{walign}">{E(word)}</div>'
-        f'<img class="cwimg" id="{i}p" src="{use(png)}" style="left:{round(cx - pw / 2)}px;width:{pw}px;height:{ph}px">'
+        f'<img class="cwl cwtop" src="{use(png)}" style="{box}">'
         f'{subh}</div>', start, dur, z)
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.2}},{start})')
     anim(f'tl.fromTo("#{i}w",{{scale:1.25,opacity:0,letterSpacing:"40px"}},{{scale:1,opacity:0.92,letterSpacing:"6px",duration:0.9,ease:"expo.out"}},{start + 0.05})')
     anim(f'tl.to("#{i}w",{{x:-60,duration:{dur},ease:"none"}},{start})')
-    anim(f'tl.fromTo("#{i}p",{{y:160,opacity:0,scale:1.06}},{{y:0,opacity:1,scale:1,duration:0.9,ease:"expo.out"}},{start + 0.15})')
-    anim(f'tl.to("#{i}p",{{scale:1.04,duration:{dur},ease:"none"}},{start + 1.0})')
+    anim(f'tl.fromTo("#{i} .cwl",{{scale:1.08}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
     if sub:
         anim(f'tl.fromTo("#{i}s",{{opacity:0,y:14}},{{opacity:1,y:0,duration:0.5}},{start + 0.7})')
     out_(i, start, dur, 0.25)

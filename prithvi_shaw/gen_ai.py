@@ -29,6 +29,11 @@ PROMPTS = {
     "ai_door": "a heavy door slightly open in a dark room with bright golden light spilling through the gap, dust in the air",
     "ai_road": "an empty road leading towards a cricket stadium at dawn, long shadows, hopeful golden light",
     "ai_newspapers": "a stack of folded newspapers on a table at morning, close-up, soft window light, no readable text",
+    "ai_windshield": "close-up of a car windshield with a shattered spiderweb crack at night, Mumbai street lights reflected, rain drops, no people",
+    "ai_bat_road": "a wooden baseball bat lying on a wet asphalt road at night next to broken glass, neon reflections, no people",
+    "ai_police_station": "exterior of an Indian city police station at night, a blue and white sign without readable text, police barricade, wet road, no people",
+    "ai_cctv": "a CCTV security camera mounted on a wall at night, red recording light, blurred city lights behind, close-up",
+    "ai_courtroom": "an empty Indian courtroom with wooden benches and a judge's bench, morning light through tall windows, no people",
     "ai_crowd_night": "packed cricket stadium crowd at night with phone flashlights, heavily blurred bokeh, blue tones",
 }
 

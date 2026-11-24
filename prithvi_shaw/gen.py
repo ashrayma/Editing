@@ -585,37 +585,42 @@ def glow(text, start, dur, side="center", size=300, label=None, y=None, z=34):
     return i
 
 
-def cutword(png, word, start, dur, side="center", tone="navy", wcolor=None, sub=None, z=40, h=960):
-    """Shehzad-doc shot: textured stage, a giant word BEHIND the cut-out player, the player rising in front."""
+def cutword(png, word, start, dur, side="center", tone="navy", wcolor=None, sub=None, z=40, h=None, wside=None):
+    """Shehzad-doc shot, layered so nothing can go missing: the REAL photo full-height (dimmed, fading into the stage),
+    a giant word BEHIND the player, then the cut-out of the same photo on top in the exact same place. The cut-out
+    only decides where the word is hidden; hands, helmet and bat always come from the original photo."""
     i = nid("cw")
     COVER.append((start, start + dur))
     EVENTS.append((start, "boom"))
-    w0, h0 = size(png)
-    ph = h
+    photo = png.replace("assets/cutouts/", "assets/photos/").replace(".png", ".jpg")
+    w0, h0 = size(photo)
+    ph = H
     pw = round(w0 * ph / h0)
-    if pw > 1500:
-        pw = 1500
-        ph = round(h0 * pw / w0)
-    cx = {"center": W / 2, "left": W * 0.30, "right": W * 0.70}[side]
+    left = {"center": (W - pw) / 2, "left": 0, "right": W - pw}[side]
+    if pw >= W * 0.95:
+        fade = "radial-gradient(120% 120% at 50% 45%,#000 55%,transparent 100%)"
+    else:
+        fade = {"right": "linear-gradient(to right,transparent 0%,#000 24%)", "left": "linear-gradient(to left,transparent 0%,#000 24%)",
+                "center": "linear-gradient(to right,transparent 0%,#000 18%,#000 82%,transparent 100%)"}[side]
     bg = {"navy": "radial-gradient(110% 90% at 50% 30%,#26262a 0%,#111113 50%,#050506 100%)",
           "red": "radial-gradient(110% 90% at 50% 30%,#7a1a1f 0%,#3a0a0e 55%,#0d0203 100%)",
           "gold": "radial-gradient(110% 90% at 50% 30%,#6b5214 0%,#2b2006 55%,#0b0802 100%)"}[tone]
     wc = wcolor or {"navy": CYAN, "red": "#ff5a5f", "gold": Y}[tone]
     fs = 430 if len(word) <= 5 else (300 if len(word) <= 9 else 210)
-    # with the player off to one side, the word sits on the other side so it reads in full
-    walign = {"right": "left:110px;right:auto;text-align:left", "left": "left:auto;right:110px;text-align:right",
-              "center": ""}[side]
+    ws = wside or {"right": "left", "left": "right", "center": "center"}[side]
+    walign = {"left": "left:110px;right:auto;text-align:left", "right": "left:auto;right:110px;text-align:right", "center": ""}[ws]
+    box = f"left:{left:.0f}px;top:0;width:{pw}px;height:{ph}px"
     subh = f'<div class="cwsub" id="{i}s">{E(sub)}</div>' if sub else ""
     add(f'<div id="{i}" class="cwstage clip" data-start="{start}" data-duration="{dur}" style="z-index:{z};background:{bg}">'
+        f'<img class="cwl cwbase" src="{use(photo)}" style="{box};-webkit-mask-image:{fade};mask-image:{fade}">'
         f'<div class="cwgrain"></div>'
         f'<div class="cwword" id="{i}w" style="font-size:{fs}px;color:{wc};{walign}">{E(word)}</div>'
-        f'<img class="cwimg" id="{i}p" src="{use(png)}" style="left:{round(cx - pw / 2)}px;width:{pw}px;height:{ph}px">'
+        f'<img class="cwl cwtop" src="{use(png)}" style="{box}">'
         f'{subh}</div>', start, dur, z)
     anim(f'tl.fromTo("#{i}",{{opacity:0}},{{opacity:1,duration:0.2}},{start})')
     anim(f'tl.fromTo("#{i}w",{{scale:1.25,opacity:0,letterSpacing:"40px"}},{{scale:1,opacity:0.92,letterSpacing:"6px",duration:0.9,ease:"expo.out"}},{start + 0.05})')
     anim(f'tl.to("#{i}w",{{x:-60,duration:{dur},ease:"none"}},{start})')
-    anim(f'tl.fromTo("#{i}p",{{y:160,opacity:0,scale:1.06}},{{y:0,opacity:1,scale:1,duration:0.9,ease:"expo.out"}},{start + 0.15})')
-    anim(f'tl.to("#{i}p",{{scale:1.04,duration:{dur},ease:"none"}},{start + 1.0})')
+    anim(f'tl.fromTo("#{i} .cwl",{{scale:1.08}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
     if sub:
         anim(f'tl.fromTo("#{i}s",{{opacity:0,y:14}},{{opacity:1,y:0,duration:0.5}},{start + 0.7})')
     out_(i, start, dur, 0.25)
@@ -895,7 +900,7 @@ head(["THE MOMENT TO", "ESTABLISH HIMSELF…", "SPENT AWAY"], b("c3_stage", 0.2)
 C_("c3_stage", "The time to establish himself — spent *away from cricket*")
 head(["HIS U19 TEAMMATES", "WERE MOVING AHEAD"], b("c3_u19mates"), until("c3_u19mates"), "center", 120, accent=(1,))
 C_("c3_u19mates", "Meanwhile, his U19 teammates *moved ahead*")
-cutword(CO + "gill_testcap.png", "GILL", b("c3_gill"), round(until("c3_gill") + 3.2, 2), "center", tone="navy", wcolor=CYAN)
+cutword(CO + "gill_testcap.png", "GILL", b("c3_gill"), round(until("c3_gill") + 3.2, 2), "right", tone="navy", wcolor=CYAN)
 C_("c3_gill", "Look at *Shubman Gill*")
 space(b("c3_journeys", 3.2), until("c3_journeys", 3.2))
 diverge(b("c3_journeys", 3.2), until("c3_journeys", 3.2), b("c3_journeys", 5.0))
@@ -948,14 +953,16 @@ head(["NOT AT ALL."], b("c4_notover", 2.4), until("c4_notover", 2.4) - 0.2, "cen
 C_("c4_notover", "Was it over? *Not at all.* He proved it in domestic cricket.")
 
 # ---------------------------------------------------------------- 05 THE COMEBACKS
-roadmap(6, round(BEAT["c4_notover"][1] + 0.05, 2), 2.4, title="05 · THE COMEBACKS")
+subscribe_card(b("mid_sub", 0.2), until("mid_sub", 0.2) - 0.3)
+C_("mid_sub", "Enjoy untold cricket stories? *Subscribe* to TheCricketLounge")
+roadmap(6, round(BEAT["mid_sub"][1] + 0.05, 2), 2.4, title="05 · THE COMEBACKS")
 card(P + "mumbai_blue_a.jpg", b("c5_vht"), until("c5_vht"), "right", maxw=720, maxh=680, label="MUMBAI", focus="50% 25%")
 head(["VIJAY HAZARE", "TROPHY", "2020-21"], b("c5_vht", 0.1), until("c5_vht", 0.1), "left", 110, accent=(2,))
 C_("c5_vht", "Vijay Hazare 2020-21, for *Mumbai*")
 space(b("c5_827"), until("c5_827"))
 glow("827", b("c5_827"), until("c5_827"), "center", 320, label="RUNS · ONE TOURNAMENT")
 C_("c5_827", "*827* runs in one tournament")
-cutword(CO + "vht_227.png", "227*", b("c5_227"), until("c5_227"), "right", tone="gold", sub="AN UNFORGETTABLE INNINGS")
+cutword(CO + "vht_227.png", "227*", b("c5_227"), until("c5_227"), "left", wside="right", tone="gold", sub="AN UNFORGETTABLE INNINGS")
 C_("c5_227", "Including an unforgettable *227 not out*")
 browser(BR + "ss_shaw_227.png", b("c5_title"), until("c5_title"), "right", maxw=980)
 head(["MUMBAI", "WIN THE TITLE"], b("c5_title", 0.1), until("c5_title", 0.1), "left", 120, accent=(1,))
@@ -981,33 +988,37 @@ head(["AND THEN:", "CONTROVERSIES"], b("c5_controversy"), until("c5_controversy"
 C_("c5_controversy", "And *controversies* began to gather around him")
 
 # ---------------------------------------------------------------- 06 THE CONTROVERSY
+# Every line has a picture behind it. AI scenes show places/objects only (no people), and are tagged AI-GENERATED;
+# allegations are labelled as allegations.
 roadmap(8, round(BEAT["c5_controversy"][1] + 0.05, 2), 2.4, title="06 · THE CONTROVERSY")
 full(A + "ai_hotel_night.jpg", b("c6_feb2023"), until("c6_feb2023"), dim=0.3, ai=True)
 datecard("FEB 2023", "MUMBAI", b("c6_feb2023", 1.2), until("c6_feb2023", 1.2), sub="dinner with friends at a hotel")
 C_("c6_feb2023", "Feb 2023, Mumbai · dinner with friends")
-space(b("c6_selfies"), until("c6_selfies") + blen("c6_refused") + blen("c6_argument") + 0.4)
-head(["SELFIES.", "VIDEOS."], b("c6_selfies"), until("c6_selfies"), "center", 160, accent=(1,), kicker="SOME PEOPLE WANTED", kcolor=CYAN)
+browser(BR + "rec_incident.webm", b("c6_selfies"), until("c6_selfies") + blen("c6_refused"), "right", maxw=980, media_start=0.6)
+head(["SELFIES.", "VIDEOS."], b("c6_selfies", 0.1), until("c6_selfies", 0.1), "left", 150, accent=(1,), kicker="SOME PEOPLE WANTED", kcolor=CYAN)
 C_("c6_selfies", "Some people wanted *selfies* and videos")
-glass("AS PER THE COMPLAINT BY SHAW'S FRIEND", ["Shaw first <b>agreed</b> to selfies", "Then <b>declined</b> after repeated requests"],
-      b("c6_refused", 0.2), until("c6_refused", 0.2), "center", w=1000)
-C_("c6_refused", "Per the complaint: he obliged, then *said no* to repeated requests")
-chips(["AN ARGUMENT", ("THE HOTEL ASKED THEM TO LEAVE", "yellow")], b("c6_argument"), until("c6_argument"), "center", gap=1.4)
+chips([("SELFIES: GIVEN ✓", ""), ("REPEATED REQUESTS → SAID NO", "red")], b("c6_refused", 0.3), until("c6_refused", 0.3), "left", gap=2.2, y=380)
+C_("c6_refused", "Per his friend's complaint: he obliged, then *said no*")
+full(A + "ai_bat_road.jpg", b("c6_argument"), until("c6_argument") + blen("c6_notover"), dim=0.45, ai=True)
+chips(["AN ARGUMENT", ("THE HOTEL ASKED THEM TO LEAVE", "yellow")], b("c6_argument"), until("c6_argument"), "left", gap=1.4, y=380)
 C_("c6_argument", "An argument. The hotel asked them to *leave*.")
-head(["IT DIDN'T", "END THERE"], b("c6_notover"), until("c6_notover"), "center", 150, accent=(1,))
+head(["IT DIDN'T", "END THERE"], b("c6_notover"), until("c6_notover"), "left", 150, accent=(1,), y=360)
 C_("c6_notover", "It didn't *end* there")
-space(b("c6_attack"), until("c6_attack") + blen("c6_arrest") + blen("c6_june") + 0.4, tone="red")
-glass("POLICE COMPLAINT · ALLEGATIONS", ["Shaw's car <b>attacked with a baseball bat</b> outside the hotel",
-                                         "Friend's car <b>windshield damaged</b>", "<b>Extortion and threats</b> alleged"],
-      b("c6_attack", 0.2), until("c6_attack", 0.2), "center", badge="ALLEGED", w=1100)
+full(A + "ai_windshield.jpg", b("c6_attack"), until("c6_attack"), dim=0.35, ai=True, push=(1.0, 1.12))
+glass("POLICE COMPLAINT · ALLEGATIONS", ["Car <b>attacked with a baseball bat</b>", "Friend's car <b>windshield damaged</b>",
+                                         "<b>Extortion & threats</b> alleged"], b("c6_attack", 0.2), until("c6_attack", 0.2), "left", badge="ALLEGED", w=900)
 C_("c6_attack", "Per the police complaint: the car was *attacked*; extortion alleged")
-chips([("SAPNA GILL & OTHERS: ARRESTED", ""), ("GILL: COUNTER-ALLEGATIONS OF ASSAULT", "red")], b("c6_arrest", 0.2), until("c6_arrest", 0.2),
-      "center", gap=2.6)
+full(A + "ai_police_station.jpg", b("c6_arrest"), until("c6_arrest"), dim=0.4, ai=True)
+chips([("SAPNA GILL & OTHERS: ARRESTED", ""), ("GILL: COUNTER-ALLEGATIONS", "red")], b("c6_arrest", 0.2), until("c6_arrest", 0.2),
+      "left", gap=2.6, y=400)
 C_("c6_arrest", "Arrests followed — and *counter-allegations*")
+full(A + "ai_courtroom.jpg", b("c6_june"), until("c6_june"), dim=0.4, ai=True)
 datecard("JUNE 2023", "POLICE TO COURT", b("c6_june"), 2.6)
-head(["MOLESTATION", "ALLEGATIONS:", "FOUND FALSE"], b("c6_june", 2.6), until("c6_june", 2.6), "center", 110, accent=(2,))
+head(["MOLESTATION", "ALLEGATIONS:", "FOUND FALSE"], b("c6_june", 2.6), until("c6_june", 2.6), "left", 110, accent=(2,), y=300)
 C_("c6_june", "June 2023: police told the court the allegations were *false*")
-chips(["CCTV FOOTAGE", "WITNESS STATEMENTS"], b("c6_cctv"), 4.2, "center", gap=1.0)
-head(["SAYING NO TO SELFIES", "WAS NOT A MISTAKE ✓"], b("c6_cctv", 4.4), until("c6_cctv", 4.4), "center", 110, accent={1: "#3ddc84"})
+full(A + "ai_cctv.jpg", b("c6_cctv"), until("c6_cctv"), dim=0.4, ai=True)
+chips(["CCTV FOOTAGE", "WITNESS STATEMENTS"], b("c6_cctv"), 4.2, "left", gap=1.0, y=420)
+head(["SAYING NO TO SELFIES", "WAS NOT A MISTAKE ✓"], b("c6_cctv", 4.4), until("c6_cctv", 4.4), "left", 110, accent={1: "#3ddc84"}, y=360)
 C_("c6_cctv", "Saying no to selfies was *not a mistake*")
 quote("He had every right to say no.", "THE CRICKET LOUNGE", b("c6_sayno"), until("c6_sayno"), size=96, maxw=1300)
 C_("c6_sayno", "He had every *right* to say no")
@@ -1107,9 +1118,10 @@ head(["OR THE SUPERSTAR", "WHO NEVER WAS?"], b("f_history"), round(until("f_hist
 C_("f_history", "Or will history remember the superstar *who never was*?", end=("f_superstar", -0.01))
 cutword(CO + "redball_14.png", "ONE MORE?", b("f_think"), round(until("f_think") + 1.0, 2), "center", tone="navy", sub="DOES HE DESERVE ONE MORE CHANCE?")
 C_("f_think", "Does Prithvi Shaw deserve *one more chance* in Team India?")
-subscribe_card(b("f_comment", 1.0), until("f_comment", 1.0) - 0.4)
-C_("f_comment", "Comment below · *every cricketer has a story*")
-endcard(round(BEAT["f_comment"][1] + 0.2, 2), round(TOTAL - BEAT["f_comment"][1] - 0.2, 2))
+C_("f_comment", "*Comment* karke zaroor batao")
+head(["EVERY CRICKETER", "HAS A STORY"], b("f_story", 0.1), until("f_story", 0.1) - 0.2, "center", 130, accent=(1,), sub="And some stories deserve to be told.")
+C_("f_story", "Every cricketer has a *story*")
+endcard(round(BEAT["f_story"][1] + 0.2, 2), round(TOTAL - BEAT["f_story"][1] - 0.2, 2))
 
 # ---------------------------------------------------------------- Shaw batting behind text about his batting
 BG_OK = ["o_status", "c1_talent", "c1_youngest", "c1_dominate", "c1_staying", "c4_xi", "c4_confidence", "c4_notover",
@@ -1288,7 +1300,9 @@ s.sk{{text-decoration:line-through;text-decoration-color:{RED};text-decoration-t
 .cwgrain{{position:absolute;inset:0;background-image:url(media/grain.png);opacity:.12;mix-blend-mode:overlay}}
 .cwword{{position:absolute;left:-200px;right:-200px;top:120px;text-align:center;font-family:Anton;line-height:1;letter-spacing:6px;
   text-transform:uppercase;text-shadow:0 0 60px rgba(0,0,0,.35)}}
-.cwimg{{position:absolute;bottom:0;object-fit:contain;object-position:bottom;filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}}
+.cwl{{position:absolute;object-fit:cover;transform-origin:50% 60%}}
+.cwbase{{filter:brightness(.62) saturate(.9)}}
+.cwtop{{filter:drop-shadow(0 20px 40px rgba(0,0,0,.45))}}
 .cwsub{{position:absolute;left:0;right:0;top:56px;text-align:center;color:#fff;font-size:30px;font-weight:800;letter-spacing:8px;
   text-shadow:0 2px 20px rgba(0,0,0,.8)}}
 .rmsvg{{position:absolute;inset:0;width:100%;height:100%}}
