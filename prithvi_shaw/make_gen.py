@@ -95,6 +95,7 @@ page = rep(page, 'pool = [os.path.join(d, f) for d in (P, C, A, BR) for f in sor
 
 out = head + "\n" + fx + "\n\n" + FILM_MARK + "\n" + film.split(FILM_MARK, 1)[1] + "\n" + PAGE_MARK + page
 out = out.replace("Next: the innings that should have changed everything", "Every cricketer has a story.")
+out = out.replace('">Team India mein hote?</div>', '">One more chance?</div>')
 # brand logo: larger in the corner
 out = out.replace('width="196" height="46" style="width:196px;height:46px;display:block"', 'width="264" height="62" style="width:264px;height:62px;display:block"')
 out = out.replace(".logo{{position:absolute;left:46px;top:40px;width:196px;height:46px;", ".logo{{position:absolute;left:52px;top:42px;width:264px;height:62px;")

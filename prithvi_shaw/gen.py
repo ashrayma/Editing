@@ -529,7 +529,7 @@ def endcard(start, dur, z=80):
     i = nid("en")
     EVENTS.append((start, "swell"))
     add(f'<div id="{i}" class="stage clip" data-start="{start}" data-duration="{dur}" style="z-index:{z}">'
-        f'<div class="eq" id="{i}q">Team India mein hote?</div>'
+        f'<div class="eq" id="{i}q">One more chance?</div>'
         f'<div class="eopts"><span id="{i}a">HAAN</span><i>ya</i><span id="{i}b">NAHI</span></div>'
         f'<div class="ecom" id="{i}c"><span class="eav"></span><span class="etype" id="{i}t">Comment mein likhiye…</span></div>'
         f'<div class="elogo" id="{i}l"><img src="media/logo.png" width="520" height="122" style="width:520px;height:122px;display:block"></div><div class="efoot" id="{i}f">Every cricketer has a story.</div></div>',
