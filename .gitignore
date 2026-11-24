@@ -570,3 +570,6 @@ karun_reel/out/*.mp4
 karun_reel/out/*.wav
 karun_reel/make.log
 ref_kane/
+kane_reel/out/*.mp4
+kane_reel/out/*.wav
+kane_reel/make.log

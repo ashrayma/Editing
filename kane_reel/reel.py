@@ -1,0 +1,2089 @@
+#!/usr/bin/env python3
+"""Karun Nair: the cruellest injustice in Indian cricket. 9:16 reel, HyperFrames composition.
+
+    python3 reel.py   ->  hf/index.html (+ hf/media/) and out/events.json (SFX cue list for soundtrack.py)
+
+Everything is timed off out/timeline.json (build_vo.py), so a new voice take re-times the whole edit.
+Look: charcoal + film grain, theCricketLounge yellow, Inter Display. Full-screen photos slide in from the left
+or right; cut-out "sticker" players carry the stat screens; Blender 3D shots for the #7, the three ICC trophies,
+91*, the stumping and G.O.A.T.; word-by-word captions in the lower third; type is kept off faces (layout.py).
+Instagram safe zone: nothing important above ~250 px or below ~1500 px.
+"""
+import html
+import json
+import os
+import re
+import shutil
+
+from PIL import Image
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(HERE, "hf")
+MEDIA = os.path.join(OUT, "media")
+W, H, FPS = 1080, 1920, 30
+Y = "#FEDE5C"
+TL = json.load(open(os.path.join(HERE, "out", "timeline.json")))
+LINE = {ln["id"]: ln for ln in TL["lines"]}
+END_CARD = 2.4
+TOTAL = round(TL["duration"] + END_CARD, 2)
+
+FACES = json.load(open(os.path.join(HERE, "assets", "faces.json")))
+_lp = os.path.join(HERE, "out", "layout.json")
+LAYOUT = json.load(open(_lp)) if os.path.exists(_lp) else {"move": {}, "brand_hide": []}
+
+os.makedirs(MEDIA, exist_ok=True)
+els, js, events = [], [], []
+_n = [0]
+_z = [10]
+
+
+def nid(p):
+    _n[0] += 1
+    return f"{p}{_n[0]}"
+
+
+def z():
+    _z[0] += 1
+    return _z[0]
+
+
+def s(lid, off=0.0):
+    """Start of a line (+offset)."""
+    return round(LINE[lid]["start"] + off, 3)
+
+
+def e(lid, off=0.0):
+    return round(LINE[lid]["end"] + off, 3)
+
+
+def word(lid, k):
+    """Start time of the k-th caption word of a line."""
+    return LINE[lid]["words"][k][1]
+
+
+def span(a, b):
+    """From the start of line a to the start of line b (or the end of the reel)."""
+    return round((s(b) if b else TOTAL) - s(a), 3)
+
+
+def media(path):
+    src = os.path.join(HERE, path)
+    name = path.replace("/", "_")
+    dst = os.path.join(MEDIA, name)
+    if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+        shutil.copy(src, dst)
+    return "media/" + name
+
+
+def mv(i, top, left=None):
+    """Position of a type element, after any move the face checker (layout.py) decided on."""
+    o = LAYOUT["move"].get(i, {})
+    return o.get("top", top), o.get("left", left)
+
+
+def face_marks(key, ox=0.0, oy=0.0, dw=None, dh=None):
+    """Invisible boxes over each face of an image drawn at (ox, oy, dw, dh) px inside its transformed wrapper;
+    the checker reads their on-screen rects."""
+    return "".join(f'<div class="face" style="left:{ox + x * dw:.0f}px;top:{oy + y * dh:.0f}px;width:{w * dw:.0f}px;'
+                   f'height:{h * dh:.0f}px"></div>' for x, y, w, h in FACES.get(key, []))
+
+
+def merge_classes(h):
+    """clip_attrs() puts class="clip" on a tag that may carry its own class too: fold them into one attribute."""
+    def fix(m):
+        tag = m.group(0)
+        cls = re.findall(r'\sclass="([^"]*)"', tag)
+        if len(cls) < 2:
+            return tag
+        tag = re.sub(r'\sclass="[^"]*"', "", tag)
+        return tag[:-1] + f' class="{" ".join(cls)}">'
+    return re.sub(r"<[a-z]+\b[^<>]*>", fix, h)
+
+
+def add(h):
+    els.append(merge_classes(h))
+
+
+def anim(a):
+    js.append(a)
+
+
+def cue(t, kind, gain=1.0):
+    events.append((round(t, 3), kind, gain))
+
+
+def clip_attrs(start, dur):
+    return f'class="clip" data-start="{round(start, 3)}" data-duration="{round(dur, 3)}"'
+
+
+# ----------------------------------------------------------------------------- layers
+
+def stage(start, dur, tone="#0b0b0c"):
+    """An opaque grain panel: resets the frame for cut-outs and type."""
+    i = nid("st")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:{tone}">'
+        f'<div class="gridbg" id="{i}g"></div><div class="grain"></div><div class="vig"></div></div>')
+    anim(f'tl.fromTo("#{i}g",{{x:0,y:0}},{{x:-60,y:-90,duration:{max(0.5, dur)},ease:"none"}},{start})')
+    return i
+
+
+FOCUS = {"ab_delhi_block": 0.5, "ab_delhi_umesh": 0.66, "selectors": 0.3}  # manual crop focus (x) for wide photos; otherwise the crop centres on the detected face
+
+
+def focus_x(name):
+    if name in FOCUS:
+        return FOCUS[name]
+    fs = FACES.get("hi/" + name) or []
+    if not fs:
+        return 0.5
+    x, y, w, h = max(fs, key=lambda f: f[2] * f[3])
+    return x + w / 2
+
+
+def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=None, whoosh=True, band=False):
+    """Full-screen photo. Tall photos fill the frame; wide ones sit full-width over a blurred fill of themselves.
+    Enters with a fast slide from `side` ("left"/"right"/"up"/None for a hard cut), then a slow push-in."""
+    i = nid("ph")
+    src = media(f"assets/hi/{name}.png")
+    fill = media(f"assets/fill/{name}.jpg")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        tall = im.height / im.width >= 1.25
+        ih = round(W * im.height / im.width)
+    filt = {"grey": "grayscale(1) contrast(1.1) brightness(.85)", "dim": "brightness(.6)"}.get(fx, "none")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        iw, ihh = im.size
+    if tall or not band:
+        sc = max(W / iw, H / ihh)
+        dw, dh = iw * sc, ihh * sc
+        # object-position that puts the focus point (the face) at the centre of the frame, within the image
+        fx_ = 0.5 if tall or dw <= W + 1 else min(1.0, max(0.0, (W / 2 - focus_x(name) * dw) / (W - dw)))
+        pos = f"{fx_ * 100:.1f}% 30%"
+        marks = face_marks("hi/" + name, (W - dw) * fx_, (H - dh) * 0.3, dw, dh)
+        inner = (f'<div id="{i}m" style="position:absolute;inset:0;transform-origin:{origin}">'
+                 f'<img src="{src}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;'
+                 f'object-position:{pos};filter:{filt}">{marks}</div>')
+    else:
+        # as big as the 2x rule allows: height up to 2x the source's own pixels, cropped around the face
+        with Image.open(os.path.join(HERE, "assets", "photos", name + ".jpg")) as so:
+            sh = so.size[1]
+        bh = min(H, 2 * sh)
+        bw = bh * iw / ihh
+        if bw < W:
+            bw, bh = W, W * ihh / iw
+        left = min(0, max(W - bw, W / 2 - focus_x(name) * bw))
+        top = round(min(max(0, H * 0.45 - bh / 2), H - bh))
+        marks = face_marks("hi/" + name, 0, 0, bw, bh)
+        inner = (f'<img src="{fill}" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover">'
+                 f'<div id="{i}m" style="position:absolute;left:{left:.0f}px;top:{top}px;width:{bw:.0f}px;height:{bh:.0f}px;transform-origin:{origin}">'
+                 f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;filter:{filt};box-shadow:0 40px 120px rgba(0,0,0,.75)">'
+                 f'{marks}</div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};overflow:hidden;background:#000">'
+        f'{inner}<div class="shade"></div><div class="vig"></div></div>')
+    if side:
+        if whoosh:
+            cue(start - 0.1, "whoosh", 0.8)
+        fr = {"left": "xPercent:-100", "right": "xPercent:100", "up": "yPercent:100"}[side]
+        anim(f'tl.fromTo("#{i}",{{{fr}}},{{xPercent:0,yPercent:0,duration:0.38,ease:"expo.out"}},{start})')
+        # motion-blur feel: a short skew while it travels
+        anim(f'tl.fromTo("#{i}m",{{skewX:{-6 if side == "right" else 6 if side == "left" else 0}}},{{skewX:0,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}m",{{scale:{push[0]}}},{{scale:{push[1]},duration:{dur},ease:"none"}},{start})')
+    return i
+
+
+def sticker(name, start, dur, side="right", x=None, h=1250, bottom=0, grey=False, flip=False):
+    """Cut-out player with a white outline, standing on the bottom edge; slides in, then floats slightly."""
+    i = nid("ct")
+    src = media(f"assets/cut/{name}.png")
+    with Image.open(os.path.join(HERE, "assets", "cut", name + ".png")) as im:
+        w = round(h * im.width / im.height)
+    if w > 1000:
+        h, w = round(h * 1000 / w), 1000
+    left = x if x is not None else (W - w - 20 if side == "right" else 20)
+    filt = "grayscale(1) brightness(.9)" if grey else "none"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer" style="position:absolute;left:{left}px;bottom:{bottom}px;width:{w}px;height:{h}px;z-index:{z()}">'
+        f'<img id="{i}m" src="{src}" style="width:100%;height:100%;filter:{filt} drop-shadow(0 30px 40px rgba(0,0,0,.6));'
+        f'transform:{"scaleX(-1)" if flip else "none"}">{face_marks("cut/" + name, 0, 0, w, h)}</div>')
+    cue(start - 0.08, "whoosh", 0.55)
+    dx = 700 if side == "right" else -700
+    anim(f'tl.fromTo("#{i}",{{x:{dx},opacity:0}},{{x:0,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}",{{y:0}},{{y:-18,duration:{dur},ease:"sine.inOut"}},{start})')
+    return i
+
+
+def video3d(name, start, dur):
+    """A Blender render, full frame; holds its last frame if the line runs longer than the shot."""
+    i = nid("v3")
+    src = media(f"blender/renders/{name}.mp4")
+    last = media(f"blender/renders/{name}_last.png")
+    with open(os.path.join(HERE, "blender", "renders", name + ".len")) as f:
+        vlen = float(f.read())
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#030304">'
+        f'<img src="{last}" style="position:absolute;inset:0;width:100%;height:100%">'
+        f'<video id="{i}v" class="clip" src="{src}" muted playsinline data-start="{start}" data-duration="{min(dur, vlen)}" '
+        f'data-media-start="0" style="position:absolute;inset:0;width:100%;height:100%"></video></div>')
+    return i
+
+
+def screen(rec, start, dur, side="left", focus="50% 30%", zoom=1.45, mstart=0.3):
+    """Screen recording in a floating browser window: swings in tilted, flattens, then pushes in on the data."""
+    i = nid("sc")
+    src = media(f"capture/out/{rec}.mp4")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:40px;top:560px;width:1000px;height:675px;'
+        f'z-index:{z()};perspective:1800px">'
+        f'<div id="{i}w" class="win" style="transform-origin:{focus}"><div class="bar"><i></i><i></i><i></i>'
+        f'<span>thecricketlounge · record book</span></div>'
+        f'<video class="clip" src="{src}" muted playsinline data-start="{start}" data-duration="{dur}" data-media-start="{mstart}" '
+        f'style="width:1000px;height:625px;display:block"></video></div></div>')
+    cue(start - 0.1, "whoosh", 0.8)
+    dx, ry = (-1100, 28) if side == "left" else (1100, -28)
+    anim(f'tl.fromTo("#{i}w",{{x:{dx},rotationY:{ry},rotationX:8}},{{x:0,rotationY:0,rotationX:0,duration:0.8,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}w",{{scale:{zoom},duration:{max(0.5, dur - 1.0)},ease:"power2.inOut"}},{start + 0.9})')
+    return i
+
+
+def screenshot(path, start, dur, side="right", rot=-4, top=600):
+    """A screenshot card dropping in with a slight tilt (the camera-shutter moment)."""
+    i = nid("ss")
+    src = media(path)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:90px;top:{top}px;width:900px;z-index:{z()}">'
+        f'<img src="{src}" style="width:900px;border-radius:22px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.9)"></div>')
+    cue(start, "shutter", 1.0)
+    dx = 900 if side == "right" else -900
+    anim(f'tl.fromTo("#{i}",{{x:{dx},rotation:{rot * 3},scale:1.15}},{{x:0,rotation:{rot},scale:1,duration:0.55,ease:"back.out(1.4)"}},{start})')
+    return i
+
+
+# ----------------------------------------------------------------------------- type
+
+def title(lines, start, dur, y=330, size=120, color="#fff", accent=(), align="center", italic=False, sfx="soft"):
+    """Heavy headline, each line rising out of a mask with a short blur."""
+    i = nid("ti")
+    cue(start, sfx, 1.0)
+    rows = "".join(f'<div class="mask"><div id="{i}l{k}" class="ln" style="color:{Y if k in accent else color}">'
+                   f'{html.escape(t)}</div></div>' for k, t in enumerate(lines))
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:70px;right:70px;top:{y}px;z-index:{z()};'
+        f'font-size:{size}px;text-align:{align};font-style:{"italic" if italic else "normal"}" class="title avoid">{rows}</div>')
+    for k in range(len(lines)):
+        anim(f'tl.fromTo("#{i}l{k}",{{yPercent:105,filter:"blur(12px)"}},{{yPercent:0,filter:"blur(0px)",duration:0.65,ease:"expo.out"}},{start + 0.08 * k})')
+    anim(f'tl.fromTo("#{i}",{{y:0,scale:1}},{{y:-16,scale:1.03,duration:{max(0.3, dur)},ease:"none"}},{start})')
+    return i
+
+
+def typed(lines, start, dur, x=70, y=420, header=None, size=56, cps=34, color=Y):
+    """A stat block like a terminal: optional italic header, then lines typed out character by character."""
+    i = nid("ty")
+    rows = []
+    t = start
+    if header:
+        rows.append(f'<div class="thead" id="{i}h">{html.escape(header)}</div>')
+        anim(f'tl.fromTo("#{i}h",{{opacity:0,x:-30}},{{opacity:1,x:0,duration:0.4,ease:"expo.out"}},{t})')
+        t += 0.3
+    for k, ln in enumerate(lines):
+        chars = "".join(f'<span class="ch">{html.escape(c) if c != " " else "&nbsp;"}</span>' for c in ln)
+        rows.append(f'<div class="tline" id="{i}r{k}" style="font-size:{size}px;color:{color if k == 0 else "#fff"}">{chars}</div>')
+        anim(f'tl.fromTo("#{i}r{k} .ch",{{opacity:0}},{{opacity:1,duration:0.01,stagger:{round(1 / cps, 3)}}},{round(t, 3)})')
+        for c in range(0, len(ln), 3):
+            cue(t + c / cps, "key", 0.5)
+        t += len(ln) / cps + 0.12
+    y, x = mv(i, y, x)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:{x}px;top:{y}px;z-index:{z()}" class="typed avoid">'
+        f'{"".join(rows)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:0}},{{y:-14,duration:{max(0.3, dur)},ease:"none"}},{start})')
+    return i
+
+
+def odo(num, start, dur, y=520, size=330, color=Y, label=None, x=None, sfx=True):
+    """Rolling-digit counter."""
+    i = nid("od")
+    if sfx:
+        cue(start, "roll", 1.0)
+    cols = []
+    for k, ch in enumerate(num):
+        if ch.isdigit():
+            strip = "".join(f"<span>{d}</span>" for d in "0123456789")
+            cols.append(f'<span class="dcol"><span class="dstrip" id="{i}d{k}">{strip}</span></span>')
+            anim(f'tl.fromTo("#{i}d{k}",{{yPercent:0}},{{yPercent:{-int(ch) * 10},duration:{0.9 + 0.15 * k},ease:"expo.out"}},{start + 0.05})')
+        else:
+            cols.append(f'<span>{html.escape(ch)}</span>')
+    lab = f'<div class="olabw"><span class="olab"><i></i>{html.escape(label)}</span></div>' if label else ""
+    y, x = mv(i, y, x)
+    pos = f"left:{x}px" if x is not None else "left:0;right:0;text-align:center"
+    gold = " gold" if color == Y else ""
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="odo avoid{gold}" style="{pos};top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">'
+        f'<div class="digits">{"".join(cols)}<span class="oshine"></span></div>{lab}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0.8,opacity:0}},{{scale:1,opacity:1,duration:0.5,ease:"back.out(1.6)"}},{start})')
+    land = start + 0.95 + 0.15 * len(num)
+    if dur > land - start + 0.2:
+        anim(f'tl.fromTo("#{i} .digits",{{scale:1.1}},{{scale:1,duration:0.35,ease:"back.out(3)"}},{land})')
+        anim(f'tl.fromTo("#{i} .oshine",{{xPercent:-160}},{{xPercent:260,duration:0.7,ease:"power2.inOut"}},{land})')
+        cue(land, "pop", 0.8)
+    anim(f'tl.fromTo("#{i}",{{y:0}},{{y:-18,duration:{max(0.3, dur)},ease:"none"}},{start})')
+    if label:
+        anim(f'tl.fromTo("#{i} .olab",{{y:20,opacity:0}},{{y:0,opacity:1,duration:0.4,ease:"expo.out"}},{start + 0.35})')
+    return i
+
+
+def tag(txt, start, dur, x=70, y=1250, dark=False):
+    """Name tag: yellow pill, the name types in."""
+    i = nid("tg")
+    chars = "".join(f'<span class="ch">{html.escape(c) if c != " " else "&nbsp;"}</span>' for c in txt)
+    y, x = mv(i, y, x)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tag avoid{" dark" if dark else ""}" style="left:{x}px;top:{y}px;z-index:{z()}">{chars}</div>')
+    anim(f'tl.fromTo("#{i}",{{scaleX:0}},{{scaleX:1,duration:0.35,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i} .ch",{{opacity:0}},{{opacity:1,duration:0.01,stagger:0.035}},{start + 0.2})')
+    cue(start, "pop", 0.8)
+    return i
+
+
+def chip(txt, start, dur, x=70, y=300):
+    """Small glass label (date / venue)."""
+    i = nid("cp")
+    y, x = mv(i, y, x)
+    pos = f"left:{x}px" if x is not None else "left:0;right:0;margin:0 auto;width:fit-content"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="chip avoid" style="{pos};top:{y}px;z-index:{z()}"><span class="dot"></span>{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:24,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"expo.out"}},{start})')
+    cue(start, "pop", 0.6)
+
+
+def bars(a, b, la, lb, start, dur, y=440, unit=""):
+    """Two 3D columns (Kohli yellow vs Sachin grey) growing to scale, values counting on top."""
+    i = nid("br")
+    hmax = 620
+    ha, hb = hmax, round(hmax * b / a)
+    def col(k, v, h, lab, c, x):
+        strip = lambda n: "".join(f'<div class="bnum" id="{i}n{k}">{n}{unit}</div>' for _ in [0])
+        return (f'<div class="bcol" style="left:{x}px;top:{y}px;height:{hmax + 160}px">'
+                f'{strip(v)}<div class="bbody" id="{i}b{k}" style="height:{h}px;background:linear-gradient(90deg,{c[0]},{c[1]})">'
+                f'<div class="btop" style="background:{c[2]}"></div></div><div class="blab">{html.escape(lab)}</div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()}">'
+        f'{col(0, a, ha, la, ("#d9b93c", Y, "#fff2b0"), 190)}{col(1, b, hb, lb, ("#5a5a60", "#8d8d94", "#c9c9cf"), 600)}</div>')
+    for k, (v, h) in enumerate(((a, ha), (b, hb))):
+        t0 = start + 0.15 + 0.25 * k
+        anim(f'tl.fromTo("#{i}b{k}",{{height:0}},{{height:{h},duration:0.9,ease:"expo.out"}},{t0})')
+        anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{v},duration:0.9,ease:"expo.out",onUpdate:()=>{{document.getElementById("{i}n{k}").textContent=Math.round(o.v)+"{unit}"}}}},{t0})}})()')
+        cue(t0, "rise", 0.7)
+
+
+def stamp(txt, start, dur, y=760, size=300, color=Y, rot=-6):
+    """Word slams in from big to size with a shake."""
+    i = nid("sm")
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="stamp avoid" style="top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:2.6,opacity:0,rotation:{rot * 2}}},{{scale:1,opacity:1,rotation:{rot},duration:0.32,ease:"power4.in"}},{start})')
+    shake(start + 0.3)
+    cue(start + 0.3, "impact", 1.0)
+    return i
+
+
+# ----------------------------------------------------------------------------- transitions / fx
+
+def shake(t, amp=22, dur=0.35):
+    anim(f'tl.fromTo("#world",{{x:0,y:0}},{{keyframes:[{{x:{amp},y:{-amp // 2}}},{{x:{-amp},y:{amp // 2}}},'
+         f'{{x:{amp // 2},y:{amp // 3}}},{{x:0,y:0}}],duration:{dur},ease:"none"}},{t})')
+
+
+def flash(t, color="#fff", peak=0.85):
+    i = nid("fl")
+    add(f'<div id="{i}" {clip_attrs(t - 0.02, 0.4)} style="position:absolute;inset:0;background:{color};z-index:{z() + 400};pointer-events:none"></div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:{peak}}},{{opacity:0,duration:0.32,ease:"power2.out"}},{t})')
+
+
+def leak(t, dur=0.8):
+    """Warm light leak sweeping across (yellow -> orange), screen-blended."""
+    i = nid("lk")
+    add(f'<div id="{i}" {clip_attrs(t, dur)} class="leak" style="z-index:{z() + 400}"></div>')
+    anim(f'tl.fromTo("#{i}",{{xPercent:-80,opacity:0}},{{keyframes:[{{xPercent:-20,opacity:1,duration:{dur * 0.4}}},'
+         f'{{xPercent:60,opacity:0,duration:{dur * 0.6}}}],ease:"none"}},{t})')
+    cue(t, "swish", 0.7)
+
+
+def glitch(t, dur=0.45, name=None):
+    """RGB-split slices + jitter. With a photo name, a red/cyan offset copy of it flickers over the frame."""
+    i = nid("gl")
+    split = ""
+    if name:
+        src = media(f"assets/hi/{name}.png")
+        split = (f'<img id="{i}r" src="{src}" class="gimg" style="mix-blend-mode:screen;filter:url(#red)">'
+                 f'<img id="{i}c" src="{src}" class="gimg" style="mix-blend-mode:screen;filter:url(#cyan)">')
+    slices = "".join(f'<div class="slice" id="{i}s{k}" style="top:{180 + k * 330}px;height:{40 + (k * 37) % 90}px"></div>' for k in range(5))
+    add(f'<div id="{i}" {clip_attrs(t, dur)} style="position:absolute;inset:0;z-index:{z() + 400};pointer-events:none">{split}{slices}</div>')
+    steps = max(3, int(dur / 0.05))
+    if name:
+        anim(f'tl.fromTo("#{i}r",{{x:-26,opacity:.7}},{{x:26,opacity:0,duration:{dur},ease:"steps({steps})"}},{t})')
+        anim(f'tl.fromTo("#{i}c",{{x:26,opacity:.7}},{{x:-26,opacity:0,duration:{dur},ease:"steps({steps})"}},{t})')
+    for k in range(5):
+        anim(f'tl.fromTo("#{i}s{k}",{{x:{(-1) ** k * 120}}},{{x:{(-1) ** (k + 1) * 80},duration:{dur},ease:"steps({steps})"}},{t})')
+    shake(t, 14, dur)
+    cue(t, "glitch", 1.0)
+
+
+def duo(name, start, dur, side=None):
+    """The red duotone treatment: greyscale photo under a deep red wash."""
+    i = photo(name, start, dur, side=side, fx="grey", push=(1.08, 1.18))
+    j = nid("du")
+    add(f'<div id="{j}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};background:#d0141e;mix-blend-mode:multiply;opacity:.85"></div>')
+    return i
+
+
+def flicker(names, start, dur):
+    """Rapid montage: hard cuts every ~0.13 s with a flash on the last one."""
+    n = len(names)
+    step = dur / n
+    for k, nm in enumerate(names):
+        photo(nm, start + k * step, step + 0.02, side=None, push=(1.18, 1.1), whoosh=False)
+        cue(start + k * step, "tick", 0.9)
+    flash(start + dur - 0.02, peak=0.5)
+
+
+# ----------------------------------------------------------------------------- captions
+
+NO_CAPTION = {"c1"}  # the comment card carries it
+
+
+# ----------------------------------------------------------------------------- the edit
+
+
+def legend(first, last, start, dur, country, k, photo_name=None):
+    """A legend's name card: first name small, surname huge, country chip, a fast slide from alternating sides.
+    Uses their photo full-screen when one is in assets/hi/, otherwise a type-only card on grain."""
+    side = "left" if k % 2 else "right"
+    if photo_name and os.path.exists(os.path.join(HERE, "assets", "hi", photo_name + ".png")):
+        photo(photo_name, start, dur, side=side, push=(1.0, 1.08), whoosh=False)
+    else:
+        i = stage(start, dur, tone="#0d0d0f")
+        anim(f'tl.fromTo("#{i}",{{xPercent:{-100 if side == "left" else 100}}},{{xPercent:0,duration:0.32,ease:"expo.out"}},{start})')
+        num = nid("lg")
+        add(f'<div id="{num}" {clip_attrs(start, dur)} class="lgnum" style="z-index:{z()}">{k + 1:02d}</div>')
+        anim(f'tl.fromTo("#{num}",{{x:{-200 if side == "left" else 200},opacity:0}},{{x:0,opacity:1,duration:0.5,ease:"expo.out"}},{start})')
+    cue(start - 0.06, "whoosh", 0.7)
+    title([first], start + 0.02, dur, y=700, size=70, color="rgba(255,255,255,.8)", sfx="soft")
+    title([last.upper()], start + 0.06, dur, y=780, size=150 if len(last) < 10 else 112, accent=(0,), sfx="soft")
+    chip(country, start + 0.12, dur - 0.12, x=None, y=1000)
+
+
+def name_wall(start, dur, names, y=300):
+    """Every legend at once: surnames tile in as a wall, then hold."""
+    i = nid("nw")
+    cells = "".join(f'<div class="nwc" id="{i}c{k}"><span>{html.escape(n.upper())}</span></div>' for k, n in enumerate(names))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="nwall avoid" style="top:{y}px;z-index:{z()}">{cells}</div>')
+    for k in range(len(names)):
+        anim(f'tl.fromTo("#{i}c{k}",{{scale:0.6,opacity:0,rotationX:-70}},{{scale:1,opacity:1,rotationX:0,duration:0.45,ease:"back.out(1.6)"}},{start + 0.06 * k})')
+        cue(start + 0.06 * k, "tick", 0.8)
+
+
+def quote_card(start, dur, txt, who):
+    """'You'll grow out of it.': a big quote typed out between giant quote marks, attribution underneath."""
+    i = nid("qt")
+    # words stay whole (no line break inside a word or before its full stop)
+    chars = " ".join('<span class="wd">' + "".join(f'<span class="ch">{html.escape(c)}</span>' for c in w) + "</span>"
+                     for w in txt.split())
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="quote avoid" style="z-index:{z()}"><div class="qm" id="{i}q">“</div>'
+        f'<div class="qt">{chars}</div><div class="qw" id="{i}w">— {html.escape(who)}</div></div>')
+    anim(f'tl.fromTo("#{i}q",{{scale:0.3,opacity:0}},{{scale:1,opacity:1,duration:0.5,ease:"back.out(1.8)"}},{start})')
+    anim(f'tl.fromTo("#{i} .ch",{{opacity:0,y:20}},{{opacity:1,y:0,duration:0.1,stagger:0.028}},{start + 0.2})')
+    anim(f'tl.fromTo("#{i}w",{{opacity:0}},{{opacity:1,duration:0.4}},{start + 0.2 + 0.028 * len(txt)})')
+    for c in range(0, len(txt), 2):
+        cue(start + 0.2 + 0.028 * c, "key", 0.6)
+
+
+def records_fan(start, dur, shots):
+    """Screenshots of the record book fly in and fan out like a deck: 'I went through every record'."""
+    for k, path in enumerate(shots):
+        screenshot(path, start + 0.28 * k, dur - 0.28 * k, side="right" if k % 2 else "left", rot=(-7, 4, -2)[k % 3],
+                   top=520 + 120 * k)
+
+
+def years(start, dur, a, b, label):
+    """a ———— b: a line draws across, the year counts up, a label lands underneath."""
+    i = nid("yl")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()}">'
+        f'<div class="ylab" style="left:90px">{a}</div><div class="ylab" id="{i}y" style="right:90px;color:{Y}">{a}</div>'
+        f'<div class="yline"><div id="{i}f" class="yfill"></div></div>'
+        f'<div class="ybig" id="{i}b">{html.escape(label)}</div></div>')
+    d = min(1.4, dur * 0.7)
+    anim(f'tl.fromTo("#{i}f",{{scaleX:0}},{{scaleX:1,duration:{d},ease:"power2.inOut"}},{start + 0.1})')
+    anim(f'(()=>{{const o={{v:{a}}};tl.to(o,{{v:{b},duration:{d},ease:"power2.inOut",onUpdate:()=>{{document.getElementById("{i}y").textContent=Math.round(o.v)}}}},{start + 0.1})}})()')
+    anim(f'tl.fromTo("#{i}b",{{scale:0.6,opacity:0}},{{scale:1,opacity:1,duration:0.5,ease:"back.out(1.8)"}},{start + d})')
+    cue(start + 0.1, "rise", 0.8)
+    for k in range(10):
+        cue(start + 0.1 + k * d / 10, "tick", 0.5)
+
+
+def receipt(n, start, dur, total=8):
+    """Proof counter in the corner: PROOF 3/8 — ticks up with every new receipt."""
+    i = nid("rc")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="receipt" style="z-index:{z() + 300}"><span class="rl">PROOF</span>'
+        f'<span class="rn">{n}</span><span class="rt">/{total}</span></div>')
+    anim(f'tl.fromTo("#{i} .rn",{{yPercent:100,opacity:0}},{{yPercent:0,opacity:1,duration:0.35,ease:"back.out(2)"}},{start})')
+
+
+def then_now(start, dur, a_photo, b_photo, la="THEN", lb="NOW", grey=True):
+    """Split screen: THEN (grey, 2007) on top, NOW (colour) underneath; the divider wipes across."""
+    i = nid("tn")
+    sa, sb = media(f"assets/hi/{a_photo}.png"), media(f"assets/hi/{b_photo}.png")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000">'
+        f'<div class="half" id="{i}a" style="top:0"><img src="{sa}" style="filter:{"grayscale(1) contrast(1.1)" if grey else "none"}"><div class="hl">{html.escape(la)}</div></div>'
+        f'<div class="half" id="{i}b" style="top:960px"><img src="{sb}"><div class="hl" style="color:{Y}">{html.escape(lb)}</div></div>'
+        f'<div class="hdiv" id="{i}d"></div></div>')
+    anim(f'tl.fromTo("#{i}a",{{xPercent:-100}},{{xPercent:0,duration:0.5,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{xPercent:100}},{{xPercent:0,duration:0.5,ease:"expo.out"}},{start + 0.25})')
+    anim(f'tl.fromTo("#{i}d",{{scaleX:0}},{{scaleX:1,duration:0.6,ease:"expo.out"}},{start + 0.4})')
+    cue(start - 0.08, "whoosh", 0.8)
+    cue(start + 0.17, "whoosh", 0.8)
+
+
+def recap(start, dur, items):
+    i = nid("rp")
+    rows = "".join(f'<div class="rrow" id="{i}r{k}"><span class="tick" id="{i}t{k}">✓</span>{html.escape(t)}</div>'
+                   for k, t in enumerate(items))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="recap avoid" style="z-index:{z()}">{rows}</div>')
+    for k in range(len(items)):
+        t0 = start + 0.09 * k
+        anim(f'tl.fromTo("#{i}r{k}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{t0})')
+        anim(f'tl.fromTo("#{i}t{k}",{{scale:0}},{{scale:1,duration:0.3,ease:"back.out(2.5)"}},{t0 + 0.15})')
+        cue(t0 + 0.15, "pop", 0.7)
+
+
+def comment_cta(start, dur):
+    i = nid("cm")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
+        f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Who was your childhood GOAT?</div></div>')
+    anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.3})')
+    txt = "Dhoni. Always 💛"
+    anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:1.0,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 0.8})}})()')
+    cue(start + 0.3, "pop", 1.0)
+
+
+BOARD = [("ROHIT SHARMA", "India", 650, "650+"), ("CHRIS GAYLE", "West Indies", 553, "553"),
+         ("SHAHID AFRIDI", "Pakistan", 476, "476"), ("BRENDON McCULLUM", "New Zealand", 398, "398"),
+         ("MARTIN GUPTILL", "New Zealand", 383, "383")]
+
+
+def leaderboard(start, dur, reveal=False, y=380):
+    """The top five as a leaderboard: rows rise in from #5 up, bars grow to scale, numbers count.
+    reveal=False keeps #1 as a '???' tease; reveal=True lands Rohit on top with a glow."""
+    i = nid("lb")
+    rows = []
+    for k, (name, team, n, lab) in enumerate(BOARD):
+        top = k == 0
+        hide = top and not reveal
+        w = round(560 * n / 650)
+        rows.append(f'<div class="lbr{" lbtop" if top else ""}" id="{i}r{k}"><div class="lbk">{k + 1}</div>'
+                    f'<div class="lbm"><div class="lbn">{"? ? ?" if hide else html.escape(name)}</div>'
+                    f'<div class="lbbar"><div class="lbf" id="{i}f{k}" style="width:{0 if hide else w}px"></div></div></div>'
+                    f'<div class="lbv" id="{i}v{k}">{"???" if hide else "0"}</div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="lboard avoid" style="top:{y}px;z-index:{z()}">{"".join(rows)}</div>')
+    order = list(range(4, -1, -1))  # #5 first
+    for j, k in enumerate(order):
+        t0 = start + 0.12 + (0.16 if not reveal else 0.1) * j + (0.35 if reveal and k == 0 else 0)
+        anim(f'tl.fromTo("#{i}r{k}",{{x:-120,opacity:0}},{{x:0,opacity:1,duration:0.45,ease:"expo.out"}},{t0})')
+        name, team, n, lab = BOARD[k]
+        if k == 0 and not reveal:
+            cue(t0, "pop", 0.8)
+            continue
+        anim(f'tl.fromTo("#{i}f{k}",{{scaleX:0}},{{scaleX:1,duration:0.8,ease:"expo.out"}},{t0 + 0.1})')
+        plus = "+" if lab.endswith("+") else ""
+        anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{n},duration:0.8,ease:"expo.out",onUpdate:()=>{{document.getElementById("{i}v{k}").textContent=Math.round(o.v)+(o.v>={n}-0.5?"{plus}":"")}}}},{t0 + 0.1})}})()')
+        cue(t0 + 0.1, "rise" if k else "impact", 0.8 if k else 1.0)
+    if reveal:
+        anim(f'tl.fromTo("#{i}r0",{{boxShadow:"0 0 0 rgba(254,222,92,0)"}},{{boxShadow:"0 0 60px rgba(254,222,92,.55)",duration:0.6,yoyo:true,repeat:3}},{start + 0.9})')
+        flash(start + 0.85, peak=0.3)
+
+
+def versus(start, dur, a, b, la, lb, y=420):
+    """Two bars: Rohit 650+ vs Gayle 553 — the gap you can see."""
+    i = nid("vs")
+    def col(k, n, lab, name, x, gold):
+        h = round(640 * n / 650)
+        c = ("#d9b93c", Y, "#fff2b0") if gold else ("#5a5a60", "#8d8d94", "#c9c9cf")
+        return (f'<div class="bcol" style="left:{x}px;top:{y}px;height:800px"><div class="bnum" id="{i}n{k}">{lab}</div>'
+                f'<div class="bbody" id="{i}b{k}" style="height:{h}px;background:linear-gradient(90deg,{c[0]},{c[1]})">'
+                f'<div class="btop" style="background:{c[2]}"></div></div><div class="blab">{name}</div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="avoid" style="position:absolute;inset:0;z-index:{z()}">'
+        f'{col(0, a[0], a[1], la, 190, True)}{col(1, b[0], b[1], lb, 600, False)}</div>')
+    for k, n in enumerate((a[0], b[0])):
+        t0 = start + 0.1 + 0.2 * k
+        anim(f'tl.fromTo("#{i}b{k}",{{height:0}},{{height:{round(640 * n / 650)},duration:0.9,ease:"expo.out"}},{t0})')
+        anim(f'tl.fromTo("#{i}n{k}",{{opacity:0,y:30}},{{opacity:1,y:0,duration:0.4}},{t0 + 0.5})')
+        cue(t0, "rise", 0.8)
+
+
+def strike_list(start, dur, names, y=560):
+    """The reference reel's crossing-out move: names stack in, then a line strikes through each one."""
+    i = nid("sl")
+    rows = "".join(f'<div class="slr" id="{i}r{k}"><span>{html.escape(n)}</span><i class="sll" id="{i}l{k}"></i></div>'
+                   for k, n in enumerate(names))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="slist avoid" style="top:{y}px;z-index:{z()}">{rows}</div>')
+    n = len(names)
+    for k in range(n):
+        anim(f'tl.fromTo("#{i}r{k}",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.35,ease:"expo.out"}},{start + 0.08 * k})')
+        t1 = start + 0.45 + (dur - 0.8) * k / max(1, n)
+        anim(f'tl.fromTo("#{i}l{k}",{{scaleX:0}},{{scaleX:1,duration:0.25,ease:"power2.out"}},{t1})')
+        anim(f'tl.to("#{i}r{k} span",{{opacity:.35,duration:0.25}},{t1})')
+        cue(t1, "swish", 0.8)
+
+
+def slowmo(name, start, dur):
+    """'Bats like he's in slow motion': a very slow push, ghost echoes trailing behind, SLOW MOTION stretching out."""
+    i = photo(name, start, dur, side=None, push=(1.0, 1.05), whoosh=False)
+    src = media(f"assets/hi/{name}.png")
+    for k in range(3):
+        g = nid("gh")
+        add(f'<div id="{g}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};pointer-events:none;mix-blend-mode:screen;opacity:{0.28 - 0.07 * k}">'
+            f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:blur({2 + 2 * k}px)"></div>')
+        anim(f'tl.fromTo("#{g}",{{x:0,y:0}},{{x:{-26 * (k + 1)},y:{10 * (k + 1)},duration:{dur},ease:"sine.out"}},{start})')
+    t = nid("sm")
+    add(f'<div id="{t}" {clip_attrs(start, dur)} class="slowt avoid" style="z-index:{z()}">SLOW MOTION</div>')
+    anim(f'tl.fromTo("#{t}",{{letterSpacing:"-0.04em",opacity:0}},{{letterSpacing:"0.22em",opacity:1,duration:{dur},ease:"power1.out"}},{start + 0.1})')
+    cue(start, "swish", 0.9)
+    return i
+
+
+def badge(n, start, dur):
+    """The rank stays pinned top-left for the player's whole segment (from the new reference)."""
+    i = nid("bd")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="badge" style="z-index:{z() + 350}">{n}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0,rotation:-90}},{{scale:1,rotation:0,duration:0.45,ease:"back.out(2.2)"}},{start})')
+    cue(start, "pop", 0.7)
+
+
+def hero(cut, lines, start, dur):
+    """Cut-out on the grid with a big yellow circle behind and chunky white type underneath (reference hook look)."""
+    i = stage(start, dur, tone="#0d0d0f")
+    j = nid("hr")
+    add(f'<div id="{j}" {clip_attrs(start, dur)} class="hero" style="z-index:{z()}"><div class="circ" id="{j}c"></div></div>')
+    anim(f'tl.fromTo("#{j}c",{{scale:0}},{{scale:1,duration:0.55,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{j}c",{{y:0}},{{y:-30,duration:{dur},ease:"none"}},{start})')
+    with Image.open(os.path.join(HERE, "assets", "cut", cut + ".png")) as im:
+        cw = min(1000, round(1250 * im.width / im.height))
+    sticker(cut, start + 0.05, dur - 0.05, side="right", h=1250, x=round((W - cw) / 2), bottom=0)
+    k = nid("hb")
+    rows = "<br>".join(html.escape(t) for t in lines)
+    add(f'<div id="{k}" {clip_attrs(start, dur)} class="hero avoid" style="z-index:{z()}"><div class="big" id="{k}t">{rows}</div></div>')
+    anim(f'tl.fromTo("#{k}t",{{scale:1.6,opacity:0}},{{scale:1,opacity:1,duration:0.22,ease:"power4.in"}},{start + 0.1})')
+    anim(f'tl.fromTo("#{k}t",{{y:0}},{{y:-20,duration:{dur},ease:"none"}},{start + 0.32})')
+    shake(start + 0.32, 18)
+    cue(start + 0.32, "impact", 1.0)
+    return i
+
+
+def pips(cards, start, dur):
+    """Small picture-in-picture cards stacking in at the top right, each with a name strip."""
+    for k, (name, label) in enumerate(cards):
+        i = nid("pp")
+        src = media(f"assets/hi/{name}.png")
+        add(f'<div id="{i}" {clip_attrs(start + 0.35 * k, dur - 0.35 * k)} class="pip" style="right:{50 + 30 * k}px;top:{290 + 410 * k}px;'
+            f'z-index:{z()}"><img src="{src}"><b>{html.escape(label)}</b></div>')
+        anim(f'tl.fromTo("#{i}",{{x:420,rotation:8}},{{x:0,rotation:{(-3, 3)[k % 2]},duration:0.5,ease:"back.out(1.5)"}},{start + 0.35 * k})')
+        cue(start + 0.35 * k, "whoosh", 0.6)
+
+
+def depth_number(cut, num, label, start, dur):
+    """Depth layer: blurred backdrop, a giant number, and the player's cut-out standing in front of it."""
+    i = nid("dp")
+    fill = media(f"assets/fill/{cut}.jpg")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000">'
+        f'<img id="{i}b" src="{fill}" style="position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:brightness(.8) saturate(1.2)">'
+        f'<div class="vig"></div></div>')
+    anim(f'tl.fromTo("#{i}b",{{scale:1.15}},{{scale:1.0,duration:{dur},ease:"none"}},{start})')
+    j = nid("dn")
+    add(f'<div id="{j}" {clip_attrs(start, dur)} class="dnum avoid" style="z-index:{z()}"><div id="{j}n">{html.escape(num)}</div><span>{html.escape(label)}</span></div>')
+    anim(f'tl.fromTo("#{j}n",{{yPercent:60,opacity:0,scale:.85}},{{yPercent:0,opacity:1,scale:1,duration:0.6,ease:"expo.out"}},{start + 0.05})')
+    anim(f'tl.fromTo("#{j}",{{y:0,scale:1}},{{y:-30,scale:1.05,duration:{dur},ease:"none"}},{start})')
+    cue(start + 0.05, "impact", 0.9)
+    sticker(cut, start + 0.15, dur - 0.15, side="left", h=1300, x=170)
+
+
+def band(num, label, start, dur, y=1160):
+    """Broadcast lower-third: a yellow band slams across with the number and a label."""
+    i = nid("bn")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="band avoid" style="top:{y}px;z-index:{z()}"><b id="{i}n">{html.escape(num)}</b><span>{html.escape(label)}</span></div>')
+    anim(f'tl.fromTo("#{i}",{{xPercent:-110,skewX:-12}},{{xPercent:0,skewX:0,duration:0.42,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}n",{{scale:1.5}},{{scale:1,duration:0.3,ease:"back.out(2.4)"}},{start + 0.25})')
+    anim(f'tl.fromTo("#{i}",{{x:0}},{{x:-24,duration:{dur},ease:"none"}},{start})')
+    shake(start + 0.3, 14)
+    cue(start, "whoosh_big", 0.9)
+    cue(start + 0.3, "impact", 0.9)
+
+
+def stat_screen(cut, num, lines, start, dur, x=430, h=1250):
+    """The Gayle-style stat screen: outlined cut-out on the right, rolling number + typed descriptor on the left."""
+    stage(start, dur)
+    sticker(cut, start, dur, side="right", h=h, x=x)
+    odo(num, start + 0.1, dur - 0.1, x=70, y=330, size=300)
+    typed(lines, start + 0.35, dur - 0.35, y=700, size=58)
+
+
+def rank_card(num_shot, name, lid, nxt, word_name):
+    """'At number N, it's X': the 3D number, then the player's first photo lands on their name."""
+    video3d(num_shot, s(lid, -0.1), word(lid, word_name) - s(lid, -0.1) + 0.02)
+    cue(s(lid, -0.6), "riser", 0.7)
+    cue(s(lid), "boom", 0.9)
+
+
+def comment_cta(start, dur):
+    i = nid("cm")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
+        f'<div class="mot" id="{i}q"><span>GREATEST</span><i>peak</i><span style="color:{Y}">EVER?</span></div>'
+        f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Tell me in the comments 👇</div></div>')
+    anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.6})')
+    txt = "2016 Kohli. No debate 👑"
+    anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 1.1})}})()')
+    cue(start, "pop", 1.0)
+
+
+def bg(name, start, dur, grade="dark", credit="PHOTO: BCCI", push=(1.0, 1.08), side=None, origin="50% 35%", tall=False):
+    """News look: a big photo, graded dark (or B&W / blue), slow push, photo credit at the bottom.
+    tall=True: the photo fills the top 1260 px (for low-res / wide shots), cropped on the face, type sits below it."""
+    if tall:
+        i = nid("tp")
+        src = media(f"assets/hi/{name}.png")
+        with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+            iw, ih = im.size
+        bh = 1260
+        dw, dh = max(W, iw * bh / ih), max(bh, ih * W / iw)
+        fxp = min(1.0, max(0.0, (W / 2 - focus_x(name) * dw) / (W - dw))) if dw > W + 1 else 0.5
+        filt = "grayscale(1) contrast(1.1) brightness(.85)" if grade == "bw" else "none"
+        marks = face_marks("hi/" + name, (W - dw) * fxp, (bh - dh) * 0.3, dw, dh)
+        add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#0b0b0c;overflow:hidden">'
+            f'<div id="{i}m" style="position:absolute;left:0;top:0;width:100%;height:{bh}px;transform-origin:{origin}">'
+            f'<img src="{src}" style="width:100%;height:100%;object-fit:cover;object-position:{fxp * 100:.1f}% 30%;filter:{filt}">{marks}</div>'
+            f'<div class="tfade"></div></div>')
+        anim(f'tl.fromTo("#{i}m",{{scale:{push[0]}}},{{scale:{push[1]},duration:{dur},ease:"none"}},{start})')
+    else:
+        i = photo(name, start, dur, side=side, fx="grey" if grade == "bw" else None, push=push, origin=origin, whoosh=bool(side))
+    tint = {"dark": "rgba(0,0,0,0)", "bw": "rgba(0,0,0,.1)", "blue": "rgba(11,11,12,.25)"}[grade]
+    g = nid("gr")
+    add(f'<div id="{g}" {clip_attrs(start, dur)} class="ngrade" style="z-index:{z()};background-color:{tint}"></div>')
+    if credit:
+        c = nid("cr")
+        add(f'<div id="{c}" {clip_attrs(start, dur)} class="credit" style="z-index:{z() + 150}">{html.escape(credit)}</div>')
+    return i
+
+
+def ntag(txt, start, dur, color=Y):
+    i = nid("tg")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ntag" style="z-index:{z() + 150};background:{color};color:{"#111" if color in (Y, "#fff") else "#fff"}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{x:-40,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
+
+
+def nbig(lines, start, dur, color=Y, sub=None, y=860, size=190, sfx="impact"):
+    """The huge italic headline that blurs in."""
+    i = nid("nb")
+    cue(start, sfx, 1.0)
+    rows = "".join(f'<div>{html.escape(t)}</div>' for t in lines)
+    sb = f'<div class="nsub" id="{i}s">{html.escape(sub)}</div>' if sub else ""
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="nbig avoid" style="top:{y}px;font-size:{size}px;color:{color};z-index:{z()}">'
+        f'<div id="{i}t">{rows}</div>{sb}</div>')
+    anim(f'tl.fromTo("#{i}t",{{scale:1.25,opacity:0,filter:"blur(18px)"}},{{scale:1,opacity:1,filter:"blur(0px)",duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}",{{scale:1}},{{scale:1.05,duration:{max(0.5, dur)},ease:"none"}},{start})')
+    if sub:
+        anim(f'tl.fromTo("#{i}s",{{opacity:0,y:20}},{{opacity:1,y:0,duration:0.4}},{start + 0.35})')
+
+
+def sbox(a, b, start, dur, sub=None, pill=None, y=1040, roll=None, gold_sub=False):
+    """Dark glass stat box: the number counts a -> b (formatted with commas), sub line under it, optional pill on top."""
+    i = nid("sb")
+    pl = f'<div class="spill" id="{i}p">{html.escape(pill)}</div>' if pill else ""
+    sb = f'<span id="{i}s" class="{"gsub" if gold_sub else ""}">{html.escape(sub)}</span>' if sub else ""
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="sbox avoid" style="top:{y}px;z-index:{z()}">{pl}'
+        f'<b id="{i}n">{a:,}</b>{sb}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    t0 = start + 0.25 if roll is None else roll
+    if a != b:
+        d = 1.0
+        anim(f'(()=>{{const o={{v:{a}}};tl.to(o,{{v:{b},duration:{d},ease:"power2.out",onUpdate:()=>{{document.getElementById("{i}n").textContent=Math.round(o.v).toLocaleString("en-US")}}}},{t0})}})()')
+        for k in range(10):
+            cue(t0 + k * 0.08, "tick", 0.6)
+        anim(f'tl.fromTo("#{i}n",{{scale:1.12}},{{scale:1,duration:0.35,ease:"back.out(3)"}},{t0 + d})')
+        cue(t0 + d, "impact", 0.8)
+    if pill:
+        anim(f'tl.fromTo("#{i}p",{{scale:0,opacity:0}},{{scale:1,opacity:1,duration:0.35,ease:"back.out(2.4)"}},{start + 0.2})')
+    return i
+
+
+def vs_scene(start, dur, cells):
+    """Split screen: Kohli on top, Ponting below, a VS badge between; each stat cell lands at its own time.
+    cells: [(row 0/1, col 0..2, text, t)]"""
+    i = nid("vs")
+    ka, pa = media("assets/hi/kohli_hands.png"), media("assets/hi/ponting_bat.png")
+    def box(r, name):
+        cols = "".join(f'<div class="vc"><i>{lab}</i><b id="{i}v{r}{k}">&nbsp;</b></div>' for k, lab in enumerate(("INNINGS", "AVERAGE", "100s")))
+        return f'<div class="vpill">{name}</div><div class="vbox">{cols}</div>'
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#05070d">'
+        f'<div class="vh" id="{i}a" style="top:0"><img src="{ka}" style="object-position:50% 32%"><div class="vsh"></div>'
+        f'<div class="vstack" style="top:700px">{box(0, "VIRAT KOHLI · 13,000+ RUNS")}<div class="credit2">PHOTO: BCCI</div></div></div>'
+        f'<div class="vh" id="{i}b" style="top:960px"><img src="{pa}" style="object-position:40% 18%"><div class="vsh"></div>'
+        f'<div class="vstack" style="top:600px">{box(1, "RICKY PONTING · 12,662 RUNS")}<div class="credit2">PHOTO: GETTY IMAGES</div></div></div>'
+        f'<div class="vsb" id="{i}x">VS</div></div>')
+    anim(f'tl.fromTo("#{i}a",{{yPercent:-100}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{yPercent:100}},{{yPercent:0,duration:0.5,ease:"expo.out"}},{start + 0.1})')
+    anim(f'tl.fromTo("#{i}x",{{scale:0,rotation:-90}},{{scale:1,rotation:0,duration:0.45,ease:"back.out(2.2)"}},{start + 0.45})')
+    anim(f'tl.fromTo("#{i} .vh img",{{scale:1}},{{scale:1.08,duration:{dur},ease:"none"}},{start})')
+    cue(start, "whoosh_big", 0.9)
+    for r, c, txt, t in cells:
+        anim(f'tl.call(()=>{{document.getElementById("{i}v{r}{c}").textContent={json.dumps(txt)}}},null,{t})')
+        anim(f'tl.fromTo("#{i}v{r}{c}",{{scale:1.6,opacity:0}},{{scale:1,opacity:1,duration:0.3,ease:"back.out(2.5)"}},{t})')
+        cue(t, "pop", 0.9)
+
+
+def notebox(top, main, start, dur, t2=None, y=1180):
+    i = nid("nt")
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="sbox avoid" style="top:{y}px;z-index:{z()}">'
+        f'<span style="font-size:30px;color:#aab">{html.escape(top)}</span>'
+        f'<span id="{i}m" class="gsub" style="font-size:64px;margin-top:14px">{html.escape(main)}</span></div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}m",{{opacity:0,scale:1.2}},{{opacity:1,scale:1,duration:0.4,ease:"back.out(2)"}},{t2 or start + 0.3})')
+    cue(t2 or start + 0.3, "impact", 0.8)
+
+
+RANKS = [("VIRAT KOHLI", 13000, "13,000+"), ("RICKY PONTING", 12662, "12,662"), ("KUMAR SANGAKKARA", 9747, "9,747"),
+         ("JACQUES KALLIS", 7774, "7,774"), ("KANE WILLIAMSON", 6504, "6,504")]
+
+
+def ranks(start, dur):
+    i = nid("rk")
+    rows = "".join(f'<div class="rr{" rtop" if k == 0 else ""}" id="{i}r{k}"><div class="rl"><span>{n}</span><b>{lab}</b></div>'
+                   f'<div class="rt"><div class="rf" id="{i}f{k}" style="width:{v / 13000 * 100:.1f}%"></div></div></div>'
+                   for k, (n, v, lab) in enumerate(RANKS))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ranks avoid" style="z-index:{z()}"><div class="rh">MOST ODI RUNS AT NO. 3</div>{rows}'
+        f'<div class="rfoot">THE GREATEST NO. 3?</div></div>')
+    anim(f'tl.fromTo("#{i} .rh",{{x:-60,opacity:0}},{{x:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    for k in range(len(RANKS)):
+        t = start + 0.15 + 0.12 * k
+        anim(f'tl.fromTo("#{i}r{k}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{t})')
+        anim(f'tl.fromTo("#{i}f{k}",{{scaleX:0}},{{scaleX:1,duration:0.8,ease:"expo.out"}},{t + 0.1})')
+        cue(t, "tick", 0.8)
+    anim(f'tl.fromTo("#{i} .rfoot",{{scale:0.7,opacity:0}},{{scale:1,opacity:1,duration:0.45,ease:"back.out(2)"}},{start + 1.2})')
+
+
+def credit(start, dur, txt="PHOTO: BCCI"):
+    c = nid("cr")
+    add(f'<div id="{c}" {clip_attrs(start, dur)} class="credit" style="z-index:{z() + 150}">{html.escape(txt)}</div>')
+
+
+def ph(name, start, dur, **kw):
+    """Full-screen photo + the BCCI credit line."""
+    i = photo(name, start, dur, **kw)
+    credit(start, dur)
+    return i
+
+
+def speed(start, dur):
+    """Speed lines streaking across (attack moments)."""
+    i = nid("sp")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="speed" style="z-index:{z()}"></div>')
+    anim(f'tl.fromTo("#{i}",{{backgroundPositionX:"0px",opacity:0}},{{backgroundPositionX:"-2400px",opacity:.9,duration:{dur},ease:"none"}},{start})')
+    cue(start, "whoosh_big", 0.9)
+
+
+def meter(start, dur, val=120, top=150, t_hit=None):
+    """Strike-rate gauge: the needle sweeps past 100 and lands on 120+."""
+    import math
+    i = nid("mt")
+    ang = -120 + 240 * val / top
+    ticks = "".join(f'<line x1="400" y1="70" x2="400" y2="{100 if k % 5 else 120}" stroke="{Y if k * 5 >= 100 else "#666"}" '
+                    f'stroke-width="{6 if k % 5 == 0 else 3}" transform="rotate({-120 + 240 * k * 5 / top} 400 400)"/>'
+                    for k in range(top // 5 + 1))
+    labs = "".join(f'<text x="400" y="165" fill="#aaa" font-size="34" font-family="IDisp" font-weight="800" text-anchor="middle" '
+                   f'transform="rotate({-120 + 240 * v / top} 400 400)">{v}</text>' for v in (0, 50, 100, 150))
+    x0, y0 = 400 + 330 * math.sin(math.radians(-120)), 400 - 330 * math.cos(math.radians(-120))
+    x1, y1 = 400 + 330 * math.sin(math.radians(120)), 400 - 330 * math.cos(math.radians(120))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="meter avoid" style="z-index:{z()}"><svg width="800" height="560" viewBox="0 0 800 560">'
+        f'<path d="M {x0:.1f} {y0:.1f} A 330 330 0 1 1 {x1:.1f} {y1:.1f}" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="26"/>'
+        f'{ticks}{labs}<g id="{i}n"><line x1="400" y1="400" x2="400" y2="110" stroke="{Y}" stroke-width="12" stroke-linecap="round"/>'
+        f'<circle cx="400" cy="400" r="26" fill="{Y}"/></g></svg>'
+        f'<div class="mval"><b id="{i}v">0</b><span>STRIKE RATE · 2026</span></div></div>')
+    th = t_hit or start + 0.6
+    d = max(0.6, th - start)
+    anim(f'tl.fromTo("#{i}",{{scale:0.7,opacity:0}},{{scale:1,opacity:1,duration:0.45,ease:"back.out(1.7)"}},{start})')
+    anim(f'tl.fromTo("#{i}n",{{rotation:-120,svgOrigin:"400 400"}},{{rotation:{ang:.1f},svgOrigin:"400 400",duration:{d:.2f},ease:"power3.inOut"}},{start + 0.1})')
+    anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{val},duration:{d:.2f},ease:"power3.inOut",onUpdate:()=>{{document.getElementById("{i}v").textContent=Math.round(o.v)+(o.v>={val}-0.5?"+":"")}}}},{start + 0.1})}})()')
+    for k in range(10):
+        cue(start + 0.1 + k * d / 10, "tick", 0.6)
+    cue(start + 0.1 + d, "impact", 1.0)
+    shake(start + 0.1 + d, 16)
+
+
+def seam_ball(start, dur, y=520):
+    """A red Test ball with its seam drawing in bolt upright, then gently wobbling - 'every single ball'."""
+    i = nid("sb")
+    stitches = "".join(f'<line x1="{c - 26}" y1="{yy}" x2="{c - 8}" y2="{yy}" stroke="#f3e6c8" stroke-width="5"/>'
+                       f'<line x1="{c + 8}" y1="{yy}" x2="{c + 26}" y2="{yy}" stroke="#f3e6c8" stroke-width="5"/>'
+                       for c in (300,) for yy in range(150, 460, 26))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="seamb avoid" style="top:{y}px;z-index:{z()}">'
+        f'<svg width="600" height="600" viewBox="0 0 600 600"><defs><radialGradient id="{i}g" cx="38%" cy="32%" r="75%">'
+        f'<stop offset="0" stop-color="#d23a33"/><stop offset=".55" stop-color="#8e1712"/><stop offset="1" stop-color="#3d0605"/></radialGradient></defs>'
+        f'<circle cx="300" cy="300" r="190" fill="url(#{i}g)"/>'
+        f'<g id="{i}s"><line id="{i}l" x1="300" y1="112" x2="300" y2="488" stroke="#f3e6c8" stroke-width="10" stroke-linecap="round"/>{stitches}</g>'
+        f'<ellipse cx="240" cy="200" rx="60" ry="34" fill="rgba(255,255,255,.18)"/></svg></div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0.4,opacity:0,rotation:-40}},{{scale:1,opacity:1,rotation:0,duration:0.55,ease:"back.out(1.7)"}},{start})')
+    anim(f'tl.fromTo("#{i}l",{{strokeDasharray:380,strokeDashoffset:380}},{{strokeDashoffset:0,duration:0.6,ease:"power2.out"}},{start + 0.25})')
+    anim(f'tl.fromTo("#{i}s",{{rotation:-4,svgOrigin:"300 300"}},{{rotation:4,svgOrigin:"300 300",duration:0.5,yoyo:true,repeat:{max(1, int(dur / 0.5))},ease:"sine.inOut"}},{start + 0.8})')
+    cue(start, "whoosh", 0.8)
+    cue(start + 0.25, "rise", 0.6)
+
+
+def card(name, start, dur, w=780, y=360, x=None, rot=0.0, hmax=900):
+    """The reference look: a rounded photo card floating on the grid, popping in and drifting."""
+    i = nid("cd")
+    src = media(f"assets/hi/{name}.png")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        iw, ih = im.size
+    h = round(w * ih / iw)
+    if h > hmax:
+        w, h = round(hmax * iw / ih), hmax
+    left = x if x is not None else round((W - w) / 2)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="pcard" style="left:{left}px;top:{y}px;width:{w}px;height:{h}px;z-index:{z()}">'
+        f'<img src="{src}">{face_marks("hi/" + name, 0, 0, w, h)}</div>')
+    anim(f'tl.fromTo("#{i}",{{scale:0.82,opacity:0,y:40,rotation:{rot * 2}}},{{scale:1,opacity:1,y:0,rotation:{rot},duration:0.45,ease:"back.out(1.5)"}},{start})')
+    anim(f'tl.fromTo("#{i} img",{{scale:1.0}},{{scale:1.08,duration:{max(0.5, dur)},ease:"none"}},{start})')
+    anim(f'tl.to("#{i}",{{y:-22,duration:{max(0.5, dur)},ease:"none"}},{start + 0.45})')
+    cue(start, "pop", 0.8)
+    cue(start - 0.06, "whoosh", 0.5)
+    return i
+
+
+MAX_ZOOM = 2.0  # never blow a photo up more than this: low-res shots go full-width on their blurred fill instead
+
+
+def zoom_full(name):
+    with Image.open(os.path.join(HERE, "assets", "photos", name + ".jpg")) as im:
+        w, h = im.size
+    return 1920 / h if w / h >= 9 / 16 else 1080 / w
+
+
+def ph(name, start, dur, credit_txt="PHOTO: BCCI", **kw):
+    """Full-screen photo + its credit line (full-width band when the source is too small to fill the frame sharply)."""
+    if zoom_full(name) > MAX_ZOOM:
+        kw["band"] = True
+    i = photo(name, start, dur, **kw)
+    credit(start, dur, credit_txt)
+    return i
+
+
+GETTY = "PHOTO: GETTY IMAGES"
+
+
+def post_card(txt, start, dur, y=300):
+    """The discussion-post card from the reference, in our colours: avatar, handle, the question, a Discussion pill."""
+    i = nid("pc")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="post avoid" style="top:{y}px;z-index:{z() + 100}">'
+        f'<div class="phd"><i></i><div><b>theCricketLounge</b><span>Discussion · 1h</span></div></div>'
+        f'<div class="ptx" id="{i}t">{html.escape(txt)}</div><div class="ppill">Discussion</div>'
+        f'<div class="pft"><span>▲ 2.4k</span><span>💬 1.1k</span></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:-80,opacity:0,scale:.92}},{{y:0,opacity:1,scale:1,duration:0.5,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{i}",{{rotation:0}},{{rotation:-1.5,duration:{max(0.5, dur)},ease:"sine.inOut"}},{start})')
+    cue(start, "pop", 1.0)
+
+
+def scorebar(points, start, dur):
+    """Broadcast-style score strip along the bottom; each point re-types the batter's score.
+    points: [(t, text)]"""
+    i = nid("sbr")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="sbar" style="z-index:{z() + 260}"><b>SA</b>'
+        f'<span id="{i}t">{html.escape(points[0][1])}</span><em id="{i}e">LIVE</em></div>')
+    anim(f'tl.fromTo("#{i}",{{yPercent:120}},{{yPercent:0,duration:0.45,ease:"expo.out"}},{start})')
+    for t, txt in points[1:]:
+        anim(f'tl.call(()=>{{document.getElementById("{i}t").textContent={json.dumps(txt)}}},null,{t})')
+        anim(f'tl.fromTo("#{i}t",{{y:24,opacity:0}},{{y:0,opacity:1,duration:0.3,ease:"back.out(2)"}},{t})')
+        cue(t, "tick", 0.8)
+
+
+def two_cards(a, b, la, lb, start, dur):
+    card(a, start, dur, w=480, y=520, x=50, rot=-4, hmax=700)
+    card(b, start + 0.25, dur - 0.25, w=480, y=600, x=550, rot=4, hmax=700)
+    tag(la, start + 0.3, dur - 0.3, x=70, y=1300)
+    tag(lb, start + 0.55, dur - 0.55, x=600, y=1380, dark=True)
+
+
+def follow_card(start, dur, t_follow):
+    """'If you're a true cricket fan, follow this page': profile card pops in, a cursor taps FOLLOW, it flips to Following."""
+    i = nid("fw")
+    logo = media("assets/logo.png") if os.path.exists(os.path.join(HERE, "assets", "logo.png")) else "media/logo.png"
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="fcard avoid" style="z-index:{z() + 100}">'
+        f'<div class="fav"><img src="{logo}"></div><div class="fname">theCricketLounge</div>'
+        f'<div class="fsub">Cricket stories, records & debates</div>'
+        f'<div class="fbtn" id="{i}b"><span id="{i}t">Follow</span></div><div class="fcur" id="{i}c"></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{i}c",{{x:260,y:260,opacity:0}},{{x:0,y:0,opacity:1,duration:0.6,ease:"power2.out"}},{t_follow - 0.6})')
+    anim(f'tl.to("#{i}c",{{scale:.75,duration:0.08,yoyo:true,repeat:1}},{t_follow})')
+    anim(f'tl.call(()=>{{document.getElementById("{i}t").textContent="Following ✓";document.getElementById("{i}b").classList.add("on")}},null,{t_follow + 0.08})')
+    anim(f'tl.fromTo("#{i}b",{{scale:1}},{{scale:1.12,duration:0.12,yoyo:true,repeat:1}},{t_follow + 0.08})')
+    cue(start, "pop", 1.0)
+    cue(t_follow + 0.05, "pop", 1.0)
+
+
+def speedgun(start, dur, val=161.3, top=170, t_hit=None):
+    """Speed gun: the needle tears past 150 and lands on 161.3 KM/H."""
+    import math
+    i = nid("sg")
+    ang = -120 + 240 * val / top
+    ticks = "".join(f'<line x1="400" y1="70" x2="400" y2="{100 if k % 2 else 125}" stroke="{"#ff3b3b" if k * 10 >= 150 else (Y if k * 10 >= 100 else "#666")}" '
+                    f'stroke-width="{6 if k % 2 == 0 else 3}" transform="rotate({-120 + 240 * k * 10 / top} 400 400)"/>'
+                    for k in range(top // 10 + 1))
+    labs = "".join(f'<text x="400" y="170" fill="#aaa" font-size="32" font-family="IDisp" font-weight="800" text-anchor="middle" '
+                   f'transform="rotate({-120 + 240 * v / top} 400 400)">{v}</text>' for v in (0, 50, 100, 150))
+    x0, y0 = 400 + 330 * math.sin(math.radians(-120)), 400 - 330 * math.cos(math.radians(-120))
+    x1, y1 = 400 + 330 * math.sin(math.radians(120)), 400 - 330 * math.cos(math.radians(120))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="meter avoid" style="z-index:{z()}"><svg width="800" height="560" viewBox="0 0 800 560">'
+        f'<path d="M {x0:.1f} {y0:.1f} A 330 330 0 1 1 {x1:.1f} {y1:.1f}" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="26"/>'
+        f'{ticks}{labs}<g id="{i}n"><line x1="400" y1="400" x2="400" y2="110" stroke="#ff3b3b" stroke-width="12" stroke-linecap="round"/>'
+        f'<circle cx="400" cy="400" r="26" fill="#ff3b3b"/></g></svg>'
+        f'<div class="mval"><b id="{i}v" style="color:#fff">0.0</b><span>KM/H · FASTEST EVER</span></div></div>')
+    th = t_hit or start + 0.8
+    d = max(0.6, th - start)
+    anim(f'tl.fromTo("#{i}",{{scale:0.7,opacity:0}},{{scale:1,opacity:1,duration:0.45,ease:"back.out(1.7)"}},{start})')
+    anim(f'tl.fromTo("#{i}n",{{rotation:-120,svgOrigin:"400 400"}},{{rotation:{ang:.1f},svgOrigin:"400 400",duration:{d:.2f},ease:"power4.in"}},{start + 0.1})')
+    anim(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{val},duration:{d:.2f},ease:"power4.in",onUpdate:()=>{{document.getElementById("{i}v").textContent=o.v.toFixed(1)}}}},{start + 0.1})}})()')
+    anim(f'tl.to("#{i}v",{{color:"{Y}",duration:0.1}},{start + 0.1 + d})')
+    anim(f'tl.fromTo("#{i}n",{{rotation:{ang + 6:.1f},svgOrigin:"400 400"}},{{rotation:{ang:.1f},svgOrigin:"400 400",duration:0.5,ease:"elastic.out(1.2,0.3)",immediateRender:false}},{start + 0.1 + d})')
+    cue(start + 0.1, "riser", 0.9)
+    cue(start + 0.1 + d, "boom", 1.0)
+    shake(start + 0.1 + d, 26)
+    flash(start + 0.1 + d, color="#ff3b3b", peak=0.35)
+
+
+def stumps_shatter(t):
+    """Stump-shatter beat: a red flash, a hard shake, an impact and a glitch."""
+    flash(t, color="#ff3b3b", peak=0.55)
+    shake(t, 30, 0.45)
+    cue(t, "impact", 1.0)
+    cue(t, "boom", 0.8)
+
+
+def teaser(num, line, start, dur, x, rot):
+    """Silhouette teaser card for the next parts: a dark card, a big '?', the rank and one clue."""
+    i = nid("tz")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tz avoid" style="left:{x}px;z-index:{z()}">'
+        f'<div class="tzr">#{num}</div><div class="tzq">?</div><div class="tzl">{html.escape(line)}</div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,rotation:{rot * 3}}},{{y:0,opacity:1,rotation:{rot},duration:0.5,ease:"back.out(1.6)"}},{start})')
+    anim(f'tl.fromTo("#{i} .tzq",{{scale:0.6}},{{scale:1.08,duration:0.5,yoyo:true,repeat:{max(1, int(dur / 0.5))},ease:"sine.inOut"}},{start + 0.3})')
+    cue(start, "whoosh", 0.8)
+    cue(start + 0.2, "pop", 0.8)
+
+
+INK, PAPER, RED = "#141416", "#efe9dd", "#d4372c"
+
+
+def bgp(start, dur, tone="ink"):
+    """Editorial background: dark ink or warm paper, a faint diagonal texture that drifts."""
+    i = nid("bg")
+    col = INK if tone == "ink" else PAPER
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full ed {tone}" style="position:absolute;inset:0;z-index:{z()};background:{col}">'
+        f'<div class="edtex" id="{i}t"></div><div class="grain"></div></div>')
+    anim(f'tl.fromTo("#{i}t",{{x:0,y:0}},{{x:-80,y:-40,duration:{max(0.5, dur)},ease:"none"}},{start})')
+    return i
+
+
+def kick(txt, start, dur, tone="ink", y=250):
+    i = nid("kk")
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="kick avoid {tone}" style="top:{y}px;z-index:{z() + 50}">{html.escape(txt)}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:-16,opacity:0,letterSpacing:"0.5em"}},{{y:0,opacity:1,letterSpacing:"0.28em",duration:0.5,ease:"expo.out"}},{start})')
+
+
+def head(lines, start, dur, tone="ink", y=300, size=118, accent=(), sfx="soft", align="center"):
+    """Condensed editorial headline: each line rises out of a mask, accent lines in yellow (ink) / red (paper)."""
+    i = nid("hd")
+    cue(start, sfx, 1.0)
+    acc = Y if tone == "ink" else RED
+    base = "#fff" if tone == "ink" else INK
+    rows = "".join(f'<div class="mask"><div id="{i}l{k}" style="color:{acc if k in accent else base}">{html.escape(t)}</div></div>'
+                   for k, t in enumerate(lines))
+    y, _ = mv(i, y)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="edh avoid" style="top:{y}px;font-size:{size}px;text-align:{align};z-index:{z() + 40}">{rows}</div>')
+    for k in range(len(lines)):
+        anim(f'tl.fromTo("#{i}l{k}",{{yPercent:110}},{{yPercent:0,duration:0.55,ease:"expo.out"}},{start + 0.08 * k})')
+    return i
+
+
+def frame(name, start, dur, x, y, w, rot=0.0, side="left", cap=None, hmax=900, grey=False):
+    """Photo in a white print frame with a tiny caption, sliding in from the left or right with a soft overshoot."""
+    i = nid("fr")
+    src = media(f"assets/hi/{name}.png")
+    with Image.open(os.path.join(HERE, "assets", "hi", name + ".png")) as im:
+        iw, ih = im.size
+    h = round(w * ih / iw)
+    if h > hmax:
+        w, h = round(hmax * iw / ih), hmax
+    capd = f'<div class="frc">{html.escape(cap)}</div>' if cap else ""
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="frm" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div style="position:relative;width:{w}px;height:{h}px;overflow:hidden"><img src="{src}" style="width:100%;height:100%;object-fit:cover;'
+        f'filter:{"grayscale(1)" if grey else "none"}">{face_marks("hi/" + name, 0, 0, w, h)}</div>{capd}</div>')
+    dx = -900 if side == "left" else 900
+    anim(f'tl.fromTo("#{i}",{{x:{dx},rotation:{rot * 4}}},{{x:0,rotation:{rot},duration:0.7,ease:"expo.out"}},{start})')
+    anim(f'tl.to("#{i}",{{y:-18,duration:{max(0.5, dur)},ease:"none"}},{start + 0.7})')
+    cue(start - 0.05, "swish", 0.7)
+    return i
+
+
+def cutout(name, start, dur, x, h, side="right", grey=False, bottom=0):
+    return sticker(name, start, dur, side=side, x=x, h=h, grey=grey, bottom=bottom)
+
+
+def stems(start, dur, items, y=420):
+    """Peak ratings as stems against a 900 line: each value rises to its height, photo card on top, number above."""
+    i = nid("stm")
+    base_y, top_v, low_v = 1260, 950, 860
+    def ypos(v):
+        return base_y - (v - low_v) / (top_v - low_v) * 700
+    line = ypos(900)
+    cols = []
+    for k, (lab, v, photo_, t) in enumerate(items):
+        x = 130 + k * 300
+        src = media(f"assets/hi/{photo_}.png")
+        cols.append(f'<div class="stc" id="{i}c{k}" style="left:{x}px">'
+                    f'<div class="sts" id="{i}s{k}" style="top:{ypos(v):.0f}px;height:{base_y - ypos(v):.0f}px"></div>'
+                    f'<div class="stv" id="{i}v{k}" style="top:{ypos(v) - 300:.0f}px">'
+                    f'<div class="stimg"><img src="{src}"></div><b>{v}</b><span>{html.escape(lab)}</span></div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="stems avoid" style="z-index:{z()}">'
+        f'<div class="stl" style="top:{line:.0f}px"><i>900</i></div>{"".join(cols)}</div>')
+    anim(f'tl.fromTo("#{i} .stl",{{scaleX:0}},{{scaleX:1,duration:0.6,ease:"expo.out"}},{start})')
+    for k, (lab, v, photo_, t) in enumerate(items):
+        anim(f'tl.fromTo("#{i}s{k}",{{scaleY:0}},{{scaleY:1,duration:0.6,ease:"expo.out"}},{t})')
+        anim(f'tl.fromTo("#{i}v{k}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.5,ease:"back.out(1.6)"}},{t + 0.15})')
+        cue(t, "rise", 0.7)
+        cue(t + 0.3, "pop", 0.8)
+
+
+def window(start, dur, t_slide):
+    """Moving-average window: 6 bars, the frame slides one match to the right and the newest bar counts most."""
+    i = nid("mw")
+    hs = [62, 80, 54, 92, 70, 48, 88, 76]
+    bars = "".join(f'<i style="left:{40 + k * 105}px;height:{h * 4}px;background:{Y if k in (5, 6) else "#3a3a40"}" id="{i}b{k}"></i>'
+                   for k, h in enumerate(hs))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="mwin avoid" style="z-index:{z()}"><div class="mwb">{bars}</div>'
+        f'<div class="mwf" id="{i}f"><span>RATING WINDOW</span></div><div class="mwl">OLDER ← MATCHES → NEWEST</div></div>')
+    anim(f'tl.fromTo("#{i} .mwb i",{{scaleY:0}},{{scaleY:1,duration:0.5,stagger:0.05,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}f",{{opacity:0}},{{opacity:1,duration:0.4}},{start + 0.4})')
+    anim(f'tl.to("#{i}f",{{x:210,duration:0.7,ease:"power3.inOut"}},{t_slide})')
+    cue(t_slide, "swish", 0.8)
+
+
+def clipping(lines, place, start, dur, x, y, rot, t_lost=None):
+    """Newspaper scorecard clipping (typewriter), with a red LOST stamp landing on it."""
+    i = nid("cl")
+    rows = "".join(f'<div>{html.escape(t)}</div>' for t in lines)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="clip2" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div class="clp">{html.escape(place)}</div><div class="clt">{rows}</div><div class="lost" id="{i}l">LOST</div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:-700,rotation:{rot * 3}}},{{y:0,rotation:{rot},duration:0.6,ease:"back.out(1.3)"}},{start})')
+    tl_ = t_lost or start + 0.5
+    anim(f'tl.fromTo("#{i}l",{{scale:2.4,opacity:0,rotation:-24}},{{scale:1,opacity:1,rotation:-12,duration:0.25,ease:"power4.in"}},{tl_})')
+    cue(start, "swish", 0.8)
+    cue(tl_ + 0.25, "impact", 0.8)
+
+
+def aiimg(start, dur, x, y, w):
+    """The AI-generated newspaper front page (Canva AI). Falls back to a typeset front page until the full-size file is in."""
+    i = nid("ai")
+    p = os.path.join(HERE, "assets", "photos", "ai_newspaper.jpg")
+    if os.path.exists(p) and os.path.exists(os.path.join(HERE, "assets", "hi", "ai_newspaper.png")):
+        inner = f'<img src="{media("assets/hi/ai_newspaper.png")}" style="width:100%;display:block">'
+    else:
+        inner = ('<div class="np"><div class="npm">THE CRICKET LOUNGE TIMES</div><div class="npd">CHENNAI · JANUARY 1999</div>'
+                 '<div class="nph">INDIA LOSE BY 12 RUNS</div><div class="nps">Tendulkar\'s 136 in vain</div><div class="npl"></div></div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="aiw" style="left:{x}px;top:{y}px;width:{w}px;z-index:{z()}">{inner}'
+        f'<div class="aitag">AI-GENERATED</div></div>')
+    anim(f'tl.fromTo("#{i}",{{x:900,rotation:12}},{{x:0,rotation:4,duration:0.7,ease:"expo.out"}},{start})')
+    cue(start, "shutter", 0.9)
+
+
+def ratingline(start, dur, beats, y=520):
+    """Sachin's rating story as a line: rise to the 2002 peak (898), crash in the elbow years, climb to No. 1 in 2010
+    but stay under the 898 ceiling. beats: dict of reveal times: rise, crash, back, ceiling. Shape is illustrative."""
+    i = nid("rl")
+    pts = [(60, 560), (200, 420), (330, 250), (420, 130), (500, 300), (580, 470), (660, 420), (760, 260), (850, 175), (960, 260)]
+    d = "M" + " L".join(f"{x},{yy}" for x, yy in pts)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="rline avoid" style="top:{y}px;z-index:{z()}">'
+        f'<svg width="1080" height="640" viewBox="0 0 1080 640">'
+        f'<rect id="{i}bad" x="430" y="0" width="200" height="600" fill="rgba(212,55,44,.12)"/>'
+        f'<line x1="40" y1="130" x2="1040" y2="130" stroke="{RED}" stroke-width="3" stroke-dasharray="14 10" id="{i}c"/>'
+        f'<path id="{i}p" d="{d}" fill="none" stroke="{INK}" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'<circle id="{i}pk" cx="420" cy="130" r="16" fill="{RED}"/><circle id="{i}no1" cx="850" cy="175" r="16" fill="{INK}"/></svg>'
+        f'<div class="rlb" id="{i}l1" style="left:330px;top:40px">2002 · <b>898</b></div>'
+        f'<div class="rlb" id="{i}l2" style="left:420px;top:600px">TENNIS ELBOW</div>'
+        f'<div class="rlb" id="{i}l3" style="left:740px;top:80px">No. 1 · 2010</div>'
+        f'<div class="rlb red" id="{i}l4" style="left:760px;top:-10px">CEILING: 898</div>'
+        f'<div class="rlax">1990 · · · · · · · · · · · · · · · · · · · 2013</div></div>')
+    L = 1400
+    seg = {"rise": 0.42, "crash": 0.62, "back": 0.86, "end": 1.0}
+    anim(f'tl.set("#{i}p",{{strokeDasharray:{L},strokeDashoffset:{L}}},{start})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["rise"])},duration:1.0,ease:"power2.out"}},{beats["rise"]})')
+    anim(f'tl.fromTo("#{i}pk,#{i}l1",{{scale:0,opacity:0,transformOrigin:"50% 50%"}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{beats["rise"] + 0.9})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["crash"])},duration:1.0,ease:"power2.in"}},{beats["crash"]})')
+    anim(f'tl.fromTo("#{i}bad,#{i}l2",{{opacity:0}},{{opacity:1,duration:0.5}},{beats["crash"]})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:{L * (1 - seg["back"])},duration:1.0,ease:"power2.out"}},{beats["back"]})')
+    anim(f'tl.fromTo("#{i}no1,#{i}l3",{{scale:0,opacity:0,transformOrigin:"50% 50%"}},{{scale:1,opacity:1,duration:0.4,ease:"back.out(2)"}},{beats["back"] + 0.9})')
+    anim(f'tl.to("#{i}p",{{strokeDashoffset:0,duration:0.8,ease:"power2.out"}},{beats["ceiling"]})')
+    anim(f'tl.fromTo("#{i}c,#{i}l4",{{opacity:0}},{{opacity:1,duration:0.4}},{beats["ceiling"]})')
+    for k in ("rise", "crash", "back", "ceiling"):
+        cue(beats[k], "rise" if k != "crash" else "whoosh_big", 0.7)
+
+
+def mountain(start, dur, t_range):
+    """'Not the peak, the mountain range': one spike, then a long ridge of peaks draws across."""
+    i = nid("mt")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="mtn avoid" style="z-index:{z()}"><svg width="1080" height="420" viewBox="0 0 1080 420">'
+        f'<path id="{i}a" d="M40,400 L300,400 L360,60 L420,400 L1040,400" fill="none" stroke="#666" stroke-width="7"/>'
+        f'<path id="{i}b" d="M40,400 L120,210 L190,280 L260,120 L330,230 L400,150 L470,250 L540,110 L610,220 L680,160 L750,260 L820,140 L890,240 L960,190 L1040,400" '
+        f'fill="rgba(254,222,92,.14)" stroke="{Y}" stroke-width="8" stroke-linejoin="round"/></svg></div>')
+    anim(f'tl.fromTo("#{i}a",{{strokeDasharray:1400,strokeDashoffset:1400}},{{strokeDashoffset:0,duration:0.9,ease:"power2.out"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{strokeDasharray:2600,strokeDashoffset:2600,fillOpacity:0}},{{strokeDashoffset:0,fillOpacity:1,duration:1.6,ease:"power2.inOut"}},{t_range})')
+    anim(f'tl.to("#{i}a",{{opacity:.25,duration:0.5}},{t_range})')
+    cue(t_range, "rise", 0.9)
+
+
+def captions():
+    """Reference-style phrase captions: 2-3 words in a black box with white uppercase type, numbers in yellow."""
+    for ln in TL["lines"]:
+        if ln["id"] in NO_CAPTION:
+            continue
+        words = ln["words"]
+        groups, cur = [], []
+        for w in words:
+            cur.append(w)
+            if len(cur) == 3 or w[0][-1] in ",.?!":
+                groups.append(cur)
+                cur = []
+        if cur:
+            groups.append(cur)
+        for k, g in enumerate(groups):
+            t0 = g[0][1]
+            t1 = groups[k + 1][0][1] if k + 1 < len(groups) else ln["end"] + 0.1
+            txt = " ".join(html.escape(w[0].upper().strip(",.…")) if not any(c.isdigit() for c in w[0])
+                           else f'<em>{html.escape(w[0].upper().strip(",.…"))}</em>' for w in g)
+            i = nid("cap")
+            cy, _ = mv(i, 1500)
+            add(f'<div id="{i}" {clip_attrs(t0, t1 - t0)} class="capb avoid" style="top:{cy}px"><span>{txt}</span></div>')
+            anim(f'tl.fromTo("#{i} span",{{y:14,opacity:0}},{{y:0,opacity:1,duration:0.18,ease:"power3.out"}},{t0})')
+
+
+IPLC = "PHOTO: BCCI / IPL"
+TEAMS = [("CSK", "#f9cd05", "#111"), ("MI", "#004ba0", "#fff"), ("KKR", "#3a225d", "#f3c34a"), ("SRH", "#f26522", "#111"),
+         ("DC", "#17449b", "#fff"), ("RR", "#e73895", "#fff"), ("PBKS", "#d71920", "#fff"), ("GT", "#1b2133", "#c9a96e"),
+         ("LSG", "#0057e2", "#fff"), ("RCB", "#c8102e", "#fff")]
+
+
+def team_grid(start, dur, t_rcb):
+    """10 franchise tiles: 9 flicker TRADED, RCB stays still and gets a 0 MOVES stamp."""
+    i = nid("tg")
+    cells = []
+    for k, (n, bg, fg) in enumerate(TEAMS):
+        r, c = divmod(k, 3) if k < 9 else (3, 1)
+        x, y = 90 + c * 310, 360 + r * 250
+        tag_ = '' if n == "RCB" else f'<em id="{i}t{k}">TRADED ↔</em>'
+        cells.append(f'<div class="tcell" id="{i}c{k}" style="left:{x}px;top:{y}px;background:{bg};color:{fg}"><b>{n}</b>{tag_}</div>')
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tgrid avoid" style="position:absolute;inset:0;z-index:{z()}">{"".join(cells)}'
+        f'<div class="t0" id="{i}z">0 MOVES</div></div>')
+    for k in range(10):
+        anim(f'tl.fromTo("#{i}c{k}",{{scale:0.6,opacity:0}},{{scale:1,opacity:1,duration:0.35,ease:"back.out(1.8)"}},{start + 0.04 * k})')
+        if k < 9:
+            t = start + 0.35 + 0.11 * k
+            anim(f'tl.fromTo("#{i}t{k}",{{opacity:0,y:10}},{{opacity:1,y:0,duration:0.2}},{t})')
+            anim(f'tl.fromTo("#{i}c{k}",{{x:-10}},{{x:0,duration:0.25,ease:"elastic.out(1,0.4)"}},{t})')
+            cue(t, "tick", 0.6)
+    anim(f'tl.to("#{i} .tcell:not(#{i}c9)",{{opacity:.35,duration:0.3}},{t_rcb})')
+    anim(f'tl.fromTo("#{i}c9",{{scale:1}},{{scale:1.18,duration:0.35,ease:"back.out(2)"}},{t_rcb})')
+    anim(f'tl.fromTo("#{i}z",{{scale:2.2,opacity:0,rotation:-14}},{{scale:1,opacity:1,rotation:-8,duration:0.25,ease:"power4.in"}},{t_rcb + 0.25})')
+    cue(t_rcb + 0.5, "impact", 1.0)
+
+
+def trophy_card(name, year, start, dur, x, y, w, rot, side):
+    i = frame(name, start, dur, x=x, y=y, w=w, rot=rot, side=side, cap=f"IPL CHAMPIONS · {year}")
+    credit(start, dur, IPLC)
+    return i
+
+
+def health(start, dur, rows):
+    """Squad health check scanner. rows: [(label, ok, t)]"""
+    i = nid("hc")
+    html_rows = "".join(f'<div class="hrw" id="{i}r{k}"><span>{html.escape(lab)}</span><b class="{"ok" if ok else "bad"}" id="{i}m{k}">'
+                        f'{"✓" if ok else "⚠"}</b></div>' for k, (lab, ok, t) in enumerate(rows))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="hcard avoid" style="z-index:{z()}"><div class="hh">SQUAD HEALTH CHECK · RCB</div>'
+        f'{html_rows}<div class="hscan" id="{i}s"></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:80,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}s",{{top:"0%"}},{{top:"100%",duration:{max(0.6, dur - 0.3):.2f},ease:"none"}},{start})')
+    for k, (lab, ok, t) in enumerate(rows):
+        anim(f'tl.fromTo("#{i}r{k}",{{x:-60,opacity:0}},{{x:0,opacity:1,duration:0.35,ease:"expo.out"}},{t - 0.1})')
+        anim(f'tl.fromTo("#{i}m{k}",{{scale:0}},{{scale:1,duration:0.3,ease:"back.out(2.5)"}},{t + 0.25})')
+        cue(t + 0.25, "pop" if ok else "impact", 0.9)
+        if not ok:
+            anim(f'tl.to("#{i}r{k}",{{backgroundColor:"rgba(212,55,44,.22)",duration:0.2,yoyo:true,repeat:5}},{t + 0.3})')
+
+
+def ticket(lines, start, dur, x, y, rot, stamp_txt=None, t_stamp=None):
+    """Stat ticket: player name strip + rows of (year, value), optional stamp."""
+    i = nid("tk")
+    rows = "".join(f'<div class="tkr"><span>{html.escape(a)}</span><b id="{i}v{k}">{html.escape(b)}</b></div>' for k, (a, b) in enumerate(lines[1:]))
+    st = f'<div class="tks" id="{i}s">{html.escape(stamp_txt)}</div>' if stamp_txt else ""
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="tick2" style="left:{x}px;top:{y}px;z-index:{z()}">'
+        f'<div class="tkh">{html.escape(lines[0])}</div>{rows}{st}</div>')
+    anim(f'tl.fromTo("#{i}",{{x:700,rotation:{rot * 3}}},{{x:0,rotation:{rot},duration:0.55,ease:"expo.out"}},{start})')
+    cue(start, "swish", 0.8)
+    if stamp_txt:
+        anim(f'tl.fromTo("#{i}s",{{scale:2.4,opacity:0,rotation:-20}},{{scale:1,opacity:1,rotation:-10,duration:0.25,ease:"power4.in"}},{t_stamp})')
+        cue(t_stamp + 0.25, "impact", 0.9)
+    return i
+
+
+def overs(start, dur, t_light):
+    """Over strip 1-20; overs 7-15 light up as the middle overs."""
+    i = nid("ov")
+    cells = "".join(f'<i id="{i}o{k}">{k}</i>' for k in range(1, 21))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ovs avoid" style="z-index:{z()}"><div class="ovh">MIDDLE OVERS</div>'
+        f'<div class="ovr">{cells}</div></div>')
+    anim(f'tl.fromTo("#{i} .ovr i",{{y:30,opacity:0}},{{y:0,opacity:1,duration:0.25,stagger:0.025}},{start})')
+    for k in range(7, 16):
+        t = t_light + 0.05 * (k - 7)
+        anim(f'tl.to("#{i}o{k}",{{backgroundColor:"{Y}",color:"#111",scale:1.12,duration:0.18}},{t})')
+        cue(t, "tick", 0.5)
+    anim(f'tl.fromTo("#{i} .ovh",{{opacity:0}},{{opacity:1,duration:0.3}},{t_light})')
+
+
+def pitch(start, dur, t_turn):
+    """Top-down pitch: the ball pitches, grips and turns (dry surface)."""
+    i = nid("pt")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="ptch avoid" style="z-index:{z()}"><div class="pts">'
+        f'<svg width="360" height="900" viewBox="0 0 360 900"><path id="{i}p" d="M180,40 L190,560 Q196,640 280,860" fill="none" '
+        f'stroke="#d4372c" stroke-width="7" stroke-linecap="round"/><circle id="{i}b" cx="190" cy="560" r="14" fill="#d4372c"/></svg></div>'
+        f'<div class="ptl">DRY · SLOW · TURNING</div></div>')
+    anim(f'tl.fromTo("#{i}",{{x:-500,opacity:0}},{{x:0,opacity:1,duration:0.55,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}p",{{strokeDasharray:1000,strokeDashoffset:1000}},{{strokeDashoffset:0,duration:1.1,ease:"power2.in"}},{t_turn})')
+    anim(f'tl.fromTo("#{i}b",{{scale:0,transformOrigin:"50% 50%"}},{{scale:1,duration:0.3,ease:"back.out(3)"}},{t_turn + 0.55})')
+    cue(t_turn + 0.55, "pop", 1.0)
+
+
+def slot(start, dur, x, y, t_q):
+    """Empty card slot with a pulsing '?': the missing plan B."""
+    i = nid("sl")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="slot" style="left:{x}px;top:{y}px;z-index:{z()}"><b>?</b><span>PLAN B</span></div>')
+    anim(f'tl.fromTo("#{i}",{{opacity:0,scale:0.9}},{{opacity:1,scale:1,duration:0.4}},{t_q})')
+    anim(f'tl.fromTo("#{i} b",{{scale:0.8}},{{scale:1.1,duration:0.5,yoyo:true,repeat:{max(1, int(dur / 0.5))},ease:"sine.inOut"}},{t_q})')
+    cue(t_q, "pop", 0.9)
+
+
+def auction(start, dur, t_open):
+    """TRADE WINDOW: CLOSED panel that flips into an AUCTION ? ticket."""
+    i = nid("au")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="auc avoid" style="z-index:{z()}">'
+        f'<div class="auf" id="{i}a"><span>TRADE WINDOW</span><b>CLOSED</b></div>'
+        f'<div class="aub" id="{i}b"><span>IPL</span><b>AUCTION</b><i>?</i><em>LAST CHANCE</em></div></div>')
+    anim(f'tl.fromTo("#{i}a",{{rotationY:0}},{{rotationY:-90,duration:0.3,ease:"power2.in"}},{t_open})')
+    anim(f'tl.fromTo("#{i}b",{{rotationY:90}},{{rotationY:0,duration:0.4,ease:"back.out(1.6)"}},{t_open + 0.3})')
+    anim(f'tl.fromTo("#{i}",{{y:80,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    cue(t_open + 0.3, "impact", 1.0)
+
+
+GETTY = "PHOTO: GETTY IMAGES"
+
+
+def strikes(n, start, dur):
+    """Strike counter pinned top-left: n of 4 filled red."""
+    i = nid("sk")
+    dots = "".join(f'<i class="{"on" if k < n else ""}" id="{i}d{k}"></i>' for k in range(4))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="strk" style="z-index:{z() + 300}"><span>STRIKE {n}</span>{dots}</div>')
+    anim(f'tl.fromTo("#{i}",{{x:-80,opacity:0}},{{x:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i}d{n - 1}",{{scale:2.4}},{{scale:1,duration:0.35,ease:"back.out(3)"}},{start + 0.15})')
+    flash(start + 0.05, color="#d4372c", peak=0.35)
+    cue(start + 0.15, "impact", 1.0)
+
+
+def phone(start, dur, msgs, readable=True, y=470):
+    """Phone screen with message bubbles typing in; unreadable (blurred) for the cold open."""
+    i = nid("ph")
+    bubbles = "".join(f'<div class="pmb" id="{i}m{k}"{" style=\'filter:blur(7px)\'" if not readable else ""}>{html.escape(m)}</div>'
+                      for k, (m, _) in enumerate(msgs))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="phn avoid" style="top:{y}px;z-index:{z()}"><div class="pnt">To: South Africa ●</div>{bubbles}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:120,opacity:0,rotation:-6}},{{y:0,opacity:1,rotation:-2,duration:0.55,ease:"expo.out"}},{start})')
+    for k, (_, t) in enumerate(msgs):
+        anim(f'tl.fromTo("#{i}m{k}",{{scale:0.6,opacity:0,transformOrigin:"100% 100%"}},{{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"}},{t})')
+        cue(t, "pop", 0.9)
+
+
+def rewind(start, dur, a=2012, b=2000):
+    i = nid("rw")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="rwd avoid" style="z-index:{z()}"><span>⏪ REWIND</span><b id="{i}y">{a}</b></div>')
+    anim(f'(()=>{{const o={{v:{a}}};tl.to(o,{{v:{b},duration:{min(1.4, dur * 0.6):.2f},ease:"power2.inOut",onUpdate:()=>{{document.getElementById("{i}y").textContent=Math.round(o.v)}}}},{start + 0.2})}})()')
+    anim(f'tl.fromTo("#{i}",{{scale:1.15,opacity:0}},{{scale:1,opacity:1,duration:0.35}},{start})')
+    for k in range(10):
+        cue(start + 0.2 + k * 0.12, "tick", 0.6)
+    glitch(start, 0.5)
+
+
+def snap_bar(start, dur, t_snap):
+    """'CAPTAIN · 5 MONTHS' bar that cracks in two."""
+    i = nid("sb")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="snp avoid" style="z-index:{z()}"><div class="snl"><b>CAPTAIN</b><span>AUG 2008</span></div>'
+        f'<div class="snbar"><i id="{i}a"></i><i id="{i}b"></i></div><div class="snr"><b>5 MONTHS</b><span>JAN 2009</span></div></div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.45,ease:"expo.out"}},{start})')
+    anim(f'tl.fromTo("#{i} .snbar i",{{scaleX:0}},{{scaleX:1,duration:0.6,ease:"expo.out"}},{start + 0.2})')
+    anim(f'tl.to("#{i}a",{{rotation:-14,y:40,x:-30,duration:0.4,ease:"power3.in"}},{t_snap})')
+    anim(f'tl.to("#{i}b",{{rotation:16,y:60,x:30,duration:0.4,ease:"power3.in"}},{t_snap})')
+    cue(t_snap, "impact", 1.0)
+    shake(t_snap + 0.3, 18)
+
+
+GETTY = "PHOTO: GETTY IMAGES"
+BCCI = "PHOTO: BCCI"
+
+
+def badges(start, dur, lit, y=1500, labels=("TEST", "ODI", "T20I")):
+    """TEST / ODI / T20I pills along the bottom; each lights gold with a tick at its time. lit: [t_test, t_odi, t_t20]"""
+    i = nid("fb")
+    pills = "".join(f'<div class="fbp" id="{i}p{k}"><b>{n}</b><i id="{i}t{k}">✓</i></div>' for k, n in enumerate(labels))
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="fbadge avoid" style="top:{y}px;z-index:{z() + 200}">{pills}</div>')
+    anim(f'tl.fromTo("#{i}",{{y:60,opacity:0}},{{y:0,opacity:1,duration:0.4,ease:"expo.out"}},{start})')
+    for k, t in enumerate(lit):
+        if t is None:
+            continue
+        anim(f'tl.to("#{i}p{k}",{{backgroundColor:"{Y}",color:"#111",borderColor:"{Y}",duration:0.2}},{t})')
+        anim(f'tl.fromTo("#{i}t{k}",{{scale:0,opacity:0}},{{scale:1,opacity:1,duration:0.3,ease:"back.out(3)"}},{t})')
+        anim(f'tl.fromTo("#{i}p{k}",{{scale:1}},{{scale:1.14,duration:0.15,yoyo:true,repeat:1}},{t})')
+        cue(t, "pop", 1.0)
+
+
+def ground(name, venue, score, start, dur, x, y, rot, side):
+    """Double-hundred card: framed photo + venue + score tag."""
+    frame(name, start, dur, x=x, y=y, w=430, rot=rot, side=side, cap=venue, hmax=420)
+    tag(score, start + 0.3, dur - 0.3, x=x + 20, y=y - 50)
+
+
+SOC = "PHOTO: VIA X / @karun126"
+REDC = "#ff5a4f"
+
+
+def shadebot(start, dur):
+    """Dark gradient over the lower half of a bright photo so the type on it reads."""
+    i = nid("sh")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} style="position:absolute;left:0;right:0;top:760px;bottom:0;z-index:{z()};'
+        f'background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.45) 40%,rgba(0,0,0,.55))"></div>')
+
+
+def comment_cta(start, dur):
+    i = nid("cm")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="cta" style="z-index:{z()}">'
+        f'<div class="mot" id="{i}q"><span>CRUELLEST</span><i>injustice</i><span style="color:{Y}">EVER?</span></div>'
+        f'<div class="bubble" id="{i}b"><div class="av"></div><div><div class="who">you</div>'
+        f'<div class="what" id="{i}w"></div></div></div><div class="cta2">Drop your answer in the comments 👇</div></div>')
+    anim(f'tl.fromTo("#{i}q span,#{i}q i",{{y:40,opacity:0}},{{y:0,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(1.8)"}},{start})')
+    anim(f'tl.fromTo("#{i}b",{{y:60,opacity:0,scale:.9}},{{y:0,opacity:1,scale:1,duration:0.6,ease:"back.out(1.6)"}},{start + 0.5})')
+    txt = "Karun Nair. No doubt 💔"
+    anim(f'(()=>{{const o={{n:0}};const s="{txt}";tl.to(o,{{n:[...s].length,duration:0.7,ease:"none",onUpdate:()=>{{document.getElementById("{i}w").textContent=[...s].slice(0,Math.round(o.n)).join("")}}}},{start + 0.9})}})()')
+    cue(start, "pop", 1.0)
+
+
+_pan = [0]
+
+
+def sc(name, t0, t1, credit_txt=BCCI, grey=False, side="right", dim=False, push=None):
+    """One beat: a full-screen photo that never sits still (push in or out + a slow pan), a lower shade for the type."""
+    _pan[0] += 1
+    k = _pan[0]
+    pu = push or ((1.0, 1.16) if k % 2 else (1.16, 1.02))
+    i = ph(name, round(t0, 3), round(t1 - t0, 3), credit_txt, side=side, fx="grey" if grey else ("dim" if dim else None), push=pu,
+           origin=("35% 40%", "65% 40%", "50% 30%")[k % 3])
+    dx = 36 if k % 2 else -36
+    anim(f'tl.fromTo("#{i}m",{{x:{-dx}}},{{x:{dx},duration:{max(0.5, t1 - t0):.2f},ease:"none"}},{t0})')
+    shadebot(round(t0, 3), round(t1 - t0, 3))
+    return i
+
+
+def edit():
+    def seg(t0, t1):
+        return round(t0, 3), round(t1 - t0, 3)
+
+    W_ = word
+    # ---------------- HOOK
+    a, b = 0, W_("h1", 6) - 0.05
+    sc("k_walkoff_eng", a, b, side=None)
+    head(["THE BIGGEST", "INJUSTICE", "IN INDIAN CRICKET?"], *seg(a + 0.05, b), y=1080, size=120, accent=(1,), sfx="impact")
+    a, b = b, W_("h1", 18) - 0.05
+    sc("sanju", a, b, side="left")
+    kick("IT WASN'T…", *seg(a, b), y=240)
+    head(["SANJU SAMSON"], *seg(a + 0.05, b), y=1150, size=150, accent=(0,), sfx="impact")
+    chip("IN & OUT OF THE TEAM FOR YEARS", *seg(W_("h1", 10), b), x=None, y=1330)
+    stamp("NOT HIM", *seg(W_("h1", 16), b), y=980, size=130, color=REDC, rot=-6)
+    a, b = b, W_("h1", 28) - 0.05
+    sc("shreyas", a, b, side="right")
+    head(["SHREYAS IYER"], *seg(a + 0.05, b), y=1150, size=150, accent=(0,), sfx="impact")
+    chip("IGNORED FOR THE ASIA CUP", *seg(W_("h1", 22), b), x=None, y=1330)
+    a, b = b, s("h2", -0.03)
+    sc("shreyas", a, b, side=None, push=(1.25, 1.1))
+    chip("AFTER LEADING PUNJAB TO THE IPL FINAL", *seg(a + 0.05, b), x=None, y=1200)
+    stamp("NOT HIM", *seg(W_("h1", 34), b), y=1340, size=130, color=REDC, rot=-6)
+    # ---------------- the forgotten man
+    a, b = b, W_("h2", 8) - 0.05
+    sc("k_helmet_sad", a, b, grey=True, side="up")
+    head(["A MAN YOU'VE", "FORGOTTEN"], *seg(W_("h2", 3), b), y=1120, size=130, accent=(1,))
+    a, b = b, W_("h2", 12) - 0.05
+    sc("k_kar_helmet", a, b, side="right")
+    head(["KARUN NAIR"], *seg(a + 0.03, b), y=1170, size=170, accent=(1,), sfx="impact")
+    chip("DECEMBER 2016", *seg(W_("h2", 10), b), x=None, y=1330)
+    flash(a + 0.03, color=Y, peak=0.3)
+    # ---------------- Chennai 2016
+    a, b = b, W_("h2", 20) - 0.05
+    sc("k_303_b", a, b, side="left")
+    kick("CHENNAI · DECEMBER 2016", *seg(a, b), y=240)
+    head(["vs A MIGHTY", "ENGLAND"], *seg(W_("h2", 13) - 0.05, b), y=1150, size=130, accent=(1,), sfx="impact")
+    a, b = b, s("t1", -0.03)
+    sc("k_303_a", a, b, side="right")
+    head(["QUIET. FEARLESS.", "25 YEARS OLD."], *seg(a + 0.03, b), y=1120, size=110, accent=(1,))
+    chip("ONLY HIS 3rd TEST", *seg(W_("h2", 25), b), x=None, y=1350)
+    a, b = b, W_("t1", 7) - 0.05
+    sc("k_303_b", a, b, side="up", push=(1.2, 1.05))
+    odo("100", *seg(W_("t1", 1) - 0.1, b), x=None, y=1080, size=280)
+    flash(W_("t1", 6), color="#fff", peak=0.35)
+    a, b = b, W_("t1", 15) - 0.05
+    sc("k_303_a", a, b, side="left", push=(1.0, 1.25))
+    odo("200", *seg(a + 0.05, b), x=None, y=1080, size=280)
+    shake(W_("t1", 14), 16)
+    a, b = b, s("t2", -0.03)
+    sc("k_kar_helmet", a, b, side="right", push=(1.25, 1.05))
+    odo("300", *seg(W_("t1", 18) - 0.05, b), x=None, y=1080, size=300)
+    a, b = b, W_("t2", 3) - 0.05
+    sc("k_303_b", a, b, side=None, push=(1.0, 1.3))
+    odo("303*", *seg(a + 0.03, b), x=None, y=1050, size=300, label="NOT OUT")
+    flash(a + 0.05, color=Y, peak=0.35)
+    shake(a + 0.6, 24)
+    a, b = b, W_("t2", 14) - 0.05
+    sc("k_303_a", a, b, side="left", push=(1.3, 1.1))
+    head(["ONLY THE 2nd INDIAN", "TEST TRIPLE HUNDRED"], *seg(a + 0.03, b), y=1120, size=104, accent=(0,), sfx="impact")
+    a, b = b, s("t3", -0.03)
+    sc("sehwag", a, b, GETTY, side="right")
+    head(["1st: VIRENDER SEHWAG"], *seg(a + 0.03, b), y=1350, size=100, accent=(0,))
+    a, b = b, W_("t3", 10) - 0.05
+    sc("tweet_bg" if False else "k_303_b", a, b, side="up", push=(1.1, 1.3))
+    kick("THAT MAGICAL NIGHT", *seg(a, b), y=240)
+    head(["A PROUD NATION", "SAID…"], *seg(W_("t3", 3), b), y=1130, size=120, accent=(1,))
+    a, b = b, s("d1", -0.03)
+    sc("k_kar_helmet", a, b, side="left", push=(1.05, 1.25))
+    head(["INDIA'S NEXT", "SUPERSTAR"], *seg(a + 0.03, b), y=1120, size=150, accent=(1,), sfx="impact")
+    # ---------------- the cold years
+    a, b = b, W_("d1", 8) - 0.05
+    sc("k_lords_walk", a, b, grey=True, side="right")
+    head(["A COLD,", "HEARTLESS SCRIPT"], *seg(W_("d1", 4), b), y=1120, size=130, accent=(1,), sfx="impact")
+    a, b = b, W_("d1", 16) - 0.05
+    sc("k_bowled", a, b, grey=True, side="left")
+    chip("WITHIN MONTHS", *seg(a + 0.1, b), x=None, y=300)
+    stamp("DROPPED", *seg(W_("d1", 12), b), y=1150, size=150, color=REDC, rot=-5)
+    a, b = b, W_("d1", 22) - 0.05
+    sc("kohli_presser", a, b, grey=True, side="right")
+    for k, wi in enumerate((16, 18, 20)):
+        head([("NO CALLS.", "NO CHANCE.", "NO EXPLANATION.")[k]], *seg(W_("d1", wi) - 0.05, b), y=980 + 120 * k, size=100,
+             accent=(0,) if k == 2 else (), sfx="impact")
+    a, b = b, s("k1", -0.03)
+    sc("selectors", a, b, grey=True, side="up")
+    head(["LONG, PAINFUL YEARS"], *seg(a + 0.03, b), y=1020, size=90)
+    head(["SELECTORS FORGOT.", "FANS FORGOT."], *seg(W_("d1", 26) - 0.05, b), y=1140, size=120, accent=(1,))
+    # ---------------- 10 Dec 2022
+    a, b = b, W_("k1", 9) - 0.05
+    sc("ishan2", a, b, side="right")
+    head(["10 DEC 2022"], *seg(a + 0.03, b), y=1080, size=150, accent=(0,), sfx="impact")
+    kick("THE WHOLE OF INDIA CELEBRATES", *seg(W_("k1", 3), b), y=1260)
+    a, b = b, W_("k1", 14) - 0.05
+    sc("ishan", a, b, side="left", push=(1.0, 1.2))
+    odo("210", *seg(a + 0.03, b), x=None, y=960, size=230, label="ISHAN KISHAN · DOUBLE HUNDRED")
+    a, b = b, W_("k1", 23) - 0.05
+    sc("k_helmet_sad", a, b, grey=True, side="right", push=(1.2, 1.0))
+    kick("THE SAME DAY", *seg(a, b), y=240)
+    head(["BROKEN.", "DESPERATE."], *seg(W_("k1", 20) - 0.05, b), y=1120, size=140, accent=(1,))
+    a, b = b, s("k2", -0.03)
+    sc("tweet", a, b, SOC, side="up", push=(1.0, 1.12))
+    kick("KARUN NAIR · 10 DEC 2022", *seg(a, b), y=240)
+    # ---------------- Karnataka
+    a, b = b, W_("k2", 8) - 0.05
+    sc("k_kar_100", a, b, grey=True, side="right")
+    kick("THAT SAME WEEK · KARNATAKA", *seg(a, b), y=240)
+    head(["HIS OWN STATE"], *seg(W_("k2", 3) - 0.05, b), y=1150, size=140, accent=(0,))
+    a, b = b, s("f1", -0.03)
+    sc("k_kar_helmet", a, b, grey=True, side=None, push=(1.3, 1.1))
+    stamp("DROPPED", *seg(a + 0.03, b), y=1150, size=150, color=REDC, rot=-5)
+    chip("FROM THEIR RANJI TEAM", *seg(W_("k2", 11), b), x=None, y=1350)
+    # ---------------- follow
+    a, b = b, s("v1", -0.03)
+    sc("k_303_a", a, b, side="left", dim=True)
+    head(["WHAT HAPPENED NEXT?"], *seg(a + 0.03, W_("f1", 9) - 0.05), y=1130, size=110, accent=(1,), sfx="impact")
+    head(["TRUE CRICKET FAN?"], *seg(W_("f1", 9) - 0.05, b), y=300, size=110, accent=(0,), sfx="impact")
+    follow_card(*seg(W_("f1", 4), b), t_follow=W_("f1", 18))
+    # ---------------- Vidarbha
+    a, b = b, W_("v1", 8) - 0.05
+    sc("k_vidarbha", a, b, side="up")
+    kick("A NEW STATE · VIDARBHA", *seg(a, b), y=240)
+    head(["KARUN DIDN'T", "BREAK."], *seg(a + 0.03, b), y=1150, size=140, accent=(1,), sfx="impact")
+    a, b = b, s("v2", -0.03)
+    sc("k_northants", a, b, GETTY, side="right")
+    head(["A STORM OF RUNS"], *seg(a + 0.03, b), y=260, size=110, accent=(0,), sfx="impact")
+    odo("779", *seg(W_("v1", 11), b), x=None, y=960, size=220, label="RUNS · VIJAY HAZARE 2024-25")
+    a, b = b, W_("v2", 10) - 0.05
+    sc("k_india_travel", a, b, side="left")
+    head(["8 YEARS", "LATER"], *seg(W_("v2", 1) - 0.05, b), y=1100, size=170, accent=(0,), sfx="impact")
+    a, b = b, W_("v2", 16) - 0.05
+    sc("k_oval_fist", a, b, side="right", push=(1.25, 1.05))
+    stamp("CALLED BACK", *seg(W_("v2", 13), b), y=1150, size=140, rot=-5)
+    a, b = b, s("x1", -0.03)
+    sc("k_nets", a, b, side="up")
+    head(["NOW THINK", "ABOUT IT."], *seg(a + 0.03, b), y=1120, size=150, accent=(1,), sfx="impact")
+    # ---------------- the case
+    for (nm, wi0, wi1, txt, col, gr) in (("k_303_b", 0, 12, "303* · ONLY THE 2nd INDIAN", Y, False),
+                                       ("k_bowled", 12, 16, "DROPPED WITHIN MONTHS", "#fff", True),
+                                       ("k_kar_100", 16, 21, "ABANDONED BY HIS OWN STATE", "#fff", True),
+                                       ("k_helmet_sad", 21, None, "AN 8-YEAR WAIT", REDC, True)):
+        a = s("x1", -0.03) if wi0 == 0 else W_("x1", wi0) - 0.05
+        b = W_("x1", wi1) - 0.05 if wi1 else s("x2", -0.03)
+        sc(nm, a, b, grey=gr, side=("left", "right")[wi0 % 2], push=(1.1, 1.3) if wi0 % 2 else (1.3, 1.1))
+        head([txt], *seg(a + 0.03, b), y=1150, size=100, accent=(0,) if col != "#fff" else (), sfx="impact")
+    a, b = s("x2", -0.03), W_("x2", 3) - 0.05
+    sc("sanju", a, b, side="left")
+    head(["SANJU GOT", "CHANCES."], *seg(a + 0.03, b), y=1120, size=140, accent=(1,), sfx="impact")
+    a, b = b, W_("x2", 6) - 0.05
+    sc("shreyas", a, b, side="right")
+    head(["SHREYAS", "CAME BACK."], *seg(a + 0.03, b), y=1120, size=140, accent=(1,), sfx="impact")
+    a, b = b, s("q1", -0.03)
+    sc("k_lords_walk", a, b, side="up")
+    head(["KARUN WAITED", "8 YEARS"], *seg(a + 0.03, b), y=1100, size=140, accent=(1,), sfx="impact")
+    chip("FOR JUST 1 MORE CHANCE", *seg(W_("x2", 10), b), x=None, y=1360)
+    a, b = b, s("c1", -0.03)
+    sc("k_walkoff_eng", a, b, side="left", push=(1.3, 1.05))
+    head(["A CRUELLER", "INJUSTICE?"], *seg(a + 0.03, b), y=1100, size=150, accent=(1,), sfx="impact")
+    # ---------------- CTA
+    a, b = b, s("c2", -0.03)
+    sc("k_vidarbha", a, b, side="right", dim=True, push=(1.2, 1.0))
+    comment_cta(*seg(a + 0.03, b))
+    a, b = b, e("c2", 0.1)
+    sc("k_nets", a, b, side="left", push=(1.0, 1.25))
+    head(["THE FULL", "UNTOLD STORY"], *seg(a + 0.03, b), y=1080, size=150, accent=(1,), sfx="impact")
+    chip("👇 LINKED BELOW", *seg(W_("c2", 8), b), x=None, y=1360)
+    video3d("logo", b, TOTAL - b)
+    for a2, b2 in LAYOUT["brand_hide"]:
+        if a2 >= b - 0.3:
+            continue
+        anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{a2})')
+        if b2 < b - 0.3:
+            anim(f'tl.fromTo("#brand",{{opacity:0}},{{opacity:.95,duration:0.25,immediateRender:false}},{b2})')
+    anim(f'tl.fromTo("#brand",{{opacity:.95}},{{opacity:0,duration:0.2,immediateRender:false}},{b - 0.3})')
+
+
+EXTRA_CSS = f"""
+.fbadge{{position:absolute;left:0;right:0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 22px;padding:0 50px}}
+.ldr{{position:absolute;left:80px;right:80px;height:370px}}
+.ldr .lh{{position:absolute;top:-56px;left:0;font:800 26px "IDisp";letter-spacing:.2em;color:{Y}}}
+.ldr .rk{{position:absolute;left:0;width:90px;height:110px;display:flex;align-items:center;justify-content:center;font-family:"Bebas";font-size:84px;color:#9a9aa2}}
+.ldr .lr{{position:absolute;left:110px;right:0;height:110px;border-radius:20px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;padding:0 30px;font-family:"Bebas";font-size:76px;color:#fff}}
+.ldr .lr.me{{background:{Y};color:#111;border-color:{Y};z-index:2}}
+.fbp{{display:flex;align-items:center;gap:10px;padding:10px 24px;border-radius:999px;border:3px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);color:#fff}}
+.fbp b{{font-family:"Bebas";font-size:54px;font-weight:400;line-height:1}}
+.fbp i{{font-style:normal;font:900 36px "IDisp";opacity:0}}
+
+.strk{{position:absolute;left:60px;top:190px;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.6);border:2px solid rgba(212,55,44,.6);border-radius:999px;padding:10px 20px}}
+.strk span{{font:900 26px "IDisp";letter-spacing:.16em;color:#ff5a4f;margin-right:6px}}
+.strk i{{width:24px;height:24px;border-radius:50%;border:3px solid #ff5a4f;display:block}}
+.strk i.on{{background:#ff3b3b}}
+.phn{{position:absolute;left:240px;width:600px;min-height:620px;background:#0f0f12;border:10px solid #2a2a30;border-radius:60px;padding:70px 34px 40px;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 80px rgba(80,140,255,.15)}}
+.pnt{{position:absolute;left:0;right:0;top:24px;text-align:center;font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.06em}}
+.pmb{{margin:16px 0 0 auto;width:fit-content;max-width:440px;background:#1f7aff;color:#fff;font:700 40px "IDisp";padding:16px 24px;border-radius:30px 30px 8px 30px}}
+.rwd{{position:absolute;left:0;right:0;top:640px;text-align:center}}
+.rwd span{{display:block;font:900 40px "IDisp";letter-spacing:.3em;color:#ff5a4f}}
+.rwd b{{display:block;font-family:"Bebas";font-size:300px;line-height:1;color:#fff}}
+.snp{{position:absolute;left:60px;right:60px;top:1150px;display:flex;align-items:center;gap:20px}}
+.snl b,.snr b{{display:block;font-family:"Bebas";font-size:64px;color:#fff;line-height:1}}
+.snl span,.snr span{{font:800 22px "IDisp";color:#9a9aa2;letter-spacing:.1em}}
+.snr b{{color:#ff5a4f}}
+.snbar{{flex:1;height:26px;display:flex}}
+.snbar i{{flex:1;background:{Y};transform-origin:0 50%}}
+.snbar i:last-child{{transform-origin:100% 50%}}
+
+.tcell{{position:absolute;width:280px;height:200px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}}
+.tcell b{{font-family:"Bebas";font-size:96px;line-height:1}}
+.tcell em{{font-style:normal;font:800 22px "IDisp";letter-spacing:.12em;margin-top:6px;opacity:.9}}
+.t0{{position:absolute;left:395px;top:1340px;border:6px solid {Y};color:{Y};font:900 54px "IDisp";padding:6px 22px;border-radius:12px;background:rgba(0,0,0,.6)}}
+.hcard{{position:absolute;left:70px;right:70px;top:300px;background:#16161a;border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 36px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
+.hh{{font:800 26px "IDisp";letter-spacing:.2em;color:#9a9aa2;margin-bottom:16px}}
+.hrw{{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:14px;margin-bottom:8px}}
+.hrw span{{font-family:"Bebas";font-size:96px;color:#fff;line-height:1}}
+.hrw b{{font:900 70px "IDisp"}}
+.hrw b.ok{{color:#3ddc84}}
+.hrw b.bad{{color:#ff5a4f}}
+.hscan{{position:absolute;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,{Y},transparent);box-shadow:0 0 30px {Y};opacity:.8}}
+.tick2{{position:absolute;width:460px;background:#f6f1e4;border-radius:18px;padding:20px 26px 26px;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#141416}}
+.tkh{{font:800 24px "IDisp";letter-spacing:.1em;color:#d4372c;border-bottom:2px dashed #c9bfa9;padding-bottom:10px;margin-bottom:6px}}
+.tkr{{display:flex;justify-content:space-between;align-items:baseline;font-family:"Bebas"}}
+.tkr span{{font-size:64px;color:#555}}
+.tkr b{{font-size:120px;color:#141416;font-weight:400}}
+.tks{{position:absolute;right:-30px;bottom:-30px;border:5px solid #d4372c;color:#d4372c;font:900 34px "IDisp";padding:4px 14px;border-radius:8px;background:rgba(246,241,228,.92);white-space:nowrap}}
+.slot{{position:absolute;width:420px;height:560px;border:5px dashed #d4372c;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#d4372c}}
+.slot b{{font:900 260px/1 "IDisp"}}
+.slot span{{font:900 40px "IDisp";letter-spacing:.14em}}
+.ovs{{position:absolute;left:40px;right:40px;top:1200px}}
+.ovh{{text-align:center;font:900 34px "IDisp";letter-spacing:.2em;color:#d4372c;margin-bottom:16px}}
+.ovr{{display:flex;gap:6px;justify-content:center}}
+.ovr i{{font-style:normal;width:44px;height:64px;border-radius:8px;background:#e1d9c8;color:#555;font:800 24px/64px "IDisp";text-align:center}}
+.ptch{{position:absolute;left:80px;top:280px}}
+.pts{{width:360px;height:900px;border-radius:20px;background:linear-gradient(180deg,#d9c49a,#c8ae7c);box-shadow:inset 0 0 60px rgba(0,0,0,.25),0 30px 70px rgba(0,0,0,.5);position:relative;overflow:hidden}}
+.pts:before{{content:"";position:absolute;left:0;right:0;top:120px;height:4px;background:#fff}}
+.pts:after{{content:"";position:absolute;left:0;right:0;bottom:120px;height:4px;background:#fff}}
+.ptl{{margin-top:20px;font:900 30px "IDisp";letter-spacing:.14em;color:{Y}}}
+.auc{{position:absolute;left:140px;right:140px;top:560px;height:640px;perspective:1600px}}
+.auf,.aub{{position:absolute;inset:0;border-radius:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden}}
+.auf{{background:#16161a;border:3px solid #444;color:#fff}}
+.auf span{{font:800 40px "IDisp";letter-spacing:.2em;color:#9a9aa2}}
+.auf b{{font-family:"Bebas";font-size:200px;color:#ff5a4f;line-height:1}}
+.aub{{background:#c8102e;color:#fff;transform:rotateY(90deg);box-shadow:0 40px 100px rgba(200,16,46,.45)}}
+.aub span{{font:900 40px "IDisp";letter-spacing:.3em}}
+.aub b{{font-family:"Bebas";font-size:180px;line-height:1}}
+.aub i{{font-style:normal;font:900 160px/1 "IDisp";color:{Y}}}
+.aub em{{font-style:normal;font:900 34px "IDisp";letter-spacing:.2em;color:{Y};margin-top:10px}}
+
+.ed .edtex{{position:absolute;inset:-120px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 18px)}}
+.ed.paper .edtex{{background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.04) 0 2px,transparent 2px 18px)}}
+.ed.paper .grain{{opacity:.35;mix-blend-mode:multiply}}
+.kick{{position:absolute;left:0;right:0;text-align:center;font:800 26px "IDisp";letter-spacing:.28em;color:{Y}}}
+.kick.paper{{color:#d4372c}}
+.edh{{position:absolute;left:60px;right:60px;font-family:"Bebas";line-height:.92;letter-spacing:.005em}}
+.edh .mask{{overflow:hidden}}
+.frm{{position:absolute;background:#fff;padding:14px 14px 0;box-shadow:0 30px 70px rgba(0,0,0,.45)}}
+.frc{{font:600 22px "IDisp";color:#555;padding:10px 2px 14px;font-style:italic}}
+.stems{{position:absolute;inset:0}}
+.stl{{position:absolute;left:60px;right:60px;height:3px;background:#d4372c;transform-origin:0 50%}}
+.stl i{{position:absolute;right:0;top:-34px;font:800 26px "IDisp";font-style:normal;color:#d4372c}}
+.stc{{position:absolute;width:260px}}
+.sts{{position:absolute;left:126px;width:8px;background:#141416;transform-origin:50% 100%}}
+.stv{{position:absolute;left:0;width:260px;text-align:center}}
+.stimg{{width:180px;height:180px;margin:0 auto 8px;border-radius:50%;overflow:hidden;border:6px solid #fff;box-shadow:0 14px 30px rgba(0,0,0,.3)}}
+.stimg img{{width:100%;height:100%;object-fit:cover;object-position:50% 15%}}
+.stv b{{display:block;font-family:"Bebas";font-size:96px;line-height:.9;color:#141416}}
+.stv span{{font:800 24px "IDisp";letter-spacing:.14em;color:#d4372c}}
+.mwin{{position:absolute;left:60px;right:60px;top:700px;height:520px}}
+.mwb i{{position:absolute;bottom:80px;width:80px;border-radius:8px 8px 0 0;transform-origin:50% 100%}}
+.mwf{{position:absolute;left:446px;bottom:60px;width:240px;height:440px;border:5px solid #d4372c;border-radius:16px}}
+.mwf span{{position:absolute;left:0;right:0;top:-44px;text-align:center;font:800 22px "IDisp";letter-spacing:.14em;color:#d4372c}}
+.mwl{{position:absolute;left:0;right:0;bottom:0;text-align:center;font:800 24px "IDisp";letter-spacing:.2em;color:#555}}
+.clip2{{position:absolute;width:420px;background:#f6f1e4;padding:22px 26px 26px;box-shadow:0 24px 50px rgba(0,0,0,.45);font-family:"Courier New",monospace;color:#1d1d1d}}
+.clp{{font-size:22px;letter-spacing:.12em;color:#7a6e5a;margin-bottom:8px}}
+.clt{{font-size:46px;font-weight:700}}
+.lost{{position:absolute;right:-20px;bottom:-24px;border:5px solid #d4372c;color:#d4372c;font:900 44px "IDisp";padding:2px 16px;border-radius:8px;background:rgba(246,241,228,.85)}}
+.aiw{{position:absolute;box-shadow:0 30px 70px rgba(0,0,0,.55);background:#fff;padding:12px}}
+.aitag{{position:absolute;left:12px;top:-30px;background:{Y};color:#111;font:900 20px "IDisp";letter-spacing:.12em;padding:4px 10px;border-radius:6px}}
+.np{{background:#f2ecdc;padding:20px 22px 30px;font-family:Georgia,serif;color:#1b1b1b;text-align:center}}
+.npm{{font-size:28px;font-weight:700;border-bottom:3px double #1b1b1b;padding-bottom:6px}}
+.npd{{font-size:16px;letter-spacing:.2em;margin:6px 0 14px}}
+.nph{{font-size:52px;font-weight:900;line-height:1}}
+.nps{{font-size:24px;font-style:italic;margin:10px 0}}
+.npl{{height:160px;background:repeating-linear-gradient(0deg,#cfc6b2 0 3px,transparent 3px 14px)}}
+.rline{{position:absolute;left:0;width:1080px;height:660px}}
+.rlb{{position:absolute;font:800 28px "IDisp";color:#141416;letter-spacing:.06em;white-space:nowrap}}
+.rlb b{{color:#d4372c}}
+.rlb.red{{color:#d4372c}}
+.rlax{{position:absolute;left:40px;right:40px;bottom:-56px;text-align:center;font:700 22px "IDisp";color:#777;letter-spacing:.1em}}
+.mtn{{position:absolute;left:0;top:640px;width:1080px;height:420px}}
+.capb{{position:absolute;left:0;right:0;text-align:center;z-index:900}}
+.capb span{{display:inline-block;background:#0b0b0c;color:#fff;font:900 46px "IDisp";letter-spacing:.02em;text-transform:uppercase;padding:10px 22px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4)}}
+.capb em{{font-style:normal;color:{Y}}}
+
+.tz{{position:absolute;top:560px;width:450px;height:640px;border-radius:30px;background:linear-gradient(160deg,#1c1c22,#0c0c0f);border:2px solid rgba(254,222,92,.4);box-shadow:0 40px 90px rgba(0,0,0,.6);text-align:center}}
+.tzr{{margin-top:40px;font:900 80px "IDisp";font-style:italic;color:{Y}}}
+.tzq{{font:900 280px/1 "IDisp";color:#fff;opacity:.9;margin-top:10px}}
+.tzl{{margin:20px 30px 0;font:800 36px/1.2 "IDisp";color:#fff}}
+
+.fcard{{position:absolute;left:110px;right:110px;top:620px;background:#16161a;border:2px solid rgba(254,222,92,.4);border-radius:34px;padding:50px 40px 46px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.65)}}
+.fav{{width:200px;height:200px;margin:0 auto 26px;border-radius:50%;background:#0b0b0c;border:5px solid {Y};display:flex;align-items:center;justify-content:center;overflow:hidden}}
+.fav img{{width:170px}}
+.fname{{font:900 58px "IDisp";color:#fff}}
+.fsub{{font:600 30px "IDisp";color:#9a9aa2;margin-top:10px}}
+.fbtn{{margin:36px auto 0;width:420px;height:96px;border-radius:20px;background:{Y};display:flex;align-items:center;justify-content:center;font:900 44px "IDisp";color:#111}}
+.fbtn.on{{background:#2a2a30;color:#fff}}
+.fcur{{position:absolute;left:62%;top:78%;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 4px 20px rgba(0,0,0,.6)}}
+
+.post{{position:absolute;left:70px;right:70px;background:#16161a;border:2px solid rgba(255,255,255,.1);border-radius:26px;padding:30px 34px 26px;box-shadow:0 40px 90px rgba(0,0,0,.6)}}
+.phd{{display:flex;align-items:center;gap:18px;margin-bottom:18px}}
+.phd i{{width:58px;height:58px;border-radius:50%;background:{Y};display:block}}
+.phd b{{display:block;font:800 30px "IDisp";color:#fff}}
+.phd span{{font:600 24px "IDisp";color:#8a8a92}}
+.ptx{{font:800 50px/1.15 "IDisp";color:#fff}}
+.ppill{{display:inline-block;margin-top:18px;background:{Y};color:#111;font:800 24px "IDisp";padding:6px 16px;border-radius:999px}}
+.pft{{display:flex;gap:30px;margin-top:20px;font:700 26px "IDisp";color:#8a8a92}}
+.sbar{{position:absolute;left:40px;right:40px;top:1560px;height:70px;display:flex;align-items:center;gap:20px;background:#0e0e10;border:2px solid rgba(254,222,92,.5);border-radius:14px;padding:0 22px;font-family:"Osw"}}
+.sbar b{{background:{Y};color:#111;font-size:30px;padding:2px 12px;border-radius:6px}}
+.sbar span{{flex:1;color:#fff;font-size:40px;letter-spacing:.04em}}
+.sbar em{{font-style:normal;color:#ff3b3b;font-size:26px;letter-spacing:.14em}}
+#root .cap1 span{{font-family:"Osw";font-weight:700;text-transform:uppercase;letter-spacing:.01em;font-size:84px}}
+
+.seamb{{position:absolute;left:240px;width:600px;height:600px}}
+
+.speed{{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background-image:repeating-linear-gradient(176deg,rgba(255,255,255,0) 0 46px,rgba(255,255,255,.22) 47px 49px,rgba(255,255,255,0) 50px 140px),repeating-linear-gradient(178deg,rgba(254,222,92,0) 0 90px,rgba(254,222,92,.25) 91px 94px,rgba(254,222,92,0) 95px 260px)}}
+.meter{{position:absolute;left:140px;top:520px;width:800px}}
+.mval{{position:absolute;left:0;right:0;top:330px;text-align:center}}
+.mval b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:190px;line-height:1;color:{Y};text-shadow:0 4px 0 #b8941e,0 0 40px rgba(254,222,92,.35)}}
+.mval span{{display:block;font:800 34px "IDisp";letter-spacing:.16em;color:#fff;margin-top:8px}}
+
+.tfade{{position:absolute;left:0;right:0;top:960px;height:320px;background:linear-gradient(180deg,rgba(11,11,12,0),#0b0b0c)}}
+.ngrade{{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.05) 30%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.92) 100%)}}
+.credit{{position:absolute;left:0;right:0;top:1560px;text-align:center;font:600 20px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55)}}
+.credit2{{text-align:center;font:600 18px "IDisp";letter-spacing:.16em;color:rgba(255,255,255,.55);margin-top:12px}}
+.ntag{{position:absolute;left:70px;top:330px;color:#fff;font:800 24px "IDisp";letter-spacing:.1em;padding:9px 18px;border-radius:999px}}
+.nbig{{position:absolute;left:30px;right:30px;text-align:center;font-family:"IDisp";font-weight:900;font-style:italic;letter-spacing:-.03em;line-height:.92;text-transform:uppercase;text-shadow:0 0 50px rgba(0,0,0,.6),0 8px 30px rgba(0,0,0,.6)}}
+.nsub{{font:700 38px "IDisp";font-style:normal;letter-spacing:.3em;color:#fff;margin-top:22px;text-shadow:none}}
+.sbox{{position:absolute;left:80px;right:80px;text-align:center;background:rgba(14,14,16,.86);border:2px solid rgba(254,222,92,.35);border-radius:28px;padding:30px 20px 34px;box-shadow:0 30px 80px rgba(0,0,0,.6)}}
+.sbox b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:170px;line-height:1;color:{Y};text-shadow:0 4px 0 #b8941e,0 0 40px rgba(254,222,92,.35)}}
+.sbox span{{display:block;font:800 40px "IDisp";letter-spacing:.14em;color:#fff;margin-top:10px}}
+.sbox span.gsub{{font-style:italic;font-size:84px;letter-spacing:-.01em;color:{Y};font-weight:900}}
+.spill{{position:absolute;left:50%;top:-30px;transform:translateX(-50%);background:{Y};color:#111;font:900 26px "IDisp";font-style:italic;letter-spacing:.06em;padding:8px 22px;border-radius:999px;white-space:nowrap}}
+.vh{{position:absolute;left:0;right:0;height:960px;overflow:hidden}}
+.vh img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
+.vsh{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75))}}
+.vstack{{position:absolute;left:60px;right:60px}}
+.vpill{{display:table;margin:0 auto -18px;position:relative;z-index:2;background:{Y};color:#111;font:900 24px "IDisp";letter-spacing:.06em;padding:8px 20px;border-radius:999px}}
+.vbox{{display:flex;background:rgba(14,14,16,.88);border:2px solid rgba(254,222,92,.35);border-radius:24px;padding:34px 30px 22px}}
+.vc{{flex:0 0 30%;text-align:left}}.vc:nth-child(2){{flex-basis:40%}}
+.vc i{{display:block;font:700 22px "IDisp";font-style:normal;letter-spacing:.14em;color:#aab}}
+.vc b{{display:block;font-family:"IDisp";font-weight:900;font-style:italic;font-size:90px;line-height:1.05;color:{Y};text-shadow:0 3px 0 #b8941e}}
+.vsb{{position:absolute;left:50%;top:960px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:#111;border:4px solid {Y};color:{Y};font:900 48px "IDisp";font-style:italic;display:flex;align-items:center;justify-content:center;z-index:5}}
+.ranks{{position:absolute;left:70px;right:70px;top:420px}}
+.rh{{font-family:"IDisp";font-weight:900;font-style:italic;font-size:68px;color:{Y};line-height:1;margin-bottom:40px}}
+.rr{{margin-bottom:34px}}
+.rl{{display:flex;justify-content:space-between;font:800 30px "IDisp";letter-spacing:.06em;color:#dfe3ea;margin-bottom:10px}}
+.rr.rtop .rl{{color:{Y}}}
+.rt{{height:20px;background:rgba(255,255,255,.08);border-radius:6px}}
+.rf{{height:100%;background:linear-gradient(90deg,#55555c,#c9c9cf);border-radius:6px;transform-origin:0 50%}}
+.rr.rtop .rf{{background:linear-gradient(90deg,#e0a800,{Y})}}
+.rfoot{{margin-top:60px;font-family:"IDisp";font-weight:900;font-style:italic;font-size:78px;color:{Y};text-align:center}}
+
+@font-face{{font-family:"Bebas";src:url({media("assets/fonts/BebasNeue.woff2")})}}
+@font-face{{font-family:"Osw";font-weight:700;src:url({media("assets/fonts/Oswald-700.woff2")})}}
+.glow{{position:absolute;left:-200px;right:-200px;top:180px;height:1400px;pointer-events:none}}
+.hlw{{position:absolute;left:70px;right:70px;font-family:"Bebas";line-height:.92;letter-spacing:.01em;text-shadow:0 6px 30px rgba(0,0,0,.6)}}
+.hln{{display:block}}
+.needs{{position:absolute;left:70px;font-family:"Bebas";font-size:84px;color:{Y};border:5px solid {Y};border-radius:10px;padding:2px 22px 0;background:rgba(0,0,0,.55);transform-origin:0 50%}}
+.ctr{{position:absolute;left:70px;right:70px;top:1500px;font-family:"Osw"}}
+.ctop{{display:flex;justify-content:space-between;align-items:flex-end;color:#cfd3da;font-size:30px;letter-spacing:.14em}}
+.ctop b{{font-family:"Bebas";font-size:120px;line-height:.8;color:{Y};letter-spacing:0;font-weight:400}}
+.cbar{{position:relative;height:22px;margin-top:14px;background:rgba(255,255,255,.12);border-radius:6px}}
+.cfill{{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2f6bff,#4f8bff);border-radius:6px;box-shadow:0 0 24px rgba(79,139,255,.6)}}
+.cmark{{position:absolute;top:-14px;bottom:-14px;width:4px;background:#fff}}
+.cmark i{{position:absolute;right:10px;top:46px;font-style:normal;font-size:22px;color:#fff;letter-spacing:.1em;white-space:nowrap}}
+.chl{{position:absolute;font-family:"Bebas";font-size:84px;color:{Y}}}
+.dgrid{{position:absolute;left:110px;top:620px;width:860px;display:grid;grid-template-columns:repeat(10,1fr);gap:22px}}
+.dgrid i{{display:block;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.18)}}
+.yrow{{position:absolute;left:60px;right:60px;top:720px;display:flex;justify-content:space-between}}
+.yc{{display:flex;flex-direction:column;align-items:center;gap:10px}}
+.yc b{{font-family:"Bebas";font-size:96px;color:#fff;font-weight:400}}
+.yc span{{font-family:"Osw";font-size:28px;color:{Y};letter-spacing:.08em}}
+.yc:last-child b{{color:#ff3b3b}}
+.vbars{{position:absolute;left:70px;right:70px;top:660px}}
+.vbh{{font-family:"Osw";font-size:30px;letter-spacing:.16em;color:#cfd3da;margin-bottom:30px}}
+.vbr{{display:flex;align-items:center;gap:24px;margin-bottom:56px}}
+.vbn{{width:230px;font-family:"Bebas";font-size:84px;color:#fff;line-height:.9}}
+.vbn span{{display:block;font-family:"Osw";font-size:24px;color:#9aa0a6;letter-spacing:.06em}}
+.vbt{{flex:1;height:64px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden}}
+.vbf{{height:100%;border-radius:8px;transform-origin:0 50%}}
+.vbv{{width:150px;text-align:right;font-family:"Bebas";font-size:100px}}
+
+.pcard{{position:absolute;border-radius:34px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 2px rgba(255,255,255,.08)}}
+.pcard img{{width:100%;height:100%;object-fit:cover;display:block}}
+.rainl{{position:absolute;left:0;right:0;top:-600px;bottom:-600px;background-image:linear-gradient(100deg,transparent 48%,rgba(220,230,255,.55) 49%,transparent 51%);background-size:90px 200px;transform:rotate(8deg)}}
+.odo .digits{{position:relative;transform-origin:50% 60%}}
+.odo.gold{{font-style:italic}}
+.odo.gold .dstrip span,.odo.gold .digits>span:not(.dcol):not(.oshine){{color:#FFE14D;
+  text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #C29008,0 8px 0 #A67A05,0 22px 34px rgba(0,0,0,.55),0 0 46px rgba(254,222,92,.45)}}
+.oshine{{position:absolute;top:-10%;bottom:-10%;left:0;width:22%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));
+  transform:skewX(-20deg) translateX(-160%);mix-blend-mode:overlay;pointer-events:none}}
+.olabw{{margin-top:14px}}
+.odo .olab{{display:inline-flex;align-items:center;gap:14px;padding:10px 22px 10px 16px;border-radius:999px;background:rgba(10,10,12,.55);
+  backdrop-filter:blur(12px);box-shadow:inset 0 0 0 2.5px rgba(254,222,92,.75);font-size:42px;font-weight:800;font-style:normal;letter-spacing:.22em;color:#fff}}
+.odo .olab i{{width:14px;height:14px;border-radius:50%;background:{Y};box-shadow:0 0 14px {Y}}}
+.lbtop .lbv,.bcol:first-child .bnum{{font-style:italic;color:#FFE14D;
+  text-shadow:0 2px 0 #F2C21E,0 4px 0 #DDA90F,0 6px 0 #B98806,0 0 30px rgba(254,222,92,.55)}}
+
+.lboard{{position:absolute;left:50px;right:50px}}
+.slowt{{position:absolute;left:-200px;right:-200px;top:1150px;text-align:center;font-size:96px;font-weight:900;font-style:italic;color:{Y};
+  white-space:nowrap;text-shadow:0 6px 30px rgba(0,0,0,.7)}}
+.dnum{{position:absolute;left:0;right:0;top:260px;text-align:center}}
+.dnum div{{font-size:560px;font-weight:900;font-style:italic;letter-spacing:-0.06em;line-height:.9;color:#FFE14D;
+  text-shadow:0 4px 0 #F2C21E,0 8px 0 #DDA90F,0 12px 0 #B98806,0 40px 60px rgba(0,0,0,.5),0 0 60px rgba(254,222,92,.5)}}
+.dnum span{{display:inline-block;margin-top:10px;font-size:44px;font-weight:900;letter-spacing:.3em;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}}
+.band{{position:absolute;left:0;right:60px;display:flex;align-items:baseline;gap:26px;padding:22px 50px 26px 70px;background:{Y};
+  border-radius:0 26px 26px 0;box-shadow:0 30px 60px rgba(0,0,0,.5)}}
+.band b{{font-size:150px;font-weight:900;font-style:italic;color:#0b0b0c;letter-spacing:-0.05em;line-height:.9;display:inline-block}}
+.band span{{font-size:38px;font-weight:900;color:#0b0b0c;letter-spacing:.12em}}
+.cap1{{position:absolute;left:0;right:0;text-align:center;z-index:900}}
+.cap1 span{{display:inline-block;font-size:78px;font-weight:900;color:#fff;letter-spacing:-0.01em;
+  text-shadow:0 4px 0 rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.75)}}
+.cap1.num span{{color:#FFE14D;text-shadow:0 3px 0 #C29008,0 10px 30px rgba(0,0,0,.75)}}
+.badge{{position:absolute;left:46px;top:236px;width:118px;height:118px;border-radius:50%;background:{Y};color:#0b0b0c;display:flex;
+  align-items:center;justify-content:center;font-size:76px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 6px rgba(254,222,92,.25)}}
+.hero{{position:absolute;inset:0}}
+.hero .circ{{position:absolute;left:50%;top:640px;width:820px;height:820px;margin-left:-410px;border-radius:50%;background:{Y};
+  box-shadow:0 0 120px rgba(254,222,92,.45)}}
+.hero .big{{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:170px;font-weight:900;color:#fff;letter-spacing:-0.045em;line-height:.9;
+  text-shadow:0 6px 0 #c8c8c8,0 12px 0 #8d8d8d,0 30px 50px rgba(0,0,0,.6)}}
+.pip{{position:absolute;width:290px;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 4px #fff}}
+.pip img{{width:100%;height:370px;object-fit:cover;object-position:50% 25%;display:block}}
+.pip b{{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);color:#fff;font-size:26px;font-weight:800}}
+.slist{{position:absolute;left:70px;right:70px}}
+.slr{{position:relative;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.02em;line-height:1.25;white-space:nowrap}}
+.sll{{position:absolute;left:-10px;right:-10px;top:52%;height:9px;border-radius:5px;background:{Y};transform-origin:left;box-shadow:0 0 18px {Y}}}
+.lbr{{display:flex;align-items:center;gap:22px;height:150px;margin-bottom:18px;padding:0 26px;border-radius:24px;
+  background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.1)}}
+.lbr.lbtop{{background:rgba(254,222,92,.12);box-shadow:inset 0 0 0 2.5px {Y}}}
+.lbk{{width:70px;font-size:76px;font-weight:900;color:rgba(255,255,255,.35);letter-spacing:-0.04em}}
+.lbtop .lbk{{color:{Y}}}
+.lbm{{flex:1}}
+.lbn{{font-size:36px;font-weight:900;color:#fff;letter-spacing:.02em;margin-bottom:12px}}
+.lbbar{{height:16px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;width:560px}}
+.lbf{{height:100%;border-radius:8px;background:linear-gradient(90deg,#9a9aa2,#d8d8de);transform-origin:left}}
+.lbtop .lbf{{background:linear-gradient(90deg,#d9b93c,{Y});box-shadow:0 0 20px {Y}}}
+.lbv{{width:200px;text-align:right;font-size:70px;font-weight:900;color:#fff;letter-spacing:-0.03em}}
+.lbtop .lbv{{color:{Y}}}
+.mot{{position:absolute;left:0;right:0;top:330px;text-align:center;font-size:120px;font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1}}
+.mot span,.mot i{{display:block}}
+.mot i{{font-size:54px;font-style:italic;font-weight:700;color:rgba(255,255,255,.6);margin:10px 0}}
+.lgnum{{position:absolute;right:50px;top:330px;font-size:300px;font-weight:900;color:rgba(254,222,92,.08);letter-spacing:-0.05em;line-height:1}}
+.nwall{{position:absolute;left:60px;right:60px;display:grid;grid-template-columns:1fr 1fr;gap:18px;perspective:1200px}}
+.nwc{{height:150px;border-radius:22px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center}}
+.nwc span{{font-size:46px;font-weight:900;color:#fff;letter-spacing:.02em}}
+.nwc:last-child{{grid-column:span 2;background:rgba(254,222,92,.14);box-shadow:inset 0 0 0 2px {Y}}}
+.nwc:last-child span{{color:{Y}}}
+.quote{{position:absolute;left:70px;right:70px;top:640px;text-align:left}}
+.qm{{font-size:340px;line-height:.7;font-weight:900;color:{Y};height:200px;transform-origin:left top}}
+.qt{{font-size:108px;font-weight:800;font-style:italic;color:#fff;letter-spacing:-0.03em;line-height:1.02}}
+.qt .ch{{display:inline-block}}
+.qt .wd{{white-space:nowrap}}
+.qw{{margin-top:34px;font-size:40px;font-weight:600;color:rgba(255,255,255,.6)}}
+.receipt{{position:absolute;right:50px;top:232px;display:flex;align-items:baseline;gap:8px;padding:12px 20px;border-radius:14px;
+  background:rgba(10,10,12,.6);backdrop-filter:blur(14px);box-shadow:inset 0 0 0 1.5px rgba(254,222,92,.5);overflow:hidden}}
+.receipt .rl{{font-size:22px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.7);margin-right:6px}}
+.receipt .rn{{display:inline-block;font-size:44px;font-weight:900;color:{Y}}}
+.receipt .rt{{font-size:28px;font-weight:800;color:rgba(255,255,255,.6)}}
+.half{{position:absolute;left:0;width:1080px;height:960px;overflow:hidden}}
+.half img{{width:100%;height:100%;object-fit:cover;object-position:50% 30%}}
+.hl{{position:absolute;left:60px;bottom:50px;font-size:150px;font-weight:900;color:#fff;letter-spacing:-0.04em;text-shadow:0 10px 50px rgba(0,0,0,.6)}}
+.hdiv{{position:absolute;left:0;right:0;top:955px;height:10px;background:{Y};box-shadow:0 0 30px {Y};transform-origin:left}}
+.recap .rrow{{font-size:64px;margin-bottom:16px;gap:20px}}
+.recap .tick{{width:64px;height:64px;font-size:42px}}
+"""
+
+
+FONTS = {400: "Regular", 600: "SemiBold", 700: "Bold", 800: "ExtraBold", 900: "Black"}
+FONT_CSS = "".join(f'@font-face{{font-family:"IDisp";font-weight:{w};font-style:{st};src:url(media/InterDisplay-{n}{"Italic" if st == "italic" else ""}.otf)}}'
+                   for w, n in FONTS.items() for st in ("normal", "italic"))
+
+CSS = FONT_CSS + EXTRA_CSS + f"""
+html,body{{margin:0;background:#000}}
+#root{{position:relative;width:{W}px;height:{H}px;overflow:hidden;background:#0b0b0c;font-family:"IDisp","Inter Display",system-ui,sans-serif}}
+#cam{{position:absolute;inset:-30px;transform-origin:50% 50%}}
+#world{{position:absolute;inset:30px}}
+.gridbg{{position:absolute;inset:-120px;background-image:linear-gradient(rgba(255,255,255,.045) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.045) 2px,transparent 2px);
+  background-size:120px 120px}}
+.clip{{}}
+.grain{{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.09;mix-blend-mode:overlay}}
+#grainTop{{position:absolute;inset:-60px;background:url(media/assets_grain.png);opacity:.05;z-index:880;pointer-events:none;mix-blend-mode:overlay}}
+.shade{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,.15) 34%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%);pointer-events:none}}
+.vig{{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);pointer-events:none}}
+.title{{font-weight:900;letter-spacing:-0.035em;line-height:.98;color:#fff;text-shadow:0 8px 40px rgba(0,0,0,.55)}}
+.title .mask{{overflow:hidden;padding:0 .04em .06em}}
+.title .ln{{display:block}}
+.typed{{font-weight:800;letter-spacing:-0.01em;line-height:1.1}}
+.thead{{font-size:34px;font-weight:600;font-style:italic;color:rgba(255,255,255,.8);margin-bottom:16px}}
+.tline{{white-space:nowrap;text-shadow:0 4px 24px rgba(0,0,0,.6)}}
+.odo{{position:absolute;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 10px 50px rgba(0,0,0,.5)}}
+.digits{{display:inline-flex}}
+.dcol{{display:inline-block;height:1em;line-height:1em;overflow:hidden}}
+.dstrip{{display:flex;flex-direction:column}}
+.dstrip span{{display:block;height:1em;line-height:1em}}
+.olab{{font-size:40px;font-weight:800;letter-spacing:.18em;color:#fff;margin-top:6px}}
+.tag{{position:absolute;padding:14px 26px;border-radius:14px;background:{Y};color:#0b0b0c;font-size:44px;font-weight:900;letter-spacing:.02em;transform-origin:left;white-space:nowrap}}
+.tag.dark{{background:#fff}}
+.chip{{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 28px;border-radius:999px;background:rgba(20,20,22,.6);
+  backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18);color:#fff;font-size:36px;font-weight:700;white-space:nowrap}}
+.chip .dot{{width:14px;height:14px;border-radius:50%;background:{Y};box-shadow:0 0 14px {Y}}}
+.face{{position:absolute;pointer-events:none}}
+.cap{{position:absolute;left:0;right:0;top:1420px;text-align:center;z-index:900}}
+.cap span{{display:inline-block;padding:10px 22px;border-radius:12px;background:#fff;color:#0b0b0c;font-size:58px;font-weight:900;letter-spacing:-0.01em;
+  box-shadow:0 10px 30px rgba(0,0,0,.45)}}
+.cap.num span{{background:{Y}}}
+.win{{width:1000px;border-radius:22px;overflow:hidden;background:#111;box-shadow:0 60px 140px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.12)}}
+.win .bar{{height:50px;display:flex;align-items:center;gap:10px;padding:0 20px;background:#1c1c20;color:#8d8d94;font-size:20px;font-weight:600}}
+.win .bar i{{width:14px;height:14px;border-radius:50%;background:#ff5f57}}
+.win .bar i:nth-child(2){{background:#febc2e}}.win .bar i:nth-child(3){{background:#28c840}}
+.win .bar span{{margin-left:16px}}
+.bcol{{position:absolute;width:300px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}}
+.bnum{{font-size:120px;font-weight:900;color:#fff;letter-spacing:-0.04em;margin-bottom:18px}}
+.bbody{{position:relative;width:240px;border-radius:6px 6px 0 0;box-shadow:30px 0 0 rgba(0,0,0,.25)}}
+.btop{{position:absolute;left:0;right:0;top:-18px;height:18px;transform:skewX(-45deg);transform-origin:bottom}}
+.blab{{margin-top:22px;font-size:42px;font-weight:900;letter-spacing:.12em;color:#fff}}
+.stamp{{position:absolute;left:0;right:0;text-align:center;font-weight:900;letter-spacing:-0.05em;line-height:1;text-shadow:0 20px 80px rgba(0,0,0,.6)}}
+.leak{{position:absolute;inset:-200px;background:radial-gradient(40% 55% at 50% 50%,rgba(255,170,40,.95),rgba(254,222,92,.5) 45%,rgba(0,0,0,0) 75%);mix-blend-mode:screen;pointer-events:none}}
+.gimg{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
+.slice{{position:absolute;left:-200px;right:-200px;background:rgba(254,222,92,.18);mix-blend-mode:difference;border-top:2px solid rgba(255,40,60,.7)}}
+.ylab{{position:absolute;top:640px;font-size:110px;font-weight:900;color:#fff;letter-spacing:-0.03em}}
+.yline{{position:absolute;left:90px;right:90px;top:820px;height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden}}
+.yfill{{position:absolute;inset:0;background:{Y};transform-origin:left;box-shadow:0 0 24px {Y}}}
+.ybig{{position:absolute;left:0;right:0;top:930px;text-align:center;font-size:150px;font-weight:900;color:{Y};letter-spacing:-0.04em}}
+.recap{{position:absolute;left:70px;top:330px}}
+.rrow{{display:flex;align-items:center;gap:22px;font-size:84px;font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:26px;white-space:nowrap}}
+.rnum{{color:{Y};width:90px}}
+.tick{{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:50%;background:{Y};color:#0b0b0c;font-size:56px}}
+.cta{{position:absolute;inset:0}}
+.bubble{{position:absolute;left:110px;right:110px;top:1080px;display:flex;gap:22px;align-items:center;padding:28px 32px;border-radius:30px;
+  background:rgba(30,30,34,.85);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12),0 30px 80px rgba(0,0,0,.6)}}
+.av{{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,{Y},#f39c12);flex:none}}
+.who{{font-size:30px;font-weight:700;color:rgba(255,255,255,.6)}}
+.what{{font-size:46px;font-weight:800;color:#fff;min-height:56px}}
+.cta2{{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:40px;font-weight:700;color:rgba(255,255,255,.75)}}
+.brand{{position:absolute;right:56px;top:185px;text-align:right;z-index:950;opacity:.95}}
+.brand img{{width:250px}}
+"""
+
+SVG_FILTERS = """<svg width="0" height="0" style="position:absolute"><filter id="red"><feColorMatrix type="matrix"
+values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter><filter id="cyan"><feColorMatrix type="matrix"
+values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter></svg>"""
+
+
+def build():
+    edit()
+    captions()
+    gsap = os.path.join(HERE, "..", "doc_video", "node_modules", "gsap", "dist", "gsap.min.js")
+    shutil.copy(gsap, os.path.join(OUT, "gsap.min.js"))
+    media("assets/grain.png")
+    for w, n in FONTS.items():
+        for it in ("", "Italic"):
+            f = f"InterDisplay-{n}{it}.otf".replace("RegularItalic", "Italic")
+            shutil.copy(f"/usr/share/fonts/opentype/inter/{f}", os.path.join(MEDIA, f"InterDisplay-{n}{it}.otf"))
+    shutil.copy(os.path.join(HERE, "..", "kohli_countdown", "assets", "logo.png"), os.path.join(MEDIA, "logo.png"))
+    # grain crawl: jumps every frame (steps), like film
+    # the camera never stops: a slow breathing zoom and drift over the whole reel
+    anim(f'tl.fromTo("#cam",{{scale:1.025,rotation:-0.35,x:-6}},{{scale:1.055,rotation:0.35,x:6,duration:3.2,ease:"sine.inOut",repeat:{int(TOTAL / 3.2) + 1},yoyo:true}},0)')
+    anim(f'tl.fromTo("#grainTop",{{x:0,y:0}},{{x:-48,y:-36,duration:{TOTAL},ease:"steps({int(TOTAL * 12)})"}},0)')
+    page = f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>
+{SVG_FILTERS}
+<div id="root" data-composition-id="root" data-width="{W}" data-height="{H}" data-fps="{FPS}" data-duration="{TOTAL}">
+<div id="cam"><div id="world">
+{chr(10).join(els)}
+</div></div>
+<div id="grainTop"></div>
+<div class="brand" id="brand"><img src="media/logo.png"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const tl = gsap.timeline({{paused:true}});
+{(";" + chr(10)).join(js)};
+tl.set({{}},{{}},{TOTAL});
+window.__timelines = window.__timelines || {{}};
+window.__timelines["root"] = tl;
+</script></body></html>"""
+    with open(os.path.join(OUT, "index.html"), "w") as f:
+        f.write(page)
+    json.dump({"total": TOTAL, "events": sorted(events)}, open(os.path.join(HERE, "out", "events.json"), "w"))
+    print(f"reel {TOTAL:.1f}s, {len(els)} layers, {len(events)} sfx cues")
+
+
+if __name__ == "__main__":
+    build()
