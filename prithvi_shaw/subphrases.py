@@ -11,7 +11,7 @@ import numpy as np
 import transcribe as T
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = open(os.path.join(HERE, "script.txt")).read()
+SCRIPT = open(os.path.join(HERE, "script.md")).read()
 
 
 def split(a, s, e, min_sil):

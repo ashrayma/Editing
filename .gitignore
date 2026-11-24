@@ -65,3 +65,5 @@ prithvi_shaw/node_modules/
 prithvi_shaw/hf/media/
 prithvi_shaw/hf/.hyperframes/
 prithvi_shaw/final/*.mp4
+prithvi_shaw/out/.*hf-transaction*/
+prithvi_shaw/out/work-*/
