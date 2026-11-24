@@ -55,3 +55,13 @@ karun_303/out/work-*/
 karun_303/node_modules/
 karun_303/out/*.log
 karun_303/final/*.mp4
+prithvi_shaw/vo_raw/
+prithvi_shaw/ref/
+prithvi_shaw/out/
+prithvi_shaw/out_*.log
+prithvi_shaw/__pycache__/
+prithvi_shaw/footage/
+prithvi_shaw/node_modules/
+prithvi_shaw/hf/media/
+prithvi_shaw/hf/.hyperframes/
+prithvi_shaw/final/*.mp4
