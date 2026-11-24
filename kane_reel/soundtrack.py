@@ -273,10 +273,9 @@ def main():
     duck = np.repeat(np.where(on, 0.62, 1.0), hop)
     duck = np.convolve(duck, np.ones(2205) / 2205, "same")
     m[: len(duck)] *= duck
-    bed = m * 0.46 + fx * 0.62
+    bed = m * 0.4 + fx * 0.45  # quieter impacts: nothing shouts
     write_wav(os.path.join(HERE, "out", "music_sfx_only.wav"), norm(np.tanh(bed * 1.1), 0.9))
-    mix = vo * 1.0 + bed
-    mix = np.tanh(mix * 1.05) / np.tanh(1.05)
+    mix = vo * 0.85 + bed  # linear: no saturation on the voice
     write_wav(os.path.join(HERE, "out", "soundtrack.wav"), norm(mix, 0.92))
     print(f"soundtrack {total:.1f}s, {len(ev['events'])} sfx")
 

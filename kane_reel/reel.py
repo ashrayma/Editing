@@ -1457,12 +1457,15 @@ def ground(name, venue, score, start, dur, x, y, rot, side):
 
 
 REDC = "#d4372c"
-PC = {"rust": "#b5523a", "blue": "#2d4b63", "char": "#2a2c30"}
+PC = {"rust": "#FEDE5C", "blue": "#3a3d44", "char": "#17181b"}
+CUR = ["char"]
+DARK = "#141416"
 
 
 def poster(start, dur, col="rust"):
     """Vintage poster ground: flat colour, slowly turning sunburst rays, paper grid; never still."""
     i = nid("po")
+    CUR[0] = col
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:{PC[col]};overflow:hidden">'
         f'<div class="rays" id="{i}r"></div><div class="pgrid"></div><div class="pvig"></div></div>')
     anim(f'tl.fromTo("#{i}r",{{rotation:0}},{{rotation:{12 + dur * 2.5:.1f},duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
@@ -1470,9 +1473,28 @@ def poster(start, dur, col="rust"):
     return i
 
 
-def pcut(name, start, dur, x=None, h=1350, side="right", bottom=0, flip=False):
+def place(name, cx, head_y, frame_h=1920):
+    """Size + position for a cut-out standing on the bottom edge with its face centred on cx and the top of the face at head_y."""
+    with Image.open(os.path.join(HERE, "assets", "cut", name + ".png")) as im:
+        cw, ch = im.size
+    fs = FACES.get("cut/" + name) or [[0.4, 0.08, 0.2, 0.12]]
+    fx = sum(f[0] + f[2] / 2 for f in fs) / len(fs)
+    fy = min(f[1] for f in fs)
+    h = (frame_h - head_y) / (1 - fy)
+    w = h * cw / ch
+    return round(cx - fx * w), round(w), round(h)
+
+
+def pcut(name, start, dur, cx=540, head_y=780, side="right"):
     """Black-and-white 'printed' cut-out: slides in, then keeps breathing (slow scale + drift)."""
-    i = sticker(name, start, dur, side=side, x=x, h=h, bottom=bottom, flip=flip)
+    i = nid("ct")
+    left, w, h = place(name, cx, head_y)
+    src = media(f"assets/cut/{name}.png")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer" style="position:absolute;left:{left}px;bottom:0;width:{w}px;height:{h}px;z-index:{z()}">'
+        f'<img id="{i}m" src="{src}" style="width:100%;height:100%">{face_marks("cut/" + name, 0, 0, w, h)}</div>')
+    cue(start - 0.08, "whoosh", 0.55)
+    fr = {"left": "x:-700", "right": "x:700", "up": "y:700"}[side]
+    anim(f'tl.fromTo("#{i}",{{{fr},opacity:0}},{{x:0,y:0,opacity:1,duration:0.6,ease:"expo.out"}},{start})')
     add(f'<style>#{i} img{{filter:grayscale(1) contrast(1.35) brightness(1.04) sepia(.18) drop-shadow(0 30px 40px rgba(0,0,0,.55)) !important}}</style>')
     anim(f'tl.fromTo("#{i}m",{{scale:1,transformOrigin:"50% 100%"}},{{scale:1.07,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
     return i
@@ -1480,6 +1502,7 @@ def pcut(name, start, dur, x=None, h=1350, side="right", bottom=0, flip=False):
 
 def pphoto(name, start, dur, tint="blue", colour=False, side="right", push=(1.0, 1.15), credit_txt="PHOTO: GETTY IMAGES"):
     """Full-screen photo in print style (B&W with a colour wash) or in colour for the big moment; always moving."""
+    CUR[0] = "photo"
     i = ph(name, start, dur, credit_txt, side=side, fx=None if colour else "grey", push=push)
     if not colour:
         t = nid("tn")
@@ -1507,7 +1530,9 @@ def ltag(txt, start, dur, y=300, x=None, gold=False):
 
 
 def serif(txt, start, dur, y=400, size=200, color=Y, x=None, sfx="impact"):
-    """Gold italic serif word/number, rising in with a slight tilt."""
+    """Gold italic serif word/number, rising in with a slight tilt (dark on the yellow ground)."""
+    if CUR[0] == "rust":
+        color = DARK
     i = nid("sf")
     y, x = mv(i, y, x)
     pos = f"left:{x}px" if x is not None else "left:0;right:0;text-align:center"
@@ -1520,6 +1545,8 @@ def serif(txt, start, dur, y=400, size=200, color=Y, x=None, sfx="impact"):
 
 def rstamp(txt, start, dur, y=1100, color="#111", rot=-5, size=86, x=None):
     """Rubber stamp: outlined box, slams in."""
+    if CUR[0] == "rust":
+        color = DARK
     i = nid("rs")
     y, x = mv(i, y, x)
     pos = f"left:{x}px" if x is not None else "left:0;right:0;margin:0 auto;width:fit-content"
@@ -1575,15 +1602,11 @@ def split(start, dur, left, right, ltxt, rtxt, lnum, rnum, t_flip=None):
     i = nid("sp")
     def pane(k, name, col, lab, num):
         src = media(f"assets/cut/{name}.png")
-        with Image.open(os.path.join(HERE, "assets", "cut", name + ".png")) as im:
-            w = round(1250 * im.width / im.height)
-        if w > 900:
-            w = 900
-        hh = round(w * im.height / im.width) if w == 900 else 1250
+        left, w, hh = place(name, 270, 860)
         return (f'<div class="spp" id="{i}p{k}" style="left:{k * 540}px;background:{PC[col]}"><div class="rays"></div>'
-                f'<div class="spi" id="{i}i{k}" style="left:{270 - w / 2:.0f}px;width:{w}px;height:{hh}px"><img src="{src}">{face_marks("cut/" + name, 0, 0, w, hh)}</div>'
+                f'<div class="spi" id="{i}i{k}" style="left:{left}px;width:{w}px;height:{hh}px"><img src="{src}">{face_marks("cut/" + name, 0, 0, w, hh)}</div>'
                 f'<div class="ltag" style="position:absolute;top:300px;left:0;right:0;margin:0 auto;width:fit-content">{html.escape(lab)}</div>'
-                f'<div class="serif spn" id="{i}n{k}">{html.escape(num)}</div>'
+                f'<div class="serif spn" id="{i}n{k}" style="color:{DARK if col == "rust" else Y}">{html.escape(num)}</div>'
                 f'<div class="ltag" style="position:absolute;top:610px;left:0;right:0;margin:0 auto;width:fit-content">TESTS</div></div>')
     add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()}">'
         f'{pane(0, left, "rust", ltxt, lnum)}{pane(1, right, "blue", rtxt, rnum if t_flip is None else "?")}</div>')
@@ -1636,30 +1659,30 @@ def edit():
     # ---------------- HOOK: the loud superstars
     a, b = 0, W_("h1", 6) - 0.05
     poster(*seg(a, b), "char")
-    ltag("EVERY ERA HAS ITS", *seg(a + 0.05, b), y=640)
-    serif("loud", *seg(a + 0.15, b), y=720, size=220)
-    pcut("smith", *seg(a, b), x=-80, h=700, side="left")
-    pcut("root", *seg(a + 0.1, b), x=560, h=700, side="right")
-    serif("superstars.", *seg(a + 0.5, b), y=960, size=170, color="#fff")
+    ltag("EVERY ERA HAS ITS", *seg(a + 0.05, b), y=330)
+    serif("loud", *seg(a + 0.15, b), y=410, size=220)
+    for k, nm in enumerate(("kohli", "root", "smith")):
+        pcut(nm, *seg(a + 0.1 * k, b), cx=190 + 350 * k, head_y=1180, side="up")
+    serif("superstars.", *seg(a + 0.5, b), y=650, size=170, color="#fff")
     for k, (nm, lab, word_, wi0, wi1, col) in enumerate((("kohli", "VIRAT KOHLI", "fire.", 6, 11, "rust"),
                                                       ("root", "JOE ROOT", "volume.", 11, 16, "blue"),
                                                       ("smith", "STEVE SMITH", "madness.", 16, 21, "char"))):
         a, b = W_("h1", wi0) - 0.05, W_("h1", wi1) - 0.05
         poster(*seg(a, b), col)
-        pcut(nm, *seg(a, b), x=None, h=1300, side=("right", "left", "right")[k])
+        pcut(nm, *seg(a, b), cx=540, head_y=760, side=("right", "left", "right")[k])
         ltag(lab, *seg(a + 0.05, b), y=290)
         serif(word_, *seg(W_("h1", wi1 - 1) - 0.05, b), y=360, size=190)
         credit(*seg(a, b), G if nm != "kohli" else BCCI)
     a, b = W_("h1", 21) - 0.05, s("h2", -0.03)
     poster(*seg(a, b), "rust")
     for k, nm in enumerate(("kohli", "root", "smith")):
-        pcut(nm, *seg(a + 0.08 * k, b), x=-140 + 380 * k, h=820, side="left")
+        pcut(nm, *seg(a + 0.08 * k, b), cx=190 + 350 * k, head_y=860, side="up")
     ltag("THE FAB 4", *seg(a + 0.05, b), y=290)
     serif("most underrated?", *seg(W_("h1", 23) - 0.05, b), y=370, size=120, color="#fff")
     # ---------------- Kane
     a, b = b, s("n1", -0.03)
     poster(*seg(a, b), "rust")
-    pcut("k_full", *seg(a, b), x=330, h=1250, side="right")
+    pcut("k_full", *seg(a, b), cx=760, head_y=760, side="right")
     serif("never needed", *seg(a + 0.05, W_("h2", 6) - 0.05), y=330, size=110, color="#fff")
     serif("Kane", *seg(W_("h2", 6) - 0.05, b), y=230, size=170, color="#fff", x=50)
     serif("Williamson", *seg(W_("h2", 7) - 0.05, b), y=400, size=125, color="#fff", x=50)
@@ -1681,7 +1704,7 @@ def edit():
     credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
     a, b = b, s("n5", -0.03)
     poster(*seg(a, b), "blue")
-    pcut("k_100", *seg(a, b), x=None, h=1250, side="up" if False else "right")
+    pcut("k_100", *seg(a, b), cx=540, head_y=860, side="right")
     ltag("KANE WILLIAMSON", *seg(a + 0.05, b), y=290, gold=True)
     serif("110", *seg(W_("n4", 2) - 0.1, b), y=340, size=300)
     ltag("TESTS", *seg(W_("n4", 2), b), y=680)
@@ -1705,7 +1728,7 @@ def edit():
     # ---------------- and yet: 33
     a, b = b, W_("y1", 5) - 0.05
     poster(*seg(a, b), "blue")
-    pcut("kt_50", *seg(a, b), x=None, h=1120, side="right")
+    pcut("kt_50", *seg(a, b), cx=540, head_y=860, side="right")
     ltag("AND YET…", *seg(a + 0.05, b), y=290)
     serif("33", *seg(W_("y1", 2) - 0.1, b), y=300, size=300)
     ltag("TEST HUNDREDS", *seg(W_("y1", 3), b), y=640, gold=True)
@@ -1716,7 +1739,7 @@ def edit():
     hbars(*seg(a + 0.05, b), [("WILLIAMSON", 33, True), ("KOHLI", 30, False)], y=560)
     a, b = b, s("y2", -0.03)
     poster(*seg(a, b), "rust")
-    pcut("k_bat_small", *seg(a, b), x=420, h=1200, side="right")
+    pcut("k_bat_small", *seg(a, b), cx=780, head_y=800, side="right")
     ltag("1 HUNDRED EVERY", *seg(a + 0.05, b), y=300, x=60)
     serif("3.3", *seg(W_("y1", 12) - 0.1, b), y=360, size=280, x=50)
     ltag("TESTS", *seg(W_("y1", 13), b), y=700, x=90)
@@ -1729,7 +1752,7 @@ def edit():
     a, b = b, s("f1", -0.03)
     poster(*seg(a, b), "rust")
     for k, nm in enumerate(("kohli", "root", "smith")):
-        pcut(nm, *seg(a + 0.07 * k, b), x=-60 + 330 * k, h=950, side="right")
+        pcut(nm, *seg(a + 0.07 * k, b), cx=190 + 350 * k, head_y=860, side="up")
     ltag("OUTSCORING", *seg(a + 0.05, b), y=290)
     serif("the giants?", *seg(W_("y2", 12) - 0.05, b), y=360, size=170)
     # ---------------- follow
@@ -1740,12 +1763,12 @@ def edit():
     # ---------------- the method
     a, b = b, W_("p1", 8) - 0.05
     poster(*seg(a, b), "blue")
-    pcut("k_full", *seg(a, b), x=200, h=1350, side="left")
+    pcut("k_full", *seg(a, b), cx=540, head_y=760, side="left")
     ltag("A METHOD BUILT ON", *seg(a + 0.05, b), y=290)
     serif("playing it late", *seg(W_("p1", 3) - 0.05, b), y=360, size=120)
     a, b = b, s("p2", -0.03)
     poster(*seg(a, b), "rust")
-    pcut("k_100", *seg(a, b), x=None, h=1200, side="right")
+    pcut("k_100", *seg(a, b), cx=540, head_y=900, side="right")
     for k, (txt, wi) in enumerate((("SOFT HANDS", 8), ("NO SLOG", 10), ("NO EGO", 12))):
         rstamp(txt, *seg(W_("p1", wi) - 0.05, b), y=300 + 140 * k, color=("#fff", "#fff", Y)[k], size=80, rot=(-5, 4, -3)[k])
     credit(*seg(a, b), G)
@@ -1784,7 +1807,7 @@ def edit():
     # ---------------- respect
     a, b = b, s("r2", -0.03)
     poster(*seg(a, b), "char")
-    pcut("kt_walk", *seg(a, b), x=None, h=1250, side="right")
+    pcut("kt_walk", *seg(a, b), cx=540, head_y=860, side="right")
     for k, (txt, wi) in enumerate((("NO TANTRUMS", 0), ("NO HEADLINES", 2))):
         rstamp(txt, *seg(W_("r1", wi) - 0.05, b), y=290 + 140 * k, color=("#fff", Y)[k], size=80, rot=(-4, 3)[k])
     serif("just respect.", *seg(W_("r1", 4) - 0.05, b), y=580, size=120)
@@ -1793,12 +1816,12 @@ def edit():
     a, b = b, W_("r2", 13) - 0.05
     poster(*seg(a, b), "rust")
     for k, (nm, lab, wi) in enumerate((("kohli", "FIRE", 0), ("root", "VOLUME", 4), ("smith", "MADNESS", 9))):
-        pcut(nm, *seg(W_("r2", wi) - 0.1, b), x=-60 + 330 * k, h=1000, side=("left", "up" if False else "right", "right")[k])
-        ltag(lab, *seg(W_("r2", wi), b), y=720 + 60 * (k % 2), x=60 + 330 * k, gold=True)
+        pcut(nm, *seg(W_("r2", wi) - 0.1, b), cx=190 + 350 * k, head_y=900, side="up")
+        ltag(lab, *seg(W_("r2", wi), b), y=780, x=110 + 350 * k)
     credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
     a, b = b, s("q1", -0.03)
     poster(*seg(a, b), "blue")
-    pcut("k_full", *seg(a, b), x=None, h=1450, side="up" if False else "right")
+    pcut("k_full", *seg(a, b), cx=540, head_y=760, side="right")
     ltag("KANE HAD SOMETHING RARER", *seg(a + 0.05, b), y=300)
     serif("calm.", *seg(W_("r2", 17) - 0.05, b), y=370, size=260)
     credit(*seg(a, b), G)
@@ -1817,7 +1840,7 @@ def edit():
 
 
 EXTRA_CSS = f"""
-.rays{{position:absolute;left:50%;top:55%;width:3200px;height:3200px;margin:-1600px 0 0 -1600px;background:repeating-conic-gradient(rgba(255,255,255,.07) 0deg 6deg,rgba(0,0,0,0) 6deg 15deg)}}
+.rays{{position:absolute;left:50%;top:55%;width:3200px;height:3200px;margin:-1600px 0 0 -1600px;background-image:radial-gradient(circle,rgba(0,0,0,.16) 30%,transparent 33%),repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 18px,transparent 18px 56px);background-size:34px 34px,auto}}
 .pgrid{{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);background-size:60px 60px}}
 .pvig{{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 45%,rgba(0,0,0,.45) 100%)}}
 .ltag{{position:absolute;background:#111;color:#fff;font:800 30px "IDisp";letter-spacing:.06em;padding:10px 18px;border:2px solid rgba(255,255,255,.85);white-space:nowrap;text-transform:uppercase}}

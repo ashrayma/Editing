@@ -7,7 +7,7 @@ python3 soundtrack.py
 ( cd hf && npx --prefix ../../doc_video hyperframes render -o ../out/video_silent.mp4 -q delivery -w ${WORKERS:-4} )
 for v in reel:soundtrack music_sfx:music_sfx_only; do
   ffmpeg -v error -y -i out/video_silent.mp4 -i out/${v##*:}.wav -map 0:v -map 1:a -c:v copy \
-    -af "loudnorm=I=-14:TP=-1.5:LRA=11" -ar 48000 -c:a aac -b:a 256k -shortest -movflags +faststart \
+    -af "loudnorm=I=-16:TP=-2:LRA=14" -ar 48000 -c:a aac -b:a 256k -shortest -movflags +faststart \
     out/Kane_${v%%:*}.mp4
 done
 ffprobe -v error -show_entries format=duration,size -of csv=p=0 out/Kane_reel.mp4

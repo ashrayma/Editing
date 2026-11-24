@@ -69,8 +69,8 @@ def recording_lines(path):
     return clips
 
 
-CLEAN = ("highpass=f=90,lowpass=f=13000,afftdn=nf=-32:nr=26:tn=1,anlmdn=s=5:p=0.004:r=0.006,deesser=i=0.35:m=0.5:f=0.5,equalizer=f=160:t=q:w=1.0:g=1.5,equalizer=f=5500:t=q:w=1.2:g=2,equalizer=f=250:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=3,"
-         "acompressor=threshold=-22dB:ratio=3.5:attack=4:release=90:makeup=4")  # voiceover.clean_recording's chain
+CLEAN = ("highpass=f=90,lowpass=f=13000,afftdn=nf=-32:nr=26:tn=1,anlmdn=s=5:p=0.004:r=0.006,deesser=i=0.55:m=0.6:f=0.5,equalizer=f=180:t=q:w=1.0:g=1.5,equalizer=f=2800:t=q:w=1.2:g=-2,equalizer=f=5500:t=q:w=1.2:g=-2,"
+         "acompressor=threshold=-20dB:ratio=1.8:attack=12:release=200:makeup=1.5")  # softer: no presence boost, gentle compression  # voiceover.clean_recording's chain
 
 
 def load_take(take):
