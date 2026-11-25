@@ -573,3 +573,4 @@ ref_kane/
 kane_reel/out/*.mp4
 kane_reel/out/*.wav
 kane_reel/make.log
+shaw_thumb/out/*.html
