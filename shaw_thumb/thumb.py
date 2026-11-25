@@ -120,7 +120,7 @@ body{{width:1280px;height:720px;overflow:hidden;background:#140203;font-family:"
 <div class="p young"><img src="{ysrc}"></div><div class="warmwash"></div>
 <div class="p now"><img src="{nsrc}"></div><div class="coldwash"></div>
 <div class="tear"></div>
-<div class="yrs" style="left:40px">2018</div><div class="yrs" style="right:40px">NOW</div>
+
 <div class="vig"></div><div class="grain"></div>
 {text}
 <div class="badge"><img src="{b64(os.path.join(HERE, "logo.png"))}"><span>UNTOLD STORIES</span><b>#4</b></div>
