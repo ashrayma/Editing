@@ -31,10 +31,10 @@ PLACE = ("data:image/svg+xml;base64," + base64.b64encode(b"""<svg xmlns='http://
 <rect width='400' height='280' fill='#6b6b6b'/><text x='200' y='150' font-size='30' text-anchor='middle' fill='#bbb' font-family='sans-serif'>PHOTO</text></svg>""").decode())
 
 # centre face: cut/now.png is 1921x2123 with the face at (630, 324, 452, 476)
-FACE_H = 300
+FACE_H = 228
 SC = FACE_H / 476
 CW, CH = round(1921 * SC), round(2123 * SC)
-CL, CT = round(640 - (630 + 226) * SC), round(66 - 324 * SC)
+CL, CT = round(640 - (630 + 226) * SC), round(92 - 324 * SC)
 
 
 def prints(x, y, w, h, rot, src, tape=((-18, -14, -30), (None, -14, 28))):
@@ -62,7 +62,7 @@ body{{width:1280px;height:720px;overflow:hidden;background:#0d0906}}
 .fadeb{{position:absolute;left:0;right:0;bottom:0;height:330px;background:linear-gradient(180deg,rgba(13,9,6,0),rgba(13,9,6,.85) 55%,#0d0906)}}
 .pr{{position:absolute;background:#f1ece0;padding:12px 12px 34px;box-shadow:0 18px 40px rgba(0,0,0,.7)}}
 .pi{{overflow:hidden;background:#555}}
-.pi img{{width:100%;height:100%;object-fit:cover}}
+.pi img{{width:100%;height:100%;object-fit:cover;object-position:50% 25%}}
 .tape{{position:absolute;width:110px;height:34px;background:rgba(235,232,222,.78);box-shadow:0 2px 6px rgba(0,0,0,.25)}}
 .title{{position:absolute;left:0;right:0;bottom:22px;text-align:center}}
 .small{{display:flex;align-items:center;justify-content:center;gap:22px;font:900 54px "PF";letter-spacing:.06em;color:#fff;text-shadow:0 4px 12px rgba(0,0,0,.9)}}
@@ -79,8 +79,8 @@ body{{width:1280px;height:720px;overflow:hidden;background:#0d0906}}
 <div class="bg"></div><div class="tex"></div>
 <div class="face"><img src="{b64(os.path.join(HERE, "cut", "now.png"))}"></div>
 {prints(36, 150, 330, 300, -6, find("young_full") or PLACE)}
-{prints(930, 60, 290, 200, 5, find("print_r1") or PLACE)}
-{prints(950, 300, 290, 200, -4, find("print_r2") or PLACE, tape=((None, -14, 30), (-16, 190, -25)))}
+{prints(920, 66, 300, 210, 5, find("print_r1") or PLACE)}
+{prints(935, 318, 300, 170, -4, find("print_r2") or PLACE, tape=((None, -14, 30), (-16, 160, -25)))}
 <div class="fadeb"></div><div class="grain"></div><div class="burn"></div>
 <div class="title"><div class="small"><i></i>{small}<i></i></div><div class="big">{big}</div></div>
 <div class="badge"><img src="{b64(os.path.join(HERE, "logo.png"))}"><span>UNTOLD STORIES</span><b>#4</b></div>
@@ -88,10 +88,10 @@ body{{width:1280px;height:720px;overflow:hidden;background:#0d0906}}
 
 
 def render():
-    for v in ("unsold", "wasted"):
+    for v in ("wasted",):
         open(os.path.join(OUT, f"m_{v}.html"), "w").write(page(v))
     js = ("const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1280,height:720}});"
-          "for(const v of ['unsold','wasted']){await p.goto('file://" + OUT + "/m_'+v+'.html');await p.waitForTimeout(500);"
+          "for(const v of ['wasted']){await p.goto('file://" + OUT + "/m_'+v+'.html');await p.waitForTimeout(500);"
           "await p.screenshot({path:'" + OUT + "/shaw2_'+v+'.png'});console.log('out/shaw2_'+v+'.png')}await b.close()})()")
     subprocess.run(["node", "-e", js], check=True)
 
