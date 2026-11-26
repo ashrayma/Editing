@@ -67,3 +67,8 @@ prithvi_shaw/hf/.hyperframes/
 prithvi_shaw/final/*.mp4
 prithvi_shaw/out/.*hf-transaction*/
 prithvi_shaw/out/work-*/
+sachin_records/ref/
+sachin_records/vo_raw/
+sachin_records/out/
+sachin_records/footage/
+sachin_records/__pycache__/
