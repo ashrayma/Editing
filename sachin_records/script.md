@@ -17,8 +17,9 @@ Fix vs the reference reel: it says "he batted at 4, 5 and 6" (he also batted at 
 ## Voiceover: TheCricketLounge's own script (topic inspired by the reference, no lines or structure copied)
 
 **HOOK**
-100 international shatak. 34,357 run. Lagta hai cricket ka har record Sachin Tendulkar ke naam hai.
-Par chaar record aise hain… jo 24 saal mein bhi Sachin ke paas kabhi nahi aaye.
+Batting records ki koi bhi list bana ke dekho… Sachin Tendulkar ke bina banana impossible hai.
+100 international shatak. 34,357 run.
+Toh aaj ek impossible list banate hain. Wo chaar records… jo 24 saal mein bhi Sachin ke naam kabhi nahi aaye.
 
 **1 · 248**
 Pehla. Test cricket mein triple century.
@@ -51,7 +52,8 @@ Signature device: each record is a page torn from Sachin's record book, with a r
 
 | Line | On screen |
 |---|---|
-| Hook | Sachin close-up (first frame); gold odometers 100 and 34,357 roll up; a record book fans open with every page reading "TENDULKAR" |
+| Hook | Sachin close-up (first frame); "IMPOSSIBLE" slams in, then "WITHOUT TENDULKAR"; gold odometers 100 and 34,357 roll up as a record book fans open, every page reading "TENDULKAR" |
+| "Impossible list" | The book snaps shut; a blank sheet titled "THE IMPOSSIBLE LIST" slides in |
 | Chaar record… | Four pages fall out of the book in silhouette, each with "?"; tally strip appears: ? ? ? ? |
 | 1 · 248 | Paper sheet "TEST TRIPLE HUNDRED", odometer climbs and stops at 248* with a dashed 300 line above; "NEVER" stamp; tally shows 248 |
 | Karun line | Karun's 300 moment (clip from the 303 video) slides in from the right, "3RD TEST" chip |
