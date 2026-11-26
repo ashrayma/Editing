@@ -72,3 +72,4 @@ sachin_records/vo_raw/
 sachin_records/out/
 sachin_records/footage/
 sachin_records/__pycache__/
+sachin_records/out_*.log

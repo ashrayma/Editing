@@ -20,8 +20,8 @@ SR = 16000
 HOP = 160            # 10 ms frames
 MIN_SIL = 0.28       # a pause at least this long splits phrases
 MIN_PHRASE = 0.25
-HINT = ("Hinglish, Roman script: Sachin Tendulkar ke records, Test, ODI, century, runs.")
-PROMPT = ("Prithvi Shaw, Shubman Gill, Harris Shield, 546 runs, Test debut, Rajkot, century, Adelaide, 36 all out, "
+HINT = ("Hinglish, Roman script: Batting records ki koi bhi list bana lo, Sachin Tendulkar ke bina woh list complete ho hi nahi sakti. 248 not out, Karun Nair, 493, Lord's, Ajit Agarkar.")
+PROMPT = ("Sachin Tendulkar, Karun Nair, Ajit Agarkar, Lord's, 248, 493, 37, 34,357, Bangladesh, Australia. "
           "Vijay Hazare, Northamptonshire, BCCI, terbutaline, IPL auction, Maharashtra. Hinglish in Roman script.")
 
 
