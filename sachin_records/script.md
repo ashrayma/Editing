@@ -1,6 +1,6 @@
-# Records Sachin never had (in 24 years)
+# 4 records Sachin never had
 TheCricketLounge · Reel / Short · 9:16 · ~65–70 s · Hinglish VO, English on-screen text
-Same format as the reference reel "Records Sachin missed in his 24-year career" (ref/src.mp4): the "impossible without Sachin… but is it really?" hook, then 4 records in the same order, with the facts corrected and a twist added to two of them.
+Topic inspired by the reel "Records Sachin missed in his 24-year career" (ref/src.mp4). Script, order, hook and visuals are TheCricketLounge's own: each record is named by its number (248 · 493 · 37 · No. 3), building to the strangest one.
 
 ## Facts (all checked on ESPNcricinfo Statsguru, 26 Nov 2026)
 | Claim | Statsguru says |
@@ -14,49 +14,51 @@ Same format as the reference reel "Records Sachin missed in his 24-year career" 
 
 Fix vs the reference reel: it says "he batted at 4, 5 and 6" (he also batted at 7 four times) and "67 Test series" (Statsguru lists 74). Neither line is used here.
 
-## Voiceover: same format as the reference reel (record this; retakes are fine, I'll pick the best take)
+## Voiceover: TheCricketLounge's own script (topic inspired by the reference, no lines or structure copied)
 
 **HOOK**
-Cricket ki koi bhi batting stats list banana impossible hai… bina ek naam ke. Sachin Tendulkar.
-But is it really though?
-Aaj wahi karte hain. Kuch records, jo aapko lagta hai Sachin ne 24 saal mein zaroor kiye honge… par asal mein kabhi nahi kiye.
+100 international shatak. 34,357 run. Lagta hai cricket ka har record Sachin Tendulkar ke naam hai.
+Par chaar record aise hain… jo 24 saal mein bhi Sachin ke paas kabhi nahi aaye.
 
-**1 · NO TRIPLE**
-Shuru karte hain sabse obvious se. Sachin ne kabhi Test triple hundred nahi banaya.
-Triple chhodo, 250 tak nahi pahunche. Best? 248 not out.
-Aur jo Sachin 24 saal mein nahi kar paaye… Karun Nair ne apne teesre hi Test mein kar diya.
+**1 · 248**
+Pehla. Test cricket mein triple century.
+Sachin ka best? 248 not out. Dhaka, 2004.
+Aur jo record Sachin ko 200 Test mein nahi mila… Karun Nair ne apne teesre Test mein le liya.
 
-**2 · LORD'S**
-Number two. Lord's. Home of Cricket.
-Aur ironically, God of Cricket ka sabse kamzor ground.
-Nau innings. Best score? Sirf 37.
-Aur usi 2002 ke Test mein… Ajit Agarkar ne number 8 par aakar 109 not out maar diye.
+**2 · 493**
+Doosra. Ek Test series mein 500 run.
+Sachin ka sabse best series? 493. Australia, 2007-08.
+Saat run. Bas saat run kam.
 
-**3 · NEVER AT No. 3**
-Number three par hai… number three. Pun intended.
-200 Test mein Sachin ne ek baar bhi number 3 par batting nahi ki.
-275 baar number 4. Ek baar opener bhi bane. Par number 3? Kabhi nahi.
+**FOLLOW (mid-reel)**
+Agar aap sachche cricket fan ho, toh page follow kar lo… kyunki agla record sabse ajeeb hai.
 
-**4 · NEVER 500 IN A SERIES**
-Aur number four. Ek Test series mein kabhi 500 run nahi.
-Sabse kareeb? 493. Australia, 2007-08. Bas saat run door.
+**3 · 37**
+Teesra. Lord's par ek bada score.
+Home of Cricket par God of Cricket ki nau innings. Best? Sirf 37.
+Aur 2002 ke usi Test mein, jahan Sachin ne 16 aur 12 banaye… Ajit Agarkar ne number 8 par aakar shatak maar diya.
+
+**4 · NO. 3**
+Aur chautha… sabse ajeeb.
+200 Test. 329 innings. Aur ek baar bhi number 3 par batting nahi.
+275 baar number 4. Ek baar opener. Par number 3? Zero.
 
 **END**
-Aur kya hai jo Sachin ne kabhi nahi kiya? Comment mein likho.
-Aur aisi lists ke liye, follow zaroor karna.
+Sabse zyada shocking kaunsa? 248, 493, 37, ya number 3? Bas number likho comment mein.
 
-## Edit plan (TheCricketLounge style: yellow #FEDE5C on near-black, logo top-left)
+## Edit plan (TheCricketLounge style: yellow #FEDE5C on near-black, warm-paper stat sheets, logo top-left)
+Signature device: each record is a page torn from Sachin's record book, with a red "NEVER" stamp. The four numbers (248 · 493 · 37 · 3) stay on a running tally strip at the bottom and get struck off one by one.
+
 | Line | On screen |
 |---|---|
-| Hook | Sachin close-up; "IMPOSSIBLE" then "WITHOUT SACHIN TENDULKAR" builds line by line; record-book pages flick behind |
-| But is it really? | Hard cut, "REALLY?" in yellow, record-book slams shut |
-| 24 saal | Rolling 24 YEARS, then "RECORDS HE NEVER HAD" |
-| Lord's, 9 innings, 37 | Statsguru screen recording, Lord's row highlighted; 9 score tickets dropping (10, 27, 31, 16, 12, 37, 16, 34, 12) with the 37 circled |
-| 2002 Test | Two tickets: SACHIN 16 & 12 vs AGARKAR 109* (No. 8) |
-| No triple | Odometer 248* that stops short of a 300 line; "250 BHI NAHI" stamp |
-| Karun 303 | Karun's 300 moment (clip from the 303 video) + "3RD TEST" chip |
-| Never No. 3 | Batting-order ladder 1–11: 4 lit (275), 5 (29), 6 (20), 7 (4), 2 (1); No. 3 empty and pulsing red |
-| Bonus 493 | Bar filling to 493 with a dashed 500 line; "7 SHORT" stamp |
-| End | Comment bubble typing "Sachin never…" + follow card with tap and bell |
+| Hook | Sachin close-up (first frame); gold odometers 100 and 34,357 roll up; a record book fans open with every page reading "TENDULKAR" |
+| Chaar record… | Four pages fall out of the book in silhouette, each with "?"; tally strip appears: ? ? ? ? |
+| 1 · 248 | Paper sheet "TEST TRIPLE HUNDRED", odometer climbs and stops at 248* with a dashed 300 line above; "NEVER" stamp; tally shows 248 |
+| Karun line | Karun's 300 moment (clip from the 303 video) slides in from the right, "3RD TEST" chip |
+| 2 · 493 | Statsguru screen recording, the 2007-08 row highlighted; bar fills to 493 under a dashed 500 line; "7 SHORT" stamp |
+| Follow | Follow pill with tap and bell: "TRUE CRICKET FANS FOLLOW" |
+| 3 · 37 | Lord's honours-board look: AGARKAR 109* (gold) vs SACHIN 37 (red); 9 score tickets drop (10, 27, 31, 16, 12, 37, 16, 34, 12) |
+| 4 · No. 3 | Batting-order ladder 1–11: 4 glows (275), 5 (29), 6 (20), 7 (4), 2 (1); No. 3 is an empty slot with a big red 0 |
+| End | The four numbers as vote pills (248 · 493 · 37 · 3) + a comment bubble typing a number |
 
-Format kept from the reference (creator's call): 4 items, follow ask at the end. Still applied: Sachin's face in the first frame, a new visual every 2–3 s, legend pairings (Sachin x Karun, Sachin x Agarkar), one shareable number (37 vs 109*), English on-screen text + Hinglish VO.
+Playbook rules applied: face in the first frame (1), boldest claim and payoff by 0:03 (2, 3), new visual every 2–3 s (6), legend pairings: Sachin x Karun, Sachin x Agarkar (7), shareable numbers: 37 vs 109*, 493 (8), mid-reel follow ask, last line a one-word (one-number) answer (9), English on-screen text + Hinglish VO.
