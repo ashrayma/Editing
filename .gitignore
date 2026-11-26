@@ -73,3 +73,10 @@ sachin_records/out/
 sachin_records/footage/
 sachin_records/__pycache__/
 sachin_records/out_*.log
+sachin_records/node_modules/
+sachin_records/reel/media/
+sachin_records/reel/.hyperframes/
+sachin_records/final/*.mp4
+sachin_records/assets/*.mp4
+sachin_records/out/.*hf-transaction*/
+sachin_records/out/work-*/
