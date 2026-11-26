@@ -26,7 +26,7 @@ def place(cw, ch, f, fh, cx, ty):
     return round(cx - (f[0] + f[2] / 2) * s), round(ty - f[1] * s), round(cw * s), round(ch * s)
 
 
-FL, FT, FW, FH = place(1921, 2123, (630, 324, 452, 476), 300, 1035, 88)   # cut/now.png = 2018 Test-whites portrait
+FL, FT, FW, FH = place(1921, 2123, (630, 324, 452, 476), 325, 1015, 92)   # cut/now.png = 2018 Test-whites portrait
 
 
 def scratches(n=22, seed=3):
@@ -64,9 +64,10 @@ body{{width:1280px;height:720px;overflow:hidden;background:#222;font-family:"Ant
 .grain{{position:absolute;inset:0;opacity:.26;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='1.1' numOctaves='2'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}}
 .scr{{position:absolute;inset:0}}
 .vig{{position:absolute;inset:0;background:radial-gradient(ellipse 78% 78% at 50% 48%,rgba(0,0,0,0) 52%,rgba(0,0,0,.62) 100%)}}
-.halo{{position:absolute;left:{1035 - 380}px;top:-60px;width:760px;height:800px;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,.42) 0%,rgba(0,0,0,0) 62%)}}
+.halo{{position:absolute;left:{1010 - 380}px;top:-60px;width:760px;height:800px;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,.42) 0%,rgba(0,0,0,0) 62%)}}
 .face{{position:absolute;left:{FL}px;top:{FT}px;width:{FW}px;height:{FH}px;
   -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 20%),linear-gradient(0deg,transparent 0%,#000 12%);-webkit-mask-composite:source-in}}
+.corner{{position:absolute;right:0;bottom:0;width:760px;height:170px;background:linear-gradient(180deg,rgba(12,36,18,0) 0%,rgba(12,36,18,.75) 55%,#0c2412 100%)}}
 .face img{{width:100%;height:100%;display:block;filter:contrast(1.12) saturate(1.06) brightness(1.05) drop-shadow(-12px 8px 24px rgba(0,0,0,.55))}}
 /* torn strip with the crossed-out headline */
 .strip{{position:absolute;left:30px;top:96px;width:560px;height:262px;background:#f3eee1;transform:rotate(-4deg);box-shadow:0 20px 40px rgba(0,0,0,.5);
@@ -89,7 +90,7 @@ body{{width:1280px;height:720px;overflow:hidden;background:#222;font-family:"Ant
 <g stroke-width="5">{spokes}</g></g></svg>
 <div class="dirt"></div><svg class="scr" viewBox="0 0 1280 720">{scratches()}</svg><div class="grain"></div><div class="vig"></div>
 <div class="halo"></div>
-<div class="face"><img src="{b64(os.path.join(HERE, "cut", "now.png"))}"></div>
+<div class="face"><img src="{b64(os.path.join(HERE, "cut", "now.png"))}"></div><div class="corner"></div>
 <div class="strip"></div><div class="paper"></div><div class="hd">NEXT<br>SACHIN</div>
 <svg class="x" viewBox="0 0 560 262"><g fill="none" stroke="#e0161e" stroke-linecap="round" opacity=".95">
 <path d="M18 84 C120 66 240 92 360 62" stroke-width="16"/><path d="M22 100 C130 88 250 104 352 84" stroke-width="7"/>
