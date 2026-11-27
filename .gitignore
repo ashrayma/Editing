@@ -582,3 +582,7 @@ shaw_thumb/out/v6.html
 shaw_thumb/out/v7.html
 shaw_thumb/out/dir*.html
 shaw_thumb/out/v9.html
+gill_reel/out/*.mp4
+gill_reel/out/*.wav
+gill_reel/make.log
+records_reel/models/
