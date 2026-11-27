@@ -586,3 +586,5 @@ gill_reel/out/*.mp4
 gill_reel/out/*.wav
 gill_reel/make.log
 records_reel/models/
+gill_reel/clips/starc.mp4
+gill_reel/clips/cummins.mp4

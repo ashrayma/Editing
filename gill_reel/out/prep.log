@@ -1,0 +1,85 @@
+doull.png (904, 1356)
+g_cap.png (942, 1300)
+g_mcg_def.png (802, 1528)
+g_mcg_pull.png (1458, 2592)
+g_now_raise.png (1108, 1108)
+g_now_series.png (960, 1280)
+s_546.png (2176, 2160)
+s_debut_fist.png (1726, 2400)
+s_debut_raise.png (1350, 908)
+s_mum_bat.png (800, 1280)
+s_mum_cut.png (600, 800)
+s_mum_pull.png (830, 1478)
+s_mum_sweep.png (600, 800)
+s_now_bat.png (830, 1478)
+s_now_drive.png (868, 1412)
+s_now_mum100.png (450, 800)
+s_now_nhants.png (1280, 960)
+s_now_nhants2.png (900, 1600)
+s_test_portrait.png (1108, 1108)
+s_trophy_young.png (828, 1480)
+u19_trophy.png (2154, 2160)
+ok doull
+ok g_cap
+ok g_mcg_def
+ok g_mcg_pull
+ok g_now_raise
+ok g_now_series
+ok s_546
+ok s_debut_fist
+ok s_debut_raise
+ok s_mum_bat
+ok s_mum_cut
+ok s_mum_pull
+ok s_mum_sweep
+ok s_now_bat
+ok s_now_drive
+ok s_now_mum100
+ok s_now_nhants
+ok s_now_nhants2
+ok s_test_portrait
+ok s_trophy_young
+ok u19_trophy
+[ WARN:0@0.203] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+hi/doull                           1 [[0.4378, 0.1418, 0.1312, 0.2775]]
+hi/g_cap                           1 [[0.3661, 0.2015, 0.1846, 0.3097]]
+hi/g_mcg_def                       1 [[0.4637, 0.1505, 0.1049, 0.2481]]
+hi/g_mcg_pull                      1 [[0.2253, 0.1811, 0.0756, 0.2054]]
+hi/g_now_raise                     1 [[0.4626, 0.1547, 0.1002, 0.1342]]
+hi/g_now_series                    1 [[0.4105, 0.1232, 0.1398, 0.2291]]
+hi/s_546                           1 [[0.4529, 0.1523, 0.1036, 0.1149]]
+hi/s_debut_fist                    1 [[0.292, 0.1132, 0.0646, 0.0989]]
+hi/s_debut_raise                   1 [[0.4433, 0.141, 0.097, 0.0648]]
+hi/s_mum_bat                       1 [[0.2752, 0.0667, 0.0775, 0.194]]
+hi/s_mum_cut                       1 [[0.7054, 0.1333, 0.0929, 0.1407]]
+hi/s_mum_pull                      2 [[0.3788, 0.0346, 0.0313, 0.0703], [0.5594, 0.3221, 0.0408, 0.0874]]
+hi/s_mum_sweep                     1 [[0.3118, 0.2231, 0.0884, 0.1415]]
+hi/s_now_bat                       1 [[0.5678, 0.3126, 0.0795, 0.1968]]
+hi/s_now_drive                     0 []
+hi/s_now_mum100                    1 [[0.5427, 0.286, 0.1034, 0.2393]]
+hi/s_now_nhants                    1 [[0.2794, 0.567, 0.1813, 0.1852]]
+hi/s_now_nhants2                   1 [[0.4523, 0.3604, 0.0714, 0.1584]]
+hi/s_test_portrait                 1 [[0.3467, 0.0903, 0.2251, 0.2915]]
+hi/s_trophy_young                  1 [[0.408, 0.1112, 0.1446, 0.3191]]
+hi/u19_trophy                      4 [[0.6173, 0.1447, 0.122, 0.1531], [0.1813, 0.2921, 0.1166, 0.1424]]
+cut/doull                          1 [[0.3729, 0.0821, 0.2538, 0.3028]]
+cut/g_cap                          1 [[0.3508, 0.1668, 0.2333, 0.3418]]
+cut/g_mcg_def                      1 [[0.393, 0.1385, 0.2659, 0.2455]]
+cut/g_mcg_pull                     1 [[0.1411, 0.1929, 0.0902, 0.1764]]
+cut/g_now_raise                    1 [[0.4829, 0.0438, 0.1842, 0.1412]]
+cut/g_now_series                   1 [[0.397, 0.0743, 0.213, 0.2626]]
+cut/s_546                          1 [[0.5243, 0.0216, 0.1543, 0.1557]]
+cut/s_debut_fist                   1 [[0.0637, 0.057, 0.1098, 0.1079]]
+cut/s_debut_raise                  1 [[0.4619, 0.1234, 0.1887, 0.0737]]
+cut/s_mum_bat                      1 [[0.4888, 0.0926, 0.1326, 0.1651]]
+cut/s_mum_cut                      1 [[0.7446, 0.0969, 0.138, 0.1292]]
+cut/s_mum_pull                     1 [[0.183, 0.0632, 0.1247, 0.1168]]
+cut/s_mum_sweep                    1 [[0.2909, 0.0959, 0.0908, 0.1604]]
+cut/s_now_bat                      1 [[0.5575, 0.115, 0.1586, 0.2595]]
+cut/s_now_drive                    1 [[0.0666, 0.0592, 0.1359, 0.124]]
+cut/s_now_mum100                   1 [[0.3872, 0.2167, 0.2015, 0.2667]]
+cut/s_now_nhants                   1 [[0.2835, 0.4047, 0.1765, 0.2582]]
+cut/s_now_nhants2                  1 [[0.4123, 0.2515, 0.1196, 0.2028]]
+cut/s_test_portrait                1 [[0.316, 0.0666, 0.2669, 0.3106]]
+cut/s_trophy_young                 1 [[0.4195, 0.0765, 0.3755, 0.3453]]
+cut/u19_trophy                     3 [[0.6223, 0.0402, 0.1356, 0.1822], [0.1478, 0.2104, 0.1338, 0.1582]]

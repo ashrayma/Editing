@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Kane Williamson: the quiet genius (vintage poster style). 9:16 reel, HyperFrames composition.
+"""Shaw vs Gill: the prediction. 9:16 reel, HyperFrames composition.
 
     python3 reel.py   ->  hf/index.html (+ hf/media/) and out/events.json (SFX cue list for soundtrack.py)
 
@@ -14,6 +14,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 
 from PIL import Image
 
@@ -140,7 +141,7 @@ def focus_x(name):
     return x + w / 2
 
 
-def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=None, whoosh=True, band=False):
+def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=None, whoosh=True, band=False, whole=False):
     """Full-screen photo. Tall photos fill the frame; wide ones sit full-width over a blurred fill of themselves.
     Enters with a fast slide from `side` ("left"/"right"/"up"/None for a hard cut), then a slow push-in."""
     i = nid("ph")
@@ -166,7 +167,7 @@ def photo(name, start, dur, side="right", push=(1.0, 1.1), origin="50% 40%", fx=
         # as big as the 2x rule allows: height up to 2x the source's own pixels, cropped around the face
         with Image.open(os.path.join(HERE, "assets", "photos", name + ".jpg")) as so:
             sh = so.size[1]
-        bh = min(H, 2 * sh)
+        bh = min(H, 2 * sh) if not whole else W * ihh / iw
         bw = bh * iw / ihh
         if bw < W:
             bw, bh = W, W * ihh / iw
@@ -438,7 +439,7 @@ def flicker(names, start, dur):
 
 # ----------------------------------------------------------------------------- captions
 
-NO_CAPTION = {"q1"}  # the comment card carries it
+NO_CAPTION = set()
 
 
 # ----------------------------------------------------------------------------- the edit
@@ -1500,10 +1501,10 @@ def pcut(name, start, dur, cx=540, head_y=780, side="right"):
     return i
 
 
-def pphoto(name, start, dur, tint="blue", colour=False, side="right", push=(1.0, 1.15), credit_txt="PHOTO: GETTY IMAGES"):
+def pphoto(name, start, dur, tint="blue", colour=False, side="right", push=(1.0, 1.15), credit_txt="PHOTO: GETTY IMAGES", **kw):
     """Full-screen photo in print style (B&W with a colour wash) or in colour for the big moment; always moving."""
     CUR[0] = "photo"
-    i = ph(name, start, dur, credit_txt, side=side, fx=None if colour else "grey", push=push)
+    i = ph(name, start, dur, credit_txt, side=side, fx=None if colour else "grey", push=push, **kw)
     if not colour:
         t = nid("tn")
         add(f'<div id="{t}" {clip_attrs(start, dur)} style="position:absolute;inset:0;z-index:{z()};background:{PC[tint]};mix-blend-mode:multiply;opacity:.55"></div>')
@@ -1651,184 +1652,193 @@ def comment_cta(start, dur):
     cue(start, "pop", 1.0)
 
 
+ICC = "PHOTO: ICC"
+CA = "VIDEO: CRICKET AUSTRALIA"
+
+
+def vclip(name, start, dur, label=None):
+    """Broadcast clip as a full-width 16:9 band over a blurred, darkened still of itself (stills hold if the line runs long)."""
+    i = nid("vc")
+    src = media(f"clips/{name}.mp4")
+    first, last = media(f"clips/{name}_first.png"), media(f"clips/{name}_last.png")
+    vlen = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                                 os.path.join(HERE, "clips", name + ".mp4")], capture_output=True, text=True).stdout)
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer full" style="position:absolute;inset:0;z-index:{z()};background:#000;overflow:hidden">'
+        f'<img src="{last}" style="position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(28px) brightness(.45)">'
+        f'<div id="{i}b" style="position:absolute;left:0;top:{round(H * 0.42 - 304)}px;width:1080px;height:608px;box-shadow:0 30px 80px rgba(0,0,0,.7)">'
+        f'<img src="{last}" style="position:absolute;inset:0;width:100%;height:100%">'
+        f'<video class="clip" src="{src}" muted playsinline data-start="{start}" data-duration="{min(dur, vlen)}" data-media-start="0" '
+        f'style="position:absolute;inset:0;width:100%;height:100%"></video></div></div>')
+    anim(f'tl.fromTo("#{i}b",{{scale:1.0}},{{scale:1.06,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    anim(f'tl.fromTo("#{i}",{{xPercent:100}},{{xPercent:0,duration:0.35,ease:"expo.out"}},{start})')
+    cue(start - 0.08, "whoosh", 0.8)
+    credit(start, dur, CA)
+
+
+def half(name, start, dur, k, face_h=300, face_y=760):
+    """One half of a two-up: the cut-out scaled so its face is face_h tall, face centred in the half, face top at face_y,
+    always reaching the bottom edge; clipped to its own half so the two never overlap."""
+    i = nid("hf")
+    with Image.open(os.path.join(HERE, "assets", "cut", name + ".png")) as im:
+        cw, ch = im.size
+    fx, fy, fw, fh = (FACES.get("cut/" + name) or [[0.4, 0.08, 0.2, 0.12]])[0]
+    sc = face_h / (fh * ch)
+    if face_y - fy * ch * sc + ch * sc < 1920:  # make sure the body reaches the bottom edge
+        sc = (1920 - face_y) / (ch * (1 - fy))
+    w, h = cw * sc, ch * sc
+    left, top = 270 - (fx + fw / 2) * w, face_y - fy * h
+    src = media(f"assets/cut/{name}.png")
+    add(f'<div id="{i}" {clip_attrs(start, dur)} class="layer" style="position:absolute;left:{540 * k}px;top:0;width:540px;height:1920px;overflow:hidden;z-index:{z()}">'
+        f'<div id="{i}w" style="position:absolute;left:{left:.0f}px;top:{top:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
+        f'<img src="{src}" style="width:100%;height:100%;filter:grayscale(1) contrast(1.3) brightness(1.05) sepia(.15)">{face_marks("cut/" + name, 0, 0, w, h)}</div></div>')
+    anim(f'tl.fromTo("#{i}w",{{y:{1920 - top:.0f},opacity:0}},{{y:0,opacity:1,duration:0.55,ease:"expo.out"}},{start + 0.08 * k})')
+    anim(f'tl.fromTo("#{i}w",{{scale:1,transformOrigin:"50% 30%"}},{{scale:1.06,duration:{max(0.5, dur):.2f},ease:"none"}},{start})')
+    cue(start + 0.08 * k, "whoosh", 0.5)
+
+
+def two(left, right, start, dur, ll, rl, face_y=760):
+    """Two cut-outs in equal halves, faces the same size and height; a thin divider; name tags above the faces."""
+    half(left, start, dur, 0, face_y=face_y)
+    half(right, start, dur, 1, face_y=face_y)
+    d = nid("dv")
+    add(f'<div id="{d}" {clip_attrs(start, dur)} style="position:absolute;left:538px;top:0;width:4px;height:1920px;background:{Y};z-index:{z()}"></div>')
+    anim(f'tl.fromTo("#{d}",{{scaleY:0,transformOrigin:"50% 0%"}},{{scaleY:1,duration:0.5,ease:"expo.out"}},{start})')
+    ltag(ll, start + 0.15, dur - 0.15, y=face_y - 90, x=40)
+    ltag(rl, start + 0.25, dur - 0.25, y=face_y - 90, x=580, gold=True)
+
+
 def edit():
     def seg(t0, t1):
         return round(t0, 3), round(t1 - t0, 3)
     W_ = word
-    G = GETTY
-    # ---------------- HOOK: the loud superstars
-    a, b = 0, W_("h1", 6) - 0.05
+    # ---------------- HOOK
+    a, b = 0, W_("h1", 16) - 0.05
+    pphoto("u19_trophy", *seg(a, b), colour=True, side=None, push=(1.0, 1.1), credit_txt=ICC, band=True, whole=True)
+    ltag("U19 WORLD CUP · 2018", *seg(a + 0.1, b), y=300, gold=True)
+    serif("2 talents. 1 team.", *seg(W_("h1", 8) - 0.05, b), y=1290, size=120, color="#fff")
+    a, b = b, s("h2", -0.03)
+    pphoto("s_trophy_young", *seg(a, b), colour=True, side="right", credit_txt=BCCI)
+    ltag("CAPTAIN · PRITHVI SHAW", *seg(a + 0.1, b), y=300)
+    serif("the next Sachin?", *seg(W_("h1", 26) - 0.05, b), y=1180, size=120)
+    a, b = b, s("h3", -0.03)
+    pphoto("g_cap", *seg(a, b), colour=True, side="left", credit_txt=BCCI)
+    ltag("THE OTHER ONE", *seg(a + 0.05, b), y=300)
+    serif("Shubman Gill", *seg(W_("h2", 5) - 0.05, b), y=1180, size=130)
+    a, b = b, W_("h3", 10) - 0.05
+    pphoto("doull", *seg(a, b), colour=True, side="right", credit_txt=GETTY)
+    ltag("SIMON DOULL", *seg(W_("h3", 5) - 0.05, b), y=1180, gold=True)
+    ltag("FORMER NEW ZEALAND CRICKETER", *seg(W_("h3", 6), b), y=1250)
+    a, b = b, s("h4", -0.03)
     poster(*seg(a, b), "char")
-    ltag("EVERY ERA HAS ITS", *seg(a + 0.05, b), y=330)
-    serif("loud", *seg(a + 0.15, b), y=410, size=220)
-    for k, nm in enumerate(("kohli", "root", "smith")):
-        pcut(nm, *seg(a + 0.1 * k, b), cx=190 + 350 * k, head_y=1180, side="up")
-    serif("superstars.", *seg(a + 0.5, b), y=650, size=170, color="#fff")
-    for k, (nm, lab, word_, wi0, wi1, col) in enumerate((("kohli", "VIRAT KOHLI", "fire.", 6, 11, "rust"),
-                                                      ("root", "JOE ROOT", "volume.", 11, 16, "blue"),
-                                                      ("smith", "STEVE SMITH", "madness.", 16, 21, "char"))):
-        a, b = W_("h1", wi0) - 0.05, W_("h1", wi1) - 0.05
-        poster(*seg(a, b), col)
-        pcut(nm, *seg(a, b), cx=540, head_y=760, side=("right", "left", "right")[k])
-        ltag(lab, *seg(a + 0.05, b), y=290)
-        serif(word_, *seg(W_("h1", wi1 - 1) - 0.05, b), y=360, size=190)
-        credit(*seg(a, b), G if nm != "kohli" else BCCI)
-    a, b = W_("h1", 21) - 0.05, s("h2", -0.03)
+    serif("a shocking", *seg(a + 0.03, b), y=600, size=150, color="#fff")
+    serif("prediction.", *seg(W_("h3", 13) - 0.05, b), y=780, size=180)
+    a, b = b, s("h5", -0.03)
     poster(*seg(a, b), "rust")
-    for k, nm in enumerate(("kohli", "root", "smith")):
-        pcut(nm, *seg(a + 0.08 * k, b), cx=190 + 350 * k, head_y=860, side="up")
-    ltag("THE FAB 4", *seg(a + 0.05, b), y=290)
-    serif("most underrated?", *seg(W_("h1", 23) - 0.05, b), y=370, size=120, color="#fff")
-    # ---------------- Kane
-    a, b = b, s("n1", -0.03)
-    poster(*seg(a, b), "rust")
-    pcut("k_full", *seg(a, b), cx=760, head_y=760, side="right")
-    serif("never needed", *seg(a + 0.05, W_("h2", 6) - 0.05), y=330, size=110, color="#fff")
-    serif("Kane", *seg(W_("h2", 6) - 0.05, b), y=230, size=170, color="#fff", x=50)
-    serif("Williamson", *seg(W_("h2", 7) - 0.05, b), y=400, size=125, color="#fff", x=50)
-    ltag("NEW ZEALAND", *seg(W_("h2", 7), b), y=560, x=60, gold=True)
-    credit(*seg(a, b), G)
-    a, b = b, s("n2", -0.03)
-    pphoto("k_presser", *seg(a, b), "blue", side="up")
-    ltag("THE CATCH", *seg(a + 0.05, b), y=1080)
-    serif("nobody talks about", *seg(W_("n1", 4) - 0.05, b), y=1150, size=100, color="#fff")
-    # ---------------- Tests played: split screens
-    a, b = b, W_("n2", 5) - 0.05
-    split(*seg(a, b), "root", "k_full", "JOE ROOT", "KANE WILLIAMSON", "169", "?")
-    credit(*seg(a, b), G)
-    a, b = b, s("n3", -0.03)
-    split(*seg(a, b), "smith", "k_100", "STEVE SMITH", "KANE WILLIAMSON", "127", "?")
-    credit(*seg(a, b), G)
-    a, b = b, s("n4", -0.03)
-    split(*seg(a, b), "kohli", "k_bat_small", "VIRAT KOHLI", "KANE WILLIAMSON", "123", "?")
-    credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
-    a, b = b, s("n5", -0.03)
-    poster(*seg(a, b), "blue")
-    pcut("k_100", *seg(a, b), cx=540, head_y=860, side="right")
-    ltag("KANE WILLIAMSON", *seg(a + 0.05, b), y=290, gold=True)
-    serif("110", *seg(W_("n4", 2) - 0.1, b), y=340, size=300)
-    ltag("TESTS", *seg(W_("n4", 2), b), y=680)
-    credit(*seg(a, b), G)
-    # ---------------- the schedule
-    a, b = b, W_("n5", 8) - 0.05
-    poster(*seg(a, b), "char")
-    ltag("THE BIG 3 GET", *seg(a + 0.05, b), y=420)
-    tiles(*seg(a + 0.1, W_("n5", 12) - 0.05), t_cross=W_("n5", 10))
-    rstamp("5-TEST BLOCKBUSTERS", *seg(W_("n5", 6), b), y=960, color=Y, size=80)
-    a, b = b, W_("n5", 12) - 0.05
-    poster(*seg(a, b), "blue")
-    ltag("NEW ZEALAND GETS", *seg(a + 0.05, b), y=420)
-    rstamp("2-TEST SPRINTS", *seg(W_("n5", 10), b), y=960, color=Y, size=90)
-    stopwatch(*seg(a + 0.1, b), y=1100)
-    a, b = b, s("y1", -0.03)
-    poster(*seg(a, b), "rust")
-    ltag("FAIL TWICE…", *seg(a + 0.05, b), y=300)
-    xmarks(*seg(a + 0.05, b), t2=W_("n5", 13) - 0.05, y=420)
-    rstamp("TOUR GONE", *seg(W_("n5", 16), b), y=1050, color="#111", size=110)
-    # ---------------- and yet: 33
-    a, b = b, W_("y1", 5) - 0.05
-    poster(*seg(a, b), "blue")
-    pcut("kt_50", *seg(a, b), cx=540, head_y=860, side="right")
-    ltag("AND YET…", *seg(a + 0.05, b), y=290)
-    serif("33", *seg(W_("y1", 2) - 0.1, b), y=300, size=300)
-    ltag("TEST HUNDREDS", *seg(W_("y1", 3), b), y=640, gold=True)
-    credit(*seg(a, b), G)
-    a, b = b, W_("y1", 9) - 0.05
-    poster(*seg(a, b), "char")
-    ltag("TEST HUNDREDS", *seg(a + 0.05, b), y=420)
-    hbars(*seg(a + 0.05, b), [("WILLIAMSON", 33, True), ("KOHLI", 30, False)], y=560)
-    a, b = b, s("y2", -0.03)
-    poster(*seg(a, b), "rust")
-    pcut("k_bat_small", *seg(a, b), cx=780, head_y=800, side="right")
-    ltag("1 HUNDRED EVERY", *seg(a + 0.05, b), y=300, x=60)
-    serif("3.3", *seg(W_("y1", 12) - 0.1, b), y=360, size=280, x=50)
-    ltag("TESTS", *seg(W_("y1", 13), b), y=700, x=90)
-    credit(*seg(a, b), G)
-    # ---------------- 5 million
-    a, b = b, W_("y2", 11) - 0.05
-    pphoto("wtc_mace", *seg(a, b), "blue", side="left", push=(1.15, 1.0))
-    ltag("A COUNTRY OF", *seg(a + 0.05, b), y=1000)
-    serif("5 million", *seg(W_("y2", 9) - 0.05, b), y=1070, size=170)
+    two("s_trophy_young", "g_cap", *seg(a, b), "SHAW", "GILL")
+    rstamp("FAR BETTER", *seg(W_("h4", 5) - 0.05, b), y=1180, size=100, x=600, rot=-6)
+    credit(*seg(a, b), BCCI)
     a, b = b, s("f1", -0.03)
-    poster(*seg(a, b), "rust")
-    for k, nm in enumerate(("kohli", "root", "smith")):
-        pcut(nm, *seg(a + 0.07 * k, b), cx=190 + 350 * k, head_y=860, side="up")
-    ltag("OUTSCORING", *seg(a + 0.05, b), y=290)
-    serif("the giants?", *seg(W_("y2", 12) - 0.05, b), y=360, size=170)
+    pphoto("g_now_series", *seg(a, b), colour=True, side="up", credit_txt=GETTY)
+    ltag("LOOKING AT THEIR CAREERS TODAY…", *seg(a + 0.1, b), y=300)
+    serif("almost unbelievable.", *seg(W_("h5", 9) - 0.05, b), y=1180, size=110)
     # ---------------- follow
-    a, b = b, s("p1", -0.03)
+    a, b = b, s("s1", -0.03)
     poster(*seg(a, b), "char")
-    serif("True cricket fan?", *seg(W_("f1", 6) - 0.05, b), y=330, size=110)
-    follow_card(*seg(a + 0.05, b), t_follow=W_("f1", 12))
-    # ---------------- the method
-    a, b = b, W_("p1", 8) - 0.05
+    serif("True cricket fan?", *seg(a + 0.05, b), y=330, size=110)
+    follow_card(*seg(a + 0.1, b), t_follow=W_("f1", 9))
+    # ---------------- Shaw: the sensation
+    a, b = b, W_("s1", 8) - 0.05
+    pphoto("s_debut_fist", *seg(a, b), colour=True, side="right", credit_txt=BCCI)
+    ltag("2018", *seg(a + 0.05, b), y=300, gold=True)
+    serif("a sensation.", *seg(W_("s1", 5) - 0.05, b), y=1180, size=140)
+    a, b = b, s("s2", -0.03)
     poster(*seg(a, b), "blue")
-    pcut("k_full", *seg(a, b), cx=540, head_y=760, side="left")
-    ltag("A METHOD BUILT ON", *seg(a + 0.05, b), y=290)
-    serif("playing it late", *seg(W_("p1", 3) - 0.05, b), y=360, size=120)
-    a, b = b, s("p2", -0.03)
+    ltag("AGE 14 · SCHOOL CRICKET", *seg(a + 0.05, b), y=300, gold=True)
+    frame("s_546", *seg(a + 0.05, b), x=150, y=400, w=780, rot=-2, side="left", hmax=820)
+    credit(*seg(a, b), "GRAPHIC: MUMBAI CRICKET ASSOCIATION")
+    a, b = b, s("g1", -0.03)
+    pphoto("s_mum_sweep", *seg(a, b), colour=True, side="up", credit_txt=BCCI)
+    ltag("FIRST 7 FIRST-CLASS MATCHES", *seg(a + 0.1, b), y=1060)
+    serif("5 hundreds", *seg(W_("s2", 11) - 0.05, b), y=1130, size=170)
+    # ---------------- Gill: his own statement
+    a, b = b, W_("g1", 9) - 0.05
+    pphoto("u19_trophy", *seg(a, b), colour=True, side="right", push=(1.25, 1.1), credit_txt=ICC)
+    serif("his own statement.", *seg(W_("g1", 5) - 0.05, b), y=1180, size=120)
+    a, b = b, s("g2", -0.03)
     poster(*seg(a, b), "rust")
-    pcut("k_100", *seg(a, b), cx=540, head_y=900, side="right")
-    for k, (txt, wi) in enumerate((("SOFT HANDS", 8), ("NO SLOG", 10), ("NO EGO", 12))):
-        rstamp(txt, *seg(W_("p1", wi) - 0.05, b), y=300 + 140 * k, color=("#fff", "#fff", Y)[k], size=80, rot=(-5, 4, -3)[k])
-    credit(*seg(a, b), G)
-    # ---------------- 2019
-    a, b = b, W_("p2", 4) - 0.05
+    pcut("g_cap", *seg(a, b), cx=540, head_y=1000, side="up")
+    ltag("U19 WORLD CUP 2018", *seg(a + 0.05, b), y=280)
+    serif("372", *seg(W_("g1", 16) - 0.1, b), y=340, size=260)
+    ltag("RUNS · 5 INNINGS", *seg(W_("g1", 17), b), y=640)
+    rstamp("AVERAGE 124", *seg(W_("g1", 24) - 0.05, b), y=730, size=90)
+    credit(*seg(a, b), BCCI)
+    a, b = b, s("g3", -0.03)
+    pphoto("doull", *seg(a, b), colour=True, side="left", push=(1.15, 1.0), credit_txt=GETTY)
+    ltag("SIMON DOULL", *seg(a + 0.05, b), y=1180, gold=True)
+    serif("why Gill?", *seg(W_("g2", 8) - 0.05, b), y=1250, size=130)
+    a, b = b, s("a1", -0.03)
     poster(*seg(a, b), "char")
-    serif("2019", *seg(a + 0.05, b), y=560, size=300)
-    ltag("WORLD CUP FINAL · LORD'S", *seg(W_("p2", 1), b), y=920)
-    a, b = b, W_("p2", 10) - 0.05
-    pphoto("k_presser", *seg(a, b), "rust", side="right", push=(1.0, 1.2))
-    serif("578", *seg(a + 0.05, b), y=1250, size=200)
-    ltag("RUNS · PLAYER OF THE TOURNAMENT", *seg(W_("p2", 6), b), y=300, gold=True)
-    a, b = b, W_("p2", 18) - 0.05
+    two("s_test_portrait", "g_mcg_def", *seg(a, b), "SHAW", "GILL", face_y=820)
+    rstamp("FLAWS", *seg(W_("g3", 4) - 0.05, b), y=420, size=96, x=120, color="#ff5a4f", rot=-5)
+    rstamp("COMPLETE", *seg(W_("g3", 12) - 0.05, b), y=420, size=96, x=610, color=Y, rot=4)
+    credit(*seg(a, b), BCCI)
+    # ---------------- Australia 2020
+    a, b = b, W_("a1", 7) - 0.05
+    poster(*seg(a, b), "char")
+    serif("2020", *seg(a + 0.05, b), y=600, size=280)
+    ltag("AUSTRALIA TOUR · ADELAIDE", *seg(W_("a1", 5) - 0.05, b), y=920, gold=True)
+    a, b = b, W_("a1", 12) - 0.05
+    vclip("c_starc", *seg(a, b))
+    ltag("1st INNINGS", *seg(a + 0.1, b), y=300)
+    serif("0", *seg(a + 1.0, b), y=1200, size=220)
+    a, b = b, s("a2", -0.03)
+    vclip("c_cummins", *seg(a, b))
+    ltag("2nd INNINGS", *seg(a + 0.1, b), y=300)
+    serif("4", *seg(a + 1.2, b), y=1200, size=220)
+    a, b = b, W_("a2", 9) - 0.05
+    pphoto("g_mcg_def", *seg(a, b), colour=True, side="right", credit_txt=GETTY)
+    ltag("THE VERY NEXT TEST · GILL'S DEBUT", *seg(a + 0.1, b), y=300, gold=True)
+    a, b = b, s("d1", -0.03)
+    pphoto("g_mcg_pull", *seg(a, b), colour=True, side="left", credit_txt=GETTY)
+    ltag("MELBOURNE", *seg(a + 0.05, b), y=300)
+    serif("45 & 35", *seg(W_("a2", 11) - 0.1, b), y=1120, size=200)
+    ltag("REMARKABLY COMPOSED", *seg(W_("a2", 16), b), y=1360, gold=True)
+    # ---------------- two directions
+    a, b = b, s("d2", -0.03)
     poster(*seg(a, b), "blue")
-    ltag("LOST ON A", *seg(a + 0.05, b), y=420)
-    rstamp("BOUNDARY COUNT", *seg(W_("p2", 16), b), y=500, color=Y, size=96)
-    hbars(*seg(W_("p2", 16) + 0.2, b), [("ENGLAND", 26, False), ("NEW ZEALAND", 17, True)], y=760)
-    ltag("BOUNDARIES HIT", *seg(W_("p2", 16) + 0.2, b), y=1060)
-    a, b = b, s("p3", -0.03)
-    pphoto("k_smile_cap", *seg(a, b), "blue", side="up", push=(1.0, 1.18))
-    serif("still smiling.", *seg(W_("p2", 19) - 0.05, b), y=1200, size=130, color="#fff")
-    # ---------------- Southampton
-    a, b = b, W_("p3", 9) - 0.05
-    pphoto("kt_walk", *seg(a, b), "blue", side="right")
-    ltag("2 YEARS LATER · SOUTHAMPTON", *seg(a + 0.05, b), y=1080)
-    serif("his answer.", *seg(W_("p3", 5) - 0.05, b), y=1150, size=130)
-    a, b = b, W_("p3", 12) - 0.05
-    pphoto("kt_50", *seg(a, b), "rust", side="left", push=(1.0, 1.2))
-    serif("52*", *seg(a + 0.03, b), y=1020, size=280)
-    ltag("WTC FINAL 2021", *seg(a + 0.1, b), y=1330, gold=True)
-    a, b = b, s("r1", -0.03)
-    pphoto("wtc_mace", *seg(a, b), colour=True, side="up", push=(1.0, 1.22))
-    rstamp("WORLD TEST CHAMPIONS", *seg(a + 0.05, b), y=1330, color=Y, size=80)
-    serif("NZ's greatest day", *seg(W_("p3", 15) - 0.05, b), y=1160, size=110, color="#fff")
-    flash(a + 0.05, color=Y, peak=0.35)
-    # ---------------- respect
-    a, b = b, s("r2", -0.03)
-    poster(*seg(a, b), "char")
-    pcut("kt_walk", *seg(a, b), cx=540, head_y=860, side="right")
-    for k, (txt, wi) in enumerate((("NO TANTRUMS", 0), ("NO HEADLINES", 2))):
-        rstamp(txt, *seg(W_("r1", wi) - 0.05, b), y=290 + 140 * k, color=("#fff", Y)[k], size=80, rot=(-4, 3)[k])
-    serif("just respect.", *seg(W_("r1", 4) - 0.05, b), y=580, size=120)
-    credit(*seg(a, b), G)
-    # ---------------- the line-up
-    a, b = b, W_("r2", 13) - 0.05
+    two("s_now_nhants", "g_now_raise", *seg(a, b), "SHAW", "GILL")
+    serif("different directions.", *seg(W_("d1", 5) - 0.05, b), y=440, size=100)
+    credit(*seg(a, b), "PHOTOS: GETTY IMAGES / BCCI")
+    a, b = b, W_("d2", 6) - 0.05
+    pphoto("g_now_raise", *seg(a, b), colour=True, side="up", credit_txt=BCCI)
+    serif("kept rising.", *seg(a + 0.05, b), y=1180, size=150)
+    a, b = b, s("d3", -0.03)
+    pphoto("g_now_series", *seg(a, b), colour=True, side="right", push=(1.15, 1.0), credit_txt=GETTY)
+    ltag("ONE OF INDIA'S LEADING BATTERS", *seg(a + 0.05, b), y=1180, gold=True)
+    a, b = b, W_("d3", 7) - 0.05
+    pphoto("s_now_nhants2", *seg(a, b), tint="blue", side="left", credit_txt=GETTY)
+    serif("all that talent…", *seg(a + 0.05, b), y=1180, size=120, color="#fff")
+    a, b = b, s("e1", -0.03)
+    pphoto("s_now_bat", *seg(a, b), tint="blue", side="right", push=(1.15, 1.0), credit_txt=BCCI)
+    rstamp("STRUGGLED", *seg(a + 0.05, b), y=1150, size=120, color="#ff5a4f")
+    # ---------------- ending
+    a, b = b, W_("e1", 9) - 0.05
     poster(*seg(a, b), "rust")
-    for k, (nm, lab, wi) in enumerate((("kohli", "FIRE", 0), ("root", "VOLUME", 4), ("smith", "MADNESS", 9))):
-        pcut(nm, *seg(W_("r2", wi) - 0.1, b), cx=190 + 350 * k, head_y=900, side="up")
-        ltag(lab, *seg(W_("r2", wi), b), y=780, x=110 + 350 * k)
-    credit(*seg(a, b), "PHOTOS: BCCI / GETTY IMAGES")
-    a, b = b, s("q1", -0.03)
-    poster(*seg(a, b), "blue")
-    pcut("k_full", *seg(a, b), cx=540, head_y=760, side="right")
-    ltag("KANE HAD SOMETHING RARER", *seg(a + 0.05, b), y=300)
-    serif("calm.", *seg(W_("r2", 17) - 0.05, b), y=370, size=260)
-    credit(*seg(a, b), G)
-    # ---------------- CTA
-    a, b = b, e("q1", 0.1)
+    two("s_trophy_young", "g_now_raise", *seg(a, b), "SHAW", "GILL", face_y=860)
+    serif("2 players.", *seg(a + 0.05, b), y=280, size=120)
+    serif("2 destinies.", *seg(W_("e1", 5) - 0.05, b), y=430, size=120)
+    credit(*seg(a, b), BCCI)
+    a, b = b, W_("e1", 22) - 0.05
+    pphoto("s_test_portrait", *seg(a, b), colour=True, side="up", push=(1.0, 1.18), credit_txt=BCCI)
+    serif("lost his way?", *seg(W_("e1", 18) - 0.05, b), y=1180, size=150)
+    a, b = b, s("e2", -0.03)
+    pphoto("s_debut_raise", *seg(a, b), colour=True, side="left", credit_txt=BCCI)
+    ltag("THE COMPLETE STORY", *seg(a + 0.05, b), y=1100, gold=True)
+    serif("watch the documentary", *seg(a + 0.3, b), y=1170, size=80, color="#fff")
+    a, b = b, e("e2", 0.1)
     poster(*seg(a, b), "char")
-    comment_cta(*seg(a + 0.03, b))
+    serif("more stories?", *seg(a + 0.05, b), y=330, size=120)
+    follow_card(*seg(a + 0.1, b), t_follow=W_("e2", 10))
     video3d("logo", b, TOTAL - b)
     for a2, b2 in LAYOUT["brand_hide"]:
         if a2 >= b - 0.3:
