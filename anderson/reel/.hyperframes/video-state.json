@@ -939,5 +939,18 @@
         "attribution": "unversioned"
       }
     ]
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "4598b053-2726-44aa-bb60-21111a16ef6b",
+      "completedAt": 1795871271012,
+      "output": "/home/user/Editing/anderson/out/silent.mp4",
+      "status": "completed",
+      "revision": "87dc9653-dccf-476b-944e-bb67607b8aa7"
+    },
+    "retainedRevisions": [
+      "87dc9653-dccf-476b-944e-bb67607b8aa7"
+    ]
+  },
+  "pendingArtifactCleanup": []
 }
