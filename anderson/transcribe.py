@@ -20,7 +20,7 @@ SR = 16000
 HOP = 160            # 10 ms frames
 MIN_SIL = 0.28       # a pause at least this long splits phrases
 MIN_PHRASE = 0.25
-HINT = ("James Anderson, deliveries, wickets, Test cricket, England, Lancashire, Sachin Tendulkar.")
+HINT = ("James Anderson, Sachin Tendulkar, 29,437 deliveries, 10,600, 40,037, 704 wickets, 76,117, Lancashire, Surrey, 1,193.")
 PROMPT = ("Sachin Tendulkar, Karun Nair, Ajit Agarkar, Lord's, 248, 493, 37, 34,357, Bangladesh, Australia. "
           "Vijay Hazare, Northamptonshire, BCCI, terbutaline, IPL auction, Maharashtra. Hinglish in Roman script.")
 
