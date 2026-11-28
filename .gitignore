@@ -87,3 +87,8 @@ anderson/footage/
 anderson/node_modules/
 anderson/__pycache__/
 anderson/out_*.log
+anderson/reel/media/
+anderson/reel/.hyperframes/
+anderson/final/*.mp4
+anderson/out/.*hf-transaction*/
+anderson/out/work-*/

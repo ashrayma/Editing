@@ -1,7 +1,7 @@
 {
   "version": 1,
   "historyId": "9d59fa45-c441-4e46-9702-97dfc5e0d97c",
-  "currentRevision": null,
+  "currentRevision": "87dc9653-dccf-476b-944e-bb67607b8aa7",
   "pendingChanges": false,
   "files": {
     "gsap.min.js": {
@@ -9,8 +9,8 @@
       "content": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/3d/3d1bea374ab1b703cc5c4105358eec63c4465efdc573931dc116e34a0a190c1b"
     },
     "index.html": {
-      "hash": "cd3f5a748023408cedb76a4559bc31b16c69d0bb4eab9ab4eb05983e62933cb8",
-      "content": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/cd/cd3f5a748023408cedb76a4559bc31b16c69d0bb4eab9ab4eb05983e62933cb8"
+      "hash": "d767b6d24df3225121d64cc123cef6b1a9a7752b631c3dbaf2ab0c8c32b96434",
+      "content": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/d7/d767b6d24df3225121d64cc123cef6b1a9a7752b631c3dbaf2ab0c8c32b96434"
     },
     "media/anton.woff2": {
       "hash": "d0fa07ff63dd60cbc0e2f58e29c802dca2a5ae0276c999f59c6111ab7bbaec3b",
@@ -69,7 +69,23 @@
       "content": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/42/42120aa9b628ffd31939ad259529fd27483f3c3e9c785427f5ef12700385cfc6"
     }
   },
-  "revisions": {},
+  "revisions": {
+    "87dc9653-dccf-476b-944e-bb67607b8aa7": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1795871155885,
+      "endedAt": 1795871155887,
+      "files": {
+        "index.html": {
+          "before": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/cd/cd3f5a748023408cedb76a4559bc31b16c69d0bb4eab9ab4eb05983e62933cb8",
+          "after": "/root/.cache/hyperframes/history/9d59fa45-c441-4e46-9702-97dfc5e0d97c/blobs/d7/d767b6d24df3225121d64cc123cef6b1a9a7752b631c3dbaf2ab0c8c32b96434"
+        }
+      }
+    }
+  },
   "checks": {
     "latest": null,
     "revisions": {},
