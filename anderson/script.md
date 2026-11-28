@@ -1,5 +1,5 @@
 # Jimmy Anderson: 76,117 deliveries and still asking for the ball
-TheCricketLounge · Reel / Short · 9:16 · ~70 s · Hinglish VO, English on-screen text
+TheCricketLounge · Reel / Short · 9:16 · ~70 s · English VO, English on-screen text
 Topic inspired by the reel "James Anderson has bowled more than 76,000 deliveries…" (ref/src.mp4). Hook, order,
 script and visuals are TheCricketLounge's own: built around one pairing (Sachin's balls faced vs Anderson's balls
 bowled) and one number that keeps growing on screen.
@@ -19,42 +19,42 @@ bowled) and one number that keeps growing on screen.
 | Born 30 July 1982 → 44 now, 45 in July 2027 | Wikipedia |
 | Surrey for 2027 | Wikipedia says he joined, but uncited. **Confirm before posting** (line marked ⚠ below) |
 
-## Voiceover (record this; retakes are fine, I'll pick the best take)
+## Voiceover: English, adjective-loaded (record this; retakes are fine, I'll pick the best take)
 
 **HOOK**
-Sachin Tendulkar ne apne poore Test career mein 29,437 gendein kheli.
-James Anderson ne Test cricket mein utni gendein daal di… aur upar se 10,600 aur.
+Across a glorious, record-shattering Test career, Sachin Tendulkar faced 29,437 deliveries.
+James Anderson bowled every single one of those… and then a staggering 10,600 more.
 
 **TESTS**
-188 Test. Sachin ke baad, duniya mein sabse zyada.
-40,037 gendein. 704 wicket. Kisi bhi fast bowler se zyada.
+188 Tests. A colossal number that only Sachin has ever bettered.
+40,037 relentless, swinging, soul-draining deliveries. 704 wickets — more than any fast bowler in history.
 
 **THE COUNTER**
-Aur ye toh sirf Test hai.
-ODI aur T20I — 10,006 aur.
-County first-class — 22,007 aur.
-Domestic one-day aur T20 — 4,067 aur.
+And that's just the Tests.
+ODIs and T20Is? Another 10,006.
+Gritty, grey county first-class days? Another 22,007.
+Domestic one-day and T20? Another 4,067.
 
 **TOTAL**
-Total? 76,117 gendein.
-Har gend ke liye run-up. Jump. Kamar ka jhatka. Aur phir se.
+The grand, almost absurd total? 76,117 deliveries.
+Every single one a long, rhythmic run-up. A violent leap. A brutal, back-bending release. And then… again.
 
 **FOLLOW (mid-reel)**
-Agar aap sachche cricket fan ho, toh page follow kar lo… kyunki asli pagalpan ab shuru hota hai.
+If you're a true cricket fan, hit follow… because the truly insane part starts now.
 
 **THE TWIST**
-2024 mein England ne aage badhne ka faisla kiya. Anderson ne Test cricket chhoda… cricket nahi.
-Lancashire ke liye khelte rahe. 2026 mein 50 wicket. Club ke Championship Player of the Year.
-Aur phir bhi… Lancashire ne naya contract nahi diya. 25 saal ka rishta khatam.
+In 2024, a ruthless England decided to move on. Anderson walked away from Test cricket… but never from cricket.
+He kept charging in for his beloved Lancashire. In 2026, a sensational 50 wickets. The club's Championship Player of the Year.
+And yet… Lancashire didn't offer him a new contract. A loyal, legendary 25-year bond — over.
 
 **STILL GOING**
-Kya Jimmy ruk gaye? Nahi.
-⚠ 2027 mein ab Surrey. *(if the deal isn't confirmed yet, say: "Ab 2027 ke liye Surrey se baat chal rahi hai.")*
-Season ke beech woh 45 saal ke ho jaayenge. Aur 1,193 first-class wicket ke baad bhi… unhe bas ek cheez chahiye. Gend.
+Did Jimmy stop? Absolutely not.
+⚠ In 2027, it's Surrey. *(if the deal isn't announced yet, say: "Now he's in talks with Surrey for 2027.")*
+He'll turn 45 midway through that season. And after 1,193 first-class wickets, he still wants just one thing. The ball.
 
 **END**
-Log 35 mein thak jaate hain. Jimmy 44 mein gend maang rahe hain.
-Aap batao — Jimmy legend ya pagal? Ek word mein comment karo.
+Most fast bowlers are broken, battered and done by 35. Jimmy is 44 and still asking for the new ball.
+So tell me — legend or lunatic? One word in the comments.
 
 ## Edit plan (TheCricketLounge style: yellow #FEDE5C on near-black, logo top-left)
 Signature device: a **ball counter** in the corner that keeps rolling up all reel (29,437 → 40,037 → 50,043 → 72,050 → 76,117), like an odometer that never stops.
@@ -69,4 +69,4 @@ Signature device: a **ball counter** in the corner that keeps rolling up all ree
 | 2024 | England exit photo + "TESTS: DONE · CRICKET: NOT DONE" |
 | Lancashire 2026 | Paper stat sheet: 50 WKTS · AVG 17.68 · PLAYER OF THE YEAR, then a red "NOT RETAINED" stamp; 25-year timeline 2002→2026 snaps |
 | Still going | Surrey shirt or presser photo; age counter 44 → 45; 1,193 wickets |
-| End | Two vote pills: LEGEND / PAGAL + comment bubble; follow end card |
+| End | Two vote pills: LEGEND / LUNATIC + comment bubble; follow end card |
