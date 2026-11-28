@@ -80,3 +80,10 @@ sachin_records/final/*.mp4
 sachin_records/assets/*.mp4
 sachin_records/out/.*hf-transaction*/
 sachin_records/out/work-*/
+anderson/ref/
+anderson/vo_raw/
+anderson/out/
+anderson/footage/
+anderson/node_modules/
+anderson/__pycache__/
+anderson/out_*.log
